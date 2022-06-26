@@ -1,6 +1,6 @@
 # NAssim 
 
-This is a validated and expert-curated dataset of parsed manual of network configuration CLI commands of different vendors. 
+This repository contains a validated and expert-curated dataset of parsed manual of network configuration CLI commands of different vendors. 
 
 The original online manuals can be accessed via the following links:
 
