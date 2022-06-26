@@ -6,7 +6,7 @@ The original online manuals can be accessed via the following links:
 
 [Command Reference for Huawei NE40E model](https://support.huawei.com/hedex/hdx.do?docid=EDOC1100218869&lang=en&idPath=24030814%7C9856750%7C22715517%7C9858933%7C15837)
 
-[Command References for Nokia 7750 SR model](https://documentation.nokia.com/cgi-bin/doc_list.pl)
+[Command Reference for Nokia 7750 SR model](https://documentation.nokia.com/cgi-bin/doc_list.pl)
 
 
 ## Citation
