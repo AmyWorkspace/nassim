@@ -14,7 +14,7 @@ The `corpus` folder contains a validated and expert-curated dataset of parsed ma
 The vendor (hw/nokia) subfolders contain the corpus of CLI configuration models in JSON format. The format definition of the vendor-independent corpus is as follows (please refer to the NAssim paper for more details): 
 
 <div align="center">
-<img src="./assets/corpusformat.png",  width="300">
+<img src="./assets/corpusformat.png",  width="800">
 </div>
 
 The `hierarchy` subfolder contains the hierarchy of CLI configuration models in JSON format. 
