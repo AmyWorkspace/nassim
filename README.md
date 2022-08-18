@@ -44,8 +44,8 @@ The original online manuals can be accessed via the following links:
 
 [Command Reference for H3C S3600 model](http://www.h3c.com/en/Support/Resource_Center/HK/Switches/H3C_S3600/H3C_S3600_Series_Switches/Technical_Documents/Command/Command/H3C_S3600_CM-Release_1510(V1.04)/)
 
-p.s. Cisco and H3C websites do not provide whole package download option of manuals in HTML format. [Selenium Python bindings](https://selenium-python.readthedocs.io/) could be helpful. 
+p.s. Cisco and H3C websites do not provide whole package download option of manuals in the HTML format. [Selenium Python bindings](https://selenium-python.readthedocs.io/) could be helpful. 
 
 ### Licensing
 ---
-Please see [LICENSE](./LICENSE.txt) for more information.
+Please see [LICENSE](./LICENSE) for more information.
