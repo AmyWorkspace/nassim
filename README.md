@@ -6,11 +6,10 @@ This repository contains the by-products of the following paper:
 
 
 ## Description
----
 
-### `corpus' folder
+### `corpus` folder
 ---
-The `corpus' folder contains a validated and expert-curated dataset of parsed manual of network configuration CLI commands of different vendors (Huawei/Nokia). 
+The `corpus` folder contains a validated and expert-curated dataset of parsed manual of network configuration CLI commands of different vendors (Huawei/Nokia). 
 
 The vendor (hw/nokia) subfolders contain the corpus of CLI configuration models in JSON format. The format definition of the vendor-independent corpus is as follows (please refer to the NAssim paper for more details): 
 
@@ -18,23 +17,23 @@ The vendor (hw/nokia) subfolders contain the corpus of CLI configuration models 
 <img src="./assets/corpusformat.png">
 </div>
 
-The `hierarchy' subfolder contains the hierarchy of CLI configuration models in JSON format. 
+The `hierarchy` subfolder contains the hierarchy of CLI configuration models in JSON format. 
 
 
-### `manuals_error_ambiguity' folder
+### `manuals_error_ambiguity` folder
 ---
 
-The `manuals_error_ambiguity' folder contains the identified errors and ambiguities in manuals of different vendors (Huawei/Cisco/Nokia/H3C). 
+The `manuals_error_ambiguity` folder contains the identified errors and ambiguities in manuals of different vendors (Huawei/Cisco/Nokia/H3C). 
 
-For syntactic errors of CLI templates, we list the json corpus and relevant html manual pages. 
+For **syntactic errors** of CLI templates, we list the json corpus and relevant html manual pages. 
 It is worth mentioning that except Huawei, one html page of Cisco/Nokia/H3C manuals generally contains multiple CLI templates, i.e., multiple resultant json corpus. 
 
-For hierarchy ambiguities, we list all ambiguous views not be resolved by the model hierarchy derivation scheme in the NAssim paper, and their relevant html pages.  
+For **hierarchy ambiguities**, we list all ambiguous views not be resolved by the model hierarchy derivation scheme in the NAssim paper, and their relevant html pages.  
 
-p.s., In Section 7.2 of the NAssim paper, only part of Cisco Nexus 5500 manual (i.e., [the part of unicast routing](https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus5500/sw/command/reference/unicast/n5500-ucast-cr.html)) is evaluated. In this repo, the `manuals_error_ambiguity/cisco_nexus5500' folder covers the complete Cisco Nexus 5500 manual.
+p.s., In Section 7.2 of the NAssim paper, only part of Cisco Nexus 5500 manual (i.e., [the part of unicast routing](https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus5500/sw/command/reference/unicast/n5500-ucast-cr.html)) is evaluated. In this repo, the `manuals_error_ambiguity/cisco_nexus5500` folder covers the complete Cisco Nexus 5500 manual.
 
 ## Configuration Manuals 
----
+
 The original online manuals can be accessed via the following links:
 
 [Command Reference for Huawei NE40E model](https://support.huawei.com/hedex/hdx.do?docid=EDOC1100218869&lang=en&idPath=24030814%7C9856750%7C22715517%7C9858933%7C15837)
