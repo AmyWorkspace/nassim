@@ -8,7 +8,7 @@ This repository contains the by-products of the following paper:
 ## Description
 
 ### `corpus` folder
----
+
 The `corpus` folder contains a validated and expert-curated dataset of parsed manual of network configuration CLI commands of different vendors (Huawei/Nokia). 
 
 The vendor (hw/nokia) subfolders contain the corpus of CLI configuration models in JSON format. The format definition of the vendor-independent corpus is as follows (please refer to the NAssim paper for more details): 
@@ -21,7 +21,6 @@ The `hierarchy` subfolder contains the hierarchy of CLI configuration models in 
 
 
 ### `manuals_error_ambiguity` folder
----
 
 The `manuals_error_ambiguity` folder contains the identified errors and ambiguities in manuals of different vendors (Huawei/Cisco/Nokia/H3C). 
 
