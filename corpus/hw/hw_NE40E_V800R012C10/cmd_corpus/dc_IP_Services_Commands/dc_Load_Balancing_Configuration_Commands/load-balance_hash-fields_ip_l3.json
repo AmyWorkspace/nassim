@@ -1,0 +1,25 @@
+{
+    "PageTitle": "load-balance hash-fields ip l3",
+    "FuncDef": "The load-balance hash-fields ip l3 command configures IP-address-based load balancing in the following scenarios: On PEs over a backbone network in an L3VPN over L2VPN, L2VPN over L2VPN, or an IP over IP scenario.On Ps in common scenarios. L2VPN supports VPLS and VLL that use Ethernet interfaces for access and homogeneous media without control word.\nThe undo load-balance hash-fields ip l3 command restores the default configuration.\n\nIP packets are balanced in different ways depending on different scenarios by default:\n\n\nIn an L3VPN over L2VPN,  L2VPN over L2VPN, IPv6 Over L2VPN scenario, traffic is balanced based on MPLS labels carried in IP packets.\n\nIn an IP over IP scenario, traffic is balanced based on an inner IP header if it can be obtained or an outer IP header if the inner IP header cannot be obtained.\n\nIf a device functions as a P in a common scenario, traffic is balanced based on MPLS labels. Specifically, traffic is balanced based on the third outer MPLS label in case of more than five but less than thirteen incoming MPLS labels.",
+    "CLIs": [
+        "load-balance hash-fields ip l3",
+        "undo load-balance hash-fields ip l3"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "GE optical interface view",
+        "GE interface view",
+        "POS interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet 1/0/0] load-balance hash-fields ip l3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn L2/L3VPN over L2VPN scenarios, L2-P1 resides on the backbone network.By default, L2-P1 balances traffic among outbound Eth-Trunk member interfaces based on the MPLS labels of the packets. Because packets transmitted over the same VPLS tunnel carry the same MPLS labels, traffic from the same site but different L3VPNs cannot be load-balanced among the Eth-Trunk member interfaces. To resolve this problem, run the load-balance hash-fields ip l3 command on the inbound interface of L2-P1 to allow L2-P1 to load-balance traffic from the same site but different L3VPNs among links between L2-P1 and L2-PE2 in the L3VPN over VPLS scenario.\nFor information about fundamentals, see Configuration Guide > IP Service > Load Balancing Configuration > Configuring Hash Factors (L2/L3VPN Over L2VPN Scenarios).\nConfiguration Impact\nAfter this command is configured:\nThe Layer 2 ACL becomes unavailable in the inbound direction. This change affects only MPLS L2VPN and L3VPN packets transmitted over the VPLS tunnel.Port-based MAC address learning restriction becomes unavailable in the inbound direction. This change affects only MPLS L2VPN and L3VPN packets transmitted over the VPLS tunnel.The performance of forwarding L3VPN over L2VPN and L2VPN over L2VPN traffic decreases on a board.PWE3 services of TDM, ATM, POS, FR, and SDH cannot be deployed.The P devices cannot function as egress PEs.\n\nPrecautions\nThis command cannot be run on an Eth-Trunk. It must be run on a trunk's member interface. After this command is run on a trunk's member interface and the member interface is removed from the trunk, you must delete the command and reconfigure it for the configuration to take effect."
+}

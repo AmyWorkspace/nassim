@@ -1,0 +1,37 @@
+{
+    "PageTitle": "peer ip-prefix export (BGP-VPNv4 address family view) (group)",
+    "FuncDef": "The peer ip-prefix export command configures a policy based on an IP prefix list for filtering BGP routes to be advertised to a specified peer group.\nThe undo peer ip-prefix export command cancels this configuration.\nBy default, no route filtering policy based on an IP address prefix list is configured for a peer group.",
+    "CLIs": [
+        "peer <group-name> ip-prefix <ip-prefix-name> export",
+        "undo peer <group-name> ip-prefix [ <ip-prefix-name> ] export"
+    ],
+    "ParentView": [
+        "BGP-VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "specifies the name of an IP address prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "export",
+            "Info": "Applies a filtering policy to the routes to be advertised to a peer group.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix list1 permit 10.0.192.0 8 greater-equal 17 less-equal 18",
+            "[~HUAWEI] bgp 100",
+            "[~HUAWEI-bgp] group a internal",
+            "[~HUAWEI-bgp] ipv4-family vpnv4",
+            "[~HUAWEI-bgp-af-vpnv4] peer a enable",
+            "[~HUAWEI-bgp-af-vpnv4] peer a ip-prefix list1 export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer ip-prefix export command can be used to configure a route filtering policy that is based on an IP prefix list for filtering BGP routes to be advertised to a specified peer group, implementing route control.\nPrerequisites\nIf the peer ip-prefix command specifies an IP prefix list that does not exist for a peer, use the ip ip-prefix command to create an IP prefix list.\nConfiguration Impact\nIf an IP prefix list is specified for a peer group, all the members of the peer group inherit the configuration.\nAfter an IP prefix list is specified for a peer group, the peers in the peer group filter the routes to be advertised to other peers based on the IP prefix list. Only the routes that pass the filtering of the IP prefix list can be advertised.\nPrecautions\nThe peer ip-prefix export command is mutually exclusive with the peer route-filter export commands."
+}

@@ -1,0 +1,29 @@
+{
+    "PageTitle": "mld-snooping robust-count (VSI view)",
+    "FuncDef": "The mld-snooping robust-count command configures the robustness variable. The robustness variable decides the number of group-specific Query messages to be sent by the querier.\nThe undo mld-snooping robust-count command restores the default robustness variable.\nBy default, the robustness variable is 2.",
+    "CLIs": [
+        "mld-snooping robust-count <robust-count-value>",
+        "undo mld-snooping robust-count"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "robust-count robust-count-value",
+            "Info": "Sets the number of group-specific Query messages to be sent by the querier.\nThe value is an integer ranging from 2 to 5."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mld-snooping enable",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] mld-snooping robust-count 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe-mld-snooping-robust-count-command-has-the-following-functions:--Defines-the-number-of-times-a-querier-sends-group-specific-query-messages,-preventing-packet-loss-on-a-network.-When-a-device-receives-an-MLD-Leave-message-for-a-multicast-group,-it-sends-group-specific-query-messages-for-the-number-of-times-defined-by-robust-count-to-check-whether-there-are-any-other-members-in-this-group.-The-interval-at-which-group-specific-query-messages-are-sent-is-set-using-the-mld-snooping-lastmember-queryinterval-command.--Changes-the-aging-time-of-member-ports.-After-receiving-a-Report-message-from-a-downstream-device,-a-device-sets-the-aging-time-of-the-corresponding-member-port-based-on-the-following-formula:-Aging-time-of-a-member-port-=-Number-of-times-group-specific-query-messages-are-sent-x-Interval-at-which-general-query-messages-are-sent-+-Maximum-time-for-a-downstream-host-to-respond-to-a-querier.-The-default-aging-time-is-130-seconds.-The-interval-at-which-general-query-messages-are-sent-is-set-using-the-mld-snooping-query-interval-command.-The-maximum-time-for-a-downstream-host-to-respond-to-a-querier-is-set-using-the-mld-snooping-max-response-time-command.-After-receiving-an-MLD-Leave-message-from-a-host,-a-device-sets-the-aging-time-of-the-corresponding-member-port-based-on-the-following-formula:-Aging-time-of-a-member-port-=-Interval-at-which-group-specific-query-messages-are-sent-x-Number-of-times-group-specific-query-messages-are-sent.-By-default,-the-aging-time-is-re-set-to-2-seconds.-The-mld-snooping-robust-count-command-is-used-to-set-the-number-of-times-group-specific-query-messages-are-sent-in-the-preceding-formula.-The-interval-at-which-group-specific-query-messages-are-sent-is-set-using-the-mld-snooping-lastmember-queryinterval-command.-If-the-querier-receives-a-Report-message-for-the-multicast-group-from-another-host-within-the-robust-value-x-lastmember-queryinterval-period,-it-continues-to-maintain-the-memberships-for-the-group.-Otherwise,-the-querier-considers-that-there-is-no-member-of-the-group-on-the-network-segment,-and-does-not-maintain-the-memberships-for-the-group.\nPrerequisites\nMLD snooping has been enabled using the mld-snooping enable command.\nConfiguration Impact\nIf the mld-snooping robust-count command is run more than once in the same view, the latest configuration overwrites the previous one.\nPrecautions\nTo use the mld-snooping robust-count configuration as a factor of adjusting the member interface aging time, set the same number of group-specific Query messages to be sent as that specified on its upstream device. Otherwise, multicast data transmission will be interrupted between the Layer 2 and Layer 3 devices.\nThe\nmld-snooping robust-count command fails to be run in a VLAN view in any of the following conditions:\nThe VLAN is bound to a VSI.\nThe\nmld-snooping robust-count command fails to be run in a VSI view in the following condition:\nThe VSI is bound to a BD."
+}

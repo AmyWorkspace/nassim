@@ -1,0 +1,49 @@
+{
+    "PageTitle": "mru",
+    "FuncDef": "The mru command configures a maximum receive unit (MRU) for an interface.\nThe undo mru command restores the default MRU for an interface.\nBy default, no MRU is configured, and the length of the received data packet is not compared with the MRU.",
+    "CLIs": [
+        "mru <mru-value>",
+        "undo mru [ <mru-value> ]"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "FlexE interface view",
+        "GE sub-interface view",
+        "GE interface view",
+        "Global-VE layer2 subinterface view",
+        "Global VE sub-interface view",
+        "PW-VE sub-interface view",
+        "VBDIF interface view",
+        "VE layer2 subinterface view",
+        "VE sub-interface view",
+        "VLANIF interface view",
+        "Layer 2 sub-interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mru-value",
+            "Info": "Specifies an MRU for an interface.\nIt is recommended that you do not change the MRU in normal cases. Some protocols have limitations on the smallest packet. If a small MRU is configured, protocol neighbor relationships cannot be established.\nThe value is an integer ranging from 46 to 9600, in bytes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] mru 1600"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] mru 1600"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn some cases, the maximum length of a received data frame needs to be limited at the IP layer. After receiving an IP data packet, the IP layer obtains the interface's MRU and compares the MRU with the length of the received data packet. If the length (excluding the data link layer) of the received data packet is greater than the MRU, the data packet is discarded.\nConfiguration Impact\nWhen the length of protocol packets received on an interface is greater than the MRU configured on the interface, protocol packet loss occurs. Therefore, setting the MRU to a value greater than the MTU is recommended.\nPrecautions\nIf the total length of the packets received by the interface minus the length of the Layer 2 header of the packets is greater than the MRU configured on the interface, the packets are discarded.\nThe following lengths are compared with the MRU:\n Packets received by Ethernet main interfaces and packets with VLAN tags: length starting from the Layer 3 header; MPLS packets: length starting from the MPLS label (label + Layer 3 MPLS packet). PPPoE packets: length starting from the PPPoE header (PPPoE header + Layer 3 packet) IPv6 packets: MRU comparison is not performed on the packets received by main interfaces and packets with VLAN tags, but on MPLS and PPPoE IPv6 packets. MRU comparison is not performed on low-speed cards. MRU comparison is performed only on Layer-2 interfaces in V8."
+}

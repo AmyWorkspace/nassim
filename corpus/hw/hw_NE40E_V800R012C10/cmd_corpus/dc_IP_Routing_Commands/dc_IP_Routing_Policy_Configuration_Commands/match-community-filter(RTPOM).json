@@ -1,0 +1,64 @@
+{
+    "PageTitle": "if-match community-filter",
+    "FuncDef": "The if-match community-filter command sets a filtering rule that is based on the community filter.\nThe undo if-match community-filter command cancels the configuration.\nBy default, no filtering rule based on the community filter is set.",
+    "CLIs": [
+        "if-match community-filter { <basIndex> [ whole-match ] | <AdvIndex> [ sort-match ] } &<1-16>",
+        "if-match community-filter <cfName> [ whole-match | sort-match ]",
+        "undo if-match community-filter { <basIndex> | <AdvIndex> } &<1-16>",
+        "undo if-match community-filter <cfName>",
+        "undo if-match community-filter"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basIndex",
+            "Info": "Specifies the number of the basic community filter.\nThe value is an integer ranging from 1 to 99."
+        },
+        {
+            "Parameters": "whole-match",
+            "Info": "Indicates complete matching. That is, all the communities in the command must be matched. Complete matching is valid only for the basic community filter.\n-"
+        },
+        {
+            "Parameters": "AdvIndex",
+            "Info": "Specifies the number of the advanced community filter.\nThe value is an integer ranging from 100 to 199."
+        },
+        {
+            "Parameters": "sort-match",
+            "Info": "Indicates sort matching. That is, all the communities in the command must be matched in sequence. Sort matching is valid only for the advanced community filter.\n-"
+        },
+        {
+            "Parameters": "cfName",
+            "Info": "Specifies the name of the community filter.\nThe value is a string of 1 to 51 case-sensitive characters, spaces not supported. The string cannot be all numbers. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip community-filter 1 permit 100:200",
+            "[*HUAWEI] route-policy test permit node 10",
+            "[*HUAWEI-route-policy] if-match community-filter 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip community-filter 1 permit",
+            "[*HUAWEI] ip community-filter 2 permit",
+            "[*HUAWEI] route-policy test permit node 11",
+            "[*HUAWEI-route-policy] if-match community-filter 1 whole-match 2 whole-match"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip community-filter basic aa permit",
+            "[*HUAWEI] route-policy test permit node 12",
+            "[*HUAWEI-route-policy] if-match community-filter aa"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip community-filter 101 permit ^10",
+            "[*HUAWEI] route-policy test permit node 13",
+            "[*HUAWEI-route-policy] if-match community-filter 101 sort-match"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe community attribute is a proprietary attribute of BGP. The if-match community-filter command is applicable mainly to BGP routes. The ip community-filter command must be used to define a community filter so that the filtering rule based on this community filter can take effect. For example:\nIf the if-match community-filter 1 command is used but community filter 1 is not configured, all routes match the filtering rule.If the if-match community-filter 1 command is used after the ip community-filter 1 permit 1:1 command is used, the BGP routes with the community attribute 1:1 are permitted.\n\nPrerequisites\nA community filter has been configured using the ip community-filter command.\nA route-policy has been configured using the route-policy command.\nConfiguration Impact\nWhen you filter routes based on the community attributes, the routes that match the filtering rule are permitted and the routes that do not match the filtering rule are denied.\nPrecautions\nThe community filters can be configured in the if-match community-filter command. The relationship between these community filters is OR. Specifically, if a route matches one of these community filters, it matches the matching rules of the command. If the if-match community-filter command is run more than once, the relationship between its configurations is OR.\nThe parameter whole-match is valid only for its front community filter. If multiple community filters are specified in the if-match community-filter command and packets are required to completely match each filter, you need to specify the parameter whole-match behind each community filter.\nThe parameter sort-match is valid only for its front community filter. If multiple community filters are specified in the if-match community-filter command and packets are required to wholly match the regular expansion in the filter in sequence, you need to specify the parameter sort-match behind each community filter.\nThe name of a community filter cannot be all numbers."
+}

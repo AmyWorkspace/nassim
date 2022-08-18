@@ -1,0 +1,29 @@
+{
+    "PageTitle": "suppress-flapping lsp-flood",
+    "FuncDef": "The suppress-flapping lsp-flood command configures a period for the system to delay LSP flooding during route flapping.\nThe suppress-flapping lsp-flood disable command restores the default configuration.\nThe undo suppress-flapping lsp-flood command restores the default configuration.\nBy default, if route flapping occurs, the device delays LSP flooding for 10s.",
+    "CLIs": [
+        "suppress-flapping lsp-flood { disable | timer <delay-interval> [ threshold <threshold-value> ] }",
+        "undo suppress-flapping lsp-flood"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "timer delay-interval",
+            "Info": "Specifies a period for the system to delay LSP flooding during route flapping.\nThe value is an integer ranging from 1 to 600, in seconds."
+        },
+        {
+            "Parameters": "threshold threshold-value",
+            "Info": "Specifies a route flapping threshold. If a route flaps for the specified number of times, LSP flooding is delayed.\nThe value is an integer ranging from 3 to 100, in times."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] suppress-flapping lsp-flood timer 5 threshold 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an IS-IS network, if the Router receives an LSP with a routing information change, the Router floods LSPs to advertise the change. If routing information changes frequently and LSPs are flooded immediately, a lot of system resources will be consumed. To prevent this problem, run the suppress-flapping lsp-flood command to configure a period for the Router to delay LSP flooding during route flapping.\nThe flapping suppression process is as follows:\nIf the same LSP is flooded repeatedly within 3s, IS-IS records a flapping event and increases the flapping_count by 1. If the interval at which the system floods the same LSP is greater than 10s before flapping suppression takes effect, IS-IS clears the flapping_count. If the flapping_count is greater than threshold-value, flapping suppression takes effect.During the flapping suppression period, IS-IS does not flood the same LSP, but the flapping_count may increase during this period. After the delay-interval elapses, IS-IS exits from flapping suppression and clears the flapping_count.\nIf an LSP is suppressed locally, the corresponding LSP on neighbors may age. To prevent this problem, a mechanism is provided. Specifically, if the Remaining Lifetime field in an LSP is less than or equal to delay-interval plus 60s, the LSP is not suppressed.\n\nPrerequisites\nAn IS-IS process has been created and the IS-IS view has been displayed using the isis command.\nConfiguration Impact\nIf the device delays LSP flooding too long, other devices on the network cannot detect the route information change in time, slowing down route convergence."
+}

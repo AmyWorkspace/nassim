@@ -1,0 +1,46 @@
+{
+    "PageTitle": "dhcp lease-proxy",
+    "FuncDef": "The dhcp lease-proxy command enables DHCP lease proxy on a BAS interface and specifies a proxy lease.\nThe undo dhcp lease-proxy command disables DHCP lease proxy on a BAS interface.\nThe dhcp lease-proxy first-step second-step command enables DHCP lease proxy with step-based proxy leases.\nThe undo dhcp lease-proxy first-step second-step command disables DHCP lease proxy with step-based proxy leases.\nBy default, DHCP lease proxy is disabled on a BAS interface.",
+    "CLIs": [
+        "dhcp lease-proxy [ <lease-time> ]",
+        "dhcp lease-proxy first-step <first-step> second-step <second-step>",
+        "undo dhcp lease-proxy [ <lease-time> ]",
+        "undo dhcp lease-proxy first-step <first-step> second-step <second-step>"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lease-time",
+            "Info": "Specifies a proxy lease.\nThe value is an integer ranging from 600 to 3600, in seconds. The default value is 600s."
+        },
+        {
+            "Parameters": "first-step first-step",
+            "Info": "Specifies a first-step proxy lease.\nThe value is an integer ranging from 300 to 599, in seconds."
+        },
+        {
+            "Parameters": "second-step second-step",
+            "Info": "Specifies a second-step proxy lease.\nThe value is an integer ranging from 1800 to 3600, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI] commit",
+            "[~HUAWEI-GigabitEthernet1/0/1.1] bas",
+            "[~HUAWEI-GigabitEthernet1/0/1.1-bas] dhcp lease-proxy 700"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/1.1] bas",
+            "[~HUAWEI-GigabitEthernet1/0/1.1-bas] dhcp lease-proxy first-step 500 second-step 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a scenario where a DHCP server assigns an IP address with a long lease to a client, if the client or the link between the client and the BRAS fails, the user is offline. However, the DHCP server cannot immediately detect the logout because the lease of the assigned IP address has not expired. As a result, the DHCP server cannot release the assigned IP address immediately after the user is offline, causing a waste of address resources. To resolve this problem, run the dhcp lease-proxy command to enable DHCP lease proxy on a BAS interface and specifies a proxy lease. After DHCP lease proxy is enabled, the BRAS functioning as a DHCP relay agent changes the lease to a short proxy lease before sending DHCP Offer and ACK messages to the client. In this way, the BRAS can release the assigned IP address immediately after the user goes offline due to a user-side fault. If the client sends a lease renewal packet after the fault is rectified, the BRAS replies with an NAK message and triggers the client to re-initiate a login request for service restoration.\nUsing shorter proxy leases can accelerate the identification of client or link faults. However, users renew their leases more frequently, increasing the processing load of the device. To balance the conflict between fault detection and processing load, run the dhcp lease-proxy first-step second-step command to enable DHCP lease proxy with step-based proxy leases. After this function is enabled, the first-step proxy lease specified by first-step is used for user login and lease renewal by default. If the number of users on a board exceeds the upper limit, the second-step proxy lease specified by second-step is automatically used for user login and lease renewal.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nLease proxy takes effect only when the lease assigned by the DHCP server is greater than a value that is twice the proxy lease.If a user's lease is delivered by the RADIUS server, the RADIUS-delivered lease takes effect.DHCP lease proxy and WLAN user roaming switchover (which can be enabled using the wlan-switch enable command) are mutually exclusive.A fixed proxy lease and a step-based proxy lease cannot be configured on the same BAS interface. If both a fixed proxy lease and a step-based proxy lease are configured on the same BAS interface, the later configuration overrides the previous one.DHCP lease proxy is not supported in DHCPv6.DHCP lease proxy is not supported on inter-board Eth-Trunk's slave processing board or RUI backup device.DHCP lease proxy is not supported on a BAS interface on which DHCP proxy is disabled.DHCP lease proxy does not support self-defined options."
+}

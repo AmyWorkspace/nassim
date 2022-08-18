@@ -1,0 +1,49 @@
+{
+    "PageTitle": "trust upstream vlan",
+    "FuncDef": "The trust upstream vlan command binds a Layer 2 interface to a DS domain and enables the Layer 2 interface to support BA classification and to change the priorities of IP and MPLS packets.\nThe undo trust upstream vlan command cancels the configuration.\nBy default, no DS domain is bound to a Layer 2 interface.",
+    "CLIs": [
+        "trust upstream { 5p3d | <ds-domain-name> | default } [ inbound | outbound ] vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10>",
+        "undo trust upstream { 5p3d | <ds-domain-name> | default } [ inbound | outbound ] vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10>"
+    ],
+    "ParentView": [
+        "50GE interface view",
+        "50|100GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "FlexE interface view",
+        "Layer 2 GE interface view",
+        "GE sub-interface view",
+        "GE electrical interface view",
+        "Port extension Layer 2 interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ds-domain-name",
+            "Info": "Specifies the name of a DS domain. A DS domain consists of the DiffServ (DS) nodes that adopt the same service policy and Per-Hop Behavior (PHB) collection.\nThe value is a string of 1 to 48 case-sensitive characters."
+        },
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies a start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to",
+            "Info": "Specifies a VLAN ID range.\n-"
+        },
+        {
+            "Parameters": "vlan-id2",
+            "Info": "Specifies an end VLAN ID.\nThe value is an integer ranging from 1 to 4094. vlan-id2 must be greater than vlan-id1."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] diffserv domain ds2",
+            "[*HUAWEI-dsdomain-ds2] quit",
+            "[~HUAWEI] interface GigabitEthernet4/0/0",
+            "[*HUAWEI-GigabitEthernet4/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet4/0/0] port trunk allow-pass vlan 2",
+            "[*HUAWEI-GigabitEthernet4/0/0] trust upstream ds2 inbound vlan 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo implement a simple traffic classification-based QoS policy, for example, to change the priorities of IP and MPLS packets, on a Layer 2 interface, run the trust upstream vlan command to bind the Layer 2 interface to a DS domain and enable the Layer 2 interface to map the priorities of packets.\nThe command trust upstream can take effect only on the outbound interface traffic and the inbound interface traffic by specifying the parameter inbound and outbound. If the inbound parameter is specified, the priority fields, dscp, exp, 8021p, configured in the DS domain is mapped to the internal priorities (queue, color) for the inbound interface traffic. If the outbound parameter is specified, the internal priorities (queue, color) configured in the DS domain is mapped to the priority fields, dscp, exp, 8021p, for the outbound interface traffic.\nConfiguration Impact\nThe trust upstream vlan command is mutually exclusive to the qos phb enable and qos default-service-class commands on a Layer 2 interface.\nPrecautions\nSimple traffic classification cannot be configured on a physical interface that has been added to an Eth-trunk interface."
+}

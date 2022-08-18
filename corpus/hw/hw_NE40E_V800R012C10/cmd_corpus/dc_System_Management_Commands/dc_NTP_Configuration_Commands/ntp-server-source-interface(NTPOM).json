@@ -1,0 +1,62 @@
+{
+    "PageTitle": "ntp-service server source-interface",
+    "FuncDef": "The ntp-service server source-interface command specifies an interface that the NTP IPv4 server listens to.\nThe undo ntp-service server  source-interface command cancels an interface that the NTP IPv4 server listens to.\nThe ntp-service ipv6 server source-address command specifies an address that the NTP IPv6 server listens to.\nThe undo ntp-service ipv6 server source-address command cancels an address that the NTP IPv6 server listens to.\nThe ntp-service server physic-isolate source-interface command configures an IPv4 source interface for isolation on the NTP server.\nThe undo ntp-service server physic-isolate source-interface command deletes the IPv4 source interface for isolation from the NTP server.\nThe ntp-service ipv6 server physic-isolate source-interface command configures an IPv6 source interface for isolation on the NTP server.\nThe undo ntp-service ipv6 server physic-isolate source-interface command deletes the IPv6 source interface for isolation from the NTP server.\nBy default, the NTP server does not listen to any interface.",
+    "CLIs": [
+        "ntp-service server source-interface { <interface-name> | <interface-type> <interface-number> }",
+        "ntp-service ipv6 server source-address <ipv6Addr> [ vpn-instance <vpnName> ]",
+        "ntp-service ipv6 server physic-isolate source-interface { <interface-name> | <interface-type> <interface-number> } source-address <ipv6Addr>",
+        "ntp-service server physic-isolate source-interface { <interface-name> | <interface-type> <interface-number> } source-address <ipv4Addr>",
+        "undo ntp-service server source-interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo ntp-service ipv6 server source-address <ipv6Addr> [ vpn-instance <vpnName> ]",
+        "undo ntp-service ipv6 server physic-isolate source-interface { <interface-name> | <interface-type> <interface-number> } source-address <ipv6Addr>",
+        "undo ntp-service server physic-isolate source-interface { <interface-name> | <interface-type> <interface-number> } source-address <ipv4Addr>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the type and number of a local interface that receives NTP packets.\nThe value is a string of 1 to 47 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type and number of a local interface that receives NTP packets.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the type and number of a local interface that receives NTP packets.\nThe value is a string of 1 to 47 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "source-address ipv6Addr",
+            "Info": "Specifies the IPv6 address that the server listens to. The ipv6-address is a host address and cannot be a multicast address, loopback address, or IP address of a reference clock.\nThe address is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "source-address ipv4Addr",
+            "Info": "Specifies the IPv4 address that the server listens to. The ipv4-address is a host address and cannot be a multicast address, loopback address, or IP address of a reference clock.\nThe value is an IPv4 address in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpnName",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ntp-service server source-interface 10GE 1/0/0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ntp-service ipv6 server source-address 2001:db8::1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ntp-service server physic-isolate source-interface 10GE1/0/0 source-address 10.1.1.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ntp-service ipv6 server physic-isolate source-interface 10GE1/0/0 source-address 10::1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo listen to the packets received from a specified interface or IP address on the NTP server, you can specify the interface as the server source interface. After the interface is specified, the host can receive only the NTP packets from the interface.\nIn VS mode, this command is supported only by the admin VS.\nPrecautions\nIf this command is the first NTP configuration command, the system automatically adds the ntp-service [ ipv6 ] server disable command in the configuration file to disable the NTP service. To enable the NTP service, run the undo ntp-service [ ipv6 ] server disable command. If this command is the last NTP configuration command to be deleted, the system automatically deletes the ntp-service [ ipv6 ] server disable command from the configuration file.If a VPN instance needs to be specified for the NTP IPv6 source address, a VPN must have been created using the ip vpn-instance command and the IPv6 address family must have been enabled using the ipv6-family command in the VPN instance view. Otherwise, command execution will fail.If a source interface needs to be specified for NTP IPv4, this interface must already exist. Otherwise, command execution will fail.If the specified VPN instance or source interface is deleted, the corresponding configuration of the source interface of the NTP server is also deleted.To enhance system security, the NTP server by default does not process the packets received by interfaces or addresses. You can run this command on the server to specify the source interface of the NTP server and add interface and address check to receive only the packets from a trusted source.After a user specifies the source IPv4 interface of the NTP server, the NTP server uses only the primary IP address of the interface as the trusted source address. The packets with a subaddress as the destination address are not handled.If the ntp-service [ipv6] server source-interface all enable, ntp-service server source-interface, and ntp-service ipv6 server source-address commands are all run, the ntp-service [ipv6] server source-interface all enable command takes effect in priority, allowing the server to receive and process the packets sent by all interfaces and addresses."
+}

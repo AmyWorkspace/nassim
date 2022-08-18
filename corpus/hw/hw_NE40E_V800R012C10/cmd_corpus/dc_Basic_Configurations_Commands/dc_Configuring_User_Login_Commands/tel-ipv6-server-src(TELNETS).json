@@ -1,0 +1,54 @@
+{
+    "PageTitle": "telnet ipv6 server-source",
+    "FuncDef": "The telnet ipv6 server-source command specifies an IPv6 address for a Telnet server.\nThe undo telnet ipv6 server-source command restores the default setting.\nThe telnet ipv6 server-source physic-isolate command specifies the isolated source interface of the Telnet server.\nThe undo telnet ipv6 server-source physic-isolate command cancels the isolation of the source interface of the Telnet server.\nBy default, the source IPv6 address of a Telnet server is not specified.",
+    "CLIs": [
+        "telnet ipv6 server-source -a <ipv6-address> [ -vpn-instance <vpn-instance-name> ]",
+        "telnet ipv6 server-source all-interface",
+        "telnet ipv6 server-source physic-isolate -i { <interface-type> <interface-num> | <interface-name> } -a <ipv6-address>",
+        "undo telnet ipv6 server-source -a <ipv6-address> [ -vpn-instance <vpn-instance-name> ]",
+        "undo telnet ipv6 server-source all-interface",
+        "undo telnet ipv6 server-source physic-isolate -i { <interface-type> <interface-num> | <interface-name> } -a <ipv6-address>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-vpn-instance vpn-instance-name",
+            "Info": "Specifies the VPN.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "all-interface",
+            "Info": "Indicates that any interface having an IP address configured can be used as the source interface of a Telnet server.\n-"
+        },
+        {
+            "Parameters": "-i interface-name",
+            "Info": "Specifies the source interface name of a Telnet server.\n-"
+        },
+        {
+            "Parameters": "interface-type interface-num",
+            "Info": "Specifies the source interface type and interface number of a Telnet server.\n-"
+        },
+        {
+            "Parameters": "-a ipv6-address",
+            "Info": "Specifies the source IPv6 address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] telnet ipv6 server-source -a 2001:db8:1::1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] telnet ipv6 server-source all-interface"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] telnet ipv6 server-source physic-isolate -i GigabitEthernet 1/0/0 -a 2001:db8:1::1",
+            "Warning: Telnet server source configuration will take effect in the next login. Do you want to continue? [Y/N]:y",
+            "Info: Succeeded in setting the source interface of the Telnet server to GigabitEthernet1/0/0."
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a restart with non-base configuration, a Telnet server receives login requests from all interfaces and addresses, leading to low system security. To improve system security, you can run the telnet server-source command to specify a source interface or source IPv6 address for the telnet server. Then only authorized users can log in to the Telnet server.\nIf the telnet ipv6 server-source-a command is run and the telnet ipv6 server-sourceall-interface command is not, the specified IPv6 address is used as the source IPv6 address.If the telnet ipv6 server-sourceall-interface command is run and the telnet ipv6 server-source-a command is not, any valid interface on the device can be used as the source interface, including any physical interface with an IP address configured and any created logical interface with an IP address configured.If both the telnet ipv6 server-source-a and telnet ipv6 server-sourceall-interface commands are run, the interface IPv6 address specified in the telnet ipv6 server-source-a command is preferentially used as the source IPv6 address of the Telnet server.If no source interface is specified using the telnet server-source command after the system starts with base configuration, users cannot log in to the system through Telnet.\n\nPrerequisites\nA VPN instance has been created before you specify it for a Telnet server using the telnet ipv6 server-source-aipv6-address [ -vpn-instancevpn-instance-name ] command. Otherwise, the command cannot be executed.\nConfiguration Impact\nAfter the source IPv6 address is specified, the system only allows Telnet users to log in to the Telnet server through this source ipv6 address, and Telnet users logging in through other interfaces are denied. Note that setting this parameter only affects Telnet users that attempt to log in to the Telnet server, and it does not affect Telnet users that have logged in to the server.\nPrecautions\nIf a source interface or source IPv6 address is specified for a Telnet server, Telnet users must be able to communicate with the specified source interface or source IPv6 address at Layer 3 to ensure that authorized Telnet users can log in to the server.If the specified source interface is bound to a VPN instance, the VPN instance is automatically bound to the Telnet server. If the interface to which the specified source IPv6 address belongs is bound to a VPN instance, the -vpn-instance parameter must be specified when you specify the IPv6 address for the client.If the VPN instance bound to the specified source interface is deleted, the VPN configuration specified in the telnet ipv6 server-source -a ipv6-address [ -vpn-instance vpn-instance-name ] command is not cleared but does not take effect. In this case, the Telnet server uses the public network instance instead. If the VPN instance with the same name as the deleted one is reconfigured, the VPN function will be restored.For an IPv6 Telnet server, you can run the telnet ipv6 server-source -a ipv6-address [ -vpn-instance vpn-instance-name ] command to specify a source IPv6 address through which users log in to the server.If the telnet ipv6 server-source all-interface command is run, users can log in to the Telnet server through any valid IPv6 interface address, which increases system security risks. Therefore, running the telnet ipv6 server-source all-interface command is not recommended.If the specified source interface is deleted, the interface configuration in the telnet server-source command is not deleted but does not take effect. If the source interface with the same name as the deleted one is reconfigured, the function will be restored.If both the telnet ipv6 server-source -a and telnet ipv6 server-source all-interface commands are run, the interface specified in the telnet ipv6 server-source -a command is preferentially used as the source interface of the telnet server. If the specified source interface fails to be used for login, the system selects an interface from other valid interfaces for login.The telnet ipv6 server-source -a interface-type interface-number and telnet ipv6 server-source all-interface commands take effect only in IPv6 scenarios.In the interface unnumbered scenario, if the source interface and common source interface (not isolated) are configured and the same IP address and VPN are listened to, the common source interface takes effect. That is, the non-isolation configuration takes effect.Both all-zero listening and interface isolation are configured on the source interface. If the isolation configuration is matched, the isolation configuration takes effect. If the isolation configuration is not matched, the all-zero listening configuration takes effect.The specified IP address is decoupled from the corresponding interface IP address when you configure the isolation source interface. The IP address does not need to be on the specified interface."
+}

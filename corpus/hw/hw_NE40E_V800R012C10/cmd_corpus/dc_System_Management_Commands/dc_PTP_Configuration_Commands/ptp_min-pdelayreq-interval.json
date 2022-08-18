@@ -1,0 +1,34 @@
+{
+    "PageTitle": "ptp min-pdelayreq-interval",
+    "FuncDef": "The ptp min-pdelayreq-interval command sets the minimum interval at which a PTP interface sends Pdelay_Req packets.\nThe undo ptp min-pdelayreq-interval command restores the default minimum interval at which a PTP interface sends Pdelay_Req packets.\nThe default minimum interval at which a PTP interface sends Pdelay_Req packets is 128/1024s.\nBy default, the minimum interval at which a PTP interface sends Pdelay_Req packets is 128/1024s.",
+    "CLIs": [
+        "ptp min-pdelayreq-interval <min-pdelayreq-interval>",
+        "undo ptp min-pdelayreq-interval"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "GE optical interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-pdelayreq-interval",
+            "Info": "Specifies the minimum interval at which a PTP interface sends Pdelay_Req packets.\nIn 1588v2 mode,the value is an integer ranging from 0 to 20. The default value is 7, which means the interval is 128/1024s. In SMPTE-2059-2 mode, the value ranges from 3 to 14, and the default value is 7. The mapping between min-pdelayreq-interval values and actual intervals is as follows:\n0 1/1024s1 2/1024s2 4/1024s3 8/1024s4 16/1024s5 32/1024s6 64/1024s7 128/1024s8 256/1024s9 512/1024s10 1s11 2s12 4s13 8s14 16s15 32s16 64s17 128s18 256s19 512s20 1024s"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ptp min-pdelayreq-interval 6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTwo devices exchange Announce packets to determine the master/slave relationship. The master device sends Sync packets to notify the slave device of time signal parameters and uses a delay measurement mechanism to achieve time signals accuracy.\nDifferent delays on links deteriorate the accuracy of PTP time synchronization. PTP uses the delay measurement mechanism to correct time signals. A delay measurement process is implemented by sending delay measurement request packets and delay response packets. Either of the following parameters can be configured in the ptp delay-mechanism command to enable a specific delay measurement mechanism:\ndelay: enables the delay request-response mechanism, in which information about the clock and time is calculated based on the delay of an entire link between the master and slave clocks. Only the slave clock sends Delay_Req packets to the master clock, and the master clock replies with Delay_Resp packets. Upon receipt, the slave clock uses information carried in Delay_Resp packets to correct time signals.pdelay: enables the peer delay mechanism, in which information about the clock and time is calculated based on the delay time of each link along the path between the master and slave clocks. In this mode, the master and slave clocks can send Pdelay_Rep packets to each other and then correct time signals based on the Pdelay_Resp packets. Upon receipt of the responses, the slave or master clock uses information carried in Delay_Resp packets to correct time signals.\nIf devices exchange PTP packets frequently and consume a lot of bandwidth resources, increase the min-pdelayreq-interval value. If time synchronization accuracy is low, reduce the min-pdelayreq-interval value.\nThis command applies only to 1588v2 and SMPTE-2059-2.\n\nPrecautions\nThe delay request-response mechanism has been configured using the ptp delay-mechanism pdelay command on an OC interface, a BC interface, or a TCandBC interface.\nThis command cannot be run on an OTN subcard.\nIn VS mode, this command is supported only by the admin VS."
+}

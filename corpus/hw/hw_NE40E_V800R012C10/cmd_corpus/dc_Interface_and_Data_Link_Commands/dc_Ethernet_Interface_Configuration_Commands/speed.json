@@ -1,0 +1,40 @@
+{
+    "PageTitle": "speed",
+    "FuncDef": "The speed command sets the rate of an electrical GE interface.\nThe undo speed command restores the default rate of an electrical GE interface.\nBy default, an  interface uses the auto-negotiation mode.",
+    "CLIs": [
+        "speed { 100 | auto }",
+        "speed { 10 | 100 | 1000 | auto }",
+        "speed 1000",
+        "speed 10",
+        "undo speed"
+    ],
+    "ParentView": [
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "100",
+            "Info": "Indicates a rate of 100 Mbit/s.\n-"
+        },
+        {
+            "Parameters": "auto",
+            "Info": "Indicates the auto-negotiation mode.\nIt is recommended that Ethernet interfaces work in auto-negotiation mode provided that the interfaces support this mode. Auto-negotiation is disabled only when two ends of a link work at mismatched rates or duplex modes. In this case, you need to manually set the interface rate and duplex mode.\n-"
+        },
+        {
+            "Parameters": "10",
+            "Info": "Indicates a rate of 10 Mbit/s.\n-"
+        },
+        {
+            "Parameters": "1000",
+            "Info": "Indicates a rate of 1000 Mbit/s, which is provided only by interfaces on a master control board.\n1000M Ethernet networks are developed based on the IEEE802.3 Ethernet standards. The transmission rate of a 1000M Ethernet is 1 Gbit/s, which is ten times the transmission rate of an FE.\nThe standards are IEEE802.3z for optical fibers and copper cables and IEEE802.3ab for twisted pair cables.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet GigabitEthernet0/0/0",
+            "[~HUAWEI-GigabitEthernetGigabitEthernet0/0/0] speed 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn auto-negotiation mode, the local device automatically adjusts the interface rate and duplex mode based on the interface rate and duplex mode of the peer so that both ends can work in the same duplex mode at a highest possible speed.\nOn a large-scale Ethernet network, manually setting the interface rate and duplex mode, verifying the configurations of devices, and checking statistics about Ethernet interfaces require a great deal of time and human input. Therefore, it is recommended that manually setting the interface rate and duplex mode be adopted only when auto-negotiation of an Ethernet link fails or a problem occurs with auto-negotiation. When there is an auto-negotiation problem, you are recommended to upgrade software or hardware of the device to support the auto-negotiation standard defined in IEEE802.3u/z.\nIf both ends support auto-negotiation, the duplex mode with a lower priority is adopted. Interconnected devices working in auto-negotiation mode is the prerequisite to the auto-negotiation mechanism. If one end works in auto-negotiation mode while the other end works in fixed mode, the auto-negotiation mechanism does not take effect.\nManually setting the interface rate and duplex mode usually complicates network planning and maintenance, and incorrect setting may affect even interrupt normal communication on the network. During network planning, if the rate of the interface on the peer end of an Ethernet link is known, you can run the speed command to set the rate for the local interface. However, once the rate of the peer interface changes, the rate of the local interface does not change, which will affect the communication quality.\nPrerequisites\nThe interface where the speed command is to be run is an electrical interface.\nConfiguration Impact\nChanging the rate or the duplex mode of an interface interrupts network communication for a short period.\nRates of the Ethernet interfaces at the two ends of a link must be the same. If one end works at 10 Mbit/s while the other end works at 100 Mbit/s, the link is Down.\nPrecautions\nThe GE mode of the subcard uses electrical modules and does not support the speed 10 configuration.\nThe rate of the GE optical interface is fixed at 1000 Mbit/s, which cannot be changed by using this command.\nIf the rate of an interface is changed, the new rate takes effect only after the interface restarts automatically.\nWhen a GE/FE optical interface does not have any module inserted, the speed { 10 | 100 | 1000 | auto } command can be run, but the command configuration will be deleted if an optical or electrical module inserted into the interface does not support this command. For example, if an optical module that does not support the speed 10 command is inserted into an optical interface that has the speed 10 command configuration, the speed 10 command configuration will be deleted. If an optical or electrical module inserted into the interface supports this command, the command configuration will be retained.\nWhen a GE/FE optical interface has a GE optical module inserted, the interface supports the speed 100 and speed 1000 commands, but not the speed 10 or speed auto command. If the speed 100 command is run, the GE/FE optical interface does not support auto-negotiation, but you can run either the speed 1000 or undo speed command to restore the default configuration, although the speed 1000 or undo speed command configuration is not generated in the configuration file. If a GE/FE optical interface with a GE optical module has the speed 100 command configuration and then the GE optical module is replaced by an electrical module, the speed 100 command configuration will be retained.\nGE/FE optical interfaces with FE optical modules do not support the speed command.\nFor Ethernet electrical interfaces, the speed, duplex, and negotiation auto commands are associated with one another:\nIf auto-negotiation is enabled, the rate and duplex mode specified using speed and duplex commands, respectively, are automatically negotiated.If a rate is specified using the speed command, the duplex mode is automatically changed to full, and auto-negotiation is automatically disabled."
+}

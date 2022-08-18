@@ -1,0 +1,52 @@
+{
+    "PageTitle": "snmp-agent proxy community",
+    "FuncDef": "The snmp-agent proxy community command creates an SNMP proxy community.\nThe undo snmp-agent proxy community command deletes an SNMP proxy community.\nBy default, no SNMP proxy community is configured.",
+    "CLIs": [
+        "snmp-agent proxy community <community-name> remote-engineid <remote-engineid> [ acl { <acl-number> | <acl-name> } | alias <alias-name> ] *",
+        "snmp-agent proxy community cipher <cipher-name> remote-engineid <remote-engineid> [ acl { <acl-number> | <acl-name> } | alias <alias-name> ] *",
+        "undo snmp-agent proxy community <community-name>",
+        "undo snmp-agent proxy community cipher <cipher-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "community-name",
+            "Info": "Specifies the name of an SNMP proxy community.\nThe community-name parameter applies to only SNMPv1 and SNMPv2c entities.\nThe value is a string of case-sensitive characters, spaces not supported. The length range depends on whether the complexity check of community names is enabled:\nIf it is enabled, the length ranges from 8 to 32.If it is disabled, the length ranges from 1 to 32.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "remote-engineid remote-engineid",
+            "Info": "Specifies the engine ID of the managed device.\nThe engine ID of the managed device must be different from the engine ID of the SNMP proxy.\nThe value is an integer ranging from 10 to 64."
+        },
+        {
+            "Parameters": "acl",
+            "Info": "Indicates that a created community is bound to a basic ACL.\nThe basic ACL defines whether NMSs with specified source IP addresses can access SNMP agents.\n-"
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nIf no matching rule is configured for the referenced ACL, the matching rule is permit by default.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "alias alias-name",
+            "Info": "Specifies a community alias.\nThe community alias will be saved in simple text format in the configuration file.\nA community alias must be unique and differs from the community. Only one alias can be configured for a community.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nIf quotation marks are used at both ends of an entered character sting, you can enter spaces in the character string."
+        },
+        {
+            "Parameters": "cipher cipher-name",
+            "Info": "Specify the unencrypted/encrypted string of proxy community name.\nThe value is a string of 1 to 168 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2000",
+            "[*HUAWEI-acl4-basic-2000] quit",
+            "[*HUAWEI] snmp-agent proxy community proxy_public remote-engineid 800007DB03360607111100 acl 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn SNMP community is used to define the relationships between multiple NMSs and a managed device. The community name acts as a password to regulate access to the managed device. An NMS can access a managed device only if the community name carried in the SNMP request sent by the NMS matches the community name configured on the managed device. The snmp-agent proxy community command creates an SNMP community on an SNMP proxy, enabling communication between the NMS and managed device.\nConfiguration Impact\nIf a device receives a packet with a null community name, the device drops the packet without filtering the packet based on ACL rules. In addition, the community name error is logged. A device filters a received packet based on ACL rules only if the packet has a valid community name.\nFollow-up Procedure\nAfter you run the snmp-agent proxy community command, run the display snmp-agent proxy community command to check SNMPv1 or SNMPv2c proxy community information.\nPrecautions\nThe snmp-agent proxy community command applies only to SNMPv1 and SNMPv2c."
+}

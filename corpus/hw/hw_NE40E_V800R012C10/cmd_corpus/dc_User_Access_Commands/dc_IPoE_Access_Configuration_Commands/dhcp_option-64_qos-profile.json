@@ -1,0 +1,40 @@
+{
+    "PageTitle": "dhcp option-64 qos-profile",
+    "FuncDef": "The dhcp option-64 qos-profile command configures an Option 64 parsing mode for the device to parse QoS profile names carried in ACK packets from a DHCP server.\nThe undo dhcp option-64 qos-profile command deletes the Option 64 parsing mode configured on the device to parse QoS profile names carried in ACK packets from a DHCP server.\nBy default, no Option 64 parsing mode is configured on the device to parse QoS profile names carried in ACK packets from a DHCP server.",
+    "CLIs": [
+        "dhcp option-64 qos-profile [ parse-mode separator <separator> segment <segment> ]",
+        "undo dhcp option-64 qos-profile [ parse-mode separator <separator> segment <segment> ]"
+    ],
+    "ParentView": [
+        "AAA domain view",
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "parse-mode",
+            "Info": "Option 64 parsing mode.\n-"
+        },
+        {
+            "Parameters": "separator separator",
+            "Info": "Delimiter that divides an Option 64 value into several segments.\nThe value is one case-insensitive character, spaces unsupported. The default value is |."
+        },
+        {
+            "Parameters": "segment segment",
+            "Info": "Segment which is divided from an Option 64 value and is specified as the QoS profile name to be delivered.\nThe value is an integer ranging from 1 to 3. By default, the value is 2."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp option-64 qos-profile"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain isp1",
+            "[*HUAWEI-aaa-domain-isp1] commit",
+            "[*HUAWEI-aaa-domain-isp1] dhcp option-64 qos-profile parse-mode separator - segment 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nQoS profiles carrying parameters to control user bandwidth are configured on the device. The device selects a QoS profile to allocate bandwidth to users based on the service suite that they apply for. A DHCP server sends ACK packets carrying Option 64 fields. QoS profile names are encapsulated in these Option 64 fields. The dhcp option-64 qos-profile command configures an Option 64 parsing mode to parse QoS profile names to be delivered.\nConfiguration Impact\nAfter the dhcp option-64 qos-profile command is configured in the system view, all QoS profile names delivered to users can be parsed. After the dhcp option-64 qos-profile command is configured in the domain view, only QoS profile names delivered to users in this domain can be parsed. If the dhcp option-64 qos-profile command is configured both in the system view and the domain view, the Option 64 parsing mode configured in the domain view has a higher priority over that in the system view.\nPrecautions\nThis command is supported only on the admin VS.\nIf you delete the configuration in the system view, the configuration in the domain view will not be affected.\nThe dhcp option-64 qos-profile command takes effect for users who go online after you have configured this command."
+}

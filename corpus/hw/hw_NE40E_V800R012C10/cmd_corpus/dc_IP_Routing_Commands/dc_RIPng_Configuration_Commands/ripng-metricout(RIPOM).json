@@ -1,0 +1,73 @@
+{
+    "PageTitle": "ripng metricout",
+    "FuncDef": "The ripng metricout command sets the metric that is added to the RIPng routes sent by an interface.\nThe undo ripng metricout command restores the default setting.\nBy default, the metric that is added to the RIPng routes sent by an interface is 1.",
+    "CLIs": [
+        "ripng metricout <value>",
+        "ripng metricout { { <acl6-number> | acl6-name <acl6-name> } <value> }",
+        "ripng metricout { ipv6-prefix <ipv6-prefix-name> <value> }",
+        "undo ripng metricout"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "GMPLS-UNI interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "value",
+            "Info": "Specifies the metric that is added to the routes that match the filtering conditions of the ACL6 or IPv6 prefix list.\nThe value is an integer ranging from 1 to 15."
+        },
+        {
+            "Parameters": "acl6-number",
+            "Info": "Specifies the number of a basic ACL6.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named basic ACL6.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ipv6-prefix ipv6-prefix-name",
+            "Info": "Specifies the name of an IPv6 prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ripng metricout 12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 2050",
+            "[*HUAWEI-acl6-basic-2050] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ripng metricout 2050 12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ipv6-prefix p1 permit 2001:db8:1::1 128",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ripng metricout ipv6-prefix p1 12"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the metric that is added to the RIPng routes sent by an interface, run the ripng metricout command. You can specify in the command so that the metric is added to only the RIPng routes that match the filtering conditions of the ACL or IP prefix list.\nConfiguration Impact\nWhen a RIPng route is being advertised, the additional metric is added to the route. Therefore, increasing the metric of an interface also increases the metric of the RIPng route sent by the interface. However, the metric of the route in the routing table remains unchanged."
+}

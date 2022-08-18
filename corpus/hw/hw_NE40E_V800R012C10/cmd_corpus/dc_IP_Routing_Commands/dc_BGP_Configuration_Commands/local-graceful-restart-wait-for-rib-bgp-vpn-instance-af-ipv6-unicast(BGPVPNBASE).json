@@ -1,0 +1,36 @@
+{
+    "PageTitle": "peer local-graceful-restart timer wait-for-rib (BGP-VPN instance IPv6 address family view) (IPv6)",
+    "FuncDef": "The peer local-graceful-restart timer wait-for-rib command sets the maximum duration for a BGP restarter to wait for the End-of-RIB flag from a specified peer.\nThe undo peer local-graceful-restart timer wait-for-rib command deletes the configured duration.\nBy default, a BGP restarter waits for the End-of-RIB flag from a specified peer for a maximum of 600s.",
+    "CLIs": [
+        "peer <ipv6-address> local-graceful-restart timer wait-for-rib <wfrtime>",
+        "undo peer <ipv6-address> local-graceful-restart timer wait-for-rib"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a BGP peer.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "wfrtime",
+            "Info": "Specifies the maximum duration for a BGP restarter to wait for the End-of-RIB flag.\nThe value is an integer ranging from 3 to 3000, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-6-vpn1] peer 2001:DB8:1::1 as-number 100",
+            "[*HUAWEI-bgp-6-vpn1] peer 2001:DB8:1::1 local-graceful-restart timer wait-for-rib 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a device supports GR but a BGP peer specified on the device does not support GR, you can run the peer local-graceful-restart timer wait-for-rib command to set the maximum duration for the device to wait for the End-of-RIB flag from the peer. After the BGP session between the device and the peer is reestablished, if the device does not receive the End-of-RIB flag within the specified duration, the BGP session on the device exits from the GR process and the device selects the optimal route among reachable routes."
+}

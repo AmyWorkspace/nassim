@@ -1,0 +1,31 @@
+{
+    "PageTitle": "data-switch disable (VSI-inclusive-root view)",
+    "FuncDef": "The data-switch disable command disables multicast traffic from being transmitted over P2P tunnels when the P2MP PE tunnel is Down.\nThe undo data-switch disable command enables multicast traffic to be transmitted over P2P tunnels when the P2MP PE tunnel is Down.\nBy default, multicast traffic is transmitted over P2P tunnels when the P2MP TE tunnel is Down.",
+    "CLIs": [
+        "data-switch disable",
+        "undo data-switch disable"
+    ],
+    "ParentView": [
+        "VSI-inclusive-root view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] bgp-ad",
+            "[*HUAWEI-vsi-vsi1-bgpad] vpls-id 1:1",
+            "[*HUAWEI-vsi-vsi1-bgpad] vpn-target 1:1 import-extcommunity",
+            "[*HUAWEI-vsi-vsi1-bgpad] vpn-target 1:1 export-extcommunity",
+            "[*HUAWEI-vsi-vsi1-bgpad] quit",
+            "[*HUAWEI-vsi-vsi1] inclusive-provider-tunnel",
+            "[*HUAWEI-vsi1-inclusive] root",
+            "[*HUAWEI-vsi1-inclusive-root] data-switch disable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nP2MP TE FRR establishes a bypass tunnel to provide local link protection for the P2MP TE tunnel used as a primary tunnel. The bypass tunnel is a P2P tunnel.In a dual-root protection scenario in which multicast traffic is carried over a P2MP TE tunnel, you can configure P2MP TE FRR for the P2MP TE tunnel. If the primary P2MP tunnel and its bypass tunnel both go Down, multicast traffic will be switched to the backup P2MP TE tunnel for transmission. After the bypass tunnel goes Up, the bypass tunnel also transmits multicast traffic. As a result, the leaf nodes will receive and forward two copies of traffic. To prevent this situation, run the data-switch disable command. Then, multicast traffic will not be switched to the P2P bypass tunnel when the P2MP TE tunnel is Down. This configuration ensures that the leaf nodes receive multicast traffic only from the backup P2MP TE tunnel.\nPrerequisites\nThe root command has been run to display the VSI-inclusive-root view."
+}

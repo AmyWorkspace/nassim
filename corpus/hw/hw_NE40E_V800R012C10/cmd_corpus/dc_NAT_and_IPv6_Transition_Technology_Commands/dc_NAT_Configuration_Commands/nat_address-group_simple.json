@@ -1,0 +1,55 @@
+{
+    "PageTitle": "nat address-group",
+    "FuncDef": "The nat address-group command creates an address pool in a simplified NAT instance.\nThe undo nat address-group command deletes an address pool in a simplified NAT instance.\nBy default, no address pool is configured in a simplified NAT instance.",
+    "CLIs": [
+        "nat address-group <address-group-name> group-id <id> <start-address> { mask { <address-mask-length> | <address-mask> } | <end-address> } [ vpn-instance <vpn-instance-name> ] [ no-pat ]",
+        "undo nat address-group <address-group-name> [ group-id <id> [ <start-address> { mask { <address-mask> | <address-mask-length> } | <end-address> } ] [ vpn-instance <vpn-instance-name> ] [ no-pat ] ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "address-group-name",
+            "Info": "Specifies the name of an IP address pool.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "group-id id",
+            "Info": "Specifies an address pool ID.\nThe value is an integer ranging from 0 to 127."
+        },
+        {
+            "Parameters": "start-address",
+            "Info": "Specifies a start IP address in a public address pool.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask address-mask-length",
+            "Info": "Specifies the mask length of public IP addresses.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "mask address-mask",
+            "Info": "Specifies the mask of public IP addresses.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "end-address",
+            "Info": "Specifies the end IP address in a public network address pool.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "no-pat",
+            "Info": "Enables no-PAT NAT translation.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance nat1 id 1 simple-configuration",
+            "[*HUAWEI-nat-instance-nat1] commit",
+            "[~HUAWEI-nat-instance-nat1] quit",
+            "[~HUAWEI] nat address-group group1 group-id 1 192.168.131.1 192.168.131.155"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA NAT address pool is a collection of public IPv4 addresses. After receiving IPv4 packets sent by users, a NAT device translates private IPv4 addresses carried in the IPv4 packets to public IPv4 addresses and transmits the packets to a public network. The NAT address pool used in NAT is determined by a specific traffic policy.\nTo create an address pool in a simplified NAT instance in the non-easy IP mode, run the nat address-group command.\nPrerequisites\nA simplified NAT instance has been configured using the nat instance command in the system view.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIP addresses in different NAT address pools must be different. An IP address added to a NAT address pool must be different from an interface address or a server address on the NAT device.\nIP addresses in a NAT address pool cannot be assigned to interfaces.\nThe group-id parameter must be configured in the nat address-group command to create a NAT address pool. The group-id parameter identifies an address pool index. The value must be unique. The output of querying address pool information is displayed by indexes."
+}

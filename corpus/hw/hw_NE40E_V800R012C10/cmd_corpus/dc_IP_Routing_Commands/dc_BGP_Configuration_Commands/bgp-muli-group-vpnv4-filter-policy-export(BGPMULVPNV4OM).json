@@ -1,0 +1,46 @@
+{
+    "PageTitle": "peer filter-policy export (BGP multi-instance VPNv4 address family view) (group)",
+    "FuncDef": "The peer filter-policy export command configures an ACL-based policy for filtering BGP routes to be advertised to a specified peer group.\nThe undo peer filter-policy export command cancels this configuration.\nBy default, no filtering policy is set for a peer group.",
+    "CLIs": [
+        "peer <group-name> filter-policy <acl-number> export",
+        "peer <group-name> filter-policy acl-name <acl-name> export",
+        "undo peer <group-name> filter-policy <acl-number> export",
+        "undo peer <group-name> filter-policy acl-name <acl-name> export"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "export",
+            "Info": "Filters routes to be advertised.\n-"
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2001",
+            "[*HUAWEI-acl4-basic-2001] rule permit",
+            "[*HUAWEI-acl4-basic-2001] comm",
+            "[~HUAWEI-acl4-basic-2001] quit",
+            "[~HUAWEI] bgp 100 instance p1",
+            "[*HUAWEI-bgp-instance-p1] group a internal",
+            "[*HUAWEI-bgp-instance-p1] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-instance-p1-af-vpnv4] peer a enable",
+            "[*HUAWEI-bgp-instance-p1-af-vpnv4] peer a filter-policy 2001 export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer filter-policy export command is used to configure an ACL-based policy for filtering routes to be advertised to a peer group.\nA proper basic ACL needs to be selected based on the address family of a peer group.\nConfiguration Impact\nIf the peer filter-policy export command is run multiple times, the latest configuration overwrites the previous one. For example, if the peer 2001:DB8:2::2 filter-policy 2600 export command is run and then the peer 2001:DB8:2::2 filter-policy 2400 export command is run, the configuration of the peer 2001:DB8:2::2 filter-policy 2400 export command overwrites that of the peer 2001:DB8:2::2 filter-policy 2600 export command.\nPrecautions\nWhen the rule command is run to configure rules for a named ACL, only the source address range specified by source and the time period specified by time-range take effect.\nThe peer route-filter export command is mutually exclusive with the peer route-filter export commands."
+}

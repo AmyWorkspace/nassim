@@ -1,0 +1,32 @@
+{
+    "PageTitle": "igmp-snooping backup-report forward",
+    "FuncDef": "The igmp-snooping backup-report forward command enables the function to forward IGMP Report/Leave messages on a secondary E-Trunk link to upstream router interfaces.\nThe undo igmp-snooping backup-report forward command disables the function.\nBy default, the function is disabled.",
+    "CLIs": [
+        "igmp-snooping backup-report forward",
+        "undo igmp-snooping backup-report forward"
+    ],
+    "ParentView": [
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vpna",
+            "[*HUAWEI-vsi-vpna] pwsignal ldp",
+            "[*HUAWEI-vsi-vpna-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vpna-ldp] quit",
+            "[*HUAWEI-vsi-vpna] quit",
+            "[*HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] interface Eth-Trunk 1",
+            "[*HUAWEI-Eth-Trunk1] l2 binding vsi vpna",
+            "[*HUAWEI-Eth-Trunk1] igmp-snooping backup-report forward"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a Layer 2 multicast over VPLS scenario, if a CE is dual-homed to PEs through E-Trunk and the primary E-Trunk link works properly, the secondary E-Trunk link is blocked, and therefore the backup PE does not receive IGMP Report messages from the CE. After a primary/secondary E-Trunk link or PE switchover occurs, the current master PE has to learn IGMP Report messages before it can create Layer 2 MDTs. This process is time-consuming, causing length multicast data flow interruptions.\nTo address this problem, Layer 2 multicast supports E-Trunk-based dual-device hot backup. This function allows the system to back up the IGMP Report messages on the backup link. To prevent message loops, by default the backup PE does not forward hot backup messages to router interfaces in the VPLS.\nHowever, if the backup device fails to receive IGMP Report messages, it cannot receive backup multicast flows, and services will be interrupted for a long time after a primary/secondary E-Trunk link switchover occurs. To resolve this problem, run the igmp-snooping backup-report forward command to enable the function to forward IGMP Report/Leave messages on the secondary E-Trunk link to router interfaces in the VPLS.\nIf both the master and backup PEs send IGMP Report/Leave messages to upstream router interfaces, traffic loops may occur. To prevent this problem, run the undo igmp-snooping backup-report forward command to disable the backup PE's AC interface from sending IGMP Report/Leave messages on the secondary E-Trunk link to upstream router interfaces.\nPrerequisites\nIGMP snooping has been enabled using the igmp-snooping enable command.\nThe specified interface has been bound to a VSI using the l2 binding vsi vsi-name command in the interface view."
+}

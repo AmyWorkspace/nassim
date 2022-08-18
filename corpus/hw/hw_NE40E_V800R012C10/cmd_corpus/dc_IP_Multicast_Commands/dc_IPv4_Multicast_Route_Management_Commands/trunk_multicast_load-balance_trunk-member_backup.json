@@ -1,0 +1,44 @@
+{
+    "PageTitle": "trunk multicast load-balance trunk-member backup",
+    "FuncDef": "The trunk multicast load-balance trunk-member backup command enables master/backup protection for trunk member interfaces when the outbound interface of a multicast group is a trunk interface. After the command is run, traffic is quickly switched if a member interface of the trunk interface fails.\nThe undo trunk multicast load-balance trunk-member backup command disables master/backup protection for trunk member interfaces when the outbound interface of a multicast group is a trunk interface.\nBy default, master/backup protection is disabled for trunk member interfaces when the outbound interface of a multicast group is a trunk interface.",
+    "CLIs": [
+        "trunk multicast load-balance interface { if-type if-number | if-name } trunk-member backup { l3mcv4 | l3mcv6 }",
+        "undo trunk multicast load-balance interface { if-type if-number | if-name } trunk-member backup { l3mcv4 | l3mcv6 }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "if-type",
+            "Info": "Specifies an interface type.\n-"
+        },
+        {
+            "Parameters": "if-number",
+            "Info": "Specifies an interface number.\n-"
+        },
+        {
+            "Parameters": "if-name",
+            "Info": "Specifies an interface name.\n-"
+        },
+        {
+            "Parameters": "l3mcv4",
+            "Info": "Indicates Layer 3 IPv4 multicast.\n-"
+        },
+        {
+            "Parameters": "l3mcv6",
+            "Info": "Indicates Layer 3 IPv6 multicast.\n-"
+        },
+        {
+            "Parameters": "interface",
+            "Info": "Specifies an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] trunk multicast load-balance interface Eth-Trunk1 trunk-member backup l3mcv4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf multicast traffic is transmitted over trunk outbound interfaces, by default the device implements group-based multicast load balancing on trunk member interfaces using the hash algorithm. Therefore, if two or more multicast flows belong to the same multicast group but have different outbound sub-interfaces of a trunk interface, the device will select the same trunk member interface for traffic forwarding. This may overburden some trunk member interfaces. To resolve this issue, run the trunk multicast load-balance hash-mode multicast-member command to implement group- and trunk sub-interface-based multicast load balancing using the hash algorithm. Then, if two or more multicast flows belong to the same multicast group but have different outbound sub-interfaces of a trunk interface, the device will select different trunk member interfaces for traffic forwarding. However, when the trunk member interfaces change, the duration during which packet loss occurs or excess packets are received increases significantly. You can run the trunk multicast load-balance trunk-member backup command to enable master/backup protection for trunk member interfaces. When the trunk member interfaces change, traffic can be quickly restored to reduce the duration during which packet loss occurs or excess packets are received.\nPrecautions\nAfter the trunk multicast load-balance trunk-member backup command is run, hardware forwarding resources may be insufficient. If an alarm indicating that hardware forwarding resources are insufficient is generated, you are advised to cancel this command.If downstream multicast traffic of the board where trunk member interfaces reside is replicated on the network processor (NP), this command cannot be configured.After IGMP dual-device hot backup is configured on an Eth-Trunk interface, the trunk multicast load-balance trunk-member backup command cannot configure the Eth-Trunk interface as the outbound interface of a multicast group.If trunk member interfaces are distributed on both Type 1 and Type 2 boards, this command cannot be configured. Type 1 boards: LPUI-21-L/LPUI-51-L/LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUI-51-S/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101/LPUF-51-E/LPUI-51-E/LPUI-51-CM/LPUF-120/LPUF-120-B/LPUF-120-E/LPUI-102-E/LPUI-120/LPUI-120-B/LPUI-120-L/LPUI-52-E/LPUI-120-E/LPUI-120-CM/LPUF-240/LPUF-240-B/LPUF-240-E/LPUI-240/LPUI-240-B/LPUI-240-CM/LPUI-240-L/LPUF-50/LPUF-50-L; Type 2 boards: LPUF-480/LPUF-480-B/LPUI-480/LPUI-480-B/LPUI-480-L/LPUF-480-E/LPUI-480-CM/LPUI-200/LPUI-200-L/LPUF-200/LPUF-200-B/LPUI-1T/LPUI-1T-B/LPUI-1T-L/LPUI-1T-CM/LPUI-241/LPUI-241-B/LPUI-241-CM/LPUF-241/LPUF-241-E/LPUF-52\nIn VS mode, this command is supported only by the admin VS."
+}

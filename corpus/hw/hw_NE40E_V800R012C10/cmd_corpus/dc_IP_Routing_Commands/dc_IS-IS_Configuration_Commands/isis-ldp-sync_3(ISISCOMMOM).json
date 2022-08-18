@@ -1,0 +1,46 @@
+{
+    "PageTitle": "isis timer ldp-sync hold-down",
+    "FuncDef": "The isis timer ldp-sync hold-down command sets the interval during which an interface waits for creating an LDP session and an LDP adjacency before establishing an IS-IS neighbor relationship.\nThe undo isis timer ldp-sync hold-down command restores the default interval.\nBy default, the interval is 10 seconds.",
+    "CLIs": [
+        "isis timer ldp-sync hold-down <value>",
+        "undo isis timer ldp-sync hold-down"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "FlexE interface view",
+        "XGE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "value",
+            "Info": "Specifies the interval during which an interface waits for creating an LDP session and an LDP adjacency before setting up the IS-IS neighbor relationship.\nAn integer ranging from 0 to 65535, in seconds. The default value (10 seconds) is recommended."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis timer ldp-sync hold-down 15"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a network with both active and standby links, if the active link fails, traffic switches to a standby link. Therefore, the standby IS-IS route and backup LDP LSP along the standby link become reachable. After the active link recovers, its IS-IS route converges more rapidly than the LDP LSP. As a result, the IS-IS neighbor relationship is established earlier than the LDP session or LDP adjacency on the active link. Although traffic is directed over the IS-IS route to the active link, traffic fails to be forwarded because no LDP LSP is established.\nTo prevent the traffic forwarding failure, LDP and IS-IS synchronization can be configured. After the active link recovers from a physical fault, the IS-IS route for the active link is set to the Hold-down state, and the Hold-down timer starts. After an LDP session and an LDP adjacency are reestablished over the active link or the Hold-down timer expires, the IS-IS neighbor relationship starts to be established. This allows the LDP LSP and IS-IS route to go Up simultaneously. To set the Hold-down timer, run the isis timer ldp-sync hold-down command.\nPrerequisites\nAn IS-IS process has been enabled using the isis enable command in the interface view."
+}

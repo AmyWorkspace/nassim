@@ -1,0 +1,74 @@
+{
+    "PageTitle": "igmp prompt-leave",
+    "FuncDef": "The igmp prompt-leave command enables the prompt leave function on an interface.\nThe undo igmp prompt-leave command restores the deImmLeaveAclNumValuefault setting.\nBy default, an IGMP interface sends a last-member query message after receiving a Leave message for a specific multicast group from a host.",
+    "CLIs": [
+        "igmp prompt-leave",
+        "igmp prompt-leave group-policy { <acl-number> | acl-name <acl-name> }",
+        "undo igmp prompt-leave"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "PW-VE sub-interface view",
+        "Tunnel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "POS sub-interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of an ACL. This ACL defines the range of multicast groups.\nThe value is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] acl number 2005",
+            "[*HUAWEI-acl4-basic-2005] rule permit source 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-basic-2005] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp prompt-leave group-policy 2005"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] acl name myacl",
+            "[*HUAWEI-acl4-advance-myacl] rule permit ip destination 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-advance-myacl] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp prompt-leave group-policy acl-name myacl"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe prompt leave function enables an interface to directly delete the record of a multicast group after it receives a Leave message for the multicast group, without sending a last-member query message. To enable this function, run the igmp prompt-leave command.\nThis command applies only to IGMPv2.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nConfiguration Impact\nIf the igmp prompt-leave command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nTo enable the prompt leave function for specific multicast groups on an interface, the igmp prompt-leave command requires an ACL configured using the acl command.\nTo use a numbered ACL, specify the source parameter in the rule command in the ACL view to define a multicast group, so that the interface does not send a last-member query message after receiving a Leave message for this group.To use a named ACL, specify the destination and time-range parameters in the rule command in the ACL view to define a multicast group and time range, so that the interface does not send a last-member query message after receiving a Leave message for this group in the specified time range."
+}

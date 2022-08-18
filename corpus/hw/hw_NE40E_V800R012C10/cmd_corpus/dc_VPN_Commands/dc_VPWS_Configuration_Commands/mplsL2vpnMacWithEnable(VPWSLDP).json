@@ -1,0 +1,54 @@
+{
+    "PageTitle": "mpls l2vpn mac-withdraw disable",
+    "FuncDef": "The mpls l2vpn mac-withdraw disable command disables a VLL in Ethernet or VLAN encapsulation mode from sending MAC Withdraw messages during a primary/secondary PW switchover.\nThe undo mpls l2vpn mac-withdraw disable command enables a VLL in Ethernet or VLAN encapsulation mode to send MAC Withdraw messages during a primary/secondary PW switchover.\n\nBy default, a VLL in Ethernet or VLAN encapsulation mode is enabled to send MAC Withdraw messages during a primary/secondary PW switchover.",
+    "CLIs": [
+        "mpls l2vpn mac-withdraw disable",
+        "undo mpls l2vpn mac-withdraw disable"
+    ],
+    "ParentView": [
+        "50GE Layer 2 sub-interface view",
+        "40GE interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "XGE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50|100GE sub-interface view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "50GE interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "400GE Layer 2 sub-interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 10",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls l2vc 2.2.2.2 1000 control-word",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls l2vc 4.4.4.4 2000 control-word secondary",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls l2vpn  redundancy independent",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls l2vpn mac-withdraw disable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nOn an IP RAN network where the primary and secondary VLLs access a VPLS network, the primary and secondary VLLs send MAC Withdraw messages to the VPLS-enabled Radio Service Gateway (RSG) each time a primary/secondary PW switchover is performed. After receiving the MAC-Withdraw messages, the VPLS-enabled RSG clears all learned MAC addresses. Then packets will be transmitted in broadcast mode. To prevent packets from being broadcast, run the mpls l2vpn mac-withdraw disable command to disable the VLL in Ethernet or VLAN encapsulation mode from sending MAC-Withdraws messages during a primary/secondary PW switchover.\nIn the above scenario, the primary and secondary VLLs are configured on the Cell Site Gateway (CSG), and the mVRRP is bound to the VSI on the RSG. When a primary/secondary PW switchover is performed on the CSG, the CSG sends MAC Withdraw messages to the VSI on the RSG. After receiving the MAC Withdraw messages from the CSG, the primary and secondary RSGs clear all MAC addresses, including virtual MAC addresses of the VRRP backup group, learned through the VSI PW. Then packets from the CSG to the RSG will be broadcast through the PW because no virtual MAC address of the VRRP backup group is available. After the mpls l2vpn mac-withdraw disable command is run, packets transmitted through the VSI PW will not be broadcast between the primary and secondary RSGs, preventing network congestion caused by broadcast packets.\n\nPrecautions\n\nThis command applies only to the IP RAN network where the primary and secondary VLLs access a VPLS network. In other scenarios, do not run the mpls l2vpn mac-withdraw disable command; otherwise, services will be interrupted."
+}

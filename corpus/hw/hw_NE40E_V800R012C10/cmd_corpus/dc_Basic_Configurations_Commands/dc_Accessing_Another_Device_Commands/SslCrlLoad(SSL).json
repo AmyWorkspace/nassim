@@ -1,0 +1,29 @@
+{
+    "PageTitle": "crl load",
+    "FuncDef": "The crl load command loads a Certificate Revocation List (CRL) to an SSL policy.\nThe undo certificate load command unloads a CRL from an SSL policy.\nBy default, no CRLs are loaded to SSL policies.",
+    "CLIs": [
+        "crl load <crlType> <crlFile>",
+        "undo crl load <crlType> <crlFile>"
+    ],
+    "ParentView": [
+        "SSL policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "crlType",
+            "Info": "Loads a CRL to an SSL policy.\nEnumerated type, there are three levels:\npem-crl: Loads a PEM CRL to an SSL policy.asn1-crl: Loads an ASN1 CRL to an SSL policy."
+        },
+        {
+            "Parameters": "crlFile",
+            "Info": "Specifies the name of a CRL.\nThis file must be saved in the security sub-directory of the system directory.\nThe value is a string of 1 to 64 case-insensitive characters without a blank space.\nThe specified file name must be consistent with the name of the uploaded file.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssl policy policy1",
+            "[~HUAWEI-ssl-policy-policy1] crl load pem-crl server.pem"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe lifetime of a digital certificate is limited. A Certificate Authority (CA) can revoke a digital certificate to shorten the lifetime of the digital certificate. A CRL is a list of certificates that have been revoked, and therefore should not be relied upon. The CRL is issued by a CA. If a CA revokes a certificate, the key pair defined in the certificate can no longer be used even if the certificate does not expire. After a certificate in a CRL expires, the certificate is deleted from the CRL to shorten the CRL.\nIf the key carried in a certificate is disclosed or a certificate needs to be revoked, use a third-party tool to revoke the certificate. The certificate will be marked revoked and added to a CRL.\nPrerequisites\nThe ssl policy command has been used in the system view to create an SSL policy.\nConfiguration Impact\nAfter a CRL is loaded to an FTPS client, the client checks whether the server's certificate is in the CRL when the client attempts to access the server. If the server's certificate is in the CRL, the connection fails.\nPrecautions\nA maximum of two CRL files can be loaded to an SSL policy."
+}

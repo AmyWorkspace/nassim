@@ -1,0 +1,43 @@
+{
+    "PageTitle": "trap-threshold",
+    "FuncDef": "The trap-threshold command sets a threshold and detection interval for the SDH B1 or SDH B2 error alarm on an interface.\nThe undo trap-threshold command restores the threshold and detection interval of the SDH B1 or SDH B2 error alarm to the default values on an interface.\nBy default, the threshold for the SDH B1 or SDH B2 error alarm is 1000, and the detection interval is 10 seconds.",
+    "CLIs": [
+        "trap-threshold { sdh-b1-error | sdh-b2-error } <threshold> interval-second <interval>",
+        "undo trap-threshold { sdh-b1-error | sdh-b2-error }"
+    ],
+    "ParentView": [
+        "10G WAN interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sdh-b1-error",
+            "Info": "Indicates SDH B1 error frames.\n-"
+        },
+        {
+            "Parameters": "sdh-b2-error",
+            "Info": "Indicates SDH B2 error frames.\n-"
+        },
+        {
+            "Parameters": "threshold",
+            "Info": "Specifies an alarm threshold for the number of SDH B1 or SDH B2 error frames.\nThe value is an integer ranging from 1 to 65535. The default value is 1000."
+        },
+        {
+            "Parameters": "interval-second interval",
+            "Info": "Specifies a detection interval for SDH B1 or SDH B2 error frames.\nThe value is an integer ranging from 1 to 65535, in seconds. The default value is 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] trap-threshold sdh-b1-error 10 interval-second 12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface pos 1/0/0",
+            "[*HUAWEI-Pos1/0/0] trap-threshold sdh-b1-error 10 interval-second 12"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen an interface generates a large number of SDH B1 or SDH B2 error frames frequently, the link quality is poor and cannot ensure traffic transmission for normal services. To monitor the link quality, run the snmp-agent trap enable feature-name port trap-name { hwifmonitorsdhb1errorrising | hwifmonitorsdhb2errorrising } command to enable the SDH B1 or SDH B2 alarm function, and then run the trap-threshold { sdh-b1-error | sdh-b2-error } command to set an alarm threshold and detection interval. After this configuration is performed, the device monitors the number of SDH B1 or SDH B2 error frames on the interface at the specified detection interval. When the number of SDH B1 or SDH B2 error frames on the interface reaches the specified threshold for three consecutive detection intervals, the link quality is poor. Only in this case, the device generates an alarm and sends it to an NMS so that the administrator can be instructed to maintain the interface and troubleshoot the fault. The device sends a clear alarm to the NMS only when the number of SDH B1 or SDH B2 error frames on the interface falls below the specified threshold for three consecutive detection intervals to inform the administrator that the fault is rectified.\nPrerequisites\nThe alarm function has been enabled using the snmp-agent trap enable feature-name port trap-name { hwifmonitorsdhb1errorrising | hwifmonitorsdhb2errorrising } command in case that the number of SDH B1 or SDH B2 error frames reaches an alarm threshold."
+}

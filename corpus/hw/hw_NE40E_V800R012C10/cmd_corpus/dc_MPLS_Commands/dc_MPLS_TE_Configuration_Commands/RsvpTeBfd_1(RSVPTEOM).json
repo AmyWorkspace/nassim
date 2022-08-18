@@ -1,0 +1,44 @@
+{
+    "PageTitle": "mpls rsvp-te bfd all-interfaces",
+    "FuncDef": "The mpls rsvp-te bfd all-interfaces command sets BFD session parameters on all RSVP-TE interfaces.\nBy default, BFD sessions use default parameter values.",
+    "CLIs": [
+        "mpls rsvp-te bfd all-interfaces { detect-multiplier <multiplier> | min-tx-interval <tx-interval> | min-rx-interval <rx-interval> | process-pst | tos-exp <tosexp-value> } *"
+    ],
+    "ParentView": [
+        "MPLS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "detect-multiplier multiplier",
+            "Info": "Specifies a BFD detection multiplier.\nThe value is an integer that ranges from 3 to 50 .\nThe default value is 3."
+        },
+        {
+            "Parameters": "min-tx-interval tx-interval",
+            "Info": "Specifies the minimum interval at which BFD packets are sent.\nThe value is an integer that ranges from 3 to 20000.\nThe default value is 10."
+        },
+        {
+            "Parameters": "min-rx-interval rx-interval",
+            "Info": "Specifies the minimum interval at which BFD packets are received.\nThe value is an integer that ranges from 3 to 20000.\nThe default value is 10."
+        },
+        {
+            "Parameters": "process-pst",
+            "Info": "Set BFD PST.\n-"
+        },
+        {
+            "Parameters": "tos-exp tosexp-value",
+            "Info": "Configure the priority of BFD packets.\nAn integer ranging from 0 to 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls rsvp-te",
+            "[*HUAWEI-mpls] mpls rsvp-te bfd all-interfaces min-tx-interval 50 min-rx-interval 40"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nActual local interval at which BFD packets are sent = MAX { Local interval at which BFD packets are sent, Remote interval at which BFD packets are received }; Actual local interval at which BFD packets are received = MAX { Remote interval at which BFD packets are sent, Local interval at which BFD packets are received }; Local detection period = Actual interval at which BFD packets are received x Remote BFD detection multiplier.\nFor example:\nThe local sending interval is 200 ms, while the local receiving interval is 300 ms, and the detection multiplier is 4.The remote sending interval is 100 ms, while the remote receiving interval is 600 ms, and the detection multiplier is 5.The actual local sending interval is 600 ms (MAX { 200 ms, 600 ms }), while the local receiving interval is 300 ms (MAX { 100 ms, 300 ms }), and the detection period is 1500 ms (300 ms x 5).The actual remote sending interval is 300 ms (MAX { 100 ms, 300 ms }), while the receiving interval is 600 ms (MAX { 200 ms, 600 ms }), and the detection period is 2400 ms (600 ms x 4).\nOn an interface on which BFD for PST is enabled, configure the process-pst parameter in this command to enable the interface to more rapidly obtain BFD detection results.\n\nPrerequisites\nBFD has been enabled."
+}

@@ -1,0 +1,126 @@
+{
+    "PageTitle": "tracert lsp (All views)",
+    "FuncDef": "The tracert lsp command enables the system to trace the gateways along the BGP LSP from the source to the destination.",
+    "CLIs": [
+        "tracert lsp [ -a <source-ip> | -exp <exp-value> | -h <ttl-value> | -t <time-out> | -s <size> | -g ] * sr-te policy { policy-name <policyname> | endpoint-ip <endpoint-ip> color <colorid> | binding-sid <bsid> }",
+        "tracert lsp [ -a <source-ip> | -exp <exp-value> | -h <ttl-value> | -t <time-out> | -s <size> | -g ] * segment-routing ip <ip-address> <mask-length> [ version draft2 ] [ remote <remote-ip> ]",
+        "tracert lsp [ -a <source-ip> | -exp <exp-value> | -h <ttl-value> | -t <time-out> | -s <size> | -g ] * segment-routing ip <ip-address> <mask-length> [ version draft2 ] [ remote-fec ldp <remoteipaddr> <remotemasklen> ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ip",
+            "Info": "Specifies a source IP address of the MPLS Echo Request packet to be sent.\nIf no source IP address is specified, the LSR-ID functions as the source address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies an EXP value of the MPLS Echo Request packet to be sent.\nThe value is an integer ranging from 0 to 7. The default value is 0."
+        },
+        {
+            "Parameters": "-h ttl-value",
+            "Info": "Specifies a TTL value of the MPLS Echo Request packet to be sent.\nCarried in the IP header, the TTL field indicates the lifetime of the IP packet and specifies the maximum number of routers that the packet can pass through. The TTL value is set on the source and reduced by 1 each time the packet passes through one router. When the TTL value is reduced to 0, the packet is discarded. At the same time, a timeout packet is sent to notify the source.\nThe value is an integer ranging from 1 to 255. The default value is 30."
+        },
+        {
+            "Parameters": "-t time-out",
+            "Info": "Specifies a period of time for waiting for an MPLS Echo Reply packet.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-s size",
+            "Info": "Specify a packet size.\nThe value is an integer ranging from 100 to 9600."
+        },
+        {
+            "Parameters": "-g",
+            "Info": "Indicates MPLS packet fragmentation for an NQA test instance.\n-"
+        },
+        {
+            "Parameters": "segment-routing",
+            "Info": "Tests a segment routing traffic engineering (SR-MPLS TE) tunnel.\n-"
+        },
+        {
+            "Parameters": "ip ip-address",
+            "Info": "Specifies the destination IPv4 address or host name of an LDP LSP.\nIf the value is an IP address, it is in dotted decimal notation. If the value is a host name, it is a string of 1 to 255 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length of the destination address.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "version",
+            "Info": "Tests SR-MPLS TE tunnels with the protocol version.\n-"
+        },
+        {
+            "Parameters": "draft2",
+            "Info": "Tests SR-MPLS TE tunnels with the protocol version being draft2.\n-"
+        },
+        {
+            "Parameters": "remote remote-ip",
+            "Info": "Specifies the IP address of a remote LDP FEC.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "sr-te",
+            "Info": "Sets the LSP ping type to SR-MPLS TE policy.\n-"
+        },
+        {
+            "Parameters": "policy",
+            "Info": "Sets the LSP ping type to SR-MPLS TE policy.\n-"
+        },
+        {
+            "Parameters": "policy-name policyname",
+            "Info": "Specifies the name of an SR-MPLS TE policy.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "endpoint-ip endpoint-ip",
+            "Info": "Specifies the destination IPv4 address of an SR-MPLS TE policy.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "color colorid",
+            "Info": "Specifies the color ID of an SR-MPLS TE policy.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "binding-sid bsid",
+            "Info": "Specifies the ID of a segment bound to an SR-MPLS TE policy.\nThe value is an integer ranging from 16 to 1048575."
+        },
+        {
+            "Parameters": "remote-fec",
+            "Info": "Indicates the remote FEC type.\n-"
+        },
+        {
+            "Parameters": "ldp remoteipaddr",
+            "Info": "Specifies the IP address of a remote LDP FEC.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "remotemasklen",
+            "Info": "Specifies the mask length for the IP address of a remote LDP FEC.\nThe value is an integer ranging from 0 to 32."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> tracert lsp segment-routing ip 2.2.2.2 32 version draft2",
+            "  LSP Trace Route FEC: SEGMENT ROUTING IPV4 PREFIX 2.2.2.2/32 , press CTRL_C to break.",
+            "  TTL    Replier              Time    Type      Downstream",
+            "  0                                   Ingress   192.168.1.2/[1001 ]",
+            "  1      192.168.1.2          6 ms    Transit   192.168.2.2/[3 ]",
+            "  2      192.168.2.2          6 ms    Egress"
+        ],
+        [
+            "<HUAWEI> tracert lsp sr-te policy policy-name test",
+            "LSP Trace Route FEC: Nil FEC, press CTRL_C to break.  ",
+            "sr-te policy's segment list:",
+            "Preference : 300; Path Type: main; Protocol-Origin : local; Originator: 0, 0.0.0.0; Discriminator: 300; Segment-List ID : 1;  Xcindex : 1",
+            "TTL   Replier            Time     Type       Downstream  ",
+            "0                                Ingress    10.1.2.1/[13312 12]  ",
+            "1     10.1.2.2           63 ms   Transit    10.1.2.2/[12 ]  ",
+            "2     6.6.6.6            93 ms   Egress",
+            "",
+            "sr-te policy's segment list:",
+            "Preference : 400; Path Type: backup; Protocol-Origin : local; Originator: 0, 0.0.0.0; Discriminator: 400; Segment-List ID : 1;  Xcindex : 1",
+            "TTL   Replier            Time      Type       Downstream  ",
+            "0                                Ingress    10.1.2.1/[13312 12]  ",
+            "1     10.1.2.2           63 ms   Transit    10.1.2.2/[12 ]  ",
+            "2     6.6.6.6            93 ms   Egress"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe ping lsp command can be used to check the connectivity of LSPs on an MPLS network, and the tracert lsp command can be used to locate the faulty node.\nThe tracert lsp command uses MPLS Echo Request packets and MPLS Echo Reply packets to detect the connectivity of LSPs. Both Echo Request and Echo Reply packets are transmitted in the format of UDP packets through port 3503. The receiver distinguishes these two types of packets based on the port number. An MPLS Echo Request packet carries FEC information to be detected, and is sent along the same LSP as other packets carrying the same FEC information. In this manner, the connectivity of the LSP is checked. Echo Request packets are transmitted to the destination using MPLS, whereas MPLS Echo Reply packets are transmitted to the source using IP.\nThe tracert lsp command can be used to check links of the following types:\nSR-MPLS BE IPv4 Tracert: To test the fault point of an SR-MPLS BE IPv4 tunnel, run the tracert lsp [ -a source-ip | -exp exp-value | -h ttl-value | -s size | -g ] * segment-routing ip ip-address mask-length version draft2 [ remote remote-ip ] command.SR-MPLS BE tunnel connected with an LDP LSP: To locate a fault point on an SR-MPLS BE tunnel connected with an LDP LSP, run the tracert lsp [ -a source-ip | -exp exp-value | -h ttl-value | -t time-out | -s size | -g ] * segment-routing ip ip-address mask-length version draft2 [ remote remote-ip ] command on the ingress to initiate a tracert test to the egress with the destination address being the LDP LSP.SR-MPLS BE tunnel connected with an LDP LSP: If the LDP side does not support interworking, to locate a fault point on an SR-MPLS BE tunnel connected with an LDP LSP, run the tracert lsp [ -a source-ip | -exp exp-value | -h ttl-value | -s packet-size | -g | -t time-out ] * segment-routing ip ip-address mask-length version draft2 [ remote-fec ldp remoteipaddr remotemasklen ] command on the ingress to initiate a tracert test to the egress with the destination address being the LDP LSP.SR-MPLS TE policy LSP tracert: If the type of tunnels to be tested is SR-MPLS TE policy, to test the connectivity of a manually configured SR-MPLS TE policy tunnel, run the ping lsp [ -a source-ip | -exp exp-value | -h ttl-value | -s packet-size | -t time-out | -g ] * sr-te policy { policy-name policyname | endpoint-ip endpoint-ip color colorid | binding-sid bsid } command to initiate a tracert test to the egress.\n\nPrerequisites\nBefore initiating a trace test, ensure that the UDP module of each node works properly.Ensure that the MPLS module of each node is enabled and works properly.Ensure that the ICMP module of each node works properly; otherwise, a message is returned, indicating the trace test times out.\n\nImplementation Procedure\nThe process of the tracert lsp command is as follows:\nThe source sends an MPLS Echo Request packet with the TTL being 1. After the TTL times out, the first hop sends an MPLS Echo Reply packet to the source.The source sends an MPLS Echo Request packet with the TTL being 2. After the TTL times out, the second hop sends an MPLS Echo Reply packet to the source.The source sends an MPLS Echo Request packet with the TTL being 3. After the TTL times out, the third hop sends an MPLS Echo Reply packet to the source.The preceding process proceeds until an MPLS Echo Request packet reaches the destination.\nIn each probe, when receiving an MPLS Echo Request packet, the device on the last hop replies with an MPLS Echo Reply packet, indicating that the trace test ends. In this manner, the result of each probe is displayed on the source, based on which you can find the path from the source to the destination.\n\nConfiguration Impact\nTo prevent the egress from forwarding a received MPLS Echo Request packet to another node, you can set the destination address in the IP header of the packet to a loopback address with the prefix being 127.0.0.0/8."
+}

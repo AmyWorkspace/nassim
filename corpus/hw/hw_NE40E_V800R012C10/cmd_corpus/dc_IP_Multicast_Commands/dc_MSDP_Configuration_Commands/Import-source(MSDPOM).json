@@ -1,0 +1,35 @@
+{
+    "PageTitle": "import-source",
+    "FuncDef": "The import-source command configures a policy for filtering active sources that can be advertised using source active (SA) messages.\nThe undo import-source command restores the default configuration.\nBy default, all active sources can be advertised using SA messages.",
+    "CLIs": [
+        "import-source acl { <acl-number> | <acl-name> }",
+        "import-source",
+        "undo import-source"
+    ],
+    "ParentView": [
+        "VPN instance MSDP view",
+        "MSDP view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL or an advanced ACL.\nThe value is an integer ranging from 2000 to 3999.\nACLs numbered 2000 to 2999 are basic ACLs. A basic ACL defines a range of source addresses, so that only (S, G) entries that contain a source address in the defined range can be advertised using SA messages.ACLs numbered 3000 to 3999 are advanced ACLs. An advanced ACL defines both ranges of source and group addresses, so that only (S, G) entries that contain source and group addresses in the defined ranges can be advertised using SA messages.If the ACL is not specified, no multicast sources can be advertised."
+        },
+        {
+            "Parameters": "acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 3101",
+            "[*HUAWEI-acl4-advance-3101] rule permit ip source 10.10.0.0 0.0.255.255 destination 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-advance-3101] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] msdp",
+            "[*HUAWEI-msdp] import-source acl 3101"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the import-source command is run, Multicast Source Discovery Protocol (MSDP) filters (S, G) forwarding entries to be advertised based on source addresses when creating SA messages, implementing control over the transmission of multicast source information.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nConfiguration Impact\nIf the import-source command is run more than once, the latest configuration overrides the previous one."
+}

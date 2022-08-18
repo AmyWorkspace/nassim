@@ -1,0 +1,47 @@
+{
+    "PageTitle": "untagged (sub-interface view)",
+    "FuncDef": "The untagged command configures a matching policy on an untagged sub-interface. Untagged VLAN packets entering an interface are distributed to different untagged sub-interfaces according to the DSCP values of these packets and then access the L3VPN.\nThe undo untagged command restores the default configuration.\nBy default, no matching policy is configured on sub-interfaces.",
+    "CLIs": [
+        "untagged { dscp { <dscp-value1> [ to <dscp-value2> ] } &<1-10> | default }",
+        "undo untagged [ dscp { <dscp-value1> [ to <dscp-value2> ] } &<1-10> | default ]"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dscp-value1",
+            "Info": "Specifies the minimum DSCP value.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "dscp-value2",
+            "Info": "Specifies the DSCP value in packets.\nvaldscp2: specifies the maximum DSCP value.valdscp2 must be greater than or equal to valdscp1. valdscp1 and valdscp2 specify a DSCP value range.If you do not specify to valdscp2, valdscp1 specifies the DSCP value in packets.If the valdscp1 [ to valdscp2 ] parameters are run more than once, all configurations take effect.\nIn one untagged command, a maximum of 10 DSCP value ranges can be specified using to.\nAccording to relevant standards, six bits of the Type of Service (ToS) field in an IPv4 packet header serve as the DSCP, which provides reference for differentiated services (DiffServ) and is used to ensure the Quality of Service (QoS) on the IP network. The operation of the traffic controller on the gateway depends on the DSCP field.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "default",
+            "Info": "Indicates that packets that do not match 802.1p value/DSCP value/EthType configured on a sub-interface are processed by the default sub-interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] untagged dscp 1 3 to 6"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.2",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] untagged default"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn Layer 2 networks, packets carry one or two VLAN tags to identify users and services. If an access device does not support QinQ or one VLAN ID is used by multiple services, the access device may add service access information to the 802.1p/DSCP field. In this situation, edge devices on the network need to use the 802.1p/DSCP value to identify access users, bound the users to different VPNs, and apply different QoS scheduling policies. Untagged sub-interfaces provide different L3VPN services for untagged services based on their DSCP values.\nConfiguration Impact\nAfter the untagged dscp command is configured on an untagged sub-interface, the interface of the sub-interface cannot process Layer 3 services, and untagged packets are distributed to the sub-interface for processing.\nPrecautions\nAfter the untagged command is configured on an untagged sub-interface, the port default vlan command cannot be configured on the interface of the sub-interface."
+}

@@ -1,0 +1,22 @@
+{
+    "PageTitle": "bsm semantic fragmentation (IPv6)",
+    "FuncDef": "The bsm semantic fragmentation command enables bootstrap router (BSR) message fragmentation.\nThe undo bsm semantic fragmentation command disables BSR message fragmentation.\nBy default, BSR message fragmentation is disabled.",
+    "CLIs": [
+        "bsm semantic fragmentation",
+        "undo bsm semantic fragmentation"
+    ],
+    "ParentView": [
+        "IPv6 PIM view",
+        "VPN instance IPv6 PIM view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] bsm semantic fragmentation"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA BSR message carries information about all candidate-rendezvous points (C-RPs) on the network. Therefore, if there are a large number of C-RPs, the length of a BSR message will exceed the maximum transmission unit (MTU) of an outbound interface. As a result, the BSR message cannot be processed and RP election fails. Consequently, multicast services cannot be transmitted normally. To resolve this problem, run the bsm semantic fragmentation command to enable BSR message fragmentation, so that the devices on the network can learn consistent RP information and MDTs can be successfully established.\nBSR message fragmentation is recommended because it can solve the problem faced by IP fragmentation that all fragments become unavailable due to loss of fragment information.\nIf IP fragmentation is enabled, the protocol layer transmits the entire BSR message up to the IP layer regardless of the length of the BSR message. The BSR message is then fragmented at the IP layer. After BSR message fragments are transmitted to the destination, the destination cannot parse the entire BSR message if one fragment is lost. As a result, the destination cannot learn RP information and MDTs cannot be established, which causes a multicast data forwarding failure.If BSR message fragmentation is enabled, the protocol layer directly fragments a long BSR message. After BSR message fragments are transmitted to the destination, only the information carried in a lost fragment is lost. As a result, only MDTs corresponding to the information carried in the lost fragments cannot be established, but MDTs corresponding to the information carried in other BSR message fragments that reach the destination can still be established.\n\nPrecautions\nTo use the BSR message fragmentation function, you need to enable this function on all devices. If BSR message fragmentation is not enabled on some devices, RP information on these devices is inconsistent with that on other devices and MDTs cannot be established on these devices."
+}

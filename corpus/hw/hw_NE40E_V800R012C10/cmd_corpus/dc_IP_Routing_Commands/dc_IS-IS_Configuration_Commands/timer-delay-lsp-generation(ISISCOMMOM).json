@@ -1,0 +1,29 @@
+{
+    "PageTitle": "suppress-flapping lsp-generation",
+    "FuncDef": "The suppress-flapping lsp-generation command configures a period for the system to delay generation of the same LSP during route flapping.\nThe suppress-flapping lsp-generation disable command restores the default configuration.\nThe undo suppress-flapping lsp-generation command restores the default configuration.\nBy default, the system delays generation of the same LSP for 10s during route flapping.",
+    "CLIs": [
+        "suppress-flapping lsp-generation { disable | timer <delay-interval> [ threshold <threshold-value> ] }",
+        "undo suppress-flapping lsp-generation"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "timer delay-interval",
+            "Info": "Specifies a period for the system to delay generation of the same LSP during route flapping.\nThe value is an integer ranging from 1 to 600, in seconds."
+        },
+        {
+            "Parameters": "threshold threshold-value",
+            "Info": "Specifies a route flapping threshold. If a route flaps for the specified number of times, LSP generation is delayed.\nThe value is an integer ranging from 3 to 100, in times."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] suppress-flapping lsp-generation timer 5 threshold 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an IS-IS network, when the local routing information changes, the router sends LSPs to advertise the change. If the local routing information changes frequently and new LSPs are generated immediately, a lot of system resources will be consumed. To prevent this problem, run the suppress-flapping lsp-generation command to configure a period for the router to delay generation of the same LSP during route flapping.\nThe flapping suppression process is as follows:\nIf the same LSP is generated repeatedly within 3s, IS-IS records a flapping event and increases the flapping_count by 1. If the interval at which the system generates the same LSP is greater than 10s before flapping suppression takes effect, IS-IS clears the flapping_count. If the flapping_count is greater than threshold-value, flapping suppression takes effect.During the flapping suppression period, IS-IS does not generate the same LSP, but the flapping_count may increase during this period. After the delay-interval elapses, IS-IS exits from flapping suppression and clears the flapping_count.\n\nPrerequisites\nAn IS-IS process has been created and the IS-IS view has been displayed using the isis command.\nConfiguration Impact\nIf the device delays generation of the same LSP too long, the local routing information cannot be advertised to neighbors in time, slowing down route convergence."
+}

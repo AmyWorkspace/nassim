@@ -1,0 +1,61 @@
+{
+    "PageTitle": "ipv6 urpf",
+    "FuncDef": "The ipv6 urpf command enables IPv6 URPF check in the interface view.\nThe undo ipv6 urpf command disables IPv6 URPF check in the interface view.\nBy default, IPv6 URPF check is disabled.",
+    "CLIs": [
+        "ipv6 urpf strict",
+        "ipv6 urpf strict allow-default",
+        "ipv6 urpf loose",
+        "ipv6 urpf loose allow-default",
+        "ipv6 urpf { loose | strict } [ allow-default ] statistics enable",
+        "undo ipv6 urpf"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "40GE interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "VLANIF interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "strict",
+            "Info": "Indicates URPF strict check. After receiving a packet, a router searches for the interface board slot ID, interface number, and VLAN ID (only for VLAN packets) information corresponding to the source IPv6 address of the packet in the FIB table, and matches the obtained interface board slot ID, interface number, and VLAN ID information against the information of the packet. If they match, the router forwards the packet; if they do not match, the router discards the packet.\n-"
+        },
+        {
+            "Parameters": "allow-default",
+            "Info": "Indicates that URPF is implemented for packets matching the default route.\n-"
+        },
+        {
+            "Parameters": "loose",
+            "Info": "Indicates URPF loose check. After receiving a packet, a router uses the source IPv6 address in the packet as the destination address, and searches the FIB table for an outbound interface mapped to the destination IPv6 address. If the outbound interface is found, the router forwards the packet; if the outbound interface is not found, the router discards the packet.\n-"
+        },
+        {
+            "Parameters": "statistics",
+            "Info": "Indicates the URPF statistics function.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables the URPF statistics function.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 urpf strict allow-default"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/0",
+            "[*HUAWEI-GigabitEthernet2/0/0] ipv6 urpf loose allow-default statistics enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGenerally, when receiving a packet, a router obtains the destination address of the packet and searches the forwarding table for a route to the destination address. If a route to the destination address is found, the packet is forwarded; otherwise, the packet is discarded. When a packet is received on a URPF-enabled interface, the interface obtains the source address and inbound interface of the packet, takes the source address as the destination address to search for the corresponding inbound interface, and then compares the found interface with the inbound interface. If the two interfaces do not match, the interface considers the source address as a spoofing one and discards the packet. In this manner, URPF can effectively protect against malicious attacks by blocking packets with bogus source addresses.\nIf all packets on an interface need to be checked by URPF, URPF is enabled on the interface."
+}

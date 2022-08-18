@@ -1,0 +1,66 @@
+{
+    "PageTitle": "ptp port-state",
+    "FuncDef": "The ptp port-state command allows you to specify the 1588v2 interface status.\nThe undo ptp port-state command restores the default 1588v2 interface status.\nBy default, the 1588v2 interface works in the Initializing state.",
+    "CLIs": [
+        "ptp port-state { disabled | faulty | initializing | listening | master | passive | premaster | slave | uncalibrated }",
+        "undo ptp port-state"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "GE optical interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "disabled",
+            "Info": "Configures a 1588v2 interface to work in the Disabled state. The disabled interface sends no 1588v2 packets and discards all received 1588v2 packets, except for management messages. Setting a 1588v2 interface to the Disabled state is equivalent to running the undo ptp enable command in the interface view to disable 1588v2 on the interface.\n-"
+        },
+        {
+            "Parameters": "faulty",
+            "Info": "Configures a 1588v2 interface to work in the Faulty state. The faulty interface does not send 1588v2 packets, except for responses to some management messages.\n-"
+        },
+        {
+            "Parameters": "initializing",
+            "Info": "Configures a 1588v2 interface to work in the Initializing state. An initializing interface does not send or receive 1588v2 packets.\n-"
+        },
+        {
+            "Parameters": "listening",
+            "Info": "Configures a 1588v2 interface to work in the Listening state. The listening interface does not track external time information or advertise time information. An OC working in slave-only mode changes from the Master state to the Listening state if the OC fails.\n-"
+        },
+        {
+            "Parameters": "master",
+            "Info": "Configures a 1588v2 interface to work in the Master state. The master interface advertises time information to other devices.\n-"
+        },
+        {
+            "Parameters": "passive",
+            "Info": "Configures a 1588v2 interface to work in the Passive state. The passive interface does not track external time information or advertise time information. Passive interfaces can send Delay_Req, Pdelay_Resp, Delay_Resp_Follow_Up, signaling, and management response messages. If a device has multiple master 1588v2 interfaces in the same clock domain, the device selects the interface with the highest priority as the master clock. The interface connected to the master clock is the slave clock. The unselected master interfaces enter the Passive state and function as backups for the slave clock.\n-"
+        },
+        {
+            "Parameters": "premaster",
+            "Info": "Configures a 1588v2 interface to work in the Premaster state. The premaster interface does not track external time information or advertise time information. Premaster interfaces can send Pdelay_Req, Pdelay_Resp, Delay_Resp_Follow_Up, signaling, and management response messages.\n-"
+        },
+        {
+            "Parameters": "slave",
+            "Info": "Configures a 1588v2 interface to work in the Slave state. This interface keeps tracking time information. Each 1588v2 device has a single slave interface.\n-"
+        },
+        {
+            "Parameters": "uncalibrated",
+            "Info": "Configures a 1588v2 interface to work in the Uncalibrated state. There are a few scenarios for the Uncalibrated state usage. An uncalibrated interface has detected one or more master interfaces in the same clock domain. The uncalibrated interface selects a master interface as a time source to synchronize with. The Uncalibrated state is a temporary state.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp set-port-state enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ptp port-state slave"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nStatic clock source selection and dynamic BMC selection are two independent mechanisms. Static clock source selection has a configuration priority higher than dynamic BMC selection. To manually determine the master/slave relationship between clock nodes within a network, run the ptp port-state command to set the status of 1588v2 interfaces on the nodes.\nThe limits on static 1588v2 interface status configurations are as follows:\nA TC interface can only work in the Premaster state, which cannot be changed. TC interfaces reside on E2ETC devices, P2PTC devices, E2ETCOC devices, P2PTCOC devices, and TCandBC devices.Delete the state setting before you perform either of the following operations:Change the clock type to E2ETC, P2PTC, E2ETCOC, or P2PTCOC.Configure an interface on a TCandBC as a TC interface.Each 1588v2 device has a single slave interface.The ptp set-port-state enable and ptp slaveonly commands are mutually exclusive.\nThis command applies only to 1588v2 and SMPTE-2059-2.\n\nPrerequisites\nThe ptp set-port-state enable command has been run in the system view to enable you to set the 1588v2 interface status.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

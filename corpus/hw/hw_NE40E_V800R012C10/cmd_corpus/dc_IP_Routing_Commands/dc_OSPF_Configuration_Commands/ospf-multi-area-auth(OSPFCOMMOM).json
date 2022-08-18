@@ -1,0 +1,117 @@
+{
+    "PageTitle": "ospf authentication-mode multi-area",
+    "FuncDef": "The ospf authentication-mode multi-area command configures an authentication mode for a multi-area adjacency interface.\nThe ospf authentication-mode multi-area null command configures null authentication for a multi-area adjacency interface.\nThe undo ospf authentication-mode multi-area command deletes the authentication mode configured for a multi-area adjacency interface.\nBy default, a multi-area adjacency interface does not authenticate OSPF packets.",
+    "CLIs": [
+        "ospf authentication-mode simple [ plain <plain-text> | [ cipher ] <cipher-text> ] multi-area { <area-id> | <area-id> }",
+        "ospf authentication-mode { md5 | hmac-md5 | hmac-sha256 } [ <key-id> { plain <plain-text> | [ cipher ] <cipher-text> } ] multi-area { <area-id> | <area-id> }",
+        "ospf authentication-mode null multi-area { <area-id> | <area-id> }",
+        "ospf authentication-mode keychain <keychain-name> multi-area { <area-id> | <area-id> }",
+        "undo ospf authentication-mode multi-area { <area-id> | <area-id> }"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "VBDIF interface view",
+        "FlexE interface view",
+        "Cellular channel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "GMPLS-UNI interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "plain",
+            "Info": "Indicates the simple type.\nConfiguring the ciphertext mode is recommended because simple passwords are stored in simple form in the configuration file, which provokes high security risks. For security purposes, change passwords regularly.\nFor simple authentication, cipher is used by default."
+        },
+        {
+            "Parameters": "plain-text",
+            "Info": "Specifies a simple text password.\nThe value is a string of characters.\nIn simple mode, the value is a string of 1 to 8 characters.In md5, hmac-md5, or hmac-sha256 mode, the value is a string of 1 to 255 characters.\nA password cannot contain a question mark (?), but can contain spaces if surrounded by double quotation marks (\"\"). In this case, the double quotation marks are part of the password."
+        },
+        {
+            "Parameters": "cipher",
+            "Info": "Indicates the ciphertext type.\nFor MD5 or HMAC-MD5 authentication, cipher is used by default."
+        },
+        {
+            "Parameters": "cipher-text",
+            "Info": "Specifies a ciphertext password.\nThe value is a string of characters.\nIn simple mode, if the value is a string of 1 to 8 characters, the password is a simple password; if the value is a string of 24 to 128 characters, the password is a ciphertext password.In md5, hmac-md5, or hmac-sha256 mode, if the value is a string of 1 to 255 characters, the password is a simple password; if the value is a string of 20 to 432 characters, the password is a ciphertext password.\nA password cannot contain a question mark (?), but can contain spaces if surrounded by double quotation marks (\"\"). In this case, the double quotation marks are part of the password."
+        },
+        {
+            "Parameters": "area-id",
+            "Info": "Specifies the ID of an OSPF area.\nThe value can be a decimal integer ranging from 0 to 4294967295 or in the format of an IP address."
+        },
+        {
+            "Parameters": "md5",
+            "Info": "Indicates MD5 authentication.\nConfiguring HMAC-SHA256 rather than MD5 is recommended for the sake of security.\nAn MD5 password must not start with and end with symbols $@$@ because these symbols are used to identify password types during an upgrade."
+        },
+        {
+            "Parameters": "hmac-md5",
+            "Info": "Indicates HMAC-MD5 authentication.\nonfiguring HMAC-SHA256 rather than HMAC-MD5 is recommended for the sake of security.\n-"
+        },
+        {
+            "Parameters": "hmac-sha256",
+            "Info": "Indicates HMAC SHA256 ciphertext authentication.\n-"
+        },
+        {
+            "Parameters": "key-id",
+            "Info": "Specifies the key ID for authentication, which must be the same as the one configured at the other end.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "null",
+            "Info": "Indicates null authentication.\n-"
+        },
+        {
+            "Parameters": "keychain",
+            "Info": "Indicates keychain authentication.\nBefore you configure keychain authentication, run the keychain command to configure a keychain, the key-id command to configure a key ID, the key-string command to configure a password, and the algorithm command to configure an algorithm. If these commands are not run, OSPF authentication fails.\nCurrently, OSPF supports only HMAC-MD5 and HMAC-SHA256 algorithms.\n-"
+        },
+        {
+            "Parameters": "keychain-name",
+            "Info": "Specifies a keychain name.\nThe value is a string of 1 to 47 case-insensitive characters.\nA password cannot contain a question mark (?), but can contain spaces if surrounded by double quotation marks (\"\"). In this case, the double quotation marks are part of the password."
+        },
+        {
+            "Parameters": "simple",
+            "Info": "Indicates simple authentication.\nThe new password is at least eight characters long and contains at least two of the following types: upper-case letters, lower-case letters, digits, and special characters.For security purposes, you are advised to configure a password in ciphertext mode. To further improve device security, periodically change the password.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] area 0",
+            "[*HUAWEI-ospf-1-area-0.0.0.0] quit",
+            "[*HUAWEI-ospf-1] area 1",
+            "[*HUAWEI-ospf-1-area-0.0.0.1] quit",
+            "[*HUAWEI-ospf-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ospf enable 1 area 0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ospf enable multi-area 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] ospf authentication-mode hmac-sha256 1 cipher Huawei-123 multi-area 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] area 0",
+            "[*HUAWEI-ospf-1-area-0.0.0.0] quit",
+            "[*HUAWEI-ospf-1] area 1",
+            "[*HUAWEI-ospf-1-area-0.0.0.1] quit",
+            "[*HUAWEI-ospf-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 2/0/0",
+            "[*HUAWEI-GigabitEthernet2/0/0] ospf enable 1 area 0",
+            "[*HUAWEI-GigabitEthernet2/0/0] ospf enable multi-area 1",
+            "[*HUAWEI-GigabitEthernet2/0/0] ospf authentication-mode hmac-sha256 1 cipher Huawei-123 multi-area 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDue to inherent defects and flawed implementation of the TCP/IP protocol suite, there are an increasing number of attacks, which poses greater threats on TCP/IP networks than ever before. The attacks on network devices may lead to network failures. To configure an authentication mode for a multi-area adjacency interface to improve OSPF network security, run the ospf authentication-mode multi-area command.\nPrerequisites\nThe ospf enable multi-area command has been run.\nConfiguration Impact\nInterface authentication is implemented based on an authentication mode and password between neighboring devices. Interface authentication takes precedence over area authentication.\nPrecautions\nNull authentication is also an authentication mode, different from non-authentication.\nInterfaces of devices on one network segment must share the same authentication mode and password."
+}

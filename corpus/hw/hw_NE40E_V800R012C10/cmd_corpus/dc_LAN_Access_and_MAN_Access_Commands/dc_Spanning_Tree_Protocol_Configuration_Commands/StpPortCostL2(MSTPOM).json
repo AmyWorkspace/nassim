@@ -1,0 +1,42 @@
+{
+    "PageTitle": "stp cost (Layer 2 Ethernet interface view)",
+    "FuncDef": "The stp cost command sets a path cost for a spanning tree port.\nThe undo stp cost command restores the default path cost.\nBy default, the path cost of a spanning tree port is the path cost corresponding to the port rate.",
+    "CLIs": [
+        "stp [ process <process-id> ] [ instance <instance-id> ] cost <cost>",
+        "undo stp [ process <process-id> ] [ instance <instance-id> ] cost"
+    ],
+    "ParentView": [
+        "Layer 2 100GE interface view",
+        "Layer 2 10GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Layer 2 Eth-Trunk interface view",
+        "Layer 2 GE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "process process-id",
+            "Info": "Specifies the ID of a Multiple Spanning Tree Protocol (MSTP) process.\nThe value is an integer ranging from 1 to 256."
+        },
+        {
+            "Parameters": "instance instance-id",
+            "Info": "Specifies the ID of a spanning tree instance.\nIf instance <instance-id> is not specified, the path cost of an interface in the Common and Internal Spanning Tree (CIST) is configured.\nThe value is an integer ranging from 0 to 4094, Value 0 indicates CIST."
+        },
+        {
+            "Parameters": "cost",
+            "Info": "Specifies the path cost of an interface.\nThe value varies with path cost calculation standards:\nHuawei legacy standard: 1 to 200,000IEEE 802.1D standard: 1 to 65535IEEE 802.1t standard: 1 to 200,000,000"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] stp instance 2 cost 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPort path costs are important basis for calculating a spanning tree. Path costs determine root port selection. On a spanning tree, the port with the lowest path cost to the root bridge is selected as a root port. To configure a port path cost, run the stp cost command.\nIf different path costs are set for a port in different spanning tree instances, traffic of different VLANs will be forwarded along different physical links and VLAN-based load balancing can be performed.\nPrerequisites\nA path cost calculation standard has been set using the stp pathcost-standard command. By default, the IEEE 802.1T is used to calculate the path cost.\nConfiguration Impact\nIf the path cost of a port changes, the spanning tree where the port resides is recalculated.\nPrecautions\nIf the path cost calculation standard is changed using the stp pathcost-standard command, the path cost set using the stp cost command is restored to the default value."
+}

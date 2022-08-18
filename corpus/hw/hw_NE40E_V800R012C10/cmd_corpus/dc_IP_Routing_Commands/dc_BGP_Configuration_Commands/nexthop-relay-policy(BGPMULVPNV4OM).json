@@ -1,0 +1,30 @@
+{
+    "PageTitle": "nexthop recursive-lookup (BGP multi-instance VPNv4 address family view) (route-policy)",
+    "FuncDef": "The nexthop recursive-lookup command configures route-policy/route-filter-based next hop recursion.\nThe undo nexthop recursive-lookup command disables route-policy/route-filter-based next hop recursion.\nBy default, route-policy-based next hop recursion is disabled.",
+    "CLIs": [
+        "nexthop recursive-lookup route-policy <route-policy-name>",
+        "undo nexthop recursive-lookup route-policy"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Indicates the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix ip_nexthop permit 0.0.0.0 32 greater-equal 32 less-equal 32",
+            "[*HUAWEI] route-policy nexthop permit node 0",
+            "[*HUAWEI-route-policy] if-match ip-prefix ip_nexthop",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100 instance p1",
+            "[*HUAWEI-bgp-instance-p1] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-instance-p1-af-vpnv4] nexthop recursive-lookup route-policy nexthop"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP needs route recursion in case of next hops. If route recursion is not limited, BGP routes may be incorrectly iterated, causing traffic loss. Therefore, next hops should perform recursion according to certain conditions.\nTo control route recursion based on a route-policy, run the nexthop recursive-lookup route-policy command. If a target recursive route is filtered out by the route-policy, the route is considered unreachable. In this manner, BGP route recursion will fail.\nPrerequisites\nThe target recursive route has been determined, and a route-policy has been configured.\nBefore configuring a route-policy, ensure that all desired target recursive routes will not be filtered out by the route-policy.\nPrecautions\nThe command does not apply to the routes received from LinkLocal peers."
+}

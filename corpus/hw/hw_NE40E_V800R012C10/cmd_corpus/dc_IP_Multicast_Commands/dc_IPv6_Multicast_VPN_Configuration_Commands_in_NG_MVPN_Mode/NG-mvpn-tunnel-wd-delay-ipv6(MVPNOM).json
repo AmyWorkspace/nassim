@@ -1,0 +1,34 @@
+{
+    "PageTitle": "tunnel-withdraw-delay (IPv6 address family MVPN-SPMSI view)",
+    "FuncDef": "The tunnel-withdraw-delay command sets an S-PMSI tunnel withdraw delay for a VPN instance to delay the withdrawal of the S-PMSI tunnel in a switchover from the S-PMSI tunnel to an I-PMSI tunnel.\nThe undo tunnel-withdraw-delay command restores the default value.\nBy default, the S-PMSI tunnel withdraw delay is 5s for a VPN instance.",
+    "CLIs": [
+        "tunnel-withdraw-delay <tunnel-withdraw-delay>",
+        "undo tunnel-withdraw-delay"
+    ],
+    "ParentView": [
+        "IPv6 address family MVPN-SPMSI view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tunnel-withdraw-delay",
+            "Info": "Sets an S-PMSI tunnel withdraw delay for a VPN instance.\nThe value is an integer ranging from 5 to 20, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 mvpn 2.2.2.2",
+            "[*HUAWEI] ip vpn-instance mcast1",
+            "[*HUAWEI-vpn-instance-mcast1] ipv6-family",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] route-distinguisher 100:100",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] multicast ipv6 routing-enable",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] mvpn",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn] ipmsi-tunnel",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn-ipmsi] mldp",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn-ipmsi] quit",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn] spmsi-tunnel",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn-spmsi] tunnel-withdraw-delay 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen multicast data is switched back from an S-PMSI tunnel to an I-PMSI tunnel, the device starts the S-PMSI tunnel withdraw delay timer to prevent service interruptions in case of an I-PMSI tunnel failure during the switchback. If the default value of the timer does not meet actual requirements, run the tunnel-withdraw-delay command to set a longer delay.\nIf multicast data needs to be switched to the S-PMSI tunnel again before the timer expires, the data can be directly switched to the S-PMSI tunnel. If such a switchover is not required, the S-PMSI tunnel is withdrawn when the timer expires.\nPrecautions\nIf a long delay is set using the tunnel-withdraw-delay command, excessive tunnel resources may be consumed before the delay expires, which will then delay new services that need to be transmitted over an S-PMSI tunnel."
+}

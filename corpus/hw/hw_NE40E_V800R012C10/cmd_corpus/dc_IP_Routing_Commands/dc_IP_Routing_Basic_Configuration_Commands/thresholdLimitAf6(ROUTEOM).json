@@ -1,0 +1,28 @@
+{
+    "PageTitle": "ipv6 prefix-limit system threshold-alarm",
+    "FuncDef": "The ipv6 prefix-limit system threshold-alarm command configures thresholds (one alarm threshold and one clear alarm threshold) for the number of IPv6 route prefixes on a device.\nThe undo ipv6 prefix-limit system threshold-alarm command restores the default configuration.\nBy default, the alarm threshold for IPv6 route prefixes is 80%, and the clear alarm threshold for IPv6 route prefixes is 70%.",
+    "CLIs": [
+        "ipv6 prefix-limit system threshold-alarm upper-limit <upper-limit-value> lower-limit <lower-limit-value>",
+        "undo ipv6 prefix-limit system threshold-alarm"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lower-limit lower-limit-value",
+            "Info": "Specifies the clear alarm threshold for the number of IPv6 route prefixes.\nThe value is a percent integer ranging from 1 to 100.\nlowerlimit-percent must be less than upperlimit-percent. Set lowerlimit-percent to a value at least 10 less than upperlimit-percent to prevent alarms from being frequently generated and cleared due to route flapping."
+        },
+        {
+            "Parameters": "upper-limit upper-limit-value",
+            "Info": "Specifies the alarm threshold for the number of IPv6 route prefixes.\nThe value is a percent integer ranging from 1 to 100.\nSet a value less than or equal to 95 for upperlimit-percent."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 prefix-limit system threshold-alarm upper-limit 85 lower-limit 65"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe number of IPv6 route prefixes that can be added to a routing table is limited. If the number exceeds the limit, new prefixes cannot be added to the routing table, which may interrupt services. To address this problem, configure an alarm threshold for the number of IPv6 route prefixes.\nYou can run the ipv6 prefix-limit system threshold-alarm command to configure the two thresholds based on the requirements of services.\nWhen the number of IPv6 route prefixes reaches the maximum number of route prefixes (configured using the ipv6 prefix-limit command) multiplied by upperlimt-percent, an alarm (RM_1.3.6.1.4.1.2011.5.25.145.11.3 hwIpv6PrefixThresholdExceed) is generated.When the number of IPv6 route prefixes falls below the maximum number of route prefixes multiplied by lowerlimt-percent, a clear alarm (RM_1.3.6.1.4.1.2011.5.25.145.11.4 hwIpv6PrefixThresholdExceedClear) is generated.\n\nPrecautions\nThe ipv6 prefix-limit system threshold-alarm command can configure only two thresholds. An alarm is generated only when the following two conditions are met:\nThe alarm function is enabled for the RM module using the snmp-agent trap enable feature-name rm command.The number of IPv6 route prefixes on the device exceeds the alarm threshold."
+}

@@ -1,0 +1,47 @@
+{
+    "PageTitle": "mirror rule service-policy",
+    "FuncDef": "The mirror rule service-policy command configures the mapping between a traffic policy and the Option 82 attribute.\nThe undo mirror rule command deletes the mapping between a traffic policy and the Option 82 attribute.\nBy default, no between a traffic policy and the Option 82 attribute is configured.",
+    "CLIs": [
+        "mirror rule [ <rule-number-name> ] service-policy <service-policy-name> [ partial-match ] { circuit-id | remote-id } <description-text>",
+        "undo mirror rule <rule-number-name> [ service-policy <service-policy-name> [ partial-match ] { circuit-id | remote-id } <description-text> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "service-policy service-policy-name",
+            "Info": "Specifies the name of a value-added service policy.\nThe value is a string of 1 to 64 case-insensitive characters, which can be uppercase letters A to Z, lowercase letters a to z, digits 0 to 9, periods (.), hyphens (-), underscores (_), or their combinations."
+        },
+        {
+            "Parameters": "partial-match",
+            "Info": "Indicates fuzzy matching. Matching succeeds as long as the character string specified by the circuit-id description-text or remote-id description-text parameter is carried in the Option 82 attribute of a user packet.\n-"
+        },
+        {
+            "Parameters": "circuit-id description-text",
+            "Info": "Specifies the circuit ID carried in a DHCP Request or Discover message. During user login process, circuit ID which records a user's physical information is carried in a login request sent to the device.\nThe value is a string of 1 to 198case-sensitive characters, with spaces supported."
+        },
+        {
+            "Parameters": "remote-id description-text",
+            "Info": "Specifies the remote ID carried in a DHCP Request or Discover message. During user login process, remote ID which records a user's physical location is carried in a login request sent to the device.\nThe value is a string of 1 to 198 case-sensitive characters, with spaces supported."
+        },
+        {
+            "Parameters": "rule rule-number-name",
+            "Info": "Specifies a rule ID. If rule-number-name is not specified, the ID of a new rule is the current largest ID plus 5 which cannot exceed the maximum value allowed. If the ID of the first rule is not specified, its ID is 5.\nThe value is an integer ranging from 0 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic policy test1",
+            "[*HUAWEI-trafficpolicy-test1] commit",
+            "[~HUAWEI-trafficpolicy-test1] quit",
+            "[~HUAWEI] service-group huawei",
+            "[~HUAWEI-service-policy-test1] service-group huawei",
+            "[~HUAWEI-service-policy-test1] quit",
+            "[~HUAWEI] service-policy name test1 mirror",
+            "[~HUAWEI] mirror rule 6 service-policy test1 circuit-id 12344"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a scenario where local flow mirroring is performed based on the Option 82 attribute, you need to run the mirror service-policy command to configure the mapping between a traffic policy and the Option 82 attribute, so that user packets whose Option 82 information matches the configured value are mirrored.\nPrerequisites\nA traffic policy has been configured using the traffic-policy command in the system view, and the service policy type has been configured as mirroring using the service-policy name mirror command.\nPrecautions\nThe same or cannot be specified for different rules.If the mirror rule command is run more than once, the latest configuration overrides the previous one.If a service policy template has been configured using the service-policy name command, the service policy template cannot be deleted, and the service group bound to the service template cannot be deleted or changed.If the circuit ID or remote ID information carried in a user login request matches multiple rules, the rule with the smallest ID is selected."
+}

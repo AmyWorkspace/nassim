@@ -1,0 +1,95 @@
+{
+    "PageTitle": "capture-packet access condition",
+    "FuncDef": "The capture-packet access condition mac-address command enables a device to obtain protocol packet headers based on a specified MAC address.\nThe capture-packet access condition interface command enables a device to obtain protocol packet headers based on a specified interface.\nThe capture-packet access condition l2tp slot source-ip dest-ip command enables a device to obtain L2TP packet headers and collect packet statistics based on a specified interface board and IP addresses.\nThe capture-packet access condition l2tp slot local-tunnel-id remote-tunnel-id command enables a device to obtain L2TP packet headers and collect packet statistics based on a specified interface board and tunnel IDs.\nThe undo capture-packet access condition command restores the default configuration.\nBy default, a device is disabled from obtaining protocol packet headers.",
+    "CLIs": [
+        "capture-packet access condition { pppoe | dhcp | dhcpv6 | nd | ip | arp } mac-address <mac-address> vlan-tags <vlan-tags> [ inbound | outbound ] [ time-out <time-out-value> ]",
+        "capture-packet access condition { pppoe | dhcp | dhcpv6 | nd | ip | arp } { interface { <interface-type> <interface-num> | <interface-name> } [ pevlan <pevlan-id> [ cevlan <cevlan-id> ] ] } [ inbound | outbound ] [ time-out <time-out-value> ]",
+        "capture-packet access condition l2tp slot <slot-id> source-ip <source-ip-address> dest-ip <dest-ip-address> [ inbound | outbound ] [ time-out <time-out-value> ]",
+        "capture-packet access condition l2tp slot <slot-id> { local-tunnel-id <local-tunnel-id> | remote-tunnel-id <remote-tunnel-id> } * [ time-out <time-out-value> ]",
+        "undo capture-packet access condition"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pppoe",
+            "Info": "Obtains PPPoE protocol packet headers.\n-"
+        },
+        {
+            "Parameters": "dhcp",
+            "Info": "Obtains DHCP protocol packet headers.\n-"
+        },
+        {
+            "Parameters": "dhcpv6",
+            "Info": "Obtains DHCPv6 protocol packet headers.\n-"
+        },
+        {
+            "Parameters": "nd",
+            "Info": "Obtains ND protocol packet headers.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Obtains IP protocol packet headers.\n-"
+        },
+        {
+            "Parameters": "arp",
+            "Info": "Obtains ARP protocol packet headers.\n-"
+        },
+        {
+            "Parameters": "mac-address mac-address",
+            "Info": "Obtains protocol packet headers based on a MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        },
+        {
+            "Parameters": "vlan-tags vlan-tags",
+            "Info": "Specifies the number of VLAN tags.\nThe value is an integer ranging from 0 to 2."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Obtains inbound packet headers.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Obtains outbound packet headers.\n-"
+        },
+        {
+            "Parameters": "time-out time-out-value",
+            "Info": "Specifies a timeout period for obtaining packet headers.\nThe value is an integer ranging from 1 to 3600, in seconds."
+        },
+        {
+            "Parameters": "pevlan pevlan-id",
+            "Info": "Specifies an outer VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "cevlan cevlan-id",
+            "Info": "Specifies an inner VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Obtains L2TP protocol packet headers based on a slot ID.\nThe value is a string of 1 to 15 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "source-ip source-ip-address",
+            "Info": "Obtains L2TP protocol packet headers based on a source IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "dest-ip dest-ip-address",
+            "Info": "Obtains L2TP protocol packet headers based on a destination IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "local-tunnel-id local-tunnel-id",
+            "Info": "Specifies a local tunnel ID based on which L2TP protocol packet headers are to be obtained.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "remote-tunnel-id remote-tunnel-id",
+            "Info": "Specifies a remote tunnel ID based on which L2TP protocol packet headers are to be obtained.\nThe value is an integer ranging from 1 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] capture-packet access condition l2tp slot 1 source-ip 1.1.1.1 dest-ip 2.2.2.2 time-out 300"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn case of a user access fault, to enable a device to obtain packet headers based on specified rules, run the capture-packet access condition command. This facilitates fault diagnosis. To check information about obtained packet headers, run the display capture-packet access information command.\nThe device distinguishes PPPoE protocol packets in the Discovery Stage and Session stage. If inbound is configured, the device obtains PPPoE packet headers in the Discovery stage. If outbound is configured, the device obtains PPPoE packet headers in the Session stage. If neither inbound or outbound is configured, the device obtains PPPoE packet headers in the Discovery stage only.\nPrecautions\nDue to hardware resource constraints, a maximum of four packet header obtaining rules can be configured. If more than four rules are configured, the capture-packet access condition command fails to take effect, and no prompt message is displayed. Run the display capture-packet access config-state command to check the packet header obtaining configuration."
+}

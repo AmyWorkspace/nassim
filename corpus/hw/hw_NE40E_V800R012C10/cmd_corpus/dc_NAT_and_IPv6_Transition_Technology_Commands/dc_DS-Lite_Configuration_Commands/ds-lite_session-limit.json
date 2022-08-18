@@ -1,0 +1,46 @@
+{
+    "PageTitle": "ds-lite session-limit",
+    "FuncDef": "The ds-lite session-limit command enables the limitation on the maximum number of user-to-network DS-Lite sessions, or sets the maximum number of user-to-network DS-Lite sessions that can be established for each user.\nThe undo ds-lite session-limit command disables the limitation on the maximum number of user-to-network DS-Lite sessions, or restores the default upper limit.\n\nBy default, the limitation on the user-based user-to-network DS-Lite session number is enabled. The maximum number of user-to-network DS-Lite sessions for each user of a specific or all three protocols is as follows:\n\nTCP or UDP: 10240\n\nICMP: 512\n\nTCP, UDP, and ICMP: 8192\n\n\n\nIf the total parameter is set, this parameter takes precedence.",
+    "CLIs": [
+        "ds-lite session-limit { enable | icmp <session-number> | tcp <session-number> | total <session-number> | udp <session-number> }",
+        "undo ds-lite session-limit { enable | { icmp | tcp | total | udp } [ <session-number> ] }"
+    ],
+    "ParentView": [
+        "DS-Lite instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "enable",
+            "Info": "Enables the limitation on the maximum number of user-to-network DS-Lite sessions.\n-"
+        },
+        {
+            "Parameters": "icmp session-number",
+            "Info": "Indicates the maximum number of ICMP user-to-network DS-Lite sessions for each user.\nThe value is an integer ranging from 50 to 65535."
+        },
+        {
+            "Parameters": "tcp session-number",
+            "Info": "Indicates the maximum number of TCP user-to-network DS-Lite sessions for each user.\nThe value is an integer ranging from 50 to 65535."
+        },
+        {
+            "Parameters": "total session-number",
+            "Info": "Indicates the maximum number of all sessions for each user.If the total number of TCP, UDP, and ICMP user-to-network IP sessions for each user reaches the maximum number, DS-Lite cannot be performed even if the number of TCP, UDP, or ICMP user-to-network IP sessions for each user has not reached the maximum number.\nThe value is an integer ranging from 50 to 65535."
+        },
+        {
+            "Parameters": "udp session-number",
+            "Info": "Indicates the maximum number of UDP user-to-network DS-Lite sessions for each user.\nThe value is an integer ranging from 50 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ds-lite instance cpe1 id 1",
+            "[*HUAWEI-ds-lite-instance-cpe1] ds-lite session-limit tcp 20000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ds-lite instance cpe1 id 1",
+            "[*HUAWEI-ds-lite-instance-cpe1] ds-lite session-limit enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the ds-lite session-limit enable command is run in the DS-Lite instance view, the system will allow the creation of only a specified number of user-to-network DS-Lite sessions.\nSome unauthorized users may consume a lot of session resources to attack devices. As a result, there is a possibility that no session can be used by authorized users for DS-Lite. To prevent this, run the ds-lite session-limit command to limit the number of sessions that can be used. A forward session is established for packets transmitted from the user side to the network side.\nConfiguration Impact\nWhen the number of DS-Lite sessions of a user reaches the upper limit, additional DS-Lite sessions cannot be established. After existing DS-Lite sessions age and the number of established sessions falls below the upper limit, new sessions can be established for the user.\nPrecautions\nThe configured the maximum number of user-to-network DS-Lite sessions that can be established can take effect only after the ds-lite session-limit enable command is run."
+}

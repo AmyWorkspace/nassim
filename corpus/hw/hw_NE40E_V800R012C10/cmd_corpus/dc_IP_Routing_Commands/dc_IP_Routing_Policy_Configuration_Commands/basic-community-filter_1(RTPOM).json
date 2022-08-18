@@ -1,0 +1,60 @@
+{
+    "PageTitle": "ip community-filter basic",
+    "FuncDef": "The ip community-filter basic command adds a basic community filter.\nThe undo ip community-filter basic command deletes a basic community filter.\nBy default, no basic community filter exists.",
+    "CLIs": [
+        "ip community-filter basic <basCfName> [ index <index-val> ] <matchMode> [ <cmntyStr> | <cmntyNum> | internet [ strict-match ] | no-advertise | no-export | no-export-subconfed ] &<1-20>",
+        "undo ip community-filter basic <basCfName> [ index <index-val> ] [ <matchMode> ] [ <cmntyStr> | <cmntyNum> | internet [ strict-match ] | no-advertise | no-export | no-export-subconfed ] &<1-20>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "index index-val",
+            "Info": "Specifies the sequence number of a basic community filter.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "matchMode",
+            "Info": "Sets the matching mode of the community filter.\nThe value is an enumerated type:\npermit: Sets the matching mode of the community filter to permit.deny: Sets the matching mode of the community filter to deny."
+        },
+        {
+            "Parameters": "cmntyStr",
+            "Info": "Specifies a community attribute, in the format of aa:nn.\nThe value is in the format of aa:nn. The values of aa, and nn are integers ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "cmntyNum",
+            "Info": "Specifies a community number.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "internet",
+            "Info": "Allows the routes that match the community filter to be sent to all peers.\n-"
+        },
+        {
+            "Parameters": "strict-match",
+            "Info": "Strictly matches the routes with the Internet community attribute.\n-"
+        },
+        {
+            "Parameters": "no-advertise",
+            "Info": "Prevents routes from being advertised to other peers.\n-"
+        },
+        {
+            "Parameters": "no-export",
+            "Info": "Prevents routes from being advertised outside an AS. If an AS confederation is used, routes are not advertised outside the AS confederation, but to other sub-ASs in the AS confederation.\n-"
+        },
+        {
+            "Parameters": "no-export-subconfed",
+            "Info": "Prevents routes from being advertised outside an AS. If an AS confederation is used, routes are not advertised to any other sub-ASs in the AS confederation.\n-"
+        },
+        {
+            "Parameters": "basic basCfName",
+            "Info": "Specifies the name of a basic community filter.\nThe value is a string of 1 to 51 case-sensitive characters. The string cannot be all digits."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip community-filter basic aa deny 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe community attribute is a private attribute of BGP and can be used to filter only BGP routes. The community attribute can be used as a matching condition of a route-policy using a command, such as the if-match community-filter command.\nFollow-up Procedure\nRun the display ip community-filter command to view detailed community filter configurations.\nPrecautions\nOnly the community number or known community attribute can be specified for a basic community filter. The regular expression can be used as a matching rule in an advanced community filter.\nThe relationship between the rules of the community filter is \"AND\", which is different from that of an RD filter. This is because each route has only one RD but can have multiple communities.\nA community filter in different formats may lead to different matching results. For example:\nFormat 1:\nip community-filter 1 permit 100:1 200:1 300:1\nThe filter has one rule, which consists of three communities: 100:1, 200:1, and 300:1. The relationship between them is \"AND.\"\nFormat 2:\nip community-filter 1 permit 100:1\nip community-filter 1 permit 200:1 300:1\nThe filter has two rules. Rule 1 consists of community 100:1, and rule 2 consists of communities 200:1 and 300:1. The relationship between the two rules is \"OR.\"\nIn format 2, the community defined in each rule must be a sub-set of route communities so that the rule can be matched.\nThe RD filters in the following formats have the same matching result:\nFormat 1:\nip rd-filter 100 permit 100:1 200:1 2.2.2.2:1 3.3.3.3:1\nFormat 2:\nip rd-filter 100 permit 100:1 200:1\nip rd-filter 100 permit 2.2.2.2:1\nip rd-filter 100 permit 3.3.3.3:1\nWhen you run the apply comm-filter delete command in the route-policy view, only one community attribute can be deleted each time. To delete more than one community attribute, run the command repeatedly. If multiple community attributes are specified in one filter, none of them can be deleted. For information about examples, see apply comm-filter delete.\nBy default, Community filters work in deny mode. If all matching rules in a filter are configured to work in deny mode, all routes are denied by the filter; to prevent this problem, configure one matching rule in permit mode after one or multiple matching rules in deny mode so that the routes except for those denied by preceding matching rules are permitted by the filter."
+}

@@ -1,0 +1,34 @@
+{
+    "PageTitle": "binding",
+    "FuncDef": "The binding command binds an instance to a performance statistics task.\nThe undo binding command unbinds an instance from a performance statistics task.\nBy default, no instance is bound to a performance statistics task.",
+    "CLIs": [
+        "binding instance-type <instance-type> { <all> | <instance> { <vpn-instance-name> } &<1-8> }",
+        "undo binding instance-type <instance-type> { <all> | <instance> { <vpn-instance-name> } &<1-8> }"
+    ],
+    "ParentView": [
+        "Statistics task view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "instance-type instance-type",
+            "Info": "Specifies the type of an instance bound to a performance statistics task. The instance type is predefined in each feature. Each instance type is defined in a feature.\nThe value is a string of 1 to 63 case-insensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Specifies all instances of a specific type.\nThis parameter is not necessarily supported by all instance types. For details, see the instance type help information.\n-"
+        },
+        {
+            "Parameters": "vpn-instance-name",
+            "Info": "Specifies the name of an instance bound to a performance statistics task.\nThe value is a string of 1 to 255 case-insensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] pm",
+            "[~HUAWEI-pm] statistics-task huawei",
+            "[*HUAWEI-pm-statistics-huawei] binding instance-type interface instance GigabitEthernet1/0/1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo bind an instance to a performance statistics task, run the binding command to allow the system to collect performance statistics about the instance.\nPrerequisites\nThe performance statistics function has been enabled using the statistics enable command.A performance statistics task has been configured.An instance that is to be bound to the performance statistics task has existed.\n\nPrecautions\nIf the bound instance is an Ethernet interface, GE interface, or Eth-Trunk interface, note the following aspects:\nTraffic statistics on the interface are collected at the default interval (300s), meaning that the forwarding rate and bandwidth usage of the interface will not change within 300s. If the value of cycle specified in the statistics-cycle command is less than 300s (5 minutes), the performance statistics (the forwarding rate and bandwidth usage) about the interface remain unchanged, which cannot reflect the actual traffic on the interface.\nTo resolve this issue, use either of the following methods:\nRun the set flow-stat interval command to set the interval at which traffic statistics on the interface are collected to a smaller value, ranging from 10 to 600, in seconds.Run the statistics-cycle command to increase the interval at which performance statistics about an interface are collected.\nTo collect and upload Y.1731 performance statistics using a performance statistics task, run the y1731 pm-mode enable command to switch to the PM mode in which Y.1731 performance statistics objects are configured.\nThe instance type depends on the service."
+}

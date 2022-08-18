@@ -1,0 +1,32 @@
+{
+    "PageTitle": "peer graceful-restart peer-reset (BGP-VPN instance IPv6 address family view) (IPv6)",
+    "FuncDef": "The peer graceful-restart peer-reset command enables a device to use the GR mode to reset the BGP connection with a specified peer.\nThe undo peer graceful-restart peer-reset command cancels the enabling configuration.\nThe peer graceful-restart peer-reset disable command disables a device from using the GR mode to reset the BGP connection with a specified peer.\nThe undo peer graceful-restart peer-reset disable command cancels the disabling configuration.\nBy default, a device cannot use the GR mode to reset the BGP connection with a specified peer.",
+    "CLIs": [
+        "peer <ipv6-address> graceful-restart peer-reset",
+        "peer <ipv6-address> graceful-restart peer-reset disable",
+        "undo peer <ipv6-address> graceful-restart peer-reset",
+        "undo peer <ipv6-address> graceful-restart peer-reset disable"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a BGP peer.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] peer 2001:DB8:1::1 as-number 100",
+            "[*HUAWEI-bgp-6-vpna] peer 2001:DB8:1::1 graceful-restart peer-reset"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCurrently, BGP does not support dynamic capability negotiation. Therefore, each time a BGP capability is changed or a new BGP capability is enabled, a BGP speaker tears down the existing session with the affected peer and renegotiates BGP capabilities with the peer.\nTo enable the BGP speaker to use the GR mode to reset the BGP connection with the peer, run the peer graceful-restart peer-reset command. After this command is run, if the BGP speaker establishes a peer relationship with the peer in the BGP IPv6 unicast address family and then attempts to establish a new relationship with the same peer in another address family, the BGP IPv6 unicast session enters the GR process and the BGP speaker renegotiates BGP capabilities with the peer. During this process, the BGP speaker reestablishes the BGP IPv6 unicast session. However, the BGP speaker retains the routes received from the BGP IPv6 unicast peer. This allows the forwarding module to continue forwarding IPv6 services according to the existing routing entries, thereby ensuring service continuity."
+}

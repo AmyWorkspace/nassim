@@ -1,0 +1,34 @@
+{
+    "PageTitle": "loop-detect eth-loop priority (VSI-LDP-PW view)",
+    "FuncDef": "The loop-detect eth-loop priority command configures the blocking priority of a pseudo wire (PW) for MAC flapping-based loop detection.\nThe undo loop-detect eth-loop priority command restores the default setting.\nBy default, the blocking priority of a PW for MAC flapping-based loop detection has no default value.",
+    "CLIs": [
+        "loop-detect eth-loop priority <priority>",
+        "undo loop-detect eth-loop priority"
+    ],
+    "ParentView": [
+        "VSI-LDP-PW view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "priority priority",
+            "Info": "Specifies the blocking priority of a PW.\nThe value is an integer ranging from 1 to 4.\nIf a loop occurs, the device blocks an interface with a low blocking priority value.  If the value is 4 on an interface or a PW, the interface or PW is never blocked, and the MAC flapping-based loop detection is invalid."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi1-ldp] peer 1.1.1.1",
+            "[*HUAWEI-vsi-vsi1-ldp] peer 1.1.1.1 pw pw1",
+            "[*HUAWEI-vsi-vsi1-ldp-pw-pw1] loop-detect eth-loop priority 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter MAC flapping-based loop detection is configured on devices of a virtual private LAN service (VPLS) network, if a device detects a loop, the device blocks a PW based on its blocking priority. To configure the blocking priority of an interface or a PW, run the loop-detect eth-loop priority command.\nPrecautions\nBy default, a PW for MAC flapping-based loop detection has no default value, so no PW is blocked. To allow a PW to be blocked, configure the blocking priority of a PW for MAC flapping-based loop detection.\nIf a loop occurs and the AC-side interfaces or PWs have the same blocking priority, the AC-side interfaces or PWs are all blocked.\nIf MAC flapping-based loop detection is configured for a VSI using the loop-detect eth-loop loop-times loop-times detect-cycle detect-cycle-time cycles cycles command with detect-cycle-time and cycles specified and a blocking priority is configured on an interface bound to the VSI using the loop-detect eth-loop priority priority command, the detection cycle is as follows:\nIf priority is 1, the detection cycle is calculated as follows: Detection cycle = 1 x detect-cycle-time x cyclesIf priority is 2, the detection cycle is calculated as follows: Detection cycle = 4 x detect-cycle-time x cyclesIf priority is 3, the detection cycle is calculated as follows: Detection cycle = 8 x detect-cycle-time x cyclesIf priority is 4, the interface is never blocked, and the MAC flapping-based loop detection function does not take effect.\nHigh-priority interfaces have a longer detection time, and low-priority interfaces are preferentially blocked if the MAC flapping based-loop detection function detects a loop."
+}

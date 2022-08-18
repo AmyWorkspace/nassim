@@ -1,0 +1,55 @@
+{
+    "PageTitle": "mpls l2vpn vccv bfd-cv-negotiation peer",
+    "FuncDef": "The mpls l2vpn vccv bfd-cv-negotiation peer command sets the BFD CV Type value in the VCCV field.\nThe undo mpls l2vpn vccv bfd-cv-negotiation peer command restores the BFD CV Type value in the VCCV field.\nBy default, the BFD CV Type value in the VCCV field is 0x08.",
+    "CLIs": [
+        "mpls l2vpn vccv bfd-cv-negotiation fault-detection-only peer <peer-address> { enable | disable }",
+        "mpls l2vpn vccv bfd-cv-negotiation { ach-fault-detection-only | detection-and-signaling } peer <peer-address> enable",
+        "undo mpls l2vpn vccv bfd-cv-negotiation { fault-detection-only | ach-fault-detection-only | detection-and-signaling } peer <peer-address>"
+    ],
+    "ParentView": [
+        "MPLS-L2VPN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "enable",
+            "Info": "Enables the function to send the BFD CV Type information to the remote peer.\n-"
+        },
+        {
+            "Parameters": "disable",
+            "Info": "Restores the default BFD CV Type in the VCCV field.\n-"
+        },
+        {
+            "Parameters": "ach-fault-detection-only",
+            "Info": "Specifies the BFD CV Type as 0x10.\n-"
+        },
+        {
+            "Parameters": "detection-and-signaling",
+            "Info": "Specifies the BFD CV Type as 0x08.\n-"
+        },
+        {
+            "Parameters": "peer peer-address",
+            "Info": "Specifies the IP address of a remote peer.\nThis value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "fault-detection-only",
+            "Info": "Specifies the BFD CV Type as 0x04.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] mpls l2vpn vccv bfd-cv-negotiation fault-detection-only peer 10.10.10.10 enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] mpls l2vpn vccv bfd-cv-negotiation ach-fault-detection-only peer 10.10.10.10 enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nVCCV is a mechanism to detect and diagnose end-to-end faults on PWs. VCCV is, in its simplest description, a control channel between a PW's ingress and egress over which connectivity verification messages can be sent. A Label Mapping packet uses the BFD CV Type field to indicate whether a PW supports BFD fault detection. The BFD CV Type can be 0x04, 0x08, or 0x10. By default, the BFD CV Type is 0x08. If a remote peer does not support the 0x08 BFD CV Type, run the mpls l2vpn vccv bfd-cv-negotiation command to change the BFD CV Type in the Label Mapping packet.\n0x04: supports BFD IP/UDP encapsulation, used in PW fault detection only. The keyword is fault-detection-only.0x08: supports BFD IP/UDP encapsulation, used for PW fault detection and AC/PW status signaling. The keyword is detection-and-signaling.0x10: supports BFD PW-ACH encapsulation, used for PW fault detection only. The keyword is ach-fault-detection-only.\nTo set the value of the BFD CV Type field to be sent to remote peers, run the mpls l2vpn vccv bfd-cv-negotiation command. Note that:\nPeer-based configuration:The mpls l2vpn vccv bfd-cv-negotiation fault-detection-only peer enable command sets the BFD CV Type to 0x04 for Label Mapping packets to be sent to a specified remote peer.The mpls l2vpn vccv bfd-cv-negotiation detection-and-signaling peer enable command sets the BFD CV Type to 0x08 for Label Mapping packets to be sent to a specified remote peer.The mpls l2vpn vccv bfd-cv-negotiation ach-fault-detection-only peer enable command sets the BFD CV Type to 0x10 for Label Mapping packets to be sent to a specified remote peer.The mpls l2vpn vccv bfd-cv-negotiation fault-detection-only peer disable command restores the BFD CV Type to 0x08 for Label Mapping packets to be sent to a specified remote peer.The undo mpls l2vpn vccv bfd-cv-negotiation { fault-detection-only | ach-fault-detection-only | detection-and-signaling } peer command applies the global BFD CV Type to Label Mapping packets to be sent to a specified remote peer.\n\nConfiguration Impact\nIf the BFD CV Type used during the negotiation of a PW changes after the mpls l2vpn vccv bfd-cv-negotiation command is configured, the PW will be re-established, and services will be temporarily interrupted.\nPrecautions\nThe mpls l2vpn vccv bfd-cv-negotiation command applies only to static VPWS SS-PWs.If the global BFD CV Type is different from the BFD CV Type specified for a remote peer, the BFD CV Type specified for the remote peer prevails.When a Huawei device interconnects with a non-Huawei device, BFD CV must be set to 0x04 or 0x10."
+}

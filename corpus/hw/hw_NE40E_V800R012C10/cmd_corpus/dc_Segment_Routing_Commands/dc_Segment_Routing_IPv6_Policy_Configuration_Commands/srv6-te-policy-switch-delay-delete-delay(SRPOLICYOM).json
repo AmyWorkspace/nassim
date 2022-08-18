@@ -1,0 +1,30 @@
+{
+    "PageTitle": "srv6-te-policy switch-delay",
+    "FuncDef": "The srv6-te-policy switch-delay delete-delay command is used to set the slow-cut time for all SRv6 TE policies.\nThe undo srv6-te-policy switch-delay command is used to restore the default.\nBy default, the switch-delay and the delete-delay of SRv6 TE Policies are 5000 and 20000 milliseconds,respectively.",
+    "CLIs": [
+        "srv6-te-policy switch-delay <switchDelay> delete-delay <deleteDelay>",
+        "undo srv6-te-policy switch-delay",
+        "undo srv6-te-policy switch-delay <switchDelay> delete-delay <deleteDelay>"
+    ],
+    "ParentView": [
+        "Segment routing IPv6 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "switchDelay",
+            "Info": "MBB switch delay time of SRv6 TE Policies.\nThe value is an integer that ranges from 0 to 600000, in millisecond."
+        },
+        {
+            "Parameters": "delete-delay deleteDelay",
+            "Info": "MBB delete delay time of SRv6 TE Policies.\nThe value is an integer that ranges from 0 to 600000, in millisecond."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] srv6-te-policy switch-delay 10000 delete-delay 10000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSRv6 TE Policies support make-before-break (MBB), allowing a forwarder to establish a new segment list before removing the original one during a segment list update. In the establishment process, traffic is still forwarded through the original segment list, preventing packet loss upon a segment list switchover. The srv6-te-policy switch-delay delete-delay command is used to set switchover and deletion delays for all SRv6 TE Policies.\nIn actual applications, if the traffic volume greatly differs on an upstream node and a downstream node, the forwarding entries may be inconsistent on the two nodes. When this is the case, traffic may be interrupted for a short time.\nTo prevent this issue, run the srv6-te-policy switch-delay delete-delay command on the headend of SRv6 TE Policy to adjust switchover and deletion delays based on service requirements. Then, after a new segment list is established, the system waits for the specified switching delay to expire before switching traffic to the new segment list. After the switchover is complete, the system waits for the specified deletion delay to expire before tearing down the original primary segment list.\nDelayed deletion takes effect only for up segment lists (including backup segment lists) in an SRv6 TE Policy."
+}

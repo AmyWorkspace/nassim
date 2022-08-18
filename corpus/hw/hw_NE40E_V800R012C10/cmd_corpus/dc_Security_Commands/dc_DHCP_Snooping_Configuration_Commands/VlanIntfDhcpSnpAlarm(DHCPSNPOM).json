@@ -1,0 +1,60 @@
+{
+    "PageTitle": "dhcp snooping alarm enable interface",
+    "FuncDef": "The dhcp snooping alarm enable interface command enables the alarm function for the scenario in which the number of dropped ARP packets, IP packets, DHCP reply packets (dropped on the untrusted interface), and DHCP request packets reaches the threshold or the user number reaches the threshold.\nThe undo dhcp snooping alarm enable interface command disables DHCP snooping alarm on an interface.\nBy default, DHCP snooping alarm is disabled on an interface.",
+    "CLIs": [
+        "dhcp snooping alarm { arp | ip | dhcp-request | dhcp-chaddr | dhcp-reply | user-limit } enable interface { <interface-type> <interface-number> | <interface-name> }",
+        "undo dhcp snooping alarm { arp | ip | dhcp-request | dhcp-chaddr | dhcp-reply | user-limit } enable interface { <interface-type> <interface-number> | <interface-name> }"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "arp",
+            "Info": "Indicates that an alarm is generated when the number of dropped ARP packets reaches the threshold.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Indicates that an alarm is generated when the number of dropped IP packets reaches the threshold.\n-"
+        },
+        {
+            "Parameters": "dhcp-request",
+            "Info": "Indicates that an alarm is generated when the number of dropped DHCP request packets reaches the threshold.\n-"
+        },
+        {
+            "Parameters": "dhcp-chaddr",
+            "Info": "Indicates that an alarm is generated when the number of dropped DHCP request packets reaches the alarm threshold. The DHCP request packets are dropped when the client hardware address (CHADDR) field does not match the source MAC address in the Ethernet frame header.\n-"
+        },
+        {
+            "Parameters": "dhcp-reply",
+            "Info": "Indicates that an alarm is generated when the number of dropped DHCP Offer, ACK, or NAK packets on the untrusted interface reaches the threshold.\n-"
+        },
+        {
+            "Parameters": "user-limit",
+            "Info": "Indicates that an alarm is generated when the number of DHCP snooping users exceeds the threshold.\n-"
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the interface on which an alarm is generated. This parameter applies only to the VLAN view.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] commit",
+            "[~HUAWEI-vlan100] q",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] port link-type access",
+            "[*HUAWEI-GigabitEthernet1/0/0] port default vlan 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] commit",
+            "[~HUAWEI-GigabitEthernet1/0/0] q",
+            "[~HUAWEI] dhcp snooping enable",
+            "[~HUAWEI] vlan 100",
+            "[~HUAWEI-vlan100] dhcp snooping enable",
+            "[*HUAWEI-vlan100] dhcp snooping alarm arp enable interface GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can configure the following check functions in DHCP snooping applications:\nARP check: The ARP packets mismatching information in the binding table are dropped.CHADDR field check: The DHCP packets with the CHADDR field value mismatching the MAC address in the packet header are dropped.DHCP reply check on the untrusted interface: The DHCP reply packets received on the untrusted interface are dropped.Check for packets requesting lease renewal: The packets that request lease renewal but mismatch information in the binding table are dropped.IP check: The IP packets mismatching information in the binding table are dropped.User number check: The maximum number of users is restricted.\nAfter these check functions are enabled, you can configure the alarm function so that an alarm is generated and sent to the NMS when the number of dropped packets or the user number exceeds the threshold.\n\nPrerequisites\nFor CHADDR field check and binding table check, DHCP check has been enabled using the dhcp snooping check enable command.For DHCP reply check on the untrusted interface, the trusted interface has been configured using the dhcp snooping trusted or dhcp snooping trusted interface command.DHCP snooping has been enabled globally using the dhcp snooping enable command.For CHADDR field check, IP check, ARP check, and check for packets requesting lease renewal, and binding table check, DHCP check has been enabled using the dhcp snooping check enable command.For user number check:The maximum number of users has been configured using the dhcp snooping max-user-number (interface view) command.The maximum number of users has been configured using the dhcp snooping max-user-number (VLAN view) command.\n\nFollow-up Procedure\nRun the dhcp snooping alarm threshold command to configure an alarm threshold."
+}

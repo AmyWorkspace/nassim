@@ -1,0 +1,37 @@
+{
+    "PageTitle": "multicast-suppression",
+    "FuncDef": "The multicast-suppression command configures multicast traffic suppression in the QoS profile.\nThe undo multicast-suppression command cancels multicast traffic suppression in the QoS profile.\nBy default, multicast suppression is not configured in the QoS profile view.",
+    "CLIs": [
+        "multicast-suppression cir <cir-value> [ cbs <cbs-value> ] [ inbound | outbound ]",
+        "undo multicast-suppression [ inbound | outbound ]"
+    ],
+    "ParentView": [
+        "QoS profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the CBS, that is the depth of the first token bucket (assume it to C bucket).\nThe value is an integer in the range of 0 bytes to 4,294,967,295 bytes. The cbs-value must be greater than the configured cir-value. The default value varies with the value of cir-value: cbs-value = cir-value * 187.\nIf cir-value<100000 kbit/s, the default value of cbs-value equals cir-value * 187 (in bytes).If cir-value >=100000 kbit/s, the default value of cbs-value equals 100000*187 (in bytes)."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates the inbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates the outbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR, that is, the committed traffic rate.\nThe value is an integer that ranges from 0 kbit/s to 4,294,967,295 kbit/s"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile test",
+            "[*HUAWEI-qos-profile-test] multicast-suppression cir 38400"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen multicast packets grow on a network, resources consumed by multicast packets increase accordingly, affecting running services on the network.\nThe multicast-suppression command configures multicast traffic suppression in the QoS profile. When the number of multicast packets exceeds the configured threshold, the system drops excess multicast packets so that the multicast traffic volume can be restricted within a proper range.\nPrecautions\nThe multicast suppression in the QoS profile does not take effected in VLL scenario.\nTo achieve accurate packet suppression, you should specify a value for the CBS that is 10 times the length of the packet.\nDirection-oriented and directionless multicast suppression cannot be configured at the same time. If direction-oriented multicast suppression is configured on an interface, the configuration takes effect only when the direction to which the QoS profile applies is the same as the direction configured for multicast suppression."
+}

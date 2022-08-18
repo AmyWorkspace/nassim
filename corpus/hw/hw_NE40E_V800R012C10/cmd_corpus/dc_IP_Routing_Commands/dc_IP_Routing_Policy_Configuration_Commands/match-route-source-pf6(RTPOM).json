@@ -1,0 +1,27 @@
+{
+    "PageTitle": "if-match ipv6 route-source prefix-list",
+    "FuncDef": "The if-match ipv6 route-source prefix-list command configures a filtering rule that is based on IPv6 addresses of the source devices from which routes are received.\nThe undo if-match ipv6 route-source prefix-list command cancels the configuration.\nBy default, no filtering rule based on IPv6 addresses of the source devices from which routes are received is configured.",
+    "CLIs": [
+        "if-match ipv6 route-source prefix-list <ipv6-prefix-name>",
+        "undo if-match ipv6 route-source prefix-list <ipv6-prefix-name>"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "prefix-list ipv6-prefix-name",
+            "Info": "Specifies the name of the IPv6 prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ipv6-prefix p1 permit :: 0 greater-equal 32 less-equal 64",
+            "[*HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] if-match ipv6 address prefix-list p1",
+            "[*HUAWEI-route-policy] if-match ipv6 route-source prefix-list p1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe filtering rule (based on the destination addresses, next hop addresses, or source addresses of IPv6 routes) configured using this command takes effect only after an IPv6 prefix or an ACL is configured.\nIf the if-match ipv6 next-hop prefix-list aa command is used but the ip ipv6-prefix aa is not configured, all routes are permitted. This is the same case when the ACL is used.If the if-match ipv6 next-hop prefix-list aa command is used after the ip ipv6-prefix aa permit 2001:db8:1::1 128 command is used, the routes with the next hop address 2001:db8:1::1 are permitted. This is the same case when the ACL is used.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nAn IPv6 prefix has been configured using the ip ipv6-prefix command.\nConfiguration Impact\nWhen you filter routes based on the source addresses of IPv6 routes, the routes that match the filtering rule are permitted and the route that do not match the filtering rule are denied.\nPrecautions\nIf the next hop address or source address of a route to be filtered is 0::0, by default, the system matches the route and considers its mask length as 0.\nIf the next hop address or source address of a route to be filtered is not 0::0, by default, the system matches the route and considers its mask length as 128."
+}

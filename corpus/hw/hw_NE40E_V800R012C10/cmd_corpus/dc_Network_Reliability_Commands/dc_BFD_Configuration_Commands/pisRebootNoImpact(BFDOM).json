@@ -1,0 +1,28 @@
+{
+    "PageTitle": "process-interface-status reboot-no-impact",
+    "FuncDef": "The process-interface-status reboot-no-impact command does not trigger the interface or sub-interface to go Down when the initial state is Down after configuration recovery.\nThe undo process-interface-status reboot-no-impact command recovers default configuration, the status of the multicast IP single-hop BFD session is not associated with the status of the bound interface, and the status of the link-bundle single-hop BFD session is associated with the status of the bound interface.\nBy default, the status of the multicast IP single-hop BFD session is not associated with the status of the bound interface, and the status of the link-bundle single-hop BFD session is associated with the status of the bound interface.",
+    "CLIs": [
+        "process-interface-status reboot-no-impact",
+        "undo process-interface-status reboot-no-impact"
+    ],
+    "ParentView": [
+        "BFD session view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 1",
+            "[*HUAWEI-Eth-Trunk1] ip address 10.1.1.1 24",
+            "[*HUAWEI-Eth-Trunk1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] eth-trunk 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd test bind link-bundle peer-ip 10.1.1.2 interface Eth-Trunk 1 source-ip 10.1.1.1",
+            "[*HUAWEI-bfd-session-test] process-interface-status reboot-no-impact"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen transmission devices exist on a link and a fault occurs on the link, the devices on both ends of the link need a long time to detect the fault. To shorten the fault detection time, run the process-interface-status reboot-no-impact command to associate a multicast BFD session with an interface to trigger fast route convergence.\nPrerequisites\nA multicast IP single-hop BFD session or link-bundle single-hop BFD session has been configured.\nConfiguration Impact\nIf the process-interface-status reboot-no-impact command is run, the following situations occur:\nIf a BFD session detects a fault and goes Down, the associated interface status becomes BFD_Down. As a result, the direct route of the interface is deleted from the routing table, but BFD packets can still be sent.Although the process-interface-status command has been run, the BFD status will not be reported to the interface if the BFD status changes while the commit command is being executed. This prevents an incorrect BFD status message (when the BFD session is not established or does not go Up) from causing an incorrect interface status change. After the commit command is run, if the BFD status changes, the interface is notified of the change and sets the BFD status to Down. This implements association between the BFD session status and the interface status.\n\nPrecautions\nWhen multiple multicast IP single-hop BFD sessions are bound to the same interface, process-interface-status reboot-no-impact command can be configured for only one BFD session. This means that the BFD status of the interface is affected by only one BFD session. Between link-bundle sessions and multicast sessions, and between link-bundle sessions, multiple BFD sessions can be bound to one interface enabled with the process-interface-status command.Before the BFD session status is associated with the interface status, the BFD configurations on two ends must be correct and matched. If the local BFD status is Down, check the remote BFD configurations and ensure that the shutdown command is not run on the remote router.If the networking requires that the BFD status must be synchronized with the interface status, you can run the shutdown and undo shutdown commands to change the status of the BFD session after ensuring the configurations on both routers are correct. After the BFD session is configured with the undo shutdown command, a detection timer is started. Before the timer expires, if the BFD session can go Up after the negotiation, the BFD session reports the Up status to the interface. Otherwise, the link is considered faulty, and the BFD session reports the Down status to the interface after the timer expires.In this manner, the BFD status can keep consistent with the interface status.If the shutdown command is run, the BFD status will not be sent to the interface."
+}

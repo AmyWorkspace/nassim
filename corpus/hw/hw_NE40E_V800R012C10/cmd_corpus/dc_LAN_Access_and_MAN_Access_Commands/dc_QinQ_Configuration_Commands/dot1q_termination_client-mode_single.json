@@ -1,0 +1,41 @@
+{
+    "PageTitle": "dot1q termination client-mode single",
+    "FuncDef": "The dot1q termination client-mode single command enables a dot1q VLAN tag termination sub-interface to deliver only one leaf for replication of one copy of broadcast traffic when the sub-interface provides access for qualify-mode VPLS services.\nThe undo dot1q termination client-mode single command restores the default configuration.\nBy default, a dot1q VLAN tag termination sub-interface replicates broadcast traffic leaves based on VLANs when accessing qualify-mode VPLS services.",
+    "CLIs": [
+        "dot1q termination client-mode single",
+        "undo dot1q termination client-mode single"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view",
+        "Port extension sub-interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi 1",
+            "[*HUAWEI-vsi-1] mac-learn-style qualify",
+            "[*HUAWEI-vsi-1] pwsignal ldp",
+            "[*HUAWEI-vsi-1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-1-ldp] quit",
+            "[*HUAWEI-vsi-1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0.2",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] encapsulation dot1q-termination",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] dot1q termination vid 2",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] l2 binding vsi 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] dot1q termination client-mode single"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a dot1q VLAN tag termination sub-interface that has many VLANs configured accesses qualify-mode VPLS services, broadcast, multicast, and unicast traffic with unknown destination MAC addresses will be replicated a lot on this sub-interface, consuming many device bandwidth resources and affecting normal bandwidth. To resolve this problem, run the dot1q termination client-mode single command to enable the sub-interface to deliver only one leaf for replication of one copy of broadcast traffic.\nPrerequisites\nBefore running the dot1q termination client-mode single command:\nA dot1q VLAN tag termination sub-interface has been configured.The dot1q VLAN tag termination sub-interface has been bound to a qualify-mode VSI (namely, the mac-learn-style qualify command has been run for the VSI).\n\nConfiguration Impact\nAfter the dot1q termination client-mode single command is run on a dot1q VLAN tag termination sub-interface, some HQoS functions will stop taking effect.\nPrecautions\nAfter the dot1q termination client-mode single command is run in the dot1q VLAN tag termination sub-interface view in qualify mode to enable the one leaf mode, the downstream HQoS function of the preposition TM becomes invalid.\nThe single leaf mode can be configured using the dot1q termination client-mode single command on only one dot1q termination sub-interface on an interface or in a VSI."
+}

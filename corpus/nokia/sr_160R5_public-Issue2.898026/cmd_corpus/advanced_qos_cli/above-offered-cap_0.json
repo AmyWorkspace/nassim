@@ -1,0 +1,23 @@
+{
+    "PageTitle": "above-offered-cap",
+    "FuncDef": "This command is used to limit the operationally configured shaping or policing rate on the child associated with the policy. After the parent virtual scheduler or policer control policy determines the appropriate rate for a given child, a separate operation decides the actual PIR that should be configured for that child. When the parent determines that the distributed rate is equal to or less than the child s offered rate, the configured operational PIR will be equal to that determined rate. But when the parent determines that the child s offered rate is less than the available bandwidth the child could consume, the operational PIR may be set to a value larger than the distributed bandwidth. This extra rate is not currently used by the child since the offered rate is less. The system provides this extra bandwidth in case the child s offered rate increases before the next sampling interval is complete, in order to mitigate the periodic nature\nof the child s operational PIR adjustments. The increase in the offered rate is not subtracted from the parent s remaining distribution bandwidth for lower priority children, only the determined rate is considered consumed by the parent virtual scheduler or policer control policy instance. The actual operationally configured PIR will never be greater than the child s administratively defined PIR.",
+    "CLIs": [
+        "above-offered-cap { percent <percent-of-admin-pir> | rate <rate-in-kilobits-per-second> }",
+        "no above-offered-cap"
+    ],
+    "ParentView": [
+        "config>qos>adv-config-policy>child-control>bandwidth-distribution"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "percent-of-admin-pir",
+            "Info": "When the percent qualifier is used, the following percent-of-admin-pir parameter specifies the percentage of the child s administrative PIR that is used as the fair share increase limit. The new operational PIR result is capped by the child s PIR. If a value of 0 or 0.00 is used, the system will disable the fair share increase function and only configure the actual distribution rate. If a value of 100 or 100.00 is used, the system will interpret this equivalent to executing the no above-offered-cap command and return the fair-share operation to the default behavior. Values-0.00 to 100.00."
+        },
+        {
+            "Parameters": "rate-in-kilobits-per-second",
+            "Info": "When the rate qualifier is used, the rate-in-kilobits-per-second parameter specifies an explicit rate, in kb/s, that are used as the limit to the child s fair share increase to the operational PIR. The new operational PIR result is capped by the child s PIR. If a value of 0 is used, the system will disable the fair share increase function and only configure the actual distribution rate. Values-0 to 100,000,000."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

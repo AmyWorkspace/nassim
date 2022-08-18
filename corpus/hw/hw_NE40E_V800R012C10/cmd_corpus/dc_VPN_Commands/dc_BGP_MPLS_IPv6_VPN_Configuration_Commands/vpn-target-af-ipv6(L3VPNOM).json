@@ -1,0 +1,36 @@
+{
+    "PageTitle": "vpn-target (VPN instance IPv6 address family view)",
+    "FuncDef": "The vpn-target command adds VPN targets to the VPN target list of a VPN instance IPv6 address family.\nThe undo vpn-target command deletes the VPN targets of a VPN instance IPv6 address family.\nBy default, no VPN target is configured for a VPN instance IPv6 address family.",
+    "CLIs": [
+        "vpn-target { vpn-target } &<1-8> [ <vrfRtType> ]",
+        "undo vpn-target { vpn-target } &<1-8> [ <vrfRtType> ]",
+        "undo vpn-target all"
+    ],
+    "ParentView": [
+        "VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-target",
+            "Info": "Specifies the VPN target to be added to the VPN target list of a VPN instance IPv6 address family.\nThe format of a VPN target are as follows:\n16-bit AS number:32-bit user-defined number. For example, 1:3. The AS number ranges from 0 to 65535, and the user-defined number ranges from 0 to 4294967295. The AS number and user-defined number cannot be both 0s. This means that a VPN target cannot be 0:0.Integral 4-byte AS number:2-byte user-defined number, for example, 0:3 or 65537:3. An AS number ranges from 0 to 4294967295. A user-defined number ranges from 0 to 65535. The AS number and user-defined number cannot be both 0s. This means that a VPN target cannot be 0:0.4-byte AS number in dotted notation:2-byte user-defined number, for example, 0.0:3 or 0.1:0. A 4-byte AS number in dotted notation is in the format of x.y, where x and y are integers that range from 1 to 65535 and from 0 to 65535, respectively. A user-defined number ranges from 0 to 65535. The AS number and user-defined number cannot be both 0s. This means that a VPN target cannot be 0:0.32-bit IP address:16-bit user-defined number. For example, 192.168.122.15:1. The IP address ranges from 0.0.0.0 to 255.255.255.255, and the user-defined number ranges from 0 to 65535."
+        },
+        {
+            "Parameters": "vrfRtType",
+            "Info": "Adds a VPN target to the VPN target list of a VPN instance IPv6 address family.\nThe value is an enumerated type:\nboth: adds a VPN target to both the import and export VPN target lists of a VPN instance IPv6 address family. If both, export-extcommunity, and import-extcommunity are not configured in the vpn-target command, a VPN target is added to both lists by default.export-extcommunity: adds a VPN target to the export VPN target list of a VPN instance IPv6 address family.import-extcommunity: adds a VPN target to the import VPN target list of a VPN instance IPv6 address family."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Delete all the VPN targets of a VPN instance IPv6 address family.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vrf1",
+            "[*HUAWEI-vpn-instance-vrf1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv6] vpn-target 5:5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nVPNv6 routes advertised from the local PE to peer PEs carry all the VPN targets in the export VPN target list of the local VPN instance IPv6 address family. A PE installs a received VPNv6 route to its VPN routing table only when the export VPN target of the route is identical with the import VPN target of the local VPN instance IPv6 address family on the PE.\nPrerequisites\nThe ipv6-family command has been run in the VPN instance view to enable the IPv6 address family, and the route-distinguisher command has been run in the VPN instance view to set an RD for the VPN instance IPv6 address family.\nConfiguration Impact\nThe vpn-target command can be run repeatedly to add VPN targets to the VPN target list of a VPN instance IPv6 address family. A maximum of eight VPN targets can be added to a VPN target list. If you want to configure more VPN targets in the VPN instance IPv6 address family view, run the vpn-target command multiple times.\nIf the vpn-target command is not used, a PE does not import received VPNv6 routes into the local VPN instance IPv6 address family.\nIf all the VPN targets of the IPv6 address family of a VPN instance are deleted using the undo vpn-target command, all routes learned by the IPv6 address family of the VPN instance from other VPN instances will be deleted.\nFollow-up Procedure\nRun the ipv6-family vpn-instance command in the BGP view to enable the IPv6 address family of the BGP-VPN instance. This allows VPN targets to play their roles during route import; otherwise, VPNv6 routes cannot be imported into the routing table of the local VPN instance IPv6 address family."
+}

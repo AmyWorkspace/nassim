@@ -1,0 +1,29 @@
+{
+    "PageTitle": "suppress-flapping route-calculate",
+    "FuncDef": "The suppress-flapping route-calculate command configures a period for the device to delay route calculation when the device receives an LSP during route flapping.\nThe suppress-flapping route-calculate disable command restores the default configuration.\nThe undo suppress-flapping route-calculate command restores the default configuration.\nBy default, if the device receives an LSP during route flapping, it delays route calculation for 10s.",
+    "CLIs": [
+        "suppress-flapping route-calculate { disable | timer <delay-interval> [ threshold <threshold-value> ] }",
+        "undo suppress-flapping route-calculate"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "timer delay-interval",
+            "Info": "Specifies a period for the device to delay route calculation when the device receives an LSP during route flapping.\nThe value is an integer ranging from 1 to 600, in seconds."
+        },
+        {
+            "Parameters": "threshold threshold-value",
+            "Info": "Specifies a route flapping threshold. If a route flaps for the specified number of times, route calculation is delayed.\nThe value is an integer ranging from 3 to 100, in times."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] suppress-flapping route-calculate timer 5 threshold 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an IS-IS network, if the Router receives an LSP with a routing information change, the Router needs to calculate routes based on the LSP. If routing information changes frequently and routes are calculated immediately, a lot of system resources will be consumed. To prevent this problem, run the suppress-flapping route-calculate command to configure a period for the device to delay route calculation when the Router receives an LSP during route flapping.\nThe flapping suppression process is as follows:\nIf the same LSP with a routing information change is received repeatedly within 3s, IS-IS records a flapping event and increases the flapping_count by 1. If the interval at which the system receives the same LSP with a routing information change is greater than 10s before flapping suppression takes effect, IS-IS clears the flapping_count. If the flapping_count is greater than threshold-value, flapping suppression takes effect.During the flapping suppression period, IS-IS does not calculate routes in response to the LSP, but the flapping_count may increase during this period. After the delay-interval elapses, IS-IS exits from flapping suppression and clears the flapping_count.\n\nPrerequisites\nAn IS-IS process has been created and the IS-IS view has been displayed using the isis command."
+}

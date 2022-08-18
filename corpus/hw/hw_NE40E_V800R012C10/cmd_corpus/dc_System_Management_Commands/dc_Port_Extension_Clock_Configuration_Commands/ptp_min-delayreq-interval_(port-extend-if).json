@@ -1,0 +1,29 @@
+{
+    "PageTitle": "ptp min-delayreq-interval (port extension interface view)",
+    "FuncDef": "The ptp min-delayreq-interval command sets the minimum interval at which a 1588v2 interface sends Delay_Req packets.\nThe undo ptp min-delayreq-interval command restores the default minimum interval at which a 1588v2 interface sends Delay_Req packets.\nThe default minimum interval at which a 1588v2 interface sends Delay_Req packets is 128/1024s.",
+    "CLIs": [
+        "ptp min-delayreq-interval <min-delayreq-interval>",
+        "undo ptp min-delayreq-interval"
+    ],
+    "ParentView": [
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-delayreq-interval",
+            "Info": "Specifies the minimum interval at which a 1588v2 interface sends Delay_Req packets.\nThe value of ethernet card is an integer ranging from 0 to 20. In G.8275.1 mode, the default value is 6. In CU-106 mode, the default value is 6. In SMPTE-2059-2 mode, the value ranges from 3 to 14, and the default value is 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ap-id 1000",
+            "[~HUAWEI-ap1000] remote-interface GigabitEthernet1/0/0",
+            "[*HUAWEI-ap1000] commit",
+            "[~HUAWEI-ap1000] quit",
+            "[~HUAWEI] interface GigabitEthernet 1000/1/0/0",
+            "[~HUAWEI-GigabitEthernet1000/1/0/0] ptp min-delayreq-interval 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTwo devices exchange Announce packets to determine the master/slave relationship. The master device sends Sync packets to notify the slave device of time signal parameters and uses a delay measurement mechanism to achieve time signals accuracy.\nDifferent delays on links deteriorate the accuracy of 1588v2 time synchronization. 1588v2 uses the delay measurement mechanism to correct time signals. A delay measurement process is implemented by sending delay measurement request packets and delay response packets. Either of the following parameters can be configured in the ptp delay-mechanism command to enable a specific delay measurement mechanism:\ndelay: enables the delay request-response mechanism, in which information about the clock and time is calculated based on the delay of an entire link between the master and slave clocks. Only the slave clock sends Delay_Req packets to the master clock, and the master clock replies with Delay_Resp packets. Upon receipt, the slave clock uses information carried in Delay_Resp packets to correct time signals.pdelay: enables the peer delay mechanism, in which information about the clock and time is calculated based on the delay time of each link along the path between the master and slave clocks. In this mode, the master and slave clocks can send Pdelay_Rep packets to each other and then correct time signals based on the Pdelay_Resp packets. Upon receipt of the responses, the slave or master clock uses information carried in Delay_Resp packets to correct time signals.\nIf devices exchange 1588v2 packets frequently and consume a lot of bandwidth resources, increase the min-delayreq-interval value. If time synchronization accuracy is low, reduce the min-delayreq-interval value.\n\nPrerequisites\nThe delay request-response mechanism has been configured using the ptp delay-mechanism delay command on an OC interface, a BC interface, or a TCandBC interface.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

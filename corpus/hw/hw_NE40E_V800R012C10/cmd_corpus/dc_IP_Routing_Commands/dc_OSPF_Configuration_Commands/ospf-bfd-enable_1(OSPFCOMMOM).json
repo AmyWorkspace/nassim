@@ -1,0 +1,58 @@
+{
+    "PageTitle": "ospf bfd",
+    "FuncDef": "The ospf bfd command enables bidirectional forwarding detection (BFD) on an OSPF interface, or sets parameter values for a BFD session.\nThe undo ospf bfd command disables BFD from an interface, or restores the default parameter values of a BFD session.\nBy default, BFD is not enabled in the OSPF interface view.",
+    "CLIs": [
+        "ospf bfd { min-tx-interval <transmit-interval> | min-rx-interval <receive-interval> | detect-multiplier <multiplier-value> | frr-binding } *",
+        "undo ospf bfd { min-tx-interval [ <transmit-interval> ] | min-rx-interval [ <receive-interval> ] | detect-multiplier [ <multiplier-value> ] | frr-binding } *"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "VBDIF interface view",
+        "FlexE interface view",
+        "Cellular channel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "GMPLS-UNI interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-tx-interval transmit-interval",
+            "Info": "Specifies the minimum interval at which BFD packets are sent to the neighbor.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-rx-interval receive-interval",
+            "Info": "Specifies the minimum interval at which BFD packets are received from the neighbor.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "detect-multiplier multiplier-value",
+            "Info": "Specifies the local detection multiplier.\nThe value is an integer ranging from 3 to 50. The default value is 3."
+        },
+        {
+            "Parameters": "frr-binding",
+            "Info": "Associates the BFD session status with the link status on an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ospf bfd enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ospf bfd min-rx-interval 40 detect-multiplier 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEither a link fault or topology change on a network will cause routes to be re-calculated within an area. As such, speeding up the convergence of a routing protocol is critical to improving the network performance.\nAs link faults are inevitable, rapidly detecting these faults and notifying routing protocols is an effective way to quickly mitigate them. This includes associating BFD with a routing protocol to speed up convergence of the routing protocol once a link fault occurs.\nDuring the configuration of OSPF IP FRR, the lower layer can fast respond to the link change so that traffic can be rapidly switched to the backup link if the primary link fails. By setting frr-binding, you can associate the BFD session status with the link status of an interface (when the BFD session goes Down, the link status of the interface becomes Down) so that link faults can be rapidly detected.\nPrerequisites\nBFD has been enabled on the interface.\nImplementation Procedure\nThe receive-interval is negotiated by the local and peer ends by comparing the values of the local min-rx-interval and the peer min-tx-interval. If the local end fails to receive a BFD packet from the peer end within an interval of receive-interval * multiplier-value, the local end considers the peer end Down.\nConfiguration Impact\nIf global BFD is not enabled, you can enable BFD on an interface, but BFD sessions cannot be set up in this case. Similarly, if only parameters of a BFD session are set but the ospf bfd enable command is not used, the BFD session cannot be set up.\nBFD configured on an interface takes precedence over BFD configured for a process. If BFD is enabled on an interface, the BFD parameters on the interface are used to establish BFD sessions.\nPrecautions\nAfter BFD is enabled, BFD sessions can be created only between the two ends that have set up an OSPF neighbor relationship and the relationship is in the Full state.the OSPF BFD enable command and OSPF BFD block command are mutually exclusive in function, and the later configuration overwrites the previous one.After BFD is disabled from an interface using the undo OSPF BFD enable command, the parameters for setting up BFD sessions remain on this interface but no longer take effect."
+}

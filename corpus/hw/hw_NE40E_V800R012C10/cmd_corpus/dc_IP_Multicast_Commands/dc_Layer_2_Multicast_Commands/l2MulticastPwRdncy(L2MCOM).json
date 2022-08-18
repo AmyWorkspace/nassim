@@ -1,0 +1,37 @@
+{
+    "PageTitle": "l2-multicast backup-query forward",
+    "FuncDef": "The l2-multicast backup-query forward command enables a backup device to forward IGMP Query messages along the backup link.\nThe undo l2-multicast backup-query forward command cancels the configuration.\nBy default, a backup device is disabled from forwarding IGMP Query messages along the backup link.",
+    "CLIs": [
+        "l2-multicast backup-query forward [ source-mac-replace ]",
+        "undo l2-multicast backup-query forward"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "source-mac-replace",
+            "Info": "Enables a backup device to replace the source MAC addresses of IGMP Report/Leave messages with its own MAC address.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vpna",
+            "[*HUAWEI-vsi-vpna] pwsignal ldp",
+            "[*HUAWEI-vsi-vpna-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-vpna-ldp] quit",
+            "[*HUAWEI-vsi-vpna] igmp-snooping enable",
+            "[*HUAWEI-vsi-vpna] l2-multicast backup-query forward source-mac-replace"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn VPLS networking, master and backup links can be used to transmit multicast data traffic. If the master link or master device fails, multicast traffic must be rapidly switched to the backup link or backup device. The backup device, however, cannot learn Layer 2 multicast forwarding entries. As a result, services will be interrupted for a long period of time after a master/backup link switchover. In such a situation, you need to configure the backup device to forward IGMP Query messages along the backup link so that multicast data flows can be immediately forwarded after the master/backup link switchover.\nPrerequisites\nThe igmp-snooping enable command has been run in the system view and the VSI view to enable the IGMP snooping function.\nPrecautions\nIf source-mac-replace is specified in the l2-multicast backup-query forward command, the backup device replaces the source MAC address of a received IGMP Report/Leave message with its own MAC address before sending the message out. If this parameter is not specified, the backup device does not replace the source MAC address of a received IGMP Report/Leave message and the source address of the IGMP Report/Leave message remains the MAC address of the upstream device that sends an IGMP Query message."
+}

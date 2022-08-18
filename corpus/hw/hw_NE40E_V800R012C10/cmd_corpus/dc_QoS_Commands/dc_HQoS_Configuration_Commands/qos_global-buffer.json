@@ -1,0 +1,71 @@
+{
+    "PageTitle": "qos global-buffer",
+    "FuncDef": "The qos global-buffer command controls flow-wred scheduling on a board. Before the buffer resources shared by queues are exhausted, the flow-wred configurations for specific queues do not take effect.\nThe undo qos global-buffer command stops controlling flow-wred scheduling on a board.\nBy default, the shared threshold of buffer resources is not configured.",
+    "CLIs": [
+        "qos global-buffer { share-threshold <share-value> | { be | af1 | af2 | af3 | af4 | ef | cs6 | cs7 } share } { inbound | outbound }",
+        "undo qos global-buffer { share-threshold [ <share-value> ] | { be | af1 | af2 | af3 | af4 | ef | cs6 | cs7 } share } { inbound | outbound }"
+    ],
+    "ParentView": [
+        "Slot view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "share-threshold share-value",
+            "Info": "Specifies the shared threshold value.\nThe value is an integer ranging from 1 to 500k. There is no default value."
+        },
+        {
+            "Parameters": "be",
+            "Info": "Set the service type to BE.\n-"
+        },
+        {
+            "Parameters": "af1",
+            "Info": "Set the service type to AF1.\n-"
+        },
+        {
+            "Parameters": "af2",
+            "Info": "Set the service type to AF2.\n-"
+        },
+        {
+            "Parameters": "af3",
+            "Info": "Set the service type to AF3.\n-"
+        },
+        {
+            "Parameters": "af4",
+            "Info": "Set the service type to AF4.\n-"
+        },
+        {
+            "Parameters": "ef",
+            "Info": "Set the service type to EF.\n-"
+        },
+        {
+            "Parameters": "cs6",
+            "Info": "Set the service type to CS6.\n-"
+        },
+        {
+            "Parameters": "cs7",
+            "Info": "Set the service type to CS7.\n-"
+        },
+        {
+            "Parameters": "share",
+            "Info": "Share.\n-"
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies the inbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the outbound direction of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[~HUAWEI-slot-1] qos global-buffer share-threshold 50 inbound",
+            "[~HUAWEI-slot-1] qos global-buffer be share inbound",
+            "[~HUAWEI-slot-1] qos global-buffer af1 share inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nQueues share buffer resources. If the buffer resources are exhausted, packet loss occurs even if the queues are not congested. To prevent buffer resources from being exhausted by some queues, control flow-wred scheduling. If the flow-wred value is set to a small value, packet loss occurs in traffic bursts. To resolve this problem, run the qos global-buffer command to set the shared threshold of buffer resources. Before the shared buffer resources are exhausted, flow-wred configurations do not take effect to prevent packet loss.\nPrecautions\nTo control flow-wred scheduling, you must configure both of the following commands:\nRun the qos global-buffer share-threshold command to configure the global shared threshold of buffer resources.Run the qos global-buffer { be | af1 | af2 | af3 | af4 | ef | cs6 | cs7 } share } { inbound | outbound } command to configure the shared threshold of buffer resources for specific queues.\nIn VS mode, this command applies only to the admin VSand cannot be configured in other VSs. This command takes effect on all VSs."
+}

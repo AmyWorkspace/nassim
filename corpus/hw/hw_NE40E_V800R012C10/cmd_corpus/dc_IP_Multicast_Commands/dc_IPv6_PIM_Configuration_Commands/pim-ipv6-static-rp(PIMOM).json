@@ -1,0 +1,50 @@
+{
+    "PageTitle": "static-rp(IPv6)",
+    "FuncDef": "The static-rp command configures a static rendezvous point (RP).\nThe undo static-rp command deletes the configured static RP.\nBy default, no static RP is configured.",
+    "CLIs": [
+        "static-rp <rp-address> [ <basic-acl6-number> | acl6-name <acl6-name> ] [ preferred ]",
+        "undo static-rp <rp-address>"
+    ],
+    "ParentView": [
+        "IPv6 PIM view",
+        "VPN instance IPv6 PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "rp-address",
+            "Info": "Specifies a static RP address.\nThe value must be a valid global IPv6 unicast address."
+        },
+        {
+            "Parameters": "basic-acl6-number",
+            "Info": "Specifies the number of a basic IPv6 ACL that defines the range of multicast groups served by a static RP.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named basic IPv6 ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "preferred",
+            "Info": "Indicates that a static RP is preferred.\nIf this parameter is not specified, the RP elected through the BSR mechanism is preferred."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] acl ipv6 number 2001",
+            "[*HUAWEI-acl6-basic-2001] quit",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] static-rp 2001:db8:1::1 2001 preferred"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] acl ipv6 name myacl6 basic",
+            "[*HUAWEI-acl6-basic-myacl6] rule permit source ff03::101 128",
+            "[*HUAWEI-acl6-basic-myacl6] quit",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] static-rp 2001:db8:1::1 acl6-name myacl6 preferred"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen only one RP exists on a network, you can run the static-rp command to configure a static RP. Compared with dynamic RP election using the bootstrap router (BSR) mechanism, the static RP mechanism can reduce bandwidth occupied by messages exchanged between candidate-rendezvous points (C-RPs) and the BSR. To make the static RP work properly, you must run the static-rp command on all Routers in the PIM-SM domain.\nPrerequisites\nIPv6 PIM has been enabled and the IPv6 PIM instance view has been displayed using the command.\nConfiguration Impact\nIn PIM-SM, if the static RP address is the address of an interface in the Up state on a router, the router acts as the static RP. PIM does not need to be enabled on the interface of the static RP.\nIf no IPv6 ACL is specified, or an IPv6 ACL is specified but no rule is configured for the IPv6 ACL, the configured static RP serves all multicast groups. If an IPv6 ACL is specified and rules are specified for the IPv6 ACL, the configured static RP serves only multicast groups permitted by the IPv6 ACL.\nIf preferred is specified, the router prefers the static RP. If preferred is not specified, the router prefers the RP elected using the BSR mechanism. If no BSR RP is configured on the network or the dynamically elected RP becomes invalid, the static RP takes effect.\nA static RP is configured each time the static-rp command is run. If multiple static RPs are configured to serve the same group, the RP with the largest IP address is selected. If the IPv6 ACL for static RPs changes, re-select static RPs for all groups. If a same RP address is specified in the rp-address parameter, the latest configuration overrides the previous one.\nPrecautions\nUp to 50 static RPs can be configured using the static-rp command, but a same IPv6 ACL can be applied to only one static RP. If an IPv6 ACL is not specified, only one static RP can be configured."
+}

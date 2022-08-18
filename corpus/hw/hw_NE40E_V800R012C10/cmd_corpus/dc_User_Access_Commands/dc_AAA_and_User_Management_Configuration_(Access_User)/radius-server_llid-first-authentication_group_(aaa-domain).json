@@ -1,0 +1,31 @@
+{
+    "PageTitle": "radius-server llid-first-authentication group(AAA domain view)",
+    "FuncDef": "The radius-server llid-first-authentication group command configures a RADIUS server group for the first LLID authentication.\nThe undo radius-server llid-first-authentication group command cancels the configuration.\nBy default, no RADIUS server group is configured for the first LLID authentication.",
+    "CLIs": [
+        "radius-server llid-first-authentication group <group-name>",
+        "undo radius-server llid-first-authentication group [ <group-name> ]"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group group-name",
+            "Info": "Specifies a RAIUD server group name for a domain.\nThe value is a string of 1 to 32 characters. The value can be any combination of letters, digits, dots (.), hyphens (-), and underscores (_)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group huawei",
+            "[*HUAWEI-radius-huawei] commit",
+            "[~HUAWEI-radius-huawei] quit",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[~HUAWEI-aaa-domain-huawei] radius-server group huawei",
+            "[~HUAWEI-aaa-domain-huawei] radius-server llid-first-authentication group huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the radius-server calling-station-id include llid user-type { ppp | lns }* command is run in the RADIUS server group view, users will be authenticated twice. To configure a RADIUS server group for the first LLID authentication, run the radius-server llid-first-authentication group command.\nDifferent RADIUS server groups may be used in the two authentications. You can run the radius-server llid-first-authentication group group-name command to configure a RADIUS server group (B) for the first LLID authentication. Then, this RADIUS server group is used for the first authentication, and the RADIUS server group (A) configured using the radius-server group group-name command is used for the second authentication.\nBy default, no RADIUS server group is configured for the first LLID authentication, and the RADIUS server group specified using the radius-server group group-name command is used for the first authentication.\nPrerequisites\nThe specified RADIUS server group has been created using the radius-server group group-name command in the system view.The radius-server group group-name command has been run in the AAA domain view.\n\nPrecautions\nThis command can be used to configure a RADIUS server group for the first LLID authentication while services are running, but takes effect only for new access users.Before deleting the default RADIUS server group in the AAA domain view, run the undo radius-server llid-first-authentication group [ group-name ] to delete the RADIUS server group used for the first LLID authentication.Other attributes can also be delivered by the RADIUS server group specified for the first authentication using the radius-server llid-first-authentication group command. However, if the attribute delivered is the same as that delivered by the default RADIUS server group configured using the radius-server group group-name command, the value of the attribute delivered by the default RADIUS server group takes effect."
+}

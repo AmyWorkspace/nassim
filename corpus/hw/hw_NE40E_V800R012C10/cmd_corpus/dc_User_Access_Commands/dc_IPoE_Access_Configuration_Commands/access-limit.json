@@ -1,0 +1,85 @@
+{
+    "PageTitle": "access-limit (BAS interface view)",
+    "FuncDef": "The access-limit command configures the maximum number of access users that can access the network from each VLAN or a specified VLAN on a BAS sub-interface or the maximum number of users that can access the network from the BAS main interface.\nThe undo access-limit command deletes the configured maximum number of access users on a BAS interface.\nBy default, the maximum number of access users is not configured on a BAS interface.",
+    "CLIs": [
+        "access-limit <user-number>",
+        "access-limit <user-number> [ start-vlan <start-vlan> [ end-vlan <end-vlan> ] [ qinq <qinq-vlan> ] [ user-type { ipoe { ipv4 | ipv6 } | pppoe } ] ]",
+        "access-limit <user-number> user-type { ipoe | pppoe }",
+        "undo access-limit [ start-vlan <start-vlan> [ end-vlan <end-vlan> ] [ qinq <qinq-vlan> ] [ user-type { ipoe { ipv4 | ipv6 } | pppoe } ] ]",
+        "undo access-limit user-type { ipoe | pppoe }",
+        "undo access-limit"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-number",
+            "Info": "Specifies the maximum number of access users.\nThe value ranges from 0 to 2147483647 on a non-ATM board."
+        },
+        {
+            "Parameters": "start-vlan start-vlan",
+            "Info": "Specifies the start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "end-vlan end-vlan",
+            "Info": "Specifies the end VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "qinq qinq-vlan",
+            "Info": "Specifies the QinQ VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "user-type",
+            "Info": "Specifies the type of users.\n-"
+        },
+        {
+            "Parameters": "ipoe",
+            "Info": "Specifies the IPoE users whose maximum number is limited.\n-"
+        },
+        {
+            "Parameters": "ipv4",
+            "Info": "Specifies IPoE IPv4 users.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Specifies IPoE IPv6 users.\n-"
+        },
+        {
+            "Parameters": "pppoe",
+            "Info": "Specifies the PPPoE users whose maximum number is limited.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] bas",
+            "[~HUAWEI-GigabitEthernet1/0/1-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet1/0/1-bas] access-limit 100"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/1.5",
+            "[~HUAWEI-GigabitEthernet2/0/1.5] commit",
+            "[~HUAWEI-GigabitEthernet2/0/1.5] user-vlan 100 200",
+            "[~HUAWEI-GigabitEthernet2/0/1.5-vlan-100-200] quit",
+            "[~HUAWEI-GigabitEthernet2/0/1.5] bas",
+            "[~HUAWEI-GigabitEthernet2/0/1.5-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet2/0/1.5-bas] access-limit 80 start-vlan 100 end-vlan 200"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/1.5",
+            "[~HUAWEI-GigabitEthernet2/0/1.5] commit",
+            "[~HUAWEI-GigabitEthernet2/0/1.5] user-vlan 100 200",
+            "[~HUAWEI-GigabitEthernet2/0/1.5-vlan-100-200] quit",
+            "[~HUAWEI-GigabitEthernet2/0/1.5] bas",
+            "[~HUAWEI-GigabitEthernet2/0/1.5-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet2/0/1.5-bas] access-limit 80 start-vlan 100 end-vlan 200 user-type pppoe"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDifferent VLANs may be set to represent different users during service planning. To prevent misuse of resources, you can run this command to set the maximum number of access users for each VLAN or for the specified VLAN on a BAS interface. When the maximum number of access users is reached, no more users can access. Even a DHCP user applies for IP addresses repeatedly by changing the MAC address constantly, the IP addresses will not be exhausted.\nYou can also specify the user-type parameter to limit the maximum number of access users based on user types.\nPrerequisites\nThe access-limit command can be used on a BAS interface only if the access type of the BAS interface is set by using the access-type command.\nConfiguration Impact\nIf the access-limit command is configured on a BAS interface and the VLAN range is specified in the command, the number of the VLAN users who access the BAS interface is limited. If and are specified, is the maximum number of access users belonging to each of the VLANs ranging from to .\nIf the access-limit command is configured on a BAS interface and the VLAN range is not specified in the command, the number of the users who access the BAS interface is limited for each VLAN.\nIf the access-limit command with the specified VLAN range and the command without the specified VLAN range are configured on a same BAS interface, the number of the specified VLAN range user is limited by the command with the specified VLAN range, the number of the other user is limited by the command of without the specified VLAN range.\nThe access-limit command will take effect at once if the command is configured, but the users who have gone online can remain online.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

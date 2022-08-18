@@ -1,0 +1,39 @@
+{
+    "PageTitle": "e-trunk bfd enable",
+    "FuncDef": "The e-trunk bfd enable command enables a device to create a dynamic Bidirectional Forwarding Detection (BFD) session. After the command is run, the device automatically creates a BFD session and binds it to an E-Trunk.\nThe undo e-trunk bfd enable command disables a device from creating a dynamic BFD session and deletes created dynamic BFD sessions.\nBy default, a device is disabled from creating a dynamic BFD session.",
+    "CLIs": [
+        "e-trunk bfd enable [ track interface { <interface-name> | <interface-type> <interface-number> } ]",
+        "undo e-trunk bfd enable"
+    ],
+    "ParentView": [
+        "E-Trunk view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "track",
+            "Info": "Associates a dynamic BFD session with an interface.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] e-trunk 1",
+            "[*HUAWEI-e-trunk-1] e-trunk bfd enable track interface GigabitEthernet 1/0/1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAssume that an E-Trunk is deployed on PE1 and PE2. PE1 is the master device, and PE2 is the backup device. If PE1 fails, to enable PE2 to rapidly detect the fault and change its status for proper traffic forwarding, run the e-trunk track bfd-session command to bind a static BFD session to the E-Trunk.\nAfter the static BFD session is bound to the E-Trunk, BFD can rapidly detect the link protocol status of PE1 and PE2. If the link protocol status changes, the BFD session goes Down. PE2 can use the BFD mechanism to rapidly detect the fault and change its status, ensuring proper traffic forwarding.\nA static BFD session must be manually created, and its type must be BFD for IP. To simplify configurations and reduce maintenance costs, run the e-trunk bfd enable command to enable a device to create a dynamic BFD session. After the command is run, the device automatically creates a BFD session and binds it to an E-Trunk. If the status of the user-side interface on a PE changes, to enable a dynamic BFD session to rapidly detect the change, run the e-trunk bfd enable track interface interface-type interface-number command to associate the dynamic BFD session with the interface.\nPrerequisites\nBFD has been globally enabled using the bfd command in the system view.\nPrecautions\nTo ensure that the created dynamic BFD session can be successfully bound to an E-Trunk:\nThe source and destination IP addresses of the E-Trunk must be reachable. Otherwise, the BFD session cannot go Up.The e-trunk bfd enable command must be run on both devices with the E-Trunk deployed to enable the devices to create dynamic BFD sessions."
+}

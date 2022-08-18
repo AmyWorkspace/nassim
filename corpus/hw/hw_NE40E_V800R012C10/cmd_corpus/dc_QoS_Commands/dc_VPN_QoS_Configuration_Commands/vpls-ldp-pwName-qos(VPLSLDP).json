@@ -1,0 +1,43 @@
+{
+    "PageTitle": "qos cir (VSI-LDP-PW view)",
+    "FuncDef": "The qos cir command configures QoS parameters for an LDP PW in a VSI.\nThe undo qos command deletes the configuration of QoS parameters for an LDP PW in a VSI.\nBy default, QoS parameters are not configured for an LDP PW in a VSI.",
+    "CLIs": [
+        "qos cir <cir-value> [ pir <pir-value> ] [ qos-profile <qos-profile-name> ]",
+        "undo qos [ cir <cir-value> [ pir <pir-value> ] [ qos-profile <qos-profile-name> ] ]"
+    ],
+    "ParentView": [
+        "VSI-LDP-PW view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the PIR.\nThe value is 0 or an integer ranging from 16 to 4294967294, in kbit/s.\nIf you do not specify pir pir-value, the pir-value value is equal to the cir-value value.If you want to specify pir pir-value, ensure that the pir-value value is greater than or equal to the cir-value value.\npir-value and cir-value cannot be both 0s. If the cir-value value is 0, you must specify pir-value."
+        },
+        {
+            "Parameters": "qos-profile qos-profile-name",
+            "Info": "Specifies the name of the referenced QoS profile.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported. The string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR.\nThe value is 0 or an integer ranging from 16 to 4294967294, in kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi a2",
+            "[*HUAWEI-vsi-a2] pwsignal ldp",
+            "[*HUAWEI-vsi-a2-ldp] vsi-id 33",
+            "[*HUAWEI-vsi-a2-ldp] peer 3.3.3.3",
+            "[*HUAWEI-vsi-a2-ldp] peer 3.3.3.3 pw 33",
+            "[*HUAWEI-vsi-a2-ldp-pw-33] quit",
+            "[*HUAWEI-vsi-a2-ldp] pw 33",
+            "[*HUAWEI-vsi-a2-ldp-pw-33] qos cir 400 pir 600"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an L2VPN scenario, if multiple VPN services share the same tunnel, bandwidth preemption occurs among these VPN services. Non-VPN traffic also preempts the bandwidth of VPN traffic. As a result, VPN traffic cannot be forwarded strictly based on service priorities.\nTo meet the resource requirements of VPLS services carried over a tunnel without affecting the quality of other VPN services, you can configure VPLS QoS. To configure QoS parameters for a specific LDP PW in a VSI, run the qos cir command.\nPrerequisites\nThe VSI-LDP-PW view has been displayed using the pw command.\nPrecautions\nThis qos cir (VSI-LDP-PW view) command is mutually exclusive with the following commands:\nqos cir (VSI view)pbb i-vsi enablepbb b-vsi enablemld-snooping enableigmp-snooping enable"
+}

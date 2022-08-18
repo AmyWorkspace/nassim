@@ -1,0 +1,78 @@
+{
+    "PageTitle": "mpls oam ingress",
+    "FuncDef": "The mpls oam ingress command configures MPLS OAM parameters on the ingress of an LSP.\nThe undo mpls oam ingress command deletes MPLS OAM parameters configured on the ingress of an LSP.\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.\nBy default, the reverse tunnel works in shared mode.",
+    "CLIs": [
+        "mpls oam ingress { <tunnelType> <tunnelNum> | <tunnelName> } [ type { cv | ffd frequency { 3 | 10 | 20 | 50 | 100 | 200 | 500 } } ] [ backward-lsp { share | lsp-name <lsp-name-value> | lsr-id <ip_addr> tunnel-id <rev-tunnel-id> } ] [ compatibility-mode <compati-mode-val> ] [ bdi-frequency <bdi-frep-value> ] [ exp <exp-value> ]",
+        "undo mpls oam ingress { <tunnelType> <tunnelNum> | <tunnelName> }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tunnelType tunnelNum",
+            "Info": "Specifies the tunnel type and number.\n-"
+        },
+        {
+            "Parameters": "type",
+            "Info": "Indicates the type of OAM detection packets.\nBy default, the type of detection packets is cv and the interval between sending CV packets is 1 second."
+        },
+        {
+            "Parameters": "cv",
+            "Info": "Indicates that the type of OAM detection packets is CV.\n-"
+        },
+        {
+            "Parameters": "ffd",
+            "Info": "Indicates that the type of OAM detection packets is FFD.\n-"
+        },
+        {
+            "Parameters": "frequency",
+            "Info": "Specifies the interval between sending FFD packets.\nThe value is 3, 10, 20, 50, 100, 200 or 500, in milliseconds.\nIf the egress does not receive OAM packets within a period of 3 times the specified interval, the egress considers the connection to the ingress faulty."
+        },
+        {
+            "Parameters": "backward-lsp",
+            "Info": "Indicates the working mode of a reverse LSP. The working mode can be share or private. In private mode, a reverse LSP can be specified by either lsp-name lsp-name or lsr-id rev-ingress-lsr-id tunnel-id rev-tunnel-id.\n-"
+        },
+        {
+            "Parameters": "share",
+            "Info": "Indicates that a reverse LSP works in shared mode.\n-"
+        },
+        {
+            "Parameters": "lsp-name lsp-name-value",
+            "Info": "Specifies the name of a static bidirectional CR-LSP.\nThe value is a string of 1 to 19 characters, spaces not supported.\nIf quotation marks are used at both ends of an entered character sting, you can enter spaces in the string."
+        },
+        {
+            "Parameters": "lsr-id ip_addr",
+            "Info": "Specifies the LSR ID of the ingress on a reverse LSP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "tunnel-id rev-tunnel-id",
+            "Info": "Specifies the tunnel ID of a reverse LSP.\nThe value is an integer and the value range is 1 to 65535."
+        },
+        {
+            "Parameters": "compatibility-mode compati-mode-val",
+            "Info": "Indicates the router/PTN communication mode.\nThe values are as follows:\nrouter-modeptn-mode"
+        },
+        {
+            "Parameters": "bdi-frequency bdi-frep-value",
+            "Info": "Indicates the interval at which BDI packets are sent.\nThe values are as follows:\nper-second: Indicates that the interval at which BDI packets are sent is the same as that between sending OAM detection packets.detect-freq:Indicates that BDI packets are sent every second."
+        },
+        {
+            "Parameters": "exp exp-value",
+            "Info": "Specifies a forwarding priority for packets.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls oam ingress Tunnel 10 type ffd frequency 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe MPLS OAM mechanism effectively detects and locates MPLS link faults. The MPLS OAM mechanism also triggers a protection switchover after detecting a fault. To configure MPLS OAM to monitor an LSP, you must configure MPLS OAM parameters on the ingress and egress. To configure MPLS OAM parameters on the ingress, run the mpls oam ingress command.\nPrerequisites\nMPLS OAM has been globally enabled using the mpls oam command.\nFollow-up Procedure\nRun the mpls oam ingress enable command to enable OAM."
+}

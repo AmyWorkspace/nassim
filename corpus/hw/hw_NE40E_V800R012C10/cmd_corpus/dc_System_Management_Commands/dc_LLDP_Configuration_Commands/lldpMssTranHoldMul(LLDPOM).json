@@ -1,0 +1,25 @@
+{
+    "PageTitle": "lldp message-transmission hold-multiplier",
+    "FuncDef": "The lldp message-transmission hold-multiplier command sets the time multiplier of device information held on neighbors.\nThe undo lldp message-transmission hold-multiplier command restores the default time multiplier.\nThe default time multiplier is 4.",
+    "CLIs": [
+        "lldp message-transmission hold-multiplier <hold-multiplier>",
+        "undo lldp message-transmission hold-multiplier"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "hold-multiplier",
+            "Info": "Specifies the time multiplier of device information held on neighbors.\nThe value is an integer ranging from 2 to 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] lldp enable",
+            "[*HUAWEI] lldp message-transmission hold-multiplier 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA time multiplier can be set for a device to calculate the valid time of LLDP packets being sent to neighbors. The time of device information held in neighbors can be adjusted by setting this parameter. The formula for calculating the TTL of device information held on neighbors is as follows:\nTTL = Min (65535, (interval * hold-multiplier)hold-multiplier). The value is configured using the lldp message-transmission interval command.\nAfter receiving LLDP packets sent by a local device, neighbors update the aging time of local device information based on the TTL value. Even if the local device has LLDP disabled, neighbors still hold local device information until the TTL expires. This effectively prevents frequent network topology changes.\nConfiguration Impact\nThe hold-multiplier value must be appropriate. You can flexibly adjust this parameter based on the network load:\nThe greater the value, the lower the frequency of network topology changes. However, if the value is too large, the local device cannot immediately notify neighbors of its status. As a result, the NMS cannot dynamically detect network topology changes.The smaller the value, the higher the frequency of sending local status information to neighbors. This helps the neighbors dynamically refresh the network topology. However, if the delay is too short, the neighbors refresh status information about the local device frequently. This increases the possibility of network flapping and system load and wastes resources.\nThe default time multiplier is recommended."
+}

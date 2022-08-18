@@ -1,0 +1,50 @@
+{
+    "PageTitle": "delay-measure one-way send",
+    "FuncDef": "The delay-measure one-way send command configures on-demand one-way frame delay measurement.\nBy default, on-demand one-way frame delay measurement is not configured in an MA.",
+    "CLIs": [
+        "delay-measure one-way send test-id <test-id-value> interval { <1000> | <10000> } count <count-value>"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the interval at which DMMs are sent.\nThe value is 1000 or 10000, in milliseconds."
+        },
+        {
+            "Parameters": "count count-value",
+            "Info": "Specifies the number of one-way frame delay measurement operations.\ncount-value must be configured. There is no default value.\nThe value is an integer ranging from 1 to 60."
+        },
+        {
+            "Parameters": "test-id test-id-value",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 mac 00e0-fc12-7890",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send mep-id 1 enable",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 2",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep ccm-receive mep-id 2 enable",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 remote-mep 2",
+            "[*HUAWEI-md-md1-ma-ma1] commit",
+            "[~HUAWEI-md-md1-ma-ma1] delay-measure one-way send test-id 1 interval 10000 count 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn-demand OAM refers to OAM actions that are initiated through manual intervention for a limited time to carry out diagnostics. On-demand OAM can result in singular or periodic OAM actions during the diagnostics time interval. DM packets can be used for on-demand OAM to test the link delay.\nOne-way frame delay measurement is performed on end-to-end MEPs. A MEP receives a DM frame and returns a DMR frame to carry out the one-way frame delay measurement. A MEP periodically sends DMMs carrying TxTimeStampf. After receiving a DM frame, the remote MEP calculates the one-way frame delay based on the following formula:\nFrame delay = RxTimef - TxTimeStampf\nWhen the clocks of the MEPs at both ends of a link are synchronized, you can run this command to implement singular or periodic one-way frame delay measurement.\nPrerequisites\nIEEE Standard has been specified for CFM using the cfm version standard command in the system view.The CFM function has been globally enabled using the cfm enable command in the system view.An MD has been created using the cfm md command in the system view.An MA has been created using the ma command in the MD view.An inward-facing MEP has been created using the mep mep-id command.A remote MEP has been created using the remote-mep command in the MA view.The local MEP has been enabled to send CCMs by using the mep ccm-send enable command in the MA view.The local MEP has been enabled to receive CCMs from the remote MEP in the same MA by using the remote-mep ccm-receive enable command in the MA view.A test instance has been created using the test-id command.\n\nConfiguration Impact\nAfter the configuration is complete, on-demand one-way frame delay measurement is implemented for links.\nPrecautions\nOne-way frame delay measurement requires that clocks of the local MEP and remote MEP be synchronized.To implement one-way frame delay measurement, you can specify a remote MEP ID or destination MAC address, an interval at which DMMs are sent, and the number of one-way frame delay measurement operations.If the local MEP has not learned the MAC address of the remote MEP, you must specify a destination MAC address for one-way frame delay measurement.If the local MEP has learned the MAC address of the remote MEP, you can specify a remote MEP ID for one-way frame delay measurement."
+}

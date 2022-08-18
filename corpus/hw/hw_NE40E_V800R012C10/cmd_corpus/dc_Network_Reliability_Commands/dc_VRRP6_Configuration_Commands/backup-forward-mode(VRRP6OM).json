@@ -1,0 +1,50 @@
+{
+    "PageTitle": "vrrp6 vrid backup-forward",
+    "FuncDef": "The vrrp6 vrid backup-forward command enables the backup device in a VRRP6 backup group to forward service traffic.\nThe undo vrrp6 vrid backup-forward command disables the backup device in a VRRP6 backup group from forwarding service traffic.\n\nBy default, the backup device cannot forward service traffic.",
+    "CLIs": [
+        "vrrp6 vrid <virtual-router-id> backup-forward",
+        "undo vrrp6 vrid <virtual-router-id> backup-forward"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-router-id",
+            "Info": "Specifies the ID of a VRRP6 backup group.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/0",
+            "[~HUAWEI-GigabitEthernet2/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet2/0/0] ipv6 address 100::1/64",
+            "[*HUAWEI-GigabitEthernet2/0/0] vrrp6 vrid 20 virtual-ip FE80::23 link-local",
+            "[*HUAWEI-GigabitEthernet2/0/0] vrrp6 vrid 20 backup-forward"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nOn a mobile bearer network, a base station is connected to aggregation devices over the primary and secondary PWs and to NPEs over the active and standby links. A VRRP6 backup group is deployed on both NPEs. If the aggregation device on the active link fails, service traffic switches from the active link to the standby link immediately, but a master/backup VRRP6 switchover is performed between both NPEs after a delay. Therefore, service traffic is lost before the master/backup VRRP6 switchover is performed. To resolve this issue and meet carrier-class reliability requirements, run the vrrp6 vrid backup-forward command to enable the backup NPE to forward service traffic. After the configuration is complete, the backup NPE forwards service traffic before a master/backup VRRP6 switchover is performed, which prevents service traffic loss.\n\nPrerequisites\n\nA VRRP6 backup group has been created using the vrrp6 vrid command in the interface view.\n\nConfiguration Impact\n\nAfter the vrrp6 vrid backup-forward command is run, backup devices forward service traffic with a virtual MAC address as a destination MAC address. If a downstream switch broadcasts a packet with a virtual MAC address as a destination MAC address, backup devices also forward this packet. As a result, duplicate traffic is sent. Do not run this command on a non-mobile bearer network to prevent duplicate traffic.\n\nPrecautions\n\nYou can configure backup devices to forward service traffic on the master and backup devices in a VRRP6 backup group."
+}

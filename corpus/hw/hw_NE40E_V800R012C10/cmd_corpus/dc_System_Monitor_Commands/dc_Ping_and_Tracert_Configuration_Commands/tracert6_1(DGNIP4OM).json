@@ -1,0 +1,58 @@
+{
+    "PageTitle": "tracert ipv6-sid",
+    "FuncDef": "The tracert ipv6-sid command specifies SIDs and enables the system to trace gateways that packets pass through from the source to the destination on an SRv6 network.",
+    "CLIs": [
+        "tracert ipv6-sid [ -f <first-hop-limit> | -m <max-hop-limit> | -p <port-number> | -q <probes> | -w <timeout> | -s <packetsize> | -a <source-ipv6-address> ] * [ overlay ] <sid1> [ <sid2> [ <sid3> [ <sid4> [ <sid5> [ <sid6> [ <sid7> [ <sid8> [ <sid9> [ <sid10> [ <sid11> ] ] ] ] ] ] ] ] ] ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-f first-hop-limit",
+            "Info": "Specifies an initial hop-limit.\nCarried in the IPv6 header, the hop-limit field indicates the lifetime of an IPv6 packet and specifies the maximum number of hops through which the packet can pass. The hop-limit field in IPv6 packets is similar to the TTL field in IPv4 packets. The hop-limit value is set on the source and reduced by 1 each time the packet passes through one Router. When the hop-limit value is reduced to 0, the packet is discarded. Then, an ICMPv6 Time Exceeded message is sent to the source.\nIf first-hop-limit is specified and the number of hops is less than the specified value, the hop-limit value will be greater than 0 after the packet passes through all the nodes. Therefore, no ICMPv6 Time Exceeded message is sent to the source.\nIf max-hop-limit is specified, the value of first-hop-limit must be less than the value of max-hop-limit.\nThis parameter is not supported for an overlay test.\nThe value is an integer ranging from 1 to 255. The default value is 1."
+        },
+        {
+            "Parameters": "-m max-hop-limit",
+            "Info": "Specifies a maximum hop-limit.\nUsually, max-hop-limit is set to the number of hops through which packets pass. To change the maximum hop-limit, specify this parameter.\nIf first-hop-limit is specified, the value of max-hop-limit must be greater than the value of first-hop-limit.\nThis parameter is not supported for an overlay test.\nThe value is an integer ranging from 1 to 255. The default value is 30."
+        },
+        {
+            "Parameters": "-p port-number",
+            "Info": "Specifies the UDP port number of the destination.\nThe value is an integer ranging from 1 to 65535. The default value is 33434."
+        },
+        {
+            "Parameters": "-q probes",
+            "Info": "Specifies the number of test packets to be sent each time.\nIf network quality is poor, you can increase the parameter value so that a test packet can reach the destination.\nThe value is an integer ranging from 1 to 65535. The default value is 3."
+        },
+        {
+            "Parameters": "-w timeout",
+            "Info": "Specifies a timeout period during which the source waits for a reply.\nIf a timeout occurs in sending a test packet to a gateway, an asterisk (*) is displayed.\nIf network quality is poor and transmission is slow, increase the timeout period.\nThe value is an integer ranging from 1 to 65535, in milliseconds. The default value is 5000."
+        },
+        {
+            "Parameters": "-s packetsize",
+            "Info": "Specifies a packet size.\nThe value is an integer ranging from 20 to 9600, in bytes. The default value is 20."
+        },
+        {
+            "Parameters": "-a source-ipv6-address",
+            "Info": "Specifies a source IPv6 address.\nIf the source IPv6 address is not specified, the encapsulation source-address address is preferentially used in the SRv6 BE scenario. In other scenarios, the IPv6 address of the outbound interface is used as the source address of packets.\nThe address is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "overlay",
+            "Info": "Indicates an overlay test.\nYou must specify this parameter in the following situations:\nThe destination device does not support the function of running the opcode func-opcode end-op command to specify an End.OP SID.Only nodes with the segment-routing ipv6 command configured need to be tested.\n-"
+        },
+        {
+            "Parameters": "sid1",
+            "Info": "Specifies an SRv6 SID.\nThe address is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X.\nA maximum of 11 SRv6 SIDs can be specified. They are separated by spaces, and the first specified SID is the outer SID."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> tracert ipv6-sid A2::C31 A4::C50 A4::C52",
+            "  traceroute ipv6-sid A2::C31 A4::C50 A4::C52  30 hops max,60 bytes packet",
+            "1  2001:DB8:1:2::21[SRH: A4::C52, A4::C50, A2::C31, SL=2] 5 ms 3 ms 2 ms",
+            "2  2001:DB8:2:3::31[SRH: A4::C52, A4::C50, A2::C31, SL=1] 5 ms 2001:DB8:2:3::32[SRH: A4::C52, A4::OP, A2::C31, SL=1] 2ms 2ms",
+            "3  A4::C52[SRH: A4::C52, A4::C50, A2::C31, SL=1] 5 ms 10 ms 0.759 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run the ping ipv6 command to check the connectivity of the network and then run the tracert ipv6 command to locate the faulty node.\nImplementation Procedure\nThe process of the\ntracert ipv6-sid command is as follows:\nThe source sends a packet with the hop-limit of 1. After the hop-limit times out, the first hop sends an ICMPv6 Error message to the source, indicating that the packet cannot be forwarded.The source sends a packet with the hop-limit of 2. After the hop-limit times out, the second hop sends an ICMPv6 Error message to the source, indicating that the packet cannot be forwarded.The source sends a packet with the hop-limit of 3. After the hop-limit times out, the third hop sends an ICMPv6 Error message to the source, indicating that the packet cannot be forwarded.The preceding process continues until the packet reaches the destination.\nAfter receiving an IPv6 packet, the destination device sends an ICMPv6 Port Unreachable message to the source device because the packet is trying to access an invalid port at the destination device. This message indicates that the port is unreachable and the tracert ipv6-sid command execution is finished. The purpose behind this is to record the source of each ICMPv6 Time Exceeded message to provide a trace of the path the packet took to reach the destination.\n\nPrecautions\nAn End.OP SID must be specified as the penultimate SRv6 SID. Otherwise, the tracert ipv6-sid command fails to be run.If router ID is not configured, source address need to configure manually when initiating a tracert operation to the SRv6 TE Policy.By default, the ICMPv6 module is automatically enabled after the IPv6 module is enabled."
+}

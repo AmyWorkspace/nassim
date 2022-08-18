@@ -1,0 +1,35 @@
+{
+    "PageTitle": "route-policy",
+    "FuncDef": "The route-policy command creates a route-policy and displays the Route-policy view.\nThe undo route-policy command deletes the created route-policy.\nBy default, no route-policy is created.",
+    "CLIs": [
+        "route-policy <route-policy-name> <matchMode> node <node>",
+        "undo route-policy <route-policy-name> [ node <node> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy-name",
+            "Info": "Specifies the name of the route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "matchMode",
+            "Info": "Specifies the matching mode of the route-policy.\nThe value is an enumerated type:\npermit: Specifies the matching mode of the route-policy as permit.deny: Specifies the matching mode of the route-policy as deny."
+        },
+        {
+            "Parameters": "node node",
+            "Info": "Specifies the index of the node in the route-policy.\nThe value is an integer ranging from 0 to 65535. When the route-policy is used to filter routes, the node with the smaller value is matched against first."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix-a index 10 permit 172.17.1.0 24",
+            "[*HUAWEI] route-policy policy1 permit node 10",
+            "[*HUAWEI-route-policy] if-match ip-prefix prefix-a",
+            "[*HUAWEI-route-policy] apply cost 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA route-policy is used to filter routes and set route attributes for the routes that match the route-policy. A route-policy consists of multiple nodes. One node can be configured with multiple if-match and apply clauses. The if-match clauses define filtering rules for this node, and the apply clauses define behaviors for the routes that match the rules.\nThe relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. If no if-match clause is specified, all the routes can pass the node.\nThe relationship between the nodes of a route-policy is \"OR\". That is, if a route matches one node, the route matches the route-policy. If the route does not match any node, the route fails to match the route-policy.\nPrecautions\nYou can run the display route-policy command to view the number of routes that match or do not match the route-policy.\nIf an if-match clause of a route-policy defines an ip-prefix-based filtering rule, the filtering rule applies to IPv4 prefixes, not to IPv6 prefixes, and IPv6 prefixes match the filtering rule by default. If IPv6 prefixes also need to be filtered, add an ipv6-prefix-based if-match clause. Similarly, if an if-match clause of a route-policy defines an ipv6-prefix-based filtering rule, the filtering rule applies to IPv6 prefixes, not to IPv4 prefixes, and IPv4 prefixes match the filtering rule by default. If IPv4 prefixes also need to be filtered, add an ip-prefix-based if-match clause.\nThe configuration of a peer takes precedence over that of the peer group to which the peer belongs. That is, when a routing policy is used to control BGP route advertisement or receiving, the priority of this configuration on a BGP peer is higher than that of the configuration on the peer group."
+}

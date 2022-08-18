@@ -1,0 +1,64 @@
+{
+    "PageTitle": "mpls l2vpn (interface view)",
+    "FuncDef": "The mpls l2vpn arp-dual-sending command enables ARP dual-fed and sets an aging time for dynamic ARP entries. After ARP dual-fed is enabled on an AC interface, this interface forwards upstream ARP packets to both the primary and secondary PWs.\nThe undo mpls l2vpn arp-dual-sending command disables ARP dual-fed.\n\nBy default, the ARP single-fed function is disabled.",
+    "CLIs": [
+        "mpls l2vpn { arp-dual-sending | arp-sending } [ expire-time <expire-time-value> ]",
+        "undo mpls l2vpn { arp-dual-sending | arp-sending }"
+    ],
+    "ParentView": [
+        "40GE interface view",
+        "GE electrical interface view",
+        "XGE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50|100GE sub-interface view",
+        "GE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "50GE interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "arp-sending",
+            "Info": "Enable ARP-fed function.\n-"
+        },
+        {
+            "Parameters": "expire-time expire-time-value",
+            "Info": "Specifies an aging time for dynamic ARP entries. ARP entries must be updated regularly to ensure communication reliability. A dynamic ARP entry has a life cycle. If a dynamic ARP entry is not updated before its life cycle expires, this dynamic ARP entry will be deleted from the ARP table. The life cycle is called aging time. If the entry is updated before its life cycle expires, the aging time of the entry is recalculated. The expire-time expire-time-value parameter allows you to specify an aging time for dynamic ARP entries.\nThe value is an integer ranging from 60 to 4294967295, in seconds. The default value is 4294967295. If the value is 4294967295, dynamic ARP entries do not age."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] mpls l2vpn arp-sending expire-time 2400"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] mpls l2vpn arp-dual-sending"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] mpls l2vpn arp-dual-sending expire-time 2400"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nIn L2VPN PW redundancy (1:1 protection), user-side ARP packets are transparently transmitted only on the primary PW. As a result, user-side MAC addresses cannot be learned on the secondary PW. When a node fault occurs on the primary PW, the secondary PW needs to trigger the learning of user-side MAC address using traffic. This causes traffic loss.\nThis command enables ARP packets to be transparently transmitted on primary and secondary PWs, minimizing traffic loss in the case of a node fault on the primary PW.\n\nPrecautions\n\nAfter this command is used, normal service packets are transparently transmitted only on the primary PW.\nThis command can be configured on an interface that is not configured with PW redundancy, but the command configuration will not take effect."
+}

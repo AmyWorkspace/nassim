@@ -1,0 +1,36 @@
+{
+    "PageTitle": "qos",
+    "FuncDef": "This command specifies the ingress or egress Quality of Service (QoS) policy that is associated with a Managed SAP (MSAP). Only QoS policies with scope template can be associated with MSAPs.",
+    "CLIs": [
+        "qos <policy-id>",
+        "qos <policy-id> [ multipoint-shared | service-queuing ]",
+        "qos <policy-id> [ shared-queuing | service-queuing ]",
+        "no qos"
+    ],
+    "ParentView": [
+        "config>subscr-mgmt>msap-policy>ies-vprn>egress",
+        "config>subscr-mgmt>msap-policy>ies-vprn>ingress",
+        "config>subscr-mgmt>msap-policy>vpls-only>egress",
+        "config>subscr-mgmt>msap-policy>vpls-only>ingress"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-id",
+            "Info": "Specifies the QoS policy ID or name to associate with the MSAPs. The policy ID or name must already exist. Values-id: 1 to 65535."
+        },
+        {
+            "Parameters": "multipoint-shared",
+            "Info": "Ingress unicast MSAP queues are mapped one-for-one with hardware queues. Multipoint MSAP queues are not instantiated. Unicast and BUM packets traverse the ingress forwarding plane twice: in the first pass, both unicast and BUM traffic use the unicast MSAP queues, while in the second pass shared unicast and multipoint queues are used towards the egress line card. Multipoint-shared queuing greatly reduces ingress queue consumption. This keyword can only be specified for ingress vpls-only-sap-parameters."
+        },
+        {
+            "Parameters": "shared-queuing",
+            "Info": "Ingress unicast MSAP queues are mapped one-for-one with hardware queues. Unicast packets traverse the ingress forwarding plane twice: in the first pass the MSAP queues are used, while in the second pass shared queues are used towards the egress line card. Shared-queuing greatly reduces ingress queue consumption. This keyword can only be specified for ingress ies-vprn-only-sap-parameters."
+        },
+        {
+            "Parameters": "service-queuing",
+            "Info": "Ingress MSAP queues are mapped to multiple hardware queues, per egress line card destination. For scaled environments such as in subscriber management, this could lead to a high number of queue resources being used. Therefore, service-queuing for MSAPs should only be enabled for specific use cases. This keyword can only be specified for ingress parameters."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: qos 1 - For egress parameters.qos 1 multipoint-shared - For ingress vpls-only-sap-parameters. qos 1 shared-queuing - For ingress ies-vprn-only-sap-parameters."
+}

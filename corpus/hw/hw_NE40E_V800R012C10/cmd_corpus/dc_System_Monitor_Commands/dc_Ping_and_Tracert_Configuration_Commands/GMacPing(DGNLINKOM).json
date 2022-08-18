@@ -1,0 +1,110 @@
+{
+    "PageTitle": "ping mac",
+    "FuncDef": "The ping mac command monitors connectivity of the links between a source device and a destination device. This mechanism is called GMAC ping.",
+    "CLIs": [
+        "ping mac <mac-address> vlan <vlan-id> [ interface { <interface-name> | <interface-type> <interface-number> } | -c <count> | -s <packetsize> | -t <timeout> | -p <priority-value> ] *",
+        "ping mac <mac-address> { vsi <vsi-name> | l2vc <l2vc-id> { raw | tagged } } [ interface { <interface-name> | <interface-type> <interface-number> } | { pe-vid <pe-vid-value> ce-vid <ce-vid-value> | dot1q-vlan <dot1q-vlan-value> } | -c <count> | -s <packetsize> | -t <timeout> | -p <priority-value> ] *"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies the bridge MAC address of a destination device.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0. It cannot be a broadcast or multicast MAC address."
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies a VLAN ID.\nThe value is an integer that ranges from 1 to 4094 ."
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the interface name of an outbound interface for sending a ping message.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type of an outbound interface for sending a ping message.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number of an outbound interface for sending a ping message.\n-"
+        },
+        {
+            "Parameters": "-c count",
+            "Info": "Specifies the number of times that a ping can be performed.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-s packetsize",
+            "Info": "Specifies the size of a ping message to be sent.\nThe value is an integer ranging from 95 to 9000, in bytes. The default value is 95 bytes. The value indicates the size of the message with the layer 2 frame header removed."
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies the timeout period during which the device waits for a reply.\nThe value is an integer ranging from 1 to 65535, in milliseconds. The default value is 2000 ms."
+        },
+        {
+            "Parameters": "-p priority-value",
+            "Info": "Specifies a priority value for ping messages.\nThe value is an integer that ranges from 0 to 7 .\nThe default value is 7."
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies the name of a virtual switch instance (VSI).\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "l2vc l2vc-id",
+            "Info": "Specifies the ID of a Layer 2 virtual circuit.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "raw",
+            "Info": "Strip the VLAN tag.\n-"
+        },
+        {
+            "Parameters": "tagged",
+            "Info": "Attach the VLAN tag.\n-"
+        },
+        {
+            "Parameters": "pe-vid pe-vid-value",
+            "Info": "Specifies the ID of the VLAN to which the PE belongs. This is the value of the outer VLAN tag.\nThe value is an integer that ranges from 1 to 4094 ."
+        },
+        {
+            "Parameters": "ce-vid ce-vid-value",
+            "Info": "Specifies the ID of the VLAN to which the CE belongs. This is the value of the inner VLAN tag.\nThe value is an integer that ranges from 1 to 4094 ."
+        },
+        {
+            "Parameters": "dot1q-vlan dot1q-vlan-value",
+            "Info": "Specifies the VLAN ID carried by the packet.\nThe value is an integer that ranges from 1 to 4094 ."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ping mac enable",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] ping mac 00e0-fc12-3456 vlan 10 -c 2 -s 112",
+            "Reply from 00e0-fc12-3456: bytes = 112 time < 1ms",
+            "Reply from 00e0-fc12-3456: bytes = 112 time < 1ms",
+            "Packets: Sent = 2, Received = 2, loss = 0 (0.00% loss)",
+            "Minimum = 1ms, Maximum = 1ms, Average = 1ms"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ping mac enable",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] ping mac 00e0-fc12-3456 vsi vsi1 -c 2 -s 112",
+            "Reply from 00e0-fc12-3456: bytes = 112 time < 1ms",
+            "Reply from 00e0-fc12-3456: bytes = 112 time < 1ms",
+            "Packets: Sent = 2, Received = 2, loss = 0 (0.00% loss)",
+            "Minimum = 1ms, Maximum = 1ms, Average = 1ms"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ping mac enable",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] ping mac 00e0-fc12-3456 l2vc 1 raw -c 2 -s 112",
+            "Reply from 00e0-fc12-3456: bytes = 112 time < 1ms",
+            "Reply from 00e0-fc12-3456: bytes = 112 time < 1ms",
+            "Packets: Sent = 2, Received = 2, loss = 0 (0.00% loss)",
+            "Minimum = 1ms, Maximum = 1ms, Average = 1ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a network with GMAC ping enabled, the source device does not need to be a MEP, and the destination device does not need to be a MEP or MIP. In other words, on the source, intermediate, or destination device, an MD, MA, or MEP is not configured to implement GMAC ping. The only requirement is to specify the VLAN on which the destination node resides.\nIf devices between PEs are interconnected through a L2VPN,\nWhen packets received by PEs carry double tags, use the QinQ tag termination sub-interface that is bound to the L2VC/VSI to access the L2VPN. If you need to determine connectivity between PEs, specify the parameter pe-vid and ce-vid.When packets received by PEs carry one tag, use the Dot1q tag termination sub-interface that is bound to the L2VC/VSI to access the L2VPN. If you need to determine connectivity between PEs, specify the parameter dot1q-vlan vlan-id.\nDifferent types of interfaces process packets differently, as shown in following lists.\nPacket processing on the inbound interface:\nVLANIF interface, raw encapsulation (ethernet encapsulation) is default mode means no action is performed and trunk mode means the outer tags are stripped. Tagged encapsulation (VLAN encapsulation) is default mode means adds a tag (default VLAN ID of the interface) and trunk mode means no action is required.Ethernet main interface, tags are stripped in raw encapsulation. Tags are Reserved and no action is required in tagged encapsulation.Dot1q sub-interface, one tag is stripped in raw encapsulation. Tags are reserved and no action is required in tagged encapsulation.Dot1q termination sub-interface, one tag is stripped in raw encapsulation. Tags are Reserved and no action is required in tagged encapsulation.QinQ termination sub-interface (in symmetric mode), the outer tag is stripped in raw encapsulation. Double tags are reserved and no action is required in tagged encapsulation.QinQ termination sub-interface (in asymmetric mode), double tags are stripped in raw encapsulation. Two tags are stripped and then one tag is added in tagged encapsulation.\nPacket processing on the outbound interface:\nVLANIF interface, raw encapsulation (ethernet encapsulation) is default mode means no action is performed and trunk mode means a specific tag is added. Tagged encapsulation (VLAN encapsulation) is default mode means the tag is stripped and trunk mode means the tag is replaced.Ethernet main interface, a specific tag is added in raw encapsulation. The tag is replaced in tagged encapsulation.Dot1q sub-interface, one tag is added in raw encapsulation. The tag is replaced with the tag that is encapsulated on the outbound interface in tagged encapsulation.Dot1q termination sub-interface, one tag is added in raw encapsulation. The tag is replaced with the tag that is encapsulated on the outbound interface in tagged encapsulation.QinQ termination sub-interface (in symmetric mode), the outer tag is added in raw encapsulation. The outer tag is replaced with the tag that is encapsulated on the outbound interface.QinQ termination sub-interface (in asymmetric mode), double tags are added in raw encapsulation. The outer tag is removed and then two tags that are encapsulated are added.\nThe MAC address specified in the general MAC ping must be the physical MAC address of the physical interface in the Layer 2 scenario.\n\nPrerequisites\nThe GMAC ping function has been enabled using the ping mac enable command.\nPrecautions\nThe two devices must be enabled with 802.1ag of the same version."
+}

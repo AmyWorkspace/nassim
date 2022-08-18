@@ -1,0 +1,53 @@
+{
+    "PageTitle": "dn-bit-check disable",
+    "FuncDef": "The dn-bit-check disable command disables OSPF from checking the DN bit in LSAs.\nThe undo dn-bit-check disable command enables OSPF to check the DN bit in LSAs.\nThe dn-bit-check disable command disables OSPFv3 from checking the DN bit in LSAs.\nThe undo dn-bit-check disable command enables OSPFv3 to check the DN bit in LSAs.\n\nBy default, OSPF is enabled to check the DN bit in LSAs.\n\n\nBy default, OSPFv3 is enabled to check the DN bit in LSAs.",
+    "CLIs": [
+        "dn-bit-check disable { ase | nssa }",
+        "dn-bit-check disable summary [ router-id <router-id> ]",
+        "undo dn-bit-check disable { ase | nssa }",
+        "undo dn-bit-check disable summary [ router-id <router-id> ]"
+    ],
+    "ParentView": [
+        "OSPFv3 view",
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ase",
+            "Info": "Indicates that the DN bit in ASE LSAs is not checked.\n-"
+        },
+        {
+            "Parameters": "nssa",
+            "Info": "Indicates that the DN bit in NSSA LSAs is not checked.\n-"
+        },
+        {
+            "Parameters": "summary",
+            "Info": "Indicates that the DN bit in summary LSAs is not checked.\n-"
+        },
+        {
+            "Parameters": "router-id router-id",
+            "Info": "Specifies the ID of a router on which the DN bit in summary LSAs is checked.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance huawei",
+            "[*HUAWEI-vpn-instance-huawei] ipv6-family",
+            "[*HUAWEI-vpn-instance-huawei-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-huawei] quit",
+            "[*HUAWEI] ospfv3 100 vpn-instance huawei",
+            "[*HUAWEI-ospfv3-100] dn-bit-check disable summary router-id 1.1.1.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance huawei",
+            "[*HUAWEI-vpn-instance-huawei] ipv4-family",
+            "[*HUAWEI-vpn-instance-huawei-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-huawei] quit",
+            "[*HUAWEI] ospf 100 vpn-instance huawei",
+            "[*HUAWEI-ospf-100] dn-bit-check disable summary router-id 1.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the VPN option A scenario, the local PE imports BGP routes to generate LSAs and advertise the generated LSAs to the peer PE. According to standard protocols, setting of the DN bit is restricted. The peer PE may fail to calculate a route. In this situation, you need to use the dn-bit-check disable command to disable OSPF from checking the DN bit in LSAs.\nTo prevent routing loops, the OSPF multi-instance process uses a bit as a flag. The bit is called DN bit.\nIn a VPN Option A scenario, the local ASBR (ASBR1) imports BGP routes to generate LSAs, advertises the LSAs to the peer ASBR (ASBR2), and exchange OSPFv3 routes with ASBR2. According to the standard protocol, ASBR2 cannot calculate the BGP routes imported by ASBR1 due to the DN bit check mechanism, causing traffic loss. To disable ASBR2 from checking the DN bit in LSAs, run the\ndn-bit-check disable command.\nOSPFv3 multi-instance processes use a bit flag called the DN bit to prevent routing loops.\nPrerequisites\nA VPN instance has been created using the ip vpn-instance vpn-instance-name command and the VPN instance view is displayed.The BGP-VPN instance IPv6 address family view has been enabled using the ipv6-family vpn-instance-name command in the VPN instance view.The ospfv3[ process-id ] [ vpn-instance vpn-instance-name ] command has been run to enable an OSPFv3 multi-instance process and enter its view.\n\nConfiguration Impact\nAfter the dn-bit-check disable command is run, routing loops may occur. If the parameter ase or nssa is specified, the DN bit in ASE LSAs or NSSA LSAs is not checked. You can use the route-tag command to set the same tag value to prevent routing loops. Therefore, run the dn-bit-check disable command only in the scenario specified in Usage Scenario.\nAfter the dn-bit-check disable command is run to disable OSPFv3 from checking the DN bit in LSAs, routing loops may occur. If ase or nssa is configured, you can set the same VPN route tag for imported VPN routes using the route-tag command in the OSPFv3 view to prevent routing loops. You are advised to run the dn-bit-check disable command only in VPN Option A scenarios.\nPrecautions\nWhen a PE is connected to an MCE, the MCE does not check the DN bit by default.\nThe dn-bit-check disable command can be configured only for private OSPF processes. The configuration of this command takes effect only on PEs.\nThe dn-bit-set disable command disables OSPF from checking the DN bit in LSAs on the local PE.\nThe dn-bit-check disable command can be run only in OSPFv3 VPN processes and takes effect only on PEs.\nWhen a PE is connected to an MCE, the MCE does not check the DN bit in LSAs by default."
+}

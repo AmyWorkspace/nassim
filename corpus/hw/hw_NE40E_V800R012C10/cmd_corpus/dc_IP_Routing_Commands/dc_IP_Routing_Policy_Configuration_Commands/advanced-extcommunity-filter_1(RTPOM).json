@@ -1,0 +1,36 @@
+{
+    "PageTitle": "ip extcommunity-filter advanced",
+    "FuncDef": "The ip extcommunity-filter advanced command adds an advanced VPN-Target extended community filter.\nThe undo ip extcommunity-filter advanced command deletes a specified advanced VPN-Target extended community filter.\nBy default, no advanced VPN-Target extended community filter is configured.",
+    "CLIs": [
+        "ip extcommunity-filter advanced <advanced-extcomm-filter-name> [ index <index-number> ] <matchMode> <regular-expression>",
+        "undo ip extcommunity-filter advanced <advanced-extcomm-filter-name> [ index <index-number> ] [ [ <matchMode> ] <regular-expression> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "index index-number",
+            "Info": "Specifies the sequence number of an advanced VPN-Target extended community filter.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "matchMode",
+            "Info": "Sets the matching mode of the advanced VPN-Target extended community filter.\nThe value is an enumerated type:\npermit: Sets the matching mode of the VPN-Target extended community filter to permit.deny: Sets the matching mode of the VPN-Target extended community filter to deny."
+        },
+        {
+            "Parameters": "regular-expression",
+            "Info": "Specifies the regular expression matched the VPN-Target extended community.\nThe value is a string of 1 to 1024 characters, spaces supported."
+        },
+        {
+            "Parameters": "advanced advanced-extcomm-filter-name",
+            "Info": "Specifies the name of the advanced VPN-Target extended community filter.\nThe name is a string of 1 to 51 case-sensitive characters, spaces not supported. The string cannot be all digits. The character string can contain spaces if it is enclosed with double quotation marks (\")."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip extcommunity-filter advanced aa permit 200:*"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA VPN-Target extended community filter can be used as a matching condition of a route-policy using a command, such as the if-match extcommunity-filter zz command.\nThe undo ip extcommunity-filter command deletes a specified VPN-Target extended community filter.\nThe display ip extcommunity-filter command displays detailed configurations of the VPN-Target extended community filter.\nConfiguration Impact\nThe ip extcommunity-filter command filters routes based on the RT attributes of the routes. The routes that match the filtering are permitted to pass through, and the routes that fail to match the filtering are denied.\nPrecautions\nThe extended community attributes of a route include VPN-target and Source of Origin (SoO). The ip extcommunity-filter command adds a VPN-Target extended community filter.\nBy default, VPN-Target extended community filters work in deny mode. If all matching rules in a filter are configured to work in deny mode, all routes are denied by the filter; to prevent this problem, configure one matching rule in permit mode after one or multiple matching rules in deny mode so that the routes except for those denied by preceding matching rules are permitted by the filter.\nFor an advanced VPN-Target extended community filter, if the VPN-Target attribute is set to be in the format of 4-byte AS number:2-byte user-defined number, the filtering rule that uses the VPN-Target-based regular expression is affected by the as-notation plain command:\nIf the as-notation plain command is run, route matching can succeed only after the regular expression is set to be in the format of integral 4-byte AS number:2-byte user-defined number.If the as-notation plain command is not run, route matching can succeed only after the regular expression is set to be in the format of 4-byte AS number in dotted notation:2-byte user-defined number.If the as-notation plain command is run after the regular expression is configured, you need to reconfigure the regular expression; otherwise, route matching may fail against an import or export route-policy, causing a network fault."
+}

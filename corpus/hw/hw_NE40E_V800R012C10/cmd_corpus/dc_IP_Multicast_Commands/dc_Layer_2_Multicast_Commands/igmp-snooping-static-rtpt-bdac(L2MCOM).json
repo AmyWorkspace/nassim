@@ -1,0 +1,88 @@
+{
+    "PageTitle": "igmp-snooping static-router-port (Sub-interface view)",
+    "FuncDef": "The igmp-snooping static-router-port command configures a static router port.\nThe undo igmp-snooping static-router-port command cancels the configuration.\nBy default, a dynamic router port is used.",
+    "CLIs": [
+        "igmp-snooping static-router-port",
+        "igmp-snooping static-router-port dot1q vid <vid>",
+        "igmp-snooping static-router-port qinq pe-vid <pe-vid> ce-vid <ce-vid>",
+        "undo igmp-snooping static-router-port [ dot1q vid <vid> ] [ qinq pe-vid <pe-vid> ce-vid <ce-vid> ]"
+    ],
+    "ParentView": [
+        "Layer 2 sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "400GE Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dot1q",
+            "Info": "Enables dot1q encapsulation to allow a Layer 2 sub-interface to receive packets each with one or more tags.\n-"
+        },
+        {
+            "Parameters": "vid vid",
+            "Info": "Specifies a range of VLAN IDs for single-tagged packets to be received by a Layer 2 sub-interface.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "qinq",
+            "Info": "Enables QinQ encapsulation to allow a Layer 2 sub-interface to receive packets with two or more tags.\n-"
+        },
+        {
+            "Parameters": "pe-vid pe-vid",
+            "Info": "Specifies an outer VLAN ID for double-tagged packets to be received by a Layer 2 sub-interface.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid ce-vid",
+            "Info": "Specifies a range of inner VLAN IDs for double-tagged packets to be received by a Layer 2 sub-interface.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vpna",
+            "[*HUAWEI-vsi-vpna] pwsignal ldp",
+            "[*HUAWEI-vsi-vpna-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vpna-ldp] quit",
+            "[*HUAWEI-vsi-vpna] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] l2 binding vsi vpna",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] igmp-snooping static-router-port vsi vpna"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[*HUAWEI-vsi-vsi0] igmp-snooping static-router-port remote-peer 3.3.3.3"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] igmp-snooping static-router-port vlan 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[~HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] igmp-snooping static-router-port remote-peer 3.3.3.3 bgp-ad"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf user hosts need to receive multicast data packets from a port for a long period of time, the igmp-snooping static-router-port command can be used to configure the port as a static router port.\nStatic router ports can be configured on different positions on a network to enable user hosts to regularly receive data for specific multicast groups or source-specific multicast groups. The commands listed in the following table can be run in any order. Run one or more commands as required to configure static router ports. For details, see Table 1.\nPrerequisites\nIGMP snooping has been configured globally and in a VLAN/VSI/BD.\nConfiguration Impact\nA static router port does not age. To delete a static router port, you must run the undo igmp-snooping static-router-port command.\nIf the igmp-snooping static-router-port command is run more than once, all configurations take effect."
+}

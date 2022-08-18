@@ -1,0 +1,49 @@
+{
+    "PageTitle": "multicast-suppression(Traffic behavior view)",
+    "FuncDef": "The multicast-suppression command restricts the rate at which multicast packets are transmitted.\nThe undo multicast-suppression command cancels the configuration.\nBy default, multicast suppression is not configured in the traffic behavior view.",
+    "CLIs": [
+        "multicast-suppression { cir <cir-value> } [ cbs <cbs-value> ] [ green { discard | pass [ service-class <class> color { green | yellow | red } ] } | red { discard | pass [ service-class <class> color { green | yellow | red } ] } ] *",
+        "undo multicast-suppression [ { cir <cir-value> } [ cbs <cbs-value> ] [ green { discard | pass [ service-class <class> color { green | yellow | red } ] } | red { discard | pass [ service-class <class> color { green | yellow | red } ] } ] * ]"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir-value",
+            "Info": "Specifies the Committed Information Rate (CIR).\nThe value is an integer ranging from 0 to 4294967295, in kbit/s."
+        },
+        {
+            "Parameters": "cbs-value",
+            "Info": "Specifies the Committed Burst Size (CBS).\nThe value is an integer ranging from 0 to 4294967295, in bytes.\nThe CBS value must be larger than the CIR value.\nThe default CBS value is calculated in the format of cbs-value = cir-value*187.\nIf cir-value < 100000 kbit/s, the CBS value is calculated in the format of cbs-value = cir-value*187, in bytes.If cir-value >= 100000 kbit/s, the CBS value is calculated in the format of cbs-value = 100000*187, in bytes."
+        },
+        {
+            "Parameters": "green",
+            "Info": "Indicates the action to be taken on the packets when the traffic reaches the CIR. The default action is pass.\n-"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "Indicates that packets of a color are discarded.\n-"
+        },
+        {
+            "Parameters": "pass",
+            "Info": "Indicates that packets of a color can pass.\n-"
+        },
+        {
+            "Parameters": "class",
+            "Info": "Specifies the CoS that the packets are to be re-marked.\nThe value can be CS7, CS6, EF, AF4, AF3, AF2, AF1, and BE."
+        },
+        {
+            "Parameters": "red",
+            "Info": "Specifies the action to be taken on data packets when the traffic rate of the data packets exceeds the PIR. The default action is discard.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] multicast-suppression cir 1000 green pass service-class af1 color green red discard"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA growing number of multicast packets occupy a large amount of network resources. In this situation, services may not be provisioned properly.\nYou can run the multicast-suppression command to set thresholds for multicast traffic that is allowed to pass through an interface. If the multicast traffic volume exceeds the value set using the multicast-suppression command, the system drops the excessive multicast traffic.\nPrecautions\nThe multicast suppression does not take effected in VLL scenario.\nThe command is valid only for multicast traffics.\nIf the multicast-suppression command is run for multiple times, the latest configuration overrides the previous ones.\nTo achieve an exact packet suppression, you should specify a value for the CBS that is 10 times the length of the packet.\nIf member interfaces of a trunk interface reside on different NP or TM, the effective CIR or PIR for CAR or user-queue can be a multiple of the configured one."
+}

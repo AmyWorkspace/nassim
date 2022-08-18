@@ -1,0 +1,39 @@
+{
+    "PageTitle": "keepalive count",
+    "FuncDef": "The keepalive count command configures the number of times that a link can be kept alive during the link detection.\nThe undo keepalive count command restores the default configuration.\nBy default, a link can be kept alive for 5 times during the link detection.",
+    "CLIs": [
+        "keepalive count <number>",
+        "undo keepalive count"
+    ],
+    "ParentView": [
+        "LMP interface view",
+        "LMP configuration view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "number",
+            "Info": "Specifies the number of times that a link can be kept alive during the link detection.\nThe value is an integer ranging from 2 to 244."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Serial1/0/0:1",
+            "[~HUAWEI-Serial1/0/0:1] link-protocol ppp",
+            "[*HUAWEI-Serial1/0/0:1] keepalive count 7"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] lmp",
+            "[*HUAWEI-lmp] commit",
+            "[~HUAWEI-lmp] quit",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI] lmp interface enable",
+            "[*HUAWEI] quit",
+            "[*HUAWEI] interface Lmpif1/0/1",
+            "[*HUAWEI-Lmpif1/0/1] keepalive count 7"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure the number of times that a link can be kept alive during the link detection, run the keepalive count command. If the device does not receive any Keepalive packets from the remote device within a polling interval configured using the timer hold command, the device adds 1 to the number of times that the link has been kept alive. If the device does not receive any Keepalive packets within the number of times specified by the number parameter, the device considers the link faulty and sets the link status to Down. Calculate the time that a link can be kept alive based on the formula: Time that a link can be kept alive = Polling interval x Number of times that a link can be kept alive.\nYou can set a polling interval and the number of times that a link can be kept alive during the link detection to determine whether the link is normal. If the time that a link can be kept alive is rather short and the network delay is long or congestion is severe, network flapping may occur. If the time that a link can be kept alive is rather long, link faults may not be detected in a timely manner. Set a proper polling interval and number of times that a link can be kept alive based on the site requirements.\nPrerequisites\nThe link layer protocol of the interface has been configured as PPP or HDLC.\nConfiguration Impact\nIf the keepalive count command is run more than once, the latest configuration overrides the previous one."
+}

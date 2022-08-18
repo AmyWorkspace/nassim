@@ -1,0 +1,44 @@
+{
+    "PageTitle": "user-defined-flow",
+    "FuncDef": "The user-defined-flow command configures a user-defined flow.\nThe undo user-defined-flow command deletes the configuration.\nBy default, no user-defined flow is configured.",
+    "CLIs": [
+        "user-defined-flow <flow-id> ipv6 acl { <acl-number> | name <acl-name> }",
+        "user-defined-flow <flow-id> acl { <acl-number> | name <acl-name> } [ prior ]",
+        "undo user-defined-flow <flow-id>"
+    ],
+    "ParentView": [
+        "Attack defense policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "flow-id",
+            "Info": "Specifies the number of a user-defined flow.\nA smaller number indicates a higher priority.\nThe value is an integer that ranges from 1 to 64."
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Sets rules for the IPv6 user-defined flow. If this parameter is not specified, the rules are set for the IPv4 user-defined flow.\n-"
+        },
+        {
+            "Parameters": "acl acl-number",
+            "Info": "Specifies the number of an ACL.\nThe value is an integer that ranges from 2000 to 3999."
+        },
+        {
+            "Parameters": "name acl-name",
+            "Info": "Specifies the name of an ACL.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "prior",
+            "Info": "Configures the highest priority for a user-defined flow in the whitelist, blacklist, and user-defined flows.\nThis function currently applies only to BGP IPv4 packets.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2001",
+            "[*HUAWEI-acl4-basic-2001] quit",
+            "[*HUAWEI] cpu-defend policy 8",
+            "[*HUAWEI-cpu-defend-policy-8] user-defined-flow 30 acl 2001"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can add packets matching specific ACL rules to a user-defined flow and then impose restrictions on these packets as required. Types of data flows restricted by the whitelist and blacklist are limited. When unknown attacks occur on the network, you can flexibly configure ACL rules to add packets to the user-defined flow and then impose restrictions as required.\nWhen an ACL is bound to a user-defined flow, the rules containing NEQ, time-range, or vpn-instance in the ACL do not take effect. The other rules can take effect.\nPrerequisites\nACL rules are configured.\nPrecautions\nIf both the user-defined-flow acl prior and process-sequence commands are configured in an attack defense policy, the process-sequence command configuration does not take effect for user-defined flows configured with prior.\nIn VS mode, this command is supported only by the admin VS."
+}

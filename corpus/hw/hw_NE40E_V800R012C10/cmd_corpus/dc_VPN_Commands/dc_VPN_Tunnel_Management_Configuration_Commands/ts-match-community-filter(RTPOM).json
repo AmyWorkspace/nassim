@@ -1,0 +1,64 @@
+{
+    "PageTitle": "if-match community-filter (tunnel-selector view)",
+    "FuncDef": "The if-match community-filter command configures a tunnel selector to use specified community filters.\nThe undo if-match community-filter command restores the default configuration.\nBy default, a tunnel selector does not use any community filter.",
+    "CLIs": [
+        "if-match community-filter { <basIndex> [ whole-match ] | <AdvIndex> [ sort-match ] } &<1-16>",
+        "if-match community-filter <cfName> [ whole-match | sort-match ]",
+        "undo if-match community-filter { <basIndex> | <AdvIndex> } &<1-16>",
+        "undo if-match community-filter <cfName>",
+        "undo if-match community-filter"
+    ],
+    "ParentView": [
+        "Tunnel-selector view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basIndex",
+            "Info": "Specifies the number of a basic community filter.\nThe value is an integer ranging from 1 to 99."
+        },
+        {
+            "Parameters": "whole-match",
+            "Info": "Matches routes against all the filtering rules of a community filter. This keyword applies only to basic community filters.\nThe whole-match keyword applies only to the community filter before it. If multiple community filters are specified in the if-match community-filter command and you want to apply the whole-match keyword to all the filters, add the whole-match keyword after each community filter. Note that the whole-match keyword applies only to basic community filters.\n-"
+        },
+        {
+            "Parameters": "AdvIndex",
+            "Info": "Specifies the number of an advanced community filter.\nThe value is an integer ranging from 100 to 199."
+        },
+        {
+            "Parameters": "sort-match",
+            "Info": "Indicates sort matching. That is, all the communities in the command must be matched in sequence. Sort matching is valid only for the advanced community filter.\nThe parameter sort-match is valid only for its front community filter. If multiple community filters are specified in the if-match community-filter command and packets are required to wholly match the regular expansion in the filter in sequence, you need to specify the parameter sort-match behind each community filter.\n-"
+        },
+        {
+            "Parameters": "cfName",
+            "Info": "Specifies the name of a community filter.\nThe value is a string of 1 to 51 case-sensitive characters, spaces not supported. The string can contain spaces only if it is enclosed with double quotation marks (\" \"). A string containing only digits is not allowed."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip community-filter 1 permit 100:200",
+            "[*HUAWEI] tunnel-selector test permit node 10",
+            "[*HUAWEI-tunnel-selector] if-match community-filter 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip community-filter 1 permit 100:200",
+            "[*HUAWEI] ip community-filter 2 permit 300:400",
+            "[*HUAWEI] tunnel-selector test permit node 11",
+            "[*HUAWEI-tunnel-selector] if-match community-filter 1 whole-match 2 whole-match"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip community-filter basic aa permit 10",
+            "[*HUAWEI] tunnel-selector test permit node 12",
+            "[*HUAWEI-tunnel-selector] if-match community-filter aa"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip community-filter 101 permit 10",
+            "[*HUAWEI] route-policy test permit node 13",
+            "[*HUAWEI-route-policy] if-match community-filter 101 sort-match"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCommunity attributes are BGP-specific attributes. Therefore, the if-match community-filter command applies mainly to BGP routes. This command must be used with the ip community-filter command. For example:\nIf the if-match community-filter 1 command is configured but the ip community-filter 1 command is not configured, all the routes will be permitted.If the if-match community-filter 1 and ip community-filter 1 permit 1:1 commands are both configured, BGP routes with community attribute 1:1 will be permitted.\n\nPrerequisites\nA community filter has been configured using the ip community-filter command.\nA tunnel selector has been configured using the tunnel-selector command.\nConfiguration Impact\nBGP routes are filtered by community attribute. Those with the specified community attributes are permitted and those without the specified community attributes are denied.\nPrecautions\nA maximum of 16 community filters can be specified in the if-match community-filter command.\nThe name of a community filter cannot be all numbers."
+}

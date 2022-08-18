@@ -1,0 +1,45 @@
+{
+    "PageTitle": "rrpp snooping vsi",
+    "FuncDef": "The rrpp snooping vsi command associates RRPP-enabled sub-interfaces or VLANIF interfaces with the virtual switch instances (VSIs) that are not bound to the current sub-interface or VLANIF interface.\nThe undo rrpp snooping vsi command deletes the VSIs that are associated with RRPP snooping-enabled sub-interfaces or VLANIF interfaces.\nBy default, RRPP snooping enabled sub-interfaces or VLANIF interfaces is not associated with the other VSIs of the device.",
+    "CLIs": [
+        "rrpp snooping vsi <vsi-name>",
+        "undo rrpp snooping vsi <vsi-name>"
+    ],
+    "ParentView": [
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "VLANIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vsi-name",
+            "Info": "Specifies the name of a VSI instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. A VSI name must be unique on a device."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 10",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] quit",
+            "[*HUAWEI] vsi abc",
+            "[*HUAWEI-vsi-abc] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vlan-type dot1q 10",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] l2 binding vsi vsi1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] rrpp snooping enable",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] rrpp snooping vsi abc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nRRPP snooping notifies the virtual private LAN service (VPLS) network of RRPP status changes. When RRPP snooping is configured on sub-interfaces or VLANIF interfaces that are associated with other VSIs of the device, the VPLS network can transparently transmit RRPP protocol packets, detect the changes on the RRPP rings, and upgrade the forwarding entries to ensure that traffic is switched in time to a congestion-free path.\nAfter the rrpp snooping vsi command is run to associate RRPP snooping-enabled sub-interfaces or VLANIF interfaces with other VSIs of the device, sub-interfaces or VLANIF interfaces notify RRPP ring changes of the associated VSIs and instruct VSIs to refresh MAC address tables.\nPrerequisites\nThe rrpp snooping enable command has been run to enable RRPP snooping on sub-interfaces or VLANIF interfaces.\nPrecautions\nThe VSI associated with the current sub-interface or VLANIF interface configured using the rrpp snooping vsi command is a VSI bound to the other sub-interfaces or VLANIF interfaces of the device. The configuration can specify the VSI whose MAC address needs to be cleared based on service traffic. To bind a VSI to a sub-interface or VLANIF interface, run the l2 binding vsi command.After you run the rrpp snooping all-vsi command, running the undo erps snooping vsi command cannot cancel the associations configured using the rrpp snooping all-vsi command.On the interface where both the rrpp snooping vsi and rrpp snooping all-vsi commands are configured, the latest configuration overrides the previous one. The overwritten information is about VSIs that are bound to other sub-interfaces on the same interface where RRPP snooping is configured."
+}

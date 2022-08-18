@@ -1,0 +1,66 @@
+{
+    "PageTitle": "vrrp vrid authentication-mode (Interface view)",
+    "FuncDef": "The vrrp vrid authentication-mode command configures an authentication mode and key for a VRRP backup group.\nThe undo vrrp vrid authentication-mode command cancels authentication for a VRRP backup group.\n\nBy default, a VRRP backup group does not authenticate packets.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id> authentication-mode { simple <key> | md5 <md5-key> }",
+        "vrrp vrid <virtual-router-id> authentication-mode simple { plain <key> | cipher <cipher-key> }",
+        "undo vrrp vrid <virtual-router-id> authentication-mode"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-router-id",
+            "Info": "Specifies the ID of a VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "simple key",
+            "Info": "Specifies an authentication key for plaintext authentication.\n\nThe new password is at least eight characters long and contains at least two of the following types: upper-case letters, lower-case letters, digits, and special characters.\nFor security purposes, you are advised to configure a password in ciphertext mode. To further improve device security, periodically change the password.\nThe value is a string of 1 to 8 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "md5 md5-key",
+            "Info": "Specifies an MD5 authentication key.\nThe value is a string of 1 to 8 case-sensitive characters. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "plain key",
+            "Info": "Indicates plaintext authentication. When configuring an authentication password, select the ciphertext mode. If you select the simple text mode, the password is saved as a simple text in the configuration file, which has a high risk. To ensure device security, change the password periodically.\nThe value is a string of 1 to 8 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "cipher cipher-key",
+            "Info": "Specifies an authentication key for ciphertext authentication.\nThe value is a string of 1 to 8."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 virtual-ip 10.10.10.10",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 authentication-mode md5 HW-123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nTo help improve security of protocol packets, run the vrrp vrid authentication-mode command to configure an authentication mode and key for a specified VRRP backup group.\n\nPrerequisites\n\nA VRRP backup group has been configured using the vrrp vrid command.\n\nConfiguration Impact\n\nIndex Influence(In English) Product Products\n0 If the authentication mode and key have been configured for a VRRP backup group, a backup device compares the authentication mode and key carried in a received VRRP Advertisement packet with the local configurations. The backup device performs different operations based on the comparison results.\n\nIf the authentication mode and key in the received packet are the same as the local configurations, the backup device discards the packet after the VRRP module processes the packet and resets the timer.\nIf the authentication mode and key in the received packet are different from the local configurations, the backup device immediately discards the packet and changes to the Master state after a period of three times the interval at which VRRP Advertisement packets are sent.\n\n\nPrecautions\n\nIndex Attention(In English) Product Products\n0 - If all virtual IP addresses assigned to a VRRP backup group are deleted, the system automatically deletes the VRRP backup group.\n\nThe same authentication mode must be configured for devices in a VRRP backup group. If different authentication modes are configured, master/backup status negotiation fails.\nAccording to RFC, the authentication mode of a VRRP backup group can only be simple or MD5. Both authentication modes have security risks but MD5 is more secure and is recommended."
+}

@@ -1,0 +1,68 @@
+{
+    "PageTitle": "ping meg ttl",
+    "FuncDef": "The ping meg ttl command enables the loopback function to monitor the connectivity of an MPLS-TP link in a specified MEG.",
+    "CLIs": [
+        "ping meg <meg-name> ttl <ttl-number> [ -c <count-value> | packet-size <size-value> | -t <timeout-value> ] * [ request-tlv ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "meg-name",
+            "Info": "Specifies the name of a MEG.\nThe value is a string of 1 to 14 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "ttl ttl-number",
+            "Info": "Specifies the number of hops of the route to the destination of a probe packet.\nThe value is an integer ranging from 1 to 255. The default value is 255."
+        },
+        {
+            "Parameters": "-c count-value",
+            "Info": "Specifies the number of sent probe packets.\nThe value is an integer ranging from 1 to 268435455. The default value is 5."
+        },
+        {
+            "Parameters": "packet-size size-value",
+            "Info": "Specifies the size of a ping packet.\nThe value is an integer ranging from 64 to 1500."
+        },
+        {
+            "Parameters": "-t timeout-value",
+            "Info": "Specifies the timeout period for waiting for a response packet, in milliseconds.\nThe value is an integer ranging from 1 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "request-tlv",
+            "Info": "Specifies the request type-length-value (TLV).\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping meg test ttl 1",
+            "  PING test: 9 data bytes, press CTRL_C to break",
+            "    Reply from test: bytes=9, Sequence=1 time=290 ms",
+            "    Reply from test: bytes=9, Sequence=2 time=60 ms",
+            "    Reply from test: bytes=9, Sequence=3 time=20 ms",
+            "    Reply from test: bytes=9, Sequence=4 time=120 ms",
+            "    Reply from test: bytes=9, Sequence=5 time=130 ms",
+            "  --- ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max 20/123/290 ms"
+        ],
+        [
+            "<HUAWEI> ping meg abc ttl 1 node-id 2.2.2.2 request-tlv",
+            "",
+            "PING abc: 93 data bytes, press CTRL_C to break",
+            "    Reply from abc: bytes=93, Sequence=1 time=70 ms",
+            "    Reply from abc: bytes=93, Sequence=2 time=60 ms",
+            "    Reply from abc: bytes=93, Sequence=3 time=50 ms",
+            "    Reply from abc: bytes=93, Sequence=4 time=50 ms",
+            "    Reply from abc: bytes=93, Sequence=5 time=80 ms",
+            "  --- ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max 50/62/80 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe ping meg ttl command is the most common tool that is used to test MPLS-TP network connectivity. It uses loopback packets to monitor:\nAvailability of a remote deviceRound-trip delay in communication between MEPsLoss of ping packets\nAfter the ping meg ttl command is run on a MEP to monitor bidirectional link connectivity, the MEP sends a unicast ETH-LB frame carrying a request. If no reply to the unicast ETH-LB frame is received within an interval specified by timeout-value, the link between the MEP and RMEP is considered disconnected.\nIf the network speed is slow, set the timeout-value parameter to a large value in the ping meg ttl command.\n\nPrerequisites\nA MEG and an ME have been created.An ME has been created on the MIP for ping MIP. Ping MIP can be initiated only on a MEP. A MIP can only respond to packets from the MEP and cannot be an initiator.\n\nPrecautions\nIf the transmission speed is slow, increase the timeout period to wait for a response packet.\nPing MIP can monitor static bidirectional co-routed LSPs and multi-segment PWs only."
+}

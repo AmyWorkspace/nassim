@@ -1,0 +1,34 @@
+{
+    "PageTitle": "lacp track vrrp",
+    "FuncDef": "The lacp track vrrp command associates an Eth-Trunk interface in static Link Aggregation Control Protocol (LACP) mode with a Manage Virtual Router Redundancy Protocol (mVRRP) backup group or a unicast VRRP backup group.\nThe undo lacp track vrrp command removes the association.\nBy default, no Eth-Trunk interface in static LACP mode is associated with an mVRRP group or a unicast VRRP backup group.",
+    "CLIs": [
+        "lacp track vrrp vrid <vrid> interface { <interface-type> <interface-number> | <interface-name> }",
+        "undo lacp track vrrp",
+        "undo lacp track vrrp vrid <vrid> interface { <interface-type> <interface-number> | <interface-name> }"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vrid vrid",
+            "Info": "Associates an Eth-Trunk interface in static LACP mode with the specified mVRRP group or unicast VRRP backup group.\nAn Eth-Trunk interface in static LACP mode can be associated with only one VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "interface interface-type interface-number interface-name",
+            "Info": "Specifies the type and number of an interface that is tracked.\nBefore associating an Eth-Trunk interface in static LACP mode with an mVRRP group, the interface specified by interface-type interface-number must have an mVRRP group configured.Before associating an Eth-Trunk interface in static LACP mode with a unicast VRRP backup group, the interface specified by interface-type interface-number must be a loopback interface that has a unicast VRRP backup group configured.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] admin-vrrp vrid 1",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] mode lacp-static",
+            "[*HUAWEI-Eth-Trunk1] lacp track vrrp vrid 1 interface GigabitEthernet1/0/1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\na CE is dual-homed to UPE1 and UPE2. Eth-Trunk links in static LACP mode are configured between the CE and the UPEs. UPE1 and UPE2 are configured as an mVRRP group or a unicast VRRP backup group, with UPE1 being Master and UPE2 being Backup.\nAfter the lacp track vrrp command is used on both UPEs, note the following:\nWhen UPE1 becomes faulty, the master/backup switchover is performed in the mVRRP group or unicast VRRP backup group, and UPE2 switches to Master. The Eth-Trunk link between the CE and UPE1 detects the status change of the mVRRP group or unicast VRRP backup group and switches traffic to the Eth-Trunk link between the CE and UPE2, which becomes the active link.When UPE1 recovers, it becomes Master and UPE2 becomes Backup. The Eth-Trunk link between the CE and UPE2 detects the status change of the mVRRP group or unicast VRRP backup group and switches traffic back to the Eth-Trunk link between the CE and UPE1, which becomes the active link.\n\nPrerequisites\nBefore running the lacp track vrrp command, ensure that the specified Eth-Trunk interface works in static LACP mode and the associated VRRP backup group is an mVRRP group or a unicast VRRP backup group.\nPrecautions\nIf the vrrp vrid track interface command is used on the UPEs to configure the VRRP tracking interface status for fast master/backup switchover, note the following:\nWhen the Eth-Trunk link between the CE and UPE1 becomes faulty or a member interface of the Eth-Trunk interface fails, the mVRRP group or unicast VRRP backup group can detect the fault according to the status of the tracked interface and implement fast master/backup switchover. As a result, UPE2 becomes Master.When the Eth-Trunk link between the CE and UPE1 recovers, the mVRRP group or unicast VRRP backup group can detect the fault and implement fast master/backup switchover. As a result, UPE1 becomes Master again."
+}

@@ -1,0 +1,42 @@
+{
+    "PageTitle": "section (NAT instance address pool view)",
+    "FuncDef": "The section command configures an address segment for a NAT address pool.\nThe undo section command deletes an address segment for a NAT address pool.\nNo address segment is configured for a NAT address pool.",
+    "CLIs": [
+        "section <section-num> <start-ip-address> { mask { <mask-length> | <mask-ip> } | <end-ip-address> }",
+        "undo section <section-num> [ <start-ip-address> { mask { <mask-length> | <mask-ip> } | <end-ip-address> } ]"
+    ],
+    "ParentView": [
+        "NAT instance address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "section-num",
+            "Info": "Specifies an address range number.\nThe value can only be 0 to 15."
+        },
+        {
+            "Parameters": "start-ip-address",
+            "Info": "Specifies a start IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask mask-length",
+            "Info": "Specifies the mask length of public IP addresses.\nFor a no-PAT address pool, the value is an integer ranging from 20 to 32. For a PAT address pool, the value is an integer ranging from 22 to 32."
+        },
+        {
+            "Parameters": "mask mask-ip",
+            "Info": "Specifies the mask of public IP addresses.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "end-ip-address",
+            "Info": "Specifies the end IP address. The end IP address must be greater than or equal to the start IP address.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat address-group group1 group-id 0",
+            "[*HUAWEI-nat-instance-cpe1-nat-address-group-group1] section 0 10.20.1.0 mask 24"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure an address segment for a NAT address pool, run the section command. A NAT address pool is a collection of public IPv4 addresses. After receiving IPv4 packets sent by users, a NAT device translates private IPv4 addresses carried in the IPv4 packets to public IPv4 addresses and transmits the packets to a public network. The NAT address pool used in NAT is determined by a specific traffic policy.\nEither of the following modes can be used to configure a NAT address segment:\nConfigure an address range by specifying a start address and an end address or by specifying a network segment address with a mask in the nat address-group/nat address-group over-load command.Run the nat address-group/nat address-group over-load command to enter the NAT address pool view or the NATover-load address pool view and run the section command to configure a public IP address pool.\n\nPrecautions\nAddress segments cannot overlap.\nRunning the section section-num start-ip-address end-ip-address command generates a large number of UNRs. The mask parameter is recommended to automatically summarize UNRs."
+}

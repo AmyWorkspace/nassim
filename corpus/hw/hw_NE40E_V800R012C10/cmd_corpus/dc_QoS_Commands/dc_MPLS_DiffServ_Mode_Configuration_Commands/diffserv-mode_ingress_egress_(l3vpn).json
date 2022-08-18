@@ -1,0 +1,56 @@
+{
+    "PageTitle": "diffserv-mode ingress egress (l3vpn)",
+    "FuncDef": "The diffserv-mode ingress egress command configures an MPLS DiffServ mode to ensure end-to-end QoS.\nThe undo diffserv-mode command restores an MPLS DiffServ mode to the default configuration.\nBy default, the MPLS DiffServ mode is Uniform.",
+    "CLIs": [
+        "diffserv-mode ingress { uniform | pipe <service-class> <color> | short-pipe <service-class> <color> } egress { uniform | pipe | short-pipe [ domain <ds-name> ] }",
+        "undo diffserv-mode"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance IPv6 address family view",
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "uniform",
+            "Info": "Specifies that the MPLS DiffServ mode is Uniform.\n-"
+        },
+        {
+            "Parameters": "pipe",
+            "Info": "Specifies that the MPLS DiffServ mode is Pipe.\n-"
+        },
+        {
+            "Parameters": "service-class",
+            "Info": "Specifies the Class of Service (CoS) for the packets that enter the public network from a private network.\nThe available values are cs7, cs6, ef, af4, af3, af2, af1, be."
+        },
+        {
+            "Parameters": "color",
+            "Info": "Specifies the color of a packet that enters the public network from a private network. The color marks the discard priority of the packet.\nThe available values are green, yellow, and red."
+        },
+        {
+            "Parameters": "short-pipe",
+            "Info": "Specifies that the MPLS DiffServ mode is Short-pipe.\n-"
+        },
+        {
+            "Parameters": "egress",
+            "Info": "Specifies that the node is an MPLS egress.\n-"
+        },
+        {
+            "Parameters": "domain ds-name",
+            "Info": "Specifies the name of a Diff-Serv domain that uses a specified PHB on an egress node in Short-pipe mode.\nThe value is a string of 1 to 48 characters."
+        },
+        {
+            "Parameters": "ingress",
+            "Info": "Specifies that the node is an MPLS ingress.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[~HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] diffserv-mode ingress pipe af1 green egress pipe"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDiff-Serv models include Pipe, Short Pipe, and Uniform.\nIn the Pipe model, the EXP value in the label assigned by the ingress PE to the packet is determined by the user-defined parameters. Before the packet leaves the MPLS network, the MPLS label is popped out, but the DSCP value of the IP packet remains unchanged. The egress PE then forwards the packet based on the EXP value in the MPLS label.In short-pipe mode, the EXP value assigned by the ingress to a packet is determined by the user-defined parameters. When the packet leaves the MPLS network, the egress removes the MPLS label, but the DSCP value of the IP packet remains unchanged. The egress forwards the packet based on the trust field in the MPLS label. If no trust field is configured, the egress forwards the packet based on its VLAN priority. If the packet does not have a VLAN priority, the egress forwards the packet based on its IP DSCP value.In uniform mode, the EXP value assigned by the ingress is determined by the inbound queue and egress DS domain. When the packet leaves the MPLS network, the egress removes the MPLS label and maps the EXP value to the DSCP value of the IP packet. The egress then forwards the packet based on the mapped DSCP value.\nWhen you configure the service type of packets transmitted from a private network to the public network:\nConfigure the service type as cs7 or cs6 to send signaling protocol packets.Configure the service type as ef to ensure low latency.Configure the service type as af4, af3, af2, or af1 to ensure the bandwidth key data.Configure the service type as be for the best effort delivery without strict QoS assurance.\nThe preceding service types are listed in the descending order of sending priorities.\nThe colors of the packets sent from private network to the public network are arranged in the ascending order of the discard priorities, specifically, green, yellow, and red.\n\nPrecautions\nIf a VPN instance functions as an ingress and egress on a device, you can configure the MPLS DiffServ mode separately for the ingress and egress. By default, the MPLS DiffServ mode of both the ingress and egress is set to Uniform.\nThe diffserv-mode ingress egress command and diffserv-mode command can overwrite each other. The two commands provide the same function. The only difference is that the diffserv-mode ingress egress command allows you to configure different DiffServ modes on the ingress and egress, whereas the diffserv-mode command allows you to configure only the same DiffServ mode on the ingress and egress.\nBefore configuring the MPLS Diff-Serv mode for IPv4 services, ensure that an IPv4 address family is configured in the VPN instance view using the ipv4-family command.\nBefore configuring the MPLS Diff-Serv mode for IPv6 services, ensure that an IPv6 address family is configured in the VPN instance view using the ipv6-family command.\nSeparation of user-to-network traffic from network-to-user traffic is supported in NG MVPN scenarios to implement flexible pipe configuration in VPN instances.\nSeparation of user-to-network traffic from network-to-user traffic is supported in SRv6 over VPN scenarios to implement flexible pipe configuration in VPN instances."
+}

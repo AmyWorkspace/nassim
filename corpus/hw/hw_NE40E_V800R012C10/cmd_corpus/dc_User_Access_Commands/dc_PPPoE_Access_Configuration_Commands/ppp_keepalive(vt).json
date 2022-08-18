@@ -1,0 +1,48 @@
+{
+    "PageTitle": "ppp keepalive (Virtual template view)",
+    "FuncDef": "The ppp keepalive command configures a PPP detection interval and the maximum number of retransmission times allowed.\nThe undo ppp keepalive command restores the default PPP detection interval and the default maximum number of retransmission times allowed.\nBy default, the PPP detection interval is 20s, and the maximum number of retransmission times is 3.",
+    "CLIs": [
+        "ppp keepalive { interval <interval-time> | retransmit <times> | response-timeout <response-timeout-time> } * [ datacheck | no-datacheck ]",
+        "undo ppp keepalive { interval | retransmit | response-timeout } *"
+    ],
+    "ParentView": [
+        "Virtual template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval interval-time",
+            "Info": "Specifies-a-PPP-detection-interval-at-which-Echo-Request-packets-are-sent-to-users.\nThe value is an integer ranging from 0 to 65535, in seconds. The value 0 indicates that PPP detection is not implemented. when a specified value is smaller than the default value, it may cause high CPU usage and overburden the system."
+        },
+        {
+            "Parameters": "retransmit times",
+            "Info": "Specifies the maximum number of retransmission times allowed.\nThe value is an integer ranging from 1 to 10.\nThe default value is 3.\nwhen a specified value is smaller than the default value, it may cause high CPU usage and overburden the system."
+        },
+        {
+            "Parameters": "response-timeout response-timeout-time",
+            "Info": "Specifies the wait time for Echo-Ack packets from users.\nThe value is an integer ranging from 1 to 65535, in seconds."
+        },
+        {
+            "Parameters": "datacheck",
+            "Info": "Indicates optimized PPP detection.\nBy default, optimized PPP detection is disabled.\n-"
+        },
+        {
+            "Parameters": "no-datacheck",
+            "Info": "Indicates that optimized PPP detection is disabled. Specifically, if a PPP server receives user traffic, it sends Echo-Request packets to the user for a specified number of times. If no response is received, the PPP server considers the user offline.\nIf optimized PPP detection is disabled and responses to Echo-Request packets are not received in time, the PPP server may incorrectly consider the user offline.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface virtual-template 10",
+            "[*HUAWEI-Virtual-Template10] ppp keepalive interval 40 retransmit 4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface virtual-template 10",
+            "[*HUAWEI-Virtual-Template10] ppp keepalive interval 10 retransmit 2",
+            "Warning: The keepalive interval value is less than 20 or retransmit value is less than 3.",
+            "This operation may cause high CPU usage and overburden the system .Continue? [Y/N]:"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a PPP detection interval and the maximum number of retransmission times allowed, run the ppp keepalive command. This function detects the PPP link status and online status of users. After LCP negotiation is complete, the device starts detection. The device sends Echo-Request packets to a user at intervals. If no response to the Echo-Request packets is received within a specified period, the device retransmits Echo-Request packets. If there is still no response from the user after the Echo-Request packets are retransmitted for a specified number of times, the device considers the user status abnormal.\nWhen both interval <interval-time> (the value is not zero) and response-timeout <response-timeout-time> are configured, interval <interval-time> takes effect at the first time, the smaller value between the two parameter values takes effect from the second time.\nConfiguration Impact\nSet a longer PPP detection interval and a greater number of retransmission times in the case the network is unstable or low delay is needed. However, a longer PPP detection interval may cause the device to fail to detect the PPP link failure in time. During this period, the users may fail to access the Internet.\nIf the PPP detection packet transmission interval is short or a small number of retransmission times is set, PPP users may frequently go offline when network congestion occurs. Therefore, setting a long PPP detection interval is recommended in the case of network congestion.\nIf the ppp keepalive command is run more than once in the same view, the latest configuration overrides the previous one.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe optimized PPP detection function takes effect only in slave core detection scenarios.\nwhen a specified value is smaller than the default value, it may cause high CPU usage and overburden the system."
+}

@@ -1,0 +1,59 @@
+{
+    "PageTitle": "peer default-route-advertise (BGP-VPN instance IPv4 address family view) (group)",
+    "FuncDef": "The peer default-route-advertise command configures a BGP device to advertise a default route to its peer group.\nThe undo peer default-route-advertise command cancels the configuration.\nBy default, a BGP device does not advertise any default route to its peer group.",
+    "CLIs": [
+        "peer <group-name> default-route-advertise [ route-policy <route-policy-name> ]",
+        "peer <group-name> default-route-advertise route-filter <route-filter-name>",
+        "peer <group-name> default-route-advertise [ route-policy <route-policy-name> ] { conditional-route-match-all | conditional-route-match-any } { <ipv4-address> { <mask-length> | <mask> } } &<1-4>",
+        "peer <group-name> default-route-advertise route-filter <route-filter-name> { conditional-route-match-all | conditional-route-match-any } { <ipv4-address> { <mask-length> | <mask> } } &<1-4>",
+        "undo peer <group-name> default-route-advertise"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "conditional-route-match-all",
+            "Info": "The default routes are sent to the peer group only when all the conditional routes are matched.\n-"
+        },
+        {
+            "Parameters": "conditional-route-match-any",
+            "Info": "The default routes are sent to the peer group if any conditional route is matched.\n-"
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length of the conditional routes.\nIt is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the mask of the conditional routes.\nIt is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-vpn1] group test",
+            "[*HUAWEI-bgp-vpn1] peer test default-route-advertise"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDefault routes are usually used in a network with the following characteristics:\nEach device has multiple EBGP peers and receives full Internet routes from each EBGP peer.There are multiple RRs, and each RR receives full Internet routes.\nIf load balancing is not performed on the network, a BGP peer receives at most one copy of active full Internet routes. If load balancing is performed on the network, the number of active routes received by a BGP peer is doubled, which causes the number of routes on the network to sharply increase. On such a network, you can configure a BGP device to advertise only default routes to its BGP peer and use default routes for traffic load balancing, which can greatly reduce the number of routes on the network.\n\nConfiguration Impact\nWhen this command is run, the default route with the next hop as the local device is unconditionally sent to its peer group regardless of whether default routes exist in the routing table."
+}

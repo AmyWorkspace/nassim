@@ -1,0 +1,53 @@
+{
+    "PageTitle": "default-route-advertise (OSPFv3 view)",
+    "FuncDef": "The default-route-advertise command advertises the default route to a common OSPFv3 area.\nThe undo default-route-advertise command disables advertisement of default routes to a common OSPFv3 area.\nBy default, the OSPFv3 devices in common OSPFv3 areas do not generate default routes.",
+    "CLIs": [
+        "default-route-advertise [ [ always | permit-calculate-other ] | cost <cost> | type <type> | tag <tag> | distribute-delay <delay> | { route-policy <route-policy-name> | route-filter <route-filter-name> } ] *",
+        "undo default-route-advertise"
+    ],
+    "ParentView": [
+        "OSPFv3 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "always",
+            "Info": "Generates and advertises an LSA that describes a default route, regardless of whether the local device has active default routes from processes other than the local OSPFv3 process. The Router that is configured with always does not calculate default routes of other Routers. If this keyword is not specified, the LSA for a default route is generated only when the routing table of the local device has active default routes from processes other than the local OSPFv3 process.\n-"
+        },
+        {
+            "Parameters": "permit-calculate-other",
+            "Info": "Generates and advertises an ASE LSA that describes the default route only when there is an active default route of another OSPFv3 process in the local routing table. The Router still calculates the default routes from other Routers.\nIf neither always nor permit-calculate-other is configured,\nIf the local device has active default routes from processes other than the local OSPFv3 process, the device no longer calculates the default routes from other devices.If the local device does not have active default routes from processes other than the local OSPFv3 process, the device still calculates the default routes from other devices.\n-"
+        },
+        {
+            "Parameters": "cost cost",
+            "Info": "Specifies the cost of the external routes.\nThe cost of a Type 1 external route equals the cost of the route from the Router to the related ASBR plus the cost of the route from the ASBR to the destination.The cost of a Type 2 external route equals the cost of the route from the ASBR to the destination.\nThe value is an integer ranging from 0 to 16777214. The default value is 1."
+        },
+        {
+            "Parameters": "type type",
+            "Info": "Specifies the type of the external routes.\nThe value is 1 or 2.\n1: Type 1 external route2: Type 2 external route\nThe default value is 2."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies the tag value of the imported VPN routes.\nThe value is an integer ranging from 0 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "distribute-delay delay",
+            "Info": "Specifies the delay timer for advertising the default route.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy. When a device's routing table contains matching default routes that are generated from processes other than the local OSPFv3 process, a device advertises the default routes based on the route-policy configuration.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter. Only the default routes that match the route-filter can be advertised.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] default-route-advertise always"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe parameters of the default route configured in the route-policy take precedence over those configured using the default-route-advertise [ [ always| permit-calculate-other ] | cost costvalue | type typevalue | route-policy route-policy-name | route-filter route-filter-name ] * command.\nIn this case, before using the default-route-advertise command, you need to view the configured route-policy by using the display route-policy command.\nBefore advertising a default route, OSPFv3 compares the priorities of default routes. If a static default route is configured on an OSPFv3 device, to add the default route to be advertised to the routing table, ensure that the priority of the static route is lower than that of the default route. To change the priority, run the preference command.\nImplementation Procedure\nWhen you use the route-policy, note the following:\nIf the default route matches the route-policy, a new default route is generated according to the parameters configured in the route-policy. The parameters that can be configured through the route-policy include the cost, tag, and type.If the default route does not match the route-policy and always is not configured, no new default route is generated.If the default route does not match the route-policy and always is configured, a new default route is generated. The parameters configured using the default-route-advertise command take effect.\n\nConfiguration Impact\nThe default route can be advertised through Type 3 LSAs. The PE then advertises the default route to its connected CE.\nPrecautions\nThe default route imported using the import-route (OSPFv3) command are not advertised. To advertise the default route, run the default-route-advertise command. The cost of the generated default route is determined by the cost and type specified in the default-route-advertise command. When the local routing table does not contain default routes from processes other than the local OSPFv3 process, specify always to generate ASE LSAs of default routes.\nIf no default route exists in the initial routing table, the OSPFv3 process calculates a default route based on LSAs learned from neighbors and delivers it to the routing table, which may cause the default route learned from another protocol (such as BGP) to be inactive. As a result, the only default route in the final routing table is the one learned by OSPFv3, and OSPFv3 does not advertise the default route.\nIf no tag value is specified when you run the default-route-advertise command, the tag in a public network OSPFv3 process is the same as that specified in the default tag command. The default tag value in the default tag command is 1, and you can run the default tag command in the OSPFv3 view to change the tag value. However, the tag value in an OSPFv3 process bound to a VPN instance is the same as that specified in the route-tag command. By default, the first two bytes of the tag value in the route-tag command are fixed at 0xD000, and the last two bytes are the local BGP AS number. For example, if the local BGP AS number is 100, the default tag value in decimal notation is 3489661028; if the BGP AS number is greater than 65535, the tag value is 0, and you can manually change the tag value. If BGP is not configured, the default tag value is 0. In this case, you can run the route-tag command to change the tag value."
+}

@@ -1,0 +1,36 @@
+{
+    "PageTitle": "switchover uplink",
+    "FuncDef": "The switchover uplink command configures the uplink fault rate threshold for a master/backup switchover and the duration of the uplink fault before the switchover.\nThe undo switchover uplink command deletes the uplink fault rate threshold for a master/backup switchover.\nBy default, traffic is switched over from the master device to the backup device when all uplinks on the master device fail.",
+    "CLIs": [
+        "switchover uplink { failure-ratio <failure-ratio> | duration <duration-time> } *",
+        "undo switchover uplink failure-ratio [ failure-ratio ]",
+        "undo switchover uplink [ failure-ratio <failure-ratio> duration <duration-time> ]",
+        "undo switchover uplink duration [ <duration-time> ]",
+        "undo switchover uplink duration <duration-time> failure-ratio <failure-ratio>"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "failure-ratio failure-ratio",
+            "Info": "Specifies the uplink fault rate threshold for a master/backup switchover. If the fault rate of uplinks reaches the threshold, traffic is switched over from the master device to the backup device.\nThe value is an integer ranging from 1 to 100, in percentage. The default value is 100%."
+        },
+        {
+            "Parameters": "duration duration-time",
+            "Info": "Specifies the duration of the uplink fault bandwidth before the switchover.\nThe value is an integer ranging from 0 to 30, in minutes. The default value is 0 minutes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service rbs",
+            "[*HUAWEI-rm-backup-srv-rbs] commit",
+            "[~HUAWEI-rm-backup-srv-rbs] track interface GigabitEthernet 1/0/0 weight 10",
+            "[~HUAWEI-rm-backup-srv-rbs] track interface GigabitEthernet 1/0/0 weight 10",
+            "[~HUAWEI-rm-backup-srv-rbs] track interface GigabitEthernet 1/0/1 weight 10",
+            "[~HUAWEI-rm-backup-srv-rbs] switchover uplink failure-ratio 50 duration 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a dual-system hot backup scenario with multiple uplinks, uplink failures may cause a lack of bandwidth of the remaining uplinks, leading to network congestion. To address this problem, run this command to configure the uplink fault rate threshold for a master/backup switchover.\nPrerequisites\nThe switchover uplink command must be used together with the track interface command. Otherwise, it will not take effect.\nConfiguration Impact\nAfter you run the switchover uplink command, if the fault rate of uplinks reaches the threshold, upstream and downstream traffic is switched over from the master device to the backup device.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nWhen you configure the track interface command, the weights specified must comply with the rules of the master/backup VRRP switchover. If a master/backup switchover is performed based on the fault rate of uplinks but a master/backup VRRP switchover is not performed, the backup device forwards the network-side traffic back to the master device for processing after receiving the traffic from the master device. In this case, the master device is congested with traffic because the master/backup switchover does not comply with the rules of the master/backup VRRP switchover.\nWhen you configure the switchover uplink command to configure a master/backup switchover to be performed based on the fault rate of uplinks, also configure the peer-backup route-cost auto-advertising command in the system view to enable both devices to automatically generate address pool user network routes (UNRs). In this situation, when a master/backup switchover is performed based on the fault rate of uplinks, the priority of a UNR is reduced, but no UNRs are withdrawn. This configuration prevents downstream traffic from being interrupted."
+}

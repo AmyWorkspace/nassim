@@ -1,0 +1,30 @@
+{
+    "PageTitle": "dhcpv6 relay option-insert mode type1",
+    "FuncDef": "The dhcpv6 relay option-insert mode type1 command enables a DHCPv6 relay agent to add the Option 18 and Option 37 attributes in OSP format to a Relay-Forward message sent to a DHCPv6 server in BAS relay scenarios.\nThe undo dhcpv6 relay option-insert mode type1 command disables a DHCPv6 relay agent from adding the Option 18 and Option 37 attributes in OSP format to a Relay-Forward message sent to a DHCPv6 server in BAS relay scenarios.\nBy default, a DHCPv6 relay agent is disabled from adding the Option 18 and Option 37 attributes in OSP format to a Relay-Forward message sent to a DHCPv6 server in BAS relay scenarios.",
+    "CLIs": [
+        "dhcpv6 relay option-insert mode type1 [ remote-id { neba | vula } ]",
+        "undo dhcpv6 relay option-insert mode type1"
+    ],
+    "ParentView": [
+        "Interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "neba",
+            "Info": "Remote-id padding to string NEBA.\n-"
+        },
+        {
+            "Parameters": "vula",
+            "Info": "Remote-id padding to string VULA.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 100.21",
+            "[~HUAWEI-ETH-Trunk 100.21] dhcpv6 relay option-insert mode type1",
+            "Warning: This operation will affect the format of the option18 and option37 field contained in packets sent to the DHCPv6 server, and the length of the interface description cannot exceed 180 bytes, otherwise, the value may be truncated."
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe dhcpv6 relay option-insert mode type1 command applies only in BAS relay scenarios where a remote address pool is used.When a DHCPv6 server uses an IPv6 remote address pool to assign addresses in BAS relay scenarios, the DHCPv6 server differentiates carriers based on the Option 18 and Option 37 attributes carried in messages. To enable a DHCPv6 relay agent to add the Option 18 and Option 37 attributes in OSP format to a Relay-Forward message, run the dhcpv6 relay option-insert mode type1 command.\nA DHCPv6 relay agent is disabled from adding the Option 18 and Option 37 attributes in OSP format to a Relay-Forward message sent to a DHCPv6 server in network-side relay scenarios.\nOption 18 indicates the inbound interface information of a message that a DHCPv6 relay agent receives from a client. The information is used to assist Relay-Reply message forwarding. A DHCPv6 server can also use the information to assign addresses/prefixes. The function of Option 18 is equivalent to that of the circuit ID in DHCPv4 Option 82.Option 37 indicates information about a remote user. This attribute is added by a DHCPv6 relay agent to a Relay-Forward message. The function of Option 37 is equivalent to that of the remote ID in DHCPv4 Option 82.Option 18 and Option 37 can both be used to identify user information.\n\nConfiguration Impact\nIf the dhcpv6 relay option-insert mode type1 or dhcpv6 relay option-insert mode type1 remote-id neba command is configured, the Option 18 and Option 37 attributes are encapsulated in the following format:\nRemote id: NEBA;Circuit id:The description of the bas interface:Outer vlan.Inner vlan\nIf the dhcpv6 relay option-insert mode type1 remote-id vula command is configured, the Option 18 and Option 37 attributes are encapsulated in the following format:\nRemote id: VULA;Circuit id:The description of the bas interface:Outer vlan.Inner vlan\nIf the user access interface is changed, for example, in RUI switching, interface switching in vBRAS-UP warm backup or hot backup scenarios, and roaming scenarios, the interface information encapsulated into Option 18 will change accordingly.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe dhcpv6 relay option-insert mode type1 and dhcpv6 relay option-insert { interface-id mode { cn-telecom | tr-101 } | remote-id } commands are mutually exclusive.The dhcpv6 relay option-insert mode type1 command takes effect in real time. After the command is run on an interface, the command configuration takes effect for online users on the interface."
+}

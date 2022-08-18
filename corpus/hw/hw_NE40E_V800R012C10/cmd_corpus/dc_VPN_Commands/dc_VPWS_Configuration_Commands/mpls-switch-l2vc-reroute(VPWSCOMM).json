@@ -1,0 +1,77 @@
+{
+    "PageTitle": "mpls switch-l2vc encapsulation reroute",
+    "FuncDef": "The mpls switch-l2vc encapsulation reroute command configures the PW switchback policy on the S-PE where the primary and secondary PWs are configured and are determined in master/slave mode. This command is applicable to the VLL FRR mode and the master/slave mode of PW redundancy.\nThe undo mpls switch-l2vc encapsulation reroute command deletes the PW switchback policy.\nBy default, in master/slave mode of PW redundancy, the switchback policy is configured as delayed switchback with the delay being 30 seconds.",
+    "CLIs": [
+        "mpls switch-l2vc <ip-address> <vc-id> encapsulation { ethernet | fr | hdlc | ip-interworking | ip-layer2 | ppp | vlan } reroute { delay <delay-time> | immediately | never }",
+        "undo mpls switch-l2vc <ip-address> <vc-id> encapsulation { ethernet | fr | hdlc | ip-interworking | ip-layer2 | ppp | vlan } reroute { delay <delay-time> | immediately | never }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies an LSR ID of the remote device on the PW.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id",
+            "Info": "Specifies the ID of a L2VC.\nThe value is a decimal integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "encapsulation",
+            "Info": "Indicates the PW encapsulation type.\n-"
+        },
+        {
+            "Parameters": "ethernet",
+            "Info": "This encapsulation type is used when Ethernet packets do not carry VLAN information.\n-"
+        },
+        {
+            "Parameters": "fr",
+            "Info": "FR provides protocol standards for the data link layer and physical layer.\n-"
+        },
+        {
+            "Parameters": "hdlc",
+            "Info": "HDLC is a bit-oriented link layer protocol.\n-"
+        },
+        {
+            "Parameters": "ip-interworking",
+            "Info": "Enables heterogeneous media IP interworking between Huawei devices.\n-"
+        },
+        {
+            "Parameters": "ip-layer2",
+            "Info": "Enables heterogeneous media IP interworking between a Huawei device and a non-Huawei device.\n-"
+        },
+        {
+            "Parameters": "ppp",
+            "Info": "PPP is a link layer protocol that specifies how to encapsulate and transmit network layer packets over P2P links.\n-"
+        },
+        {
+            "Parameters": "vlan",
+            "Info": "This encapsulation type is used when Ethernet packets carry VLAN information.\n-"
+        },
+        {
+            "Parameters": "delay delay-time",
+            "Info": "Configures delayed switchback and specifies the delay for it.\nThe value is a decimal integer ranging from 10 to 10800, in seconds."
+        },
+        {
+            "Parameters": "immediately",
+            "Info": "Configures immediate switchback.\n-"
+        },
+        {
+            "Parameters": "never",
+            "Info": "Indicates that traffic is not switched back to the primary PW after the primary PW recovers from a fault. Traffic is switched to the primary PW if the secondary PW fails.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] mpls switch-l2vc 1.1.1.1 1 between 2.2.2.2 2 backup 3.3.3.3 3 encapsulation vlan",
+            "[*HUAWEI] mpls switch-l2vc 1.1.1.1 1 encapsulation vlan reroute delay 35"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the primary and secondary MS-PWs on an SPE work in master/slave PW redundancy mode, you can use this command to configure the revertive switching policy. An appropriate switchback delay helps to prevent or reduce packet loss caused by the switchback.\nThe independent mode supports only immediate switchback.\nThe revertive switching policies can be classified into three modes: immediate switchback, delayed switchback, and non-revertive. The usage scenarios of these policies are similar to those described in mpls l2vpn reroute. Note the following in real-word situations:\nIf a network has heavy service traffic, use the delayed switchback policy. Consider device performance and service scale when specifying the switchback delay.If the bandwidth of a secondary PW is insufficient but that of the primary PW is sufficient, use the immediate switchback policy.If the bandwidth of a secondary PW is sufficient but that of the primary PW is insufficient, use the non-revertive policy.\n\nPrerequisites\nThe primary and secondary PWs have been configured on the SPE using the mpls switch-l2vc command.\nConfiguration Impact\nAfter a revertive switching policy is configured, the switchback will be performed according to the revertive switching policy.\nPrecautions\nThe specified IP address is the LSR ID of the remote peer for the single-homing PW.The specified pwId is the pwId of the single-homing PW.The encapsulation type is the same as that specified using the mpls switch-l2vc command."
+}

@@ -1,0 +1,118 @@
+{
+    "PageTitle": "ftp",
+    "FuncDef": "The ftp command sets up a control connection with the remote IPv4 FTP server and displays the FTP client view.\nThe ftp ipv6 command sets up a control connection with the remote IPv6 FTP server and displays the FTP client view.",
+    "CLIs": [
+        "ftp [ -a <source-ip-address> | -i { <interface-type> <interface-number> | <interface-name> } ] <host-ip> [ <port-number> ] [ vpn-instance <vpn-instance-name> | public-net ]",
+        "ftp",
+        "ftp ipv6 [ -a <source-ip6> ] <host-ipv6-address> [ [ vpn-instance <ipv6-vpn-instance-name> ] | public-net ] -oi { <interface-type> <interface-number> | <interface-name> } [ <port-number> ]",
+        "ftp ipv6 [ -a <source-ip6> ] <host-ipv6-address> [ [ vpn-instance <ipv6-vpn-instance-name> ] | public-net ] [ <port-number> ]"
+    ],
+    "ParentView": [
+        "User view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ip-address",
+            "Info": "Specifies an IPv4 address for the FTP client.\nAn IP address that has been configured on the device is used as the IPv4 address. It is recommended that an IP address be configured on the loopback interface and then used as the source IP address of the FTP connection.\nOn an IPv4 network, the source IP address specified using the ftp command takes precedence over the source IP address specified using the ftp client-source command. If the ftp command is run after a source IP address has been specified using the ftp client-source command, the source IP address specified using the ftp command is used for communication.\nThe source IP address specified using the ftp client-source command is available for all FTP connections; the source IP address specified using the ftp command is available only for the current FTP connection.\nThe value is in the decimal format."
+        },
+        {
+            "Parameters": "-i interface-name",
+            "Info": "Specifies the source interface name for the FTP client.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the source interface type for the FTP client.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the source interface number for the FTP client.\n-"
+        },
+        {
+            "Parameters": "host-ip",
+            "Info": "Specifies the IP address of the remote FTP server or the host with a specific name.\nTo view the mapping between the IPv4 address and host name, run the display dns dynamic-host or display ip host command.\nThe value is a string case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "port-number",
+            "Info": "Specifies the listening port number of the FTP server.\nBy default, the listening port number of a Telnet server is 21. You can directly log in to the device without specifying the port number. Attackers may access the default listening port, consuming bandwidth, deteriorating server performance, and causing authorized users unable to access the server. You can run the ftp command to change the listening port number of the Telnet server. After that, attackers do not know the new listening port number, preventing attackers from accessing the listening port.\nPort number is an integer that is 21 or ranges from 1 to 65535. By default, the port number is 21."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "public-net",
+            "Info": "Specifies the public network where the FTP server resides.\nIf you have run the set net-manager vpn-instance command to configure the default VPN instance used for an NMS to manage devices and want to use FTP to access a public network server, you must specify this parameter.\n-"
+        },
+        {
+            "Parameters": "ipv6 host-ipv6-address",
+            "Info": "Specifies the IPv6 address of the remote IPv6 FTP server or the host with a specific name.\nThe value is a string case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "source-ip6",
+            "Info": "Specifies an IPv6 address for the FTP client.\nAn IP address that has been configured on the device is used as the IPv6 address. It is recommended that an IP address be configured on the loopback interface and then used as the source IP address of the FTP connection.\nOn an IPv6 network, the source IP address specified using the ftp command takes precedence over the source IP address specified using the ftp ipv6 client-source command. If the ftp command is run after a source IP address has been specified using the ftp ipv6 client-source command, the source IP address specified using the ftp command is used for communication.\nThe source IP address specified using the ftp ipv6 client-source command is available for all FTP connections; the source IP address specified using the ftp command is available only for the current FTP connection.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "ipv6-vpn-instance-name",
+            "Info": "Specifies the name of an IPv6 VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "-oi",
+            "Info": "Specifies the source interface for the IPv6 FTP client, including the type and number of the interface. The IPv6 address configured in this interface view is the source IPv6 address of the packet. If no IPv6 address is configured for the source interface, the FTP connection cannot be set up.\nSetting the loopback interface as the source IPv6 address is recommended.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ftp 1.1.1.1",
+            "Trying 1.1.1.1 ...",
+            "Press CTRL + K to abort",
+            "Connected to 1.1.1.1.",
+            "220 VRPV8 FTP service ready.",
+            "User(1.1.1.1:(none)):root",
+            "331 Password required for root.",
+            "Password:",
+            "230 Logged on"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack 0",
+            "[*HUAWEI-LoopBack0] ip address 1.1.1.1 24",
+            "[*HUAWEI-LoopBack0] commit",
+            "[*HUAWEI-LoopBack0] quit",
+            "[~HUAWEI] ftp client-source -a 1.1.1.1",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] quit",
+            "<HUAWEI> ftp -a 1.1.1.1 1.1.1.1 10000",
+            "Trying 1.1.1.1 ...",
+            "Press CTRL + K to abort",
+            "Connected to 1.1.1.1.",
+            "220 VRPV8 FTP service ready.",
+            "User(1.1.1.1:(none)):root",
+            "331 Password required for root.",
+            "Password:",
+            "230 Logged on"
+        ],
+        [
+            "<HUAWEI> ftp 2.2.2.2 vpn-instance vrp",
+            "Trying 2.2.2.2 ...",
+            "Press CTRL + K to abort",
+            "Connected to 2.2.2.2.",
+            "220 (vsFTPd 2.3.2)",
+            "User(2.2.2.2:(none)):root",
+            "331 Please specify the password.",
+            "Password:",
+            "230 Logged on"
+        ],
+        [
+            "<HUAWEI> ftp ipv6 FE80::2E0:27FF:FE35:8342 -oi GigabitEthernet 1/0/1",
+            "Trying fe80::2e0:27ff:fe35:8342",
+            "Press CTRL+K to abort",
+            "Connected to FE80::2E0:27FF:FE35:8342.",
+            "220 FTP service ready.",
+            "User(FE80::2E0:27FF:FE35:8342:(none)):root",
+            "331 Password required for root.",
+            "Enter password:",
+            "230 Logged on"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn FTP client can access an FTP server after establishing a connection with the FTP server. The ftp command can be used to establish an FTP connection between the FTP client and FTP server.\nPrerequisites\nAn FTP connection can establish if the following conditions are met:\nFTP server function on a device is enabled by executing the ftp server enable command on the FTP server to allow FTP users to log in.The FTP server and FTP client are routable.\n\nConfiguration Impact\nAfter logging in to the FTP server from the FTP client, you can remotely manage files on the FTP server.\nFollow-up Procedure\nIf the number of login users on an FTP server reaches the upper limit, new authorized users cannot log in to the FTP server. To ensure that new authorized users can log in to the FTP server, login users need to close the FTP connection after performing the FTP function. Run the following commands in the FTP client view as required:\nRun the bye/quit command to close the connection with the FTP server and return to the user view.Run the close/disconnect command to close the connection with the FTP server, terminate the FTP session, and stay in the user view.\n\nPrecautions\nAfter executing the FTP command, the system prompts you to enter the user name and password for logging in to the FTP server. You can log in to the FTP server and enter the FTP client view only after the correct user name and password is entered.If no parameter is specified in the FTP command then the FTP view is displayed and the connection with the FTP server is not established.FTP lacks a secure authentication mode. If high security is required, using SFTP is recommended."
+}

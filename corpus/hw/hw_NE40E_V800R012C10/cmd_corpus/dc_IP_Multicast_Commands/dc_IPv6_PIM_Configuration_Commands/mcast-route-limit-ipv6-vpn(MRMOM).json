@@ -1,0 +1,56 @@
+{
+    "PageTitle": "multicast ipv6 limit pim sm",
+    "FuncDef": "The multicast ipv6 limit pim sm command configures a limit on the number of PIM-SM entries and alarm thresholds for them in the IPv6 address family of a VPN instance.\nThe undo multicast ipv6 limit pim sm command restores the default configuration.\nBy default, no limit is configured on the number of PIM-SM entries and no alarm thresholds are configured in the IPv6 address family of a VPN instance.",
+    "CLIs": [
+        "multicast ipv6 limit pim sm { star-group-number | source-group-number } <limit-count> [ threshold-alarm upper-limit <upper-limit-value> lower-limit <lower-limit-value> ]",
+        "undo multicast ipv6 limit pim sm { star-group-number | source-group-number }"
+    ],
+    "ParentView": [
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "star-group-number",
+            "Info": "Configures the specified limit to take effect for (*, G) entries.\n-"
+        },
+        {
+            "Parameters": "source-group-number",
+            "Info": "Configures the specified limit to take effect for (S, G) entries.\n-"
+        },
+        {
+            "Parameters": "limit-count",
+            "Info": "Specifies a limit on the number of PIM-SM entries.\nThe value is an integer ranging from 1 to 16384."
+        },
+        {
+            "Parameters": "threshold-alarm",
+            "Info": "Indicates alarm thresholds.\n-"
+        },
+        {
+            "Parameters": "upper-limit upper-limit-value",
+            "Info": "Sets an alarm trigger threshold, in percentage. An alarm is generated when the percentage ratio of created PIM-SM entries to limit-count reaches upper-limit-value.\nThe value is an integer ranging from 1 to 100. The default value is 80."
+        },
+        {
+            "Parameters": "lower-limit lower-limit-value",
+            "Info": "Sets an alarm clear threshold, in percentage. An alarm is cleared when the percentage ratio of created PIM-SM entries to limit-count falls below lower-limit-value.\nlower-limit-value must be less than upper-limit-value.\nThe value is an integer ranging from 1 to 100. The default value is 70."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance abc",
+            "[*HUAWEI-vpn-instance-abc] ipv6-family",
+            "[*HUAWEI-vpn-instance-abc-af-ipv6] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-abc-af-ipv6] multicast ipv6 routing-enable",
+            "[*HUAWEI-vpn-instance-abc-af-ipv6] multicast ipv6 limit pim sm source-group-number 1000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance abc",
+            "[*HUAWEI-vpn-instance-abc] ipv6-family",
+            "[*HUAWEI-vpn-instance-abc-af-ipv6] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-abc-af-ipv6] multicast ipv6 routing-enable",
+            "[*HUAWEI-vpn-instance-abc-af-ipv6] multicast ipv6 limit pim sm star-group-number 2000 threshold-alarm upper-limit 80 lower-limit 70"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a proper limit on the number of PIM-SM entries in the IPv6 address family of a VPN instance, run the multicast ipv6 limit pim sm command. This prevents multicast services from being affected by an improper limit on the number of PIM-SM entries.\nPrerequisites\nThe multicast ipv6 routing-enable command has been run in the IPv6 address family of a VPN instance.\nConfiguration Impact\nIf the number of PIM-SM entries in the IPv6 address family of a VPN instance reaches a configured limit, new entries fail to be created and the alarm PIM_1.3.6.1.4.1.2011.5.25.149.4.0.32 hwPimVrfTypeSGExceed is triggered.If upper-limit upper-limit-value is specified and the number of PIM-SM entries in the IPv6 address family of a VPN instance reaches the configured alarm trigger threshold, the alarm PIM_1.3.6.1.4.1.2011.5.25.149.4.0.30 hwPimVrfTypeSGThresholdExceed is triggered.\nStatically created (*, G) and (S, G) entries are not affected by a limit on the number of PIM-SM entries in the IPv6 address family of a VPN instance. The limit takes effect only on dynamic entries."
+}

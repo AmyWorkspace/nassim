@@ -1,0 +1,48 @@
+{
+    "PageTitle": "mld-snooping prompt-leave (VSI view)",
+    "FuncDef": "The mld-snooping prompt-leave command enables prompt leave.\nThe undo mld-snooping prompt-leave command disables prompt leave.\nBy default, prompt leave is disabled.",
+    "CLIs": [
+        "mld-snooping prompt-leave [ group-policy { <acl6-number> | acl6-name <acl6-name> } ]",
+        "undo mld-snooping prompt-leave"
+    ],
+    "ParentView": [
+        "VSI-AUTO view",
+        "VSI-BD view",
+        "VSI-DEFAULT view",
+        "VSI-STATIC view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-policy",
+            "Info": "Configures a group policy to enable prompt leave for member interfaces of a specified or all multicast groups.\n-"
+        },
+        {
+            "Parameters": "acl6-number",
+            "Info": "Specifies the number of an ACL6.\nThe value is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named ACL6.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 2008",
+            "[*HUAWEI-acl6-basic-2008] rule permit source ff18::1 64",
+            "[*HUAWEI-acl6-basic-2008] quit",
+            "[*HUAWEI] mld-snooping enable",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[~HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] mld-snooping prompt-leave group-policy 2008"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter receiving an MLD Done message for a multicast group from a host, a device enabled with prompt leave directly deletes the forwarding entry of the multicast group, without sending group-specific Query messages. If an interface is connected to only one host, the prompt leave mechanism can be used to shorten the response delay and release bandwidth resources in a timely manner.\nIf group-policy or group-policy acl6-name is not set, prompt leave will take effect for all multicast groups.\nIf group-policy or group-policy acl6-name is set, prompt leave will take effect for groups of which the MLD Done messages meet the permit clause of the ACL6.\nIf a multicast group meets the permit clause of the specified ACL6, the device deletes the member interface of the group immediately after receiving an MLD Done message of this group and notifies the upstream device of the user leave event.If a multicast group does not meet the permit clause of the specified ACL6, the device notifies the upstream device of a user leave event after receiving an MLD Done message of a group. The upstream device can then send a group-specific Query message to learn whether members exist in the group.\n\nPrerequisites\nMLD snooping has been enabled globally and in the VLAN/VSI view.\nRules have been configured in the specified ACL6. By default, the ACL6 rule in which the action is permit applies to all multicast groups. To enable prompt leave for a multicast group, you need to run the rule (basic ACL6 view) deny source any or rule (advanced ACL6 view) deny source any command.\nConfiguration Impact\nDo not enable prompt leave for a VLAN/VSI if a multicast member interface connects to multiple receiver hosts. If a member interface connects to multiple receivers, the prompt-leave-capable device will interrupt the multicast services of a group for all receivers of the group when a receiver leaves the multicast group.\nIf the mld-snooping prompt-leave command is run more than once in the same view, the latest configuration overrides the previous one.\nPrecautions\nThe\nmld-snooping prompt-leave command fails to be run a VLAN view in any of the following conditions:\nThe VLAN is bound to a VSI.\nThe\nmld-snooping prompt-leave command fails to be run in a VSI view in the following condition:\nThe VSI is bound to a BD."
+}

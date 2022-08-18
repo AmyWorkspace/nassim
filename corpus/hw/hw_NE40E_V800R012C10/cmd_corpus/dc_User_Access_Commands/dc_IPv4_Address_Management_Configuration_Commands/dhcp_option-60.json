@@ -1,0 +1,68 @@
+{
+    "PageTitle": "dhcp option-60",
+    "FuncDef": "The dhcp option-60 command configures the vendor-class (DHCPv4 option 60/DHCPv6 option 16) attribute of DHCP packets. Then, the device can allocate IP addresses in the address pool based on the domain name. You can configure partial match or complete match for the content containing the domain name.\nThe undo dhcp option-60 command cancels the configuration.\nThe vendor-class command configures the vendor-class (dhcpv4 option60/dhcpv6 option16) attribute and fuzzy or exact match of the domain name information.\nThe undo vendor-class command cancels the configuration.\nBy default, the vendor-class option contains the domain name and exact-match is configured for the vendor-class attribute, but encrypt and vendor-class attribute is not configured.",
+    "CLIs": [
+        "{ dhcp option-60 | vendor-class } [ cn | [ offset <offset-value> ] { length <length> | sub-option <suboption-id> [ sub-offset <sub-offset-id> ] [ sub-length <sub-length> ] } ] { domain-included | included-in-domain } { partial-match | exact-match } [ encrypt ]",
+        "undo { dhcp option-60 | vendor-class }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cn",
+            "Info": "Uses the cn mode for user domain identification.\n-"
+        },
+        {
+            "Parameters": "offset offset-value",
+            "Info": "Specifies the offset of a vendor-class option. After this parameter is configured, the BRAS identifies a user domain based on the vendor-class option after offset.\nThe value is an integer ranging from 1 to 254."
+        },
+        {
+            "Parameters": "length length",
+            "Info": "Specifies which part of a vendor-class option is used for user domain identification. After this parameter is configured, only the specified part of the vendor-class option is used for domain identification.\nThe value is an integer ranging from 1 to 254."
+        },
+        {
+            "Parameters": "sub-option suboption-id",
+            "Info": "Specifies the code of a vendor-class sub-option used for user domain identification.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "sub-offset sub-offset-id",
+            "Info": "Specifies the offset for a vendor-class sub-option used for user domain identification.\nThe value is an integer ranging from 1 to 254."
+        },
+        {
+            "Parameters": "sub-length sub-length",
+            "Info": "Specifies which part of a vendor-class sub-option is used for user domain identification. After this parameter is configured, only the specified part of the vendor-class sub-option is used for domain identification.\nThe value is an integer ranging from 1 to 254."
+        },
+        {
+            "Parameters": "domain-included",
+            "Info": "Indicates that the vendor-class option contains the domain name.\n-"
+        },
+        {
+            "Parameters": "included-in-domain",
+            "Info": "Indicates that the vendor-class option contains a partial domain name.\n-"
+        },
+        {
+            "Parameters": "partial-match",
+            "Info": "Indicates the content of the vendor-class string partial match (complete match is not required).\n-"
+        },
+        {
+            "Parameters": "exact-match",
+            "Info": "Indicates the content of the vendor-class string complete match.\n-"
+        },
+        {
+            "Parameters": "encrypt",
+            "Info": "Encrypts the domain name in the vendor-class option. After encrypt is configured, the device will send the encrypted option 60 to the AAA server as the user domain name.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vendor-class domain-included exact-match"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp option-60 domain-included exact-match"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe command can be used to encrypt the client information or send the vendor-class ( dhcpv4 option60/dhcpv6 option16) defined by the device manufacturer to the Radius server.\nThe cn keyword has the same function as the offset 2 sub-option 31 sub-offset 44 sub-length 4 configuration. If the cn keyword is configured, the RADIUS server uses login information obtained from vendor-class sub-option 31 to parse the user domain (offset, sub-offset, and sub-length determines which part of vendor-class sub-option 31 is used for user domain identification).\nWith the offset, length, sub-option, sub-offset, and sub-length parameters, a RADIUS server can flexibly obtain information used for user domain parsing.\nWhen the device fails to parse the vendor-class attribute of a DHCP packet, if the domain name in the vendor-class attribute is encrypted, the device sends unparsed contents of the vendor-class attribute in the format of username@vendor-class to the RADIUS server. After parsing the domain name, the RADIUS server sends the No.138 attribute carrying the domain name to the . Then, the device authorizes the user to go online by using the delivered domain name.\nIf encryption is not configured for the domain name in the vendor-class attribute, the device does not send the vendor-class attribute to the RADIUS server, and the device performs authorization based on the authentication domain.\nThe dhcp option-60 command has the same function as the vendor-class command. The later configured command overrides the previous one. When running the undo form of the command, you must ensure that the keywords of the two commands are the same. For example, if the dhcp option-60 command is configured, you can run only the undo dhcp option-60 command to delete this command; if the vendor-class command is configured, you can run only the undo vendor-class command to delete this command.\nThe display dhcp option-60 command displays both dhcp option-60 and vendor-class configurations.\nThe display vendor-class command displays both dhcp option-60 and vendor-class configurations.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

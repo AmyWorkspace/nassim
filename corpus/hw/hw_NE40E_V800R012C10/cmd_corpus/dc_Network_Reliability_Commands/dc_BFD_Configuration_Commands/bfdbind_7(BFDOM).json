@@ -1,0 +1,50 @@
+{
+    "PageTitle": "bfd bind peer-ipv6 track-interface",
+    "FuncDef": "The bfd bind peer-ipv6 track-interface command creates a BFD for IPv6 session, binds related information to the BFD session, and displays the BFD session view.\nBy default, the binding between a BFD session for IPv6 and a peer IPv6 address is not created.",
+    "CLIs": [
+        "bfd <session-name> bind peer-ipv6 <peer-ipv6> [ vpn-instance <vpn-name> ] [ source-ipv6 <source-ipv6> ] track-interface interface { <interface-name> | <interface-type> <interface-number> }",
+        "bfd <session-name> bind peer-ipv6 <peer-ipv6> [ vpn-instance <vpn-name> ] [ source-ipv6 <source-ipv6> ] track-interface controller { <interface-name> | <interface-type> <interface-number> }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "session-name",
+            "Info": "Specifies the name of a BFD session for IPv6.\nThe value is a string of 1 to 64 characters, spaces not supported. When the string entered is enclosed with quotation marks (\"), spaces are supported in the string.\nWhen you configure the name of a BFD session, the uppercase and lowercase letters in the name must be consistent with what you entered.The system does not distinguish between uppercase and lowercase letters when checking the name of a BFD session. For example, the system regards ABC and abc as a BFD session name. If a BFD session named ABC has been configured and abc is specified, the system directly displays the ABC view."
+        },
+        {
+            "Parameters": "peer-ipv6",
+            "Info": "Specifies the peer IPv6 address bound to a BFD session for IPv6.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "vpn-instance vpn-name",
+            "Info": "Specifies the name of a VPN instance bound to a BFD session for IPv6.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "source-ipv6 source-ipv6",
+            "Info": "Specifies the source IPv6 address carried in a BFD packet. If no source IPv6 address is specified, a device uses a source IPv6 address in either of the following modes before sending BFD packets:\nDuring negotiation on BFD session for IPv6 parameters, the device searches for the IPv6 address of an outbound interface connected to the remote end in the local routing table as the source IPv6 address before sending BFD packets.During BFD for IPv6 detection, the device sets the source IPv6 address to a fixed value.\nThis parameter is manually configured only when BFD works with Unicast Reverse Path Forwarding (URPF). This is because URPF checks the source IP address in received packets.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies track interface information of BFD session.\n-"
+        },
+        {
+            "Parameters": "controller",
+            "Info": "Specify controller interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 address 2001:db8::3 64",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] bfd atob bind peer-ipv6 2001:db8::1 track-interface interface GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo rapidly detect IPv6 link faults on a network, create a BFD session for IPv6.\nWhen creating the binding between a BFD session for IPv6 and a peer IPv6 address:\nIf only the peer IPv6 address is specified, BFD detects faults in a multi-hop link.If both the peer IPv6 address and local interface are specified, BFD detects faults in a single-hop link. That is, BFD monitors a fixed route whose outbound interface is this interface and the next-hop address is the peer IPv6 address.If both the peer IPv6 address and the VPN instance are specified, BFD detects faults in the multi-hop link for a specified VPN instance.If the peer IPv6 address, the VPN instance, and the local interface are specified, BFD detects faults in the single-hop link for a specified VPN instance.\n\nPrerequisites\nBFD has been globally enabled using the bfd command in the system view.\nFollow-up Procedure\nAfter the binding is created, you must perform the following operations to create the BFD session for IPv6:\nRun the discriminator command to create the local and remote discriminators for the BFD session for IPv6.Run the commit command to commit the configuration.\nAfter the binding is created, the following optional configurations can be performed in the BFD session for IPv6 view:\nRun the description command to configure a description for the BFD session for IPv6.Run the min-tx-interval command to set a desired minimum interval at which BFD for IPv6 packets are sent.Run the min-rx-interval command to set a desired minimum interval at which BFD for IPv6 packets are received.Run the detect-multiplier command to set a local detection multiplier of the BFD session for IPv6.Run the process-pst command to enable BFD to modify the PST if BFD detects a fault.Run the wtr command to set a WTR time for the BFD session for IPv6.\n\nPrecautions\nIf the IPv6 address of the outbound interface is changed after a BFD session for IPv6 has been created, either of the following situations occurs:\nDuring negotiation, the source IPv6 address to be carried in BFD for IPv6 packets is updated.During detection, the source IPv6 address carried in BFD for IPv6 packets is not updated.\nDo not configure a changeable IP address (for example, an auto link-local address) as the peer IPv6 address.\nA bidirectional BFD6 session monitors bidirectional links. Therefore, the bfd bind peer-ipv6 command must be configured on the two ends of the links.\nYou can run the undo bfd session-name command to delete a specified BFD session and its binding information."
+}

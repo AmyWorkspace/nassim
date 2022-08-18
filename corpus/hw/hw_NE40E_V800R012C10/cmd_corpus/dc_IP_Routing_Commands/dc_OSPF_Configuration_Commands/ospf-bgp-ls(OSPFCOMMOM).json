@@ -1,0 +1,33 @@
+{
+    "PageTitle": "bgp-ls (OSPF view)",
+    "FuncDef": "The bgp-ls identifier command configures an OSPF topology ID.\nThe undo bgp-ls identifier command deletes an OSPF topology ID.\nThe bgp-ls enable command enables OSPF topology advertisement to BGP.\nThe undo bgp-ls enable command disables OSPF topology advertisement to BGP.\n\nBy default, the OSPF topology ID is 0.\n\n\nBy default, OSPF topology advertisement to BGP is disabled.",
+    "CLIs": [
+        "bgp-ls enable",
+        "bgp-ls identifier <identifier-value>",
+        "undo bgp-ls enable",
+        "undo bgp-ls identifier [ <identifier-value> ]"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "identifier identifier-value",
+            "Info": "Specifies an OSPF topology ID.\nThe value is an integer ranging from 2 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf",
+            "[*HUAWEI-ospf-1] bgp-ls enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf",
+            "[*HUAWEI-ospf-1] bgp-ls enable",
+            "[*HUAWEI-ospf-1] bgp-ls identifier 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEach BGP node identifies topologies based on their IDs and reports topology information to the controller.\nThe topology information saved on all OSPF devices in the same area is the same. Therefore, the topology information about the area can be reported to the controller as long as BGP-LS is enabled on one BGP node. Deploying BGP-LS on two BGP nodes is recommended because they can back up each other. If BGP-LS is deployed on more than one node, identifier-value must remain the same on all these nodes to ensure that the collected topology information is correct.\nBGP-LS is a new method of collecting topology information.\nWithout BGP-LS, forwarders use an IGP (OSPF or IS-IS) to collect topology information of each AS, and the IGP reports the information to the controller. This topology information collection method has the following disadvantages:\nThe controller must have high computing capabilities and support the IGP and its algorithm.The controller cannot gain the complete inter-AS topology information and therefore is unable to calculate optimal E2E paths.Different IGPs report topology information separately to the controller, which complicates the controller's analysis and processing.\nWith powerful routing capabilities of BGP, BGP-LS has the following advantages:\nReduces computing capability requirements and spares the necessity of IGPs on the controller.Facilitates route selection and calculation on the controller by using BGP to summarize and report process or AS topology information to the controller.Requires only one routing protocol to report topology information to the controller.\nTo enable OSPF topology advertisement to BGP, run the bgp-ls enable command. The topology information that OSPF reports to BGP includes node, link, and prefix information.\n\nPrerequisites\nOSPF topology advertisement to BGP has been enabled using the bgp-ls enable command.\nImplementation Procedure\nOSPF topology information can be flooded only within an area. As a result, the controller can obtain OSPF topology information about only one area. To address this problem, deploy at least one BGP node in each OSPF area and establish a BGP peer relationship between each BGP node and the controller so that BGP-LS collects and reports topology information to the controller.\nConfiguration Impact\nBGP-LS advertises all topology information (node, link, and prefix information), and the controller needs to save all topology information, consuming a large number of memory resources.Any change in the topology information collected by BGP-LS will trigger LSA flooding, which may burden the controller. As a result, the maximum number of OSPF neighbors supported and the topology size will be affected.BGP-LS requires topology synchronization between OSPF and BGP, which further consumes CPU resources. As a result, OSPF convergence is slowed down.\n\nPrecautions\nThe bgp-ls enable command is inapplicable to VPN views."
+}

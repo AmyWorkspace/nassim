@@ -1,0 +1,49 @@
+{
+    "PageTitle": "ipv6 neighbor vid cevid",
+    "FuncDef": "The ipv6 neighbor vid cevid command configures a static entry in the IPv6 neighbor discovery cache.\nThe undo ipv6 neighbor vid cevid command deletes a static entry from the IPv6 neighbor discovery cache.\n\nBy default, no static entry is configured.",
+    "CLIs": [
+        "ipv6 neighbor <ipv6-address> <mac-address> vid <pe-vid> cevid <ce-vid>",
+        "undo ipv6 neighbor <ipv6-address>"
+    ],
+    "ParentView": [
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "Global VE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "100ge sub-interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a static entry.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies the data link layer address of the static entry.\nThe value is in the format of H-H-H. Each H is a 4-digit hexadecimal number, such as 00e0. If you enter fewer than four digits, the system pads 0s before the input digits. For example, if you enter e0, the system changes it to 00e0."
+        },
+        {
+            "Parameters": "pe-vid",
+            "Info": "Specifies the ID of the VLAN to which an interface belongs.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid",
+            "Info": "Specifies the inner VLAN ID of CE.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[~HUAWEI-GigabitEthernet 1/0/0.1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet 1/0/0.1] encapsulation qinq-termination",
+            "[*HUAWEI-GigabitEthernet 1/0/0.1] qinq termination pe-vid 1 ce-vid 2",
+            "[*HUAWEI-GigabitEthernet 1/0/0.1] ipv6 neighbor 2001:db8::1 1-1-1 vid 1 cevid 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nTo filter the illegal packets, you can create static ND entries, binding the destination IPv6 addresses of these packets to nonexistent MAC addresses.\n\nPrerequisites\n\nBefore running the ipv6 neighbor command to configure a static entry, you need to run the ipv6 enable command in the interface view to enable the IPv6 function on the interface.\n\nConfiguration Impact\n\nAn ND entry enters the REACHABLE state after being created, indicating that the interface connected to this neighbor is Up. If the interface connected to this neighbor turns Down, the ND entry needs to be deleted.\nThe static ND entries overwrite the ND entries dynamically learnt by routers. That is, static ND entries are of higher priorities than dynamically learnt ND entries.\n\nPrecautions\n\nYou can configure a maximum of 16K static ND entries on an interface.\nIf the IPv6 address or MAC address specified in the ipv6 neighbor command is incorrect, communication with this neighbor fails.\nYou can run the reset ipv6 neighbors command to delete dynamic ND entries."
+}

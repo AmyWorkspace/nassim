@@ -1,0 +1,38 @@
+{
+    "PageTitle": "mpls ldp timer hello-hold",
+    "FuncDef": "The mpls ldp timer hello-hold command sets the Hello hold timer value.\nThe undo mpls ldp timer hello-hold command restores the default Hello hold timer value.\nBy default, the link-Hello hold timer value is 15s, and the target-Hello hold timer value is 45s.",
+    "CLIs": [
+        "mpls ldp timer hello-hold <interval>",
+        "undo mpls ldp timer hello-hold"
+    ],
+    "ParentView": [
+        "Remote MPLS LDP peer view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the Hello hold timer value.\nThe value is an integer ranging from 3 to 65535, in seconds. Value 65535 indicates that an LDP session never times out."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls ldp",
+            "[*HUAWEI-mpls-ldp] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls ldp",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls ldp timer hello-hold 60"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls ldp",
+            "[*HUAWEI-mpls-ldp] quit",
+            "[*HUAWEI] mpls ldp remote-peer bji",
+            "[*HUAWEI-mpls-ldp-remote-bji] mpls ldp timer hello-hold 180"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe LDP peers that establish the Hello adjacency periodically send Hello packets to indicate that they expect to maintain the adjacency. If an LDP peer does not receive any Hello packet before the Hello hold timer times out, the LDP peer deletes the Hello adjacency.\nThe default timer value is recommended. On a network where the link status is unstable or a number of packets are sent, you can increase the timer value properly to prevent the session from being frequently deleted and established.\nThere are two types of Hello hold timers:\nLink-Hello hold timer: used to maintain the local adjacency. You can run the mpls ldp timer hello-hold command in the interface view to set the timer value.Target-Hello hold timer: used to maintain the remote adjacency. You can run the mpls ldp timer hello-hold command in the remote MPLS LDP peer view to set the timer value.\nThe value of the timer that takes effect is the smaller one of the Hello holder timer values configured on both ends of an LDP session.\n\nPrerequisites\nThe remote LDP peer has been configured.\nConfiguration Impact\nAfter the mpls ldp timer hello-hold command is run, the Hello hold timer value is the smaller one of the Hello holder timer values configured on both ends of an LDP session.\nPrecautions\nIf the Hello Hold timer negotiated by the two ends of an LDP session is less than 9s, the timer of 9s takes effect."
+}

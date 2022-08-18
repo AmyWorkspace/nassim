@@ -1,0 +1,49 @@
+{
+    "PageTitle": "network (BGP-IPv4 multicast address family view)",
+    "FuncDef": "The network command configures MBGP to import routes from the local IP routing table.\nThe network route-filter command configures a filtering policy for local routes advertised by MBGP.\nThe undo network command cancels the configuration.\nBy default, MBGP does not import routes from the local IP routing table.",
+    "CLIs": [
+        "network { <ip-address> [ <mask> | <mask-length> ] } [ route-policy <route-policy-name> ]",
+        "network { <ip-address> [ <mask> | <mask-length> ] } route-filter <route-filter-name>",
+        "undo network { <ip-address> [ <mask> | <mask-length> ] }"
+    ],
+    "ParentView": [
+        "BGP-IPv4 multicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of a route to be imported from the local IP routing table.\nThe address is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the mask of the IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length of the IP address.\nThe value is an integer that ranges from 0 to 32."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the routing policy that is used for route import.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter-name",
+            "Info": "Specifies the name of a routing filter that is used for route import.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family multicast",
+            "[*HUAWEI-bgp-af-multicast] network 10.0.0.0 255.255.0.0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family multicast",
+            "[*HUAWEI-bgp-af-multicast] network 10.0.0.0 255.255.0.0 filter-policy abc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe network [ route-policy ] command is used to import exactly-matching routes. This means that only the routes in the local IP routing table that exactly match the specified destination address and mask length can be added to the MBGP routing table. If the network mask is not specified, routes will be exactly matched against the natural network mask.\nThe network route-filter command configures a filtering policy for local routes advertised by MBGP. Routes that meet the filtering policy are not advertised by MBGP."
+}

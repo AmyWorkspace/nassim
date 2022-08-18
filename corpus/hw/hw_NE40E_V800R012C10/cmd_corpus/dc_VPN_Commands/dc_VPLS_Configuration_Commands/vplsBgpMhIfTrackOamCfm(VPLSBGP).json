@@ -1,0 +1,46 @@
+{
+    "PageTitle": "mpls l2vpn multi-homing trigger cfm",
+    "FuncDef": "The mpls l2vpn multi-homing trigger cfm command associates CFM with an AC interface's blocked state.\nThe undo mpls l2vpn multi-homing trigger cfm command restores the default configuration.\n\nBy default, CFM is not associated with any AC interface's blocked state.",
+    "CLIs": [
+        "mpls l2vpn multi-homing trigger cfm md <md-name> ma <ma-name>",
+        "undo mpls l2vpn multi-homing trigger cfm [ md <md-name> ma <ma-name> ]"
+    ],
+    "ParentView": [
+        "GE sub-interface view",
+        "400GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "25GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ma ma-name",
+            "Info": "Specifies the name of an MA.\nThe value is a string of 1 to 43 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "md md-name",
+            "Info": "Specifies the name of an MD.\nThe value is a string of 1 to 43 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal bgp multi-homing",
+            "[*HUAWEI-vsi-vsi1-bgp] route-distinguisher 192.168.1.1:1",
+            "[*HUAWEI-vsi-vsi1-bgp] site name company1",
+            "[*HUAWEI-vsi-vsi1-bgp-site-company1] site-id 20",
+            "[*HUAWEI-vsi-vsi1-bgp-site-company1] quit",
+            "[*HUAWEI-vsi-vsi1-bgp] quit",
+            "[*HUAWEI-vsi-vsi1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] l2 binding vsi multi-homing-site company1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls l2vpn multi-homing trigger cfm md md1 ma ma1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nIn VPLS multi-homing scenarios, CFM is generally deployed between a CE and a PE. If the PE's AC interface is blocked, the CE cannot detect the blocked state and continues sending traffic to the PE, causing a waste of forwarding resources. To associate CFM with the AC interface's blocked state, run the mpls l2vpn multi-homing trigger cfm command on the PE. If the PE's AC interface is blocked, it sends CCMs carrying the blocked state to the CE. Upon receipt, the CE with the cfm md md-name ma ma-name trigger clear-arp command will clear the ARP entries learned from the PE, saving forwarding resources.\n\nPrerequisites\n\n\nA multi-homing site has been bound to an AC interface using the l2 binding vsi multi-homing-site command.\nBasic CFM functions have been configured.\n\n\nPrecautions\n\nIn VPLS multi-homing scenarios, CFM applies only to sub-interfaces. Therefore, you must run the mpls l2vpn multi-homing trigger cfm command on sub-interfaces."
+}

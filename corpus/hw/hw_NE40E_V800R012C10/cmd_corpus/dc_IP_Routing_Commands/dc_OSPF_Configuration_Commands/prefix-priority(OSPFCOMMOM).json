@@ -1,0 +1,42 @@
+{
+    "PageTitle": "prefix-priority(OSPF view)",
+    "FuncDef": "The prefix-priority command sets a convergence priority for OSPF routes.\nThe undo prefix-priority command restores the default value.\nBy default, in an OSPF routing table, the convergence priority of public network 32-bit host routes and default routes is medium, and the convergence priority of other OSPF routes is low; in an IP routing table, the convergence priority of public network 32-bit host routes and default routes is high, and the convergence priority of other OSPF routes is medium.",
+    "CLIs": [
+        "prefix-priority { critical | high | medium | very-low } ip-prefix <ip-prefix-name>",
+        "undo prefix-priority { critical | high | medium | very-low }"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "critical",
+            "Info": "Sets the convergence priority of OSPF routes to critical.\n-"
+        },
+        {
+            "Parameters": "high",
+            "Info": "Sets the convergence priority of OSPF routes to high.\n-"
+        },
+        {
+            "Parameters": "medium",
+            "Info": "Sets the convergence priority of OSPF routes to medium.\n-"
+        },
+        {
+            "Parameters": "very-low",
+            "Info": "Sets the convergence priority of OSPF routes to very-low.\n-"
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix critical-prefix index 10 permit 10.0.0.0 8",
+            "[*HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] prefix-priority critical ip-prefix critical-prefix"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the convergence priority of OSPF routes based on a specified IP prefix list, run the prefix-priority command. The command takes effect on the public network only.\nAfter the prefix-priority command is used in the OSPF view, OSPF route calculation, link-state advertisement (LSA) flooding, and LSDB synchronization can be implemented according to the configured priority. Therefore, route convergence can be controlled.\nConfiguration Impact\nThe convergence priorities of OSPF routes can be critical, high, medium, low, and very-low. The priorities in the corresponding IP routing table are critical, high, high, medium, and low. The priorities are listed in descending order.When an LSA meets multiple priorities, the highest priority takes effect.\nOSPF calculates LSAs in the sequence of intra-area routes, inter-area routes, and AS external routes. This command enables OSPF to calculate the three types of routes separately according to the specified route calculation priorities. Convergence priorities are critical, high, medium, low and very-low. To speed up the processing of LSAs with the higher priority, during LSA flooding, the LSAs need to be placed into the corresponding critical, high, medium, low and very-low queues according to priorities.\nPrecautions\nBy default, the convergence priorities of public OSPF host routes, direct routes, static routes, and other protocol (such as BGP and RIP) routes are medium, high, medium, and low respectively. On the public network, the convergence priority of OSPF 32-bit host routes is medium."
+}

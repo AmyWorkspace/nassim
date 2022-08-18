@@ -1,0 +1,52 @@
+{
+    "PageTitle": "primary-root backup-root",
+    "FuncDef": "The primary-root backup-root command specifies the primary and backup P2MP tunnels.\nThe undo primary-root backup-root command deletes the configuration of the primary and backup P2MP tunnels.\nBy default, no primary and backup P2MP tunnels are specified.",
+    "CLIs": [
+        "primary-root <priRootIp> [ track bfd ] backup-root <bakRootIp> [ track bfd ] [ wtr <wtrValue> ]",
+        "undo primary-root <priRootIp> [ track bfd ] backup-root <bakRootIp> [ track bfd ] [ wtr <wtrValue> ]"
+    ],
+    "ParentView": [
+        "VSI-inclusive-leaf view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "priRootIp",
+            "Info": "Specifies the IP address of the primary root node.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "track",
+            "Info": "Configures the leaf node to track.\n-"
+        },
+        {
+            "Parameters": "bfd",
+            "Info": "Configures the leaf node to track BFD sessions.\n-"
+        },
+        {
+            "Parameters": "bakRootIp",
+            "Info": "Specifies the IP address of the backup root node.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "wtr wtrValue",
+            "Info": "Specifies the WTR time of the BFD session to be tracked.\nThe value is an integer ranging from 0 to 600, in minutes. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] bgp-ad",
+            "[*HUAWEI-vsi-vsi1-bgpad] vpls-id 1:1",
+            "[*HUAWEI-vsi-vsi1-bgpad] vpn-target 1:1 import-extcommunity",
+            "[*HUAWEI-vsi-vsi1-bgpad] vpn-target 1:1 export-extcommunity",
+            "[*HUAWEI-vsi-vsi1-bgpad] quit",
+            "[*HUAWEI-vsi-vsi1] inclusive-provider-tunnel",
+            "[*HUAWEI-vsi1-inclusive] leaf",
+            "[*HUAWEI-vsi1-inclusive-leaf] primary-root 1.1.1.1 track bfd backup-root 2.2.2.2 track bfd wtr 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn dual-root protection scenarios in which P2MP tunnels are used to carry services, the root nodes send two copies of traffic through the primary and backup P2MP tunnels. To specify the primary and backup P2MP tunnels, run the primary-root backup-root command on a leaf node. Then the leaf node receives and processes only traffic transmitted through the primary P2MP tunnel and discards traffic transmitted through the backup P2MP tunnel. When the primary P2MP tunnel fails, the system quickly switches service traffic to the backup P2MP tunnel, ensuring reliable traffic transmission.\nPrerequisites\nA leaf node has been specified, and the VSI-Inclusive-Leaf view has been displayed using the leaf command.P2MP tunnels have been established.\n\nConfiguration Impact\nAfter the undo primary-root backup-root command is run on a leaf node, the roles of the primary and backup P2MP tunnels are deleted so that both tunnels become independent and the leaf node receives and processes traffic from both tunnels.\nPrecautions\nIn the scenario of dual-root 1+1 protection for VPLS over P2MP, a P2MP-TE tunnel and an MLDP tunnel cannot co-exist for traffic protection. Instead, only two P2MP-TE tunnels or two MLDP tunnels can work as the primary and backup tunnels. P2MP tunnels are classified as mLDP P2MP tunnels or P2MP TE tunnels. The primary-root backup-root command applies only to P2MP TE tunnels."
+}

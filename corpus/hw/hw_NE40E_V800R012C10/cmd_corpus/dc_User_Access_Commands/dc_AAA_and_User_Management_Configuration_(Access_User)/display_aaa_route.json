@@ -1,0 +1,71 @@
+{
+    "PageTitle": "display aaa route",
+    "FuncDef": "The display aaa route command displays whether static routes are successfully delivered by the RADIUS server.",
+    "CLIs": [
+        "display aaa route [ all | vpn-instance <vpn-instance> ] [ uninstalled ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "all",
+            "Info": "Displays whether all static routes, including public and private network routes, are successfully delivered.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "uninstalled",
+            "Info": "Displays invalid static routes are delivered by the RADIUS server.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display aaa route",
+            "------------------------------------------------------------------------------------------------",
+            " VRF            Prefix/Length      NextHop      Cost  Intf    Tag   Installed   advertise   roll",
+            "------------------------------------------------------------------------------------------------",
+            "                192.168.1.0/24                  1     null0   0     yes         no          yes",
+            "                192.168.2.0/24                  1     null0   0     yes         no          yes",
+            "                192.168.3.0/24                  1     null0   0     yes         no          yes",
+            "                192.168.7.0/24                  1     null0   0     yes         no          yes",
+            "                192.168.3.0/24     3.3.3.3      1             0     no          no          yes",
+            "                10.256.256.256/24               1     null0   0     no          no          yes",
+            "------------------------------------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display aaa route all",
+            "------------------------------------------------------------------------------------------------",
+            " VRF        Prefix/Length      NextHop         Cost   Intf    Tag   Installed   advertise   roll",
+            "------------------------------------------------------------------------------------------------",
+            "            192.168.1.0/24                     1      null0   0     yes         no          yes",
+            "            192.168.2.0/24                     1      null0   0     yes         no          yes",
+            "            192.168.3.0/24                     1      null0   0     yes         no          yes",
+            "            192.168.7.0/24                     1      null0   0     yes         no          yes ",
+            "            192.168.3.0/24     3.3.3.3         1              0     no          no          yes",
+            "            10.256.256.256/24                  1      null0   0     no          no          yes",
+            " perk       192.168.10.0/24                    1      null0   0     yes         no          yes",
+            "------------------------------------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display aaa route vpn-instance perk",
+            "------------------------------------------------------------------------------------------------",
+            " VRF         Prefix/Length      NextHop         Cost   Intf    Tag   Installed   advertise   roll",
+            "------------------------------------------------------------------------------------------------",
+            " perk        192.168.10.0/24                    1      null0   0     yes         no          yes",
+            "------------------------------------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display aaa route uninstalled",
+            "---------------------------------------------------------------------------------------",
+            " VRF            Prefix/Length          NextHop         Cost",
+            "---------------------------------------------------------------------------------------",
+            " perk           192.168.3.0/24         3.3.3.3         1",
+            " abcd           256.256.256.256/24                     1",
+            "---------------------------------------------------------------------------------------"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a scenario in which the RADIUS server automatically delivers static routes without being triggered by user login, run the aaa route-download command on the device to enable it to synchronize static routes with those delivered by the RADIUS server. To check whether static routes are successfully delivered by the RADIUS server, run the display aaa route command.\nIf you do not specify any parameter, the command displays whether all public network routes are successfully delivered.\nThe RADIUS server uses the following attributes to deliver static routes:\nFramed-route (public No. 22 attribute) is used to deliver static IPv4 routes. This attribute is in the format of <address>[/<mask length>] <next hop> [<metric>], where the mask length is optional. The system automatically generates the attribute based on the address classification (class A/B/C). The next hop must be delivered and can be only null0. The metric value ranges from 0 to 255.- Framed-Ipv6-Route (public No. 99 attribute) is used to deliver static IPv6 routes. The attribute is in the format of <address>[/<mask length>] [<next hop>] [<metric>], where the mask length is optional. The system automatically generates the attribute based on the address classification (class A/B/C). The next hop must be delivered and can be only null0. The metric value ranges from 0 to 255.- HW-VPN-Instance (Huawei No. 94 attribute) indicates the name of a VPN instance.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe display aaa route command displays only the static routes of a public network. To view static routes of both the public and private networks, run the display aaa route all command."
+}

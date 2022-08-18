@@ -1,0 +1,106 @@
+{
+    "PageTitle": "display dhcpv6 relay userinfo table",
+    "FuncDef": "The display dhcpv6 relay userinfo table command displays DHCPv6 client information on a DHCPv6 relay agent.",
+    "CLIs": [
+        "display dhcpv6 relay userinfo table interface { <interface-name> | <interface-type> <interface-number> } [ pevlan <pevlan-id> [ <end-pevlan-id> ] [ cevlan <cevlan-id> [ <end-cevlan-id> ] ] ] [ statistics | verbose ]",
+        "display dhcpv6 relay userinfo table mac-address <mac-address-data> { [ statistics ] | [ verbose ] }",
+        "display dhcpv6 relay userinfo table client-duid <client-duid-data> { [ statistics ] | [ verbose ] }",
+        "display dhcpv6 relay userinfo table server-duid <server-duid-data> { [ statistics ] | [ verbose ] }",
+        "display dhcpv6 relay userinfo table client-address <client-address-data> [ vpn-instance <vpn-instance-name> ] { [ statistics ] | [ verbose ] }",
+        "display dhcpv6 relay userinfo table server-address <server-address-data> [ vpn-instance <vpn-instance-name> ] { [ statistics ] | [ verbose ] }",
+        "display dhcpv6 relay userinfo table { [ statistics ] | [ verbose ] }",
+        "display dhcpv6 relay userinfo table index <index-data>"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pevlan pevlan-id end-pevlan-id",
+            "Info": "Displays login failure and logout records of DHCPv6 clients that send packets with a specified outer VLAN ID.\npevlan-id specifies the start outer VLAN ID.\nend-pevlan-id specifies the end outer VLAN ID. end-pevlan-id must be greater than or equal to pevlan-id. pevlan-id and pevlan-id specify a VLAN range.\nIf end-pevlan-id is not specified, only login failure and logout records of DHCPv6 clients that send packets with the outer VLAN ID specified by pevlan-id are displayed.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "cevlan cevlan-id end-cevlan-id",
+            "Info": "Displays login failure and logout records of DHCPv6 clients that send packets with a specified inner VLAN ID.\ncevlan-id specifies the start inner VLAN ID.end-cevlan-id specifies the end inner VLAN ID. end-cevlan-id must be greater than or equal to cevlan-id. end-cevlan-id and cevlan-id specify a VLAN range.If end-cevlan-id is not specified, only login failure and logout records of DHCPv6 clients that send packets with the inner VLAN ID specified by cevlan-id are displayed.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "statistics",
+            "Info": "Displays the number of DHCPv6 client entries.\n-"
+        },
+        {
+            "Parameters": "verbose",
+            "Info": "Displays detailed information about DHCPv6 client entries.\n-"
+        },
+        {
+            "Parameters": "mac-address mac-address-data",
+            "Info": "Displays information about the DHCPv6 client with a specified MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0. The MAC address cannot be set to FFFF-FFFF-FFFF."
+        },
+        {
+            "Parameters": "client-duid client-duid-data",
+            "Info": "Displays information about the DHCPv6 client with a specified DUID.\nThe value is a hexadecimal number that ranges from 1 to 260, excluding 0x."
+        },
+        {
+            "Parameters": "server-duid server-duid-data",
+            "Info": "Displays DHCPv6 client information of the DHCPv6 server with a specified DUID.\nThe value is a hexadecimal number that ranges from 1 to 260, excluding 0x."
+        },
+        {
+            "Parameters": "client-address client-address-data",
+            "Info": "Displays information about the DHCPv6 client with a specified IPv6 address.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Displays information about DHCPv6 clients with a specified VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "server-address server-address-data",
+            "Info": "Displays DHCPv6 client information of the DHCPv6 server with a specified IPv6 address.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "index index-data",
+            "Info": "Displays information about DHCPv6 clients with a specified index.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Displays DHCPv6 client information on a specified relay interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display dhcpv6 relay userinfo table mac-address 00e0-fc12-3456",
+            "- ---------------------------------------------------------------------------------",
+            "   Index      IAID IA type   DUID                                   ",
+            "        Interface                     PEVLAN/CEVLAN   MAC  ",
+            "        IPv6 address                  IPv6 PD prefix ",
+            "- ---------------------------------------------------------------------------------",
+            "      0  987675961 IA_PD     eee5e2b70a5ebe37e214f01c374c3e7cad5c52a14  ",
+            "        gigabitethernet1/0/0          3526/2430       00e0-fc12-3456",
+            "- -                            2001:db8:1::1/64",
+            "- ---------------------------------------------------------------------------------",
+            "The table count             :  1"
+        ],
+        [
+            "<HUAWEI> display dhcpv6 relay userinfo table mac-address 00e0-fc12-3456 verbose",
+            "- -------------------------------------------------------",
+            "Index                         : 0",
+            "Client DUID                   : eee5e2b70a5e52a14b341b23",
+            "IA type                       : IA_PD",
+            "IA_ID                         : 987675961",
+            "Server DUID                   : 24a1b455ddace5b0131fb",
+            "Server IPv6 address           : 2001:db8:2::2",
+            "Interface                     : gigabitethernet1/0/0",
+            "PEVLAN/CEVLAN                 : 3526/2430",
+            "VPN instance                  : --",
+            "Client MAC address            : 00e0-fc12-3456",
+            "Info-request transaction-id   : 0xa71cf0",
+            "Transaction-id                : 0xd28de3",
+            "Rapid Commit                  : on",
+            "Client IPv6 PD prefix         : 2001:db8:1::1/64",
+            "  Valid time                  : 42401 days 4 hours 43 minutes",
+            "  Lease                       : 3663463433",
+            "  Remain-Lease                : 3663462932                 ",
+            "  Status                      : UP",
+            "- -------------------------------------------------------"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a device functions as a DHCPv6 relay agent, it forwards DHCPv6 messages between clients and the server and also stores client information if the clients' addresses or prefixes are available.\nTo check DHCPv6 client entries on a DHCPv6 relay agent, run the display dhcpv6 relay userinfo table command."
+}

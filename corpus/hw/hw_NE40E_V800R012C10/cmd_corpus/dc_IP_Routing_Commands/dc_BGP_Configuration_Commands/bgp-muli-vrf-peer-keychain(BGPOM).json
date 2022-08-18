@@ -1,0 +1,37 @@
+{
+    "PageTitle": "peer keychain (BGP multi-instance VPN instance IPv4 address family view)",
+    "FuncDef": "The peer keychain command configures the Keychain authentication for establishing the TCP connection between BGP peers.\nThe undo peer keychain command deletes the Keychain authentication.\nBy default, the Keychain authentication is not configured for BGP peers.",
+    "CLIs": [
+        "peer <ipv4-address> keychain <keychain-name>",
+        "undo peer <ipv4-address> keychain"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "keychain-name",
+            "Info": "Specifies the name of the Keychain authentication.\nBefore configuring this parameter, run the keychain command to create a keychain. Then, run the key-id, key-string, and algorithm commands to configure a key ID, a password, and an authentication algorithm for this keychain. Otherwise, the authentication will fail, and the BGP peer relationship fails to be established.\nIf the dependent keychain is deleted, the neighbor relationship may be interrupted. Therefore, exercise caution when deleting the keychain.\nThe value is a string of 1 to 47 case-sensitive characters without any space. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vrf1",
+            "[*HUAWEI-bgp-instance-a-vrf1] peer 10.1.1.1 as-number 100",
+            "[*HUAWEI-bgp-instance-a-vrf1] peer 10.1.1.1 keychain Huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nConfiguring Keychain authentication improves the security of the TCP connection. You must configure Keychain authentication specified for TCP-based applications on both BGP peers. Note that encryption algorithms and passwords configured for the Keychain authentication on both peers must be the same; otherwise, the TCP connection cannot be set up between BGP peers and BGP messages cannot be transmitted.\nPrerequisites\nBefore configuring the BGP Keychain authentication, a Keychain in accordance with the configured keychain-name must be configured first. For keychain configuration details, see the chapter \"Keychain Configuration\" in Configuration Guide - Security.\nPrecautions\nThe peer keychain command and the peer password command are mutually exclusive."
+}

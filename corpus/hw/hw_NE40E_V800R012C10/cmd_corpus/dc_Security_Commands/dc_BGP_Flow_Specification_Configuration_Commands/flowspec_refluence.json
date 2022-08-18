@@ -1,0 +1,29 @@
+{
+    "PageTitle": "flowspec refluence",
+    "FuncDef": "The flowspec refluence command configures the role of an interface in BGP FlowSpec as an interface that injects the cleaned traffic back to the device so that the received traffic that matches FlowSpec rules on the interface will not be redirected again.\nThe undo flowspec refluence command cancels the configuration.\nBy default, an interface is not configured as the one that injects the cleaned traffic back to the device.",
+    "CLIs": [
+        "flowspec refluence",
+        "undo flowspec refluence"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "POS interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] flowspec refluence"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can redirect attack traffic to a traffic cleaning device to protect valid services against DoS/DDoS attacks. The traffic cleaning function is applied to IP forwarding scenarios.\nTo prevent returned traffic from matching the FlowSpec rules again and returning to the traffic cleaning device, specify an interface that injects the cleaned traffic back to the device and run the flowspec refluence command on the interface.\nConfiguration Impact\nAfter the flowspec refluence command is configured on a main interface, the traffic cleaning function is enabled on all sub-interfaces of the main interface, and the traffic cleaning function takes precedence over the traffic policy function configured using the traffic-policy (interface view) command. To be specific, if the traffic cleaning function is configured on a physical main interface and a traffic policy is configured on a physical sub-interface of the main interface, the traffic cleaning function takes effect on the main interface and its sub-interfaces, and the traffic policy configured on the sub-interface is overridden by the traffic cleaning function configuration and does not take effect. In this case, specific services are damaged or interrupted.\nPrecautions\nThe flowspec refluence and capture-packet commands are mutually exclusive.\nThe flowspec disable [ ipv4 | ipv6 ] and flowspec refluence commands are mutually exclusive.\nThis command is used to prevent returned traffic from matching the FlowSpec rules again and to simply forward the returned traffic to the public network. For example, if the interface that receives returned traffic is bound to a VPN and configured with traffic cleaning, the returned traffic is not processed based on the default VPN configuration and is simply forwarded to the public network.\nAfter the flowspec refluence command is configured on a main interface, this command takes effect on all sub-interfaces of the main interface. To be specific, VPN traffic on all sub-interfaces of the main interface is redirected to the public network.\nThe flowspec refluence command can redirect packets only to the public network. Configuring the flowspec disable command and the redirection function to implement this function is recommended. However, if the if-match any rule is configured for redirection, Layer 3 protocol packets are matched. You can configure a specific rule to prevent Layer 3 protocol packets from being matched.\nThis command can be configured only on the main interface and cannot be configured on sub-interfaces or Eth-Trunk member interfaces. When the command is configured on a main interface, the command configuration also takes effect on its sub-interfaces, regardless of whether the main interface and its sub-interfaces belong to the same VS.\nFor the LPUF-50/LPUF-50-L/LPUI-21-L/LPUI-51-L/LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101, the flowspec refluence command can be used to disable the FlowSpec services on an interface and redirect matching packets on the interface that injects the cleaned traffic back to the device, including the Layer 3 protocol packets, to the public network."
+}

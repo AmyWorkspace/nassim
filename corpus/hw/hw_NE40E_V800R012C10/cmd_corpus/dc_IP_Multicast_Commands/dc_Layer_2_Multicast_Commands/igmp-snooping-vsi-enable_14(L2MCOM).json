@@ -1,0 +1,37 @@
+{
+    "PageTitle": "igmp-snooping proxy (VSI E-Tree view)",
+    "FuncDef": "The igmp-snooping proxy command enables IGMP Snooping Proxy in a VLAN/VSI/BD.\nThe undo igmp-snooping proxy command disables IGMP Snooping Proxy in a VLAN/VSI/BD.\nBy default, IGMP Snooping Proxy in a VLAN/VSI/BD is disabled.",
+    "CLIs": [
+        "igmp-snooping proxy",
+        "undo igmp-snooping proxy"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] igmp-snooping proxy"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[*HUAWEI-vsi0] igmp-snooping proxy"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nForwarding entries are set up based on IGMP messages exchanged between a Layer 3 device and user hosts. If there are many user hosts, redundant IGMP messages increase the workload of the Layer 2 device.\nIGMP Snooping Proxy can address this problem. IGMP Snooping Proxy provides two functions: querier function and uniform Report/Leave message transmission function. The querier function enables an IGMP Snooping Proxy-enabled device to replace the connected upstream device to send IGMP Query messages. The uniform Report/Leave message transmission function enables an IGMP Snooping Proxy-enabled device to process IGMP Report/Leave messages received from downstream user hosts. Configuring IGMP Snooping Proxy on a device effectively saves bandwidth between the device and the connected upstream device, and reduces the load of the connected upstream device.\nConfiguration Impact\nAfter IGMP Snooping Proxy is enabled on a device, Report messages sent by users will be terminated on the device.\nPrecautions\nThe following conditions must be met before the\nigmp-snooping proxy command is run:\nThe querier function is configured on a device only after a static multicast group is configured on the connected upstream device. Otherwise, Report messages sent by user hosts cannot be forwarded to the upstream device. As a result, these user hosts cannot receive required multicast data.If the paths from a multicast source to user hosts are in the same Layer 2 network, the querier function can be enabled on a Layer 2 device. This does not affect the normal receiving of multicast data packets.\nThe querier function fails to be run in the VLAN/VSI/BD view in any of the following situations:\nA Dot1q termination sub-interface has been added to the VLAN.The VLAN has been bound to a VSI.The querier function has been configured on the VLAN/VSI.The igmp-snooping report-suppress command is used to configure IGMP Report message suppression in a VLAN/VSI/BD.The pim sm command is used to configure PIM-SM on a VLANIF interface in a VLAN."
+}

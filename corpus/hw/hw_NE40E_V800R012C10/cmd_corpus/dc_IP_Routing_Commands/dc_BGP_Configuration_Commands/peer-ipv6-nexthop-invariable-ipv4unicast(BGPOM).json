@@ -1,0 +1,28 @@
+{
+    "PageTitle": "peer next-hop-invariable (BGP-IPv4 unicast address family view) (IPv6)",
+    "FuncDef": "The peer next-hop-invariable command has the following functions:\n- When the BGP speaker advertises routes to EBGP peers, the BGP speaker does not change the Next_Hop.\n- When the BGP speaker advertises labeled routes to IBGP peers, the BGP speaker does not change the Next_Hop.\n- When the BGP speaker advertises imported IGP routes to IBGP peers, the BGP speaker changes the Next_Hop to the Next_Hops of the IGP routes.\nThe undo peer next-hop-invariable command restores the default configuration.\n\nBy default:\n\n\nA device sets its interface IP address as the Next_Hops of routes when advertising these routes to EBGP peers.\n\nA device does not modify the Next_Hops of non-labeled routes if the routes are learned from EBGP peers and are to be advertised to IBGP peers; the device sets its interface IP address as the Next_Hops of labeled routes if the routes are learned from EBGP peers and are to be advertised to IBGP peers.\n\nA device does not change the Next_Hops of routes if the routes are learned from an IBGP peer and are to be advertised to another IBGP peer.\n\nA device sets its interface IP address as the Next_Hops of routes when advertising imported IGP routes to IBGP peers.\n\nA device modifies the Next_Hop of imported static routes to the local interface's IP address when advertising the routes to IBGP peers.",
+    "CLIs": [
+        "peer <peerIpv6Addr> next-hop-invariable",
+        "undo peer <peerIpv6Addr> next-hop-invariable"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerIpv6Addr",
+            "Info": "Specify IPv6 peer address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 2001:DB8:1::1 as-number 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[~HUAWEI-bgp-af-ipv4] peer 2001:DB8:1::1 enable",
+            "[*HUAWEI-bgp-af-ipv4] peer 2001:DB8:1::1 next-hop-invariable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an inter-AS VPN Option C scenario where an VPNv4 Route Reflector (RR) is used, the peer next-hop-invariable command needs to be run on the RR to prevent the RR from modifying the Next_Hops of routes before advertising the routes to EBGP peers. This ensures that the remote PE recurses routes to the LSP destined for the local PE during traffic transmission.\nPrecautions\nThe peer next-hop-invariable command configuration without the include-static-route keyword takes effect only for received routes. However, the configuration does not take effect for received IPv4 routes that do not carry labels.After the peer next-hop-invariable include-static-route command is run, to restore the default configuration, run the undo peer next-hop-invariable command; to override the original configuration, run the peer next-hop-invariable command.If a device needs to advertise routes to its IBGP peer or peer group, the peer next-hop-invariable and peer next-hop-local commands are mutually exclusive on the device."
+}

@@ -1,0 +1,41 @@
+{
+    "PageTitle": "qos",
+    "FuncDef": "The qos cir command configures QoS parameters for a VSI.\nThe undo qos command deletes the configuration of QoS parameters for a VSI.\nBy default, QoS parameters are not configured for a VSI.",
+    "CLIs": [
+        "qos cir <cir-value> [ pir <pir-value> ] [ qos-profile <qos-profile-name> ]",
+        "undo qos [ cir <cir-value> [ pir <pir-value> ] [ qos-profile <qos-profile-name> ] ]"
+    ],
+    "ParentView": [
+        "VSI--PBBENABLE view",
+        "VSI-AUTO view",
+        "VSI-BD view",
+        "VSI-DEFAULT view",
+        "VSI-STATIC view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the PIR.\nThe value is 0 or an integer ranging from 16 to 4294967294, in kbit/s.\nIf you do not specify pir pir-value, the pir-value value is equal to the cir-value value.If you want to specify pir pir-value, ensure that the pir-value value is greater than or equal to the cir-value value.\n-pir-value and cir-value cannot be both 0s. If the cir-value value is 0, you must specify pir-value.\n-In a cross-NP module scenario, the pir-value doubles."
+        },
+        {
+            "Parameters": "qos-profile qos-profile-name",
+            "Info": "Specifies the name of the referenced QoS profile.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported. The string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR.\nThe value is 0 or an integer ranging from 16 to 4294967294, in kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi a2",
+            "[*HUAWEI-vsi-a2] qos cir 500 pir 500"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an L2VPN scenario, if multiple VPN services share the same tunnel, bandwidth preemption occurs among these VPN services. Non-VPN traffic also preempts the bandwidth of VPN traffic. As a result, VPN traffic cannot be forwarded strictly based on service priorities.\nTo meet the resource requirements of VPLS services carried over a tunnel without affecting the quality of other VPN services, you can configure VPLS QoS. To configure QoS parameters for a VSI, run the qos cir command. The configuration takes effect to all PWs in the VSI.\nPrerequisites\nA VSI has been created, or the VSI view has been displayed using the vsi command.\nPrecautions\nThe qos cir (VSI view) command is mutually exclusive with the following commands:\nqos cir (VSI-LDP-PW view)pbb i-vsi enablepbb b-vsi enablemld-snooping enableigmp-snooping enable"
+}

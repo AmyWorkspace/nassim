@@ -1,0 +1,40 @@
+{
+    "PageTitle": "qinq vrrp",
+    "FuncDef": "The qinq vrrp command enables a sub-interface for QinQ VLAN tag termination on a VRRP device to send VRRP packets to specified VLANs.\nThe undo qinq vrrp command restores the default setting.\nBy default, a sub-interface for QinQ VLAN tag termination sends VRRP packets carrying only the minimal inner VLAN ID and each VLAN ID in the outer tag.",
+    "CLIs": [
+        "qinq vrrp pe-vid <pe-vid> ce-vid <ce-vid>",
+        "undo qinq vrrp"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pe-vid pe-vid",
+            "Info": "Specifies a PE VLAN ID in an outer VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid ce-vid",
+            "Info": "Specifies a CE VLAN ID in an inner VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] control-vid 1 qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq termination pe-vid 100 ce-vid 200",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq vrrp pe-vid 100 ce-vid 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf VRRP is enabled on a sub-interface for QinQ VLAN tag termination, VRRP packets need to be encapsulated with inner and outer VLAN tags before being transmitted between VLANs on VRRP devices. The qinq vrrp command enables the sub-interface for QinQ VLAN tag termination to add VLAN tags to VRRP packets or remove VLAN tags from VRRP packets.\nPrerequisites\nThe control-vid and qinq termination commands have been run on the sub-interface for QinQ VLAN tag termination.\nPrecautions\nIf both VRRP and static ARP are configured on a sub-interface for dot1q or QinQ VLAN tag termination or a VLANIF interface, the VRRP virtual address and the IP address mapped to the static ARP entry must be different.\nOtherwise, the device generates incorrect host routes, affecting traffic forwarding.\nThe pe-vid and ce-vid parameters specified in the qinq vrrp command are configured using the qinq termination pe-vid ce-vid command."
+}

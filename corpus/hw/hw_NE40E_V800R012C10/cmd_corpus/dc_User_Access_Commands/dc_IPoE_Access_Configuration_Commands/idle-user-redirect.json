@@ -1,0 +1,31 @@
+{
+    "PageTitle": "idle-user-redirect",
+    "FuncDef": "The idle-user-redirect command binds an idle suppression user group to a specified domain.\nThe undo idle-user-redirect command cancels the configuration.\nBy default, no idle suppression user group is bound to a domain.",
+    "CLIs": [
+        "idle-user-redirect <user-name> [ timeout <time-value> ]",
+        "undo idle-user-redirect [ <user-name> ]"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-name",
+            "Info": "Specifies the name of a user group to which idle users will be redirected.\nThe value is a string of 1 to 32  case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "timeout time-value",
+            "Info": "Specifies a timeout period after which an idle user will be redirected to a user group.\nThe value is an integer ranging from 1 to 60, in minutes. The default value is 30."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] user-group test",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain domain1",
+            "[*HUAWEI-aaa-domain-domain1] idle-user-redirect test timeout 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nNo authentication is performed for a user in the pre-authentication domain. When the set timeout period expires, the user is redirected to a user group using a unique CP-CAR to send packets. This implementation ensures the packets sent by premium users (instant authentication when they log in) can be handled preferentially. Purpose of redirecting to the user group: New exception ID and CP-CAR are used. You can lower the CP-CAR to suppress the matched user-group protocol packets.\nThe command configuration takes effect immediately after being run. After it is configured in the domain, the command takes effect for online users.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf the timeout period is shorter than 10 minutes, switchover is performed frequently, which may cause incorrect switchover."
+}

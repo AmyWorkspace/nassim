@@ -1,0 +1,65 @@
+{
+    "PageTitle": "diffserv-mode ingress egress (Bridge domain view)",
+    "FuncDef": "The diffserv-mode ingress egress command configures an MPLS DiffServ mode to ensure end-to-end QoS.\nThe undo diffserv-mode command restores an MPLS DiffServ mode to the default configuration.\nBy default, the MPLS DiffServ mode is Uniform.",
+    "CLIs": [
+        "diffserv-mode ingress { uniform | pipe <service-class> <color> | short-pipe <service-class> <color> } egress { uniform | pipe | short-pipe [ trust { inner-vlan-8021p | ip-dscp } ] [ domain <ds-name> ] }",
+        "undo diffserv-mode"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "uniform",
+            "Info": "Specifies that the MPLS DiffServ mode is Uniform.\n-"
+        },
+        {
+            "Parameters": "pipe",
+            "Info": "Specifies that the MPLS DiffServ mode is Pipe.\n-"
+        },
+        {
+            "Parameters": "service-class",
+            "Info": "Specifies the Class of Service (CoS) for the packets that enter the public network from a private network.\nThe available values are cs7, cs6, ef, af4, af3, af2, af1, be."
+        },
+        {
+            "Parameters": "color",
+            "Info": "Specifies the color of a packet that enters the public network from a private network. The color marks the discard priority of the packet.\nThe available values are green, yellow, and red."
+        },
+        {
+            "Parameters": "short-pipe",
+            "Info": "Specifies that the MPLS DiffServ mode is Short-pipe.\n-"
+        },
+        {
+            "Parameters": "egress",
+            "Info": "Specifies that the node is an MPLS egress.\nIf the uniform or pipe mode is configured on an egress, the egress forwards packets based on the EXP value.\nBy default, if the short-pipe mode is configured on an egress, the egress forwards packets based on the VLAN priority. If packets do not carry the VLAN priority, the egress forwards packets based on the IP DSCP value.\n-"
+        },
+        {
+            "Parameters": "trust",
+            "Info": "Specifies the label value trusted by the egress node in short-pipe mode.\n-"
+        },
+        {
+            "Parameters": "inner-vlan-8021p",
+            "Info": "Specifies that an egress working in short-pipe mode forwards packets based on the 802.1p value carried in inner VLAN tags.\n-"
+        },
+        {
+            "Parameters": "ip-dscp",
+            "Info": "Specifies that an egress working in short-pipe mode forwards packets based on the IP DSCP value.\n-"
+        },
+        {
+            "Parameters": "domain ds-name",
+            "Info": "Specifies the name of a Diff-Serv domain that uses a specified PHB on an egress node in Short-pipe mode.\nThe value is a string of 1 to 48 characters."
+        },
+        {
+            "Parameters": "ingress",
+            "Info": "Specifies that the node is an MPLS ingress.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] diffserv-mode ingress pipe af1 green egress short-pipe trust inner-vlan-8021p"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure different DiffServ modes for multiple BDs accessing the same VPLS, run the diffserv-mode ingress egress command.\nWhen configuring DiffServ modes, note the following:\nIf you want to distinguish service priorities on a BD network, use the uniform mode.If you do not want to distinguish service priorities on a BD network, use the pipe or short-pipe mode.\nIf downstream PHB is configured, the egress can have the trust inner-vlan-8021p configuration only if it works in short-pipe mode. If the trust inner-vlan-8021p configuration is available, an egress forwards packets based on the 802.1p value carried in the inner VLAN tags of packets. If the trust ip-dscp configuration is available, an egress forwards packets based on the IP DSCP value carried in packets.\nWhen you configure the service type of packets transmitted from a private network to the public network:\nConfigure the service type as cs7 or cs6 to send signaling protocol packets.Configure the service type as ef to ensure low latency.Configure the service type as af4, af3, af2, or af1 to ensure the bandwidth key data.Configure the service type as be for the best effort delivery without strict QoS assurance.\nThe preceding service types are listed in the descending order of sending priorities. The colors of the packets sent from private network to the public network are arranged in the ascending order of the discard priorities, specifically, green, yellow, and red.\n\nConfiguration Impact\nThe diffserv-mode ingress egress command and diffserv-mode command can overwrite each other. The two commands provide the same function. The only difference is that the diffserv-mode ingress egress command allows you to configure different DiffServ modes on the ingress and egress, whereas the diffserv-mode command allows you to configure only the same DiffServ mode on the ingress and egress.\nPrecautions\nIf the diffserv-mode ingress egress (BD view) and diffserv-mode ingress egress (VSI view) commands are both configured, only the diffserv-mode ingress egress (BD view) command takes effect.\nVXLAN allows only the uniform mode for BDs. If a BD is bound to a VNI, the BD cannot work in pipe or short-pipe mode. Conversely, a BD working in pipe or short-pipe cannot be bound to a VNI."
+}

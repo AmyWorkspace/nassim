@@ -1,0 +1,166 @@
+{
+    "PageTitle": "mtrace",
+    "FuncDef": "The mtrace command enables the system to trace the multicast path or Reverse Path Forwarding (RPF) path from a multicast source to a querier or to a destination host, and output information about each hop.",
+    "CLIs": [
+        "mtrace [ -g <group> | [ -gw <last-hop-router> | -d ] -r <receiver> | [ -gw <last-hop-router> | -b | -d ] -r <receiver> -g <group> ] [ { -mr | -ur <resp-dest> } | -a <source-ip-address> | -l [ <stat-times> ] [ -st <stat-int> ] | -m <max-ttl> | -q <nqueries> | -ts <tsttl> | -tr <trttl> | -v | -w <timeout> ] * source <source-address>"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-g group",
+            "Info": "Specifies a multicast group address. It cannot be a reserved multicast address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-gw last-hop-router",
+            "Info": "Specifies a last-hop device address when unicast packets can be transmitted between the current device and the last-hop device.\nAfter this parameter is specified, the initiating mode of MTrace is set to last-hop. IGMP query messages are sent to the last-hop device address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-d",
+            "Info": "Sets the initiating mode of MTrace to destination when unicast packets can be transmitted between the current device and the destination host. IGMP query messages that carry the Router Alert option are sent to the specified destination host.\n-"
+        },
+        {
+            "Parameters": "-r receiver",
+            "Info": "Specifies the IP address of a destination host.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-b",
+            "Info": "Sets the initiating mode of MTrace to all-router when you cannot determine whether the device directly connected to the destination host is the last-hop device. IGMP query messages are sent to 224.0.0.2.\n-"
+        },
+        {
+            "Parameters": "-mr",
+            "Info": "Indicates that the response address is the traced multicast group address. This parameter applies to scenarios where the querier is in the multicast distribution tree (MDT).\n-"
+        },
+        {
+            "Parameters": "-ur resp-dest",
+            "Info": "Specifies a unicast response address. It must be the IP address of a local interface.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-a source-ip-address",
+            "Info": "Specifies a source address for IGMP tracert query messages. It must be the IP address of a local interface.\nThis parameter is not supported when the multicast path or RPF path from a multicast source to the current device is traced.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-l",
+            "Info": "Performs MTrace detection repeatedly and outputs traffic rate and statistics.\nIf this parameter is not specified, MTrace detection is performed only once.If this parameter is specified, the -v configuration can be ignored.\n-"
+        },
+        {
+            "Parameters": "stat-times",
+            "Info": "Specifies the number of times that MTrace detection is performed.\nThe value is an integer ranging from 2 to 65535. The default value is 65535."
+        },
+        {
+            "Parameters": "-st stat-int",
+            "Info": "Specifies an interval at which hop information is output when MTrace detection is performed repeatedly.\nThe value is an integer ranging from 10 to 60, in seconds. The default value is 10."
+        },
+        {
+            "Parameters": "-m max-ttl",
+            "Info": "Specifies the maximum number of hops for MTrace detection.\nThe value is an integer ranging from 1 to 255. The default value is 255."
+        },
+        {
+            "Parameters": "-q nqueries",
+            "Info": "Specifies the number of retry times for MTrace detection.\nThe value is an integer ranging from 1 to 65535. The default value is 3."
+        },
+        {
+            "Parameters": "-ts tsttl",
+            "Info": "Specifies the maximum number of hops traced in hop-by-hop mode.\nThe value ranges from 1 to 255. The default value is 30."
+        },
+        {
+            "Parameters": "-tr trttl",
+            "Info": "Specifies a TTL value for IGMP tracert response messages sent in multicast mode.\nThe value is an integer ranging from 1 to 255. The default value is 30."
+        },
+        {
+            "Parameters": "-v",
+            "Info": "Indicates message details, including output time and statistics.\n-"
+        },
+        {
+            "Parameters": "-w timeout",
+            "Info": "Specifies a timeout period for IGMP tracert response messages.\nThe value is an integer ranging from 1 to 60, in seconds. The default value is 3."
+        },
+        {
+            "Parameters": "source source-address",
+            "Info": "Specifies a multicast source address.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> mtrace source 10.1.0.1",
+            "Press Ctrl+C to break multicast traceroute facility",
+            " From the receiver(10.1.5.1), trace reverse path to source (10.1.0.1) according to RPF rules",
+            " Num  Reverse-Path    FwdTTL Protocol",
+            "  0   10.1.5.1",
+            "- 1   10.1.5.1        1      PIM",
+            "- 2   10.1.2.1        1      PIM",
+            "- 3   10.1.0.1        1      PIM",
+            "  In maximum-hop mode, received the response message, and multicast traceroute finished."
+        ],
+        [
+            "<HUAWEI> mtrace -g 225.0.0.1 -l 2 -st 10 source 10.1.0.1",
+            "Press Ctrl+C to break multicast traceroute facility",
+            " From the receiver(10.1.5.1), trace (10.1.0.1, 225.0.0.1)'s reverse path according to multicast routing-table",
+            " In calculating-rate mode, current statistic times is: 1",
+            "- 1 10.1.5.1",
+            "   Incoming Interface Address: 10.1.5.1 Input packets rate: 0xffffffff",
+            "   Outgoing Interface Address: 0.0.0.0 Output packets rate: 0xffffffff",
+            "   Forwarding Cache (10.1.0.1, 225.0.0.1) Forwarding packets rate: 0",
+            "   The packet loss rate of (10.1.0.1, 225.0.0.1) is 0.00%",
+            "- 2 10.1.2.1",
+            "   Incoming Interface Address: 10.1.2.1 Input packets rate: 0xffffffff",
+            "   Outgoing Interface Address: 10.1.5.2 Output packets rate: 0xffffffff",
+            "   Forwarding Cache (10.1.0.1, 225.0.0.1) Forwarding packets rate: 0",
+            "   The packet loss rate of (10.1.0.1, 225.0.0.1) is 0.00%",
+            "- 3 10.1.0.1",
+            "   Incoming Interface Address: 10.1.0.1 Input packets rate: 0xffffffff",
+            "   Outgoing Interface Address: 10.1.2.2 Output packets rate: 0xffffffff",
+            "   Forwarding Cache (10.1.0.1, 225.0.0.1) Forwarding packets rate: 0",
+            " ********************************************************",
+            "  In calculating-rate mode, reach the demanded number of statistic,and multicast traceroute finished."
+        ],
+        [
+            "<HUAWEI> mtrace -gw 10.1.6.3 -r 10.1.6.4 -v source 10.1.0.1",
+            "Press Ctrl+C to break multicast traceroute facility",
+            " From the receiver(10.1.6.4), trace reverse path to source (10.1.0.1) according to RPF rules",
+            " Num  Reverse-Path    FwdTTL Protocol",
+            "  0   10.1.6.4",
+            "- 1   10.1.5.1        1      PIM",
+            "  Incoming Interface Address: 10.1.5.1 ",
+            "  Outgoing Interface Address: 10.1.6.3 ",
+            "  Previous-Hop Router Address: 10.1.5.2 ",
+            "  Input packet count on incoming interface: 0xffffffff ",
+            "  Output packet count on outgoing interface: 0xffffffff ",
+            "  Total number of packets for this source-group pair: 0xffffffff ",
+            "  Forwarding TTL: 1 ",
+            "  Forwarding Code: NO_ERROR",
+            "- 2   10.1.2.1        1      PIM",
+            "  Incoming Interface Address: 10.1.2.1 ",
+            "  Outgoing Interface Address: 10.1.5.2 ",
+            "  Previous-Hop Router Address: 10.1.2.2 ",
+            "  Input packet count on incoming interface: 0xffffffff ",
+            "  Output packet count on outgoing interface: 0xffffffff ",
+            "  Total number of packets for this source-group pair: 0xffffffff ",
+            "  Forwarding TTL: 1 ",
+            "  Forwarding Code: NO_ERROR",
+            "- 3   10.1.0.1        1      PIM",
+            "  Incoming Interface Address: 10.1.0.1 ",
+            "  Outgoing Interface Address: 10.1.2.2 ",
+            "  Previous-Hop Router Address: 0.0.0.0 ",
+            "  Input packet count on incoming interface: 0xffffffff ",
+            "  Output packet count on outgoing interface: 0xffffffff ",
+            "  Total number of packets for this source-group pair: 0xffffffff ",
+            "  Forwarding TTL: 1 ",
+            "  Forwarding Code: NO_ERROR ",
+            " In maximum-hop mode, received the response message, and multicast traceroute finished."
+        ],
+        [
+            "<HUAWEI> mtrace -b -r 10.1.6.4 -g 225.0.0.1 -tr 5 source 10.1.0.1",
+            "Press Ctrl+C to break multicast traceroute facility",
+            " From the receiver(10.1.6.4), trace (10.1.0.1, 225.0.0.1)'s reverse path according to multicast routing-table",
+            " Num  Reverse-Path    FwdTTL Protocol",
+            "  0   10.1.6.4",
+            "- 1   10.1.5.1        1      PIM",
+            "- 2   10.1.2.1        1      PIM",
+            "- 3   10.1.0.1        1      PIM",
+            "  In maximum-hop mode, received the response message, and multicast traceroute finished."
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe mtrace command mainly has the following uses:\nThe mtrace command can be used in multicast troubleshooting and routine maintenance to locate a faulty device and reduce configuration errors.It can be used to collect traffic statistics in path tracing and calculate the multicast traffic rate in cyclic path tracing.The NMS analyzes faulty device information displayed in the mtrace command output and generates alarms.\nThe following paths can be traced:\nRPF path from the multicast source to the current deviceMulticast path from the multicast source to the current deviceRPF path from the multicast source to the destination hostMulticast path from the multicast source to the destination host\nThe mtrace command has the following formats:\nTo trace the RPF path from the multicast source to the current device, run the mtrace source source-address command.To trace the multicast path from the multicast source to the current device, run the mtrace -g group source source-address.To trace the RPF path from the multicast source to the destination host, run the mtrace [ -gw last-hop-router | -d ] -r receiver source source-address command. If multiple devices are directly connected to a specified host, RPF paths initiated from different devices may be different. You can configure the -gw last-hop-router parameter to specify a last-hop device. The RPF path can thereby be determined.To trace the multicast path from a multicast source to the destination host, run the mtrace [ -b | -gw last-hop-router | -d ] -r receiver -g group source source-address command.\nTo ensure that the mtrace command is run successfully, the current device must have the (S, G) entries and meet either of the following conditions:\nThe current device is directly connected to the destination host.A ping test initiated from the current device to the last-hop device or destination host succeeds.The current device is on the multicast path from the multicast source to the destination host.\n\nPrecautions\nAccording to the standard protocol, IGMP tracert query messages sent in unicast mode to the destination and IGMP tracert response messages replied in multicast mode must carry the Router Alert option. Currently, messages of the device do not carry the Router Alert option. To ensure interconnection with devices whose messages carry the Router Alert option, specify the -gw last-hop-router parameter to set a last-hop device address and the -ur resp-dest parameter to set a unicast response address.\nSpecify -gw last-hop-router, -b, and -d based on the network. They help trace a path fast and accurately.\nSpecify -gw last-hop-router: The last-hop device address is known, and unicast packets can be sent to the last-hop device.Specify -b: The current device is directly connected to the destination host.Specify -d: Unicast packets can be transmitted between the current device and the destination host.Specify none of the preceding parameters: The current device must be on the multicast path from the multicast source to the destination host. Otherwise, MTrace detection fails."
+}

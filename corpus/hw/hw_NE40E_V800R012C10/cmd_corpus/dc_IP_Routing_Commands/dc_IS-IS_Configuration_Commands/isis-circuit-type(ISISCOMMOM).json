@@ -1,0 +1,60 @@
+{
+    "PageTitle": "isis circuit-type",
+    "FuncDef": "The isis circuit-type command sets the network type of an interface to emulate a P2P interface.\nThe undo isis circuit-type command restores the default network type.\nBy default, the network type of POS interfaces is P2P, and other interfaces' network type is broadcast.",
+    "CLIs": [
+        "isis circuit-type p2p [ strict-snpa-check ]",
+        "isis process-id <process-id> circuit-type p2p [ strict-snpa-check ]",
+        "undo isis circuit-type",
+        "undo isis process-id <process-id> circuit-type"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "FlexE interface view",
+        "Cellular channel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Loopback interface view",
+        "GMPLS-UNI interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "strict-snpa-check",
+            "Info": "Enables IS-IS to check the SNPA address of each received LSP or SNP.\n-"
+        },
+        {
+            "Parameters": "process-id process-id",
+            "Info": "Specifies the IID of an IS-IS multi-instance process.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "p2p",
+            "Info": "Sets the interface network type as P2P.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis circuit-type p2p"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe network type of IS-IS interfaces at the ends of a link must be the same. Otherwise, the two interfaces cannot set up a neighbor relationship.\nThe isis circuit-type command sets the network type of an interface to emulate a P2P interface so that the IS-IS interfaces at the ends of the link have the same network type and a neighbor relationship can be established between them.\nWhen an IS-IS neighbor relationship is established between a P2P interface and a simulated P2P interface and the simulated P2P interface has direct neighbors, the P2P interface may receive unneeded packets from these direct neighbors. To prevent the P2P interface from accepting these unneeded packets, specify strict-snpa-check in the isis circuit-type command to enable IS-IS to check the SNPA address of each received LSP or SNP. After the command is run, the P2P interface accepts only the packets whose SNPA addresses are included in the local neighbor address list, which improves network security.\nPrerequisites\nIS-IS has been enabled on interfaces using the isis enable command.\nConfiguration Impact\nFor an IS-IS interface, when the network type of the interface changes, corresponding configurations change accordingly. Details are as follows:\nAfter a broadcast interface is emulated as a P2P interface using the isis circuit-type command, the interval at which Hello packets are sent, the number of Hello packets that IS-IS does not receive from a neighbor before the neighbor is declared Down, interval at which LSPs are retransmitted on a P2P link, and the IS-IS authentication mode are restored to the default settings; other configurations such as the DIS priority, DIS name, and the interval at which CSNPs are sent on a broadcast network become invalid.After the undo isis circuit-type command is run to restore the network type of the interface, the interval at which Hello packets are sent, the number of Hello packets that IS-IS does not receive from a neighbor before the neighbor is declared Down, interval at which LSPs are retransmitted on a P2P link, the IS-IS authentication mode, DIS priority, and the interval at which CSNPs are sent on a broadcast network are restored to the default settings.\n\nPrecautions\nIf the network type of an interface is changed, some parameters of the IS-IS process are restored to the default settings. Exercise caution before running the command.\nThis command is applicable only to broadcast interfaces. If it is run on a P2P or P2MP interface, it does not take effect, and its configuration is not recorded in the configuration file."
+}

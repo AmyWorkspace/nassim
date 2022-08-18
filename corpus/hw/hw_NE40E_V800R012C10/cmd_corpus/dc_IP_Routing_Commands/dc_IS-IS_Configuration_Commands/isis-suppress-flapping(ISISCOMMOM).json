@@ -1,0 +1,87 @@
+{
+    "PageTitle": "isis suppress-flapping peer",
+    "FuncDef": "The isis suppress-flapping peer disable command disables IS-IS neighbor relationship flapping suppression from an interface.\nThe undo isis suppress-flapping peer disable command enables IS-IS neighbor relationship flapping suppression on an interface.\nThe isis suppress-flapping peer command configures detection parameters for IS-IS neighbor relationship flapping suppression.\nThe undo isis suppress-flapping peer command restores the default detection parameters.\nThe isis suppress-flapping peer hold-down command configures the Hold-down mode and sets duration for this mode.\nThe undo isis suppress-flapping peer hold-down command cancels the Hold-down mode.\nThe isis suppress-flapping peer hold-max-cost disable command disables the Hold-max-cost mode.\nThe undo isis suppress-flapping peer hold-max-cost disable command enables the Hold-max-cost mode.\n\nBy default, IS-IS neighbor relationship flapping suppression is enabled on all interfaces.\n\n\nBy default, the detection interval of IS-IS neighbor relationship flapping suppression is 60s, the suppression threshold is 10, and the interval for exiting from suppression is 120s.\n\n\nBy default, the Hold-down mode is disabled, and the Hold-max-cost mode is enabled.\n\n\nBy default, the Hold-max-cost mode is enabled.",
+    "CLIs": [
+        "isis suppress-flapping peer disable",
+        "isis suppress-flapping peer { detecting-interval <detecting-interval> | threshold <threshold> | resume-interval <resume-interval> } *",
+        "isis suppress-flapping peer hold-down <interval>",
+        "isis suppress-flapping peer hold-max-cost disable",
+        "undo isis suppress-flapping peer disable",
+        "undo isis suppress-flapping peer { detecting-interval <detecting-interval> | threshold <threshold> | resume-interval <resume-interval> } *",
+        "undo isis suppress-flapping peer hold-down [ <interval> ]",
+        "undo isis suppress-flapping peer hold-max-cost disable"
+    ],
+    "ParentView": [
+        "FlexE interface view",
+        "Cellular channel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "detecting-interval detecting-interval",
+            "Info": "Specifies the detection interval of IS-IS neighbor relationship flapping suppression.\nEach IS-IS interface on which IS-IS neighbor relationship flapping suppression is enabled starts a flapping counter. If the interval between two successive neighbor status changes from Full to a non-Full state is shorter than detecting-interval, a valid flapping_event is recorded, and the flapping_count increases by 1.\nThe value is an integer ranging from 1 to 300, in seconds. The default value is 60s."
+        },
+        {
+            "Parameters": "threshold threshold",
+            "Info": "Specifies the threshold of IS-IS neighbor relationship flapping suppression.\nWhen the flapping_count reaches or exceeds threshold, flapping suppression takes effect.\nThe value is an integer ranging from 1 to 1000. The default value is 10."
+        },
+        {
+            "Parameters": "resume-interval resume-interval",
+            "Info": "Specifies the interval for exiting from IS-IS neighbor relationship flapping suppression.\nIf the interval between two successive neighbor status changes from Full to a non-Full state is longer than resume-interval, the flapping_count is reset.\nIf IS-IS neighbor relationship flapping suppression works in hold-max-cost mode, resume-interval indicates the duration of this mode.The value of resume-interval must be greater than that of detecting-interval.\nThe value is an integer ranging from 2 to 1000, in seconds. The default value is 120s."
+        },
+        {
+            "Parameters": "hold-down interval",
+            "Info": "Specifies the duration of the Hold-down mode.\nThe value is an integer ranging from 1 to 600, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis suppress-flapping peer hold-max-cost disable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis suppress-flapping peer hold-down 200"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis suppress-flapping peer detecting-interval 5 threshold 40 resume-interval 20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis suppress-flapping peer disable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, IS-IS neighbor relationship flapping suppression is enabled on all interfaces in the same IS-IS process. To disable the function from one of the interfaces, run the isis suppress-flapping peer disable command.\nWhen an interface enters the flapping suppression state, all neighbor relationships on the interface enter the state accordingly.\nPrerequisites\nIS-IS neighbor relationship flapping suppression must have been enabled globally before you enable the function on an interface using the undo isis suppress-flapping peer disable command. By default, the function is enabled globally. If it is disabled, run the undo suppress-flapping peer disable command to enable it first.\nIS-IS neighbor relationship flapping suppression must have been enabled globally before you configure detection parameters for it. By default, the function is enabled. If it is disabled, run the undo suppress-flapping peer disable command to enable it before you configure the detection parameters.\nIS-IS neighbor relationship flapping suppression must have been enabled globally before you configure the Hold-down mode and set duration for this mode. By default, the function is enabled. If it is disabled, run the undo suppress-flapping peer disable command to enable it before you configure the Hold-down mode and set duration for this mode.\nPrecautions\nExecution of the command may affect neighbor relationship stability. Therefore, exercise caution when using the command.\nThe Hold-max-cost mode takes effect only unidirectionally. If a remote device does not support IS-IS neighbor relationship flapping suppression, bidirectional traffic between the local and remote devices may travel along different paths."
+}

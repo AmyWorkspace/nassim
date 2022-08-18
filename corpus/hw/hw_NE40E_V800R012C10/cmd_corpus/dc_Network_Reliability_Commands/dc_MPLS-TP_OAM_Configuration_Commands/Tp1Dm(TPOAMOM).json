@@ -1,0 +1,39 @@
+{
+    "PageTitle": "delay-measure one-way proactive",
+    "FuncDef": "The delay-measure one-way proactive command enables one-way proactive frame delay measurement (DM).\nThe undo delay-measure one-way proactive command disables one-way proactive frame DM.\nBy default, one-way proactive frame DM is disabled.",
+    "CLIs": [
+        "delay-measure one-way proactive [ interval { 1000 | 10000 } | exp <expValue> ] *",
+        "undo delay-measure one-way proactive"
+    ],
+    "ParentView": [
+        "Maintenance entity group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Sets the interval at which DMMs are sent.\nThe value is either 1000 or 10000, in milliseconds. The default value is 1000."
+        },
+        {
+            "Parameters": "exp expValue",
+            "Info": "Specifies a priority for DMMs.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls static-l2vc destination 4.4.4.4 400 transmit-vpn-label 100 receive-vpn-label 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] mpls-tp meg test",
+            "[*HUAWEI-mpls-tp-meg-test] me l2vc peer-ip 4.4.4.4 vc-id 400 vc-type vlan mep-id 1 remote-mep-id 2",
+            "[*HUAWEI-mpls-tp-meg-test] delay-measure one-way proactive interval 1000 exp 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDM is an MPLS-TP performance monitoring function. Four frame DM modes are supported.\nTo enable one-way on-demand frame DM, run the delay-measure one-way command.To enable one-way proactive frame DM, run the delay-measure one-way proactive command.To enable two-way on-demand frame DM, run the delay-measure two-way command.To enable two-way proactive frame DM, run the delay-measure two-way proactive command.\nOne-way proactive frame DM is implemented on a P2P link between a MEP and its RMEP. The MEP sends 1DMs to the RMEP and then receives replies from the RMEP. After the delay-measure one-way proactive command is run, the MEP sends 1DMs with the TxTimeStampf value at the interval specified by interval-value parameter. After receiving a 1DM, the RMEP parses the TxTimeStampf value and compares this value with the RxTimef value (the time when the 1DM was received). The RMEP calculates the one-way frame delay based on these values using the following equation:\nFrame delay = RxTimef - TxTimeStampf\nQuery one-way proactive frame delay statistics in either of the following scenarios:\nIf the delay-measure one-way proactive command has been run on the MEP, run the display mpls-tp oam meg statistic-type delay-measure one-way command on the RMEP to view statistics about one-way proactive frame DM in the direction from the MEP to its RMEP.If the delay-measure one-way proactive command has been run on the RMEP, run the display mpls-tp oam meg statistic-type delay-measure one-way command on the MEP to view statistics about one-way proactive frame DM in the direction from the RMEP to its MEP.\n\nPrerequisites\nThe ME of the MEG has been bound to a tunnel."
+}

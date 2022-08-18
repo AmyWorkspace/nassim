@@ -1,0 +1,32 @@
+{
+    "PageTitle": "flow-label hash-fields",
+    "FuncDef": "The flow-label hash-fields command configures a hash element for flow label load balancing.\nThe undo flow-label hash-fields command restores the default configuration.\nBy default, L4 is used as a flow label hash element.",
+    "CLIs": [
+        "flow-label hash-fields { l2 | l3 | l4 }",
+        "undo flow-label hash-fields { l2 | l3 | l4 }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "l2",
+            "Info": "Uses L2 as a hash element to perform load balancing based on source and destination MAC addresses. If incoming traffic's source and destination MAC addresses are evenly distributed on an interface board, use the L2 hash element.\nNon-Ethernet packets cannot be balanced based on MAC addresses after this parameter is configured.\n-"
+        },
+        {
+            "Parameters": "l3",
+            "Info": "Uses L3 as a hash element to perform load balancing based on source and destination IP addresses. If incoming traffic's source and destination IP addresses are evenly distributed on an interface board, use the L3 hash element.\nIf the L3 hash element is used, Ethernet packets without IP information are balanced using the source and destination MAC addresses.\n-"
+        },
+        {
+            "Parameters": "l4",
+            "Info": "Uses L4 as a hash element to perform load balancing based on source and destination IP addresses and port numbers and the protocol number. If incoming traffic's source and destination IP addresses are unevenly distributed on an interface board, use the L4 hash element.\nIf the L4 hash element is used, Ethernet packets without IP information are balanced using the source and destination MAC addresses.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] flow-label hash-fields l3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the flow label function is enabled on the ingress PE, the PE by default generates flow labels based on the IP 5-tuple information, including the protocol number, source IP address, destination IP address, source port number, and destination port number. When the source and destination MAC addresses are changed and IP 5-tuple information is unchanged, a transit node receives fixed flow labels carried in packets sent by the ingress. If multiple LSPs exist between the transit node and egress, the transit node cannot balance the packets based on flow labels. To address this problem, run the flow-label\nhash-fields command to configure a correct hash element.\nPrecautions\nIf the flow-label hash-fields command is configured multiple times, only the latest configuration takes effect. After the command is run, the configured hash element is used to balance traffic in flow label scenarios.\nThis command applies only to the Admin-VS."
+}

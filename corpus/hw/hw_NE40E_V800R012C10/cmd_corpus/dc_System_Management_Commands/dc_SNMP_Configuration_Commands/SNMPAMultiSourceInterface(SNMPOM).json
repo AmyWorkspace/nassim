@@ -1,0 +1,49 @@
+{
+    "PageTitle": "snmp-agent protocol source-interface",
+    "FuncDef": "The snmp-agent protocol source-interface command specifies a source interface for SNMP to receive and respond to requests from an NMS.\nThe undo snmp-agent protocol source-interface command restores the default configuration.\nThe snmp-agent proxy protocol source-interface command specifies a source interface for the SNMP proxy to receive and respond to requests from the CCU.\nThe undo snmp-agent proxy protocol source-interface command restores the default configuration.\nThe snmp-agent protocol physic-isolate source-interface command specifies an isolate source interface for SNMP to receive and respond to requests from an NMS.\nThe undo snmp-agent protocol physic-isolate source-interface command restores the default configuration.\nThe snmp-agent proxy protocol physic-isolate source-interface command specifies an isolate source interface for the SNMP proxy to receive and respond to requests from the CCU.\nThe undo snmp-agent proxy protocol physic-isolate source-interface command restores the default configuration.\nBy default, no source interface is specified for SNMP to receive and respond to requests from an NMS. The function that allows all interfaces on the device to be used by SNMP to receive and respond to requests from an NMS is not enabled. No source interface is specified for the SNMP proxy to receive and respond to requests from the CCU. The function that allows all interfaces on the device to be used by the SNMP proxy to receive and respond to requests from the CCU is not enabled.",
+    "CLIs": [
+        "snmp-agent protocol source-interface { <protocol-interface-type> <protocol-interface-number> | <protocol-interface-name> }",
+        "snmp-agent proxy protocol source-interface { <protocol-interface-type> <protocol-interface-number> | <protocol-interface-name> }",
+        "snmp-agent proxy protocol physic-isolate source-interface { <protocol-interface-type> <protocol-interface-number> | <protocol-interface-name> } source-ip <ipv4-address>",
+        "snmp-agent protocol physic-isolate source-interface { <protocol-interface-type> <protocol-interface-number> | <protocol-interface-name> } source-ip <ipv4-address>",
+        "undo snmp-agent protocol source-interface { <protocol-interface-type> <protocol-interface-number> | <protocol-interface-name> }",
+        "undo snmp-agent proxy protocol source-interface { <protocol-interface-type> <protocol-interface-number> | <protocol-interface-name> }",
+        "undo snmp-agent protocol physic-isolate source-interface { <protocol-interface-type> <protocol-interface-number> | <protocol-interface-name> } source-ip <ipv4-address>",
+        "undo snmp-agent proxy protocol physic-isolate source-interface { <protocol-interface-type> <protocol-interface-number> | <protocol-interface-name> } source-ip <ipv4-address>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "protocol-interface-type",
+            "Info": "Specifies the type of a source interface.\n-"
+        },
+        {
+            "Parameters": "protocol-interface-number",
+            "Info": "Specifies the number of a source interface.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "protocol-interface-name",
+            "Info": "Specifies the name of a source interface.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "source-ip ipv4-address",
+            "Info": "Specifies an IPv4 source address for SNMP.\nThe value is in the decimal format."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback1",
+            "[*HUAWEI-LoopBack1] ip address 10.1.1.1 255.255.255.255",
+            "[*HUAWEI-LoopBack1] quit",
+            "[*HUAWEI] snmp-agent protocol source-interface loopback 1"
+        ],
+        [
+            "[~HUAWEI] snmp-agent protocol physic-isolate source-interface Ethernet 3/0/0 source-ip 1.1.1.1",
+            "[*HUAWEI]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo specify a source interface for SNMP to receive and respond to requests from an NMS, run the snmp-agent protocol source-interface command.\nTo specify an isolate source interface and source IP for SNMP to receive and respond to requests from an NMS, run the snmp-agent protocol physic-isolate source-interface source-ip command.\nTo allow data to be managed in a unified manner, you can specify the source interface for the SNMP proxy to receive and respond to requests from the CCU or configure the function that allows all interfaces on the device to be used by the SNMP proxy to receive and respond to requests from the CCU.\nPrerequisites\nWhen the specified source interface is a non-isolated interface, the command takes effect if the interface exists and is configured with a valid IP address. If the interface does not exist, the command fails to be configured.\nIf the specified non-isolated source interface exists but is not configured with a valid IP address, the command does not take effect. After a valid IP address is configured for the interface, this command automatically takes effect.\nWhen the specified source interface is an isolated interface, the command takes effect if the interface exists. If the specified interface does not exist, the command fails to be configured.\nPrecautions\nThe snmp-agent protocol source-interface command does not support interface association. That is, after the configured source interface is deleted or the IP address of the interface is deleted or changed, the NMS cannot communicate with the device through the original IP address of the interface.\nAfter SNMP is bound to source interfaces, SNMP uses only these interfaces on the device to receive and respond to requests from the NMS, and the NMS communicates with the device only through the IP addresses of these interfaces. After a source interface's IP address is changed, this IP address cannot be used for the communication between the NMS and device any more.\nThe snmp-agent protocol source-interface command can be used to specify a maximum of 20 source interfaces for SNMP to receive and respond to requests from an NMS.\nThe snmp-agent proxy protocol source-interface command can be used to specify a maximum of 20 source interfaces for the SNMP proxy to receive and respond to requests from the CCU."
+}

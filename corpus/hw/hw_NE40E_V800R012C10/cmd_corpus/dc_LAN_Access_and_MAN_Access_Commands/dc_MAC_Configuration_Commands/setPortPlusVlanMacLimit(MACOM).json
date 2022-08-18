@@ -1,0 +1,95 @@
+{
+    "PageTitle": "mac-limit vlan",
+    "FuncDef": "The mac-limit vlan command applies a global MAC address learning limit rule to a VLAN to which the specified interface belongs.\nThe undo mac-limit vlan command deletes a global MAC address learning limit rule applied to a VLAN to which the specified interface belongs.\nBy default, no global MAC address learning limit rule is applied to any VLAN to which the specified interface belongs.",
+    "CLIs": [
+        "mac-limit vlan <vlanBegin> [ to <vlanEnd> ] { maximum <maxValue> [ rate <interval> ] | action { discard | forward } | alarm { disable | enable } } *",
+        "undo mac-limit vlan <vlanBegin> [ to <vlanEnd> ]"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Layer 2 50GE interface view",
+        "Eth-Trunk interface view",
+        "Port extension Layer 2 interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlanBegin",
+            "Info": "Specifies the VLAN ID associated with an Ethernet sub-interface.\nIf the vlanBegin [ to vlanEnd ] parameters are run more than once, all configurations take effect.\nThis parameter is only supported on Layer 2 interfaces.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to vlanEnd",
+            "Info": "Specifies the VLAN ID associated with an Ethernet sub-interface.\nIf the vlanBegin [ to vlanEnd ] parameters are run more than once, all configurations take effect.\nThis parameter is only supported on Layer 2 interfaces.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "maximum maxValue",
+            "Info": "Specifies the maximum number of MAC address entries that can be learned.\nThe value is an integer ranging from 0 to 262144.\nWhen the value is 0, the number of MAC addresses that can be learned is not set."
+        },
+        {
+            "Parameters": "rate interval",
+            "Info": "Indicates the interval at which MAC addresses are learned.\nThe parameter must be configured when configuring the global MAC address learning limit rule.\nThe value is an integer ranging from 0 to 1000, in milliseconds.\nWhen the value is 0, no limitation is set on the address learning interval."
+        },
+        {
+            "Parameters": "action",
+            "Info": "Specifies an action to be taken when the number of MAC address entries in the MAC address table reaches the limit.\n-"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "The packet with the source MAC address not contained in the MAC address table is discarded.\n-"
+        },
+        {
+            "Parameters": "forward",
+            "Info": "The packet with the source MAC address not contained in the MAC address table is forwarded but its MAC address is not recorded.\n-"
+        },
+        {
+            "Parameters": "alarm",
+            "Info": "Specifies whether an alarm is generated when the number of the MAC address entries in the MAC address table reaches the limit.\n-"
+        },
+        {
+            "Parameters": "disable",
+            "Info": "No alarm is generated.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "An alarm is generated.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/2",
+            "[*HUAWEI-GigabitEthernet1/0/2] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/2] mac-limit action forward alarm enable maximum 1000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsa",
+            "[*HUAWEI-vsi-vsa] pwsignal ldp",
+            "[*HUAWEI-vsi-vsa-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsa-ldp] quit",
+            "[*HUAWEI-vsi-vsa] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/2",
+            "[*HUAWEI-GigabitEthernet1/0/2] l2 binding vsi vsa",
+            "[*HUAWEI-GigabitEthernet1/0/2] mac-limit action forward alarm enable maximum 1000 rate 100"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/2",
+            "[*HUAWEI-GigabitEthernet1/0/2] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/2] port default vlan 100",
+            "[*HUAWEI-GigabitEthernet1/0/2] mac-limit action forward alarm enable maximum 1000 rate 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo control the number of users and protect a MAC address table against attacks, you can limit the number of MAC addresses that a device can learn. You can also configure the system to discard packets or generate an alarm to improve network security.\nConfiguring interface-based MAC address learning limit rule can control the number of access users on an interface. When the number of MAC addresses reaches the limit, no new MAC addresses will be learned. You can also configure the system to discard packets or generate an alarm to improve network security.\nConfiguration Impact\nAfter a MAC address learning limit rule is configured on an interface using the mac-limit command, a global MAC address learning limit rule cannot be applied on the interface using the mac-limit rule-name (interface view) command.\nTrustworthy MAC addresses may not be recorded after the number of learned MAC addresses reaches the limit. If an enterprise or a family is attacked by different source MAC addresses, only the network of the enterprise or family, not the whole network is affected.\nPrecautions\nMAC address limitation is not supported on VE interfaces.\nBefore configuring a MAC address learning limit rule, run the reset mac-address command to clear the learned MAC addresses to ensure that the number of MAC addresses that can be learned is limited accurately.\nBefore running this command in the tunnel interface view, run the tunnel-protocol command to specify the GRE tunnel mode for the tunnel interface.\nEthernet interfaces, GE interfaces, and Eth-Trunk interfaces must be Layer 2 interfaces."
+}

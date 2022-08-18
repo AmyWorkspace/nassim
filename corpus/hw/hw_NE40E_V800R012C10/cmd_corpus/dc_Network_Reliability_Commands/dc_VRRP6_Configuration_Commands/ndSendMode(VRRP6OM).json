@@ -1,0 +1,35 @@
+{
+    "PageTitle": "vrrp6 nd send-mode simple",
+    "FuncDef": "The vrrp6 nd send-mode simple command enables the master router in a Virtual Router Redundancy Protocol for IPv6 (VRRP6) backup group to send double-tagged ND packets to the VLANs specified by all outer VLAN IDs and the first inner VLAN ID through the sub-interface for QinQ VLAN tag termination.\nThe undo vrrp6 nd send-mode simple command enables the master router in a VRRP6 backup group to send double-tagged ND packets to the VLANs specified by all outer and inner VLAN IDs through the sub-interface for QinQ VLAN tag termination.\nBy default, the master router in a VRRP6 backup group sends double-tagged ND packets to the VLANs specified by all outer and inner VLAN IDs.",
+    "CLIs": [
+        "vrrp6 nd send-mode simple",
+        "undo vrrp6 nd send-mode simple"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] ipv6 address 2001:db8::1 64",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] control-vid 1 qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq termination pe-vid 2 ce-vid 1 to 20",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq vrrp pe-vid 2 ce-vid 1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vrrp6 vrid 1 virtual-ip FE80::7 link-local",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vrrp6 nd send-mode simple"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nUser hosts are connected to two or more NPEs through a UPE. VRRP6 is deployed on each NPE's sub-interface for QinQ VLAN tag termination. The NPE functioning as the master router sends ND packets to the VLANs specified by all outer and inner VLAN IDs to ensure that the VLANs on the UPE can learn the virtual MAC address. Uplink traffic is forwarded through the master router. To minimize the impact of a large number of ND packets on the master router, run the vrrp6 nd send-mode simple command to enable the master router to send double-tagged ND packets to the VLANs specified by all outer VLAN IDs and the first inner VLAN ID through the sub-interface for QinQ VLAN tag termination.\nPrerequisites\nA VRRP6 backup group has been created using the vrrp6 vrid virtual-ip command on a sub-interface for QinQ VLAN tag termination.\nConfiguration Impact\nThe vrrp6 nd send-mode simple command affects only the VLANs specified by the inner VLAN IDs. For example, if both the outer and inner VLAN ID ranges are 1 to 10, the vrrp6 nd send-mode simple command enables the master router to send ND packets to the VLANs specified by all outer VLAN IDs and the first inner VLAN ID.\nPrecautions\nThe vrrp6 nd send-mode simple command can be run only on a sub-interface for QinQ VLAN tag termination."
+}

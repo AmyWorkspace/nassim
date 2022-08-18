@@ -1,0 +1,42 @@
+{
+    "PageTitle": "protect tnl-policy",
+    "FuncDef": "The protect tnl-policy command configures a protection path between the master and slave devices for network-side traffic with the tunnel type (for public users).\nThe undo protect tnl-policy command cancels the configured protection path with the tunnel type (for public users).\nBy default, no protection path with the tunnel type (for public users) is configured for network-side traffic.",
+    "CLIs": [
+        "protect tnl-policy <policy-name> peer-ip <ip-address> [ interface { <interface-name> | <interface-type> <interface-num> } ]",
+        "undo protect tnl-policy <policy-name>"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name",
+            "Info": "Specifies the name of a tunnel policy.\nThe value is a string of 1 to 39 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "peer-ip ip-address",
+            "Info": "Specifies the peer IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the interface name of an outbound interface.\n-"
+        },
+        {
+            "Parameters": "interface interface-type",
+            "Info": "Specifies the interface type of an outbound interface.\n-"
+        },
+        {
+            "Parameters": "interface interface-num",
+            "Info": "Specifies the interface number of an outbound interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service rbs",
+            "[*HUAWEI-rm-backup-srv-rbs] commit",
+            "[*HUAWEI-rm-backup-srv-rbs] protect tnl-policy a-b peer 2.2.2.2 interface GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a protection path between the master and slave devices for network-side traffic, run the protect command. In case of an access-side link fault, the network-to-user traffic can be switched to the slave device over the protection path and then forwarded to users.\nIn the remote backup service view, a protection path of tunnel type can be specified for public network users. For public network users, the available types of protection paths are MPLS LDP, MPLS LDP over TE, GRE, and SR-MPLS BE. The tunnel type can be specified based on the tunnel policy.\nPrerequisites\nThe tunnel-policy command has been run in the system view.\nConfiguration Impact\nAfter the protect tnl-policy peer-ip command is run, the system updates host routes of online public network users. If a large number of such users are online, the update takes some time. If the master device fails, the device does not need to advertise network segment routes, and user traffic can be quickly switched to the backup device.\nPrecautions\nThe Interface parameter specifies the outbound interface. the outbound interface is optional. If the outbound interface is not specified and the tunnel has multiple links for load balancing, a link is automatically selected by software. If the tunnel is of the TE type, this parameter is unavailable.\nIn VS mode, this command is supported only by the admin VS."
+}

@@ -1,0 +1,42 @@
+{
+    "PageTitle": "peer preference",
+    "FuncDef": "The peer preference command adds a specified PW to a PW protection group and specifies the priority of the PW.\nThe undo peer preference command deletes a specified PW from a PW protection group.\nBy default, no PW is added to a PW protection group.",
+    "CLIs": [
+        "peer <peer-address> [ negotiation-vc-id <vc-id> ] preference <preference-value>",
+        "undo peer <peer-address> [ negotiation-vc-id <vc-id> ]"
+    ],
+    "ParentView": [
+        "Protection group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the IPv4 address of the VSI peer. Generally, the loopback address of the peer is used.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "negotiation-vc-id vc-id",
+            "Info": "Specifies the parameter negotiated with the peer. By default, the VSI ID is used. Generally, this parameter is used in VPLS accessing VLL scenarios in which the VSI IDs of the two ends are inconsistent but the two ends are required to communicate.\nSpecifies the ID of a VC. The VC ID is usually used when both ends need to communicate but the VSI IDs on both ends are different. The value of the parameter vc-id must be different from the VSI ID configured for another local VSI and other VSI IDs specified locally by the negotiate-vc-id command. In other words, the specified VC ID must be an unused one. If negotiate-vc-id is configured on the local end, the negotiate-vc-id or vsi-id configured on the peer must be consistent with negotiate-vc-id configured on the local end."
+        },
+        {
+            "Parameters": "preference-value",
+            "Info": "Specifies the priority of a peer specified when the peer is added to a PW protection group. The smaller the value, the higher the priority. Between the two peers added to a PW protection group, the one with the higher priority serves as the primary PW.\nThe value is an integer ranging from 1 to 32."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 100",
+            "[*HUAWEI-vsi-vsi1-ldp] peer 2.2.2.2",
+            "[*HUAWEI-vsi-vsi1-ldp] protect-group group1",
+            "[*HUAWEI-vsi-vsi1-ldp-protect-group-group1] protect-mode pw-redundancy master",
+            "[*HUAWEI-vsi-vsi1-ldp-protect-group-group1] peer 2.2.2.2 preference 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter creating a PW protection group and specifying the PW redundancy mode, you can add specified PWs to the group for them to work in backup mode.\nPrerequisites\nA PW protection group has been created, and the PW redundancy mode has been specified.\nConfiguration Impact\nIf you add the PW with a lower priority to the PW protection group first, a PW switching will occur after you add the other PW to the PW protection group.\nPrecautions\nAdd PWs to a PW protection group in descending order of PW priorities. Do not add the PW with a lower priority to the PW protection group first."
+}

@@ -1,0 +1,41 @@
+{
+    "PageTitle": "reroute",
+    "FuncDef": "The reroute command configures a revertive switching policy for a PW protection group with the master/slave PW redundancy mode.\nThe undo reroute command deletes the revertive switching policy for a PW protection group with the master/slave PW redundancy mode.\nThe default revertive switching policy for a PW protection group with the master/slave PW redundancy mode is delayed switchback, and the default delay is 30s. The default revertive switching policy for a PW protection group with the independent PW redundancy mode is immediate switchback.\nThe default revertive switching policy for a PW protection group with the master/slave PW redundancy mode is delayed switchback, and the default delay is 30s.",
+    "CLIs": [
+        "reroute { delay <delay-time> | immediately | never }",
+        "undo reroute"
+    ],
+    "ParentView": [
+        "Protection group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay delay-time",
+            "Info": "Indicates that the revertive switching policy is delayed switchback.\nThe value is an integer ranging from 10 to 10800, in seconds. The default value is 30s."
+        },
+        {
+            "Parameters": "immediately",
+            "Info": "Indicates that the revertive switching policy is immediate switchback.\n-"
+        },
+        {
+            "Parameters": "never",
+            "Info": "Indicates that the revertive switching policy is non-revertive. Traffic is not switched back to the primary PW even after the primary PW recovers. Traffic will be switched back to the primary PW only when the secondary PW fails.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi1-ldp] protect-group group1",
+            "[*HUAWEI-vsi-vsi1-ldp-protect-group-group1] protect-mode pw-redundancy master",
+            "[*HUAWEI-vsi-vsi1-ldp-protect-group-group1] reroute delay 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe reroute command can configure revertive switching policies for only PW protection groups with the master/slave PW redundancy mode. The revertive switching policy for PW protection groups with the independent PW redundancy mode is immediate switchback and cannot be modified.\nCurrently, three types of revertive switching policies are available:\nDelayed switchback: Traffic is switched back to the primary PW after the delay time specified by . After the switching is performed, a UPE notifies the remote PE on the secondary PW of a fault. On a large-scale network, packet loss caused by incomplete route convergence may occur during the switchback. To prevent this problem, configure traffic to be switched back after a delay.Immediate switchback: Traffic is immediately switched back to the primary PW. This revertive switching policy applies to scenarios in which users hope traffic to be restored as soon as possible.Non-revertive: Traffic will not be switched back to the primary PW even after the primary PW recovers. Traffic will be switched back to the primary PW only when the secondary PW fails. If you do not want traffic to be frequently switched between the primary and secondary PWs, use the non-revertive policy.\n\nPrerequisites\nThe PW redundancy mode of the PW protection group has been configured as master/slave.\nConfiguration Impact\nThe revertive switching policy determines the switchback behavior of the traffic after the primary PW recovers."
+}

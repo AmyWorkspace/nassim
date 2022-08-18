@@ -1,0 +1,37 @@
+{
+    "PageTitle": "ds-lite outbound",
+    "FuncDef": "The ds-lite outbound command configures DS-Lite address translation policies for packets that match or do not match ACL entries.\nThe undo ds-lite outbound command deletes a DS-Lite address translation existing policy.\nNo DS-Lite address translation policy is configured by default.",
+    "CLIs": [
+        "ds-lite outbound { any | <acl-number> | acl-name <acl-name> } address-group <address-group-name>",
+        "undo ds-lite outbound { any | <acl-number> | acl-name <acl-name> } [ address-group <address-group-name> ]"
+    ],
+    "ParentView": [
+        "DS-Lite instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "any",
+            "Info": "Indicates that user traffic distributed to a service board does not need to match any ACL rule. DS-Lite is performed for user traffic using addresses from a DS-Lite address pool.\n-"
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic or an advanced ACL.\nThe value is an integer. Basic ACLs are numbered from 2000 to 2999, and advanced ACLs are numbered from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of an ACL.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "address-group address-group-name",
+            "Info": "Specifies the name of a public IP address pool.\nThe value is a string of 1 to 31 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ds-lite instance cpe1 id 1",
+            "[*HUAWEI-ds-lite-instance-cpe1] ds-lite outbound 3002 address-group group1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure DS-Lite address translation policies for packets that match or do not match ACL entries, run the ds-lite outbound command. A DS-Lite instance assigns user packets to DS-Lite address pools for DS-Lite address translation based on ACL rules. Only if packets match an ACL rule and the action specified in an ACL rule is permit, IP addresses in packets are translated by DS-Lite to addresses in a DS-Lite address pool.\nDS-Lite address translation is performed in either ACL mach or mismatch mode.\nACL mach mode: If packets match an ACL rule and the action specified in an ACL rule is permit, IP addresses in packets are translated by DS-Lite to addresses in a DS-Lite address pool.ACL mismatch mode: If any is configured, packets do not match against ACL rule. All packets belonging to a specified DS-Lite instance on a service board are processed by DS-Lite using address pools.\n\nPrecautions\nIn a DS-Lite scenario, outbound ACLv6 rules are configured in an instance configuration. The options in the rules cannot be the fragmentation, VPN instance, ICMPv6 type, or source pool.Each ACL rule in a DS-Lite instance can be bound only to a single DS-Lite address pool.In a distributed NAT scenario, NAT is not performed for user packets that match a deny ACL rule or do not match a permit ACL rule. In this case, the user cannot go online.In a centralized NAT scenario, NAT is not performed for user packets that match a deny ACL rule or do not match a permit ACL rule. In this case, packets are discarded, causing services to be affected."
+}

@@ -1,0 +1,27 @@
+{
+    "PageTitle": "timer auto-remote keepalive-hold",
+    "FuncDef": "The timer auto-remote keepalive-hold command sets the value of the global Keepalive hold timer for remote LDP peers with the trigger sources of the L2VPN, Auto-Accept, and RLFA.\nThe undo timer auto-remote keepalive-hold command restores the default value of the global Keepalive hold timer.\nBy default, the value of the global Keepalive hold timer is 45s.",
+    "CLIs": [
+        "timer auto-remote keepalive-hold <interval>",
+        "undo timer auto-remote keepalive-hold"
+    ],
+    "ParentView": [
+        "MPLS-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Sets the value of the Keepalive hold timer.\nThe value is an integer ranging from 30 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] timer auto-remote keepalive-hold 55"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLDP peers exchange LDP PDUs to maintain LDP sessions. If a node does not receive any LDP PDU after the Keepalive hold timer expires, the node closes the connection to terminate the session.\nThe default value is recommended. On a network with unstable links, increase the value of a Keepalive hold timer, preventing a remote LDP session from flapping.\nThe value of the timer that takes effect is the smaller one of the values of the two Keepalive hold timers configured on both ends of a remote LDP session.\nThe Keepalive hold timer configured in the remote LDP peer view takes precedence over the global Keepalive hold timer. If the Keepalive hold timer is configured both globally and in the remote LDP peer view, the setting in the MPLS-LDP remote peer view takes effect.\nPrerequisites\nMPLS LDP has been enabled globally.\nImplementation Procedure\nWhen the timer auto-remote keepalive-hold command is run, the system displays the following message to trigger the reestablishment of an LDP session:\nWarning: All the related sessions will be deleted if the operation is performed! Continue? [Y/N]:y\nEnter y if you confirm to execute this command.\nConfiguration Impact\nRunning the timer auto-remote keepalive-hold command to change the Keepalive hold timer results in the reestablishment of an LDP session.\nPrecautions\nIf there is more than one LDP link between two LSRs, the values of the Keepalive hold timers set for the links must be the same. Otherwise, the LDP sessions may be unstable.\nIf a single session over multiple links or a local and remote coexistent session is established between two devices, the same Keepalive Hold timer must be used on both ends."
+}

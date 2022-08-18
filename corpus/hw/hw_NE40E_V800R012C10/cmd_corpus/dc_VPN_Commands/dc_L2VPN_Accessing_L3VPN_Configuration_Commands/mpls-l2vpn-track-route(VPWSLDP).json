@@ -1,0 +1,49 @@
+{
+    "PageTitle": "mpls l2vpn track route",
+    "FuncDef": "The mpls l2vpn track route command configures a VPWS PW to track VPNv4 route status.\nThe undo mpls l2vpn track route command disables a VPWS PW from tracking VPNv4 route status.\nBy default, no VPWS PW tracks VPNv4 route status.",
+    "CLIs": [
+        "mpls l2vpn track route <ipv4-address> { <mask> | <mask-length> } vpn-instance <vpn-instance-name>",
+        "undo mpls l2vpn track route"
+    ],
+    "ParentView": [
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the destination IP address of a VPNv4 route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the mask of the destination IP address of a VPNv4 route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies a mask length.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vrf1",
+            "[~HUAWEI-vpn-instance-vrf1] route-distinguisher 100:1",
+            "[~HUAWEI-vpn-instance-vrf1-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-vrf1] vpn-target 100:1 export-extcommunity",
+            "[~HUAWEI-vpn-instance-vrf1] vpn-target 100:1 import-extcommunity",
+            "[~HUAWEI-vpn-instance-vrf1] quit",
+            "[*HUAWEI] interface virtual-ethernet 1/0/0",
+            "[*HUAWEI-Virtual-Ethernet1/0/0] ve-group 1 l2-terminate",
+            "[*HUAWEI-Virtual-Ethernet1/0/0] quit",
+            "[*HUAWEI] interface virtual-ethernet 1/0/0.1",
+            "[*HUAWEI-Virtual-Ethernet1/0/0.1] vlan-type dot1q 10",
+            "[*HUAWEI-Virtual-Ethernet1/0/0.1] mpls l2vc 10.1.1.2 101",
+            "[*HUAWEI-Virtual-Ethernet1/0/0.1] mpls l2vpn track route 1.1.1.1 32 vpn-instance vrf1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an L2VPN accessing L3VPN scenario, if all L3VPN-side links of an AGG become unavailable, a black-hole route is generated. The user-side CSG cannot detect the link failures and still sends traffic to the AGG for transmission. As a result, traffic loss occurs. To prevent traffic loss, run the mpls l2vpn track route command to configure the PW between the CSG and AGG to track VPNv4 route status. After the AGG detects that all its L3VPN-side links become unavailable, the AGG instructs the CSG to switch traffic to the secondary PW.\nPrerequisites\nA VPN instance has been configured using the ip vpn-instance vpn-instance-name command.An LDP VPWS PW has been configured on the VE sub-interface.\n\nConfiguration Impact\nAfter the mpls l2vpn track route command is run, a VPNv4 route is associated with a VPWS PW. If the VPNv4 route goes Down, the route instructs its associated VPWS PW to go Down."
+}

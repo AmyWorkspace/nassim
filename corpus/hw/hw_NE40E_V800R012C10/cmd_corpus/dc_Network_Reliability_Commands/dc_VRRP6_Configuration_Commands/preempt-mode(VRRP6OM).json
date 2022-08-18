@@ -1,0 +1,50 @@
+{
+    "PageTitle": "vrrp6 vrid preempt-mode disable",
+    "FuncDef": "The vrrp6 vrid preempt-mode disable command disables a router in a Virtual Router Redundancy Protocol for IPv6 (VRRP6) backup group from preempting the Master state.\nThe undo vrrp6 vrid preempt-mode disable command enables a router in a VRRP6 backup group to preempt the Master state.\n\nBy default, a router in a VRRP6 backup group is enabled to immediately preempt the Master state.",
+    "CLIs": [
+        "vrrp6 vrid <vrid-value> preempt-mode disable",
+        "undo vrrp6 vrid <vrid-value> preempt-mode"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vrid-value",
+            "Info": "Specifies the ID of a VRRP6 backup group.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 address 2001:db8::1 64",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp6 vrid 1 virtual-ip FE80::7 link-local",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp6 vrid 1 preempt-mode disable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nA router in a VRRP6 backup group can work in either of the following modes:\n\nNon-preemption mode: After a router receives a VRRP Advertisement packet from the master router, the router does not preempt the Master state even if the priority carried in the packet is lower than the local priority.\nPreemption mode: After a router receives a VRRP Advertisement packet from the master router, the router preempts the Master state if the priority carried in the packet is lower than the local priority.\n\nWhen a router in a VRRP6 backup group works in preemption mode, you can run the vrrp6 vrid preempt-mode timer delay command to set a preemption delay for the router. If the master router fails, the router preempts the Master state after the configured preemption delay.\nTo disable a router in a VRRP6 backup group from preempting the Master state, run the vrrp6 vrid preempt disablevrrp6 vrid preempt-mode disable command.\n\nPrerequisites\n\nA VRRP6 backup group has been created using the vrrp6 vrid virtual-ip command.\n\nConfiguration Impact\n\nAfter you run the vrrp6 vrid preempt-mode disablevrrp6 vrid preempt disable command to disable a router in a VRRP6 backup group from preempting the Master state, the router works in non-preemption mode. When the master router is working properly, the router does not preempt the Master state even if its priority is higher than the master router's priority.\n\nPrecautions\n\nSet the preemption delay to 0 on a router to allow it to become a master immediately after its priority changes or set the preemption delay to a non-0 value on the master router so that it can preempt the Master state after a specified delay if a master/backup VRRP switchover is performed. These settings allow a period of time for status synchronization between the user-to-network link and network-to-user link on routers on an unstable network. This prevents the situation in which user devices learn an incorrect master router IP address when two master routers coexist or a master/backup VRRP switchover is performed frequently."
+}

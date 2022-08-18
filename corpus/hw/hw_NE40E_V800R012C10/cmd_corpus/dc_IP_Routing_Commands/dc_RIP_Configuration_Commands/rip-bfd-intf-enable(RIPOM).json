@@ -1,0 +1,59 @@
+{
+    "PageTitle": "rip bfd",
+    "FuncDef": "The rip bfd command sets BFD session parameters on the specified interface.\nThe undo rip bfd command restores default BFD session parameters.\nThe rip bfd enable command enables BFD on the specified interface to establish a BFD session with default parameters.\nThe undo rip bfd enable command disables BFD on the specified interface.\n\nBy default, BFD session parameters use the default values.\n\n\nBy default, BFD is disabled on a RIP interface.",
+    "CLIs": [
+        "rip bfd enable",
+        "rip bfd { min-tx-interval <min-transmit-value> | min-rx-interval <min-receive-value> | detect-multiplier <detect-multiplier-value> } *",
+        "undo rip bfd enable",
+        "undo rip bfd { min-tx-interval [ <min-transmit-value> ] | min-rx-interval [ <min-receive-value> ] | detect-multiplier [ <detect-multiplier-value> ] } *"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "GMPLS-UNI interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-tx-interval min-transmit-value",
+            "Info": "Specifies the minimum interval at which BFD packets are sent to the remote device.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-rx-interval min-receive-value",
+            "Info": "Specifies the minimum interval at which BFD packets are received from the remote device.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "detect-multiplier detect-multiplier-value",
+            "Info": "Specifies the local detection multiplier.\nThe value is an integer ranging from 3 to 50. The default value is 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] rip bfd enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] rip bfd enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] rip bfd min-tx-interval 600 detect-multiplier 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure BFD for RIP, enable BFD globally first and then on RIP-capable interfaces. You can perform either of the following operations to enable BFD on interfaces:\nRun the bfd all-interfaces enable command to enable BFD on all RIP-capable interfaces in a process.Run the rip bfd enable command to enable BFD on specified RIP-capable interfaces.\nAfter BFD for RIP is enabled, the default BFD parameters take effect. The minimum interval at which BFD packets are received and sent are 100 ms, and the detection multiplier is 3.\nIf the default parameters cannot meet network requirements, run the rip bfd command to modify the parameters to change the route convergence speed. If the local end does not receive any BFD packet from its neighbor within the detection period, the local end considers this neighbor Down. The relationships between the parameters and actual intervals or the detection period are as follows:\nActual interval at which BFD packets are sent on the local end = Max { local Txvalue, remote Rxvalue}Actual interval at which BFD packets are received on the local end = Max { remote Txvalue, local Rxvalue}Actual detection period = Actual interval at which BFD packets are received on the local end x Remote mul-value\n\nPrerequisites\nBefore running this command, ensure the following operations have been performed:\nGlobal BFD has been enabled using the bfd command.BFD has been enabled using the rip bfd enable or bfd all-interfaces enable command.\n\nPrecautions\nParameters set using the rip bfd command in the interface view takes precedence over those set using the bfd all-interfaces command.\nThe rip bfd block, rip bfd enable, and rip bfd static commands are mutually exclusive. The latest configuration overrides the previous one."
+}

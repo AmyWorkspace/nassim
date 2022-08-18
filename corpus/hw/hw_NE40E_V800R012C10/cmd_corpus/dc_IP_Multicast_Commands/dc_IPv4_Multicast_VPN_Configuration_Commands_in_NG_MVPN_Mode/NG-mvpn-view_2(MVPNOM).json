@@ -1,0 +1,38 @@
+{
+    "PageTitle": "c-multicast frr",
+    "FuncDef": "The c-multicast frr command enables MVPN fast reroute (FRR).\nThe undo c-multicast frr command disables MVPN FRR.\nBy default, MVPN FRR is disabled.",
+    "CLIs": [
+        "c-multicast frr [ <frrPlyNum> | acl-name <acl-name> ]",
+        "undo c-multicast frr"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family MVPN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "frrPlyNum",
+            "Info": "Specifies an ACL number.\nThe value is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies an ACL name.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast mvpn 2.2.2.2",
+            "[*HUAWEI] acl 2111",
+            "[*HUAWEI-acl4-basic-2111] rule permit source 225.1.1.0 0.0.0.255",
+            "[*HUAWEI-acl4-basic-2111] quit",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] ip vpn-instance mcast1",
+            "[*HUAWEI-vpn-instance-mcast1] route-distinguisher 4:4",
+            "[*HUAWEI-vpn-instance-mcast1] ipv4-family",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv4] mvpn",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv4-mvpn] c-multicast frr 2111"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an NG MVPN scenario, if a sender PE on a P2MP tunnel fails, the VPN multicast service will be interrupted. The network can rely only on unicast route convergence for recovery. However, unicast route convergence takes a long time and may fail to meet the high reliability requirements of some multicast services. To resolve this problem, configure dual-root 1+1 protection. When the links are working properly, multicast traffic is forwarded through both the primary and backup tunnels bidirectionally. The leaf nodes select the multicast traffic received from the primary tunnel and discard the multicast traffic received from the backup tunnel. If a sender PE fails, the leaf nodes can use BFD for P2MP TE to quickly detect the P2MP tunnel fault and choose to accept the multicast traffic received from the backup tunnel. This accelerates multicast service convergence and improves reliability.\nTo implement dual-root 1+1 protection, run the c-multicast frr command to enable VPN FRR so that VPN multicast traffic can be imported to the primary and backup tunnels.\nPrecautions\nThis command takes effect only when both the primary and backup routes are BGP remote routes.\nIf no ACL is specified, the c-multicast frr command is enabled for all source groups."
+}

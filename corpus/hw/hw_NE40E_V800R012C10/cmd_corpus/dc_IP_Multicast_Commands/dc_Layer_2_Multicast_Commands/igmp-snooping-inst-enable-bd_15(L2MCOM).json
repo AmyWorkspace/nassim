@@ -1,0 +1,57 @@
+{
+    "PageTitle": "igmp-snooping group-policy (Bridge domain view)",
+    "FuncDef": "The igmp-snooping group-policy command limits the range of multicast groups that hosts can join.\nThe undo igmp-snooping group-policy command cancels the configuration.\nBy default, hosts can join any multicast group.",
+    "CLIs": [
+        "igmp-snooping group-policy { <acl-number> | acl-name <acl-name> } [ version <number> ]",
+        "undo igmp-snooping group-policy"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of an ACL.\nThe value is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported. The name must start with a letter or digit, and cannot contain only digits."
+        },
+        {
+            "Parameters": "version number",
+            "Info": "Specifies the version number of IGMP packets.\nThe value is an integer that is 1, 2, or 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vpna",
+            "[*HUAWEI-vsi-vpna] pwsignal ldp",
+            "[*HUAWEI-vsi-vpna-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vpna-ldp] quit",
+            "[*HUAWEI-vsi-vpna] quit",
+            "[*HUAWEI] acl number 2008",
+            "[*HUAWEI-acl-basic-2008] rule permit source 225.1.1.123 0",
+            "[*HUAWEI-acl-basic-2008] rule deny source any",
+            "[*HUAWEI-acl-basic-2008] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] l2 binding vsi vpna",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] igmp-snooping group-policy 2008"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 2008",
+            "[*HUAWEI-acl-basic-2008] rule permit source 225.1.1.123 0",
+            "[*HUAWEI-acl-basic-2008] rule deny source any",
+            "[*HUAWEI-acl-basic-2008] quit",
+            "[*HUAWEI] bridge-domain 100 e-tree",
+            "[*HUAWEI-bd-100] igmp-snooping enable",
+            "[*HUAWEI-bd-100] igmp-snooping group-policy 2008"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe igmp-snooping group-policy command is used to limit the range of multicast groups that user hosts can join.\nPrerequisites\nIGMP snooping has been enabled globally and in a BD.\nRules have been configured for a specified basic ACL.\nConfiguration Impact\nAfter the igmp-snooping group-policy command is run, user hosts cannot join multicast groups beyond the configured multicast group range. If the igmp-snooping group-policy command is run more than once, all configurations take effect.\nPrecautions\nIf no IGMP version is specified, the device will apply the configured group policy to all IGMP messages (IGMPv1/IGMPv2/IGMPv3 messages) and the ACL configured for the group policy must be a basic ACL."
+}

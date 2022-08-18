@@ -1,0 +1,39 @@
+{
+    "PageTitle": "reserved ipv6-address",
+    "FuncDef": "The reserved ipv6-address command configures a reservation type for the IPv6 addresses in a local prefix pool.\nThe undo reserved ipv6-address command deletes the configured reservation type.\nThe reserved prefix command configures a reservation type for the prefixes in a delegation prefix pool.\nThe undo reserved prefix command deletes the configured reservation type.\n\nBy default, prefixes are not reserved, meaning that prefixes are recycled after users get offline.\n\n\nBy default, IPv6 addresses are not reserved, meaning that IPv6 addresses are recycled after users get offline.",
+    "CLIs": [
+        "reserved prefix { mac | duid } [ lease ]",
+        "reserved ipv6-address { mac | duid } [ lease ]",
+        "undo reserved { prefix | ipv6-address }"
+    ],
+    "ParentView": [
+        "IPv6 prefix pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac",
+            "Info": "Reserves prefixes based on MAC addresses.\n-"
+        },
+        {
+            "Parameters": "duid",
+            "Info": "Reserves prefixes based on DUIDs.\n-"
+        },
+        {
+            "Parameters": "lease",
+            "Info": "Reserves prefixes during a lease.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 prefix fix-prefix1 delegation",
+            "[~HUAWEI-ipv6-prefix-fix-prefix1] reserved prefix mac lease"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 prefix fix-prefix1 local",
+            "[~HUAWEI-ipv6-prefix-fix-prefix1] reserved ipv6-address mac lease"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf an offline user wants to get online again using the IP address that was applied for the first time, you can run the reserved ipv6-address command to configure an IPv6 address reservation type. Different parameters can be configured in the reserved ipv6-address command:\nTo use DHCPv6 to dynamically allocate IPv6 addresses based on MAC addresses to end users, configure mac in the command to reserve the IPv6 addresses.To use DHCPv6 to dynamically allocate IP addresses based on MAC addresses to end users during a valid lease, configure mac and lease in the command to reserve the IPv6 addresses.To use DHCPv6 to dynamically allocate IPv6 addresses based on DUIDs to end users, configure duid in the command to reserve the IPv6 addresses.To use DHCPv6 to dynamically allocate IP addresses based on DUIDs to end users during a valid lease, configure duid and lease in the command to reserve the IPv6 addresses.\nIf a user that has get offline wants to get online again using the prefix that was applied for the first time, you can run the reserved prefix command to configure a prefix reservation type. Different parameters can be configured in the\nreserved prefix command:\nTo use NDRA to dynamically allocate exclusive prefixes to PPPoE and L2TP users based on MAC addresses, configure mac in the command to reserve the prefixes.To use DHCPv6-PD to dynamically allocate prefixes based on MAC addresses to end users, configure mac in the command to reserve the prefixes.To use DHCPv6-PD to dynamically allocate prefixes based on MAC addresses to end users during a valid lease, configure mac and lease in the command to reserve the prefixes.To use DHCPv6-PD to dynamically allocate prefixes based on DUIDs to end users, configure duid in the command to reserve the prefixes.To use DHCPv6-PD to dynamically allocate prefixes based on DUIDs to end users during a valid lease, configure duid and lease in the command to reserve the prefixes.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe reserved ipv6-address command can be run only in the local prefix pool view or the remote prefix pool view.The reserved prefix command can be run only in the local prefix pool view or the delegation prefix pool view.After the reserved ipv6-address command is run, specified IP addresses are reserved for specified users only. Plan IP addresses properly to ensure sufficient address resources. To reclaim reserved IP addresses, run the recycle ipv6-address or undo reserved ipv6-address command.\nThe dhcpv6-server replace client-duid command cannot be used together with the reserved ipv6-address { mac| duid } [ lease] command in the remote address pool view. After the reserved ipv6-address mac lease command is run in the remote address pool view, the DHCP server cannot detect a user logout and reserves a lease for the address of the user. If the dhcpv6-server replace client-duid command is run in the remote address pool view, the DHCP server replaces the DUID of the user. As a result, the server cannot query the user, or the client DUID check fails after the user is found."
+}

@@ -1,0 +1,68 @@
+{
+    "PageTitle": "p2mp-lsp-ping",
+    "FuncDef": "This command performs in-band connectivity test for an RSVP P2MP LSP. The echo request message is sent on the active P2MP instance and is replicated in the data path over all branches of the P2MP LSP instance. By default, all egress LER nodes which are leaves of the P2MP LSP instance will reply to the echo request message.",
+    "CLIs": [
+        "p2mp-lsp-ping { <lsp-name> [ p2mp-instance <instance-name> [ s2l-dest-address <ip-address> [ <ip-address> ] ] ] [ ttl <label-ttl> ] } [ fc <fc-name> [ profile { in | out } ] ] [ size <octets> ] [ timeout <timeout> ] [ detail ]",
+        "p2mp-lsp-ping { ldp <p2mp-identifier> [ vpn-recursive-fec ] [ sender-addr <ip-address> ] [ leaf-addr <ip-address> [ <ip-address> ] ] } [ fc <fc-name> [ profile { in | out } ] ] [ size <octets> ] [ timeout <timeout> ] [ detail ]",
+        "p2mp-lsp-ping { ldp-ssm source { <ip-address> | <ipv6-address> } group { <mcast-address> | <mcast-v6-address> } [ router { <router-instance> | service-name <service-name> } ] [ sender-addr <ip-address> ] [ leaf-addr <ip-address> [ <ip-address> ] ] } [ fc <fc-name> [ profile { in | out } ] ] [ size <octets> ] [ timeout <timeout> ] [ detail ]"
+    ],
+    "ParentView": [
+        "oam"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "fc-name",
+            "Info": "Specifies the fc and profile parameters used to indicate the forwarding class and profile of the MPLS echo request packet. Values-be, l2, af, l1, h2, ef, h1, nc. ParamDefault: Default- be"
+        },
+        {
+            "Parameters": "p2mp-identifier",
+            "Info": "Specifies the identifier for an LDP P2MP LSP to ping (applies to the 7750 SR and 7950 XRS only). Values-The p2mp-identifier must be a 32 bit integer.."
+        },
+        {
+            "Parameters": "ldp-ssm",
+            "Info": "Configures a specific multicast stream to be tested when using dynamic multicast in mLDP. The source and group addresses correspond to the <S,G> being advertised by this mLDP FEC."
+        },
+        {
+            "Parameters": "lsp-name",
+            "Info": "Specifies the name that identifies an P2MP LSP to ping. The LSP name can be up to 32 characters."
+        },
+        {
+            "Parameters": "leaf-addr ip-address [ip-address]",
+            "Info": "Specifies up to five egress LER system addresses which are required to reply to LSP ping echo request message (applies to the 7750 SR and 7950 XRS only). Values-ipv4-address: a.b.c.d."
+        },
+        {
+            "Parameters": "p2mp-instance instance-name",
+            "Info": "Configures the name, up to 32 characters, of the specific instance of the P2MP LSP to send the echo request."
+        },
+        {
+            "Parameters": "profile {in | out}",
+            "Info": "Specifies the profile of the LSP ping echo request message. ParamDefault: Default- out"
+        },
+        {
+            "Parameters": "s2l-dest-addr ip-address [ip-address]",
+            "Info": "Specifies up to five egress LER system addresses which are required to reply to the LSP ping echo request message."
+        },
+        {
+            "Parameters": "sender-addr ip-address",
+            "Info": "Specifies any local IP sender address for mLDP (applies to the 7750 SR and 7950 XRS only)."
+        },
+        {
+            "Parameters": "size octets",
+            "Info": "Specifies the size in octets, expressed as a decimal integer, of the MPLS echo request packet, including the IP header but not the label stack. The request payload is padded with zeros to the specified size. Note that an OAM command is not failed if the user entered a size lower than the minimum required to build the packet for the echo request message. The payload is automatically padded to meet the minimum size. Values-1 to 9198. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "timeout timeout",
+            "Info": "Specifies the timeout parameter in seconds, expressed as a decimal integer. This value is used to override the default timeout value and is the amount of time that the router will wait for an echo reply message from all leaves of the P2MP LSP after sending the message request message. Upon the expiration of message timeout, the requesting router assumes that the missing replies will not be received. Any echo reply message received after the request times out will be silently discarded. Values-1 to 120. ParamDefault: Default- 10"
+        },
+        {
+            "Parameters": "ttl label-ttl",
+            "Info": "The TTL value for the MPLS label, expressed as a decimal integer. Values-1 to 255. ParamDefault: Default- 255"
+        },
+        {
+            "Parameters": "vpn-recursive-fec",
+            "Info": "Adds a VPN recursive FEC element to the launched packet (useful for pinging a VPN BGP inter-AS Option B leaf). This parameter issues an OAM p2mp-lsp-ping with RFC 6512 VPN recursive opaque FEC type 8."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

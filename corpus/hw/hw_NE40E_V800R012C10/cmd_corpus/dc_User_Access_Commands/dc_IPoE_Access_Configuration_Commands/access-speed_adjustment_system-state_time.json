@@ -1,0 +1,39 @@
+{
+    "PageTitle": "access-speed adjustment system-state time",
+    "FuncDef": "The access-speed adjustment system-state time command configures an interval at which the system status is detected for adjusting the user access rate and the minimum number of detection intervals after which the user access rate is increased.\nThe undo access-speed adjustment system-state time command restores the default configuration.\nThe undo access-speed adjustment system-state time interval adjust-interval delay-count adjust-delay-count command deletes the specified detection interval and minimum delay.\nBy default, a main control board and an interface board detect the system status for adjusting the user access rate at an interval of 1s and 1s, respectively and increase the access rate after a minimum number of 2 and 2 detection intervals, respectively. That means that it takes a main control board and an interface board at least 2s (1s x 2 ) to increase the user access rate.",
+    "CLIs": [
+        "access-speed adjustment system-state time interval <adjust-interval> delay-count <adjust-delay-count> [ slot ]",
+        "undo access-speed adjustment system-state time [ slot ]",
+        "undo access-speed adjustment system-state time interval <adjust-interval> delay-count <adjust-delay-count> slot"
+    ],
+    "ParentView": [
+        "AAA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay-count adjust-delay-count",
+            "Info": "Specifies the minimum number of detection intervals after which the user access rate is increased. The minimum time it takes a main control board or to increase the user access rate equals adjust-interval multiplied by adjust-delay-count.\nThe value is an integer ranging from 1 to 300. The default value is 2 for a main control board and is 2 for an interface board."
+        },
+        {
+            "Parameters": "slot",
+            "Info": "Indicates the slot number of the interface board to which the command applies. If slot is not specified, the command applies to a main control board.\n-"
+        },
+        {
+            "Parameters": "interval adjust-interval",
+            "Info": "Specifies the interval at which the system status is detected for adjusting the user access rate.\nThe value is an integer ranging from 1 to 60, in seconds. The default value is 1s for a main control board and is 1s for an interface board."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] access-speed adjustment system-state time interval 1 delay-count 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] access-speed adjustment system-state time interval 1 delay-count 2 slot"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the CPU and memory usage is overhigh, the user access rate must be reduced. If the CPU and memory usage is low, the user access rate needs to be increased. To configure an interval at which the system status is detected for adjusting the user access rate and the minimum number of detection intervals after which the user access rate is increased, run the access-speed adjustment system-state time command.\nPrerequisites\nThe access-speed adjustment system-state enable command has been run in the AAA view.\nConfiguration Impact\nThe device detects the system status at an interval specified by <adjust-interval>. If the CPU and memory usage is high, the device immediately reduces the user access rate. If the CPU and memory usage has been normal within the consecutive detection intervals specified by <adjust-delay-count> since the user access rate was adjusted last time, the device increases the user access rate.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

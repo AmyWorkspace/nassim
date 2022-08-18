@@ -1,0 +1,25 @@
+{
+    "PageTitle": "apply extcommunity color",
+    "FuncDef": "The apply extcommunity color command sets a color extended community attribute for BGP routes matching specified filtering rules.\nThe undo apply extcommunity color command cancels the configuration.\nBy default, no color extended community attribute is set for BGP routes matching specified filtering rules.",
+    "CLIs": [
+        "apply extcommunity color <color>",
+        "undo apply extcommunity color"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "color",
+            "Info": "Specifies a color extended community attribute.\nThe value is in the format of color flag: color value. For example, the value can be set to 0:100. Currently, the color flag can only be 0, and the color value ranges from 0 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] apply extcommunity color 0:100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter configuring filtering rules through if-match clauses, you can run the apply extcommunity color command to set a color extended community attribute for BGP routes matching the filtering rules. If the color extended community attribute is set for a BGP route and the color value in the attribute is the same as that in the color value of an SR-MPLS TE Policy or SRv6 TE Policy, the BGP route can rely on the tunnel for recursion.\nBefore using the apply extcommunity color command, note the following:\nFirst, create a route-policy using the route-policy command.A route-policy may consist of multiple nodes, and the relationship among these nodes is OR. The system matches routes against the nodes in order of node ID. If a route matches a node in the route-policy, the route is not matched against the next node.Each node comprises a set of if-match and apply clauses. The if-match clauses define filtering rules that are based on route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. Specifically, a route matches a node only when it meets all the if-match clauses of the node. The relationship among if-match clauses of the same node that are based on the same route attribute is OR; the system matches routes against the if-match clauses in order; if a route matches an if-match clause, the route matches the route-policy, and the system no longer matches the route against the rest if-match clauses. For example, node 10 has two if-match clauses: if-match community-filter 1 and if-match as-path-filter 1. The two if-match clauses are based on different route attributes. Therefore, the relationship between them is AND. Node 20 also has two if-match clauses: if-match community-filter 1 and if-match community-filter 2. The two if-match clauses are both based on the community attribute. Therefore, the relationship between them is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set route attributes for the route.\n\nConfiguration Impact\nAfter the apply extcommunity color command is run, the color extended community attribute specified in the command is set for BGP routes matching specified filtering rules."
+}

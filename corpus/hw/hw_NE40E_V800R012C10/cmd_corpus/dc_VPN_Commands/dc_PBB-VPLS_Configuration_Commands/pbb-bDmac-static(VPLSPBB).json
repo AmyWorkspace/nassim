@@ -1,0 +1,40 @@
+{
+    "PageTitle": "pbb backbone-destination-mac",
+    "FuncDef": "The pbb backbone-destination-mac command configures a B-DMAC address.\nThe undo pbb backbone-destination-mac command deletes a B-DMAC address.\nBy default, no B-DMAC address is configured.",
+    "CLIs": [
+        "pbb backbone-destination-mac <destination-mac-address> static",
+        "undo pbb backbone-destination-mac",
+        "undo pbb backbone-destination-mac <destination-mac-address> [ static ]"
+    ],
+    "ParentView": [
+        "VSI-IVSI-P2P view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "destination-mac-address",
+            "Info": "Specifies a B-DMAC address.\nThe B-DMAC address specified through destination-mac-address must be the same as the B-SMAC address configured on the remote end."
+        },
+        {
+            "Parameters": "static",
+            "Info": "Specifies a MAC address as a static one.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] pbb i-vsi enable",
+            "[*HUAWEI-vsi-vsi1] pbb service-type p2p",
+            "[*HUAWEI-vsi-vsi1] pbb i-tag 10",
+            "[*HUAWEI-vsi-vsi1] pbb backbone-destination-mac 00e0-fc00-0003 static"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter configuring the I-VSI and B-VSI, perform the following configurations for PBB VPLS to take effect:\nRun the pbb service-type p2p command to configure a PBB VPLS service type for the I-VSI.Run the pbb i-tag command to configure an I-tag for the I-VSI.Run the pbb backbone-source-mac command to configure a B-SMAC address for the I-VSI or B-VSI.Run the pbb backbone-destination-mac command to configure a B-DMAC address for the I-VSI.\nIn PBB VPLS, PEs perform PBB encapsulation on received user-side packets by adding a PBB header containing B-SMAC and B-DMAC addresses to these packets. SPEs on the backbone network need to learn only B-MAC addresses instead of all user MAC addresses. This implementation reduces the burden of MAC address learning on SPEs. To configure a B-DMAC address, run the pbb backbone-destination-mac command.\nIf a multicast MAC address is used as the B-DMAC, in non-E-Trunk access scenarios, large numbers of duplicated packets will appear after unicast is switched to multicast upon the receipt of MAC Withdraw messages. If a static B-DMAC address is used, unknown unicast packets will be encapsulated using the static B-DMAC address instead of a multicast MAC address. When an I-VSI receives MAC Withdraw messages, it does not delete the PBB encapsulation tables or MAC address entries. This implementation prevents broadcast traffic flooding.\n\nConfiguration Impact\nIf the pbb backbone-destination-mac command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nA B-DMAC address can be configured only in an I-VSI, and must be the same as the B-SMAC address configured on the remote end.After an I-VSI is bound to a B-VSI, you must remove the binding before changing a B-DMAC address or running the undo pbb backbone-destination-mac command."
+}

@@ -1,0 +1,61 @@
+{
+    "PageTitle": "mac-limit (VSI-IVSI-BEVPNINTERWORK view)",
+    "FuncDef": "The mac-limit up-threshold down-threshold command sets the threshold percentage of MAC addresses that have alarms generated and cleared.\nThe undo mac-limit up-threshold down-threshold command deletes the preceding setting.\nThe mac-limit command configures a MAC address learning limit rule for the current VSI.\nThe undo mac-limit command deletes a MAC address learning limit rule configured for the current VSI.\nBy default, the threshold percentage of MAC addresses that have alarms generated and cleared is not set.",
+    "CLIs": [
+        "mac-limit { maximum <max> [ rate <hours> ] | action { discard | forward } } *",
+        "mac-limit up-threshold <up-threshold> down-threshold <down-threshold>",
+        "undo mac-limit",
+        "undo mac-limit up-threshold <up-threshold> down-threshold <down-threshold>"
+    ],
+    "ParentView": [
+        "VSI-AUTO view",
+        "VSI-DEFAULT view",
+        "VSI-IVSI-BEVPNINTERWORK view",
+        "VSI-STATIC view",
+        "VSI view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "maximum max",
+            "Info": "Specifies the maximum number of MAC address entries that can be learned.\nThe value is an integer ranging from 0 to 2048000.\nWhen the value is 0, the number of MAC addresses that can be learned is not set."
+        },
+        {
+            "Parameters": "rate hours",
+            "Info": "Indicates the interval at which MAC addresses are learned.\nThe parameter must be configured when configuring the global MAC address learning limit rule.\nThe value is an integer ranging from 0 to 1000, in milliseconds.\nWhen the value is 0, no limitation is set on the address learning interval."
+        },
+        {
+            "Parameters": "action",
+            "Info": "Specifies an action to be taken when the number of MAC address entries in the MAC address table reaches the limit.\n-"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "The packet with the source MAC address not contained in the MAC address table is discarded.\n-"
+        },
+        {
+            "Parameters": "forward",
+            "Info": "The packet with the source MAC address not contained in the MAC address table is forwarded but its MAC address is not recorded.\n-"
+        },
+        {
+            "Parameters": "up-threshold up-threshold",
+            "Info": "Specifies the upper alarm threshold for the number of MAC addresses. This value indicates the percentage of the number of learned MAC addresses to the maximum number of MAC addresses that can be learned during alarm generation.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "down-threshold down-threshold",
+            "Info": "Specifies the lower alarm threshold for the number of MAC addresses. This value indicates the percentage of the number of learned MAC addresses to the maximum number of MAC addresses that can be learned during alarm clearing. downPercent must be smaller than upPercent.\nThe value is an integer ranging from 1 to 100."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi 1",
+            "[*HUAWEI-vsi-1] mac-limit maximum 100",
+            "[*HUAWEI-vsi-1] mac-limit up-threshold 80 down-threshold 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can configure the number of MAC addresses that can be learned based on VSI to control the number of users accessing a VSI. When the number of learned MAC addresses exceeds the limit, no more MAC addresses are learned to prevent MAC address attacks. To improve network security, you can run this command to specify the percentage of the number of learned MAC addresses to the maximum number of MAC addresses that can be learned. When the number of learned MAC addresses exceeds the upper alarm threshold, an alarm is generated. When the number of learned MAC addresses falls below the lower alarm threshold, an alarm is cleared.\nPrerequisites\nBefore running this command, ensure that themac-limit command has been run to set the maximum number of MAC addresses that can be learned in a specified VSI.\nPrecautions\nIf mac-limit up-threshold down-threshold command has been configured, you cannot delete the mac-limit configuration or execute the mac-limit maximum 0 command. Instead, you must first run the undo mac-limit up-threshold up-threshold down-threshold down-threshold command to cancel the configured threshold percentage of the number of MAC addresses that generates or clears a alarm."
+}

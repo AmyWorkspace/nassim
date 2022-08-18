@@ -1,0 +1,35 @@
+{
+    "PageTitle": "nexthop recursive-lookup route-filter (BGP-VPN instance IPv4 address family view)",
+    "FuncDef": "The nexthop recursive-lookup route-filter command configures route-filter-based next hop recursion.\nThe undo nexthop recursive-lookup route-filter command disables route-filter-based next hop recursion.\nBy default, route-filter-based next hop recursion is disabled.",
+    "CLIs": [
+        "nexthop recursive-lookup route-filter <route-filter-name>",
+        "undo nexthop recursive-lookup route-filter"
+    ],
+    "ParentView": [
+        "BGP-labeled VPN instance IPv4 address family view",
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Indicates the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-vpna] peer 1.1.1.1 as-number 100",
+            "[*HUAWEI-bgp-instance-vpna] quit",
+            "[*HUAWEI-bgp] ipv4-labeled-unicast vpn-instance vpna",
+            "[*HUAWEI-bgp-labeled-vpna] nexthop recursive-lookup route-filter rf"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP needs route recursion in case of next hops. If route recursion is not limited, BGP routes may be incorrectly iterated, causing traffic loss. Therefore, next hops should perform recursion according to certain conditions.To control route recursion based on a route-filter, run the nexthop recursive-lookup route-filter command. If a target recursive route is filtered out by the route-filter, the route is considered unreachable. In this manner, BGP route recursion will fail.\nPrerequisites\nThe target recursive route has been determined, and a route-filter has been configured.Before configuring a route-filter, ensure that all desired target recursive routes will not be filtered out by the route-filter.\nPrecautions\nThe command does not apply to the routes received from LinkLocal peers."
+}

@@ -1,0 +1,50 @@
+{
+    "PageTitle": "radius-server called-station-id include",
+    "FuncDef": "The radius-server called-station-id include command configures a method of constructing the No. 30 RADIUS public attribute, namely, Called-Station-Id.\nThe undo radius-server called-station-id command deletes the configured method of constructing the No. 30 RADIUS public attribute.\nBy default, no method of constructing the No. 30 RADIUS public attribute is configured.",
+    "CLIs": [
+        "radius-server called-station-id include { ap-ip account-request | [ delimiter <delimiter> ] { ap-mac [ mac-format type1 ] [ delimiter <delimiter> ] | ssid [ delimiter <delimiter> ] } * }",
+        "undo radius-server called-station-id"
+    ],
+    "ParentView": [
+        "RADIUS server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ap-ip",
+            "Info": "Indicates that the IP address of the AP/AC is encapsulated in the Called-Station-Id attribute based on the IP format in dotted decimal notation in Accounting-Request packets.\n-"
+        },
+        {
+            "Parameters": "account-request",
+            "Info": "Specified accounting request packets.\n-"
+        },
+        {
+            "Parameters": "delimiter delimiter",
+            "Info": "Indicates the delimiter.\nThe?value?is?an?enumerated?type?and?can?be?b,?*,?-,?\\,?#,?$,?@,?&,?or?:."
+        },
+        {
+            "Parameters": "ap-mac",
+            "Info": "Indicates that the No. 30 RADIUS public attribute Called-Station-Id is constructed based on the AP-MAC address.\n-"
+        },
+        {
+            "Parameters": "mac-format",
+            "Info": "Indicates the delimiter of MAC address.\nSpecifies type1 so that the MAC address is displayed in the format of aa-bb-cc-dd-ee-ff. By default, the MAC address is displayed in the format of aa:bb:cc:dd:ee:ff."
+        },
+        {
+            "Parameters": "type1",
+            "Info": "Specifies type1 so that the MAC address is displayed in the format of aa-bb-cc-dd-ee-ff.\n-"
+        },
+        {
+            "Parameters": "ssid",
+            "Info": "Indicates that the No. 30 RADIUS public attribute Called-Station-Id is constructed based on the SSID.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group huawei",
+            "[*HUAWEI-radius-huawei] commit",
+            "[~HUAWEI-radius-huawei] radius-server called-station-id include ssid"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a Huawei device is connected to another device not conforming to relevant standards, you can run the radius-server called-station-id command to configure the Huawei device to construct the No. 30 RADIUS public attribute.\nThe radius-server called-station-id include ap-ip account-request command helps locate unauthorized users. When the device functions as a proxy, terminals are dynamically assigned IP addresses. To perform source tracing for terminals, the device must inform the AAA server of the terminals' actual IP addresses. After running this command, the terminals' IP addresses are delivered to the device through RADIUS packets, then the device identifies the IP addresses and encapsulate them in the Called-Station-Id attribute to be sent to the AAA server.\nThe AP-MAC and SSID are unavailable on the device. You must run the wlan option82 decode-mode command to allow the device to parse the AP-MAC or SSID from Option 82 in user packets.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

@@ -1,0 +1,34 @@
+{
+    "PageTitle": "crp-policy (VPN instance PIM view/PIM view of a public network instance)",
+    "FuncDef": "The crp-policy command limits the range of valid candidate-rendezvous point (C-RP) addresses and the range of multicast addresses served by a C-RP. The bootstrap router (BSR) drops C-RP messages that carry addresses not in the range of valid C-RP addresses.\nThe undo crp-policy command restores the default configuration.\nBy default, the range of valid C-RP addresses and the range of multicast groups served by a C-RP are not limited. That is, the BSR considers all received C-RP messages valid.",
+    "CLIs": [
+        "crp-policy { <advanced-acl-number> | acl-name <acl-name> }",
+        "undo crp-policy"
+    ],
+    "ParentView": [
+        "VPN instance PIM view",
+        "PIM view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "advanced-acl-number",
+            "Info": "Specifies the number of an advanced ACL that defines the filtering policy for the range of C-RP addresses and the range of group addresses served by a C-RP.\nThe value is an integer ranging from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 3100",
+            "[*HUAWEI-acl4-advance-3100] rule permit ip source 1.1.1.1 0 destination 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-advance-3100] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] crp-policy 3100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a PIM SM network that uses the BSR mechanism, any Router can be configured as a C-RP, and serves the multicast groups in a specified address range. Each C-RP sends its information to the BSR in unicast mode. The BSR summarizes all received C-RP information as an RP-set, and floods it through BSR messages on the entire network. The local Router then works out the RP to which a specific multicast group address range corresponds based on the RP-set.\nTo protect valid C-RPs from being spoofed, run the crp-policy command to limit the range of valid C-RP addresses and the range of multicast group addresses served by a C-RP. You must configure the same filtering rule on each C-BSR because any C-BSR may become the BSR.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nConfiguration Impact\nIf the crp-policy command is run more than once, the latest configuration overrides the previous one.\nIf an ACL rule is specified but no C-RP address range is set, all C-RP messages are denied."
+}

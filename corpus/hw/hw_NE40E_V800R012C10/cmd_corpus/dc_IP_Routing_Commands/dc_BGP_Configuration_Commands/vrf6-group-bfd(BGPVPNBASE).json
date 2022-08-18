@@ -1,0 +1,45 @@
+{
+    "PageTitle": "peer bfd (BGP-VPN instance IPv6 address family view) (group)",
+    "FuncDef": "The peer bfd command sets BFD detection parameters for a peer group.\nThe undo peer bfd command restores default BFD detection parameter values.\nBy default, the interval at which BFD packets are sent is 10 milliseconds, the interval at which BFD packets are received is 10 milliseconds, the local detection time multiplier is 3.",
+    "CLIs": [
+        "peer <group-name> bfd { min-tx-interval <min-tx-interval> | min-rx-interval <min-rx-interval> | detect-multiplier <multiplier> } *",
+        "undo peer <group-name> bfd { min-tx-interval | min-rx-interval | detect-multiplier } *"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "min-tx-interval min-tx-interval",
+            "Info": "Specifies the interval at which BFD packets are sent.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-rx-interval min-rx-interval",
+            "Info": "Specifies the interval at which BFD packets are received.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "detect-multiplier multiplier",
+            "Info": "Specifies the local detection time multiplier.\nThe value is an integer ranging from 3 to 50."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-6-vpn1] group test external",
+            "[*HUAWEI-bgp-6-vpn1] peer test as-number 200",
+            "[*HUAWEI-bgp-6-vpn1] peer test bfd min-tx-interval 100 min-rx-interval 100 detect-multiplier 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBFD provides millisecond-level fault detection. It helps BGP to detect faults in neighboring devices or links more quickly, and instructs BGP to recalculate routes for correct packet forwarding. The peer bfd command can be used to set the values of BFD session parameters on a specified interface.\nThe BFD configuration of a peer takes precedence over that of the peer group to which the peer belongs. If BFD is not configured on a peer and the peer group to which the peer belongs is enabled with BFD, the peer will inherit the BFD configurations of the peer group.\nPrerequisites\nA BFD session can be established only when the corresponding BGP session is in the Established state.\nConfiguration Impact\nIf the peer bfd command is run multiple times, the latest configuration overwrites the previous one. The BFD session uses the latest parameters as the detection parameters.\nAssume that BFD is configured on a peer group. If the peer bfd block command is not run on members of the peer group, the members will establish BFD sessions.\nPrecautions\nIf BFD parameters are set on a peer, a BFD session will be established by using the BFD parameters on the peer."
+}

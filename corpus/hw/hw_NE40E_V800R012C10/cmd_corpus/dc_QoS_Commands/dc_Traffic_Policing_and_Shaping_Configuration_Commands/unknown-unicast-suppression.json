@@ -1,0 +1,37 @@
+{
+    "PageTitle": "unknown-unicast-suppression",
+    "FuncDef": "The unknown-unicast-suppression command configures the traffic suppression for unknown unicast packets in the QoS profile.\nThe undo unknown-unicast-suppression command cancels the traffic suppression that is configured for unknown unicast packets in the QoS profile.\nBy default, unknown unicast suppression is not configured in the QoS profile view.",
+    "CLIs": [
+        "unknown-unicast-suppression cir <cir-value> [ cbs <cbs-value> ] [ inbound | outbound ]",
+        "undo unknown-unicast-suppression [ inbound | outbound ]"
+    ],
+    "ParentView": [
+        "QoS profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the CBS.\nThe value is an integer in the range of 0 bytes to 4,294,967,295 bytes. The cbs-value must be greater than the configured cir-value. The default value varies with the value of cir-value: cbs-value = cir-value * 187.\nIf cir-value<100000 kbit/s, the default value of cbs-value equals cir-value * 187 (in bytes).If cir-value >=100000 kbit/s, the default value of cbs-value equals 100000*187 (in bytes)."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies the inbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the outbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR.\nThe value is an integer that ranges from 0 kbit/s to 4,294,967,295 kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile test",
+            "[*HUAWEI-qos-profile-test] unknown-unicast-suppression cir 38400"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen unknown unicast packets grow on a network, resources consumed by unknown unicast packets increase accordingly, affecting running services on the network.\nThe unknown-unicast-suppression command configures unknown unicast traffic suppression in the QoS profile. When the number of unknown unicast packets exceeds the configured threshold, the system drops excess unknown unicast packets so that the unknown unicast traffic volume can be restricted within a proper range.\nPrecautions\nThe unknown unicast suppression in the QoS profile does not take effected in VLL scenario.\nTo achieve an exact packet suppression, you should specify a value for the CBS that is 10 times the length of the packet.\nDirection-oriented and directionless unknown unicast suppression cannot be configured at the same time. If direction-oriented unknown unicast suppression is configured on an interface, the configuration takes effect only when the direction to which the QoS profile applies is the same as the direction configured for unknown unicast suppression."
+}

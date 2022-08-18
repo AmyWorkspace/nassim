@@ -1,0 +1,79 @@
+{
+    "PageTitle": "mld group-policy",
+    "FuncDef": "The mld group-policy command sets a rule used by an interface to filter the Multicast Listener Discovery (MLD) groups that hosts can join.\nThe undo mld group-policy command restores the default configuration.\nBy default, no filtering rule is set. That is, hosts can join any multicast group.",
+    "CLIs": [
+        "mld group-policy { <acl6-number> | acl6-name <acl6-name> } { 1 | 2 }",
+        "mld group-policy { <acl6-number> | acl6-name <acl6-name> }",
+        "undo mld group-policy"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl6-number",
+            "Info": "Specifies the number of a basic or advanced IPv6 ACL.\nThe number of a basic IPv6 ACL is an integer that ranges from 2000 to 2999; the number of an advanced IPv6 ACL ranges from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named IPv6 ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "1",
+            "Info": "Indicates that the MLD version is 1 (MLDv1).\n-"
+        },
+        {
+            "Parameters": "2",
+            "Info": "Indicates that the MLD version is 2 (MLDv2).\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 number 3000",
+            "[*HUAWEI-acl6-advance-3000] rule permit ipv6 destination ff03::101 128",
+            "[*HUAWEI-acl6-advance-3000] quit",
+            "[*HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld group-policy 3000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 name myacl6",
+            "[*HUAWEI-acl6-advance-myacl6] rule permit ipv6 destination ff03::101 128",
+            "[*HUAWEI-acl6-advance-myacl6] quit",
+            "[*HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld group-policy acl6-name myacl6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo make hosts on the network segment where an interface resides join specified IPv6 multicast groups and receive multicast packets for these groups, run the mld group-policy command on this interface and define an IPv6 ACL rule as a filter to restrict the range of multicast groups. In this manner, MLD security is guaranteed.\nPrerequisites\nThe multicast ipv6 routing-enable command must be run in the instance to which the interface belongs and the IPv6 ACL to be referenced must be configured.\nConfiguration Impact\nIf the mld group-policy command is run several times, the latest configuration overrides the previous one.\nAfter the mld group-policy command is run on the interface:\nThe interface filters the received MLD Report messages based on the created IPv6 ACL and maintains the membership only for the multicast groups permitted by the IPv6 ACL.The interface discards the MLD Report messages that are denied by the created IPv6 ACL. If the entries of the multicast groups that are denied by the IPv6 ACL already exist, these entries are not deleted immediately but are deleted when their timeout periods expire.\nIf the version of MLD is not specified, the created IPv6 ACL is applicable to both MLDv1 and MLDv2 hosts.\n\nPrecautions\nThe mld group-policy command needs to be used together with the  acl ipv6 command. For a numbered ACL:\nIn the basic IPv6 ACL view, you can set the address of the IPv6 multicast group that hosts can join by specifying the source parameter in the rule command.In the advanced IPv6 ACL view, you can set the address of the source that sends multicast data packets to an IPv6 multicast group by specifying the source parameter in the rule command and set the address of IPv6 multicast groups that hosts can join by specifying the destination parameter in the rule command. For MLDv1 and MLDv2 MODE_IS_EXCLUDE/CHANGE_TO_EXCLUDE_MODE Report messages, the source parameter in the rule command must be set to FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF."
+}

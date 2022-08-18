@@ -1,0 +1,45 @@
+{
+    "PageTitle": "asbr-summary (OSPFv3 view)",
+    "FuncDef": "The asbr-summary command configures route summarization on an AS boundary router (ASBR).\nThe undo asbr-summary command disables route summarization from an ASBR.\nBy default, route summarization is not configured on ASBRs.",
+    "CLIs": [
+        "asbr-summary <ipv6-address> <prefix-length> [ not-advertise | [ tag <tag-value> ] | [ cost <cost-value> ] | [ distribute-delay <interval> ] ] *",
+        "undo asbr-summary <ipv6-address> <prefix-length>"
+    ],
+    "ParentView": [
+        "OSPFv3 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a summary route.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the prefix length of a summary route.\nThe value is an integer ranging from 1 to 128."
+        },
+        {
+            "Parameters": "not-advertise",
+            "Info": "Prevents the summary route with the specified IPv6 prefix length from being advertised.\nBy default, the summary route with the specified IPv6 prefix length is advertised."
+        },
+        {
+            "Parameters": "tag tag-value",
+            "Info": "Specifies the tag used to control summary route advertisement.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "cost cost-value",
+            "Info": "Specifies the cost of a summary route.\nThe value is an integer ranging from 1 to 16777214.\nBy default, the largest cost of the specific routes for summarization is used as the cost of the summary route."
+        },
+        {
+            "Parameters": "distribute-delay interval",
+            "Info": "Specifies the delay for advertising a summary route.\nThe value is an integer ranging from 1 to 65535, in seconds. This parameter has no default value."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] asbr-summary 2001:: 16 cost 20 tag 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nRoutes with the same IPv6 prefix can be summarized into one route. On a large-scale OSPFv3 network, route lookup may slow down because of the large size of the routing table. To reduce the routing table size and simplify management, configure route summarization. With route summarization, if a link connected to a device within an IPv6 address range that has been summarized alternates between Up and Down, the link status change is not advertised to the devices beyond the IPv6 address range. This prevents route flapping and improves network stability.\nIf route summarization is configured on an ASBR using the asbr-summary command, the ASBR summarizes routes of imported Type 5 LSAs within the summary address range. If a large number of routes with the same IPv6 prefix are imported, run the asbr-summary command to summarize them into one route.\nPrecautions\nThe asbr-summary command applies only to ASBRs. To configure route summarization on an area border router (ABR), run the abr-summary command.In case of a large number of summary routes, you can set a delay in advertising them by specifying distribute-delay. This ensures that the summary routes advertised each time contain more valid routes and prevents incorrect routing information in case of network flapping."
+}

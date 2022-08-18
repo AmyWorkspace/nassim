@@ -1,0 +1,32 @@
+{
+    "PageTitle": "nhrp authentication",
+    "FuncDef": "The nhrp authentication command configures an authentication character string for NHRP negotiation.\nThe undo nhrp authentication command deletes an authentication character string for NHRP negotiation.\nBy default, no authentication character string is configured for NHRP negotiation.",
+    "CLIs": [
+        "nhrp authentication [ hash { sha2-256 } ] cipher <authenString>",
+        "undo nhrp authentication"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "hash sha2-256",
+            "Info": "Specifies SHA2-256 as the NHRP authentication algorithm.\n-"
+        },
+        {
+            "Parameters": "cipher authenString",
+            "Info": "Specifies the NHRP authentication string.\nThe value is a character string. An unencrypted password ranges from 1 to 8 characters, whereas an encrypted password contains 48 characters.\nThe value is a string of 1 to 8 case-sensitive characters. The value can contain special characters except the question mark (?) and space.\nTo improve security, it is recommended that the NHRP authentication string contains at least two types of lowercase letters, uppercase letters, digits, and special characters, and contains at least 6 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nhrp enable",
+            "[*HUAWEI] interface tunnel 0",
+            "[*HUAWEI-Tunnel0] tunnel-protocol gre p2mp",
+            "[*HUAWEI-Tunnel0] nhrp enable",
+            "[*HUAWEI-Tunnel0] nhrp authentication cipher huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThis command configures the NHRP authentication string on a spoke and the hub. This command enables the hub to reject the illegal registration of a spoke.\nConfiguration Impact\nAfter this command is executed on a spoke and the hub, the spoke sends an NHRP Registration Request packet to the hub, and the hub decides whether to process this packet based on the NHRP authentication string in the packet. If this NHRP authentication string is different from that configured on the hub, the hub does not process this packet. If the two NHRP authentication strings are the same, the hub processes this packet.\nPrecautions\nIf the NHRP authentication string is configured on a spoke but not on the hub, the hub does not authenticate the authentication string of the spoke. Instead, the spoke performs the authentication but the authentication fails."
+}

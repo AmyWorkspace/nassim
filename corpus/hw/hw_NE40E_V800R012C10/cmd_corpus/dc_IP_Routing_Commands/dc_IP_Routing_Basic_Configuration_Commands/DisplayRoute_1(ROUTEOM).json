@@ -1,0 +1,128 @@
+{
+    "PageTitle": "display ip routing-table",
+    "FuncDef": "The display ip routing-table command displays the summary of an IPv4 routing table.",
+    "CLIs": [
+        "display ip routing-table [ table-name { localmt | mbgp | msr } ] <prefix> { <mask> | <masklength> } <prefix> { <mask> | <masklength> } [ verbose ]",
+        "display mrt routing-table [ vpn-instance <vpn-instance-name> ] [ <prefix> [ [ <mask> ] | [ <masklength> ] ] [ longer-match ] ] [ verbose ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "table-name",
+            "Info": "Specifies a table of a producer.\n-"
+        },
+        {
+            "Parameters": "localmt",
+            "Info": "Indicates a local multi-topology routing table.\n-"
+        },
+        {
+            "Parameters": "mbgp",
+            "Info": "Indicates a multicast BGP routing table. (When topology topology-name is specified, the MBGP routing table cannot be displayed.).\n-"
+        },
+        {
+            "Parameters": "msr",
+            "Info": "Indicates a multicast static routing table. (When topology topology-name is specified, the multicast static routing table cannot be displayed.).\n-"
+        },
+        {
+            "Parameters": "prefix",
+            "Info": "Displays information about a route to a specified IP destination address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the mask in dotted decimal notation.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "masklength",
+            "Info": "Specifies the mask length. A 32-bit mask is represented by consecutive 1s, and the mask in dotted decimal notation can be replaced by the mask length.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "verbose",
+            "Info": "Displays detailed information about all the routes in the routing table, including active and inactive routes. If this parameter is not specified, only brief information about active routes is displayed.\n-"
+        },
+        {
+            "Parameters": "mrt",
+            "Info": "Indicates a MRT routing table.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "longer-match",
+            "Info": "Displays the routes matching the specified network or mask.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display ip routing-table 1.0.0.0 8 4.0.0.0 24",
+            "Route Flags: R - relay, D - download to fib, T - to vpn-instance, B - black hole route",
+            "------------------------------------------------------------------------------",
+            "Routing Table: _public_",
+            "",
+            "Destination/Mask  Proto  Pre  Cost  Flags  NextHop  Interface",
+            "",
+            "   1.0.0.0/8     Static  60    0     D    10.0.0.1  GigabitEthernet1/0/0",
+            "   1.1.1.0/24    Static  60    0     D    2.1.1.1   GigabitEthernet1/0/0",
+            "   1.2.0.0/16    Static  60    0     D    10.0.0.1  GigabitEthernet1/0/0",
+            "   2.1.1.0/24    Static  40    0     D    10.0.0.1  GigabitEthernet1/0/0",
+            "   3.1.1.0/24    Static  60    0     D    4.1.1.1   GigabitEthernet1/0/0"
+        ],
+        [
+            "[~HUAWEI] display ip routing-table vpn-instance vpn1 1.1.1.0 verbose",
+            "Route Flags: R - relay, D - download to fib, T - to vpn-instance, B - black hole route",
+            "------------------------------------------------------------------------------",
+            "Routing Table : vpn1",
+            "Summary Count : 1",
+            "",
+            "Destination: 1.1.1.0/24          ",
+            "     Protocol: IBGP               Process ID: 0              ",
+            "   Preference: 255                      Cost: 0              ",
+            "      NextHop: 2001:DB8:100::1:0:20 Neighbour: 2001:DB8:1::1",
+            "        State: Active Adv Relied         Age: 00h47m57s           ",
+            "          Tag: 0                    Priority: low            ",
+            "        Label: NULL                  QoSInfo: 0x0           ",
+            "   IndirectID: 0x1000186            Instance:                                 ",
+            " RelayNextHop: 2001:DB8:100::1:0:20 Interface: SRv6 BE",
+            "     TunnelID: 0x0                     Flags: RD",
+            "",
+            "[~HUAWEI] display ipv6 routing-table 2001:DB8:100::1:0:20 verbose",
+            "Route Flags: R - relay, D - download to fib, T - to vpn-instance, B - black hole route",
+            "------------------------------------------------------------------------------",
+            "Routing Table : _public_",
+            "Summary Count : 1",
+            "",
+            "Destination  : 2001:DB8:100::                          PrefixLength : 64",
+            "NextHop      : 2001:DB8:10::1                          Preference   : 15",
+            "Neighbour    : ::                                      ProcessID    : 1",
+            "Label        : NULL                                    Protocol     : ISIS-L1",
+            "State        : Active Adv                              Cost         : 10",
+            "Entry ID     : 0                                       EntryFlags   : 0x00000000",
+            "Reference Cnt: 0                                       Tag          : 0",
+            "Priority     : medium                                  Age          : 1355sec",
+            "IndirectID   : 0x1000033                               Instance     : ",
+            "RelayNextHop : ::                                      TunnelID     : 0x0",
+            "Interface    : Ethernet3/0/0                           Flags        : D"
+        ],
+        [
+            "<HUAWEI> display ip routing-table vpn-instance vrf 10.2.1.1 verbose",
+            "Route Flags: R - relay, D - download to fib, T - to vpn-instance, B - black hole route",
+            "------------------------------------------------------------------------------",
+            "Routing Table : vrf",
+            "Summary Count : 1",
+            "",
+            "Destination: 10.2.1.1/32         ",
+            "     Protocol: IBGP               Process ID: 0              ",
+            "   Preference: 255                      Cost: 0              ",
+            "      NextHop: 2001:DB8:100::1     Neighbour: 2001:DB8:100::2",
+            "        State: Active Adv Relied         Age: 00h22m27s           ",
+            "          Tag: 0                    Priority: low            ",
+            "        Label: 3                     QoSInfo: 0x0           ",
+            "   IndirectID: 0x1000143            Instance:                                 ",
+            " RelayNextHop: ::                  Interface: a",
+            "     TunnelID: 0x000000003400000001    Flags: RD"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the verbose parameter is not specified, information about only one route is displayed in each line. The contents include the destination address, mask length, protocol, priority, route cost, route flag, next hop, and outbound interface. This command displays only the preferred routes."
+}

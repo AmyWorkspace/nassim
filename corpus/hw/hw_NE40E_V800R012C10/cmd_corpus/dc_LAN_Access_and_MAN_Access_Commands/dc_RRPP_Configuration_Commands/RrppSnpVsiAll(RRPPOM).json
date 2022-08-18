@@ -1,0 +1,37 @@
+{
+    "PageTitle": "rrpp snooping all-vsi",
+    "FuncDef": "The rrpp snooping all-vsi command enables a sub-interface to be associated automatically with all Virtual Switch Instances (VSIs) bound to the other sub-interfaces on the same physical interface.\nThe undo rrpp snooping all-vsi command restores the default configuration.\nBy default, a sub-interface is not associated with all VSIs bound to the other sub-interfaces on a physical interface.",
+    "CLIs": [
+        "rrpp snooping all-vsi",
+        "undo rrpp snooping all-vsi"
+    ],
+    "ParentView": [
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 10",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vlan-type dot1q 10",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] l2 binding vsi vsi1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] rrpp snooping enable",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] rrpp snooping all-vsi"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a fault occurs on the RRPP ring associated with a virtual private LAN service (VPLS) network, the RRPP snooping-enabled sub-interface on the VPLS network removes forwarding entries of the associated VSIs and remote VPLS devices, and switches traffic to a proper link. This ensures that VPLS traffic is transmitted properly to the RRPP ring.\nTo associate the RRPP snooping-enabled sub-interface with all VSIs that are bound to other sub-interfaces of the same interface, run the rrpp snooping all-vsi command.\nPrerequisites\nRRPP snooping has been enabled by using the rrpp snooping enable command on the sub-interface.\nPrecautions\nOnly the VSIs bound to the other sub-interfaces on the same physical interface by using the l2 binding vsi command can be associated with the sub-interface by using the rrpp snooping all-vsi command.On a sub-interface that has been associated with a VSI using the rrpp snooping vsi command, running the rrpp snooping all-vsi command does not affect the existing association, but running the undo rrpp snooping all-vsi command removes all associations including this configured one.On the interface where both the rrpp snooping vsi and rrpp snooping all-vsi commands are configured, the latest configuration overrides the previous one. The overwritten information is about VSIs that are bound to other sub-interfaces on the same interface where RRPP snooping is configured.After the command is run in the sub-interface view, if VSIs that are bound to other sub-interfaces are modified or deleted, MAC address entries of the corresponding VSI may be affected or cleared. Run the display rrpp snooping vsi command to check the corresponding VSI, and reconfigure the VSI if it is affected."
+}

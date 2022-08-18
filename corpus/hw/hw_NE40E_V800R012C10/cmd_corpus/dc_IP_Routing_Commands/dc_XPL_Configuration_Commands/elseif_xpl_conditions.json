@@ -1,0 +1,45 @@
+{
+    "PageTitle": "elseif",
+    "FuncDef": "The elseif command configures another matching rule to filter the routes that fail to meet the matching rules specified in the if or elseif clause of the same if condition branch.\nBy default, the routes that fail to meet the matching rules specified in the if or elseif clause are not further matched against other matching rules.",
+    "CLIs": [
+        "elseif [ not ] <condition-clause> [ { and | or } [ not ] <condition-clause> ] * then"
+    ],
+    "ParentView": [
+        "Route-filter policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "not",
+            "Info": "Filters routes against the opposite of the matching rule following not.\n-"
+        },
+        {
+            "Parameters": "condition-clause",
+            "Info": "Specifies a condition clause.\nFor details of condition clauses, see the following descriptions:\nCondition clause that is based on the route costCondition clause that is based on the source IP address, destination IP address, or next hop IP address of a routeCondition clause that is based on the tag of an OSPF or IS-IS routeCondition clause that is based on the Local_Pref attribute of a BGP routeCondition clause that is based on the AS_Path attribute of a BGP routeCondition clause that is based on the community attribute of a BGP routeCondition clause that is based on an attribute of a VPN routeCondition clause that is based on any of other attributes"
+        },
+        {
+            "Parameters": "and",
+            "Info": "Filters routes against the matching rule of the previous condition clause and the one following and.\n-"
+        },
+        {
+            "Parameters": "or",
+            "Info": "Filters routes against the matching rule of the previous condition clause or the one following or.\n-"
+        },
+        {
+            "Parameters": "then",
+            "Info": "Introduces the action clause configured for the routes that meet matching rules.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system",
+            "[~HUAWEI] xpl route-filter route-filter1",
+            "[~HUAWEI-xpl-filter] if med eq 100 then",
+            "[~HUAWEI-xpl-filter-if] apply ip next-hop 1.1.1.1",
+            "[~HUAWEI-xpl-filter-if] elseif med eq 200 then",
+            "[~HUAWEI-xpl-filter-elif] apply ip next-hop 2.2.2.2",
+            "[~HUAWEI-xpl-filter-elif] endif",
+            "[~HUAWEI-xpl-filter] end-filter"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nRoute-filters are used to filter routes based on sets or a single element and modify route attributes of the routes that meet matching rules. To configure another matching rule to filter the routes that fail to meet the matching rules specified in the if or elseif clause of the same if condition branch, run the elseif command.\nThe parameters in condition clauses can be specific values or global variables referenced using $+global variable name. The parameters in a route-filter with pre-defined variables can be those defined in this route-filter.\nGlobal variables cannot be referenced by the route attribute sets in the format of {element A, element B...}.\nPrerequisites\nA matching rule has been configured for the route-filter using the if command.\nFollow-up Procedure\nRun the apply, approve, refuse, finish, call route-filter, or break command to configure an action for the routes that meet matching rules.\nPrecautions\nIf ip { route-source | route-destination | next-hop } in { ip-prefix-list-name | ip-prefix-list } is configured, the configuration applies to IPv4 prefixes, not to IPv6 prefixes, and IPv6 prefixes match the configuration by default. If IPv6 prefixes also need to be filtered, perform the following configurations:\nxpl ipv6-prefix-list ipv6-list-nullend-list\nif ip { route-source | route-destination | next-hop } in { ip-prefix-list-name | ip-prefix-list } thenif ipv6 { route-source | route-destination | next-hop } in ipv6-list-null thenfinish\nelseif ip { route-source | route-destination | next-hop } in { ip-prefix-list-name | ip-prefix-list } thenapply action-clause\nendif\nendif\nIf ipv6 { route-source | route-destination } in { ipv6-prefix-list-name | ipv6-prefix-list } is configured, the configuration applies to IPv6 prefixes, not to IPv4 prefixes, and IPv4 prefixes match the configuration by default. If IPv4 prefixes also need to be filtered, perform the following configurations:\nxpl ip-prefix-list ipv4-list-nullend-list\nif ipv6 { route-source | route-destination | next-hop } in { ip-prefix-list-name | ip-prefix-list } thenif ip { route-source | route-destination | next-hop } in ipv4-list-null thenfinish\nelseif  ip { route-source | route-destination | next-hop } in { ip-prefix-list-name | ip-prefix-list } thenapply action-clause\nendif\nendif"
+}

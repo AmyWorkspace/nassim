@@ -1,0 +1,63 @@
+{
+    "PageTitle": "nat server protocol global inside",
+    "FuncDef": "The nat server protocol global inside command configures a protocol for an internal server in a simplified NAT instance.\nThe undo nat server protocol global inside command deletes a protocol for an internal server in a simplified NAT instance.\nBy default, no protocol is specified for an internal server.",
+    "CLIs": [
+        "nat server protocol { tcp | udp | <protocol-number> } global <global-address> [ <global-protocol> ] [ vpn-instance <vpn-instance-name> ] inside <host-address> [ <host-protocol> ] [ vpn-instance <vpn-instance-name> ] [ redirect <ip-addr> { inbound | outbound } ]",
+        "undo nat server protocol { tcp | udp | <protocol-number> } global <global-address> [ <global-protocol> ] [ vpn-instance <vpn-instance-name> ] inside <host-address> [ <host-protocol> ] [ vpn-instance <vpn-instance-name> ] [ redirect <ip-addr> { inbound | outbound } ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tcp",
+            "Info": "Indicates that an internal server runs TCP.\n-"
+        },
+        {
+            "Parameters": "udp",
+            "Info": "Indicates that an internal server runs UDP.\n-"
+        },
+        {
+            "Parameters": "protocol-number",
+            "Info": "Specifies a protocol number.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "global-protocol",
+            "Info": "Specifies the protocol that an internal server runs to communicate with an external device. For example, the protocol can be PoP2, PoP3, or SMTP.\nIf parameter global-protocol is set to a non-0 integer, the destination port number in external user packets must be the same as parameter global-protocol. A port number inconsistency causes these users to fail to access an internal server.If parameter global-protocol is set to 0, port numbers carried in external user packets can be set to any numbers so that the users can access an internal server.\nThe value is a string of 1 to 31 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which an internal server belongs.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "inside host-address",
+            "Info": "Specifies the private IP address of an internal server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "host-protocol",
+            "Info": "Specifies the protocol that an internal server runs. For example, the protocol can be PoP2, PoP3, or SMTP.\nIf parameter global-protocol is set to a non-0 integer, parameter host-protocol must be set to any non-0 integer.If parameter global-protocol is set to 0, parameter host-protocol can only be set to 0.\nThe value is a string of 1 to 31 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "redirect ip-addr",
+            "Info": "Specifies a redirected next-hop IP address.\nIf traffic passing through a server has a conflicting next-hop IP address, configure this parameter so that the traffic is redirected to a specified next-hop IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Redirects user-to-network packets to a next hop.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Redirects user-to-network packets to a next hop.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance nat1 id 1 simple-configuration",
+            "[*HUAWEI-nat-instance-nat1] commit",
+            "[~HUAWEI-nat-instance-nat1] quit",
+            "[~HUAWEI] nat server protocol tcp global 192.168.12.12 ftp inside 10.12.12.12 ftp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nNAT can be configured to allow users on a private network to access public network services, while hiding the structure of the private network and devices on the private network. In this case, a user on an external network cannot communicate with a private network user.\nTo address this problem, the internal server function can be configured on the private network. The internal server function enables a NAT device to translate a public IP address into a private IP address based on either of the following entries:\nA static mapping entry that contains a private IP address, a private port number, a public IP address, and a public port numberA static mapping entry that contains a private IP address and a public IP address\nIf each internal server is assigned multiple public IP addresses, run the nat server protocol command to configure protocols used by an internal server.\n\nPrecautions\nThis command is supported only by the admin-VS.\nThe global-address value must be different from an existing IP address assigned to a device or its interface, preventing IP address conflicts.\nNAT ALG does not take effect on protocol packets that match port-level NAT internal server mappings."
+}

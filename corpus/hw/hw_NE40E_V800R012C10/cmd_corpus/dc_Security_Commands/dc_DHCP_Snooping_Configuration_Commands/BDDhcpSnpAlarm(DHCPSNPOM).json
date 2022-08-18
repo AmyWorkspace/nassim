@@ -1,0 +1,70 @@
+{
+    "PageTitle": "dhcp snooping alarm threshold (Bridge domain view)",
+    "FuncDef": "The dhcp snooping alarm threshold command configures an alarm threshold for the number of discarded ARP packets, IP packets, DHCP reply packets (received on the untrusted interface), and DHCP request packets and the percentage threshold for the maximum DHCP snooping users.\nThe undo dhcp snooping alarm threshold command restores the default settings.\n\nBy default:\n\n\nThe alarm threshold for the number of discarded packets in a BD is a global alarm threshold (which is 100 by default and can be configured manually).\n\nThe percentage threshold for the maximum DHCP snooping users in a BD is 100%.",
+    "CLIs": [
+        "dhcp snooping alarm { { ip | arp | dhcp-chaddr | dhcp-request | dhcp-reply } { enable | threshold <threshold-value> } | user-limit { enable | threshold <threshold-value> } }",
+        "undo dhcp snooping alarm { ip | arp | dhcp-chaddr | dhcp-request | dhcp-reply | user-limit } enable",
+        "undo dhcp snooping alarm { ip | arp | dhcp-chaddr | dhcp-request | dhcp-reply | user-limit } threshold"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip",
+            "Info": "Indicates the alarm threshold for the number of discarded IP packets that mismatch the binding entries.\n-"
+        },
+        {
+            "Parameters": "arp",
+            "Info": "Indicates the alarm threshold for the number of discarded ARP packets that mismatch the binding entries.\n-"
+        },
+        {
+            "Parameters": "dhcp-chaddr",
+            "Info": "Indicates the alarm threshold for discarded DHCP packets with a client hardware address (CHADDR) mismatching the source MAC address in the Ethernet frame header.\n-"
+        },
+        {
+            "Parameters": "dhcp-request",
+            "Info": "Indicates the alarm threshold for the number of discarded DHCP request packets for extending the IP address lease.\n-"
+        },
+        {
+            "Parameters": "dhcp-reply",
+            "Info": "Indicates the alarm threshold for discarded DHCP reply packets received on untrusted interfaces.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enable DHCP snooping.\n-"
+        },
+        {
+            "Parameters": "threshold threshold-value",
+            "Info": "Specifies an alarm threshold.\nFor the alarm threshold for the number of discarded packets, the value is an integer ranging from 1 to 1000. For the percentage threshold for the maximum DHCP snooping users, the value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "user-limit",
+            "Info": "Indicates the alarm threshold for the maximum DHCP snooping users.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] bridge-domain 20",
+            "[*HUAWEI-bd20] dhcp snooping enable",
+            "[*HUAWEI-bd20] dhcp snooping alarm arp threshold 200"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] dhcp snooping enable",
+            "[*HUAWEI-bd10] dhcp snooping alarm user-limit threshold 50"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] dhcp snooping enable",
+            "[*HUAWEI-bd10] dhcp snooping alarm dhcp-reply enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure the alarm threshold for the maximum discarded packets and the percentage threshold for the maximum DHCP snooping users in the BD view, run the dhcp snooping alarm threshold command.\nThe configuration of the alarm threshold for discarded packets in a BD can be one of the following situations:\nIf no alarm threshold is configured for a BD, the default global threshold takes effect for the BD. You can run the dhcp snooping alarm threshold command to modify the global threshold.If an alarm threshold is configured for a BD, the configured threshold takes effect for the BD.\nTo configure the alarm threshold for the number of discarded DHCP packets, run the dhcp snooping alarm threshold command.\n\nPrerequisites\nDHCP snooping has been enabled globally using the dhcp snooping enable command.The alarm function for DHCP snooping has been configured using the dhcp snooping alarm enable command.The maximum number of DHCP snooping users has been configured using the dhcp snooping max-user-number (BD view) command.\n\nPrecautions\nIf the maximum number of DHCP snooping users is set to n and the percentage threshold for the maximum DHCP snooping users is set to m, when the number of users on the interface reaches n x m, an alarm is generated. If the number of users on the interface reaches (n x m)+ 1, no alarm is generated. Only if the IP address lease of users expires or users proactively release IP addresses, the number of DHCP snooping users in a BD can fall below the number n x m. When the number of users on the interface reaches n x m again, an alarm is generated.Users can change the current percentage threshold by configuring a new value. Only the latest configuration takes effect."
+}

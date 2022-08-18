@@ -1,0 +1,45 @@
+{
+    "PageTitle": "loss-measure single-ended send",
+    "FuncDef": "The loss-measure single-ended send command enables on-demand single-ended packet loss measurement.\nBy default, on-demand single-ended packet loss measurement is disabled.",
+    "CLIs": [
+        "loss-measure single-ended send test-id <test-id> interval { <1000> | <10000> } count <count-value>"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "test-id test-id",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the interval at which Loss Measurement Messages (LMMs) are sent.\nThe value is 1000 or 10000."
+        },
+        {
+            "Parameters": "count count-value",
+            "Info": "Specifies the number of the single-ended frame loss measurement operations.\nThe value is an integer ranging from 1 to 60."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 mac 00e0-fc12-7890",
+            "[*HUAWEI-md-md1-ma-ma1] loss-measure single-ended send test-id 1 interval 10000 count 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn-demand OAM refers to OAM actions which are initiated via manual intervention for a limited time to carry out diagnostics. On-demand OAM can result in singular or periodic OAM actions during the diagnostics time interval. Single-ended LMMs can be used for packet loss measurement in on-demand OAM.\nTo implement singular or periodic packet loss measurement, you can run this command.\nPrerequisites\nThis command takes effect only after the following configurations are complete:\nIEEE Standard 802.1ag-2007 has been specified for CFM using the cfm version standard command in the system view.CFM has been enabled globally using the cfm enable command in the system view.An MD has been created using the cfm md command in the system view.An MA has been created using the ma command in the MD view.VLL, VPLS, and VLAN scenarios support outward-facing MEPs, and VPLS and VLL scenarios support inward-facing MEPs. An MEP has been created according to the MEP type.An inward-facing MEP has been created using the mep mep-id command in the MA view.An outward-facing MEP has been created using the mep mep-id command in the MA view.A remote MEP in the MA has been created using the remote-mep command in the MA view.The local MEP in the MA has been enabled to send CCMs using the mep ccm-send enable command in the MA view.The local MEP has been enabled to receive CCMs from the remote MEP in the same MA using the remote-mep ccm-receive enable command in the MA view.A test instance has been created using the test-id command in the MD view.\n\nConfiguration Impact\nAfter the configuration is complete, on-demand single-ended frame loss measurement is implemented.\nPrecautions\nConfiguring on-demand single-ended frame loss measurement involves the setting of the remote MEP ID or destination MAC address, interval at which LMMs are sent, and measurement period.\nIf the local MEP has not learned the MAC address of the remote MEP, you must specify the destination MAC address for single-ended frame loss measurement.If the local MEP has learned the MAC address of the remote MEP, you can specify the remote MEP ID for single-ended frame loss measurement."
+}

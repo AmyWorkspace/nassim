@@ -1,0 +1,48 @@
+{
+    "PageTitle": "peer advertise-entropy-label",
+    "FuncDef": "The peer advertise-entropy-label elc command enables a device to add the entropy label of the entropy label capability (ELC) type to the BGP routes to be advertised to a specified peer.\nThe undo peer advertise-entropy-label command cancels the existing configuration.\nBy default, a device advertises BGP routes without the entropy label to a peer.",
+    "CLIs": [
+        "peer <peerIpv4Addr> advertise-entropy-label elc [ padding <paddingValue> ]",
+        "peer <peerIpv4Addr> advertise-entropy-label disable",
+        "undo peer <peerIpv4Addr> advertise-entropy-label elc [ padding <paddingValue> ]",
+        "undo peer <peerIpv4Addr> advertise-entropy-label disable"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view",
+        "BGP-Labeled address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerIpv4Addr",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "padding paddingValue",
+            "Info": "Padding format of the ELC attribute.\nThe value is a hexadecimal string containing 1 to 32 characters (16 hexadecimal numbers). It cannot contain spaces, and can only contain uppercase letters (A to F) and digits (0 to 9), and the length must be an even number."
+        },
+        {
+            "Parameters": "disable",
+            "Info": "Disable the entropy label advertisement capability.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.1.1.1 as-number 200",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] peer 10.1.1.1 enable",
+            "[*HUAWEI-bgp-af-ipv4] peer 10.1.1.1 label-route-capability",
+            "[*HUAWEI-bgp-af-ipv4] peer 10.1.1.1 advertise-entropy-label elc"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.1.1.1 as-number 200",
+            "[*HUAWEI-bgp] ipv4-family labeled-unicast",
+            "[*HUAWEI-bgp-af-ipv4-labeled] peer 10.1.1.1 enable",
+            "[*HUAWEI-bgp-af-ipv4-labeled] peer 10.1.1.1 advertise-entropy-label elc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf load balancing is uneven on a network, you can run the peer advertise-entropy-label elc command to enable a device to add the entropy label of the ELC type to the BGP routes to be advertised to a specified peer. This command together with the peer entropy-label command helps equalize and improve the performance of load balancing. The standard that the peer advertise-entropy-label elc command complies with does not define the format of a padding value. To ensure flexible padding adjustment, specify the padding parameter to set a padding value for the entropy label as required. When changing the next hop of a route received from a peer, the device replaces the padding value carried the route with the padding value specified using the peer advertise-entropy-label elc command.\nAfter a peer is added to a peer group, the peer inherits the configuration of the peer group. If the capability of adding the entropy label of the ELC type to the BGP routes to be advertised is enabled on the local device and for the peer group, run the peer advertise-entropy-label disable command on the local device if this newly added peer does not need to have this capability."
+}

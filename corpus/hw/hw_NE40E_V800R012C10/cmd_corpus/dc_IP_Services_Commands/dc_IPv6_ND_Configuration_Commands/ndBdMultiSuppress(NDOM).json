@@ -1,0 +1,43 @@
+{
+    "PageTitle": "ipv6 nd multicast-suppress enable",
+    "FuncDef": "The ipv6 nd multicast-suppress enable command enables NS multicast suppression.\nThe undo ipv6 nd multicast-suppress enable command disables NS multicast suppression.\nBy default, NS multicast suppression is not enabled.",
+    "CLIs": [
+        "ipv6 nd multicast-suppress { proxy-reply [ unknown-options-unicast ] | unicast-forward } [ mismatch-discard ] enable",
+        "undo ipv6 nd multicast-suppress { proxy-reply [ unknown-options-unicast ] | unicast-forward } [ mismatch-discard ] enable",
+        "undo ipv6 nd multicast-suppress enable"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "proxy-reply",
+            "Info": "When the destination address of an NS multicast message is not of the local host but can match a proxy ND entry on the local device, the device implements proxy ND and replies with an NA message.\n-"
+        },
+        {
+            "Parameters": "unknown-options-unicast",
+            "Info": "When the destination address of an NS multicast message is not of the local host but can match a proxy ND entry on the local device, the device converts multicast streams to unicast streams for the packets carrying unrecognized options.\nBy default, the device does not process unrecognized options in NS messages.\n-"
+        },
+        {
+            "Parameters": "unicast-forward",
+            "Info": "When the destination address of an NS multicast message is not of the local host but can match a proxy ND entry on the local device, the device converts the NS multicast message to an NS unicast message and forwards the NS unicast message.\n-"
+        },
+        {
+            "Parameters": "mismatch-discard",
+            "Info": "When the destination address of an NS multicast message is not of the local host and does not match a proxy ND entry on the local device, the device discards the NS multicast message.\nBy default, the device replicates and forwards the NS multicast messages that do not match a proxy ND entry on the local device.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] ipv6 nd multicast-suppress proxy-reply enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] ipv6 nd multicast-suppress unicast-forward enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a network device receives an NS message to implement address resolution, the device forwards the NS message within its own BD. This NS message is received only by the nodes with the last 24 bits the same as the multicast address. If a device receives a large number of NS messages within a specified period, forwarding these NS messages uses excessive network resources and leads to network congestion and deteriorated network performance. As a result, user services are affected.\nTo resolve this problem, run the ipv6 nd multicast-suppress enable command to enable NS multicast suppression. With NS multicast suppression enabled, upon receipt of an NS message, a device checks whether the NS message contains information about the end user. If so, the device simply implements proxy ND or converts multicast streams to unicast streams. If not, the device forwards the NS message based on the original process. This reduces or suppresses message flooding occurred during address resolution.\nPrecautions\nBefore NS multicast suppression is enabled, ensure that the encapsulation type of the Layer 2 sub-interface bound to the BD domain is not any of the following types:\nDefaultDot1q transparent transmissionQinQ transparent transmission"
+}

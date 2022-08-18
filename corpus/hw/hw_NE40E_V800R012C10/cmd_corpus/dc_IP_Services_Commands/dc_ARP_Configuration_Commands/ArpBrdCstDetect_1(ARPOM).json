@@ -1,0 +1,28 @@
+{
+    "PageTitle": "arp broadcast-detect interval",
+    "FuncDef": "The arp broadcast-detect interval command sets the interval at which ARP broadcast probe is implemented when a VXLAN tunnel or Layer 2 sub-interface goes Down.\nThe undo arp broadcast-detect interval command restores the default configuration.\nBy default, ARP broadcast probe is implemented at an interval of 5s when a VXLAN tunnel or Layer 2 sub-interface goes Down.",
+    "CLIs": [
+        "arp broadcast-detect interval <detect-interval>",
+        "undo arp broadcast-detect interval [ <detect-interval> ]"
+    ],
+    "ParentView": [
+        "VBDIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "detect-interval",
+            "Info": "Specifies the interval at which ARP broadcast probe is implemented.\nThe value is an integer ranging from 1 to 5, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] commit",
+            "[~HUAWEI-bd10] quit",
+            "[~HUAWEI] interface vbdif 10",
+            "[*HUAWEI-Vbdif10] arp broadcast-detect interval 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the NFVI distributed gateway scenario, if the local VXLAN tunnel or Layer 2 sub-interface functioning as the gateway to receive ARP request packets goes Down, ARP entries cannot be generated, and packets are discarded. In this case, run the arp broadcast-detect enable command to enable ARP broadcast probe in the VBDIF interface view. Because ARP request packets are broadcast, they can be broadcast in a BD. When the local VXLAN tunnel or Layer 2 sub-interface is Down, ARP request packets cannot be sent locally. However, if the remote VXLAN tunnel or Layer 2 sub-interface is Up, ARP requests can be sent, and dynamic ARP entries can be learned upon receipt of ARP response packets. The remote device can then synchronize learned ARP entries to the local device through EVPN routes, and redirected ARP entries are generated on the local device.\nTo set the interval at which ARP broadcast probe is implemented when a local VXLAN tunnel or Layer 2 sub-interface goes Down, run the arp broadcast-detect interval command.\nConfiguration Impact\nAfter a VXLAN tunnel or Layer 2 sub-interface goes from Up to Down, if the device fails to relearn dynamic ARP entries from the remote VXLAN tunnel or sub-interface within the period specified by arp broadcast-detect interval detect-interval and arp broadcast-detect times detect-times, dynamic ARP entries learned on the local VXLAN tunnel or Layer 2 sub-interface will be deleted."
+}

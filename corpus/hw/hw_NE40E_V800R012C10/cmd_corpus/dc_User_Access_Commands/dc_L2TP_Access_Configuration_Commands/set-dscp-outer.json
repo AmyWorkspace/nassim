@@ -1,0 +1,35 @@
+{
+    "PageTitle": "set-dscp-outer",
+    "FuncDef": "The set-dscp-outer command configures the device to mark the outer DSCP value of the L2TP control packet so that the device and the peer device (LNS) can negotiate the AVP 47 attribute.\nThe undo set-dscp-outer command restores the default value of the outer DSCP value of the L2TP control packet.\nBy default, the DSCP value in the outer IP header of control packets sent by an LNS is determined by the AVP47/AVP48 attribute value configured on the LAC connecting to the LNS. If no AVP47/AVP48 attribute value is configured on the LAC, the default DSCP value is 48.",
+    "CLIs": [
+        "set-dscp-outer [ lns ] <dscp-value>",
+        "undo set-dscp-outer",
+        "undo set-dscp-outer lns"
+    ],
+    "ParentView": [
+        "L2TP group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lns",
+            "Info": "Specifies the peer device (LNS).\n-"
+        },
+        {
+            "Parameters": "dscp-value",
+            "Info": "Specifies a DSCP value in the outer IP header of control packets sent by an LNS.\nThe value is an integer ranging from 0 to 63."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2tp-group huawei",
+            "[*HUAWEI-l2tp-huawei] set-dscp-outer lns 55"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2tp-group group1",
+            "[*HUAWEI-l2tp-group1] set-dscp-outer 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter you run the set-dscp-outer command on the device, the device marks the DSCP value of the L2TP control packets used to establish the L2TP tunnel. The device then negotiates with the peer device (LNS) for AVP 47 attribute.\nPackets with different DSCP values have different priorities. To view policies adopted for packets of different priorities, run the display diffserv domain command to view the mapping among the DSCP value, PHB, and color. On the LAC, the DiffServ domain is configured on the BAS interface.\nFor the L2TP control packets in which the AVP 47 attribute is negotiated, QoS mapping is not performed in the inbound direction of the tunnel.\nConfiguration Impact\nAfter this command is run, when packets are sent to an MPLS network, the MPLS EXP and DSCP values are mapped. The DSCP value specified in the set-dscp-outer lns command is first mapped to an internal priority based on the fixed mapping, and then the internal priority is mapped to an MPLS EXP value.\nPrecautions\nIn VS mode, this command is supported only on the admin VS.\nThis command takes effect only on the LAC.\nAfter this command is run, the DSCP value carried in the AVP47/AVP48 attribute configured on a LAC no longer takes effect on an LNS connecting to the LAC.\nThe configuration takes effect only for users that go online through tunnels established after the command is run.\nThe set-dscp-outer command configures the device to mark the outer DSCP value of the L2TP control packet so that the device and the peer device (LNS) can negotiate the AVP 47 attribute.\nDuring negotiation, if the DSCP value is mapped to a red queue, the LNS ignores the value and uses the fixed value 48."
+}

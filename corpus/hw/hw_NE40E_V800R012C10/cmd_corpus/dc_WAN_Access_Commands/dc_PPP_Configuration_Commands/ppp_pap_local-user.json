@@ -1,0 +1,52 @@
+{
+    "PageTitle": "ppp pap local-user",
+    "FuncDef": "The ppp pap local-user command configures a user name and password to be sent by the local Device to the remote Device during PAP authentication.\nThe undo ppp pap local-user command deletes the configured user name and password.\nBy default, when being authenticated by the remote Device in PAP mode, the local Device sends a request without a user name or a password to the remote Device.",
+    "CLIs": [
+        "ppp pap local-user <user-name> password { simple password | cipher { password | password } }",
+        "undo ppp pap local-user"
+    ],
+    "ParentView": [
+        "LMP configuration view",
+        "POS interface view",
+        "POS-Trunk interface view",
+        "Trunk serial interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-name",
+            "Info": "Specifies the user name for PAP authentication. A user name cannot contain an at sign (@). If a user name contains a domain name with an @, you must configure AAA in the domain.\nThe value is a string of 1 to 253 case-insensitive characters."
+        },
+        {
+            "Parameters": "password",
+            "Info": "Specifies a password.\n-"
+        },
+        {
+            "Parameters": "simple password",
+            "Info": "Specifies a simple password with which the local Device is authenticated by the peer in PAP mode. The password is stored in plain text in the configuration file.\nThe password is a string of 1 to 16 case-sensitive characters."
+        },
+        {
+            "Parameters": "cipher password",
+            "Info": "Specifies a ciphertext password with which the local Device is authenticated by the peer in PAP mode. The password is input in simple or encrypt text but stored in cipher text in the configuration file.\nThe password is input in simple or encrypt text.\nWhen being input in simple text, the password is a string of 1 to 16 case-sensitive characters.When being input in ciphertext, the password must be a string of case-sensitive characters. If the system root key is not set, the length of the string must be 48. If the system root key is set, the length of the string can be 108 or 128.A 24-character or 32-character ciphertext password configured in an earlier version is also supported in this version."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface pos 1/0/1",
+            "[~HUAWEI-Pos1/0/1] ppp chap local-user Huawei password cipher Huawei-123"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] lmp",
+            "[*HUAWEI-lmp] commit",
+            "[~HUAWEI] quit",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] lmp interface enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] interface Lmpif1/0/0",
+            "[*HUAWEI-Lmpif1/0/0] ppp chap local-user Huawei password cipher Huawei-123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPAP is a two-way handshake authentication protocol. During PAP authentication, the authenticatee first sends its user name and password to the authenticator. The authenticator checks whether the received user name and password are correct according to the local user table, and then sends a response (either approval or denial) to the authenticatee.\nNote that PAP is an insecure protocol. In PAP authentication, passwords are sent over links in plain text. After a PPP link is established, the authenticatee repeatedly sends the user name and password until the authentication finishes. This authentication way cannot prevent malicious attacks. It is recommended that you select cipher to save the password in ciphertext. When the local device is authenticated by the remote device in PAP mode, the local device sends the user name and password that are the same as those configured on the remote device. By default, passwords are in plain text.\nPrerequisites\nPPP has been configured as the link layer protocol of the interface.\nPAP authentication has been configured for the authenticator.\nConfiguration Impact\nIf the ppp pap local-user command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nAfter the configuration, you must run the shutdown, commit, and undo shutdown commands in the corresponding interface view for the configuration to take effect.PAP is not a secure protocol, it is recommended to use CHAP protocol."
+}

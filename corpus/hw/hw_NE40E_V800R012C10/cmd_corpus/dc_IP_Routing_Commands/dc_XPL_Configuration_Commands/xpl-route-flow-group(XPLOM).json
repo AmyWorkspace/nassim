@@ -1,0 +1,29 @@
+{
+    "PageTitle": "xpl route-flow-group",
+    "FuncDef": "The xpl route-flow-group command creates a QPPB configuration group and displays the QPPB configuration group view.\nThe undo xpl route-flow-group command deletes a specified QPPB configuration group.\nBy default, no QPPB configuration groups are configured.",
+    "CLIs": [
+        "xpl route-flow-group <group-name>",
+        "undo xpl route-flow-group <group-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a QPPB configuration group.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. The string can contain letters, digits, underscores (_), hyphens (-), and dots (.). It must start with a letter or digit."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system",
+            "[~HUAWEI] xpl route-flow-group qppb1",
+            "[~HUAWEI-xpl-rfg] apply ip-precedence 2,",
+            "[~HUAWEI-xpl-rfg] apply qos-local-id 10,",
+            "[~HUAWEI-xpl-rfg] apply traffic-index 1,",
+            "[~HUAWEI-xpl-rfg] apply peer-id 10",
+            "[~HUAWEI-xpl-rfg] end-group"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, routes do not carry the QoS attribute. Configuring QPPB helps collect traffic statistics.\nTo create a QPPB configuration group and enter the QPPB configuration group view to set a value for the QoS attribute of routes, run the xpl route-flow-group command.\nFollow-up Procedure\n Set a value for the QoS attribute of routes using the following commands:apply ip-precedence: sets the QoS parameter ip-precedence.apply qos-local-id: sets the QoS local ID.apply traffic-index: sets the traffic index.apply behavior: sets a QoS behavior.apply peer-id: sets an ID for a BGP peer group for URPF control.\n Run the end-group command in the QPPB configuration group view to conclude the configuration of the QPPB configuration group.\n\nPrecautions\nTo exit from the QPPB configuration group view, run the abort command in the QPPB configuration group view.\nIf multiple QPPB configuration groups are applied in a route-filter, the configuration in the last QPPB configuration group applied in the route-filter takes effect. Take the following configuration as an example. Because the QPPB configuration group named rfg2 is the last applied group, the configuration of the apply qos-local-id command in this group takes effect. The configuration of the apply ip-precedence command in the group named rfg1 does not take effect in the route-filter.\n#\nxpl route-flow-group rfg1apply ip-precedence 6\nend-group\n#\nxpl route-flow-group rfg2apply qos-local-id 39\nend-group\n#\n#\nxpl route-filter rf1apply group rfg1\napply group rfg2\nend-filter\n#"
+}

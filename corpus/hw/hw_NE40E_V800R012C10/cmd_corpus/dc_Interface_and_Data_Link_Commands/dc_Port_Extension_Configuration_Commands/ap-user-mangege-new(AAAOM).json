@@ -1,0 +1,43 @@
+{
+    "PageTitle": "local-user password",
+    "FuncDef": "The local-user password command creates a local user and sets a login password for the user.\nThe undo local-user command deletes a local user.\nBy default, the system has no local user.",
+    "CLIs": [
+        "local-user <user-name> password cipher [ password ]",
+        "undo local-user <user-name>"
+    ],
+    "ParentView": [
+        "Virtual access AP-user view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-name",
+            "Info": "Specifies the username.\nThe value is a string of 1 to 253 case-insensitive characters without spaces. If the value includes @, the characters before @ are the user name and the characters after @ are the domain name. If the value excludes @ or the domain name does not exist, the entire string is the user name and the user belongs to the default domain. A user name cannot contain two or more @s.\nWhen the user security policy is configured, the value is a string of 6 to 253 characters. When the user security policy is not configured, the value is a string of 1 to 253 characters.\nThe user name cannot contain spaces or the following special characters: /, \\, :, *, ?, \", <, >, |, @, ', %."
+        },
+        {
+            "Parameters": "cipher password",
+            "Info": "Specifies the password in ciphertext. The password is input unencrypted or encrypted but stored in ciphertext in the configuration file.\nThe new password is at least eight characters long and contains at least two of the following types: upper-case letters, lower-case letters, digits, and special characters.\nThe password is input in either simple text or ciphertext mode.\nWhen being input in simple text, the password is a string of 8 to 128 case-sensitive characters. When you input a password in simple text, the system displays the password in simple text mode, which brings risks.When being input in ciphertext, the password must be a string of 32 to 268 consecutive characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ap-id 1024",
+            "[*HUAWEI-ap1024] ap-user",
+            "[*HUAWEI-ap1024] commit",
+            "[~HUAWEI-ap1024-ap-user] local-user hello@163.net password cipher Hello-13579"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "Enter system view, return user view with return command.",
+            "[~HUAWEI] ap-id 1030",
+            "[*HUAWEI-ap1030] commit",
+            "[~HUAWEI-ap1030] ap-user",
+            "[~HUAWEI-ap1030-ap-user] local-user huawei password cipher",
+            "Please configure the password (8-128)",
+            "Enter Password:",
+            "Confirm Password:",
+            "[~HUAWEI-ap1030-ap-user]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the port extension system, a NETCONF management channel must be created between the Master and AP so that the Master can deliver configurations to the AP. To create a NETCONF management channel and guarantee the security of the NETCONF management channel, create a local user and use local authentication. To create a local user and set a login password for the user, run the local-user password command.\nPrecautions\nThere is only one user on each AP, when a new user is added, the existing users will be deleted.cipher mode is a common encryption mode, using reversible encryption algorithm to generate redaction.cipher password configuration method clear text, secret text there is overlapping length area, the length of the password in the area of priority adapted to the secret text, if the redaction processing error, then as clear text processing, as clear text processing to meet the length and constraints of clear text."
+}

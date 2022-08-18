@@ -1,0 +1,95 @@
+{
+    "PageTitle": "qos bandwidth-adjustment",
+    "FuncDef": "The qos bandwidth-adjustment command sets parameters for bandwidth adjustment.\nThe undo qos bandwidth-adjustment command cancels the bandwidth adjustment function.\nBy default, the bandwidth adjustment function is disabled when the configured bandwidth is lower than 50% of the total bandwidth of the traffic scheduling module. When the configured bandwidth is between 50% and 80% of the total bandwidth of the traffic scheduling module, the bandwidth adjustment mode remains unchanged. When the configured bandwidth exceeds 80% of the total bandwidth of the traffic scheduling module, the bandwidth adjustment function is automatically enabled.",
+    "CLIs": [
+        "qos bandwidth-adjustment { degrade-cycle <cycle-num> | upgrade-cycle <cycle-num> | monitor-number <monitor_number> | adjust-number <adjust_number> | disable-percent <disable-value> enable-percent <enable-value> | upgrade-threshold <upgrade-value> degrade-threshold <degrade-value> inbound | upgrade-threshold <upgrade-value> degrade-threshold <degrade-value> outbound | enable outbound }",
+        "undo qos bandwidth-adjustment { degrade-cycle [ <cycle-num> ] | upgrade-cycle [ <cycle-num> ] | monitor-number [ <monitor_number> ] | adjust-number [ <adjust_number> ] | disable-percent <disable-value> enable-percent <enable-value> | upgrade-threshold <upgrade-value> degrade-threshold <degrade-value> inbound | upgrade-threshold <upgrade-value> degrade-threshold <degrade-value> outbound | enable outbound }"
+    ],
+    "ParentView": [
+        "Slot view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "degrade-cycle cycle-num",
+            "Info": "Specifies the degrade suppression period.\nThe value is an integer ranging from 1 to 255, in seconds. By default, the bandwidth degrade period is 64s."
+        },
+        {
+            "Parameters": "upgrade-cycle cycle-num",
+            "Info": "Specifies the upgrade suppression period.\nThe value is an integer ranging from 1 to 255, in seconds. By default, the bandwidth upgrade period is 1s."
+        },
+        {
+            "Parameters": "monitor-number monitor_number",
+            "Info": "Specifies the number of users to be monitored.\nThe value is an integer ranging from 1000 to 64000. By default, 32000 users are monitored."
+        },
+        {
+            "Parameters": "adjust-number adjust_number",
+            "Info": "Specifies the number of bandwidth adjustments in 500 ms.\nThe value is an integer ranging from 1 to 1000. By default, 50 bandwidth adjustments are implemented in 500 ms."
+        },
+        {
+            "Parameters": "disable-percent disable-value",
+            "Info": "Specifies the disable value of bandwidth adjustment.\nThe value is a percent integer ranging from 0 to 100."
+        },
+        {
+            "Parameters": "enable-percent enable-value",
+            "Info": "Specifies the enable value of bandwidth adjustment.\nThe value is a percent integer ranging from 0 to 100."
+        },
+        {
+            "Parameters": "upgrade-threshold upgrade-value",
+            "Info": "Specifies the upgrade threshold.\nThe value is a percent integer ranging from 1 to 99."
+        },
+        {
+            "Parameters": "degrade-threshold degrade-value",
+            "Info": "Specifies the degrade threshold.\nThe value is a percent integer ranging from 1 to 99."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates the inbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates the outbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enable.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[~HUAWEI-slot-1] qos bandwidth-adjustment enable outbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[~HUAWEI-slot-1] qos bandwidth-adjustment degrade-cycle 100"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[~HUAWEI-slot-1] qos bandwidth-adjustment upgrade-cycle 100"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[~HUAWEI-slot-1] qos bandwidth-adjustment monitor-number 32"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[~HUAWEI-slot-1] qos bandwidth-adjustment adjust-number 1000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[~HUAWEI-slot-1] qos bandwidth-adjustment disable-percent 0 enable-percent 30"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[~HUAWEI-slot-1] qos bandwidth-adjustment upgrade-threshold 79 degrade-threshold 20 outbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set parameters for bandwidth adjustment, run the qos bandwidth-adjustment command. The outbound bandwidth adjustment function is disabled by default. To configure parameters for outbound bandwidth adjustment, run the qos bandwidth-adjustment enable outbound command to enable the outbound bandwidth adjustment function and then run corresponding commands to set parameters.\nTo set the degrade suppression period, run the qos bandwidth-adjustment degrade-cycle command.To set the upgrade suppression period, run the qos bandwidth-adjustment upgrade-cycle command.To set the number of users to be monitored within a period, run the qos bandwidth-adjustment monitor-number command.To set the number of bandwidth adjustments, run the qos bandwidth-adjustment adjust-number command.To set the disable threshold for bandwidth adjustment, run the qos bandwidth-adjustment disable-percent command.To set the enable threshold for bandwidth adjustment, run the qos bandwidth-adjustment enable-percent command.To set the upgrade threshold for bandwidth adjustment, run the qos bandwidth-adjustment upgrade-threshold command.To set the degrade threshold for bandwidth adjustment, run the qos bandwidth-adjustment degrade-threshold command.To set the threshold for bandwidth adjustment, run the qos bandwidth-adjustment monitor-rate command.\nThere are 32 grades for bandwidth adjustment. The following table shows the mappings between the grade and default bandwidth:\n\nTable 1 Mapping between the grade and default bandwidthGrade\n\nDefault Bandwidth (kbit/s)\n\nGrade\n\nDefault Bandwidth (kbit/s)\n\n\n\n1\n\n490\n\n17\n\n59375\n\n\n2\n\n975\n\n18\n\n70313\n\n\n3\n\n1563\n\n19\n\n79688\n\n\n4\n\n3125\n\n20\n\n90625\n\n\n5\n\n4688\n\n21\n\n100000\n\n\n6\n\n6250\n\n22\n\n150000\n\n\n7\n\n7813\n\n23\n\n200000\n\n\n8\n\n9375\n\n24\n\n250000\n\n\n9\n\n12500\n\n25\n\n300000\n\n\n10\n\n15625\n\n26\n\n350000\n\n\n11\n\n20313\n\n27\n\n400000\n\n\n12\n\n25000\n\n28\n\n450000\n\n\n13\n\n29688\n\n29\n\n500000\n\n\n14\n\n34375\n\n30\n\n600000\n\n\n15\n\n39063\n\n31\n\n700000\n\n\n16\n\n48438\n\n32\n\n800000\n\n\n\n\n\nPrecautions\nWhen configuring bandwidths for grades, ensure that the bandwidth of a lower grade must be lower than that of a neighboring higher grade.\nThis command applies to the LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUI-51-S/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101/LPUF-51-E/LPUI-51-E/LPUI-51-CM/LPUF-120/LPUF-120-B/LPUF-120-E/LPUI-102-E/LPUI-120/LPUI-120-B/LPUI-120-L/LPUI-52-E/LPUI-120-E/LPUI-120-CM/LPUF-240/LPUF-240-B/LPUF-240-E/LPUI-240/LPUI-240-B/LPUI-240-CM/LPUI-240-L.\nWhen a board that supports this command functions as a TM subcard, the maximum SQ bandwidth that can be configured is 600 Gbit/s. If the configured bandwidth exceeds 600 Gbit/s, SQ resources fail to be delivered. In this case, SQ resources that BAS users request are automatically switched to CAR resources, and SQ parameters configured on an interface do not take effect.\nIn VS mode, this command applies only to the admin VS and cannot be configured in other VSs. This command takes effect on all VSs."
+}

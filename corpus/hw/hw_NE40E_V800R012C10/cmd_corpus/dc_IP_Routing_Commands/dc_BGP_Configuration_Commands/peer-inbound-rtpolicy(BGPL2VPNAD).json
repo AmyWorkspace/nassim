@@ -1,0 +1,38 @@
+{
+    "PageTitle": "peer route-policy import (BGP-L2VPN-AD address family view)",
+    "FuncDef": "The peer route-policy import command specifies a route-policy for filtering routes received from a peer.\nThe undo peer route-policy import command deletes a specified route-policy.\nBy default, no route-policy is configured for filtering routes received from a peer.",
+    "CLIs": [
+        "peer <ipv4-address> route-policy <route-policy-name> import",
+        "undo peer <ipv4-address> route-policy <route-policy-name> import"
+    ],
+    "ParentView": [
+        "BGP-L2VPN-AD address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "route-policy-name",
+            "Info": "Name of the route policy.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "import",
+            "Info": "Specify import policy.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy test-policy permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.1.1.2 as-number 200",
+            "[*HUAWEI-bgp] l2vpn-ad-family",
+            "[*HUAWEI-bgp-af-l2vpn-ad] peer 10.1.1.2 enable",
+            "[*HUAWEI-bgp-af-l2vpn-ad] peer 10.1.1.2 route-policy test-policy import"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a route-policy is created, the peer route-policy import command is used to apply a Route-Policy to a peer so that the routes received from the peer can be controlled. To be specific, only the necessary routes are received from the peer. In this manner, route management is implemented, the scale of the routing table is reduced, and fewer network resources are consumed.\nPrerequisites\nIf the command specifies a route-policy that does not exist, use the route-policy command to create the route-policy.\nConfiguration Impact\nIf the peer route-policy command is run for a peer group, all the members of the peer group inherit the configuration.\nThe peer route-policy command is mutually exclusive with the peer route-filter commands.\nBinding a route-policy after a BGP peer relationship is established may cause peer flapping."
+}

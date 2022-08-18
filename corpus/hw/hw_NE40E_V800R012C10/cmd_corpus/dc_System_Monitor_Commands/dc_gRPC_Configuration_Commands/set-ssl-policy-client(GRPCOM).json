@@ -1,0 +1,40 @@
+{
+    "PageTitle": "ssl-verify (GRPC client view)",
+    "FuncDef": "The ssl-verify peer command enables a client to perform SSL verification on a server during Telemetry static subscription.\nThe undo ssl-verify peer command disables a client from performing SSL verification on a server during Telemetry static subscription.\nThe ssl-policy command configures an SSL policy for a client during Telemetry static subscription.\nThe undo ssl-policy command deletes the SSL policy configured for a client during Telemetry static subscription.\nBy default, no SSL policy is configured for a client . A client does not perform SSL verification on a server during Telemetry static subscription.",
+    "CLIs": [
+        "ssl-policy <ssl-policy-name> [ verify-cn <cn-name> ]",
+        "ssl-verify peer",
+        "undo ssl-policy [ <ssl-policy-name> [ verify-cn <cn-name> ] ]",
+        "undo ssl-verify peer"
+    ],
+    "ParentView": [
+        "GRPC client view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "verify-cn cn-name",
+            "Info": "Specifies a CommonName for the SSL policy configured.\nCommonName is a parameter used to generate an SSL certificate.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "ssl-policy ssl-policy-name",
+            "Info": "Specifies the name of an SSL policy.\nThe value is a string of 1 to 23 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssl policy policy2",
+            "[*HUAWEI-ssl-policy-policy2] quit",
+            "[*HUAWEI] grpc",
+            "[*HUAWEI-grpc] grpc client",
+            "[*HUAWEI-grpc-client] ssl-policy policy2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] grpc",
+            "[~HUAWEI-grpc] grpc client",
+            "[~HUAWEI-grpc-client] ssl-verify peer"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen you create a gRPC-based static subscription, you can run the ssl-verify peer command to enable a client to perform SSL verification on a server. If the server does not have a certificate or the certificate is incorrect, the client tears down the connection with the server.\nWhen you create a gRPC-based static subscription, an insecure TCP connection is set up between the device functioning as a client and the collector functioning as a server. In this case, you can run the ssl-policy command to configure an SSL policy for the client to establish a secure SSL connection with the server.\nPrerequisites\nEnsure that the SSL policy has been created before you run the ssl-policy command.\nPrecautions\nIf the no-tls parameter has been configured by running the ipv4-address port or ipv6-address port command in Destination-group view or protocol command in Subscription view and taken effect, the TLS encryption mode is not used. In this case, the configuration that enables the client to perform SSL verification on a server and the client-specific SSL policy do not take effect."
+}

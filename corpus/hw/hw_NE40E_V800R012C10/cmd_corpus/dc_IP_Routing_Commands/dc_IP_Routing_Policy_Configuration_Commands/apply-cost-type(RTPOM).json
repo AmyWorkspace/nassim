@@ -1,0 +1,54 @@
+{
+    "PageTitle": "apply cost-type",
+    "FuncDef": "The apply cost-type command sets the cost type of a route.\nThe undo apply cost-type command cancels the configuration.\nBy default, no cost type of a route is set.",
+    "CLIs": [
+        "apply cost-type { external | internal | type-1 | type-2 | internal-inc-ibgp | med-plus-igp | med-inherit-aigp }",
+        "undo apply cost-type"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "external",
+            "Info": "Sets the cost type to IS-IS external.\n-"
+        },
+        {
+            "Parameters": "internal",
+            "Info": "Sets the cost type to IS-IS internal or sets the MED of a BGP route to the cost of the IGP route to which the BGP route recurses. This parameter takes effect only on EBGP peers.\n-"
+        },
+        {
+            "Parameters": "type-1",
+            "Info": "Sets the cost type to OSPF external Type 1.\n-"
+        },
+        {
+            "Parameters": "type-2",
+            "Info": "Sets the cost type to OSPF external Type 2.\n-"
+        },
+        {
+            "Parameters": "internal-inc-ibgp",
+            "Info": "Sets the cost type to IS-IS internal or enables the MED of a BGP route to inherit the cost of the IGP route to which the BGP route recurses. This parameter takes effect both on EBGP and IBGP peers.\n-"
+        },
+        {
+            "Parameters": "med-plus-igp",
+            "Info": "Sets the MED of a BGP route by adding the original MED to the cost of the IGP route to which the BGP route recurses. This parameter takes effect both on EBGP and IBGP peers.\n-"
+        },
+        {
+            "Parameters": "med-inherit-aigp",
+            "Info": "Enables the MED of a BGP route to inherit the AIGP. This parameter takes effect both on EBGP and IBGP peers. The policy applies only to BGP VPN peers.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] apply cost-type type-1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] apply cost-type med-inherit-aigp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the cost type for the routes that match an if-match clause, run the apply cost-type command. After the cost type of the routes that match a route-policy is set, the routes that are imported using the route-policy carry the set cost type.\nRun the route-policy command to enter the Route-policy view.A route-policy may consist of multiple nodes. The relationship between the nodes is \"OR\". The system matches a route against the nodes in sequence. If the route matches a node, the route matches the route-policy, and the system no longer matches it against other nodes.Each node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nConfiguration Impact\nAfter routes match the route-policy, the cost type of the routes is changed.\nPrecautions\nDifferent operations are performed when the apply cost-type internal command is applied to IS-IS routes and BGP routes:\nWhen the apply cost-type internal command is applied to IS-IS routes:Routes are configured as IS-IS internal routes.\nWhen the apply cost-type internal command is applied to BGP routes:The router sets the MED of each BGP route advertised to a peer to the cost of the IGP route to which the BGP route recurses.\n\nThe internal parameter takes effect only on EBGP peers, whereas the internal-inc-ibgp parameter takes effect both on EBGP and IBGP peers."
+}

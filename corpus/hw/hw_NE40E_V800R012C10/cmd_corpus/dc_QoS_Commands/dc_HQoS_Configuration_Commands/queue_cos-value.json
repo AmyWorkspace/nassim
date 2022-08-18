@@ -1,0 +1,59 @@
+{
+    "PageTitle": "queue cos-value",
+    "FuncDef": "The queue cos-value command sets the scheduling parameters for a flow queue in a 4-CoS flow queue profile, including the scheduling mode, shaping rate, buffer size, and discard policy.\nThe undo queue cos-value command restores the default configuration.\nBy default, the configurations in a flow queue profile in 4-CoS mode are listed in Table 1 in Usage Scenarios.",
+    "CLIs": [
+        "queue <cos-value> { { pq | wfq weight <weight-value> | lpq } | { shaping { <shaping-value> | shaping-percentage <shaping-percentage-value> } [ pbs <pbs-value> ] } | { flow-wred <wred-name> } } *",
+        "undo queue <cos-value> [ pq | wfq | lpq | shaping | flow-wred ]"
+    ],
+    "ParentView": [
+        "Flow-queue-4COS-mode profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cos-value",
+            "Info": "Specifies a service class.\nThe value can be:\ncos0cos1cos2cos3"
+        },
+        {
+            "Parameters": "pq",
+            "Info": "Sets the scheduling mode to PQ.\n-"
+        },
+        {
+            "Parameters": "wfq",
+            "Info": "Sets the scheduling mode to WFQ.\n-"
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Specifies a weight.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "lpq",
+            "Info": "Sets the scheduling mode to LPQ.\n-"
+        },
+        {
+            "Parameters": "shaping shaping-value",
+            "Info": "Specifies a shaping rate.\nThe value is an integer ranging from 8 to 4294967294, in kbit/s."
+        },
+        {
+            "Parameters": "shaping-percentage shaping-percentage-value",
+            "Info": "Specifies the percentage of the shaping rate, that is, the proportion of the traffic-shaping bandwidth to the interface bandwidth.\nThe value is an integer ranging from 0 to 100, in percentage."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies the volume of the allowed peak traffic on an interface after traffic shaping is configured on the interface. The value is equal to the PBS.\nThe value is an integer ranging from 1 to 4194304, in bytes."
+        },
+        {
+            "Parameters": "flow-wred wred-name",
+            "Info": "Specifies the name of a WRED object used by a flow queue.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] flow-wred test",
+            "[*HUAWEI-flow-wred-test] quit",
+            "[*HUAWEI] flow-queue test 4cos-mode",
+            "[*HUAWEI-flow-queue-template-test-4cos-mode] queue cos1 wfq weight 50 shaping 1000 flow-wred test"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the scheduling parameters of a 4-CoS flow queue in a flow queue profile, run the queue command. The parameters include the scheduling mode (PQ/WFQ/LPQ), shaping value, buffer size (PBS), and discard policy (WRED). For example, to allocate a high priority to voice services and ensure low delay, configure PQ for voice services and set a proper flow-WRED profile.\nTable 1 Default FQ Profile Configuration in 4-CoS ModeFlow Queue\n\nMapped 8-CoS Priority\n\nScheduling Mode\n\nWeight\n\nShaping Percentage\n\nDrop Method\n\n\n\ncos0\n\nBE,AF1\n\nWFQ\n\n10\n\n-\n\nTail drop\n\n\ncos1\n\nAF2,AF3,AF4\n\nWFQ\n\n15\n\n-\n\nTail drop\n\n\ncos2\n\nEF\n\nPQ\n\n-\n\n-\n\nTail drop\n\n\ncos3\n\nCS6,CS7\n\nPQ\n\n-\n\n-\n\nTail drop\n\n\n\n\n\nPrerequisites\nA 4-CoS flow queue profile has been created using the flow-queue 4cos-mode command.\nThe required WRED profile has been created.\nConfiguration Impact\nQueue scheduling of services is affected.\nPrecautions\nConfiguring different WRED profiles for flow queues of different service types is recommended.\nParameters in this command do not need to be configured in a specific order. You can configure the parameters individually or collectively."
+}

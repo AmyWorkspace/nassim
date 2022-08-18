@@ -1,0 +1,33 @@
+{
+    "PageTitle": "ipoe-service-type",
+    "FuncDef": "The ipoe-service-type command configures a basic protocol stack for IPoE dual-stack users.\nThe undo ipoe-service-type command restores the default configuration.\nBy default, no protocol stack is configured for IPoE dual-stack users.",
+    "CLIs": [
+        "ipoe-service-type { ipv4 | ipv6 }",
+        "undo ipoe-service-type"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4",
+            "Info": "Specifies the IPv4 as a basic protocol stack.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Specifies the IPv6 as a basic protocol stack.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet2/0/0",
+            "[*HUAWEI-GigabitEthernet2/0/0] bas",
+            "[*HUAWEI-GigabitEthernet2/0/0-bas] access-type layer2-subscriber",
+            "[*HUAWEI-GigabitEthernet2/0/0-bas] ipoe-service-type ipv4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn cold standby scenarios, to implement load balancing among multiple BRASs, run the ipoe-service-type command to configure a basic protocol stack for IPoE dual-stack users.\nConfiguration Impact\nIf IPv4 is specified as the basic protocol stack, after a user uses an IPv6 address to go online, the device checks whether the IPv4 stack is online. If not, the user is not allowed to go online from the IPv6 stack. If the user goes offline from the IPv4 stack, both the IPv4 and IPv6 stacks are offline. In constrast, when IPv6 is used as the basic protocol stack, the device must check whether the IPv6 stack is online when the user uses an IPv4 address to go online. If the user is not online, the user is not allowed to go online from the IPv4 stack. When all IPv6 addresses are offline, both the IPv4 and IPv6 stacks are offline. For example, if the ipoe-service-type ipv6 command is run in the BAS view and an IPoE IPv4+ND+PD user requests to go offline from the PD stack, the user is triggered to go offline from all stacks. If the ipv6 pd-address-release separate user-type ipoe command is run in the domain view also and the IPoE IPv4+ND+PD user requests to go offline from the PD stack, the user is triggered to go offline only from the PD stack.\nPrecautions\nThis command is supported only on the admin VS.\nThis function is not supported for Layer 2 and Layer 3 leased line users."
+}

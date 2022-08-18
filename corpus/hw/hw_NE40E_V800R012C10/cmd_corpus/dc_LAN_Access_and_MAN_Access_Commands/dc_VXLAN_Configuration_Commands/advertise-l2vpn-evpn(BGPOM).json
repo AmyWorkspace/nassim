@@ -1,0 +1,45 @@
+{
+    "PageTitle": "advertise l2vpn evpn",
+    "FuncDef": "The advertise l2vpn evpn command enables a device to advertise IP routes from a VPN instance to its EVPN instance.\nThe undo advertise l2vpn evpn command restores the default configuration.\nBy default, a device is disabled from advertising IP routes from a VPN instance to its EVPN instance.",
+    "CLIs": [
+        "advertise l2vpn evpn [ import-route-multipath ] [ include-local-cross-route ]",
+        "undo advertise l2vpn evpn [ import-route-multipath ] [ include-local-cross-route ]"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv4 address family view",
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "import-route-multipath",
+            "Info": "Advertises all routes with the same destination address in a VPN instance to an EVPN instance.\n-"
+        },
+        {
+            "Parameters": "include-local-cross-route",
+            "Info": "Advertises all routes of local cross in a VPN instance to an EVPN instance.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-vpna] advertise l2vpn evpn"
+        ],
+        [
+            "<~HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vrf1",
+            "[*HUAWEI-vpn-instance-vrf1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv6] route-distinguisher 10:1",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vrf1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vrf1",
+            "[*HUAWEI-bgp-6-vrf1] advertise l2vpn evpn include-local-cross-route"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter VTEPs establish VXLAN tunnels through IP prefix routes, run the advertise l2vpn evpn command to enable a VTEP to advertise host routes from a VPN instance to its EVPN instance. The VTEP then sends host routes to the remote VTEP through the BGP EVPN peer relationship.\nIf you run the advertise l2vpn evpn command without specifying the import-route-multipath parameter, the VPN instance selects the optimal route among its routes with the same destination address and advertises the route to the EVPN instance. To implement even load balancing, run the advertise l2vpn evpn command with the import-route-multipath parameter specified. This configuration allows the VPN instance to advertise all the routes with the same destination address to the EVPN instance.\nBy default, the VPN instance local cross-route is not sent to the EVPN instance. To solve the problem of mutual access between different VPN instances, you can enable the VPN instance to publish the local cross-connect function to the EVPN instance, and send the local cross-route collected by the VPN instance To the EVPN instance, and then send it to the remote device through the BGP EVPN peer relationship."
+}

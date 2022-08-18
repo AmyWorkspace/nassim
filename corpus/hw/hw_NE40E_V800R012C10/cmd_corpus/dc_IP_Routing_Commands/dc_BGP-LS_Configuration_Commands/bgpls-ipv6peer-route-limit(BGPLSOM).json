@@ -1,0 +1,47 @@
+{
+    "PageTitle": "peer route-limit (BGP-LS address family view) (IPv6)",
+    "FuncDef": "The peer route-limit command sets the maximum number of routes that can be received from a peer.\nThe undo peer route-limit command cancels the configuration.\nBy default, there is no limit on the number of routes that can be received from a peer.",
+    "CLIs": [
+        "peer <ipv6-address> route-limit <limit> [ <percentage> ] [ alert-only | idle-forever | idle-timeout <times> ]",
+        "undo peer <ipv6-address> route-limit"
+    ],
+    "ParentView": [
+        "BGP-LS address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specify an IPv6 peer address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X"
+        },
+        {
+            "Parameters": "limit",
+            "Info": "Route limit value. Auto-connect-retry after timeout when the maximum is exceeded and then terminating session.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "percentage",
+            "Info": "Start to generate warning messages if it reaches maximum percentage value.\nThe value is a string of 1 to 100 case-sensitive characters."
+        },
+        {
+            "Parameters": "alert-only",
+            "Info": "Allows the router to generate log message without terminating session when the maximum is exceeded.\n-"
+        },
+        {
+            "Parameters": "idle-forever",
+            "Info": "Indicates that, when the threshold for the maximum number of routes is exceeded, the device does not automatically re-set up connections until the reset bgp command is run.\n-"
+        },
+        {
+            "Parameters": "idle-timeout times",
+            "Info": "Value of idle-timeout timer(minutes).\nThe value is an integer ranging from 1 to 1200, in minutes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 2001:DB8:1::1 as-number 100",
+            "[*HUAWEI-bgp] link-state-family unicast",
+            "[*HUAWEI-bgp-af-ls] peer 2001:DB8:1::1 route-limit 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer route-limit command is used to set the maximum number of routes that a BGP device is allowed to receive from its peer. This provides a mechanism for controlling the routes received from peers in addition to distribution lists, filtering lists, and route mappings.\nConfiguration Impact\nIf the peer route-limit command is run for a peer group, the peers of the peer group inherit the configuration.\nIf a peer relationship between two devices is in the Established state, the following situations occur:\nIf the number of routes received by the Router exceeds the maximum limit after you run the peer route-limit command for the first time or run the command to reduce the maximum limit:\nIf you specified alert-only in the command, the Router does not disconnect its BGP peer. The received routes are not removed, and no additional routes will be accepted.If you specified idle-forever in the command, the Router disconnects its BGP peer. To re-establish the connection, run the reset bgp command.If you specified idle-timeout in the command, the Router disconnects its BGP peer and re-establishes its BGP peer relationship automatically after the timeout timer expires. To re-establish the connection before the timeout timer expires, run the reset bgp command.\nIf the upper limit set on the Router is increased to be greater than the number of received routes, the Router sends Refresh packets to receive routes again. If the Router does not support the route-refresh capability, the Router needs to re-establish the connection with its peer.If the upper limit set on the Router is reduced but is still greater than the number of received routes, only configuration parameters need to be modified.\nIf the alert-only, idle-forever, and idle-timeout are not specified and the proportion of the number of received routes to limit reaches percentage, the device generates an alarm; after the number of received routes exceeds the limit, the connection is interrupted and is automatically re-established in 30s.\n\nPrecautions\nIf the specified peer has the capability and the peer relationship is interrupted when the number of routes exceeds the threshold, the same peer in all address families will be affected, and the peer relationship will be re-established."
+}

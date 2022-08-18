@@ -1,0 +1,100 @@
+{
+    "PageTitle": "rewrite map",
+    "FuncDef": "The rewrite map command sets a traffic behavior to \"map\" for packets that an EVC Layer 2 sub-interface receives.\nThe undo rewrite command deletes a traffic behavior configured on an EVC Layer 2 sub-interface.\nBy default, no traffic behavior is configured on an EVC Layer 2 sub-interface. The EVC Layer 2 sub-interface transparently forwards all received packets without processing them.",
+    "CLIs": [
+        "rewrite map offset { increase | decrease } <offset-vid>",
+        "rewrite map { 1-to-1 | 2-to-1 } vid <pe-vid>",
+        "rewrite map { 1-to-1 | 2-to-1 } vid <pe-vid> 8021p <pe-8021p-value>",
+        "rewrite map { 1-to-2 | 2-to-2 } vid <pe-vid> ce-vid <ce-vid>",
+        "rewrite map { 1-to-2 | 2-to-2 } vid <pe-vid> [ 8021p <pe-8021p-value> ] ce-vid <ce-vid> ce-8021p <ce-8021p-value>",
+        "rewrite map { 1-to-2 | 2-to-2 } vid <pe-vid> 8021p <pe-8021p-value> ce-vid <ce-vid> [ ce-8021p <ce-8021p-value> ]",
+        "undo rewrite"
+    ],
+    "ParentView": [
+        "Layer 2 sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "400GE Layer 2 sub-interface view",
+        "VE layer2 subinterface view",
+        "Global-VE layer2 subinterface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "increase",
+            "Info": "Enables an EVC Layer 2 sub-interface to increase a tag value in each received packet by valoffset.\n-"
+        },
+        {
+            "Parameters": "decrease",
+            "Info": "Enables an EVC Layer 2 sub-interface to decrease a tag value in each received packet by valoffset.\n-"
+        },
+        {
+            "Parameters": "offset-vid",
+            "Info": "Specifies the offset value.\nThe value is an integer ranging from 1 to 4093."
+        },
+        {
+            "Parameters": "1-to-1",
+            "Info": "Configures 1 to 1 VLAN mapping to enable an EVC Layer 2 sub-interface to map a single tag in each received single-tagged packet or an outer tag in each received double-tagged packet to a specified tag.\nFor example, an EVC Layer 2 sub-interface with 1 to 1 VLAN mapping configured receives double-tagged packets. The sub-interface maps the outer tag to a specified VLAN tag and the inner tag remains.\n-"
+        },
+        {
+            "Parameters": "2-to-1",
+            "Info": "Configures 2 to 1 VLAN mapping to enable an EVC Layer 2 sub-interface to map two tags in each received packet to a specified tag.\nThis parameter can be configured only after QinQ encapsulation is enabled using the encapsulation qinq vid pe-vid ce-vid { low-ce-vid [ to high-ce-vid ] | default } command on a specific EVC Layer 2 sub-interface.\n-"
+        },
+        {
+            "Parameters": "vid pe-vid",
+            "Info": "Specifies the VLAN ID in the single tag to which a single tag or double tags in each received packet are mapped when 1 to 1 or 2 to 1 VLAN tag mapping is used.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "8021p pe-8021p-value",
+            "Info": "Specifies an 802.1p value for packets after a single tag or double tags in each received packet are mapped to a single tag.\n802.1p is represented by a 3-bit PRI (priority) field in an 802.1q frame. If traffic is congested on a device, the device forwards frames in descending order by priority values.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "1-to-2",
+            "Info": "Configures 1 to 2 VLAN mapping to enable an EVC Layer 2 sub-interface to map a single tag in each received single-tagged packet or an outer tag in each received double-tagged packet to the specified two tags.\n-"
+        },
+        {
+            "Parameters": "2-to-2",
+            "Info": "Configures 2 to 2 VLAN mapping to enable an EVC Layer 2 sub-interface to map two tags in each received packet to the specified two tags.\nThis parameter can be configured only after QinQ encapsulation is enabled using the encapsulation qinq vid pe-vid ce-vid { low-ce-vid [ to high-ce-vid ] | default } command on a specific EVC Layer 2 sub-interface.\n-"
+        },
+        {
+            "Parameters": "ce-vid ce-vid",
+            "Info": "Specifies the VLAN ID in the inner tag after a single tag or double tags in each received packet are mapped to two tags when 1 to 2 or 2 to 2 VLAN tag mapping is used.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-8021p ce-8021p-value",
+            "Info": "Specifies an 802.1p value for packets after a single tag or double tags in each received packet are mapped to two tags when 1 to 2 or 2 to 2 VLAN tag mapping is used.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "offset",
+            "Info": "Configures VLAN tag mapping based on a specified offset for an EVC Layer 2 sub-interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] rewrite map 1-to-1 vid 10 8021p 4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.2 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] rewrite map 1-to-2 vid 20 ce-vid 100 ce-8021p 4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.3 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] rewrite map 2-to-1 vid 10 8021p 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.4 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.4] rewrite map 2-to-2 vid 30 8021p 3 ce-vid 300 ce-8021p 4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.5 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.5] rewrite map offset increase 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA network needs to be expanded with the growth of access users and data services, which poses the following challenges to the administrator:\nExisting and new sites assigned different VLAN IDs need to communicate.Inconsistent VLAN plans among sites access the public network causes VLAN ID conflicts. Therefore, VLANs at a site need to be isolated with those at another site.VLAN IDs on both ends of public network connection are asymmetric.\nTo face these challenges, run the rewrite map command on devices on the public network edge to map VLAN tags in access packets to public network VLAN tags. The traffic mapping behavior isolates VLAN tags in various VLANs and implements inter-VLAN communication.\n\nPrerequisites\nAn EVC Layer 2 sub-interface has been created using the interface interface-type interface-number.subnum mode l2 command in the system view.The EVC Layer 2 sub-interface is not added to a bridge domain. If the EVC Layer 2 sub-interface has been added to a bridge domain, run the undo bridge-domain bd-id command to remove the EVC Layer 2 sub-interface from the bridge domain.\n\nPrecautions\nA maximum of one traffic behavior can be specified on each EVC Layer 2 sub-interface. If a traffic behavior has been configured on an EVC Layer 2 sub-interface, perform the following operations:\nRun the undo rewrite command to delete the existing traffic behavior.Run the undo bridge-domain command to remove the EVC Layer 2 sub-interface from the existing bridge domain."
+}

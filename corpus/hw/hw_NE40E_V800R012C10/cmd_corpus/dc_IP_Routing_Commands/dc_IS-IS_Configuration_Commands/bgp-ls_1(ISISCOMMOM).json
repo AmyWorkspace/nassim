@@ -1,0 +1,26 @@
+{
+    "PageTitle": "bgp-ls identifier",
+    "FuncDef": "The bgp-ls identifier command configures a BGP-LS identifier for IS-IS.\nThe undo bgp-ls identifier command deletes a BGP-LS identifier configured for IS-IS.\nBy default, the BGP-LS identifier of IS-IS is 0.",
+    "CLIs": [
+        "bgp-ls identifier <identifier-value>",
+        "undo bgp-ls identifier [ <identifier-value> ]"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "identifier-value",
+            "Info": "Specifies a BGP-LS identifier.\nThe value is an integer ranging from 2 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] bgp-ls enable",
+            "[*HUAWEI-isis-1] bgp-ls identifier 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP-LS is a new method of collecting topology information.\nWithout BGP-LS, devices use an IGP (IS-IS or OSPF) to collect topology information of each area, and the IGP reports the information to the controller. This topology information collection method has the following disadvantages:\nThe controller must have high computing capabilities and support the IGP and its algorithm.The controller cannot gain the complete inter-area topology information and therefore is unable to calculate optimal E2E paths.Different IGPs report topology information separately to the controller, which complicates the controller's analysis and processing.\nWith powerful routing capabilities of BGP, BGP-LS has the following advantages:\nReduces computing capability requirements and spares the necessity of IGPs on the controller.Facilitates route selection and calculation on the controller by using BGP to summarize and report process or AS topology information to the controller.Requires only one routing protocol (BGP) to report topology information to the controller.\nThe topology information saved on all IS-IS devices in the same area is the same. Therefore, the topology information about the area can be reported to the controller as long as BGP-LS is enabled on one of the devices. If BGP-LS is deployed on more than one device, identifier must remain the same on all these devices to ensure that the collected topology information is correct.\n\nImplementation Procedure\nIS-IS topology information can be flooded only within an area. As a result, IS-IS cannot report multi-area topology information to the controller. To address this problem, deploy at least one BGP node in each IS-IS area and establish a BGP-LS peer relationship between each BGP node and the controller so that BGP-LS collects and reports topology information to the controller.\nConfiguration Impact\nBGP-LS advertises all topology information (node, link, and prefix information), and the controller needs to save all topology information, consuming a large number of memory resources.Any change in the topology information collected by BGP-LS will trigger IS-IS LSP flooding, which may burden the controller. As a result, the maximum number of IS-IS neighbors supported and the topology size will be affected.BGP-LS requires topology synchronization between IS-IS and BGP, which further consumes CPU resources. As a result, IS-IS convergence is slowed down."
+}

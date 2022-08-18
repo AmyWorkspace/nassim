@@ -1,0 +1,109 @@
+{
+    "PageTitle": "calling-number-avp",
+    "FuncDef": "The calling-number-avp format command encapsulates the AVP22 attribute into an ICRQ message sent by an LAC in a new format. The new formats are described in Usage Guidelines.\nThe undo calling-number-avp command restores the default format for encapsulating the AVP22 attribute.\n\nBy default, the encapsulation format of the AVP22 attribute is as follows:\n\n\nMAC address Interface type (eth|trunk) Slot number/Subcard number/Port number: Outer VLAN.Inner VLAN Option 82\n\n\nFor example: xxxx-xxxx-xxxx eth 1/0/1:10.20 huawei",
+    "CLIs": [
+        "calling-number-avp format { version1 | include [ delimiter <delimiter> ] { option82 [ delimiter <delimiter> ] | mac [ delimiter <delimiter> ] | interface [ delimiter <delimiter> ] | domain [ delimiter <delimiter> ] | sysname [ delimiter <delimiter> ] | vlan [ delimiter <delimiter> ] | agent-circuit-id [ delimiter <delimiter> ] | agent-remote-id [ delimiter <delimiter> ] | pevlan [ delimiter <delimiter> ] | cevlan [ delimiter <delimiter> ] } * }",
+        "calling-number-avp format version1 include option82",
+        "calling-number-avp format llid",
+        "calling-number-avp format radius-force",
+        "calling-number-avp format version3",
+        "undo calling-number-avp",
+        "undo calling-number-avp format llid",
+        "undo calling-number-avp format radius-force",
+        "undo calling-number-avp format version3"
+    ],
+    "ParentView": [
+        "L2TP group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "version1",
+            "Info": "Indicates the version1 format for encapsulating the AVP22 attribute.\n-"
+        },
+        {
+            "Parameters": "delimiter delimiter",
+            "Info": "Specifies the delimiter for the current field.\nThe value can be b, *, -, \\, #, $, @, or & or :."
+        },
+        {
+            "Parameters": "option82",
+            "Info": "Allows the AVP22 attribute to contain Option 82 information.\n-"
+        },
+        {
+            "Parameters": "mac",
+            "Info": "Allows the AVP22 attribute to contain the MAC address.\n-"
+        },
+        {
+            "Parameters": "interface",
+            "Info": "Allows the AVP22 attribute to contain the interface type and number.\n-"
+        },
+        {
+            "Parameters": "domain",
+            "Info": "Allows the AVP22 attribute to contain the domain name.\n-"
+        },
+        {
+            "Parameters": "sysname",
+            "Info": "Allows the AVP22 attribute to contain the device name.\n-"
+        },
+        {
+            "Parameters": "vlan",
+            "Info": "Allows the AVP22 attribute to contain the user VLAN.\n-"
+        },
+        {
+            "Parameters": "agent-circuit-id",
+            "Info": "Allows the AVP22 attribute to contain the agent-circuit-id.\n-"
+        },
+        {
+            "Parameters": "agent-remote-id",
+            "Info": "Allows the AVP22 attribute to contain the agent-remote-id.\n-"
+        },
+        {
+            "Parameters": "pevlan",
+            "Info": "Allows the AVP22 attribute to contain the outer VLAN.\n-"
+        },
+        {
+            "Parameters": "cevlan",
+            "Info": "Allows the AVP22 attribute to contain the inner VLAN.\n-"
+        },
+        {
+            "Parameters": "llid",
+            "Info": "Allows the AVP22 attribute to contain the LLID.\n-"
+        },
+        {
+            "Parameters": "radius-force",
+            "Info": "Allows the AVP22 attribute to contain the Calling-Station-Id delivered by the RADIUS server on the LAC side.\n-"
+        },
+        {
+            "Parameters": "version3",
+            "Info": "Indicates the version3 format for encapsulating the AVP22 attribute.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2tp calling-number-avp enable",
+            "[*HUAWEI] l2tp-group lac1",
+            "[*HUAWEI-l2tp-lac1] calling-number-avp format version1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group test",
+            "[*HUAWEI-radius-test] radius-server calling-station-id include llid usertype ppp",
+            "[*HUAWEI-radius-test] quit",
+            "[~HUAWEI] l2tp calling-number-avp enable",
+            "[*HUAWEI] l2tp-group test",
+            "[*HUAWEI] calling-number-avp format llid"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] l2tp-group test",
+            "[*HUAWEI-I2tp-group test] calling-number-avp format radius-force"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2tp calling-number-avp enable",
+            "[*HUAWEI] l2tp-group lac1",
+            "[*HUAWEI-l2tp-lac1] calling-number-avp format version3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the device functions as an LAC and a non-Huawei device functions as an LNS, you need to encapsulate the AVP22 attribute in a new format to meet interconnection requirements.\nIf users access the network from an Eth-Trunk interface whose member interfaces are located on different boards, the calling-number-avp format version1 command must be configured to encapsulate AVP22 attribute in a new format because the slot IDs with which users get online may be changed.\nAfter the radius-server calling-station-id include llid user-type { ppp | lns } * command is run in the RADIUS server group view, a user needs to send two authentication requests to the RADIUS server group. To enable an LAC to encapsulate LLID information into the AVP22 attribute in an ICRQ message to be sent to an LNS when the LAC receives the second authentication request from a user, run the calling-number-avp format llid command on the LAC. The LNS then encapsulates LLID information into the Calling-Station-Id attribute of a RADIUS packet to be sent to the RADIUS server.\nTo encapsulate the calling-station-id delivered by the RADIUS server on the LAC side into the AVP22 attribute, run the calling-number-avp format radius-force command. The configuration allows the calling-station-id to be sent to the LNS side through the AVP22 attribute.\nIf the trunk ID, VLAN ID, system name, and user MAC address need to be carried in the AVP22 attribute of the packets to be sent to the LNS, run the calling-number-avp format version3 command to specify the content to be encapsulated into the AVP22 attribute.\nPrerequisites\nThe l2tp calling-number-avp enable command has been run to configure L2TP packets to carry the AVP22 attribute.\nThe radius-server calling-station-id include llid user-type { ppp | lns } * command has been run in the RADIUS server group view. If the radius-server calling-station-id include llid user-type { ppp | lns } * command has not been run in the RADIUS server group view, the AVP22 attribute is generated in the default format.\nConfiguration Impact\nAfter this command is run, the AVP22 attribute is encapsulated in the following format into an ICRQ packet to be sent by the LAC:\nEncapsulation format: System name#Slot/Subslot/Port#Pvlan:Cvlan\nPvlan is an outer VLAN and Cvlan is an inner VLAN.\nIf the length of the Calling-Number attribute received by the LNS exceeds 253 characters, the first 253 characters are used.\nAfter the calling-number-avp format include command is run, the AVP22 attribute in ICRQ packets sent by the LAC will contain user-specified contents. If sysname is specified but the system name is longer than 30 characters, only the first 30 characters are included in the AVP22 attribute.\nAfter you run the calling-number-avp format version1 include option82 command, the Option 82 information that begins with the number sign (#) is added to the end of the original encapsulation format. (The information carried in the Option 82 field is subject to the configuration of the option82-relay-mode include command.)\nAfter the calling-number-avp format radius-force command is run, the LAC encapsulates the RADIUS-delivered Calling-Station-Id into the AVP22 attribute of an ICRQ message to be sent to the LNS.\nAfter the calling-number-avp format version3 command is run, the information to be encapsulated into the AVP22 attribute of the ICRQ packet sent by the LAC is in the following format:\nEncapsulation format:\nIn case of trunk: lag-Trunkid:Pvlan.Cvlan#SystemName###pppoe mac-address#\nIn case of not trunk: eth Slot/Subslot/Port:Pvlan.Cvlan#SystemName###pppoe mac-address#\nPvlan specifies the outer VLAN ID, and Cvlan specifies the inner VLAN ID. In case of a single-tagged VLAN, the value of Pvlan is vlanid and the value of Cvlan is 0. If no VLAN is specified, the values of Pvlan and Cvlan are both 0.\nIn LTS scenarios:\n The slot information is from the tunnel board where the LTS user resides. subslot and port are the information about the source tunnel interface bound to lns-group.\n1) If the source tunnel interface is a GE interface, the subslot and port values of the GE interface are used.\n2) If the source tunnel interface is a loopback interface, the subslot and port values are the invalid values 255 and 65535, respectively.\n3) If the source tunnel interface is a trunk interface, trunkid in lag-trunkid is the trunk ID of the trunk interface.\n3. Both the inner and outer VLAN IDs are invalid values.\n4. Sysname specifies the system name of the lts device.\n5. mac specifies the virtual MAC address of the LNS user and consists of the tunnel-id and session-id of the LNS user. The first two bits of mac are both 0s, the middle two bits are tunneled, and the last two bits are sessionid.\nBy default, the AVP 22 attribute is encapsulated in the following formats:\nIn double-tagged VLAN scenarios: MAC address interface type (eth|trunk) slot ID/subcard ID/port number: outer VLAN. Inner VLAN option82\nIn single-tagged VLAN scenarios: MAC address interface (eth|trunk) slot ID/subcard ID/port number: 4096.single-tagged VLAN option82\nIn no VLAN scenarios: MAC address without a VLAN interface type (eth|trunk) slot ID/subcard ID/port number: 4096.4096 option82"
+}

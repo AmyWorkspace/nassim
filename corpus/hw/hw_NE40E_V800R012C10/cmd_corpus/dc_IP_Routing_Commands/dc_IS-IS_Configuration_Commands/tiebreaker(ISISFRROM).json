@@ -1,0 +1,66 @@
+{
+    "PageTitle": "tiebreaker (IS-IS FRR view)",
+    "FuncDef": "The tiebreaker command sets the solution of selecting a backup path for IS-IS Auto FRR.\nThe undo tiebreaker command restores the default solution of selecting a backup path for IS-IS Auto FRR.\nBy default, the node-protection path first solution is used in IS-IS Auto FRR.",
+    "CLIs": [
+        "tiebreaker { node-protecting | lowest-cost | non-ecmp | srlg-disjoint | hold-max-cost } preference <preference> [ level-1 | level-2 | level-1-2 ]",
+        "undo tiebreaker { node-protecting | lowest-cost | non-ecmp | srlg-disjoint | hold-max-cost } [ preference <preference> ] [ level-1 | level-2 | level-1-2 ]"
+    ],
+    "ParentView": [
+        "IS-IS FRR view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "node-protecting",
+            "Info": "Sets the solution of selecting a backup path for IS-IS Auto FRR to node-protection path first.\n-"
+        },
+        {
+            "Parameters": "lowest-cost",
+            "Info": "Sets the solution of selecting a backup path for IS-IS Auto FRR to smallest-cost path first.\n-"
+        },
+        {
+            "Parameters": "non-ecmp",
+            "Info": "Sets the solution of selecting a backup path for IS-IS Auto FRR to non-ECMP first.\n-"
+        },
+        {
+            "Parameters": "srlg-disjoint",
+            "Info": "Sets the solution of selecting a backup path for IS-IS Auto FRR to shared risk link group (SRLG) disjoint first.\n-"
+        },
+        {
+            "Parameters": "hold-max-cost",
+            "Info": "Sets the solution of selecting a backup path for IS-IS Auto FRR to the maximum cost path first.\n-"
+        },
+        {
+            "Parameters": "preference preference",
+            "Info": "Specifies a priority for the solution. The larger the value, the higher the priority.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Sets the solution of selecting a backup path for Level-1 IS-IS Auto FRR.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Sets the solution of selecting a backup path for Level-2 IS-IS Auto FRR.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Sets the solution of selecting a backup path for both Level-1 and Level-2 IS-IS Auto FRR.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] frr",
+            "[*HUAWEI-isis-1-frr] loop-free-alternate",
+            "[*HUAWEI-isis-1-frr] tiebreaker lowest-cost preference 255"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] frr",
+            "[*HUAWEI-isis-1-frr] loop-free-alternate",
+            "[*HUAWEI-isis-1-frr] tiebreaker hold-max-cost preference 255"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, the solution of selecting a backup path for IS-IS Auto FRR is node-protection path first. In some cases, the solution needs to be changed because of data forwarding capacity or link cost consideration.\nScene 1 The primary path is Link-1 (DeviceS -> DeviceE -> DeviceD), and Link-2 and Link-3 (DeviceS -> DeviceN -> DeviceD) are backup path candidates. The cost of Link-1 is cost=10, the cost of Link-2 is cost=20, and the cost of Link-3 is cost=100. By default, Link-3 is selected as the backup path. To change the solution of selecting a backup path for IS-IS Auto FRR to smallest-cost path first, run the tiebreaker lowest-cost preference preference [ level-1 | level-2 | level-1-2 ] command. After the command is run, Link-2 is selected as the backup path.\nScene 2 On the network shown Solution of selecting a backup path for IS-IS Auto FRR (non-ECMP first), traffic between DeviceS and DeviceE is balanced between Link-1 and Link-2. DeviceS is connected to DeviceN through Link-3. The cost of Link-1 is cost=10, the cost of Link-2 is cost=10, and the cost of Link-3 is cost=10. Link-1 and Link-2 back up each other when a backup path is selected from load balancing links for IS-IS Auto FRR. If the solution of selecting a backup path for IS-IS Auto FRR needs to be changed to non-ECMP first, run the tiebreaker non-ecmp preference preference [ level-1 | level-2 | level-1-2 ] command so that Link-3 is selected as the backup path.\nScene 3 On the network shown in Solution of selecting a backup path for IS-IS Auto FRR (SRLG disjoint first), traffic between DeviceS and DeviceE is balanced between Link-1 and Link-2. DeviceS is connected to DeviceN through Link-3. The cost of Link-1 is cost=10, the cost of Link-2 is cost=10, and the cost of Link-3 is cost=15. If IS-IS LFA Auto FRR is enabled, it implements protection for the two links by calculating a backup path if either Link-1 and Link-2 fails. If Link-1 and Link-2 have the same risk of failure, run the tiebreaker srlg-disjoint preference preference [ level-1 | level-2 | level-1-2 ] command to configure IS-IS to preferentially select a backup link, that is, Link-3, not in the same SRLG as Link-1 and Link-2.\nBefore using this solution, run the isis srlg srlg-value command to add the links having the same risk of failure to an SRLG.\nScenario 4. If the traffic is forwarded from DeviceS to DeviceE, there are two paths, link-1 and link-2, where link-1 cost is 10, link-1 is configured with isis peer hold-max-cost command, link-2 cost is 30, then DeviceS and DeviceN are connected through link-3, DeviceN and DeviceE are directly connected, link-3 cost is 10, and the cost of DeviceN and DeviceE link is also 10, normal In case of link-1 from DeviceS to DeviceE select the link-3 as the backup path (node protection takes priority), when link1 is disconnected, the main path from DeviceS to DeviceE changes to link-3 and the backup path changes to link-2. If link-1 is restored, link-1 cost is the maximum. If link-1 is preferred as the backup path, can run the tiebreaker hold-max-cost preference command, and link-1 can be used as the backup path.\nPrerequisites\nIS-IS Auto FRR has been enabled using the loop-free-alternate command.\nPrecautions\nBy default, the preference value is 40 for the node-protection path first solution, 20 for the smallest-cost path first solution, 15 for the maximum cost path first solution, 10 for the non-ECMP first solution, and 5 for the SRLG disjoint first solution."
+}

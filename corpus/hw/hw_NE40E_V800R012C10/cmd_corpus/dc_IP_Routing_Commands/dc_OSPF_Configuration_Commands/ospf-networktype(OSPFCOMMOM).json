@@ -1,0 +1,58 @@
+{
+    "PageTitle": "ospf network-type",
+    "FuncDef": "The ospf network-type command sets the network type for an OSPF interface.\nThe undo ospf network-type command restores the default network type.\nBy default, the network type of an interface is determined by the physical interface. For details, see \"IP Routing\" > \"OSPF Configuration\" > \"Configuring OSPF on the NBMA or P2MP Network\" > \"Configuring Network Types for OSPF Interfaces\" in the Configuration Guide.",
+    "CLIs": [
+        "ospf network-type { broadcast | p2p | p2mp | nbma }",
+        "undo ospf network-type"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10GE interface view",
+        "25GE sub-interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE sub-interface view",
+        "50GE interface view",
+        "Cellular channel interface view",
+        "Eth-Trunk interface view",
+        "FlexE interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "GMPLS-UNI interface view",
+        "Global VE sub-interface view",
+        "IP-Trunk interface view",
+        "Loopback interface view",
+        "POS interface view",
+        "Tunnel interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "VLANIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "broadcast",
+            "Info": "Indicates that the network type of the interface is changed to broadcast.\n-"
+        },
+        {
+            "Parameters": "p2p",
+            "Info": "Indicates that the network type of the interface is changed to point-to-point.\n-"
+        },
+        {
+            "Parameters": "p2mp",
+            "Info": "Indicates that the network type of the interface is changed to point-to-multipoint.\n-"
+        },
+        {
+            "Parameters": "nbma",
+            "Info": "Indicates that the network type of the interface is changed to NBMA.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ospf network-type nbma"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen link layer protocols remain unchanged, you can change network types and configure OSPF features to flexibly build networks.\nOn the broadcast network, if there is a device that does not support multicast addresses, you can change the network type of the interface to NBMA.If the network type of the interface is NBMA which is then changed to broadcast, no neighbors need to be configured.\nThe network type can be changed from NBMA to broadcast only when a direct virtual circuit is available between any two devices (the network must be fully meshed). If the condition is not met, change the network type to point-to-multipoint. In this manner, two indirectly connected devices can communicate with the help of one or two directly connected and reachable devices. After the network type of the interface is changed to point-to-multipoint, no neighbors need to be configured.\nIf there are only two devices that run OSPF in the same network segment, the network type of an interface can be changed to P2P.\n\nPrecautions\nThe command cannot be run on a null interface.When the network type of an interface is NBMA, or the network type of an interface is changed to NBMA manually, run the peer command to configure a neighbor.If the network type of an OSPF interface is NBMA, OSPF does not advertise the interface's information to RSVP-TE, and TE tunnels passing through this interface fail to go Up.Generally, the network types of two OSPF interfaces on the both ends of the link must be identical. Otherwise, the two interfaces cannot set up a neighbor relationship.The network type of an interface on a star network cannot be set to P2P. Otherwise, a deadlock tends to occur if the Layer 2 link connected to the interface goes down and then recovers."
+}

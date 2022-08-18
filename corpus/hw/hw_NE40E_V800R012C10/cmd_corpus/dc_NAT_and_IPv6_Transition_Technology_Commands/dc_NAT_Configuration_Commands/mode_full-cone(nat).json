@@ -1,0 +1,28 @@
+{
+    "PageTitle": "nat filter mode full-cone (NAT instance view)",
+    "FuncDef": "The nat filter mode full-cone command configures the full-cone (3-tuple) mode used to translate all addresses in a NAT instance.\nThe undo nat filter mode full-cone command restores the default configuration.\nBy default, the symmetrical (5-tuple) address translation mode is used.",
+    "CLIs": [
+        "nat filter mode full-cone",
+        "nat filter mode full-cone 5-tuple-session",
+        "undo nat filter mode full-cone",
+        "undo nat filter mode full-cone 5-tuple-session"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "5-tuple-session",
+            "Info": "Indicates 5-tuple flow sessions.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat filter mode full-cone",
+            "Warning: The command will reestablish all session tables of this instance. Continue? [Y/N]:"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe symmetric and full-cone modes are two main NAT address translation modes, both of which are used widely. The nat filter mode full-cone 5-tuple-session command enables a NAT instance to create 5-tuple flow tables even if the full-cone (3-tuple) mode is used. In a NAT444 scenario, if the full-cone mode is configured and a private network source communicates with multiple public destinations, to record logs of a NAT session of each destination, the 5-tuple full-cone session tables are used. In this situation, 5- and 3-tuple flow tables are generated, which consumes license resources.\nSymmetric mode: also called the 5-tuple mode. A 5-tuple entry contains a source IP address, source port number, protocol type, destination IP address, and destination port number, which is used to translate addresses and filter packets. For packets that have the same source IP address and source port number but different destination IP addresses and destination port numbers, the NAT device translates the source IP address and source port number of these packets into different public addresses and port numbers, respectively. Only the destined hosts on the public networks can use the translated addresses and port numbers to communicate with hosts on the private network.Full-cone mode: also known as the 3-tuple mode that is not concerned with destination addresses or destination port numbers. In this mode, a NAT device assigns IP addresses and filters packets based on source addresses, source port numbers, and protocol type. A device uses NAT to translate packets carrying the same source IP address and port number to the same public IP address and port number. In addition, the device allows public network hosts to use the translated IP address and port number to visit the internal network host.\n\nConfiguration Impact\nThe symmetric mode is more secure but does not support Session Traversal Utilities for NAT (STUN) or point-to-point (P2P) NAT traversal, which is supported in full-cone mode. You can select a proper translation mode as needed.\nPrecautions\nThe nat filter mode full-cone command takes effect only on VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S.\nExercise caution when switching a translation mode in the service instance view on a VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S. Such a mode change causes existing session tables to be reestablished, which may result in a maximum of a 150s traffic interruption.If an instance is bound to a VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S, the interval at which translation modes are switched is 75s.If an instance is bound to a VSUI-160-E, the interval at which translation modes are switched is 150s."
+}

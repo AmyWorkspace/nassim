@@ -1,0 +1,91 @@
+{
+    "PageTitle": "import-route inherit-cost (IS-IS view)",
+    "FuncDef": "The import-route command enables IS-IS to import routes from other protocols.\nThe undo import-route command disables IS-IS from importing routes from other protocols.\nBy default, IS-IS does not import routes from any other protocol.",
+    "CLIs": [
+        "import-route { direct | static | unr | { ospf | rip | isis } [ <process-id> ] | bgp } [ cost-type { external | internal } | cost <cost> | tag <tag> | { route-policy <route-policy-name> | route-filter <route-filter-name> } | [ level-1 | level-2 | level-1-2 ] ] *",
+        "import-route { { ospf | rip | isis } [ <process-id> ] | bgp | direct | unr } inherit-cost [ { level-1 | level-2 | level-1-2 } | tag <tag> | { route-policy <route-policy-name> | route-filter <route-filter-name> } ] *",
+        "undo import-route { direct | static | unr | { ospf | rip | isis } [ <process-id> ] | bgp }"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "direct",
+            "Info": "Imports direct routes.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Imports active static routes.\n-"
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Imports UNR routes.\n-"
+        },
+        {
+            "Parameters": "ospf",
+            "Info": "Imports OSPF routes.\n-"
+        },
+        {
+            "Parameters": "rip",
+            "Info": "Imports RIP routes.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Imports IS-IS routes.Before you specify this parameter, enable an IS-IS process with a.\nprocess-id different from the local one.\n-"
+        },
+        {
+            "Parameters": "process-id",
+            "Info": "Specifies the process ID of the imported protocol.\nThe value is an integer ranging from 1 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Imports BGP routes.\n-"
+        },
+        {
+            "Parameters": "cost cost",
+            "Info": "Specifies a cost for the imported route.\nThe value is an integer. The value range varies with the cost type.\nIf the cost type of the device is wide or wide-compatible, the value ranges from 0 to 4261412864.For other cost types, the value ranges from 0 to 63.\nThe default value is 0.\nThe cost type can be configured using the cost-style command."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies the administrative tag assigned to the imported routes.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy. The routing policy is used to filter the imported routes so that only some of the routes of other routing domains can be imported.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route filter policy. The policy is used to filter the imported routes so that only some of the routes of other routing domains can be imported.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Imports routes to the Level-1 routing table.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Imports routes to the Level-2 routing table.\nIf the level of the routing table to which routes are imported is not specified in the command, the routes are imported to the Level-2 routing table by default.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Imports routes to Level-1 and Level-2 routing tables.\n-"
+        },
+        {
+            "Parameters": "inherit-cost",
+            "Info": "Retains the original cost of the imported route.\nIf this parameter is specified, no other cost type or cost value can be configured for the imported route, and the imported route cannot be a static route.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] import-route static cost 15"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] import-route direct cost 15"
+        ]
+    ],
+    "ExtraInfo": "Prerequisites\nAn IS-IS process has been created using the isis command, and the protocol from which routes are imported has been configured.\nConfiguration Impact\nIS-IS cannot prevent external routing loops. Therefore, avoid the loops caused by manual configurations when configuring IS-IS to import external routes.\nAfter you configure the policy for importing routes using the route-policy parameters, the IS-IS process imports only the routes of the network segments that match the requirements to filter unwanted routes.\nPrecautions\nThe import-route (IS-IS) command cannot import the default route of an external protocol. To enable a router to advertise the default route of an external protocol it learns when updating the IS-IS routing table to other routers within the area, run the default-route-advertise (IS-IS) command.\nA segment routing-capable device can import IS-IS routes. If labels have been assigned to these routes, the labels are imported to a local process by default and advertised using LSPs, regardless of whether the labels are active.\nA segment routing-capable device can import labeled OSPF routes into the IS-IS routing table and use the routes to compute SR LSPs."
+}

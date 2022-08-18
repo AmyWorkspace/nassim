@@ -1,0 +1,54 @@
+{
+    "PageTitle": "option",
+    "FuncDef": "The option command configures a user-defined option for an address pool.\nThe undo option command deletes the configuration.\nBy default, no user-defined option is configured for an address pool.",
+    "CLIs": [
+        "option <code> { hex <hex-string> | { ip <ip-address-1> [ <ip-address-2> ] } | string <ascii-string> | cipher <cipher-text> }",
+        "option <code> { suboption <sub-code> { ip <ip-address-1> | string <sub-ascii-string> } } &<1-16>",
+        "undo option [ <code> [ ip <ip-address-1> ] ]"
+    ],
+    "ParentView": [
+        "IP address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "code",
+            "Info": "Specifies the code of a user-defined option.\nThe value is an integer ranging from 2 to 254. Options 3, 6, 15, 44, 46, 50 to 55, 57 to 59, 61, 82, and 119 are excluded."
+        },
+        {
+            "Parameters": "hex hex-string",
+            "Info": "Specifies a user-defined option as hexadecimal characters.\nThe value is a hexadecimal string of even-number characters, such as hh or hhhh. The value contains only digits 0 to 9, upper-case letters A to F, and lower-case letters a to f. The value ranges from 2 to 479. The length of the hex-string field minus space cannot exceed 320."
+        },
+        {
+            "Parameters": "ip ip-address-1",
+            "Info": "Specifies a user-defined option as an IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "ip ip-address-2",
+            "Info": "Specifies a user-defined option as an IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "string ascii-string",
+            "Info": "Specifies a user-defined option as ASCII characters.\nThe value is a character string that can contain digits, letters, spaces, underscores (_), and periods (.), the value ranges from 1 to 255."
+        },
+        {
+            "Parameters": "string sub-ascii-string",
+            "Info": "Specifies a user-defined option as ASCII characters.\nThe value is a character string that can contain digits, letters, spaces, underscores (_), and periods (.), the value ranges from 1 to 64."
+        },
+        {
+            "Parameters": "cipher cipher-text",
+            "Info": "Specifies a user-defined option as ciphertext characters. You can enter a plaintext or ciphertext option code, but the option code is displayed in ciphertext in the configuration file.\nThe value is a character string that can contain digits, letters, underscores (_), and periods (.).\nThe value is a string of 1 to 255 characters in plaintext.The value is a string of 20 to 432 characters in ciphertext."
+        },
+        {
+            "Parameters": "suboption sub-code",
+            "Info": "Specifies the code of a user-defined sub-option.\nThe value is an integer ranging from 1 to 254."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei server",
+            "[~HUAWEI-ip-pool-huawei] option 128 ip 10.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe Option fields in DHCP packets are used to store control information and parameters. If an Option field is configured for the DHCP server, a DHCP client obtains the configuration in the Option field of the DHCP packet replied by the DHCP server while requesting an IP address from the address pool. Well-known options are for the DNS service (Option 6, Option 15, and Option 119) and NetBIOS service (Option 44 and Option 46). To configure user-defined options, run the option command.\nPrecautions\nIf the option command is run more than once in the address pool view, the last configuration takes effect.The value of a well-known option is fixed. A message will be displayed prohibiting you from configuration if you configure options 3, 6, 15, 44, 46, 50-55, 57-59, 61, 82, and 119.For details about option configuration, refer to standard protocols. For example, Option 33 is used to configure a static route. Option 33 consists one or more groups of static routes (including the destination address and gateway address), with 1 to 8 even-number IP addresses required to be entered and the destination IP address prohibited from being configured as 0.0.0.0 (invalid IP address as defined).A user-defined option in the string format and hex format will not be encrypted, which poses a security risk. You are advised to specify the cipher format when configuring a self-defined option.The option command configuration is related to the definition of a specific option. You are advised to refer to the RFC's definition when configuring options. For example, Option 42 indicates the IP address list of the NTP server. Each IP address occupies four bytes, and therefore the length must be an integral multiple of 4. Option 45 is the NetBIOS datagram distribution server (NBDD) option. This option records the IP address list of the NBDD server. Each IP address occupies four bytes, and therefore the length must be an integral multiple of 4."
+}

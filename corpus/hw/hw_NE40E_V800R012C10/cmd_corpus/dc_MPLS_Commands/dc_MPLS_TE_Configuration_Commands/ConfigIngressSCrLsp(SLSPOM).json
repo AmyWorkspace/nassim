@@ -1,0 +1,71 @@
+{
+    "PageTitle": "static-cr-lsp ingress",
+    "FuncDef": "The static-cr-lsp ingress command configures a static CR-LSP on the ingress LSR.\nThe undo static-cr-lsp ingress command deletes a static CR-LSP from the ingress LSR.\nBy default, no static CR-LSP on the ingress LSR is configured.",
+    "CLIs": [
+        "static-cr-lsp ingress { <tunnel-name> | tunnel-interface { <port-type> <port-num> | <port-name> } } destination <destination-address> { outgoing-interface { <interface-name> | { <interface-type> <interface-number> } } | nexthop <next-hop-address> } * out-label <out-label> [ [ bandwidth { [ ct0 ] bandwidth } ] | [ pir <pir> ] ] *",
+        "undo static-cr-lsp ingress { <tunnel-name> | tunnel-interface { <port-name> | <port-type> <port-num> } }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tunnel-name",
+            "Info": "Name of the tunnel interface.\nThe value is a string of 1 to 19 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "tunnel-interface",
+            "Info": "Specifies the tunnel interface of a static CR-LSP. interface-number indicates the tunnel interface number.\n-"
+        },
+        {
+            "Parameters": "port-type",
+            "Info": "Specifies the tunnel interface of a static CR-LSP.\n-"
+        },
+        {
+            "Parameters": "port-num",
+            "Info": "Specifies the tunnel interface number of a static CR-LSP.\n-"
+        },
+        {
+            "Parameters": "port-name",
+            "Info": "Specifies the tunnel name.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "destination destination-address",
+            "Info": "Specifies the destination IP address of a static CR-LSP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "outgoing-interface interface-type interface-number",
+            "Info": "Specifies the type and number of an outgoing interface. This parameter is only applicable to a P2P link.\n-"
+        },
+        {
+            "Parameters": "nexthop next-hop-address",
+            "Info": "Specifies the next-hop IP address of a static CR-LSP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "out-label out-label",
+            "Info": "Specifies the value of an outgoing label.\nout-label is an integer ranging from 16 to 1048575."
+        },
+        {
+            "Parameters": "bandwidth",
+            "Info": "Indicates the bandwidth of a static CR-LSP.\n-"
+        },
+        {
+            "Parameters": "ct0 bandwidth",
+            "Info": "Specifies the bandwidth required by a CR-LSP.\nThe value ranges from 0 to 4000000000, in kbit/s. The default value is 0."
+        },
+        {
+            "Parameters": "pir pir",
+            "Info": "Specifies the peak information rate (PIR) of the reservable bandwidth. If ct0 bandwidth is not set to 0, the PIR parameter must be set.\nThe value is an integer ranging from 0 to 4000000000, in kbit/s. The value cannot be smaller than the value of bandwidth."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] static-cr-lsp ingress Tunnel1 destination 10.1.3.1 outgoing-interface GigabitEthernet 1/0/0 nexthop 10.1.1.2 out-label 237 bandwidth ct0 20 pir 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn devices with low routing and processing performance, a static CR-LSP can be established to implement MPLS TE functions. Labels for a static CR-LSP are assigned manually. Static CR-LSP configuration involves the operations on the following types of nodes:\nIngress: configured using the static-cr-lsp ingress command.Transit node: configured using the static-cr-lsp transit command.Egress: configured using the static-cr-lsp egress command.\nTo modify the destination address, next-hop address, outbound interface name, or outgoing label value, run the static-cr-lsp ingress command to set a new value. There is no need to run the undo static-cr-lsp ingress command before changing a configured value."
+}

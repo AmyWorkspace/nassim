@@ -1,0 +1,25 @@
+{
+    "PageTitle": "multicast-domain switch-without-register",
+    "FuncDef": "The multicast-domain switch-without-register command disables the source provider edge (PE) from sending Register packets to the Rendezvous Point (RP) to establish the shortest path tree (SPT) on the public network before the Switch-Group address is used to encapsulate VPN data.\nThe undo multicast-domain switch-without-register command restores the default configuration.\nBy default, before the Switch-Group address is used to encapsulate VPN data, the source PE sends Register packets to the RP to establish the SPT on the public network.",
+    "CLIs": [
+        "multicast-domain switch-without-register",
+        "undo multicast-domain switch-without-register"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] multicast-domain share-group 225.1.1.1 binding mtunnel 204",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] multicast-domain switch-without-register"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the previous implementation of multicast VPN, when the SPT switchover occurs on the multicast tunnel of the public network, the source PE sends switchover packets to all receiver PEs if the Switch-Group address is in the Any-Source Multicast (ASM) address range. After receiving the switchover packet, the receiver PEs send (*, G) Join packets to the RP of the public network to establish the rendezvous point tree (RPT).\nIn the scenario where the Switch-Group address is used in the VPN to encapsulate multicast data, the VPN forwards the data to the public network side of the source PE based on the Switch-Group address. Receiving the data, the source PE creates forwarding entries and encapsulates the data into a Register packet. The Register packet is then sent to the RP of the public network. The RP decapsulates the Register packet and sends the data to the receiver PEs. Finally, the receiver PEs trigger the SPT switchover towards the source PE. In this manner, the SPT is established on the public network.\nWhen there are a large number of entries, the source PE may delay sending the first Register packet of some entries to the RP due to the speed limit on sending Register packets. As a result, the SPT is delayed being established on the public network. In addition, in the process of establishing the SPT, multicast services are interrupted and some VPN data may be discarded, leading to a service interruption on the user end. To address these problems, you can enable the source PE to send Register packets to the RP to establish the SPT on the public network before the Switch-Group address is used to encapsulate VPN data.\nTo disable the source PE from sending Register packets to the RP to establish the SPT on the public network before the Switch-Group address is used to encapsulate VPN data, run the multicast-domain switch-without-register command.\nPrerequisites\nThe multicast routing-enable command has been configured in the VPN.\nConfiguration Impact\nAfter the VPN data traffic exceeds the upper limit, the source PE uses the Switch-Group address to encapsulate data and sends the switchover packet to the receiver PEs. If the Switch-Group address is allocated for the first time, besides the switchover packet, the source PE sends the Register packet that is encapsulated with the VPN Hello packet to the RP. Then, the RP forwards the Register packet to the receiver PEs. Based on the received packets, the receiver PEs and the RP directly send the (S, G) Join packets to the source PE and establish the SPT on the public network in advance. In this manner, when the public network tunnel is switched from the RPT to the SPT, the number of discarded multicast packets is reduced and the impact on multicast services is minimized."
+}

@@ -1,0 +1,121 @@
+{
+    "PageTitle": "trace access-user object",
+    "FuncDef": "The trace access-user object command creates service tracing objects, and specifies the location to which tracing information is output and the aging time of tracing information. Five objects can be traced at the same time.\nThe undo trace access-user object command deletes a single object or all objects to be traced.\nBy default, tracing information is output to the buffer of the local memory, and the tracing time is 15 minutes.",
+    "CLIs": [
+        "trace access-user object <id> { interface { <interface-name> | <interface-type> <interface-number> } | ip-address <ip-address> | mac-address <mac-address> | ce-vlan <ce-vid> | pe-vlan <pe-vid> | ipv6-address <prefix-address/prefix-length> | user-name <username> | tunnel-id <tunnel-id> | access-mode { pppoe | ipoe } } * [ output { file <file-name> | syslog-server ip-address | vty } | [ -t <time-value> ] | [ mode packet ] | [ flow-report ] ] *",
+        "trace access-user object <id> { circuit-id <circuit-id> | remote-id <remote-id> } * { exact-match | partial-match } [ output { file <file-name> | syslog-server ip-address | vty } | [ -t <time-value> ] | [ mode packet ] | [ flow-report ] ] *",
+        "undo trace access-user { object <id> | all }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Traces objects on a specified interface. interface-type specifies the type of an interface. The interface can be a GE interface or an Eth-Trunk interface. interface-number specifies the number of an interface.\n-"
+        },
+        {
+            "Parameters": "ip-address ip-address",
+            "Info": "Traces an object with a specified IP address. ip-address specifies an IP address, in dotted decimal notation.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mac-address mac-address",
+            "Info": "Traces an object with a specified MAC address. mac-address: specifies a MAC address, in the format of H-H-H.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits."
+        },
+        {
+            "Parameters": "ce-vlan ce-vid",
+            "Info": "Traces an object with a specified CE-VLAN ID, that is, VLAN ID in the inner tag. ce-vlan-id: specifies the CE VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "pe-vlan pe-vid",
+            "Info": "Traces an object with a specified PE-VLAN ID, that is, VLAN ID in the outer tag. pe-vlan-id: specifies the PE VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ipv6-address prefix-address/prefix-length",
+            "Info": "Traces an object with a specified IPv6 address or IPv6 prefix.\nipv6-address/prefixlength: specifies an IPv6 address and the IPv6 prefix length."
+        },
+        {
+            "Parameters": "user-name username",
+            "Info": "Creates the trace object according to the user name. username specifies the user name.\nThe value is a string of 1 to 253 characters in the format of 'username@domainname'."
+        },
+        {
+            "Parameters": "tunnel-id tunnel-id",
+            "Info": "Creates the L2TP trace object based on the tunnel ID.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "access-mode",
+            "Info": "Access mode of trace objects.\n-"
+        },
+        {
+            "Parameters": "pppoe",
+            "Info": "Trace PPPoE users.\n-"
+        },
+        {
+            "Parameters": "ipoe",
+            "Info": "Trace IPoE users.\n-"
+        },
+        {
+            "Parameters": "output",
+            "Info": "Indicates the location to which tracing information is output.\n-"
+        },
+        {
+            "Parameters": "file file-name",
+            "Info": "Indicates that tracing information is output to the CF card. file-name: specifies the name of the file that stores tracing information in the CF card.\nThe value is a string of 1 to 63 characters."
+        },
+        {
+            "Parameters": "syslog-server ip-address",
+            "Info": "Indicates that tracing information is output to a log server.\nip-address specifies the IP address of a log server, in dotted decimal notation."
+        },
+        {
+            "Parameters": "vty",
+            "Info": "Indicates that tracing information is output to the VTY terminal.\n-"
+        },
+        {
+            "Parameters": "-t time-value",
+            "Info": "Sets the tracing time.\nThe value is an integer ranging from 0 to 60, in minutes. If the value is 0, it indicates that the object is being traced all the time."
+        },
+        {
+            "Parameters": "packet",
+            "Info": "Configures the tracing mode as packet. In packet mode, only packet exchange information is displayed, and the exchange information of the internal modules is not displayed.\nBy default, all information of the object being traced is displayed."
+        },
+        {
+            "Parameters": "flow-report",
+            "Info": "Enables traffic reporting.\nBy default, disenables traffic reporting."
+        },
+        {
+            "Parameters": "object id",
+            "Info": "Specifies the ID of an object to be traced.\nThe value is an integer ranging from 1 to 5."
+        },
+        {
+            "Parameters": "circuit-id circuit-id",
+            "Info": "Specifies the circuit ID of the access-line ID for user packets.\nThe value is a string of 1 to 200 characters."
+        },
+        {
+            "Parameters": "remote-id remote-id",
+            "Info": "Specifies the remote ID of the access-line ID for user packets.\nThe value is a string of 1 to 200 characters."
+        },
+        {
+            "Parameters": "exact-match",
+            "Info": "Sets exactly matching information for the circuit ID or remote ID of access-line ID.\n-"
+        },
+        {
+            "Parameters": "partial-match",
+            "Info": "Sets partially matching information for the circuit ID or remote ID of access-line ID.\n-"
+        },
+        {
+            "Parameters": "all",
+            "Info": "All objects to be traced.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] trace access-user object 1 interface GigabitEthernet 1/0/0 ipv6-address 2001:db8:1::/64 output syslog-server 192.168.0.3 -t 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] trace access-user object 1 user-name huawei flow-report"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBefore tracing a service, you must make sure that the service is accessed; otherwise, no tracing information is output. In addition, you need to make sure that the CPU usage on the Main Processing Unit does not exceed 70%.\nBefore outputting tracing information to a log server, you must make sure that the log server exists and is properly configured.\nPrecautions\nThis command is used for fault diagnosis only. It consumes a great number of resources when the device is running normally and may affect services.\nRecreate tracing objects after board restart or master/slave switchover."
+}

@@ -1,0 +1,51 @@
+{
+    "PageTitle": "time-range rate-limit",
+    "FuncDef": "The time-range rate-limit command configures a mapping between a time range template and EDSG service bandwidth.\nThe undo time-range rate-limit command restores the default configuration.\nBy default, no mapping is configured between a time range template and EDSG service bandwidth.",
+    "CLIs": [
+        "time-range <time-range-name> rate-limit cir <cir-value> [ pir <pir-value> ] [ cbs <cbs-value> [ pbs <pbs-value> ] ] [ inbound | outbound ]",
+        "undo time-range <time-range-name> rate-limit [ cir <cir-value> [ pir <pir-value> ] [ cbs <cbs-value> [ pbs <pbs-value> ] ] ] [ inbound | outbound ]"
+    ],
+    "ParentView": [
+        "Service policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies a committed information rate (CIR).\nThe value is an integer ranging from 0 to 4294967294, in kbit/s."
+        },
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies a peak information rate (PIR).\nThe value is an integer ranging from 0 to 4294967294, in kbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies a committed burst size (CBS).\nThe value is an integer ranging from 0 to 4294967294, in bytes."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies a peak burst size (PBS).\nThe value is an integer ranging from 0 to 4294967294, in bytes."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates the upstream direction of service traffic.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates the downstream direction of service traffic.\n-"
+        },
+        {
+            "Parameters": "time-range time-range-name",
+            "Info": "Specifies the name of a time range template.\nThe value is a string of 1 to 32 case-sensitive characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] time-range time-range1 from 0:0 2009/1/1",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] service-policy name edsg_policy edsg",
+            "[*HUAWEI-service-policy-edsg_policy] time-range time-range1 rate-limit cir 1000 pir 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure the EDSG service bandwidth to be flexibly adjusted when the time range changes, run the time-range rate-limit command in the EDSG service policy view.\nPrerequisites\nA time range has been defined using the time-range command.\nConfiguration Impact\nAfter the time-range rate-limit command is run, the EDSG service bandwidth is adjusted when the time range changes.\nPrecautions\nThis command is supported only on the admin VS.\nAn EDSG service policy allows a maximum of three mappings to be configured between the time range template and service bandwidth.\nIf multiple time range templates are configured for an EDSG service policy, overlapping time ranges may exist between time range templates. In this situation, the EDSG service bandwidth preferentially matches the first configured time range template."
+}

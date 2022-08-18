@@ -1,0 +1,50 @@
+{
+    "PageTitle": "group (BGP-VPN instance IPv6 address family view)",
+    "FuncDef": "The group command creates a peer group.\nThe undo group command deletes a peer group.\nBy default, no peer group is created.",
+    "CLIs": [
+        "group <group-name> { external | internal }",
+        "group <group-name>",
+        "undo group <group-name>"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "external",
+            "Info": "Creates an EBGP peer group.\n-"
+        },
+        {
+            "Parameters": "internal",
+            "Info": "Creates an IBGP peer group.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] group in internal"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] group ex external",
+            "[*HUAWEI-bgp-6-vpna] peer ex as-number 500.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA peer group consists of peers with the same routing policies. After a peer is added to a peer group, it inherits the configurations of this peer group. When the configurations of the peer group are changed, the configurations of these peers are changed accordingly.\nOn a large-scale BGP network, there are a large number of peers, many of which require the same policy. In such a case, you can run the group command to create a peer group, configure the policy for the peer group, and then add peers to the group, which simplifies configurations.\nConfiguration Impact\nIf the group command is run more than once, all configurations take effect.\nAfter the group command is run, the system creates a BGP peer group of the specified type.\nPrecautions\nAfter a peer group is deleted, all the peers in the peer group are deleted.\nIf no type (IBGP or EBGP) is specified for a peer group, an IBGP peer group is created by default.\nIf an attribute configuration of a BGP peer in a peer group differs from that of the peer group, you can disable the attribute configuration of the peer using an undo command; then the peer inherits the attribute configuration of the peer group.\nIf you run the undo group command, all configurations related to the peer group are deleted. Therefore, exercise caution when running this command.\nDeleting a peer group will disconnect the peers without AS numbers configured in the peer group. Therefore, before deleting a peer group, delete these peers or configure AS numbers for these peers.\nThe functions configured on a peer using the following commands take precedence over those configured on the peer group of the peer:\npeer bfdpeer bfd blockpeer bfd enablepeer listen-onlypeer valid-ttl-hops\nFor other BGP commands, the latest configuration preferentially takes effect."
+}

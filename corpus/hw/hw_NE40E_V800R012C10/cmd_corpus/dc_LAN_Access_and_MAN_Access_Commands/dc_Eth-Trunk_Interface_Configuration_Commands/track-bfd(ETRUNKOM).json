@@ -1,0 +1,30 @@
+{
+    "PageTitle": "e-trunk track bfd-session",
+    "FuncDef": "The e-trunk track bfd-session command binds an E-Trunk to a Bidirectional Forwarding Detection (BFD) session.\nThe undo e-trunk track bfd-session command unbinds an E-Trunk from a BFD session.\nBy default, no E-Trunk is bound to any BFD session.",
+    "CLIs": [
+        "e-trunk track bfd-session session-name <bfd-session-name>",
+        "undo e-trunk track bfd-session"
+    ],
+    "ParentView": [
+        "E-Trunk view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "session-name bfd-session-name",
+            "Info": "Specifies the name of a BFD session.\nCurrently, only a static BFD session is supported.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string.\nWhen the name of a BFD session is configured, the uppercase and lowercase letters in the name must be the same as what you enter.\nBFD session names are case-insensitive. For example, ABC and abc are regarded as the same BFD session. If you have configured ABC as the name of a BFD session, the ABC BFD session view is directly displayed when you configure abc."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI] bfd hello bind peer-ip 1.1.1.1",
+            "[*HUAWEI-bfd-session-hello] discriminator local 20",
+            "[*HUAWEI-bfd-session-hello] discriminator remote 30",
+            "[*HUAWEI-bfd-session-hello] quit",
+            "[*HUAWEI] e-trunk 1",
+            "[*HUAWEI-e-trunk-1] e-trunk track bfd-session session-name hello"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn E-Trunk is created between PE1 and PE2. PE1 is the master device, and PE2 is the backup device. If PE1 is faulty, PE2 will become the master when the timeout period expires and it does not receive any E-Trunk packet from PE1. In this timeout period, user traffic is interrupted as there is no master device. To enable PE2 to detect a fault, if any, for an immediate status change in response, run the e-trunk track bfd-session command to bind an E-Trunk to a BFD session. This ensures uninterrupted user traffic.\nAfter an E-Trunk is bound to a BFD session, BFD can rapidly detect the E-Trunk link status between PE1 and PE2. If the E-Trunk link status changes, the BFD session goes Down. Using the BFD session, PE2 can detect the fault and change its status rapidly, ensuring uninterrupted user traffic.\nPrerequisites\nThe following conditions are met:\nAn E-Trunk and a BFD session have been configured, and the BFD session must be a BFD for IP session.The source and destination IP addresses of the E-Trunk must be reachable. Otherwise, the BFD session cannot go Up."
+}

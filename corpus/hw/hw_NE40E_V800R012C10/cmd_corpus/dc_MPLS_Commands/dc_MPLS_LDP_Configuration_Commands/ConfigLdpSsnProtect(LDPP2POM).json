@@ -1,0 +1,39 @@
+{
+    "PageTitle": "session protection",
+    "FuncDef": "The session protection command enables LDP session protection on each end of an LDP session.\nThe undo session protection command disables LDP session protection.\nLDP session protection is disabled by default.",
+    "CLIs": [
+        "session protection [ peer-group <peer-group-name> ] [ duration { infinite | <time-value> } ]",
+        "undo session protection [ peer-group <peer-group-name> ] [ duration { infinite | <time-value> } ]"
+    ],
+    "ParentView": [
+        "MPLS-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-group peer-group-name",
+            "Info": "Specifies the name of an LDP peer group. The parameter is specified using the ip ip-prefix command.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "duration",
+            "Info": "Indicates the period of time, during which LDP session protection remains effective.\n-"
+        },
+        {
+            "Parameters": "infinite",
+            "Info": "Indicates that LDP session protection remains effective permanently.\n-"
+        },
+        {
+            "Parameters": "time-value",
+            "Info": "Specifies a period of time, during which LDP session protection remains effective.\nThe value is an integer ranging from 30 to 2147483, in seconds. The default value is 86400."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] session protection duration 40"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the direct link of a local LDP session between two devices fails, an LDP adjacency for the LDP session is torn down. The LDP session and related labels are also deleted. After the direct link recovers, the LDP session can be reestablished with labels distributed so that an LDP LSP over the session can converge. During this process, LDP LSP traffic is dropped.\nTo speed up LDP LSP convergence and minimize traffic loss, LDP session protection can be configured using the session protection command. With LDP session protection configured, LDP establishes a remote adjacency when establishing local adjacencies and uses both adjacencies to maintain LDP sessions. If the direct link of an LDP session is faulty and other paths and routes are available, the remote adjacency can be used to maintain the LDP session without interruption. After the direct link recovers, the local outgoing label can still be used, without being distributed by the downstream node again. The LDP session does not need to be reestablished. This speeds up LDP LSP convergence and reduces traffic loss.\nPrerequisites\nMPLS LDP has been enabled globally using the mpls ldp command in the system view.\nPrecautions\nIf the LDP session holdtime is set to different values at two ends of a local LDP session, the shorter value takes effect if the link of the local LDP session fails.\nIf you want to manually configure LDP session protection, you are advised to set the LDP session holdtime at both ends of an LDP session to the same value."
+}

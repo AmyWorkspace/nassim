@@ -1,0 +1,49 @@
+{
+    "PageTitle": "affinity (MPLS TE P2MP template view)",
+    "FuncDef": "The affinity command configures an affinity constraint in the P2MP tunnel template view.\nThe undo affinity command deletes an affinity constraint.\nBy default, no affinity constraint is configured for an MPLS TE tunnel to be established.",
+    "CLIs": [
+        "affinity primary { include-all | include-any | exclude } { <bit-name> } &<1-32>",
+        "undo affinity primary { include-all | include-any | exclude } { <bit-name> } &<1-32>",
+        "undo affinity primary"
+    ],
+    "ParentView": [
+        "MPLS TE P2MP template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "include-all",
+            "Info": "Indicates that CSPF includes a link when calculating a path, only if each link administrative group bit has the same name as each affinity bit.\n-"
+        },
+        {
+            "Parameters": "include-any",
+            "Info": "Indicates that CSPF includes a link when calculating a path, if at least one link administrative group bit has the same name as an affinity bit.\n-"
+        },
+        {
+            "Parameters": "exclude",
+            "Info": "Indicates that CSPF excludes a link when calculating a path, if any link administrative group bit has the same name as an affinity bit.\n-"
+        },
+        {
+            "Parameters": "bit-name",
+            "Info": "Specifies the names of affinity bits.\nThe value is a string of 1 to 31 case-sensitive characters."
+        },
+        {
+            "Parameters": "primary",
+            "Info": "Indicates the primary CR-LSP.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls te p2mp-te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] path-constraint affinity-mapping",
+            "[*HUAWEI-pc-af-map] attribute yellow bit-sequence 3",
+            "[*HUAWEI-pc-af-map] quit",
+            "[*HUAWEI] mpls te p2mp-template Template1",
+            "[*HUAWEI-te-p2mp-template-Template1] affinity primary include-all yellow"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn affinity property is a 32-bit vector representing a tunnel link. You can name each affinity bit. After an affinity is configured for a tunnel, a device compares the affinity with the administrative group attribute during link selection to determine whether a link with specified attributes is selected or not. To configure an affinity constraint, run the affinity command, which helps control path selection for P2MP CR-LSPs.\nPrerequisites\nA P2MP tunnel template has been configured using the mpls te p2mp-template command.Mappings between names and bit values in an affinity have been configured using the attribute command."
+}

@@ -1,0 +1,39 @@
+{
+    "PageTitle": "ipv6 bfd all-interfaces",
+    "FuncDef": "The ipv6 bfd all-interfaces command configures parameters for IPv6 BFD sessions.\nThe undo ipv6 bfd all-interfaces command restores the default values.\nBy default, the minimum interval at which IPv6 BFD packets are sent or received is 10, in milliseconds; the IPv6 BFD local detection multiplier is 3.",
+    "CLIs": [
+        "ipv6 bfd all-interfaces { min-rx-interval <receive-interval> | min-tx-interval <transmit-interval> | detect-multiplier <multiplier-value> | frr-binding } *",
+        "undo ipv6 bfd all-interfaces { min-rx-interval [ <receive-interval> ] | min-tx-interval [ <transmit-interval> ] | detect-multiplier [ <multiplier-value> ] | frr-binding } *"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-rx-interval receive-interval",
+            "Info": "Specifies the minimum interval at which IPv6 BFD packets are received from the peer end.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-tx-interval transmit-interval",
+            "Info": "Specifies the minimum interval at which IPv6 BFD packets are sent to the peer end.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "detect-multiplier multiplier-value",
+            "Info": "Specifies the IPv6 BFD local detection multiplier.\nThe value ranges from 3 to 50. The default value is 3."
+        },
+        {
+            "Parameters": "frr-binding",
+            "Info": "Associates IPv6 BFD session status with IPv6 IS-IS auto FRR. If IPv6 BFD detects a link fault on an interface, the IPv6 BFD session goes Down, triggering FRR. Traffic is then quickly switched to the backup link, minimizing service loss.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] ipv6 enable",
+            "[*HUAWEI-isis-1] ipv6 bfd all-interfaces enable",
+            "[*HUAWEI-isis-1] ipv6 bfd all-interface min-tx-interval 300"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBFD can provide millisecond-level fault detection, help IS-IS to detect the faults that occur on neighboring devices or links more quickly, and instruct IS-IS to recalculate routes for correct packet forwarding. The ipv6 bfd all-interfaces command can be used to configure parameters for IPv6 BFD sessions.\nPrerequisites\nBFD has been enabled globally, An IS-IS process has been created, the IS-IS process has been enabled on a specified interface, and IPv6 BFD has been enabled in the IS-IS process.\nConfiguration Impact\nThe minimum interval at which IPv6 BFD packets are received is obtained after the receive-interval value and the remote transmit-interval value are compared. If the local end does not receive any BFD packet from its neighbor within the period (minimum receiving interval x multiplier-value), the local end declares the neighbor Down.\nPrecautions\nIf only IPv6 BFD session parameters are configured but the ipv6 bfd all-interfaces enable command is not run, no IPv6 BFD sessions can be established.\nThe priority of BFD configured on an interface is higher than that of BFD configured in a process. If IPv6 BFD is enabled on an interface, IPv6 BFD sessions are established with the BFD parameters set on the interface."
+}

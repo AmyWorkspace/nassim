@@ -1,0 +1,74 @@
+{
+    "PageTitle": "encapsulation eth out-interface",
+    "FuncDef": "The encapsulation eth out-interface command is used to configure the Layer 2 forwarding interface to support the SFF to the SF.\nThe undo encapsulation eth out-interface command is used to disable the configuration of Layer 2 forwarding from SFF to SF.\nBy default, Layer 2 forwarding with SFF to SF is not configured.",
+    "CLIs": [
+        "encapsulation eth out-interface { <outInterfaceName> | <outInterfaceType> <outInterfaceNum> } [ out-vlan <out-vlan-id> [ ce-vid <out-cevid> ] ] in-interface { <inInterfaceName> | <inInterfaceType> <inInterfaceNum> } [ in-vlan <in-vlan-id> [ ce-vid <in-cevid> ] ] [ dest-mac <destMac> ]",
+        "undo encapsulation eth out-interface { <outInterfaceName> | <outInterfaceType> <outInterfaceNum> } [ out-vlan <out-vlan-id> [ ce-vid <out-cevid> ] ] in-interface { <inInterfaceName> | <inInterfaceType> <inInterfaceNum> } [ in-vlan <in-vlan-id> [ ce-vid <in-cevid> ] ] [ dest-mac <destMac> ]"
+    ],
+    "ParentView": [
+        "SRv6 locator End-AS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "outInterfaceName",
+            "Info": "Specifies the name of an outbound interface.\n-"
+        },
+        {
+            "Parameters": "outInterfaceType",
+            "Info": "Specifies the type of the outbound interface.\n-"
+        },
+        {
+            "Parameters": "outInterfaceNum",
+            "Info": "Specifies the number of an outbound interface.\n-"
+        },
+        {
+            "Parameters": "out-vlan out-vlan-id",
+            "Info": "Specifies the outer VLAN ID of an outbound interface.\nThe value is an integer that ranges from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid out-cevid",
+            "Info": "Specifies the inner VLAN ID of an outbound interface.\nThe value is an integer that ranges from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid in-cevid",
+            "Info": "Specifies the inner VLAN ID of an inbound interface.\nThe value is an integer that ranges from 1 to 4094."
+        },
+        {
+            "Parameters": "in-interface inInterfaceName",
+            "Info": "Specifies the name of an inbound interface.\n-"
+        },
+        {
+            "Parameters": "inInterfaceType",
+            "Info": "Specifies the type of the inbound interface.\n-"
+        },
+        {
+            "Parameters": "inInterfaceNum",
+            "Info": "Specifies the number of an inbound interface.\n-"
+        },
+        {
+            "Parameters": "in-vlan in-vlan-id",
+            "Info": "Specifies the outer VLAN ID of an inbound interface.\nThe value is an integer that ranges from 1 to 4094."
+        },
+        {
+            "Parameters": "dest-mac destMac",
+            "Info": "Specifies a MAC address.\nThe value is in the format of H-H-H, in which each H is a 4-digit hexadecimal number, such as 00e0 and fc01. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0. The value cannot be an all-F, all-zero, or multicast MAC address."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] locator test1 ipv6-prefix 100:: 64 static 32",
+            "[*HUAWEI-segment-routing-ipv6-locator] opcode ::12 end-as",
+            "[*HUAWEI-segment-routing-ipv6-locator-endas-::12] encapsulation eth out-interface GigabitEthernet 1/0/0.1 out-vlan 2 ce-vid 3 in-interface GigabitEthernet 2/0/0.2 in-vlan 4 ce-vid 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] locator test1 ipv6-prefix 100:: 64 static 32",
+            "[*HUAWEI-segment-routing-ipv6-locator] opcode ::12 end-as",
+            "[*HUAWEI-segment-routing-ipv6-locator-endas-::12] encapsulation eth out-interface GigabitEthernet 1/0/0.1 out-vlan 2 ce-vid 3 in-interface GigabitEthernet 2/0/0.2 in-vlan 4 ce-vid 5 dest-mac abc-de-89"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSupports Layer 2 forwarding from the SFF to the SF. Only one type of forwarding can be configured. out-interface and in-interface can be set to the same sub-interface or different sub-interfaces.\nDestination MAC address to be encapsulated in the packets forwarded to the SF. The MAC address of the in-interface is used by default. In the scenario where SF is dual-homed to SFF, SFF1 does not know the MAC address of SFF2 in-interface. Therefore, you need to run the dest-mac command to configure the static configuration.\nPrecautions\nTo ensure correct forwarding,set the interface type to EVC Layer 2 sub-interface. An interface must be exclusively used by a service chain. If a service chain is configured on an interface, the interface cannot be configured to other services. Otherwise, forwarding problems may occur."
+}

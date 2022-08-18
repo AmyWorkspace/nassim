@@ -1,0 +1,105 @@
+{
+    "PageTitle": "lsp-trace",
+    "FuncDef": "Thelsp-tracecommand performs an LSP traceroute using the protocol and data structures defined in IETF RFC 4379.",
+    "CLIs": [
+        "lsp-trace <lsp-name> [ path <path-name> ]",
+        "lsp-trace bgp-label prefix <ip-prefix/length> [ path-destination <ip-address> [ { interface <if-name> | next-hop <ip-address> } ] ]",
+        "lsp-trace prefix <ip-prefix/length> [ path-destination <ip-address> [ { interface <if-name> | next-hop <ip-address> } ] ]",
+        "lsp-trace sr-isis prefix <ip-prefix/prefix-length> [ igp-instance <igp-instance> ] [ path-destination <ip-address> [ interface <if-name> | next-hop <ip-address> ] ]",
+        "lsp-trace sr-ospf prefix <ip-prefix/prefix-length> [ igp-instance <igp-instance> ] [ path-destination <ip-address> [ interface <if-name> | next-hop <ip-address> ] ]",
+        "sr-te <lsp-name> [ path <path-name> ] [ path-destination <ip-address> [ interface <if-name> | next-hop <ip-address> ] ]",
+        "lsp-trace static <lsp-name> [ assoc-channel { ipv4 | non-ip | none } ] [ dest-global-id <global-id> dest-node-id <node-id> ] [ path-type { active | working | protect } ]"
+    ],
+    "ParentView": [
+        "oam",
+        "config>saa>test>type"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lsp-name",
+            "Info": "Name that identifies an LSP to ping. The LSP name can be up to 32 characters long."
+        },
+        {
+            "Parameters": "path-name",
+            "Info": "The LSP path name along which to send the LSP trace request. Values-Any path name associated with the LSP.. ParamDefault: Default- The active LSP path."
+        },
+        {
+            "Parameters": "prefix ip-prefix/length",
+            "Info": "Specifies the address prefix and subnet mask of the target LDP FEC."
+        },
+        {
+            "Parameters": "bgp-label prefix ip-prefix/length",
+            "Info": "Specifies the address prefix and subnet mask of thetarget BGP IPv4 label route."
+        },
+        {
+            "Parameters": "sr-isis prefix ip-prefix/length",
+            "Info": "Specifies the address prefix and subnet mask of the target node SID of the SR-ISIS tunnel."
+        },
+        {
+            "Parameters": "sr-ospf prefix ip-prefix/length",
+            "Info": "Specifies the address prefix and subnet mask of the target node SID of the SR-OSPF tunnel."
+        },
+        {
+            "Parameters": "sr-te lsp-name",
+            "Info": "Specifies the name of the target SR-TE LSP, up to 64 characters."
+        },
+        {
+            "Parameters": "octets",
+            "Info": "The size in octets, expressed as a decimal integer, of the MPLS echo request packet, including the IP header but not the label stack. The request payload is padded with zeros to the specified size. Note that an OAM command is not failed if the user entered a size lower than the minimum required to build the packet for the echo request message. The payload is automatically padded to meet the minimum size. Values-1 to 9198. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "src-ip-address ip-addr",
+            "Info": "Specifies the source IP address. This option is used when an OAM packet must be generated from a different address than the node s system interface address. An example is when the OAM packet is sent over an LDP LSP and the LDP LSR-ID of the corresponding LDP session to the next-hop is set to an address other than the system interface address."
+        },
+        {
+            "Parameters": "min-label-ttl",
+            "Info": "The minimum TTL value in the MPLS label for the LSP trace test, expressed as a decimal integer. Values-1 to 255. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "max-label-ttl",
+            "Info": "The maximum TTL value in the MPLS label for the LDP treetrace test, expressed as a decimal integer. Values-1 to 255. ParamDefault: Default- 30"
+        },
+        {
+            "Parameters": "no-response-count",
+            "Info": "The maximum number of consecutive MPLS echo requests, expressed as a decimal integer that do not receive a reply before the trace operation fails for a given TTL. Values-1 to 255. ParamDefault: Default- 5"
+        },
+        {
+            "Parameters": "timeout",
+            "Info": "The timeout parameter in seconds, expressed as a decimal integer. This value is used to override the default timeout value and is the amount of time that the router will wait for a message reply after sending the message request. Upon the expiration of message timeout, the requesting router assumes that the message response will not be received. A  request timeout  message is displayed by the CLI for each message request sent that expires. Any response received after the request times out will be silently discarded. Values-1 to 10. ParamDefault: Default- 3"
+        },
+        {
+            "Parameters": "interval",
+            "Info": "The interval parameter in seconds, expressed as a decimal integer. This parameter is used to override the default request message send interval and defines the minimum amount of time that must expire before the next message request is sent. Values-1 to 10. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "fc-name",
+            "Info": "The FC and profile parameters are used to indicate the forwarding class and profile of the MPLS echo request packet. Values-be, l2, af, l1, h2, ef, h1, nc. ParamDefault: Default- be"
+        },
+        {
+            "Parameters": "profile {in | out}",
+            "Info": "The profile state of the MPLS echo request packet. ParamDefault: Default- out"
+        },
+        {
+            "Parameters": "path-destination ip-address",
+            "Info": "Specifies the IP address of the path destination from the range 127/8. When the LDP FEC prefix is IPv6, the user must enter a 127/8 IPv4 mapped IPv6 address, that is, in the range ::ffff:127/104."
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of an IP interface to send the MPLS echo request to. The name must already exist in the config>router>interface context."
+        },
+        {
+            "Parameters": "next-hop ip-address",
+            "Info": "Specifies the next-hop to send the MPLS echo request message to."
+        },
+        {
+            "Parameters": "downstream-map-tlv {dsmap | ddmap | none}",
+            "Info": "Specifies which format of the downstream mapping TLV to use in the LSP trace packet. The DSMAP TLV is the original format in RFC 4379. The DDMAP is the new enhanced format specified in RFC 6424. The user can also choose not to include the downstream mapping TLV by entering the value none. When lsp-trace is used on a MPLS-TP LSP (static option), it can only be executed if the control-channel is set to none. In addition, the DSMAP/DDMAP TLV is only included in the echo request message if the egress interface is either a numbered IP interface, or an unnumbered IP interface. The TLV will not be included if the egress interface is of type unnumbered-mpls-tp. ParamDefault: Default- Inherited from global configuration of downstream mapping TLV in option mpls-echo-request-downstream-map {dsmap | ddmap}."
+        },
+        {
+            "Parameters": "assoc-channel {ipv4 | non-ip | none}",
+            "Info": "Specifies the launched echo request s usage of the Associated Channel (ACH) mechanism, when testing an MPLS-TP LSP. Values-ipv4 - Use the Associated Channel mechanism with IP encapsulation, as described in RFC 6426, Section 3.2.."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

@@ -1,0 +1,21 @@
+{
+    "PageTitle": "mpls te soft-preemption (MPLS view)",
+    "FuncDef": "The mpls te soft-preemption command enables soft preemption for all RSVP-TE tunnels on the ingress.\nThe undo mpls te soft-preemption command disables soft preemption for all RSVP-TE tunnels on the ingress.\nBy default, this function is disabled globally. If soft preemption is disabled globally but enabled in the view of a specified local tunnel interface, the local tunnel is capable of this function.",
+    "CLIs": [
+        "mpls te soft-preemption",
+        "undo mpls te soft-preemption"
+    ],
+    "ParentView": [
+        "MPLS view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls te soft-preemption"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe setup and holding priorities and the preemption function are configured to allow TE tunnels to be established preferentially to transmit important services, preventing random resource competition during tunnel establishment.\nIf there is no path meeting the bandwidth requirement of a desired tunnel, a device can tear down an established tunnel and use bandwidth resources assigned to that tunnel to establish a desired tunnel. This is called preemption. The following preemption modes are supported:\nHard preemption: A tunnel with a higher setup priority can preempt resources assigned to a tunnel with a lower holding priority. Consequently, some traffic is dropped on the tunnel with a lower holding priority during the hard preemption process.Soft preemption: After a tunnel with a higher setup priority preempts the bandwidth of a tunnel with a lower holding priority, the soft preemption function retains the tunnel with a lower holding priority for a specified period of time. If the ingress finds a better path for this tunnel after the time elapses, the ingress uses the make-before-break (MBB) mechanism to reestablish the tunnel over the new path. If the ingress fails to find a better path after the time elapses, the tunnel goes Down.\nTo enable soft preemption, run the mpls te soft-preemption command.\n\nPrerequisites\nMPLS TE has been enabled globally using the mpls te command.\nConfiguration Impact\nThe priority and preemption attributes are used in conjunction to determine resource preemption among tunnels. If multiple tunnels are to be established, tunnels with higher setup priorities can be established by preempting resources. If resources, such as bandwidth, are insufficient, a tunnel with a higher setup priority can preempt resources of an established tunnel with a lower holding priority.\nPrecautions\nAfter the preceding configuration, the device performs soft preemption for tunnels that meet the following conditions:\nP2P tunnels that use RSVP-TE as a signaling protocol: include manual tunnels, manual bypass tunnels, auto tunnels, auto bypass tunnels, IP-prefix tunnel, and auto tunnels delivered by a PCE server.Manual tunnels whose tunnel interfaces have no mpls te soft-preemption block, mpls te resv-style ff command run.\nIf the mpls te soft-preemption command has been run in the view of the manual tunnel interface, this configuration prevails."
+}

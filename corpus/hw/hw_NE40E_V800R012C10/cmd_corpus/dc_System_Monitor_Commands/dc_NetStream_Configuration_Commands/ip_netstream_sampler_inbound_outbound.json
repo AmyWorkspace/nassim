@@ -1,0 +1,98 @@
+{
+    "PageTitle": "netstream sampler",
+    "FuncDef": "The ip netstream sampler command configures NetStream to IPv4 sample incoming and outgoing flows on the interface in a specified sampling mode and at a specified sampling ratio.\nThe undo ip netstream sampler command disables NetStream from sampling incoming and outgoing flows.\nThe ipv6 netstream sampler command configures NetStream to IPv6 sample incoming and outgoing flows on the interface in a specified sampling mode and at a specified sampling ratio.\nThe undo ipv6 netstream sampler command restores the default setting.\nBy default, NetStream is disabled from sampling incoming and outgoing flows. Instead, it collects statistics about each packet.",
+    "CLIs": [
+        "ip netstream sampler fix-time <fix-time-number> { inbound | outbound }",
+        "ip netstream sampler fix-packets <fix-packet-number> { inbound | outbound }",
+        "ip netstream sampler random-packets <random-packet-number> { inbound | outbound }",
+        "ipv6 netstream sampler fix-time <fix-time-number> { inbound | outbound }",
+        "ipv6 netstream sampler fix-packets <fix-packet-number> { inbound | outbound }",
+        "ipv6 netstream sampler random-packets <random-packet-number> { inbound | outbound }",
+        "undo ip netstream sampler { inbound | outbound }",
+        "undo ipv6 netstream sampler { inbound | outbound }"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE sub-interface view",
+        "50GE interface view",
+        "50|100GE sub-interface view",
+        "50|100GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "FlexE interface view",
+        "GE sub-interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "T1 interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "VLANIF interface view",
+        "Serial interface view",
+        "Sub-interface view",
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "inbound",
+            "Info": "Enables NetStream to sample incoming flows on an interface.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Enables NetStream to sample outgoing flows on an interface.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Displays the IPv4 netstream feature.\n-"
+        },
+        {
+            "Parameters": "fix-packets fix-packet-number",
+            "Info": "Enables the fixed packet sampling mode. In this mode, one packet is sampled every fix-packets-number packets.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "random-packets random-packet-number",
+            "Info": "Enables the random packet sampling mode. In this mode, one packet is randomly sampled out of random-packets-number packets.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Displays the IPv6 netstream feature.\n-"
+        },
+        {
+            "Parameters": "fix-time fix-time-number",
+            "Info": "Enables the fixed time sampling mode. In this mode, one packet is sampled every fix-time-value milliseconds.\nThe value is an integer ranging from 5 to 30000, in ms."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ip netstream sampler fix-packets 1000 inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ipv6 netstream sampler fix-packets 1000 inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface virtual-ethernet 1/0/0",
+            "[~HUAWEI-Virtual-Ethernet1/0/0] ve-group 1 l3-access",
+            "[*HUAWEI-Virtual-Ethernet1/0/0] quit",
+            "[*HUAWEI] interface virtual-ethernet 1/0/0.1",
+            "[~HUAWEI-Virtual-Ethernet1/0/0.1] ip netstream sampler fix-packets 1000 inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface virtual-ethernet 1/0/0",
+            "[~HUAWEI-Virtual-Ethernet1/0/0] ve-group 1 l3-access",
+            "[*HUAWEI-Virtual-Ethernet1/0/0] quit",
+            "[*HUAWEI] interface virtual-ethernet 1/0/0.1",
+            "[~HUAWEI-Virtual-Ethernet1/0/0.1] ipv6 netstream sampler fix-packets 1000 inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf NetStream is enabled on an interface, the system records NetStream-related information in a specific interface information table. If each packet on an interface is collected and counted, forwarding performance of the interface (especially high-speed interfaces) greatly deteriorates. To learn the traffic characteristics of an interface and at the same time minimize the impact of packet statistics collection on interface forwarding performance, enable NetStream sampling on the interface. The lower the sampling ratio, the less the impact on the device performance.\nPrecautions\n IPv4 and IPv6 streams must be sampled in the same way with different sampling ratios. Configure any of the sampling ratios, and both IPv4 and IPv6 will take effect simultaneously. Sampling ratio is based on message and does not distinguish between message types. If the fixed packet sampling ratio is 1000:1, only one of the 1000 messages will be collected, but the 1000 messages may be either IPv4 or ipv6. This random sampling may lead to deviation of IPv4/IPv6 sampling results. Especially when the proportion of ipv4/v6 traffic is not uniform, the deviation is obvious. If the sampling ratio is not configured under the interface, the global sampling ratio configuration is used. If one stream type sampling ratio is configured on the interface, the other stream type uses the other stream type sampling ratio that has been configured on the interface. If the sampling mode supported by the interface does not include the current global sampling ratio configuration, the interface does not use the global sampling ratio. Netstream does not support serial interfaces of the E1 interface. Due to CPCAR, packets may be discarded if the traffic rate on an interface is high. This will prevent the NetStream sampling rate from reaching 1:1 when a 1:1 rate is set."
+}

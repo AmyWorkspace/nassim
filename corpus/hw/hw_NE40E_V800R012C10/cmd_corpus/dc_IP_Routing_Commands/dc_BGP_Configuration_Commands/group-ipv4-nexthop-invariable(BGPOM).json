@@ -1,0 +1,32 @@
+{
+    "PageTitle": "peer next-hop-invariable (BGP view) (group)",
+    "FuncDef": "The peer next-hop-invariable command has the following functions:\n- When the BGP speaker advertises routes to EBGP peers, the BGP speaker does not change the Next_Hop.\n- When the BGP speaker advertises labeled routes to IBGP peers, the BGP speaker does not change the Next_Hop.\n- When the BGP speaker advertises imported IGP routes to IBGP peers, the BGP speaker changes the Next_Hop to the Next_Hops of the IGP routes.\nThe peer next-hop-invariable include-static-route command configures a BGP speaker to retain the original Next_Hop of imported static routes when advertising the routes to an IBGP peer.\nThe undo peer next-hop-invariable command restores the default configuration.\n\nBy default:\n\n\nA device sets its interface IP address as the Next_Hops of routes when advertising these routes to EBGP peers.\n\nA device does not modify the Next_Hops of non-labeled routes if the routes are learned from EBGP peers and are to be advertised to IBGP peers; the device sets its interface IP address as the Next_Hops of labeled routes if the routes are learned from EBGP peers and are to be advertised to IBGP peers.\n\nA device does not change the Next_Hops of routes if the routes are learned from an IBGP peer and are to be advertised to another IBGP peer.\n\nA device sets its interface IP address as the Next_Hops of routes when advertising imported IGP routes to IBGP peers.\n\nA device modifies the Next_Hop of imported static routes to the local interface's IP address when advertising the routes to IBGP peers.",
+    "CLIs": [
+        "peer <group-name> next-hop-invariable [ include-static-route ]",
+        "undo peer <group-name> next-hop-invariable"
+    ],
+    "ParentView": [
+        "BGP view",
+        "BGP-IPv4 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "include-static-route",
+            "Info": "Configures the BGP speaker to retain the original Next_Hop of imported static routes when advertising the routes to the peer.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group test external",
+            "[*HUAWEI-bgp] peer test as-number 200",
+            "[*HUAWEI-bgp] peer test next-hop-invariable include-static-route"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an inter-AS VPN Option C scenario where an VPNv4 Route Reflector (RR) is used, the peer next-hop-invariable command needs to be run on the RR to prevent the RR from modifying the Next_Hops of routes before advertising the routes to EBGP peers. This ensures that the remote PE recurses routes to the LSP destined for the local PE during traffic transmission.\nIf the peer next-hop-invariable include-static-route command is run, the BGP speaker retains the original Next_Hop of imported static routes when advertising the routes to the specified IBGP peer; if the original Next_Hop of imported public static routes is invalid or recurses to a VPN route, or the VPN static routes to be advertised are imported to the public network instance, the local interface's IP address is used as the Next_Hop when the static routes are advertised to the specified IBGP peer.\nPrerequisites\nThe peer as-number command has been used to create a peer group.\nPrecautions\nThe peer next-hop-invariable command configuration without the include-static-route keyword takes effect only for received routes. However, the configuration does not take effect for received IPv4 routes that do not carry labels.\nAfter the peer next-hop-invariable include-static-route command is run, to restore the default configuration, run the undo peer next-hop-invariable command; to override the original configuration, run the peer next-hop-invariable command.\nIf a device needs to advertise routes to its IBGP peer group, the peer next-hop-invariable and peer next-hop-local commands are mutually exclusive on the device."
+}

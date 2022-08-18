@@ -1,0 +1,80 @@
+{
+    "PageTitle": "nat session aging-time (System view)",
+    "FuncDef": "The nat session aging-time command sets the aging time for a specific or multiple types of NAT, NAT64, DS-Lite sessions.\nThe undo nat session aging-time command restores the default aging time for a specific or multiple types of NAT, NAT64, DS-Lite sessions.\nThe default aging time for a specific or multiple types of NAT sessions is default aging time.",
+    "CLIs": [
+        "nat session aging-time { tcp | udp | icmp | fin-rst | syn | fragment | dns | ftp | http | rtsp | sip | pptp | tcp long-link | ip } aging-time",
+        "undo nat session aging-time { tcp | udp | icmp | fin-rst | syn | fragment | dns | ftp | http | rtsp | sip | pptp | tcp long-link | ip } [ aging-time ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tcp",
+            "Info": "Indicates TCP sessions.\n-"
+        },
+        {
+            "Parameters": "udp",
+            "Info": "Indicates UDP sessions.\n-"
+        },
+        {
+            "Parameters": "icmp",
+            "Info": "Indicates ICMP sessions.\n-"
+        },
+        {
+            "Parameters": "fin-rst",
+            "Info": "Indicates TCP FIN, TCP RST sessions.\n-"
+        },
+        {
+            "Parameters": "syn",
+            "Info": "Indicates SYN sessions.\n-"
+        },
+        {
+            "Parameters": "fragment",
+            "Info": "Indicates fragment sessions.\n-"
+        },
+        {
+            "Parameters": "dns",
+            "Info": "Indicates DNS sessions.\n-"
+        },
+        {
+            "Parameters": "ftp",
+            "Info": "Indicates FTP sessions.\n-"
+        },
+        {
+            "Parameters": "http",
+            "Info": "Indicates HTTP sessions.\n-"
+        },
+        {
+            "Parameters": "rtsp",
+            "Info": "Indicates RTSP sessions.\n-"
+        },
+        {
+            "Parameters": "sip",
+            "Info": "Indicates SIP sessions.\n-"
+        },
+        {
+            "Parameters": "pptp",
+            "Info": "Indicates PPTP sessions.\n-"
+        },
+        {
+            "Parameters": "long-link",
+            "Info": "Indicates sessions over long TCP connections. This parameter takes effect only on NAT session entries.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Indicates IP sessions.\n-"
+        },
+        {
+            "Parameters": "aging-time",
+            "Info": "Specifies an aging time.\nFor TCP long-connection sessions, the value ranges from 1 to 24000, in hours.For Fragment sessions, the value ranges from 1 to 40000, in milliseconds.For other types of sessions, the value is an integer ranging from 1 to 40000, in second."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat session aging-time tcp 420"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the aging time for a specific or multiple types of NAT, NAT64, DS-Lite sessions, run the nat session aging-time command. The aging time of NAT, NAT64, DS-Lite session entries of different protocols can be set, so that expired NAT, NAT64, DS-Lite session entries age as soon as possible, and system resources can be released.\nThe default aging time of TCP is 240sThe default aging time of UDP is 240sThe default aging time of ICMP is 20sThe default aging time of RTSP is 240sThe default aging time of fragment is 5000msThe default aging time of fin-rst is 5sThe default aging time of syn is 5sThe default aging time of FTP is 600sThe default aging time of DNS is 240sThe default aging time of HTTP is 240sThe default aging time of SIP is 800sThe default aging time of PPTP is 180sThe default aging time of IP is 240s\n\nConfiguration Impact\nAfter an aging time is set for a specified type of NAT, NAT64, DS-Lite session entry, the session entries age after the configured aging time elapses. The changed aging time does not take effect for the generated NAT, NAT64, DS-Lite session entries.\nPrecautions\nIn the current version, configurations may fail to be restored if the nat session aging-time command in the system view and the nat session aging-time command in the NAT instance view are both configured and if the existing configuration file and a source version software package are used to restore configurations.\nFor example, the configuration file in the current version is as follows:\nnat session aging-time udp 200\n#\nnat instance 1 id 1\nservice-instance-group 1\nnat session aging-time udp 300\nnat user-session create-rate 32\n#\nIf the preceding configuration file and a source version software package are used to restore configurations, the configurations are updated as follows:\nnat session aging-time udp 300\n#\nnat instance 1 id 1\nservice-instance-group 1\n#\nAfter configuration comparison, the aging time configured in the NAT instance overrides that configured in the system view, and the configurations performed after the aging time is set in the NAT instance are missing."
+}

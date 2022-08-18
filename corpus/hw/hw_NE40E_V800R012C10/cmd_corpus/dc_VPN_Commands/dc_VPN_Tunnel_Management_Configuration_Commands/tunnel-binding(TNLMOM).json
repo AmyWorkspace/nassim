@@ -1,0 +1,79 @@
+{
+    "PageTitle": "tunnel binding",
+    "FuncDef": "The tunnel binding command binds a specified TE tunnel to a destination IP address, so that the TE tunnel carries only specific VPN services.\nThe undo tunnel binding command cancels the binding.\nBy default, a TE tunnel is not bound to any IP address.",
+    "CLIs": [
+        "tunnel binding destination <dest-ip-address> te { <tunnel-name> | <tunnel-type> <tunnel-number> } &<1-32> [ ignore-destination-check ] [ down-switch | include-ldp ]",
+        "tunnel binding destination <dest-ip-address> auto-tunnel { <auto-tunnel-name> } &<1-32> [ ignore-destination-check ] [ down-switch ]",
+        "tunnel binding destination <dest-ip-address> sr-te-policy group { <sr-te-policy-group-id> } [ ignore-destination-check ] [ down-switch ]",
+        "undo tunnel binding destination <dest-ip-address>"
+    ],
+    "ParentView": [
+        "Tunnel policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "te",
+            "Info": "Specifies the tunnel type as RSVP-TE or SR-MPLS TE to be bound.\n-"
+        },
+        {
+            "Parameters": "tunnel-name",
+            "Info": "Specifies the number of a TE tunnel interface to be bound.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "tunnel-type",
+            "Info": "Specifies the type of a TE tunnel interface to be bound.\n-"
+        },
+        {
+            "Parameters": "tunnel-number",
+            "Info": "Specifies the number of a TE tunnel interface to be bound.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "ignore-destination-check",
+            "Info": "Disables the function of checking whether the destination address of a TE tunnel or SR-MPLS TE policy tunnel group is the same as that in a tunnel policy. After this parameter is specified, such a tunnel can be selected even if its destination address is different from that in the tunnel policy.\n-"
+        },
+        {
+            "Parameters": "down-switch",
+            "Info": "Specifies whether to enable the tunnel switching function. If down-switch is configured and the bound TE tunnel is unavailable, a tunnel is selected in the sequence of conventional LSPs, CR-LSPs, GRE, and Local_IfNet tunnels.\nLSPs include LDP LSPs, BGP LSPs, and SR-LSPs, whose priorities are in descending order.CR-LSPs include RSVP-TE tunnels and SR-MPLS TE tunnels. The tunnel that goes Up earlier has a higher priority.\n-"
+        },
+        {
+            "Parameters": "include-ldp",
+            "Info": "Implements load balancing with LDP LSPs.\n-"
+        },
+        {
+            "Parameters": "destination dest-ip-address",
+            "Info": "Specifies the destination IP address to which a TE tunnel is bound.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "auto-tunnel auto-tunnel-name",
+            "Info": "Bind with an auto tunnel, specifies the name of auto-tunnel.\nThe value is a string of 1 to 37 characters."
+        },
+        {
+            "Parameters": "sr-te-policy",
+            "Info": "Specifies an SR-MPLS TE tunnel policy to be bound.\n-"
+        },
+        {
+            "Parameters": "group sr-te-policy-group-id",
+            "Info": "Specifies the ID of an SR-MPLS TE policy tunnel group to be bound.\nAfter srte-policy-group srte-policy-group-id is specified in a tunnel policy, the tunnel policy cannot be applied to a tunnel selector using the apply tunnel-policy command (in the tunnel selector view).\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] tunnel-policy tnlpolicyname",
+            "[*HUAWEI-tunnel-policy-tnlpolicyname] tunnel binding destination 2.2.2.9 te Tunnel 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-policy tnlpolicyname",
+            "[*HUAWEI-tunnel-policy-tnlpolicyname] tunnel binding destination 2.2.2.9 auto-tunnel autotunnel123"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-policy tnlpolicyname",
+            "[*HUAWEI-tunnel-policy-tnlpolicyname] tunnel binding destination 2.2.2.9 sr-te-policy group 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA tunnel policy determines the selection of tunnels for VPN services. There are two types of tunnel policies, but only one policy type can be configured in the tunnel policy view at one time:\nTunnel type prioritizing policy: This policy specifies the sequence in which different types of tunnels are selected. The tunnel select-seq command is used to configure a tunnel type prioritizing policy.Tunnel binding policy: This policy binds a tunnel to a VPN for service transmission. The tunnel binding command is used to configure a tunnel binding policy.\nA tunnel binding policy takes effect only to RSVP-TE tunnels, SR-MPLS TE tunnels, auto tunnels or SR-MPLS TE policy tunnel groups. The tunnel binding command can specify the MPLS TE tunnels that are used for VPN binding, facilitating QoS deployment. If some VPN services have high requirements for QoS, run the tunnel binding command to use specific MPLS TE tunnels to transmit these VPN services.\n\nPrerequisites\nThe mpls te reserved-for-binding command has been configured in the tunnel interface view before the MPLS TE tunnel to be bound is configured.\nConfiguration Impact\nIf the tunnel select-seq command has been used for a tunnel policy to set the tunnel priorities and number of tunnels participating in load balancing, you cannot use the tunnel binding command for the tunnel policy. Similarly, if the tunnel binding command has been used for a tunnel policy, you cannot use the tunnel select-seq command for the tunnel policy.\nFollow-up Procedure\nAfter configuring a tunnel binding policy, associate it with a VPN instance so that the bound tunnel carries specific VPN services.\nPrecautions\nYou can specify different values in the tunnel binding command for one tunnel policy.\nFor the same destination IP address of a PE, 32 tunnels can be bound to the destination IP address for load balancing when a TE tunnel or automatic tunnel is configured.\nHowever, only one SR-MPLS TE policy tunnel group ID can be bound to a destination IP address.Any two of the following cannot be bound to the same destination IP address in a tunnel policy: TE tunnel, auto tunnel, and SR-MPLS TE policy tunnel group."
+}

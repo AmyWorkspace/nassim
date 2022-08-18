@@ -1,0 +1,37 @@
+{
+    "PageTitle": "apply as-path",
+    "FuncDef": "The apply as-path command replaces or clears the original AS_Path attribute, or adds, deletes a specified AS number to the AS_Path attribute.\nThe undo apply as-path command cancels the configuration.\nBy default, the original AS_Path attribute is not replaced or cleared and no AS number is added to or deleted from the AS_Path attribute.",
+    "CLIs": [
+        "apply as-path { <as-path-value> } &<1-128> { additive | overwrite | delete }",
+        "undo apply as-path"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "as-path-value",
+            "Info": "Specifies an AS number.\nThe value is an integer ranging from 1 to 4294967295 or the value is in the format of x.y, in which x and y are integers ranging from 1 to 65535 and from 0 to 65535, respectively."
+        },
+        {
+            "Parameters": "additive",
+            "Info": "Adds the specified AS number to the original AS_Path attribute.\n-"
+        },
+        {
+            "Parameters": "overwrite",
+            "Info": "Replaces the AS numbers in the original AS_Path attribute.\n-"
+        },
+        {
+            "Parameters": "delete",
+            "Info": "Deletes the specified AS number from the original AS_Path attribute.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] apply as-path 200 10.10 overwrite"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe AS_Path attribute is a private attribute of BGP used to record all ASs that a route passes through from the local area to the destination in distance-vector (DV) order. The AS_Path attribute can be used to control route selection and prevent routing loops. When the filtering conditions specified by if-match clauses are met and the matching mode is set to permit, you can use the apply as-path command to set the AS_Path attributes of the routes that match the filtering conditions.\nRun the route-policy command to enter the Route-policy view.A route-policy may consist of multiple nodes. The relationship between the nodes is \"OR\". The system matches a route against the nodes in sequence. If the route matches a node, the system no longer matches it against other nodes.Each node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nConfiguration Impact\nAfter the apply as-path command is configured, the AS_Path attributes of the BGP routes that match filtering conditions are changed. For example, the original AS_Path attribute is (30, 40, 50). If the filtering conditions are met and the apply as-path 60 70 80 10.10 additive command is run, the original AS_Path attribute is changed to (60, 70, 80, 10.10, 30, 40, 50). If the apply as-path overwrite command is configured for an export policy and the export policy is applied to an EBGP peer, the local device replaces only non-local AS numbers in the original AS_Path attribute. If the apply as-path none overwrite command is configured for an export policy and the export policy is applied to an EBGP peer, the local device deletes only non-local AS numbers from the original AS_Path attribute. Such implementation does not apply to IBGP peers. For example, if the apply as-path 60 70 80 10.10 overwrite command is run for an export policy and the export policy is applied to an IBGP peer, the original AS_Path attribute is changed to (60, 70, 80, 10.10). If the apply as-path none overwrite command is run for an export policy and the export policy is applied to an IBGP peer, the original AS_Path attribute is changed to null.\nAfter the apply as-path command is run, the configuration is backed up to the slave main control board. You can run the display route-policy command to check whether the configuration takes effect.\nPrecautions\nRunning the apply as-path command changes the path through which network traffic passes. Use this command only when you are familiar with the network topology and impact of the command on services.\nThe apply as-path and apply as-path (enhance) commands function the same except the following:\nThe apply as-path command can be used to configure a maximum of 128 AS numbers, whereas the apply as-path (enhance) command can be used to configure 129 to 256 AS numbers."
+}

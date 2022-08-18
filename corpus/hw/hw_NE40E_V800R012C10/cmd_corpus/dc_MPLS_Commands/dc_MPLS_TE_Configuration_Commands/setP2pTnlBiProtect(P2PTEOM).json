@@ -1,0 +1,56 @@
+{
+    "PageTitle": "mpls te protection tunnel (Tunnel interface view)",
+    "FuncDef": "The mpls te protection tunnel command creates a tunnel protection group.\nThe undo mpls te protection tunnel command deletes the binding between the protection tunnel and a working tunnel.\nBy default, tunnel protection group is not created.",
+    "CLIs": [
+        "mpls te protection tunnel <tunnel-id> [ { holdoff <holdoff-time> } | { mode { non-revertive | revertive [ wtr <wtr-time> ] } } ] *",
+        "undo mpls te protection tunnel"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tunnel-id",
+            "Info": "Specifies the ID of a protection tunnel.\nThe value is an integer ranging from 1 to 32768."
+        },
+        {
+            "Parameters": "holdoff holdoff-time",
+            "Info": "Specifies the delay time. If a fault of a primary tunnel is detected, the switchover is performed after the delay time expires.\nThe value is an integer ranging from 0 to 100 with the step of 100 milliseconds. That is, the maximum delay time is 10 seconds. The default value is 0s, indicating that the switchover is performed immediately after a fault on the primary tunnel is detected."
+        },
+        {
+            "Parameters": "mode",
+            "Info": "Indicates the switchback mode.\nBy default, the revertive mode is adopted."
+        },
+        {
+            "Parameters": "non-revertive",
+            "Info": "Indicates the switchback cannot be performed.\n-"
+        },
+        {
+            "Parameters": "revertive",
+            "Info": "Indicates the switchback can be performed.\n-"
+        },
+        {
+            "Parameters": "wtr wtr-time",
+            "Info": "Specifies the WTR time for the switchback. When a primary tunnel recovers from a fault, the switchback is performed after the WTR time expires.\nThe value ranges from 0 to 60, with the step of 30 seconds. By default, the value is 24, that is, 12 minutes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 102",
+            "[*HUAWEI-Tunnel102] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel102] destination 2.2.2.2",
+            "[*HUAWEI-Tunnel102] mpls te tunnel-id 100",
+            "[*HUAWEI-Tunnel102] quit",
+            "[*HUAWEI] interface Tunnel 11",
+            "[*HUAWEI-Tunnel11] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel11] mpls te signal-protocol cr-static",
+            "[*HUAWEI-Tunnel11] mpls te bidirectional",
+            "[*HUAWEI-Tunnel11] mpls te protection tunnel 102 holdoff 100 mode revertive wtr 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA configured protection tunnel can be bound to a primary tunnel. They form an MPLS TE tunnel protection group. If the primary tunnel fails, a primary/backup tunnel switchover is performed, and traffic switches to the protection tunnel. The tunnel protection group helps improve tunnel reliability. To create a tunnel protection group and a binding between the protection and primary tunnels, run the mpls te protection tunnel command."
+}

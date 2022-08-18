@@ -1,0 +1,45 @@
+{
+    "PageTitle": "md5-password (LDP)",
+    "FuncDef": "The md5-password command sets the password used to establish a TCP connection when an LDP session is being established. The password must be the same as that on the peer.\nThe undo md5-password command restores the default configuration.\nBy default, MD5 authentication is not performed during the establishment of an LDP session.",
+    "CLIs": [
+        "md5-password plain <peer-lsr-id> <password>",
+        "md5-password cipher <peer-lsr-id> <password-cipher>",
+        "undo md5-password <peer-lsr-id>"
+    ],
+    "ParentView": [
+        "MPLS-LDP-VPN instance view",
+        "MPLS-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-lsr-id",
+            "Info": "Specifies the LSR ID of a peer. The LSR ID is used to identify the peer LSR.\nThe LSR ID is in dotted decimal notation."
+        },
+        {
+            "Parameters": "password",
+            "Info": "Specifies an authentication password.\nThe new password is at least eight characters long and contains at least two of the following types: upper-case letters, lower-case letters, digits, and special characters.For security purposes, you are advised to configure a password in ciphertext mode. To further improve device security, periodically change the password.\nThe value is a string. It cannot contain spaces. A simple text key is 1 to 255 characters long; a ciphertext key is a string of 20 to 432 characters long. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "cipher",
+            "Info": "Displays the password in cipher text.\n-"
+        },
+        {
+            "Parameters": "password-cipher",
+            "Info": "Specifies an authentication password.\nThe value is a string, spaces not supported."
+        },
+        {
+            "Parameters": "plain",
+            "Info": "Displays the password in simple text.\nIf you configure a simple password, it will be saved in the configuration file in simple text that has a high security risk. Therefore, configuring a ciphertext password is recommended. To improve the device security, periodically change the password.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] md5-password cipher 2.2.2.2 Huawei-123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMD5 authentication can be configured for a TCP connection over which an LDP session is established, improving security. Note that the peers of an LDP session can be configured with different authentication modes (simple text or ciphertext mode), but must be configured with a single password.\nLDP MD5 authentication generates a unique digest for an information segment to prevent LDP packets from being modified. LDP MD5 authentication is stricter than common checksum verification for TCP connections.\nPrerequisites\nMPLS LDP has been enabled globally using the mpls ldp command in the system view.\nPrecautions\nMD5 authentication and keychain authentication are mutually exclusive with each other on a peer.The session is not re-established if the passwords on both ends are the same. If the interval between password settings on both ends exceeds the session Keepalive time and the passwords become different, the sessions are disconnected due to a timeout, causing an LSP to be deleted.The encryption algorithm MD5 has a low security, which may bring security risks. Using more secure authentication is recommended."
+}

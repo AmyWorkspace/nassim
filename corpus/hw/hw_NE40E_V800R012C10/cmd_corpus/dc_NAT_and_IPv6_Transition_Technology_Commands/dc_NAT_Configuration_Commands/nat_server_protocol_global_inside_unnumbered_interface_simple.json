@@ -1,0 +1,83 @@
+{
+    "PageTitle": "nat server protocol global unnumbered interface",
+    "FuncDef": "The nat server protocol global unnumbered interface command configures the multiplexing relationship between an internal server running a specific protocol and an interface in a simplified NAT instance.\nThe undo nat server protocol global unnumbered interface command deletes the multiplexing relationship between an internal server running a specific protocol and an interface in a simplified NAT instance.\nBy default, no multiplexing relationship between an internal server running a specific protocol and an interface is configured in a simplified NAT instance.",
+    "CLIs": [
+        "nat server protocol { tcp | udp | <protocol-number> } global unnumbered interface { <interface-name> | <interface-type> <interface-number> } <global-protocol> inside <host-address> <host-protocol> [ vpn-instance <vpn-instance-name> ] [ redirect <ip-addr> { inbound | outbound } ]",
+        "undo nat server protocol { tcp | udp | <protocol-number> } global unnumbered interface { <interface-name> | <interface-type> <interface-number> } <global-protocol> inside <host-address> <host-protocol> [ vpn-instance <vpn-instance-name> ] [ redirect <ip-addr> { inbound | outbound } ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tcp",
+            "Info": "Indicates that an internal server runs TCP.\n-"
+        },
+        {
+            "Parameters": "udp",
+            "Info": "Indicates that an internal server runs UDP.\n-"
+        },
+        {
+            "Parameters": "protocol-number",
+            "Info": "Specifies a protocol number.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "unnumbered",
+            "Info": "Specifies an unnumbered IP address.\n-"
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the name of an interface.\nThe value is a string of 1 to 31 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\nThe value can be Ethernet, GE, Eth-Trunk, or VLANIF."
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\nThe value is a string of 0 to 63 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "global-protocol",
+            "Info": "Specifies the protocol that an internal server runs to communicate with an external device. For example, the protocol can be PoP2, PoP3, or SMTP.\nThe value is a string of 1 to 31 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "inside host-address",
+            "Info": "Specifies the protocol that an internal server runs to communicate with an external device. For example, the protocol can be PoP2, PoP3, or SMTP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "host-protocol",
+            "Info": "Specifies the protocol that an internal server runs. For example, the protocol can be PoP2, PoP3, or SMTP.\nThe value is a string of 1 to 31 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which an internal server belongs.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "redirect ip-addr",
+            "Info": "Specifies a redirected next-hop IP address.\nIf traffic passing through a server has a conflicting next-hop IP address, configure this parameter so that the traffic is redirected to a specified next-hop IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Redirects user-to-network packets to a next hop.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Redirects user-to-network packets to a next hop.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ip address 10.10.1.0 255.255.255.0",
+            "[~HUAWEI-GigabitEthernet1/0/1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/1] quit",
+            "[~HUAWEI] nat instance cpe1 id 1 simple-configuration",
+            "[~HUAWEI-nat-instance-cpe1] commit",
+            "[~HUAWEI-nat-instance-cpe1] quit",
+            "[~HUAWEI] nat server protocol tcp global unnumbered interface GigabitEthernet 1/0/1 11 inside 10.10.1.1 13"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an enterprise network, an interface address must be different from that in a NAT address pool. As public IP addresses are limited, enterprise users have to expand the number of public IP addresses. An internal server can be configured to reuse an interface address to help the enterprise users to lower the cost in applying for public IP addresses.\nPrecautions\nNAT ALG does not take effect on protocol packets that match port-level NAT internal server mappings."
+}

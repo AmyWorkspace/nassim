@@ -1,0 +1,79 @@
+{
+    "PageTitle": "dhcp snooping alarm threshold (VLAN view)",
+    "FuncDef": "The dhcp snooping alarm threshold command configures an alarm threshold for the number of dropped ARP packets, IP packets, DHCP reply packets (received on the untrusted interface), and DHCP request packets in a VLAN. In addition, you can configure the percentage threshold for the maximum number of DHCP snooping users.\nThe undo dhcp snooping alarm threshold command restores the default setting.\n\nBy default:\n\n\nThe alarm threshold for the number of dropped packets in a VLAN is a global alarm threshold (which is 100 by default and can be configured manually).\n\nThe percentage threshold for the maximum number of DHCP snooping users in a VLAN is 100%.",
+    "CLIs": [
+        "dhcp snooping alarm { arp threshold <threshold> | ip threshold <threshold> | dhcp-request threshold <threshold> | dhcp-chaddr threshold <threshold> | dhcp-reply threshold <threshold> | user-limit threshold <threshold> } interface { <interface-type> <interface-number> | <interface-name> }",
+        "undo dhcp snooping alarm { arp | ip | dhcp-request | dhcp-chaddr | dhcp-reply | user-limit } threshold interface { <interface-type> <interface-number> | <interface-name> }"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "arp",
+            "Info": "Indicates the alarm threshold for the number of dropped ARP packets.\n-"
+        },
+        {
+            "Parameters": "threshold threshold",
+            "Info": "Specifies an alarm threshold.\nThe alarm threshold for the maximum number of dropped packets in a VLAN ranges from 1 to 1000. The default value is 100. The percentage threshold for the maximum number of DHCP snooping users ranges from 1 to 100%. The default value is 100%."
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Indicates the alarm threshold for the number of dropped IP packets.\n-"
+        },
+        {
+            "Parameters": "dhcp-request",
+            "Info": "Indicates the alarm threshold for the number of dropped DHCP request packets.\n-"
+        },
+        {
+            "Parameters": "dhcp-chaddr",
+            "Info": "Indicates the alarm threshold for the number of dropped DHCP packets with the client hardware address (CHADDR) field value mismatching the source MAC address in the Ethernet frame header.\n-"
+        },
+        {
+            "Parameters": "dhcp-reply",
+            "Info": "Indicates the alarm threshold for the number of dropped DHCP reply packets on an untrusted interface. The DHCP reply packets include DHCP Offer, ACK, and NAK packets.\n-"
+        },
+        {
+            "Parameters": "user-limit",
+            "Info": "Indicates the percentage threshold for the maximum number of DHCP snooping users.\n-"
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] dhcp snooping enable",
+            "[*HUAWEI-vlan100] dhcp snooping alarm arp threshold 200"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] dhcp snooping enable",
+            "[*HUAWEI-vlan100] dhcp snooping max-user-number 3000",
+            "[*HUAWEI-vlan100] dhcp snooping alarm user-limit enable",
+            "[*HUAWEI-vlan100] dhcp snooping alarm user-limit threshold 50"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] dhcp snooping enable",
+            "[*HUAWEI-vlan100] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/6",
+            "[*HUAWEI-GigabitEthernet1/0/6] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/6] port default vlan 100",
+            "[*HUAWEI-GigabitEthernet1/0/6] quit",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] dhcp snooping max-user-number 3000 interface GigabitEthernet 1/0/6",
+            "[*HUAWEI-vlan100] dhcp snooping alarm user-limit enable",
+            "[*HUAWEI-vlan100] dhcp snooping alarm user-limit threshold 50 interface GigabitEthernet 1/0/6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the VLAN view, this command is only used to configure the alarm threshold for the maximum number of dropped packets in a VLAN and the percentage threshold for the maximum number of DHCP snooping users.\nThe configuration of the alarm threshold for dropped packets in a VLAN can be one of the following situations:\nIf no alarm threshold is configured for the VLAN, the globally configured default value is used as the alarm threshold of the VLAN. You can change the default value by configuring an alarm threshold globally.If an alarm threshold is configured for a VLAN, the configured threshold takes effect.\nBefore configuring the percentage threshold for the maximum number of DHCP snooping users in the VLAN view, run the following commands:\nRun the dhcp snooping enable command in the system view to enable DHCP snooping globally.Run the dhcp snooping max-user-number command in the VLAN view to configure the maximum number of DHCP snooping users.Run the dhcp snooping alarm enable command in the VLAN view to enable DHCP snooping alarm.\nIf the maximum number of DHCP snooping users is set to n and the percentage threshold for the maximum number of DHCP snooping users is set to m, when the number of users in the VLAN reaches nxm, an alarm is generated. When the number of users in the VLAN reaches nxm+1, however, no more alarm is generated. Only when the user lease expires or users proactively release IP addresses, the number of users in the VLAN falls below nxm. When the number of users reaches nxm again, an alarm is generated.\nYou can change the current percentage threshold by configuring a new value. Only the current setting takes effect.\n\nPrecautions\nWhen an interface is added to a VLAN not using default, trunk, VLAN-stacking, or VLAN-mapping mode, delete the configured alarm threshold in the VLAN and interface views."
+}

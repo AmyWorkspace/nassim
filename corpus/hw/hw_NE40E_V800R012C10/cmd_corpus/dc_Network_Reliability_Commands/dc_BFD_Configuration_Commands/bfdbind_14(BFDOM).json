@@ -1,0 +1,58 @@
+{
+    "PageTitle": "bfd bind peer-ip track-interface",
+    "FuncDef": "The bfd bind peer-ip command creates the binding between a BFD session and a peer IP address and displays the BFD session view.\nBy default, no binding between a BFD session and a peer IP address is created.",
+    "CLIs": [
+        "bfd <session-name> bind peer-ip <peer-ip> [ vpn-instance <vpn-name> ] [ source-ip <source-ip> ] track-interface interface { <interface-name> | <interface-type> <interface-number> }",
+        "bfd <session-name> bind peer-ip <peer-ip> [ vpn-instance <vpn-name> ] [ source-ip <source-ip> ] track-interface controller { <interface-name> | <interface-type> <interface-number> }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "session-name",
+            "Info": "Specifies the name of a BFD session.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string.\nWhen the name of a BFD session is configured, the uppercase and lowercase letters in the name must be the same as what you enter.BFD session names are case-insensitive. For example, ABC and abc are regarded as the same BFD session. If you have configured ABC as the name of a BFD session, the ABC BFD session view is directly displayed when you configure abc."
+        },
+        {
+            "Parameters": "peer-ip",
+            "Info": "Specifies the peer IP address bound to a BFD session.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-name",
+            "Info": "Specifies the name of a VPN instance bound to a BFD session.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "source-ip source-ip",
+            "Info": "Specifies the source IP address in a BFD packet. If no source IP address is specified, a device uses a source IP address in either of the following modes before sending BFD packets:\nDuring negotiation on BFD session parameters, the device searches for the IP address of an outbound interface connected to the remote end in the local routing table as the source IP address before sending BFD packets.During BFD detection, the device sets the source IP address to a fixed value.\nThis parameter is manually configured only when BFD works with Unicast Reverse Path Forwarding (URPF). This is because URPF checks the source IP address in received packets.\nFor URPF configuration details, see the chapter \"URPF Configuration\" in VRP Router Configuration Guide - Security.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "track-interface",
+            "Info": "Specifies the interface traced by the BFD session.\n-"
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of the interface monitored by a BFD session.\n-"
+        },
+        {
+            "Parameters": "controller",
+            "Info": "Specify controller.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd session bind peer-ip 10.10.20.2",
+            "[*HUAWEI-bfd-session-session]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd atob bind peer-ip 1.1.1.2 track-interface interface GigabitEthernet 4/0/4",
+            "[*HUAWEI-bfd-session-atob]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo rapidly detect link faults on a network, create a BFD session.\nWhen creating the binding between a BFD session and a peer IP address:\nIf only the peer IP address is specified, BFD detects faults in a multi-hop link.If both the peer IP address and local interface are specified, BFD detects faults in a single-hop link. That is, BFD monitors a fixed route whose outbound interface is this interface and the next-hop address is the peer IP address.If both the peer IP address and the VPN instance are specified, BFD detects faults in the multi-hop link for a specified VPN instance.If the peer IP address, the VPN instance, and the local interface are specified, BFD detects faults in the single-hop link for a specified VPN instance.\n\nPrerequisites\nBFD has been globally enabled using the bfd command in the system view.\nConfiguration Impact\nYou can run the bfd bind peer-ip command to create the binding between a static BFD session and a peer IP address.\nFollow-up Procedure\nAfter the binding is created, you must perform the following operations to create the BFD session:\nRun the discriminator command to set the local and remote discriminators for the BFD session.Run the commit command to commit the configuration.\nAfter the binding is created, the following optional configurations can be performed in the BFD session view:\nRun the description command to configure a description for the BFD session.Run the min-tx-interval command to set a desired minimum interval at which BFD packets are sent.Run the min-rx-interval command to set a desired minimum interval at which BFD packets are received.Run the detect-multiplier command to set a local detection multiplier for the BFD session.Run the process-pst command to enable BFD to modify the PST if BFD detects a fault.Run the wtr command to set a WTR time for the BFD session.\n\nPrecautions\nIf the source IP address is configured for the interface whose physical status is to be monitored by BFD, BFD packets are correctly forwarded after URPF has been enabled. The source-ip parameter must be configured correctly because the system checks only the validity of the source IP address. A multicast or broadcast address is an invalid source IP address.\nThe bfd bind peer-ip command must be run on both ends of a link because BFD detects faults in a bidirectional link.\nIf the IP address of the outbound interface is changed after a BFD session has been created, either of the following situations occurs:\nDuring negotiation, the source IP address to be carried in BFD packets is updated.During detection, the source IP address carried in BFD packets is not updated.\nYou can run the undo bfd session-name command to delete a specified BFD session and its binding information."
+}

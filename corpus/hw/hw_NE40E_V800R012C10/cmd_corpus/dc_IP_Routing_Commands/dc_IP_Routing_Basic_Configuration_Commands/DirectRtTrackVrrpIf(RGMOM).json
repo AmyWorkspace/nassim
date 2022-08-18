@@ -1,0 +1,41 @@
+{
+    "PageTitle": "direct-route track vrrp interface",
+    "FuncDef": "The direct-route track vrrp interface command associates direct routes with a Virtual Router Redundancy Protocol (VRRP) backup group in the loopback interface view.\nThe undo direct-route track vrrp interface command deletes the association between direct routes and a VRRP backup group in the loopback interface view.\nBy default, direct routes are not associated with a VRRP backup group.",
+    "CLIs": [
+        "direct-route track vrrp interface { <interface-name> | <interface-type> <interface-number> } vrid <virtual-router-id> degrade-cost <cost-value>",
+        "undo direct-route track vrrp [ interface { <interface-name> | <interface-type> <interface-number> } vrid <virtual-router-id> degrade-cost <cost-value> ]"
+    ],
+    "ParentView": [
+        "Loopback interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of the interface on which a VRRP backup group is configured.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of the interface on which a VRRP backup group is configured.\n-"
+        },
+        {
+            "Parameters": "vrid virtual-router-id",
+            "Info": "Specifies the ID of a VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "degrade-cost cost-value",
+            "Info": "Specifies a cost to be applied to IP direct routes when the associated VRRP backup group is in the Backup or Initialize state.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] vrrp vrid 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] interface loopback 1",
+            "[*HUAWEI-loopback1] vrrp vrid 1 peer-ip 1.1.1.1",
+            "[*HUAWEI-loopback1] direct-route track vrrp interface GigabitEthernet1/0/0 vrid 1 degrade-cost 300"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTwo CloudEdge-GWs in equipment room run VRRP, which is deployed on Eth-Trunk interfaces. Packets are transparently transmitted through an AGG-SW. The priority of network segment routes on loopback interfaces is associated with the VRRP status, and the priority of network segment routes on loopback interfaces of the CloudEdge-GW in the Backup state is low.\nPrerequisites\nVRRP has been configured on interfaces.\nConfiguration Impact\nAfter the direct-route track vrrp interface command is run, the cost of IP direct routes is adjusted based on the VRRP backup group status, with details as follows:\nIf the VRRP backup group status is Master, 0 is used as the cost of the IP direct routes. The IP direct routes have the highest priority.If the VRRP backup group status is Backup or Initialize, the cost-value specified in the command is used as the cost of the IP direct routes.\n\nFollow-up Procedure\nConfigure a dynamic routing protocol to import the direct routes.\nPrecautions\nYou can run only one direct-route track vrrp interface command on a loopback interface. Before associating the direct routes with the VRRP backup group specified by vrid in another direct-route track vrrp interface command, you must delete the original direct-route track vrrp interface command."
+}

@@ -1,0 +1,82 @@
+{
+    "PageTitle": "pim join-policy",
+    "FuncDef": "The pim join-policy command enables an interface to filter join information in Join/Prune messages.\nThe undo pim join-policy command restores the default configuration.\nBy default, an interface does not filter join information in Join/Prune messages.",
+    "CLIs": [
+        "pim join-policy { <advanced-acl-number> | { acl-name <acl-name> } | { asm { <basic-acl-number> | acl-name <acl-name> } | ssm { <advanced-acl-number> | acl-name <acl-name> } } }",
+        "undo pim join-policy",
+        "undo pim join-policy ssm",
+        "undo pim join-policy asm"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "Tunnel interface view",
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "POS sub-interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "advanced-acl-number",
+            "Info": "Specifies the number of a basic ACL.\n-"
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported. The name must start with a letter or digit, and cannot contain only digits."
+        },
+        {
+            "Parameters": "acl-name",
+            "Info": "Specifies a named ACL for ASM.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported. The name must start with a letter or digit, and cannot contain only digits."
+        },
+        {
+            "Parameters": "asm",
+            "Info": "Enables an interface to filter join information of group addresses in the ASM address range.\n-"
+        },
+        {
+            "Parameters": "basic-acl-number",
+            "Info": "Specifies a basic ACL for ASM.\n-"
+        },
+        {
+            "Parameters": "ssm",
+            "Info": "Enables an interface to filter join information sent by specified source addresses to group addresses in the SSM address range.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 3000",
+            "[*HUAWEI-acl4-advance-3000] rule permit ip source 10.10.0.0 0.0.255.255 destination 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-advance-3000] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] pim join-policy ssm 3000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo protect a Router against Join/Prune message attacks, run the pim join-policy command to configure a join information filter policy by setting valid source and group address ranges for Join/Prune messages. The policy enables the Router to discard join information that does not match the specified filter policy.\nPrerequisites\nThe multicast routing-enable command has been run in the instance to which the interface belongs. This command is valid only for PIM-SM.\nConfiguration Impact\nIf asm or ssm is configured more than once, the latest configuration overrides the previous one. You can configure both a basic ACL and an advanced ACL to filter the join information with group addresses in the ASM address range and SSM address range, respectively.\nAfter the pim join-policy command is run:\nIf join information carried in a Join/Prune message matches the permit clause defined in the ACL, the join information is accepted, and an (S, G) entry is created for the join information.If join information carried in a Join/Prune message matches the deny clause defined in the ACL or no action is defined for the join information, the join information is discarded, and no (S, G) entry is created for the join information.If the ACL specified by the advanced-acl-number parameter does not exist, all join information is discarded.\n\nPrecautions\nThe command can be used to filter PIM Join messages in either of the following modes:(1) The pim join-policy { asm { <basic-acl-number> | acl-name <acl-name> } | ssm { <advanced-acl-number> | acl-name <acl-name> } } command filters PIM Join messages with multicast group addresses in the ASM or SSM address range. If PIM Join messages with multicast group addresses in the ASM address range need to be filtered, the asm parameter must be specified in the command. If PIM Join messages with multicast group addresses in the SSM address range need to be filtered, the ssm parameter must be specified in the command.\n(2) The pim join-policy {<advanced-acl-number> | acl-name <acl-name> } } command filters PIM Join messages with multicast group addresses both in the ASM and SSM address ranges.The precautions for configuring filtering rules are as follows:When configuring filtering rules for an advanced ACL or a named ACL:\nFor the rules used to filter PIM Join messages with multicast group addresses in the ASM address range:\n(1) To filter (*, G) PIM Join messages, the source address in the ACL rule must be set to 7.255.255.254, and the destination address must be set to the multicast group address based on which the messages are to be filtered.\n(2) To filter (S, G) PIM Join messages:\nIn an ACL rule, if the source address is set to a multicast source address and the destination address is set to a multicast group address, the messages are filtered based on the multicast source address and multicast group address.\nIn an ACL rule, if the source address is set to a multicast source address and the destination address is set to any, the messages are filtered based on the multicast source address.\nIn an ACL rule, if the source address is set to any and the destination address is set to a multicast group address, the messages are filtered based on the multicast group address.\n(3) The filtering rules do not take effect on (S, G, RPT) PIM Join messages.\nFor the rules used to filter PIM Join messages with multicast group addresses in the SSM address range:\n(1) To filter (S, G) PIM Join messages:\nIn an ACL rule, if the source address is set to a multicast source address and the destination address is set to a multicast group address, the messages are filtered based on the multicast source address and multicast group address.\nIn an ACL rule, if the source address is set to a multicast source address and the destination address is set to any, the messages are filtered based on the multicast source address.\nIn an ACL rule, if the source address is set to any and the destination address is set to a multicast group address, the messages are filtered based on the multicast group address."
+}

@@ -1,0 +1,37 @@
+{
+    "PageTitle": "nas",
+    "FuncDef": "The nas command configures NAS parameters.\nThe undo nas command deletes the NAS parameter configuration.\nBy default, NAS parameters are not configured.",
+    "CLIs": [
+        "nas { logic-ip <ip-address> | logic-port { eth-trunk | ethernet | gigabitethernet } <interface-name> | logic-sysname <host-name> }",
+        "undo nas [ logic-ip | logic-port | logic-sysname ]"
+    ],
+    "ParentView": [
+        "Remote backup profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "logic-ip ip-address",
+            "Info": "Specifies the logical IP address.\nThe value is in the format of X.X.X.X, expressed in dotted decimal notation. It cannot be 0.0.0.0 or 255.255.255.255."
+        },
+        {
+            "Parameters": "logic-port interface-name",
+            "Info": "Specifies the name of a logical interface.\nThe format of the logical interface location information is slot ID/subcard ID/interface number."
+        },
+        {
+            "Parameters": "logic-sysname host-name",
+            "Info": "Specifies a logic host name.\nThe value is a string of 1 to 30 case-insensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-profile kouki",
+            "[*HUAWEI-rm-backup-prf-kouki] service-type bras",
+            "[*HUAWEI-rm-backup-prf-kouki] commit",
+            "[~HUAWEI-rm-backup-prf-kouki] nas logic-ip 1.2.3.4",
+            "[~HUAWEI-rm-backup-prf-kouki] nas logic-port ethernet 1/0/0",
+            "[~HUAWEI-rm-backup-prf-kouki] nas logic-sysname huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure logical IP addresses, logical interfaces, and logical host names in the remote backup profile, run the nas logic-ip logic-port logic-sysname command. The NAS-IP-Address, NAS-Port and Option82 information in the packets sent from two devices that back up each other to the RADIUS and DHCP servers is identical.\nPrerequisites\nThe BRAS users backup service has been enabled in the remote backup profile view.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nBy default, you are advised to set NAS-IP-Address on the master device to be the same as that on the backup device. If you run the radius-authorization source same-as nas-logic-ip command to set NAS-IP-Address to the source IP address of packets sent to the RADIUS server, the master and backup devices must have different NAS-IP-Address values. If the RASIUS server checks authentication, the master and backup devices must have the same NAS-IP-Address value. In this case, NAS-IP-Address cannot be set to the source IP address of packets sent to the RADIUS server.\nIn RUI scenarios, the nas logic-port and nas logic-sysname commands must be run for each RBP, and each of the command settings must be the same for the same RBP on the master and backup devices."
+}

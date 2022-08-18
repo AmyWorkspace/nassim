@@ -1,0 +1,65 @@
+{
+    "PageTitle": "broadcast-suppression (Traffic behavior view)",
+    "FuncDef": "The broadcast-suppression command restricts the rate at which broadcast packets are transmitted.\nThe undo broadcast-suppression command cancels the configuration.\nBy default, broadcast suppression is not configured in the traffic behavior view.",
+    "CLIs": [
+        "broadcast-suppression { cir <cir-value> } [ cbs <cbs-value> ] [ green { discard | pass [ service-class <class> color { green | yellow | red } ] } | red { discard | pass [ service-class <class> color { green | yellow | red } ] } ] *",
+        "undo broadcast-suppression [ { cir <cir-value> } [ cbs <cbs-value> ] [ green { discard | pass [ service-class <class> color { green | yellow | red } ] } | red { discard | pass [ service-class <class> color { green | yellow | red } ] } ] * ]"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the Committed Information Rate (CIR).\nThe value is an integer ranging from 0 to 4294967295, in kbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the Committed Burst Size (CBS).\nThe value is an integer ranging from 0 to 4294967295, in bytes.\nThe CBS value must be larger than the CIR value.\nThe default CBS value is calculated in the format of cbs-value = cir-value*187.\nIf cir-value < 100000 kbit/s, the CBS value is calculated in the format of cbs-value = cir-value*187, in bytes.If cir-value >= 100000 kbit/s, the CBS value is calculated in the format of cbs-value = 100000*187, in bytes."
+        },
+        {
+            "Parameters": "green",
+            "Info": "Specify behavior conducted when rate no higher than CIR.\n-"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "Discards packets of a specific color (green, yellow, or red).\n-"
+        },
+        {
+            "Parameters": "pass",
+            "Info": "Allows packets of a specific color (green, yellow, or red) to pass.\n-"
+        },
+        {
+            "Parameters": "service-class class",
+            "Info": "Specifies the service class to which packets are re-marked.\nThe value can be CS7, CS6, EF, AF4, AF3, AF2, AF1, and BE."
+        },
+        {
+            "Parameters": "color green",
+            "Info": "Indicates that packets are colored green.\n-"
+        },
+        {
+            "Parameters": "color yellow",
+            "Info": "Indicates that packets are colored yellow.\n-"
+        },
+        {
+            "Parameters": "color red",
+            "Info": "Indicates that packets are colored red.\n-"
+        },
+        {
+            "Parameters": "red",
+            "Info": "Specify behavior conducted when rate higher than CIR.\n-"
+        },
+        {
+            "Parameters": "broadcast-suppression",
+            "Info": "Broadcast suppression.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] broadcast-suppression cir 1000 green pass service-class af1 color green"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA growing number of broadcast packets occupy a large amount of network resources. In this situation, services may not be provisioned properly.\nTo prevent broadcast storms, you can run the broadcast-suppression command to set thresholds for broadcast traffic that is allowed to pass through an interface. If the broadcast traffic volume exceeds the value set using the broadcast-suppression command, the system drops the excessive broadcast traffic.\nPrecautions\nThe command is valid only for broadcast traffics.\nThe broadcast suppression does not take effected in VLL scenario.\nIf the broadcast-suppression command is run for multiple times, the latest configuration overrides the previous ones.\nTo achieve accurate packet suppression, specify a value for the CBS that is over 10 times the length of the packet.\nCAR on a trunk interface:\nIf member interfaces of a trunk interface reside on different forwarding or traffic management modules, the effective CIR or PIR for CAR or user-queue can be a multiple of the configured one."
+}

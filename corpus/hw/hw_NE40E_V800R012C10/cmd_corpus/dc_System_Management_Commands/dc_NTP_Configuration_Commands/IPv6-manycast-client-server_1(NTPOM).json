@@ -1,0 +1,55 @@
+{
+    "PageTitle": "ntp-service manycast-client ipv6",
+    "FuncDef": "The ntp-service manycast-client ipv6 command enables the NTP manycast client mode.\nThe undo ntp-service manycast-client ipv6 command disables the NTP manycast client configuration.\nBy default, the manycast client service is disabled.",
+    "CLIs": [
+        "ntp-service manycast-client ipv6 [ <ipv6-address> ] [ authentication-keyid <key-id> | ttl <ttl-number> | port <port-number> ] *",
+        "undo ntp-service manycast-client ipv6 [ <ipv6-address> ]"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "Loopback interface view",
+        "POS interface view",
+        "Tunnel interface view",
+        "VLANIF interface view",
+        "Virtual template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "authentication-keyid key-id",
+            "Info": "Specifies an authentication key ID number carried in messages to be sent to multicast clients.\nThe value is an integer ranging 1 to 65535."
+        },
+        {
+            "Parameters": "ttl ttl-number",
+            "Info": "Specifies the life span of the manycast packet.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "port port-number",
+            "Info": "Sets the port number to be used as the destination port in NTP manycast packets.\nThe number is an integer that can be 123, or ranges from 1025 to 65535. The default value is 123."
+        },
+        {
+            "Parameters": "ipv6 ipv6-address",
+            "Info": "Specifies a manycast IPv6 address. The default value is FF0E:0000:0000:0000:0000:0000:0000:0101.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X. By default, it is FF0E::0101."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface 10GE 1/0/0",
+            "[~HUAWEI-10GE1/0/0] ntp-service ipv6 manycast-client port 5000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface 10GE 1/0/0",
+            "[~HUAWEI-10GE1/0/0] ipv6 enable",
+            "[*HUAWEI-10GE1/0/0] ntp-service ipv6 manycast-client ipv6 FF0E::111 authentication-keyid 6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn interface can be specified on the local device and used to send NTP manycast messages after a timeout period elapses. The local device runs in manycast client mode and periodically sends manycast messages to a manycast server. Based on the message sent by the manycast server, a dynamic client-server association is established.\nIn VS mode, this command is supported only by the admin VS.\nPrecautions\nIf this command is the first NTP configuration command, the system automatically adds the ntp-service [ ipv6 ] server disable command in the configuration file to disable the NTP service. To enable the NTP service, run the undo ntp-service [ ipv6 ] server disable command. If this command is the last NTP configuration command to be deleted, the system automatically deletes the ntp-service [ ipv6 ] server disable command from the configuration file.\nOn an IPv6 network, multiple primary IPv6 addresses can be configured on the source interface. The system by default uses the most recently updated IPv6 address as the source address of the NTP multicast server. To ensure that the server can properly receive and process packets from a client, set this address as the source address listened by the NTP server."
+}

@@ -1,0 +1,27 @@
+{
+    "PageTitle": "backup-opcode",
+    "FuncDef": "The backup-opcode command is used to configure the opcode of backup static proxy for the SRv6 service chain.\nThe undo backup-opcode command is used to remove the opcode of backup static proxy configuration of the SRv6 service chain.\nBy default, no backup opcode is configured for a static SRv6 SID.",
+    "CLIs": [
+        "backup-opcode <func-opcode>",
+        "undo backup-opcode [ <func-opcode> ]"
+    ],
+    "ParentView": [
+        "SRv6 locator End-AS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "func-opcode",
+            "Info": "Specifies a backup static SRv6 SID operation code.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] locator test ipv6-prefix 1:: 64 static 32",
+            "[*HUAWEI-segment-routing-ipv6-locator] opcode ::1 end-as",
+            "[*HUAWEI-segment-routing-ipv6-locator-endas-::1] backup-opcode ::12"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSRv6 SID is an IPv6 address in total 128 bits. The SRv6 SID format is Locator:Function:Args. The Function field is also called Opcode. Configuring different Opcodes is equivalent to defining different functions. Opcode can be dynamically allocated by IGP or statically configured using the opcode command.\nStatic Opcode must be configured in the static segment to prevent conflicts with Opcodes dynamically allocated by IGP. The length range of the static segment is determined by the static static-length parameter in the locator command. The range also determines the number of static Opcodes that can be configured under the Locator.\nAfter static configuration of various types of Opcode through the opcode command, Locator Opcode Args forms a unique SRv6 SID. After SRv6 SID is generated, it will be added to the native Local SID table on the one hand, and the local SID table will be released to the public through routing protocols on the other. During forwarding, the Locator of the SRv6 SID is used to help other nodes on the network implement routing, locate the node that generates the SRv6 SID, and forward the SRv6 message to the node, while the Opcode part is used to instruct the sRv6 SID generation node to perform the corresponding functional operations.\nBackup SID indicates the SRv6 SID of the backup node End.AS.\nPrecautions\nTo ensure correct forwarding, the configured static SIDs cannot conflict with each other.\nTo ensure that the protection function is correct, the same Backup SID must be configured for the mutually protected SFF1 and SFF2, and the proxy peer-sid command must be used to configure the End SID of the backup SFF."
+}

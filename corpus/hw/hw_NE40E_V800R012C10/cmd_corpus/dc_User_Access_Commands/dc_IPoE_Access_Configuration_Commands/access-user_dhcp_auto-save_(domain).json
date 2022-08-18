@@ -1,0 +1,22 @@
+{
+    "PageTitle": "access-user dhcp auto-save (AAA domain view)",
+    "FuncDef": "The access-user dhcp auto-save enable command enables automatic backup of DHCPv4 user information in a domain.\nThe undo access-user dhcp auto-save enable command disables automatic backup of DHCPv4 user information in a domain and deletes the backup DHCPv4 user information in the domain.\nBy default, automatic backup of DHCPv4 user information is disabled in a domain.",
+    "CLIs": [
+        "access-user dhcp auto-save enable",
+        "undo access-user dhcp auto-save enable"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[*HUAWEI-aaa-domain-huawei] access-user dhcp auto-save enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a DHCPv4 user access scenario in which the device functions as a BRAS, when the device is restarted or its board, subcard, or interface is faulty, DHCPv4 users are logged out and their information is lost. If a DHCPv4 client does not detect the fault, the DHCPv4 client does not resend a DHCP request packet to the device or redial up after the fault is rectified. As a result, the DHCPv4 user cannot go online again. To address this problem, save DHCPv4 user information automatically before any fault occurs and allow the DHCPv4 users to go online automatically after the fault is rectified.\nThe DHCPv4 users include those who share one MAC address but go online from multiple sessions.\nTo automatically back up DHCPv4 user information, run the access-user dhcp auto-save command to globally enable automatic backup of DHCPv4 user information and then configure the maximum number of DHCPv4 users allowed for automatic backup. Then, run the access-user dhcp auto-save enable (domain view) command to enable automatic backup of DHCPv4 user information in a domain.\nPrerequisites\nThe access-user dhcp auto-save command has been run to enable automatic backup of DHCPv4 user information globally and configure the maximum number of the DHCPv4 users.\nConfiguration Impact\nInformation about online DHCPv4 users in the domain is saved in the high-end memory, which is a storage medium. The larger the configured maximum number of the DHCPv4 users, the more memory space the user information takes up. For example, information about 64000 DHCPv4 users takes up 50 MB of memory.\nThe device backs up information about the configured maximum number of DHCPv4 users. The excessive part of DHCPv4 user information is not backed up.\nIn a dual-system hot backup scenario, DHCPv4 user information is backed up using the dual-system hot backup mechanism, so the device does not save information about these DHCPv4 users in the high-end memory.\nFollow-up Procedure\nRun the access-user dhcp auto-recover enable command to enable automatic DHCPv4 user login.\nPrecautions\nThis command is supported only on the admin VS.\nIf the device is restarted without being powered off, user information saved in the high-end memory will not be lost. If the device is powered off and restarted, user information saved in the high-end memory will be lost. To ensure that users can go online automatically after the device is powered off and restarted, perform the following operations:\nBefore the device is powered off, run the access-user dhcp save-file command to write the DHCPv4 user information saved in the high-end memory to the CF card.After the device is restarted, run the access-user dhcp recover-file command to restore the DHCPv4 user information saved in the CF card to the high-end memory.\nThe following DHCPv4 user information is saved: MAC address, IP address, VLAN, access interface, VPN instance name, domain name, lease, Option 82, Option 60, Option 61, and IP address of the DHCPv4 server. The DHCPv4 user information is used only when the DHCPv4 users go online automatically.\nIn the automatic login process of a user in a domain enabled with the automatic backup function, the user will fail to go online if the previous IP address assigned to the user has been assigned to another user. To prevent such issues, you need to properly plan address pools for the domains enabled with automatic backup and ensure that the address pools are not shared by the domains not enabled with the function."
+}

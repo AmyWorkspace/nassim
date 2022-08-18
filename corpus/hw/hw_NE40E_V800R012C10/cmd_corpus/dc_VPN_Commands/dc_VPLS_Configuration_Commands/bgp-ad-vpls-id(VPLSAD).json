@@ -1,0 +1,50 @@
+{
+    "PageTitle": "vpls-id",
+    "FuncDef": "The vpls-id command specifies the VPLS domain to which a VSI belongs.\nThe undo vpls-id command disables the specified VPLS domain to which a VSI belongs.\nNo default value is available, and the VPLS ID needs to be set when a BGP AD VSI is created.",
+    "CLIs": [
+        "vpls-id <vplsIdValue>",
+        "undo vpls-id"
+    ],
+    "ParentView": [
+        "VSI-BGPAD view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vplsIdValue",
+            "Info": "Specifies a VPLS domain to which multiple VSIs on PEs belong.\nA VPLS ID is in one of the following formats:\n2-byte AS number:4-byte user-defined number: for example, 101:3. An AS number ranges from 0 to 65535, and a user-defined number ranges from 0 to 4294967295. The AS number and user-defined number cannot be both 0s. Specifically, a VPLS ID cannot be 0:0.4-byte AS number:2-byte user-defined number: for example, 65537:3. The AS number is an integer ranging from 0 to 65535, and the user-defined number is an integer ranging from 0 to 4294967295. The AS number and user-defined number cannot be both 0s. Specifically, a VPLS ID cannot be 0:0.Dotted decimal 4-byte AS number:2-byte user-defined number, such as 0.0:3 or 0.1:0. The AS number is usually in the format of x.y, where x and y range from 0 to 65535. The user-defined number ranges from 0 to 65535. The AS number and user-defined number cannot be both 0s. Specifically, a VPLS ID cannot be 0.0:0.4-byte IP address:2-byte user-defined number: for example, 192.168.122.15:1. The IP address ranges from 0.0.0.0 to 255.255.255.255, and the user-defined number ranges from 0 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi company1",
+            "[*HUAWEI-vsi-company1] bgp-ad",
+            "[*HUAWEI-vsi-company1-bgpad] vpls-id 101:3"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi company2",
+            "[*HUAWEI-vsi-company2] bgp-ad",
+            "[*HUAWEI-vsi-company2-bgpad] vpls-id 2.2.2.2:1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi company3",
+            "[*HUAWEI-vsi-company3] bgp-ad",
+            "[*HUAWEI-vsi-company3-bgpad] vpls-id 16.20:30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nVSIs in a BGP AD VPLS domain use BGP signaling to automatically discover members in the same VPLS domain. A VPLS domain is uniquely identified by a VPLS ID. When creating BGP AD VSIs on different PEs, specify the same VPLS ID for the VSIs so that they can join the same VPLS domain. When creating multiple BGP AD VSIs on a PE, specify different VPLS IDs for the VSIs to allow them to join different VPLS domains. To change the VPLS ID of a VSI, you need to delete the VSI and then recreate it and configure its VPLS ID.\nPrerequisites\nThe bgp-ad command has been run in the VSI view to configure automatic VPLS member discovery and PW deployment for the current VSI and to display the\nConfiguration Impact\nA VPLS ID will be specified for the BGP AD VSI after the vpls-id command is run, and the VPLS ID cannot be specified for the other BGP AD VSIs on the same PE.\nPrecautions\nA BGP AD VPLS domain is uniquely identified by a VPLS ID. The VSIs on a PE must be configured with different VPLS IDs. The VSIs that belong to the same VPLS domain and reside on different PEs must be configured with the same VPLS ID.\nAfter a VPLS ID is configured for a VSI, it cannot be directly changed. To change the VPLS ID, you need to delete the VSI and then recreate the VSI."
+}

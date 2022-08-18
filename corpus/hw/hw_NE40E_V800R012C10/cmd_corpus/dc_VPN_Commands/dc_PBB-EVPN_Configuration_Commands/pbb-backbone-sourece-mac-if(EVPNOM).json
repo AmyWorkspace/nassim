@@ -1,0 +1,51 @@
+{
+    "PageTitle": "pbb backbone-source-mac (interface view)",
+    "FuncDef": "The pbb backbone-source-mac command configures a B-MAC address for an interface.\nThe undo pbb backbone-source-mac command deletes a B-MAC address for an interface.\n\nBy default, no B-MAC address is configured for an interface.",
+    "CLIs": [
+        "pbb backbone-source-mac <mac-address>",
+        "undo pbb backbone-source-mac <mac-address>",
+        "undo pbb backbone-source-mac"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies a B-MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0. The MAC address cannot be 0000-0000-0000."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn vpn-instance ievpn i-evpn",
+            "[~HUAWEI-i-evpn-instance-ievpn] q",
+            "[~HUAWEI] interface Eth-Trunk1",
+            "[~HUAWEI-Eth-Trunk1] evpn b vpn-instance ievpn",
+            "Warning: EVPN ALL-Active does not take effect because the E-Trunk is not bound to an Eth-Trunk interface.",
+            "[*HUAWEI-Eth-Trunk1] pbb backbone-source-mac 00e0-fc12-3456"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nPBB-EVPN uses the MAC-in-MAC technique to forward user packets over an EVPN. Specifically, PBB-EVPN adds backbone MAC (B-MAC) addresses before customer MAC (C-MAC) addresses in user packets and enables PEs to transmit these user packets based only on these B-MAC addresses. PEs' control planes have to learn only the B-MAC addresses of other PEs.\nB-MAC addresses configured in these views must be different. PBB preferentially uses the B-MAC addresses configured in the interface view for packet encapsulation. If no B-MAC addresses are configured in the interface view, PBB uses B-MAC addresses configured in the I-EVPN instance view instead. If no B-MAC addresses are configured in the I-EVPN instance view either, PBB uses B-MAC addresses configured in the B-EVPN instance view.\n\nPrecautions\n\nOnly an interface bound to an I-EVPN instance can have a B-MAC address configured.\nB-MAC addresses cannot be configured on the member interfaces of an Eth-Trunk interface bound to an I-EVPN instance. In addition, an interface with a B-MAC address configured cannot join an Eth-Trunk interface bound to an I-EVPN instance.\nIf a CE is dual-homed to PEs, the PE interfaces that connect to the same CE must have the same ESI and B-MAC address configured."
+}

@@ -1,0 +1,89 @@
+{
+    "PageTitle": "cp-rate-limit igmp",
+    "FuncDef": "The cp-rate-limit igmp command limits the rate of sending IGMP packets to the CPU.\nThe undo cp-rate-limit igmp command cancels the set rate of sending IGMP to the CPU.\nBy default, the rate at which IGMP packets are sent to the CPU is not limited.",
+    "CLIs": [
+        "cp-rate-limit igmp cir <cir-value> [ cbs <cbs-value> ] vlan <vlan-id-begin> [ to <vlan-id-end> ] [ prior ]",
+        "cp-rate-limit igmp cir <cir-value> [ cbs <cbs-value> ] pe-vid <pe-vlan-id> ce-vid <ce-vlan-id-begin> [ to <ce-vlan-id-end> ] [ prior ]",
+        "cp-rate-limit igmp cir <cir-value> [ cbs <cbs-value> ] [ prior ]",
+        "undo cp-rate-limit igmp [ cir <cir-value> [ cbs <cbs-value> ] ] [ vlan <vlan-id-begin> [ to <vlan-id-end> ] ] [ prior ]",
+        "undo cp-rate-limit igmp [ cir <cir-value> [ cbs <cbs-value> ] ] pe-vid <pe-vlan-id> ce-vid <ce-vlan-id-begin> [ to <ce-vlan-id-end> ] [ prior ]"
+    ],
+    "ParentView": [
+        "Layer 2 100GE interface view",
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "Layer 2 40GE interface view",
+        "40GE interface view",
+        "Layer 2 50GE interface view",
+        "50GE interface view",
+        "Layer 2 Eth-Trunk interface view",
+        "Eth-Trunk interface view",
+        "Layer 2 GE interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "VE sub-interface view",
+        "Layer 2 XGE interface view",
+        "XGE interface view",
+        "Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the committed burst size (CBS), that is, the depth of the token bucket. The CBS indicates the committed traffic that can pass at a burst.\nThe value is an integer ranging from 100 to 33554432, in bytes. It is recommended that you set the CBS to a value that is greater than 10 times the length of a packet. The default value varies with the value of cir-value.The cbs-value that takes effect is at least 187 times the cir-value.\nIf the configured cbs-value is less than 187 times the cir-value, the cbs-value that takes effect is 187 times the cir-value.If the configured cbs-value is greater than 187 times the cir-value, the configured cbs-value takes effect."
+        },
+        {
+            "Parameters": "vlan vlan-id-begin",
+            "Info": "Specifies the start value of the VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to vlan-id-end",
+            "Info": "Specifies the end value of the VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to ce-vlan-id-end",
+            "Info": "Specifies the end value of the inner VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "prior",
+            "Info": "Specifies the IGMP packet bandwidth limit for the specified port takes precedence over blacklists, whitelists, and user-defined-flow.\n-"
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the committed information rate (CIR), that is, the committed traffic rate.\nThe value is an integer that can be 0, 32 to 1000000, in packet/s."
+        },
+        {
+            "Parameters": "pe-vid pe-vlan-id",
+            "Info": "Specifies the value of the outer VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid ce-vlan-id-begin",
+            "Info": "Specifies the start value of the inner VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] cp-rate-limit igmp cir 1000 cbs 2000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] encapsulation qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq termination pe-vid 100 ce-vid 200",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] cp-rate-limit igmp cir 1000 cbs 2000 pe-vid 100 ce-vid 200"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vlan-type dot1q 100",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] cp-rate-limit igmp cir 1000 cbs 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo protect CPU resources against IGMP attacks, run the cp-rate-limit igmp command to limit the rate at which IGMP packets on an interface are sent to the CPU.\nPrecautions\nWhen the untagged or default encapsulation mode is configured for interfaces, such as an Ethernet interface or its sub-interface or a GE interface or its sub-interface, the cp-rate-limit igmp cir cir-value [ cbs cbs-value ] [ prior ] command is supported.When the dot1q, untagged, or default encapsulation mode is configured for interfaces, such as a dot1q VLAN tag termination sub-interface, global VE sub-interface, VE sub-interface, Layer 2 Ethernet interface, Layer 2 GE interface, Layer 2 Eth-Trunk interface, or EVC sub-interface, the cp-rate-limit igmp cir cir-value [ cbs cbs-value ] vlan vlan-id-begin [ to vlan-id-end ] [ prior ] command is supported.When the QinQ, untagged, or default encapsulation mode is configured for interfaces, such as a QinQ VLAN tag termination sub-interface, global VE sub-interface, VE sub-interface, or EVC sub-interface, the cp-rate-limit igmp cir cir-value [ cbs cbs-value ] pe-vid pe-vlan-id ce-vid ce-vlan-id-begin [ to ce-vlan-id-end ] [ prior ] command is supported."
+}

@@ -1,0 +1,57 @@
+{
+    "PageTitle": "igmp lastmember-queryinterval",
+    "FuncDef": "The igmp lastmember-queryinterval command sets the interval at which an IGMP querier sends IGMP last-member query messages after it receives an IGMP Leave message from a host.\nThe undo igmp lastmember-queryinterval command restores the default setting.\nBy default, an IGMP querier sends IGMP last-member query messages at an interval of 1s.",
+    "CLIs": [
+        "igmp lastmember-queryinterval <interval>",
+        "undo igmp lastmember-queryinterval"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "PW-VE sub-interface view",
+        "Tunnel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "POS sub-interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies an interval at which an IGMP querier sends IGMP last-member query messages.\nThe value is an integer ranging from 1 to 25, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp lastmember-queryinterval 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf multiple multicast devices are connected to a shared network segment where user hosts reside, these multicast devices automatically elect a unique querier. The querier maintains IGMP group memberships by sending IGMP query messages. To set the interval at which IGMP last-member query messages are sent, run the igmp lastmember-queryinterval command.\nThe igmp lastmember-queryinterval command is valid only when the querier runs IGMPv2 or IGMPv3. A last-member query is also known as a group-specific query. IGMPv3 also supports source/group-specific queries.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nConfiguration Impact\nAfter receiving a Leave message for a group, the querier sends group-specific query messages constantly to check whether there is a member of the group. The interval at which the querier sends group-specific query messages is specified by interval, and the number of times for sending group-specific query messages is specified by robust-value in the igmp robust-count command or the robust-count command.\nIf there is a member of a group on the network segment, the member must send a Report message within the maximum response time. The maximum response time can be set by using the igmp max-response-time command or the max-response-time command.\nIf the querier receives a Report message within the period obtained by the value of robust-value multiplied by the value of interval, it continues to maintain the memberships for the group. Otherwise, the querier considers that there is no member of the group on the network segment, and therefore does not maintain the memberships for the group.\nPrecautions\nThe function of the igmp lastmember-queryinterval command is the same as the function of the lastmember-queryinterval command in the IGMP view. The configuration in the IGMP view is effective for all interfaces, whereas the configuration in the interface view is effective only for the specified interface. The configuration in the interface view takes precedence over the configuration in the IGMP view. The configuration in the IGMP view is used only when the configuration in the interface view is not available."
+}

@@ -1,0 +1,29 @@
+{
+    "PageTitle": "aaa route-download recover-delay",
+    "FuncDef": "The aaa route-download recover-delay command configures delayed advertisement of static routes downloaded from a RADIUS server after the device is restarted and configurations are restored.\nThe undo aaa route-download recover-delay command restores the default configuration.\nThe static routes downloaded from a RADIUS server to the device are called AAA download routes.\nBy default, the device immediately advertises static routes to other network devices after downloading them from a RADIUS server.",
+    "CLIs": [
+        "aaa route-download recover-delay <delay-time>",
+        "undo aaa route-download recover-delay [ <delay-time> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "recover-delay delay-time",
+            "Info": "Configures the device to advertise static routes downloaded from a RADIUS server after a specified delay.\nThe value is an integer ranging from 1 to 120, in minutes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group test",
+            "[*HUAWEI-radius-test] commit",
+            "[~HUAWEI-radius-test] quit",
+            "[~HUAWEI] aaa route-download server-group test base-user-name huawei password cipher Root@123 download-interval 1200 retry-interval 25 retry-max-count 5 tag 10 synchronization 03:45:00",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] aaa route-download recover-delay 120"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn RUI scenarios, after the aaa route-download command is run to enable the device to downloads static routes from a RADIUS server at an interval, you must also run the aaa route-download recover-delay command to configure delayed advertisement of static routes downloaded from a RADIUS server.\nIn RUI scenarios, after the aaa route-download command is run to enable the device to download static routes from a RADIUS server at an interval, the master and backup devices download static routes from the RADIUS server, but the cost value of the static routes downloaded to the master device is less than that of the static routes downloaded to the backup device. If the master device is restarted and immediately downloads static routes from the RADIUS server and advertises them to the network side, network-side traffic will be transmitted to the master device. However, batch backup of user information has not yet completed, and the master device cannot process traffic. Therefore, the traffic is transmitted to the backup device through the link between the master and backup devices. If the network traffic volume is greater than the bandwidth of the link between the master and backup devices, the downstream traffic may be interrupted.\nTo prevent this problem, run the aaa route-download recover-delay command to configure delayed advertisement of static routes downloaded from a RADIUS server after the device is restarted and configurations are restored so that the device can advertise the static routes after user information is backed up. When the master device is restarted, the network-side traffic is switched to the new master device, preventing a traffic detour.\nPrerequisites\nThe aaa route-download command has been run to enable the device to periodically download static routes from a RADIUS server.\nConfiguration Impact\nThe device advertises static routes downloaded from the RADIUS server after a delay specified by delay-time.\nIn the process of delayed route advertisement after the device is restarted, if a master/slave MPU switchover occurs, the new master MPU will recalculate the delay so that routes are advertised later than the configured delay.In the process of delayed route advertisement after the device is restarted, if the aaa route-download recover-delay command is run again to set a new delay and a master/slave MPU switchover occurs, the new master MPU will recalculate the delay based on the newly configured delay.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

@@ -1,0 +1,43 @@
+{
+    "PageTitle": "sftp client-source",
+    "FuncDef": "The sftp client-source command configures the specified address as the source IPv4 address of the device functioning as the SFTP client.\nThe undo sftp client-source command restores the default SFTP client source IPv4 address.\nThe sftp ipv6 client-source command configures the specified address as the source IPv6 address of the device functioning as the SFTP client.\nThe undo sftp ipv6 client-source command restores the default SFTP client source IPv6 address.\nBy default, the source IP address of the SFTP client is the IP address of the outbound interface for accessing the SFTP server.",
+    "CLIs": [
+        "sftp client-source -a <source-ip-address>",
+        "sftp client-source -a <source-ip-address> { public-net | -vpn-instance <vpn-instance-name> }",
+        "sftp ipv6 client-source -a <source-ipv6-address> [ -vpn-instance <ipv6-vpn-instance-name> ]",
+        "undo sftp client-source",
+        "undo sftp ipv6 client-source [ -a <source-ipv6-address> [ -vpn-instance <ipv6-vpn-instance-name> ] ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ip-address",
+            "Info": "Specifies the IPv4 address of the local device.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-a source-ipv6-address",
+            "Info": "Specifies the IPv6 address of the local device.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "public-net",
+            "Info": "Specifies the public network where the SFTP server resides.\n-"
+        },
+        {
+            "Parameters": "-vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which the SFTP server belongs.\nBefore specifying the parameter vpn-instance vpn-instance-name, ensure that a VPN instance has been configured.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "-vpn-instance ipv6-vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which the SFTP server belongs.\nBefore specifying the parameter vpn-instance ipv6-vpn-instance-name, ensure that a VPN instance has been configured.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] sftp client-source -a 10.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf you run the sftp command to log in to an SFTP server without specifying a source address or source interface, the source address or source interface specified through the sftp client-source command is adopted by default. If you run the sftp command and specify the source address or source interface, the specified source address or source interface is adopted. When viewing the current SFTP connection on the server, the specified source IP address or the primary IP address of the specified interface is displayed as the IP address of the user.\nPrecautions\nIf the specified source interface has been bound to a VPN instance, the client is automatically bound to the same VPN instance.If the specified source interface has been bound to a VPN instance, for example, vpn1, but a different VPN instance, for example, vpn2, is specified in the sftp client-source -a command, The vpn configured by this command (vpn2) takes effect.After a bound VPN instance is deleted, the VPN configuration specified using the sftp client-source command will not be cleared but does not take effect. In this case, the SFTP server uses a public IP address. If you configure the VPN instance with the same name again, the VPN function restores.After a bound source interface is deleted, the interface configuration specified using the sftp client-source command will not be cleared but does not take effect. If you configure the source interface with the same name again, the interface configuration specified using the sftp client-source command is updated and the function restores."
+}

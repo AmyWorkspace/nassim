@@ -1,0 +1,26 @@
+{
+    "PageTitle": "apply-label per-instance static (VPN instance IPv4 address family view)",
+    "FuncDef": "The apply-label per-instance static command enables a device to assign the same static label to all routes destined for a remote PE in a VPN instance IPv4 address family.\nThe undo apply-label per-instance command restores the default setting.\nBy default, the device assigns a specific label to each route destined for a remote PE in a VPN instance IPv4 address family.",
+    "CLIs": [
+        "apply-label per-instance static <static-label-value>"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "static-label-value",
+            "Info": "Specifies a static label value.\nThe value is an integer ranging from 16 to 32783."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] apply-label per-instance static 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn seamless MPLS scenarios, when the egress fails, E2E BFD for BGP tunnel is used to trigger VPN FRR switching. In this protection solution, both BGP LSPs and BFD sessions are in great numbers, which consumes a lot of bandwidth resources and burdens the device. To optimize the solution, the egress protection solution can be used. The apply-label per-instance static command is run on the master and backup PEs functioning as egress nodes. In this command, the same private label is set and assigned to both PEs. If the master PE fails, BFD for LDP LSP or BFD for TE can instruct an upstream ASBR to perform BGP FRR protection switching. After traffic is switched to the backup PE, the backup PE removes the BGP public network label and uses the VPN label the same as that on the faulty master PE to search for a matching VPN instance. Traffic can then be properly forwarded. The egress protection function reduces E2E BFD sessions to be established, bandwidth resources to be consumed, and the burden on devices.\nConfiguration Impact\nA change in the label allocation mode leads to re-advertising of IPv4 or IPv6 address family routes in a VPN instance. Therefore, exercise caution when using the apply-label per-instance command and the undo apply-label per-instance command."
+}

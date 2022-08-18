@@ -1,0 +1,42 @@
+{
+    "PageTitle": "smart-clock leap current-leap",
+    "FuncDef": "The smart-clock leap current-leap command configures the current leap second value of the multi-mode smart clock module as well as the direction and date of the next leap second adjustment.\nThe undo smart-clock leap current-leap command restores the default configuration.\nBy default, the current leap second value of the smart clock module is 0, the date for the next leap second adjustment is 0000-00-00, and the direction is none, which indicates that the date for a leap-second event is not configured.",
+    "CLIs": [
+        "smart-clock leap current-leap <current-leap-value> [ { leap59 | leap61 } date <date> ]",
+        "undo smart-clock leap current-leap [ <current-leap-value> [ { leap59 | leap61 } date <date> ] ]"
+    ],
+    "ParentView": [
+        "GE optical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "leap59",
+            "Info": "Indicates that the last minute in a day at the UTC time is a 59-second minute.\n-"
+        },
+        {
+            "Parameters": "leap61",
+            "Info": "Indicates that the last minute in a day at the UTC time is a 61-second minute.\n-"
+        },
+        {
+            "Parameters": "date date",
+            "Info": "Specifies the date for UTC time adjustment.\nThe value is expressed in the format of YYYY/MM/DD. The value is a date ranging from 2000/01/01 to 2099/12/31."
+        },
+        {
+            "Parameters": "current-leap current-leap-value",
+            "Info": "Specifies the current leap second value.\nThe value is an integer ranging from 0 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] smart-clock leap current-leap 18 leap59 date 2017/06/30"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] smart-clock leap current-leap 18"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the current mode of the multi-mode smart clock module is GLONASS or the current mode is GPS+GLONASS but the GPS experiences an abnormality in receiving satellite signals and the UTC time can be obtained only in GLONASS mode, the leap second information and GPS time cannot be obtained. To configure the current leap second value of the multi-mode smart clock module as well as the direction and date of the next leap second adjustment so that the UTC time can be obtained in GLONASS mode, run this command.\nIn GPS, Beidou, and GPS+Beidou modes, the leap second can be obtained within 12.5 minutes using satellite almanac. The GPS time can be directly obtained in the preceding three modes and the smart clock module can work properly without obtaining leap second information. In GLONASS mode, or in GPS+GLONASS mode but the GPS fails to search for satellites, the leap second parameter needs to be manually configured. Otherwise, the time is invalid.\nIn the first positioning in GPS+GLONASS mode, the time is considered accurate only when GPS participates in positioning.\nPrecautions\nThis command is supported only on the admin VS.\nThis command does not apply to the single-mode smart clock module.\nThe frequency for updating the next leap second adjustment information is 1 to 2 years and the leap second information is released around half a year before leap second adjustment. Therefore, if the next leap second adjustment information is unknown, the current leap second is configured as a valid value and the next leap second adjustment information is cleared."
+}

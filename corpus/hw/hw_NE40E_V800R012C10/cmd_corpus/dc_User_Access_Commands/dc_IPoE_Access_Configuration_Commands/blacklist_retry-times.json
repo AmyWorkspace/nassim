@@ -1,0 +1,36 @@
+{
+    "PageTitle": "blacklist retry-times",
+    "FuncDef": "The blacklist retry-times command configures the maximum number of times a destination address can be added to the cache blacklist and the detection period.\nThe undo blacklist retry-times command restores the default configuration.\nBy default, the maximum number of configuration times is 10, and the detection period is 3 minutes.",
+    "CLIs": [
+        "blacklist retry-times <retry-times> interval <interval>",
+        "undo blacklist retry-times [ retry-times interval <interval> ]"
+    ],
+    "ParentView": [
+        "HTTPS redirect view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "retry-times retry-times",
+            "Info": "Specifies the maximum number of times a destination address can be added to the cache blacklist.\nThe value is an integer ranging from 1 to 600."
+        },
+        {
+            "Parameters": "interval interval",
+            "Info": "Specifies the detection interval during which the maximum number of times a destination address can be added to the cache blacklist.\nThe value is an integer ranging from 1 to 600, in minutes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain abc",
+            "[*HUAWEI-aaa-domain-abc] commit",
+            "[~HUAWEI-aaa-domain-abc] web-server mode post",
+            "[*HUAWEI-aaa-domain-abc] quit",
+            "[*HUAWEI-aaa] quit",
+            "[*HUAWEI] access https-redirect",
+            "[*HUAWEI-access-https-redirect] js enable",
+            "[*HUAWEI-access-https-redirect] blacklist retry-times 50 interval 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn web authentication scenarios, before user authentication succeeds, the device redirects HTTP/HTTPS requests from clients to the web server.If the js enable command is run to enable the function to insert JavaScript (JS) script during web redirection on the device, the reply packets sent in response to client requests carry the JS script.If the client fails to parse the JS script, the device adds the destination address in the client request packet to the cache blacklist for HTTPS redirection. Within a specified detection period, if the number of times the destination address is added to the cache blacklist reaches thre threshold, this destination address will be added to the HTTPS redirection blacklist.\nPrecautions\nIf the js enable command is not run to enable the function to insert the JS script during web redirection, the blacklist retry-times command cannot be run.In VS mode, this command is supported only by the admin VS."
+}

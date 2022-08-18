@@ -1,0 +1,90 @@
+{
+    "PageTitle": "load configuration replace",
+    "FuncDef": "The load configuration replace command loads the configuration file on a local or remote server to replace the running configuration on the current device.",
+    "CLIs": [
+        "load configuration file <filename> replace [ relative ]",
+        "load configuration server <ip-address> [ vpn-instance <vpn-instance-name> ] transport-type { ftp | sftp } username <user-name> password <password> file <filename> replace [ relative ]",
+        "load configuration server ipv6 <ipv6-address> [ vpn-instance <vpn-instance-name> ] transport-type { ftp | sftp } username <user-name> password <password> file <filename> replace [ relative ]",
+        "load configuration server http url <url-address> [ vpn-instance <vpn-instance-name> ] [ file <filename> ] replace [ relative ]"
+    ],
+    "ParentView": [
+        "All views except the user view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "relative",
+            "Info": "Specifies that only configurations in the current view are replaced.\n-"
+        },
+        {
+            "Parameters": "server ip-address",
+            "Info": "Specifies the IPv4 address of the remote server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies a VPN instance name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "transport-type",
+            "Info": "Specifies a file transfer mode.\n-"
+        },
+        {
+            "Parameters": "ftp",
+            "Info": "Transfers files through FTP.\n-"
+        },
+        {
+            "Parameters": "sftp",
+            "Info": "Transfers files through SFTP.\n-"
+        },
+        {
+            "Parameters": "username user-name",
+            "Info": "Specifies the user name of a remote server.\nThe value is a string of 1 to 64 case-sensitive characters, spaces and question marks not supported."
+        },
+        {
+            "Parameters": "password password",
+            "Info": "Specifies the password of a remote server.\nThe value is a string of case-sensitive characters, including letters and digits. The string can contain spaces if it is enclosed in double quotation marks (\"). A simple password is a string of 1 to 255 characters, while a ciphertext password is a string of 20 to 432 characters."
+        },
+        {
+            "Parameters": "file filename",
+            "Info": "Specifies the name of the configuration file to be loaded.\nThe value (including the file name extension) is a string of 1 to 128 case-sensitive characters, including uppercase letters, lowercase letters, digits, and special characters but excluding spaces.\nSpecial characters do not include ~ ? * / \\ : \" | < > [ ] In addition, the value must not start or end with a period (.).\nThe file name extension must be .cfg, .zip, .dat, .bat, .txt, or name of text file without suffix.FTP or SFTP also supports the file names with a server directory.The file name does not support the following special characters: ~ ? * : \" | < > [ ]"
+        },
+        {
+            "Parameters": "file filename",
+            "Info": "Specifies the name of the configuration file to be saved.\nThe value (including the file name extension) is a string of 1 to 128 case-sensitive characters, including uppercase letters, lowercase letters, digits, and special characters but excluding spaces.\nSpecial characters do not include ~ ? * / \\ : \" | < > [ ] In addition, the value must not start or end with a period (.).\nThe file name extension must be .cfg, .zip, .dat, .bat, .txt, or name of text file without suffix.FTP or SFTP also supports the file names with a server directory.The file name does not support the following special characters: ~ ? * : \" | < > [ ]"
+        },
+        {
+            "Parameters": "ipv6 ipv6-address",
+            "Info": "Specifies the IPv6 address of a remote server.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "http",
+            "Info": "Specifies access to the remote server by HTTP.\nHTTP and HTTPS can be used."
+        },
+        {
+            "Parameters": "url url-address",
+            "Info": "Specifies the URL address of a remote server.\nThe value is a string of 1 to 255 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] load configuration file config.cfg replace"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] load configuration server 10.1.1.1 transport-type sftp username huawei123 password huawei_123 file config.cfg replace"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssl policy policy1",
+            "[*HUAWEI-ssl-policy-policy1] quit",
+            "[*HUAWEI] http",
+            "[*HUAWEI-http] service-restconf",
+            "[*HUAWEI-http-service-restconf] ssl-policy policy1",
+            "[*HUAWEI-http-service-restconf] quit",
+            "[*HUAWEI-http] quit",
+            "[*HUAWEI] aaa",
+            "[*HUAWEI-aaa] load configuration server http url https://10.1.1.1/https/config.cfg replace relative"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the scenario where multiple devices share the same source, to ensure that the configuration data on all devices is consistent, you can use the command in different formats to load the source file to replace the local configuration based on the source location of the configuration file.\nRun the load configuration file replace [ relative ] command to load the local configuration file and replace the current running configurations.Run the load configuration { server | server ipv6 } transport-type { ftp | sftp } file replace [ relative ] command to load the configuration file on a remote server and replace the current running configurations.Run the load configuration http url file replace [ relative ] command to load the configuration file on a remote server at the specified URL and replace the current running configurations.\nThe load configuration replace command replaces the entire configurations file or configurations in a specific view. This depends on the content in the loaded configuration file. If relative is specified, only configurations in the current view are replaced.\n\nFollow-up Procedure\nAfter the configuration file is loaded and replaced, the file enters the candidate configuration database. Run the commit command for relevant configurations to take effect.\nPrecautions\nThe specified configuration file to be loaded must exist and meet the following conditions:\nThe configuration file can contain only configuration commands, view switching commands, and # symbols. If you load other types of commands, such as display commands used for query, reset/save/ping commands used for maintenance, quit, commit, return, and upgrade-compatible commands, and one-phase configuration validation commands, the device reports an error and continues to load follow-up commands.The interactive commands in the configuration file support only Y/N automatic interaction.The indentation of commands in the configuration file must be correct. In the configuration file, the commands in the system view and the level-1 view under the system view must be left-aligned, the commands in the level-1 view must be indented by one space, and each subsequent view must be indented by one more space.If the pound sign (#) is left-aligned, the system view is displayed. If the pound sign (#) is indented, it is used only to isolate command blocks; in this case, the pound sign (#) must be aligned with the first command in the following command block. If the pound sign (#) is incorrectly used, configurations may be lost, or commands may be run in an unexpected view.The configuration file name extension must be .zip, .cfg, .txt, .dat, .bat, or name of text file without suffix.FTP or SFTP also supports the file names with a server directory. It is recommended that the directory name contain a slash (\"/\").The file name does not support special characters \"~\" \"?\" \"*\" \":\" \"\"\" \"|\" \"<\" \">\" \"[\" \"]\".Both .cfg and .txt files are text files whose content can be directly viewed. If a .cfg or .txt file is specified as the configuration file to be loaded, the system restores the commands in the file one by one during the replacement process.A .zip file is obtained by compressing a .cfg file, occupying less space. If a .zip file is specified as the configuration file to be loaded, the system decompresses the file into a .cfg file, and then restores the commands in the file one by one. The .cfg file must have the same name as the .zip file. Otherwise, the configuration file fails to be loaded.A .dat file is a compressed file, which can be in binary or text mode. Only a .dat file exported from a Huawei device is supported, and the file cannot be modified manually. Otherwise, the file fails to be loaded.A .bat file is used for batch processing. It is a text file that can be modified manually."
+}

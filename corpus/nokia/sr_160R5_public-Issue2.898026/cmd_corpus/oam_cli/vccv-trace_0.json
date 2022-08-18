@@ -1,0 +1,113 @@
+{
+    "PageTitle": "vccv-trace",
+    "FuncDef": "This command configures a Virtual Circuit Connectivity Verification (VCCV) automated trace test. The automated VCCV-trace can trace the entire path of a PW with a single command issued at the T-PE or at an S-PE. This is equivalent to LSP-Trace and is an iterative process by which the source T-PE or S-PE node sends successive VCCV-Ping messages with incrementing the TTL value, starting from TTL=1. In each iteration, the T-PE builds the MPLS echo request message in a way similar to VCCV-Ping. The first message with TTL=1 will have the next-hop S-PE T-LDP session source address in the Remote PE Address field in the PW FEC TLV. Each S-PE which terminates and processes the message will include in the MPLS echo reply message the FEC 128 TLV corresponding the PW segment to its downstream node. The source T-PE or S-PE node can then build the next echo reply message with TTL=2 to test the next-next hop for the MS-PW. It will copy the FEC TLV it received\nin the echo reply message into the new echo request message. The process is terminated when the reply is from the egress T-PE or when a timeout occurs.",
+    "CLIs": [
+        "vccv-trace <sdp-id:vc-id> [ reply-mode { ip-routed | control-channel } ] [ target-fec-type static-pw-fec agi <attachment-group-identifier> pw-path-id-saii <global-id:node-id:ac-id> pw-path-id-taii <global-id:node-id:ac-id> ]",
+        "vccv-trace saii-type2 <global-id:prefix:ac-id> taii-type2 <global-id:prefix:ac-id> [ reply-mode { ip-routed | control-channel } ] vccv-trace spoke-sdp-fec <spoke-sdp-fec-id> [ reply-mode { ip-routed | control-channel } ] [ saii-type2 <global-id:prefix:ac-id> taii-type2 <global-id:prefix:ac-id> ]",
+        "vccv-trace static <sdp-id:vc-id> [ assoc-channel { ipv4 | non-ip } ] [ src-ip-address <ipv4-address> ] [ target-fec-type <pw-id-fec> sender-src-address <ipv4-address> remote-dst-address <ipv4-address> pw-id <pw-id> pw-type <pw-type> ]"
+    ],
+    "ParentView": [
+        "oam",
+        "config>saa>test>type"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sdpid:vcid",
+            "Info": "If a FEC 128 PW is being tested, then its VC ID must be indicated with this parameter. The VC ID needs to exist on the local router and the far-end peer needs to indicate that it supports VCCV to allow the user to send vccv-ping message. Values-1 to 17407:1 to 4294967295."
+        },
+        {
+            "Parameters": "spoke-sdp-fec-id",
+            "Info": "If a FEC 129 PW is being tested, then its spoke-sdp-fec-id must be indicated with this parameter. The spoke-sdp-fec-id needs to exist on the local router and the far-end peer needs to indicate that it supports VCCV to allow the user to send vccv-ping message. Values-1 to 4294967295."
+        },
+        {
+            "Parameters": "saii-type2 global-id:prefix:ac-id",
+            "Info": "If a FEC129 AII Type 2 pseudowire is being tested, then the source attachment individual identifier (SAII) mus be indicated."
+        },
+        {
+            "Parameters": "taii-type2 global-id:prefix:ac-id",
+            "Info": "If a FEC129 AII Type 2 pseudowire is being tested, then the target attachment individual identifier (TAII) mus be indicated."
+        },
+        {
+            "Parameters": "reply-mode {ip-routed | control-channel}",
+            "Info": "The reply-mode parameter indicates to the far-end how to send the reply message. The option control-channel indicates a reply mode in-band using vccv control channel. ParamDefault: Default- control-channel"
+        },
+        {
+            "Parameters": "fc-name",
+            "Info": "The FC and profile parameters are used to indicate the forwarding class of the VCCV trace echo request packets. The actual forwarding class encoding is controlled by the network egress LSP-EXP mappings. Values-fc-name - The forwarding class of the VCCV trace echo request encapsulation.."
+        },
+        {
+            "Parameters": "profile {in | out}",
+            "Info": "The profile state of the VCCV trace echo request packet. ParamDefault: Default- out"
+        },
+        {
+            "Parameters": "octets",
+            "Info": "The size in octets, expressed as a decimal integer, of the MPLS echo request packet, including the IP header but not the label stack. The request pay-load is padded with zeros to the specified size. Note that an OAM command is not failed if the user entered a size lower than the minimum required to build the packet for the echo request message. The payload is automatically padded to meet the mini- mum size. Values-1 to 9198. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "probes-per-hop",
+            "Info": "The number of VCCV trace echo request messages to send per TTL value. Values-1 to 10. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "timeout",
+            "Info": "The timeout parameter in seconds, expressed as a decimal integer. This value is used to override the default timeout value and is the amount of time that the router will wait for a message reply after sending the message request. Upon the expiration of message timeout, the requesting router assumes that the message response will not be received. A request timeout message is displayed by the CLI for each message request sent that expires. Any response received after the request times out will be silently discarded. Values-1 to 60. ParamDefault: Default- 3"
+        },
+        {
+            "Parameters": "interval",
+            "Info": "The interval parameter in seconds, expressed as a decimal integer. This parameter is used to override the default request message send interval and defines the minimum amount of time that must expire before the next message request is sent. Values-1 to 255. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "min-vc-label-ttl",
+            "Info": "The TTL value for the VC label of the echo request message for the first hop of the MS-PW for which the results are to be displayed. This is expressed as a decimal integer. Note that the outer label TTL is still set to the default of 255 regardless of the value of the VC label. Values-1 to 255. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "max-vc-label-ttl",
+            "Info": "The TTL value for the VC label of the echo request message for the last hop of the MS-PW for which the results are to be displayed. This is expressed as a decimal integer. Note that the outer label TTL is still set to the default of 255 regardless of the value of the VC label. Values-1 to 255. ParamDefault: Default- 8"
+        },
+        {
+            "Parameters": "no-response-count",
+            "Info": "The maximum number of consecutive VCCV trace echo requests, expressed as a decimal \tinteger that do not receive a reply before the trace operation fails for a given TTL value. Values-1 to 255. ParamDefault: Default- 5"
+        },
+        {
+            "Parameters": "assoc-channel {ipv4 | non-ip}",
+            "Info": "the associated channel encapsulation format to use for the VCCV trace echo request and echo reply packet for a PW that uses the static PW FEC. An associated channel type of ipv4 must be used if a vccv-ping is performed to a remote segment of a different FEC type. Values-ipv4 - IPv4 encapsulation in an IPv4 pseudowire associated channel (channel type 0x0021)."
+        },
+        {
+            "Parameters": "non-ip",
+            "Info": "MPLS-TP encapsulation without UDP/IP headers, in pseudowire associated channel using channel type 0x025. ParamDefault: Default- non-ip"
+        },
+        {
+            "Parameters": "target-fec-type {pw-id-fec | static-pw-fec}",
+            "Info": "The FEC type for a remote PW segment targeted by a VCCV trace echo request. This parameter is used if VCCV trace is used along a MS-PW where a static MPLS-TP PW segment using the static PW FEC is switched to a T-LDP signaled segment using the PW ID FEC (FEC128), or vice versa, thus requiring the user to explicitly specify a target FEC that is different from the local segment FEC. Values-pw-id-fec - Indicates that FEC element for the remote target PW segment is of type PW ID (FEC128).."
+        },
+        {
+            "Parameters": "agi-value",
+            "Info": "The attachment group identifier for the target FEC. This parameter is only valid in combination with the target-fec-type static-pw-fec. Values-0 to 4,294,967,295."
+        },
+        {
+            "Parameters": "pw-path-id-saii src-global-id:src-node-id:src-ac-id",
+            "Info": "The SAII of the target FEC. This parameter is only valid in combination with the target-fec-type static-pw-fec."
+        },
+        {
+            "Parameters": "pw-path-id-taii dst-global-id:dst-node-id:dst-ac-id",
+            "Info": "The SAII of the target FEC. This parameter is only valid in combination with the target-fec-type static-pw-fec."
+        },
+        {
+            "Parameters": "remote-dst-address ipv4-address",
+            "Info": "The 4-octet IPv4 address of the far end node that is a target of the VCCV Ping echo request. This parameter is only valid in combination with the target-fec-type static-pw-fec. Values-ipv4-formatted address: a.b.c.d."
+        },
+        {
+            "Parameters": "sender-src-address ipv4-address",
+            "Info": "The 4-octet IPv4 address of the node originating the VCCV Ping echo request. This parameter is only valid in combination with the target-fec-type pw-id. Values-ipv4-formatted address: a.b.c.d."
+        },
+        {
+            "Parameters": "remote-dst-address ipv4-address",
+            "Info": "The 4-octet IPv4 address of the far end node that is a target of the VCCV Ping echo request. This parameter is only valid in combination with the target-fec-type pw-id. Values-ipv4-formatted address: a.b.c.d."
+        },
+        {
+            "Parameters": "pw-type value",
+            "Info": "The PW Type of the PW segment targeted on the far end node. This field must be included to populate the PW type field of the PW ID FEC in the FEC static TLV, when the far end FEC type is different form the local FEC type and the target-fec-type is pw-id-fec. Values-atm-cell, atm-sdu, atm-vcc, atm-vpc, cesopsn, cesopsn-cas, ether, satop-e1, satop-t1, [1 to 65535].."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

@@ -1,0 +1,38 @@
+{
+    "PageTitle": "traffic-policy acl",
+    "FuncDef": "The traffic-policy acl command configures the IPsec packet filtering function on a specified tunnel interface.\nThe undo traffic-policy acl command cancels the configuration.\nBy default, the IPsec packet filtering function is not configured.",
+    "CLIs": [
+        "traffic-policy acl <acl-number> { inbound | outbound }",
+        "undo traffic-policy acl <acl-number> { inbound | outbound }"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of an ACL rule.\nThe value is an integer ranging from 3000 to 3999."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Applies the traffic policy to the traffic sent from a public network to a private network.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Applies the traffic policy to the traffic sent from a private network to a public network.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 3001",
+            "[*HUAWEI-acl4-advance-3001] rule deny ip source 10.1.1.1 0 destination 10.2.1.1 0",
+            "[*HUAWEI-acl4-advance-3001] quit",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol ipsec",
+            "[*HUAWEI-Tunnel10] traffic-policy acl 3001 inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a device to filter out specific IPsec packets, run the traffic-policy acl command to configure a traffic policy.\nConfiguration Impact\nOn a specified tunnel interface, the IPsec packets that match the configured ACL rule where the action is set to deny will be discarded.\nOn a specified tunnel interface, whether the IPsec packets that match the configured ACL rule where the action is set to permit will be accepted.\nPrecautions\nWhen you run the traffic-policy acl command several times, the latest configuration overrides the previous ones.\nThe ACL rule with the specified number must have been configured. Otherwise, the configuration of the traffic-policy acl command will not take effect.\nOnly one ACL rule can be configured for either the traffic sent from a public network to a private network or the traffic sent from a private to a public network. The same ACL rule can be configured for both the traffic sent from a public network to a private network and the traffic sent from a private to a public network.\nThe command only takes effect on VSU boards."
+}

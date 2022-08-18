@@ -1,0 +1,28 @@
+{
+    "PageTitle": "pcp lifetime",
+    "FuncDef": "The pcp lifetime command sets the minimum and maximum lifetime values for PCP connections.\nThe undo pcp lifetime command restores the default minimum and maximum lifetime values for PCP connections.\nBy default, the minimum lifetime is 120 seconds, and the maximum lifetime is 40000 seconds.",
+    "CLIs": [
+        "pcp lifetime min-time <min-value> max-time <max-value>",
+        "undo pcp lifetime [ min-time <min-value> max-time <max-value> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "max-time max-value",
+            "Info": "Specifies the maximum lifetime of a PCP connection.\nThe value is an integer ranging from 120 to 86400, in seconds. The default value is 40000."
+        },
+        {
+            "Parameters": "min-time min-value",
+            "Info": "Specifies the minimum lifetime of a PCP connection.\nThe value is an integer ranging from 120 to 86400, in seconds. The default value is 120."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] pcp lifetime min-time 200 max-time 20000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a user on a piece of CPE maliciously establishes a large number of PCP connections to a CGN device, public network resources are wasted. To prevent this problem, the CGN device must be able to tear down the PCP connections to reclaim resources after the specific PCP connection lifetime elapses.\nThe CPE also sends a PCP request packet carrying a PCP connection lifetime to the CGN device. The lifetime value on the CGN device takes effect according to the following rules:\nIf the received lifetime is greater than or equal to the minimum lifetime and less than or equal to the maximum lifetime, the received lifetime takes effect.If the received lifetime is less than the minimum lifetime, the minimum lifetime takes effect. This rule helps prevent a PCP connection from being frequently torn down and reestablished due to a small lifetime.If the received lifetime is greater than the maximum lifetime, the maximum lifetime takes effect. This rule helps prevent a PCP connection from retaining and being unable to release service resources due to a large lifetime.\nDuring service deployment, you can run the pcp lifetime command to set the minimum and maximum lifetime values based on the network traffic volume and the number of connection resources so that the PCP flow table exists within the specified period.\n\nPrecautions\nThe command takes effect only on VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S."
+}

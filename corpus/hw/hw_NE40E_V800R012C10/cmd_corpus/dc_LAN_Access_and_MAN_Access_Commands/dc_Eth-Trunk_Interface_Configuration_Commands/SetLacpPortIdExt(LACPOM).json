@@ -1,0 +1,25 @@
+{
+    "PageTitle": "lacp port-id-extension enable",
+    "FuncDef": "The lacp port-id-extension enable command increases the number of each member interface in an Eth-Trunk interface by 32768 when the Eth-Trunk interface works in static LACP mode and is associated with a VRRP backup group.\nThe undo lacp port-id-extension enable command restores the number of each member interface in an Eth-Trunk interface when the Eth-Trunk interface works in static LACP mode and is associated with a VRRP backup group.\nBy default, the system automatically allocates a number to each member interface in an Eth-Trunk interface.",
+    "CLIs": [
+        "lacp port-id-extension enable",
+        "undo lacp port-id-extension enable"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] admin-vrrp vrid 1",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] mode lacp-static",
+            "[*HUAWEI-Eth-Trunk1] lacp track vrrp vrid 1 interface GigabitEthernet1/0/1",
+            "[*HUAWEI-Eth-Trunk1] lacp port-id-extension enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA non-Huawei CE is dual-homed to Huawei UPE1 and UPE2. Eth-Trunk links in static LACP mode are configured between the CE and the UPEs. UPE1 and UPE2 are configured as a VRRP backup group, with UPE1 being Master and UPE2 being Backup. After an Eth-Trunk interface in static LACP mode is associated with a VRRP backup group, the Eth-Trunk link can rapidly detect the status change of the VRRP backup group. When detecting a status change of the VRRP backup group, the Eth-Trunk interface can rapidly switch traffic to an available link. This ensures reliable service transmission.\nTo allow the function of associating an Eth-Trunk interface in static LACP mode with a VRRP backup group to take effect, the numbers of member interfaces in two Eth-Trunk interfaces associated with a VRRP backup group cannot repeat. To meet this requirement, run the lacp port-id-extension enable command on a UPE to increase the number of each member interface in an Eth-Trunk interface by 32768.\nPrerequisites\nThe Eth-Trunk interface in static LACP mode has been associated with a VRRP backup group using the lacp track vrrp vrid vrid interface interface-type interface-number command.\nFollow-up Procedure\nWhen a non-Huawei device is dual-homed to two Huawei UPEs:\nRun the lacp vrrp priority priority command on the Eth-Trunk interfaces of the UPEs to set the same LACP system priority.Run the lacp system-id mac-address command on the Eth-Trunk interfaces of the UPEs to set the same LACP system ID."
+}

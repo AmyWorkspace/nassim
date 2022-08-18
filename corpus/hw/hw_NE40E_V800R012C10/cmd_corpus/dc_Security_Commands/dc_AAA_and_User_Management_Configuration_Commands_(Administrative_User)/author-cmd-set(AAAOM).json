@@ -1,0 +1,34 @@
+{
+    "PageTitle": "authorization-cmd",
+    "FuncDef": "The authorization-cmd command configures command-line-based authorization for a user of a specified level.\nThe undo authorization-cmd command restores the default setting.\nBy default, command-line-based local authorization is used for all users and user groups at the levels 0 to 15.",
+    "CLIs": [
+        "authorization-cmd [ <privilege-level> ] <mode1> [ <mode2> ]",
+        "undo authorization-cmd [ <privilege-level> ]"
+    ],
+    "ParentView": [
+        "Authorization scheme view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "privilege-level",
+            "Info": "Specifies the use level.\nThe value ranges from 0 to 15."
+        },
+        {
+            "Parameters": "mode1",
+            "Info": "Specifies the authorization mode of Uses command line.\nThe value is an enumerated type and can be:\nhwtacacs: Uses command line authorization provided by HWTACACS.local: Uses command line authorization on the local device. Local authorization can serve as a backup option. If command line authorization fails due to server problems (for example, the server is Down or unreachable, or the response from the server times out), local authorization is performed."
+        },
+        {
+            "Parameters": "mode2",
+            "Info": "Specifies the authorization mode of Uses command line.\nThe value is an enumerated type and can be:\nhwtacacs: Uses command line authorization provided by HWTACACS.local: Uses command line authorization on the local device. Local authorization can serve as a backup option. If command line authorization fails due to server problems (for example, the server is Down or unreachable, or the response from the server times out), local authorization is performed."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] authorization-scheme scheme1",
+            "[*HUAWEI-aaa-author-scheme1] authorization-cmd 2 hwtacacs"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a user logs on to the device through Telnet or SSH, you can set the command line authorization mode to HWTACACS for the user if the user needs to be authorized with command lines. In this manner, each input command needs to pass through HWTACACS authorization. The command can be run only after the command authorization is passed. Otherwise, the HWTACACS server displays messages to inform the user that the command authorization fails and the command cannot be run.\nPrerequisites\nBefore using this command, you must create an authorization scheme and enter the authorization scheme view.\nProcedure\nIf local is configured, and the HWTACACS server does not respond, command-line-based authorization is performed on the local device.\nImplementation Procedure\nIf local is configured, and the HWTACACS server does not respond, command-line-based authorization is performed on the local device.\nFollow-up Procedure\nIf command-line-based authorization is enabled, you must configure the HWTACACS server template and apply the template in the view of the domain to which the user belongs.\nPrecautions\nWhen you configure command-line-based authorization, note the following items:\nIf the HWTACACS server is Down, unreachable, or does not respond in time, the command authorization fails, and no user can execute such command.You can configure command-line-based authorization for users only when HWTACACS is adopted.When entering a command that contains keywords and parameters, you must adopt the command format in configuration files. Otherwise, the HWTACACS authorization fails.Command-line-based authorization is not associated with any authorization mode.\nTo configure command-line-based authorization for users at levels 3 to 15, set  to 3 in the authorization-cmd command for all such users if the command-privilege level rearrange command is not run in the system view, but set  to the specific level at which target users reside if the command-privilege level rearrange command is run in the system view. For example, to configure hwtacacs authorization for users at level 4, run the authorization-cmd 3 hwtacacs command if the command-privilege level rearrange command is not run, but run the authorization-cmd 4 hwtacacs command if the command-privilege level rearrange command is run."
+}

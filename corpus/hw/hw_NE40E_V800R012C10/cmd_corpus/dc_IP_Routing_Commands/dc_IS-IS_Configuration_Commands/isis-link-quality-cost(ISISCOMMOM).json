@@ -1,0 +1,58 @@
+{
+    "PageTitle": "isis link-quality low incr-cost",
+    "FuncDef": "The isis link-quality low incr-cost command enables the function to adjust the link cost of an interface when its link quality is low.\nThe undo isis link-quality low incr-cost command disables the function.\nBy default, an IS-IS interface cannot adjust the link cost based on link quality.",
+    "CLIs": [
+        "isis link-quality low incr-cost { <cost-value> | max-reachable }",
+        "isis process-id <process-id-value> link-quality low incr-cost { <cost-value> | max-reachable }",
+        "undo isis link-quality low incr-cost [ { <cost-value> | max-reachable } ]",
+        "undo isis process-id <process-id-value> link-quality low incr-cost [ { <cost-value> | max-reachable } ]"
+    ],
+    "ParentView": [
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cost-value",
+            "Info": "Specifies a link cost adjustment value.After this parameter is specified:\nWhen the link quality becomes low, the actual link cost of the interface equals the original link cost plus the specified adjustment value.When the link quality reverts, the actual link cost of the interface equals the original link cost.\nThe value is an integer ranging from 1 to 16777213."
+        },
+        {
+            "Parameters": "max-reachable",
+            "Info": "Adjusts the link cost to the maximum link cost.\nThe maximum link cost is 63 if the cost type is narrow, narrow-compatible, or compatible.The maximum link cost is 16777214 if the cost type is wide or wide-compatible.\n-"
+        },
+        {
+            "Parameters": "process-id process-id-value",
+            "Info": "Specifies the IS-IS multi-instance process ID when multi-instance is enabled under the relevant process.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "low",
+            "Info": "Indicates that the link cost of an interface is adjusted when its link quality is low.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis link-quality low incr-cost max-reachable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA bit error indicates the deviation between a bit that is sent and the bit that is received. Bit errors caused by optical fiber aging or optical signal jitter are inevitable on carrier networks. During data transmission, a high bit error rate will degrade or even interrupt services in extreme cases.\nTo ensure network reliability, run the isis link-quality low incr-cost command to enable the device to adjust the link cost of an IS-IS interface when its link quality is low. If the IS-IS interface detects that its link quality is low, the device increases the link cost of the interface, so that this link, which has a higher bit error rate, is not selected as the optimal link. After the link quality reverts, the device automatically restores the link cost of the IS-IS interface.\nPrerequisites\nIS-IS has been enabled on the interface using the isis enable command.\nConfiguration Impact\nIf the isis link-quality low incr-cost command is run more than once in the same view, the latest configuration overrides the previous one.\nPrecautions\nThe configuration with the topology-name parameter has a higher priority than that without the parameter. Specifically, if both the isis link-quality low incr-cost { cost-value | max-reachable } and isis topology topology-name link-quality low incr-cost { cost-value | max-reachable } commands are run for an interface, the configuration with the topology-name parameter takes effect when the interface is in the specified topology. When the interface is another topology, the configuration without the topology-name takes effect for the interface."
+}

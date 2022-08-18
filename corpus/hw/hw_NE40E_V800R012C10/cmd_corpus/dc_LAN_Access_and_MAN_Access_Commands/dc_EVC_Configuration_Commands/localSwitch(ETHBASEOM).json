@@ -1,0 +1,26 @@
+{
+    "PageTitle": "local-switch enable",
+    "FuncDef": "The local-switch enable command enables local switching on an EVC Layer 2 sub-interface.\nThe undo local-switch enable command disables local switching on an EVC Layer 2 sub-interface.\nBy default, local switching is disabled on EVC Layer 2 sub-interfaces.",
+    "CLIs": [
+        "local-switch enable",
+        "undo local-switch enable"
+    ],
+    "ParentView": [
+        "Layer 2 sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "400GE Layer 2 sub-interface view",
+        "VE layer2 subinterface view",
+        "Global-VE layer2 subinterface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] local-switch enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDifferent user networks connect to PE through the same CE, and a bridge domain (BD) is bound to a virtual switching instance (VSI) for virtual private LAN service (VPLS) access. However, due to VPLS split horizon, the user-side interface on PE will not forward packets it receives, and therefore users in the same VSI cannot communicate. To allow users to communicate, run the local-switch enable command on the user-side EVC Layer 2 sub-interface on PE to enable local switching for the EVC Layer 2 sub-interface.\nPrerequisites\nAn EVC Layer 2 sub-interface has been created using the interface interface-type interface-number.subnum mode l2 command in the system view.\nConfiguration Impact\nIn scenarios in which PEs reside on a non-VPLS network and the encapsulation format configured on PE1 is Dot1q with a VLAN range specified or QinQ with inner and outer VLAN ranges specified, and the traffic behavior configured on PE1 is pop, after the local-switch enable command is run, PE1 replicates and sends a received VLAN packet to the CE through all the other VLANs. Therefore, packets are repeatedly forwarded between the CE and PE1, causing a loop. If multicast protocol packets are transmitted between the CE and PEs, the devices send the multicast protocol packets to the CPU for processing and forward them, which wastes bandwidths and affects system performance. Therefore, you must run the undo local-switch enable command to disable local switching on an EVC Layer 2 sub-interface if PEs reside on a non-VPLS network.\nPrecautions\nAfter the local-switch enable command is run on an EVC Layer 2 sub-interface, you must disable MAC address learning and clear the MAC address table on the peer device connecting to the EVC Layer 2 sub-interface. Otherwise, the peer device may learn the same MAC address from different interfaces, and therefore packets are incorrectly forwarded."
+}

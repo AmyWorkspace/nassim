@@ -1,0 +1,24 @@
+{
+    "PageTitle": "access-user dhcp auto-save",
+    "FuncDef": "The access-user dhcp auto-save command enables automatic backup of DHCPv4 user information globally and configures the maximum number of DHCPv4 users.\nThe undo access-user dhcp auto-save command disables automatic backup of DHCPv4 user information globally, deletes the backup DHCPv4 user information, and sets the maximum number of the DHCPv4 users to 0.\nBy default, automatic backup of DHCPv4 user information is disabled, and no DHCPv4 user information is backed up.",
+    "CLIs": [
+        "access-user dhcp auto-save max-user-number <max-user-number>",
+        "undo access-user dhcp auto-save [ max-user-number <max-user-number> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "max-user-number max-user-number",
+            "Info": "Specifies the maximum number of the DHCPv4 users whose information is automatically backed up.\nFor X3s, the value is an integer ranging from 8000 to 128000.\nFor X8s:\nIf the main control board's memory is 16 GB, the value is an integer ranging from 8000 to 512000.If the main control board's memory is 8 GB, the value is an integer ranging from 8000 to 512000.If the main control board's memory is 4 GB, the value is an integer ranging from 8000 to 256000.If the main control board's memory is 2 GB, the value is an integer ranging from 8000 to 128000.\nFor X16s:\nIf the main control board's memory is 16 GB, the value is an integer ranging from 8000 to 1024000.If the main control board's memory is 8 GB, the value is an integer ranging from 8000 to 512000.If the main control board's memory is 4GB, the value is an integer ranging from 8000 to 256000.If the main control board's memory is 2GB, the value is an integer ranging from 8000 to 128000."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] access-user dhcp auto-save max-user-number 8000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a DHCPv4 user access scenario in which the NE40E functions as a BRAS, when the NE40E is restarted or its board, subcard, or interface is faulty, DHCPv4 users are logged out and their information is lost. If a DHCPv4 client does not detect the fault, the DHCPv4 client does not resend a DHCP request packet to the device or redial up after the fault is rectified. As a result, the DHCPv4 user cannot go online again. To address this problem, save DHCPv4 user information automatically before any fault occurs and allow the DHCPv4 users to go online automatically after the fault is rectified.\nThe DHCPv4 users include those who share one MAC address but go online from multiple sessions.\nTo automatically save DHCPv4 user information, run the access-user dhcp auto-save command globally to enable automatic backup of DHCPv4 user information and specify the maximum number of DHCPv4 users whose information can be backed up in all domains.\nConfiguration Impact\nThe access-user dhcp auto-save command applies for a memory space based on the maximum number of DHCPv4 users. If the command cannot apply for the size of contiguous memory space, the command fails to be executed, and automatic backup of DHCPv4 user information is disabled.\nYou must also run the access-user dhcp auto-save enable (domain view) command in a domain to automatically back up DHCPv4 user information. The information about DHCPv4 users in a dual-system hot backup scenario is not saved.\nThe device backs up only information about the configured maximum number of DHCPv4 users in all domains. The excessive part of DHCPv4 user information is not backed up. Specify <max-user-num> as the total number of DHCPv4 users whose information needs to be backed up in all domains.\nFollow-up Procedure\nRun the access-user dhcp auto-save enable (domain view) command to enable automatic backup of DHCPv4 user information in a domain.\nRun the access-user dhcp auto-recover enable command to enable automatic DHCPv4 user login.\nPrecautions\nThis command is supported only on the admin VS.\nThe following DHCPv4 user information is saved: MAC address, IP address, VLAN, access interface, VPN instance name, domain name, lease, Option 82, Option 60, Option 61, and IP address of the DHCPv4 server. The DHCPv4 user information is used only when the DHCPv4 users go online automatically.\nIf the memory space is insufficient, automatic backup of DHCPv4 user information may affect other services. Exercise caution when using this function.\nRunning the access-user dhcp auto-save command may fail if memory fragments exist. Therefore, it is recommended that you run the command when the system just starts or the traffic load is light.\nThe command configuration consumes memory resources that are in direct proportion to <max-user-num> . Specify <max-user-num> based on the maximum number of DHCPv4 users to be backed up to prevent high memory usage."
+}

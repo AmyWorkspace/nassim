@@ -1,0 +1,25 @@
+{
+    "PageTitle": "timer lsp-refresh (IS-IS view)",
+    "FuncDef": "The timer lsp-refresh command configures an LSP refresh interval.\nThe undo timer lsp-refresh command restores the default value.\nBy default, the LSP refresh interval is 900 seconds.",
+    "CLIs": [
+        "timer lsp-refresh <refresh-value>",
+        "undo timer lsp-refresh"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "refresh-value",
+            "Info": "Specifies an LSP refresh interval.\nThe value ranges from 1 to 65534 seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] timer lsp-refresh 1500"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLink states on an IS-IS network are synchronized through LSP flooding. The flooding of LSPs is a mode in which a Router sends an LSP to its neighboring Routers and the neighboring Routers send the received LSP to their respective neighbors except the Router that first sends the LSP. In this manner, the LSP is flooded among the routers of the same level. By this flooding, each router of the same level can learn the same LSP information to synchronize its LSDB.\nThe flooding of LSPs needs to be refreshed periodically, because when a device generates the system LSP, it fills in the maximum lifetime for this LSP. After other devices receive this LSP, the Keepalive time of the LSP is reduced continuously. If a device does not receive any more refreshed LSPs and the lifetime of the LSP is reduced to 0, the LSP will be deleted 60s later if no more new refreshed LSPs are received.\nThe timer lsp-refresh command configures an LSP refresh interval to keep the LSPs valid and control the network convergence speed.\nPrerequisites\nAn IS-IS process has been created using the isis command.\nConfiguration Impact\nIf the LSP refresh interval is too short, the LSPs will be refreshed frequently, which causes excessive usage of bandwidth; If the refresh interval of LSPs is too long, the network cannot receive information about changes of link states in time.\nPrecautions\nThe LSP refresh interval must be at least 300 seconds shorter than the maximum Keepalive time of an LSP specified in the timer lsp-max-age command. In this manner, new LSPs can reach all Routers in an area before old LSPs expire."
+}

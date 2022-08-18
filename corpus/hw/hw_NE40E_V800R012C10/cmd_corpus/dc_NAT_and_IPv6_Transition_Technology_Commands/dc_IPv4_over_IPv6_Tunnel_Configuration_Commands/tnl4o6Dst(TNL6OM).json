@@ -1,0 +1,40 @@
+{
+    "PageTitle": "destination(tunnel interface view)",
+    "FuncDef": "The destination command configures a destination IPv6 address for an IPv4 over IPv6 tunnel interface.\nThe undo destination command deletes a destination IPv6 address for an IPv4 over IPv6 tunnel interface.\nBy default, no destination IPv6 address is configured for an IPv4 over IPv6 tunnel interface.",
+    "CLIs": [
+        "destination [ vpn-instance <vpn-instance-name> ] <ipv6-address>",
+        "undo destination"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which the destination IPv6 address of a tunnel belongs. This parameter can be specified only when the encapsulation mode is IPv4 over IPv6.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies a destination IPv6 address.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] interface Tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol ipv4-ipv6",
+            "[*HUAWEI-Tunnel1] destination vpn-instance vpn1 2001:db8:300::2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol ipv4-ipv6",
+            "[*HUAWEI-Tunnel1] destination 2001:db8:300::2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen configuring an IPv4 over IPv6 tunnel, you need to create a tunnel interface and run the destination command to configure a destination IPv6 address for the tunnel interface.\nPrerequisites\nThe tunnel encapsulation mode has been set to IPv4 over IPv6 using the tunnel-protocol ipv4-ipv6 command.\nIPv6 address families have been enabled for the VPN instance to which the configured destination IPv6 address belongs.\nPrecautions\nThe same source and destination addresses cannot be configured for two or more tunnel interfaces that use the same encapsulation protocol.\nThe destination IPv6 address specified for the tunnel interface at one end of an IPv4 over IPv6 tunnel is the IPv6 address of the interface that receives packets on the other end of the tunnel. This address must be the same as the source address specified for the tunnel interface on the other end of the tunnel. In addition, you must ensure that the route to the interface that receives packets on the other end of the tunnel is reachable."
+}

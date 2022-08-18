@@ -1,0 +1,43 @@
+{
+    "PageTitle": "port-mirroring instance",
+    "FuncDef": "The port-mirroring instance command configures mirroring on an EVC Layer 2 sub-interface or a bridge domain.\nThe undo port-mirroring instance command cancels the configuration.\nBy default, mirroring is not configured on an EVC Layer 2 sub-interface or a bridge domain.",
+    "CLIs": [
+        "port-mirroring instance <instance-name> { inbound | outbound } [ group <group-name> ]",
+        "undo port-mirroring instance <instance-name> { inbound | outbound }"
+    ],
+    "ParentView": [
+        "EVC view of an Eth-Trunk interface",
+        "EVC view of an Ethernet interface",
+        "Bridge domain view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "instance-name",
+            "Info": "Specifies the name of a mirroring instance.\nThe value is a string of 1 to 31 case-insensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates mirroring for upstream traffic.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates mirroring for downstream traffic.\n-"
+        },
+        {
+            "Parameters": "group group-name",
+            "Info": "Indicates that packets on multiple EVC Layer 2 sub-interfaces share one mirroring instance. This configuration allows users to mirror packets on more interfaces when mirroring instance resources are insufficient.\nDifferent EVC Layer 2 sub-interfaces use the same mirroring instance name. If group is configured in the command, packets on these interfaces trigger the generation of multiple mirroring instances, consuming more instance resources.\nThe value is a string of 1 to 31 case-insensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mirror instance a location",
+            "[*HUAWEI-mirror-instance-a] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0.1 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] encapsulation untag",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] port-mirroring instance a inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an EVC scenario, to mirror packets on an EVC Layer 2 sub-interface, specify a mirrored port on which the packets are copied to an observing port. Based on different encapsulation types of an EVC Layer 2 sub-interface, specific packets on the mirrored port are copied to the observing port.\nIf the encapsulation type of an EVC Layer 2 sub-interface is Dot1q, QinQ, Untag or Default, all packets on the sub-interface are copied to the observing port.\nConfiguration Impact\nAfter mirroring is enabled, specific packets will be copied to the observing port, affecting the processing of normal service packets.\nPrecautions\nAn EVC sub-interface can function only as a mirrored port, not an observing port."
+}

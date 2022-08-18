@@ -1,0 +1,65 @@
+{
+    "PageTitle": "mpls te bypass-attributes affinity (Tunnel interface view)",
+    "FuncDef": "The mpls te bypass-attributes affinity command configures an affinity for a bypass tunnel.\nThe undo mpls te bypass-attributes affinity command deletes an affinity for a bypass tunnel.\nBy default, no affinity is configured for a bypass tunnel.",
+    "CLIs": [
+        "mpls te bypass-attributes affinity property <properties> [ mask <mask-value> ]",
+        "mpls te bypass-attributes affinity { include-all | include-any | exclude } { <bit-name> } &<1-32>",
+        "undo mpls te bypass-attributes affinity { include-all | include-any | exclude } { <bit-name> } &<1-32>",
+        "undo mpls te bypass-attributes affinity"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mask mask-value",
+            "Info": "Specifies the mask of affinities. The mask helps a node determine which link attributes are checked when selecting a path for a bypass tunnel.\nThe 32-bit value ranges from 0x0 to 0xFFFFFFFF, each bit in which represents an attribute. The default value is 0x0."
+        },
+        {
+            "Parameters": "include-all",
+            "Info": "Enables CSPF to include a link when calculating a path, only if each link administrative group bit has the same name as each affinity bit.\n-"
+        },
+        {
+            "Parameters": "include-any",
+            "Info": "Enables CSPF to include a link when calculating a path, if at least one link administrative group bit has the same name as an affinity bit.\n-"
+        },
+        {
+            "Parameters": "exclude",
+            "Info": "Enables CSPF to exclude a link when calculating a path, if any link administrative group bit has the same name as an affinity bit.\n-"
+        },
+        {
+            "Parameters": "bit-name",
+            "Info": "Specifies the referenced affinity names.\nThe value is a string of 1 to 31 case-sensitive characters."
+        },
+        {
+            "Parameters": "property properties",
+            "Info": "Specifies the affinity value of a link.\nThe 32-bit value ranges from 0x0 to 0xFFFFFFFF, each bit in which represents an attribute. The default value is 0x0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] mpls te fast-reroute",
+            "[*HUAWEI-Tunnel1] mpls te bypass-attributes affinity property a04 mask e0c"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] path-constraint affinity-mapping",
+            "[*HUAWEI-pc-af-map] attribute yellow bit-sequence 3",
+            "[*HUAWEI-pc-af-map] quit",
+            "[*HUAWEI] interface tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] mpls te fast-reroute",
+            "[*HUAWEI-Tunnel1] mpls te bypass-attributes affinity include-any yellow"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an MPLS TE Auto FRR scenario, to control the selection of a path over which an automatic bypass tunnel is established, run the mpls te bypass-attributes affinity command. An affinity is a 32-bit vector representing tunnel link preference. After you configure an affinity for a bypass tunnel, a PLR compares the affinity with an administrative group value during link selection to determine whether a link with specified attributes is selected or not.\nConfigure an affinity of an automatic bypass tunnel in either of the following modes:\nSet a hexadecimal number. Run the mpls te bypass-attributes affinity property properties [ mask mask-value ] command. A PLR uses a 32-bit mask to represent bits to be compared between an affinity and an administrative group value. The rules for selecting a link for an automatic bypass tunnel are as follows:\nIf some bits in the mask are 1, at least one bit in an administrative group and the corresponding bit in the affinity must be 1. If some bits in the affinity are 0, the corresponding bits in the administrative group cannot be 1.\nFor example, an affinity is 0x0000FFFF, and its mask is 0xFFFFFFFF. The higher-order 16 bits in an administrative group of available links are 0. At least one of the lower-order 16 bits is 1. This means the administrative group attribute ranges from 0x00000001 to 0x0000FFFF.\nIf some bits in a mask are 0, the corresponding bits in an administrative group are not compared with the affinity bits.\nFor example, an affinity is 0xFFFFFFFF, and its mask is 0xFFFF0000. At least one of higher-order 16 bits in an administrative group attribute is 1, and the lower-order 16 bits can be 0 and 1. This means that the administrative group attribute ranges from 0x00010000 to 0xFFFFFFFF.\n2.Set an affinity name. Run the mpls te bypass-attributes affinity { include-all | include-any | exclude } bit-name & command. If this mode is used, some or all affinity bits must have been configured. A node compares affinity names with a link administrative group attribute and determines the nodes to be included or excluded on the automatic bypass tunnel to be established. For details, see parameter description. Naming an affinity makes the affinity easy to understand and maintain. Setting an affinity name is recommended.\n\nPrerequisites\nFRR has been enabled using the mpls te fast-reroute command.\nBefore running the mpls te bypass-attributes affinity { include-all | include-any | exclude } bit-name & command, some or all affinity bits have been named using the attribute command.\nConfiguration Impact\nIf an affinity of an automatic bypass tunnel is changed, a node starts the make-before-break mechanism to reestablish the primary tunnel and checks the binding between the primary and automatic bypass tunnels.\nIf the existing automatic bypass tunnel satisfies a new affinity, the binding remains.If the existing automatic bypass tunnel does not satisfy a new affinity, the node deletes the binding and reestablishes an automatic bypass tunnel.\n\nPrecautions\nWith an affinity configured, if an automatic bypass tunnel that satisfies the specified affinity cannot be established, a node will bind a manual bypass tunnel satisfying the affinity to the primary tunnel."
+}

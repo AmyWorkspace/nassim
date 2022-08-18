@@ -1,0 +1,49 @@
+{
+    "PageTitle": "peer fake-as (BGP multi-instance VPN instance IPv4 address family view)",
+    "FuncDef": "The peer fake-as command enables a device to use a fake AS number to establish a BGP peer relationship with a specified peer.\nThe undo peer fake-as command cancels the existing configuration.\nBy default, a device uses an actual AS number to establish a BGP peer relationship with a peer.",
+    "CLIs": [
+        "peer <ipv4-address> fake-as <fake-as-value> [ dual-as ] [ prepend-global-as ] [ prepend-fake-as ]",
+        "undo peer <ipv4-address> fake-as"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "fake-as fake-as-value",
+            "Info": "Specifies a destination AS number.\nFor an integral AS number, the value is an integer ranging from 1 to 4294967295.\nFor an AS number in dotted notation, the value is in the format of x.y, where x and y are integers ranging from 1 to 65535 and from 0 to 65535, respectively."
+        },
+        {
+            "Parameters": "dual-as",
+            "Info": "Allows the local end to use the actual or fake AS number to establish a BGP peer relationship with the specified peer.\n-"
+        },
+        {
+            "Parameters": "prepend-global-as",
+            "Info": "Indicates that the actual AS number is added to packets to be sent.\n-"
+        },
+        {
+            "Parameters": "prepend-fake-as",
+            "Info": "Indicates that the fake AS number is added to received packets.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-a-vpna] peer 10.1.1.2 as-number 200",
+            "[*HUAWEI-bgp-instance-a-vpna] peer 10.1.1.2 fake-as 99"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer fake-as command is used in a scenario where a carrier modifies network deployment. For example, in a carrier merger and acquisition scenario, if the acquirer's network and the acquiree's network belong to different ASs, BGP peers on the acquiree's network need to be shifted from their original AS to the AS of the acquirer's AS. If the customers of the acquiree do not want their BGP configurations to be changed or do not want them to be changed immediately during the shift, BGP peer relationships may be interrupted for a long time.\nFor details, see the Feature Description - IP Routing - BGP - Understanding BGP - Fake AS Number.\nIf the peer fake-as command is run, without dual-as, prepend-global-as, or prepend-fake-as specified, the local end uses only the fake AS number to establish a BGP peer relationship with the specified peer and adds only the fake AS number to the AS_Path of the routes to be advertised to the peer.\nIf a device uses a fake AS number to establish a BGP peer relationship with an EBGP peer or confederation EBGP peer, it performs the following actions before sending routes to the EBGP peer or confederation EBGP peer:\nIf prepend-global-as is not specified in the command, the device adds only the fake AS number to the AS_Path of the routes that match a specified export policy.If prepend-global-as is specified in the command, the device adds the fake AS number followed by the global AS number to the AS_Path of the routes that match a specified export policy.\nIf a device uses a fake AS number to establish a BGP peer relationship with an EBGP peer or confederation EBGP peer, it performs the following actions after receiving routes from the EBGP peer or confederation EBGP peer:\nIf prepend-fake-as is not specified in the command, the device does not change the AS_Path of the received routes.If prepend-fake-as is specified in the command, the device adds the fake AS number to the AS_Path of the received routes before filtering them using the specified import policy.\nThe peer fake-as command takes effect only for EBGP peers. That is, a local device can use fake AS numbers to establish peer relationships only with specified EBGP peers.. If the local device uses the actual AS number to establish an EBGP peer relationship with a remote device, the actual AS number is carried in the AS_Path of the route to be sent to the remote device. If the local device uses the fake AS number to establish the EBGP peer relationship, the fake AS number is carried in the AS_Path of the route to be sent to the remote device.\n\nPrerequisites\nPeers have been created using the peer as-number command.\nConfiguration Impact\nIf the peer fake-as command is run several times for a peer or a peer group, the latest configuration will overwrite the previous one.\nPrecautions\nIf the fake AS number configured on a local device is the same as the remote AS number configured on the device and dual-as is specified in the peer fake-as command, the specified peer cannot be added to a peer group; if dual-as is not specified in this case, the specified peer can be added to a peer group. In addition, if the specified peer is added to a peer group, the fake AS number configured on the device must be the same as the remote AS number configured on the device, and dual-as cannot be specified in the peer fake-as command.For a confederation EBGP peer relationship, the fake AS number configured on the local device cannot be the same as the remote AS number configured on the device.If the fake AS number configured on a local device is the same as the remote AS number configured on the device, EBGP-specific configurations are not allowed. If the fake AS number is deleted, IBGP-specific configurations are not allowed.If the fake AS number configured on a local device is the same as the remote AS number configured on the device and the dual-as parameter is specified in the peer fake-as command, the type of the connection to be established between the local device and the specified peer may be EBGP (or IBGP). For the EBGP connection, some IBGP-specific configurations on the peer may become invalid; for the IBGP connection, some EBGP-specific configurations on the peer may become invalid.Running the peer fake-as command will cause the specified peer relationship to be reestablished.After the peer fake-as [ dual-as ] [ prepend-global-as ] [ prepend-fake-as ] command is run, if the configuration of the dual-as or prepend-fake-as parameter is modified, the specified BGP peer relationship will be reestablished. If the configuration of the prepend-global-as parameter is modified in this case, the specified peer relationship will not be reestablished."
+}

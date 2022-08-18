@@ -1,0 +1,53 @@
+{
+    "PageTitle": "ripng summary-address",
+    "FuncDef": "The ripng summary-address command enables a RIPng Router to advertise the summarized IPv6 addresses on an interface and specifies the IPv6 prefix for the summarized routes.\nThe undo ripng summary-address command disables a RIPng Router from advertising summarized IPv6 addresses.\nBy default, this function is disabled.",
+    "CLIs": [
+        "ripng summary-address <ipv6-address> <prefix-length> [ avoid-feedback ]",
+        "undo ripng summary-address <ipv6-address> <prefix-length>"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "GMPLS-UNI interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the summarized IPv6 network address.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the length of the IPv6 prefix (the number of consecutive bits in the IPv6 prefix).\nThe value is an integer ranging from 0 to 128."
+        },
+        {
+            "Parameters": "avoid-feedback",
+            "Info": "Prevents the routes summarized on an interface from being learned by the interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ripng 100 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ripng summary-address 2001:db8:: 35"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe RIPng routing table on a medium or large RIPng network contains a large number of routes. Storing the routes consumes a large number of memory resources, and transmitting and processing these routes consume lots of network resources. To address this issue, run the ripng summary-address command to configure RIPng route summarization.\nRoutes with the same IPv4 prefix can be summarized into one route. The system then advertises the summary route to other network segments. Route summarization reduces the number of routes in the routing table and minimizes system resource consumption. In addition, if a specific link frequently alternates between Up and Down, the links not involved in the route summarization will not be affected, which prevents route flapping and improves network stability.\nPrerequisites\nRIPng has been enabled on the interface using the ripng enable command.\nConfiguration Impact\nThe cost of the summary route is the smallest cost of the specific routes that participate in the summarization."
+}

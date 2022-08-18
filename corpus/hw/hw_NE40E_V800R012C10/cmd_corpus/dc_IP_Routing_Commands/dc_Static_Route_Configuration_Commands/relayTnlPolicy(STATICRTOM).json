@@ -1,0 +1,32 @@
+{
+    "PageTitle": "ip route-static recursive-lookup tunnel",
+    "FuncDef": "The ip route-static recursive-lookup tunnel command allows static routes to recurse to tunnels.\nThe undo ip route-static recursive-lookup tunnel command restores the default configuration.\nBy default, static routes cannot recurse to tunnels.",
+    "CLIs": [
+        "ip route-static recursive-lookup tunnel [ [ ip-prefix <ip-prefix-name> ] [ tunnel-policy <policy-name> ] ]",
+        "undo ip route-static recursive-lookup tunnel"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "tunnel-policy policy-name",
+            "Info": "Specifies the name of a tunnel policy.\nThe value is a string of 1 to 39 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix px1 permit 10.0.192.0 8 greater-equal 17 less-equal 18",
+            "[*HUAWEI] tunnel-policy tp1",
+            "[*HUAWEI-tunnel-policy-tp1] tunnel select-seq cr-lsp lsp load-balance-number 2",
+            "[*HUAWEI-tunnel-policy-tp1] quit",
+            "[*HUAWEI] ip route-static recursive-lookup tunnel ip-prefix px1 tunnel-policy tp1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, static routes can recurse to outbound interfaces and next hops, but not to tunnels. To allow static routes to preferentially recurse to tunnels, run the ip route-static recursive-lookup tunnel command. If no tunnels are available after the command is run, static routes recurse to outbound interfaces and next hops.\nIf ip-prefix ip-prefix-name is specified in the command, only the static routes that match the specified IP prefix list recurse to tunnels.If tunnel-policy policy-name is specified in the command, static routes recurse to the tunnels that match the specified tunnel policy.If neither ip-prefix ip-prefix-name nor tunnel-policy policy-name is specified, all static routes preferentially recurse to LSPs.\n\nPrecautions\nIf the route recursive-lookup tunnel command is run more than once, the latest configuration overrides the previous one.\nThe ip route-static recursive-lookup tunnel and route recursive-lookup tunnel commands are mutually exclusive.\nA static route preferentially recurses to an IP route. If a static route recurses to a BGP route, the static route no longer recurses to a tunnel. If a static route recurses to a direct route, the static route no longer recurses to a tunnel. If a static route recurses to a non-BGP and non-direct route, the static route finally recurses to a tunnel based on the tunnel policy. If the static route recurses to a network segment, not to a host route, the network segment address is used to subscribe to a tunnel. Therefore, a non-BGP and non-direct route to the next hop of a static route must exist so that the static route recurses to a tunnel (public network tunnel). If a BGP LSP tunnel exists in the tunnel iteration result, the BGP LSP tunnel is discarded. If other types of tunnels are included in the iteration result, select other types of tunnels. Otherwise, select the IP iteration result."
+}

@@ -1,0 +1,28 @@
+{
+    "PageTitle": "mpls 6pe ttl-mode",
+    "FuncDef": "The mpls 6pe ttl-mode command configures a mode in which MPLS TTLs in 6PE route labels are processed.\nThe undo mpls 6pe ttl-mode command restores the default configuration.\nBy default, MPLS TTLs in 6PE route labels are processed in pipe mode.",
+    "CLIs": [
+        "mpls 6pe ttl-mode { pipe | uniform }",
+        "undo mpls 6pe ttl-mode"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pipe",
+            "Info": "Sets the mode in which MP-BGP processes the TTLs in 6PE route labels to pipe.\n-"
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Sets the mode in which MP-BGP processes the TTLs in 6PE route labels to uniform.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls 6pe ttl-mode uniform"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe 6PE solution uses the MPLS tunneling technology over IPv4 networks to implement interworking between separate IPv6 networks. After receiving an IPv6 packet from a CE, the ingress PE encapsulates an MPLS label that identifies IPv6 routes (referred to as a 6PE route label) and a public network tunnel label into the IPv6 packet, which is then forwarded to the egress PE through the public network tunnel. Upon receipt, the egress PE removes the 6PE route label and forwards the involved packet to the destination through an IPv6 link based on the destination address of the packet. To configure a mode in which MPLS TTLs in 6PE route labels are processed, run the mpls 6pe ttl-mode command. You can specify either of the following modes:\nPipe mode: The ingress adds a 6PE route label with the MPLS TTL value fixed at 255 to each IPv6 packet, and the egress removes the 6PE route label upon receiving the packet. Only the egress decreases the value of the IPv6 TTL field in each IPv6 packet by 1.Uniform mode: The ingress decreases the value of the IPv6 TTL field by 1 and then applies the new value to the MPLS TTL in each 6PE route label. The egress removes the 6PE route label, decreases the MPLS TTL value in the 6PE route label by 1, compares the new value with the value of the IPv6 TTL field, and applies the smaller value to the IPv6 TTL field.\n\nPrecautions\nIn VS mode, the mpls 6pe ttl-mode command and its undo form can be run only in the admin VS, but the configurations take effect for all VSs.LPUF-50/LPUF-50-L/LPUI-21-L/LPUI-51-L/LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101 boards do not support this configuration and use the pipe mode."
+}

@@ -1,0 +1,33 @@
+{
+    "PageTitle": "label advertise",
+    "FuncDef": "The label advertise command configures the labels to be assigned to the penultimate hop.\nThe undo label advertise command restores the default label.\n\nBy default, the egress node assigns implicit-null labels to the penultimate hop.\n\n\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.",
+    "CLIs": [
+        "label advertise { explicit-null | implicit-null | non-null }",
+        "undo label advertise"
+    ],
+    "ParentView": [
+        "MPLS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "explicit-null",
+            "Info": "Enables the egress node to assign explicit null labels to the penultimate hop if the penultimate hop does not support the PHP feature. If the information contained in the label needs to be sent to the penultimate hop, this parameter is required. The value of the explicit null label is 0(ipv4).\n-"
+        },
+        {
+            "Parameters": "implicit-null",
+            "Info": "Enables the egress node to assign implicit null labels to the penultimate hop if the penultimate hop supports the PHP feature. The value of the implicit null label is 3.\n-"
+        },
+        {
+            "Parameters": "non-null",
+            "Info": "Enables the egress node to assign common labels to the penultimate hop if the penultimate hop does not support the PHP feature. If the penultimate hop does not support the PHP feature, this parameter is required. The value of the label must be greater than or equal to 16.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] label advertise non-null"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nRun the label advertise command to configure the type of labels assigned to the penultimate hop on the egress. The default configuration implicit-null is recommended. The setting eases the forwarding burden on the egress, improving the forwarding efficiency.\nYou can choose a type as needed.\nimplicit-null supports PHP, which allows the LSR at the penultimate hop to pop out the label from an MPLS packet and send the packet to the egress. After receiving the packet, the egress directly forwards the unlabeled IP packet or the single-labeled packet. PHP helps reduce the burden on the egress.explicit-null does not support PHP. explicit-null supports MPLS QoS, which helps save label resources in the egress. If E2E services have QoS attributes carried in the EXP field in a label, explicit-null can be configured to save label resources and prevent EXP value loss.non-null does not support PHP. The setting is resource consuming and is therefore not recommended. This parameter can be used when the egress needs to identify services based on labels.\n\nPrerequisites\nMPLS LDP has been enabled globally using the mpls command in the system view.\nPrecautions\nThe label advertise command takes effect on newly established LSPs. For existing LSPs, perform the one of following operations to make the command take effect:\nOn an LDP LSP, run the reset mpls ldp command in the user view on the local node.On an SR-MPLS BE tunnel, run the reset isis all or reset isis process-id all command in the user view on the local node."
+}

@@ -1,0 +1,38 @@
+{
+    "PageTitle": "pbb binding b-evpn (VSI-IVSI-BEVPNINTERWORK view)",
+    "FuncDef": "The pbb binding b-evpn command binds an I-VSI to a B-EVPN instance.\nThe undo pbb binding b-evpn command unbinds an I-VSI from a B-EVPN instance.\nBy default, an I-VSI is not bound to any B-EVPN instance.",
+    "CLIs": [
+        "pbb binding b-evpn <evpn-name>",
+        "undo pbb binding b-evpn",
+        "undo pbb binding b-evpn <evpn-name>"
+    ],
+    "ParentView": [
+        "VSI-IVSI-BEVPNINTERWORK view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "evpn-name",
+            "Info": "Specifies the name of a B-EVPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] evpn vpn-instance bevpn1 b-evpn",
+            "[*HUAWEI-b-evpn-instance-bevpn1] route-distinguisher 200:1",
+            "[*HUAWEI-b-evpn-instance-bevpn1] pbb backbone-source-mac 00e0-fc02-0002",
+            "[*HUAWEI-b-evpn-instance-bevpn1] quit",
+            "[*HUAWEI] vsi ivsi1 i-vsi b-evpn-interworking",
+            "[*HUAWEI-vsi-ivsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] pbb i-tag 100",
+            "[*HUAWEI-vsi-vsi1] pbb binding b-evpn bevpn1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDuring the migration of an HVPLS network to a PBB EVPN network, HVPLS and PBB EVPN will coexist for some time. To switch service traffic from the HVPLS network to the PBB EVPN network, you have to configure the VSIs on SPEs to work in B-EVPN interworking mode and run the pbb binding b-evpn command to bind I-VSIs to B-EVPN instances.\nPrerequisites\nVSIs have been configured to work in B-EVPN interworking mode using the vsi i-vsi b-evpn-interworking command.\nConfiguration Impact\nIf you want to change the B-EVPN instance to which an I-VSI is bound, run the undo pbb binding b-evpn command to unbind the I-VSI from this B-EVPN instance and then run the pbb binding b-evpn command to bind the I-VSI to a new B-EVPN instance.\nPrecautions\nThe pbb binding b-evpn command can only be configured in an I-VSI."
+}

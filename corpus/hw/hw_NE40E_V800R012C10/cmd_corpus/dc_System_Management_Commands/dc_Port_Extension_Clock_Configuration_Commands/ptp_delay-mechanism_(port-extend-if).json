@@ -1,0 +1,33 @@
+{
+    "PageTitle": "ptp delay-mechanism (port extension interface view)",
+    "FuncDef": "The ptp delay-mechanism command configures the delay measurement mechanism on an ordinary clock (OC) interface, a boundary clock (BC) interface, or a transparent and boundary clock (TCandBC) interface.\nThe undo ptp delay-mechanism command restores the default delay measurement mechanism on an OC interface, a BC interface, or a TCandBC interface.\nAn OC interface, a BC interface, or a TCandBC interface uses the Delay mechanism by default.",
+    "CLIs": [
+        "ptp delay-mechanism { delay | pdelay }",
+        "undo ptp delay-mechanism"
+    ],
+    "ParentView": [
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay",
+            "Info": "Enables the delay request-response mechanism, in which information about the clock and time is calculated based on the delay time of an entire link between a 1588v2 device and a clock source.\n-"
+        },
+        {
+            "Parameters": "pdelay",
+            "Info": "Enables the peer delay mechanism, in which information about the clock and time is calculated based on the delay time of each segment of the path between a 1588v2 device and a clock source.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ap-id 1000",
+            "[~HUAWEI-ap1000] remote-interface GigabitEthernet1/0/0",
+            "[*HUAWEI-ap1000] commit",
+            "[~HUAWEI-ap1000] quit",
+            "[~HUAWEI] interface GigabitEthernet 1000/1/0/0",
+            "[~HUAWEI-GigabitEthernet1000/1/0/0] ptp delay-mechanism delay"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTwo devices exchange Announce packets to determine the master/slave relationship. The master device sends Sync packets to notify the slave device of time signal parameters and uses a delay measurement\nmechanism to achieve time signals accuracy.\nDifferent delays on links deteriorate the accuracy of 1588v2 time synchronization. 1588v2 uses the delay measurement mechanism to correct time signals. A delay measurement process is implemented by sending delay measurement request packets and delay response packets. Either of the following parameters can be configured in the ptp delay-mechanism command to enable a specific delay measurement mechanism:\ndelay: enables the delay request-response mechanism, in which information about the clock and time is calculated based on the delay of an entire link between the master and slave clocks. Only the slave clock sends Delay_Req packets to the master clock, and the master clock replies with Delay_Resp packets. Upon receipt, the slave clock uses information carried in Delay_Resp packets to correct time signals.pdelay: enables the peer delay mechanism, in which information about the clock and time is calculated based on the delay time of each link along the path between the master and slave clocks. In this mode, the master and slave clocks can send Pdelay_Rep packets to each other and then correct time signals based on the Pdelay_Resp packets. Upon receipt of the responses, the slave or master clock uses information carried in Delay_Resp packets to correct time signals.\nThe PDelay mechanism helps rapidly correct the difference between the delay time in opposite directions on the network, on which the master and slave clocks obtain the delay time in opposite directions.\n\nPrecautions\nBoth ends of a link must use the same delay measurement mechanism.\nIf an E2ETC, an E2ETCOC, a P2PTC, and a P2PTCOC use the default delay measurement mechanism, their interfaces can directly be enabled with 1588v2.\nIn G.8275.1, the default delay restoration mechanism is delay, which cannot be modified or deleted."
+}

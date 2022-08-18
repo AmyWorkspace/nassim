@@ -1,0 +1,73 @@
+{
+    "PageTitle": "nat server protocol global unnumbered interface (NAT instance view)",
+    "FuncDef": "The nat server protocol global unnumbered interface command creates the reusing relationship between an internal NAT server and an interface address.\nThe undo nat server protocol global unnumbered interface command deletes the reusing relationship between an internal NAT server and an interface address.\nBy default, no reusing relationship exists between an internal NAT server and an interface address.",
+    "CLIs": [
+        "nat server protocol { tcp | udp | <protocol-number> } global unnumbered interface { <interface-name> | <interface-type> <interface-number> } <global-protocol> inside <host-address> <host-protocol> [ vpn-instance <vpn-instance-name> ] [ extendable ]",
+        "undo nat server protocol { tcp | udp | <protocol-number> } global unnumbered interface { <interface-name> | <interface-type> <interface-number> } <global-protocol> inside <host-address> <host-protocol> [ vpn-instance <vpn-instance-name> ] [ extendable ]"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tcp",
+            "Info": "Indicates that the internal NAT server uses TCP for data communication.\n-"
+        },
+        {
+            "Parameters": "udp",
+            "Info": "Indicates that the internal NAT server uses UDP for data communication.\n-"
+        },
+        {
+            "Parameters": "protocol-number",
+            "Info": "Specifies the number of a protocol.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "unnumbered",
+            "Info": "Share an address with interface.\n-"
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the name of an interface.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\nThe value can be: Ethernet, GE, Eth-trunk, Vlanif."
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "global-protocol",
+            "Info": "Specifies the public network protocol that an internal NAT server runs. For example, the value can be pop2, pop3, or smtp.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "inside host-address",
+            "Info": "Specifies the IP address of the internal NAT server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "host-protocol",
+            "Info": "Specifies the private network protocol that an internal server runs. For example, the value can be pop2, pop3, or smtp.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which the internal NAT server belongs.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "extendable",
+            "Info": "Indicates the extended NAT server identifier, meaning that an internal server with a private IP address and different public IP addresses can be configured.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ip address 10.10.1.0 255.255.255.0",
+            "[~HUAWEI-GigabitEthernet1/0/1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/1] quit",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat server protocol tcp global unnumbered interface GigabitEthernet 1/0/1 11 inside 10.10.1.1 13"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn enterprise network scenarios, the IP address of an internal NAT server does not overlap with an interface address, leading to insufficiency of public IP addresses. To expand public IP address for enterprise users, run the nat server protocol global unnumbered interface command to configure the reusing relationship between an internal NAT server and an interface address.\nConfiguration Impact\nThe internal server function enables a NAT device to translate the public IP address to the private IP address based on a static mapping entry that contains a private IP address, a private port number, a public IP address, and a public port number or a static mapping entry that contains a private IP address and a public IP address.\nPrecautions\nWhen you configure the internal server function, note the following:\nAfter the extendable parameter is configured, the mapping between a pair of a private IP address and a private port number and different pairs of public IP addresses and public port numbers can be configured for an internal server in a NAT instance.After the extendable parameter is configured, the command and nat server-mode enable, nat filter mode full-cone, nat filter mode full-cone 5-tuple-session commands are mutually exclusive, and the static source tracing algorithm cannot be bound to the NAT instance.After the extendable parameter is configured, a public network-side user cannot access different public IP addresses of the same private network server.\nNAT ALG does not take effect on protocol packets that match port-level NAT internal server mappings.\nThe primary IP address, not the secondary IP address, of an interface can be borrowed."
+}

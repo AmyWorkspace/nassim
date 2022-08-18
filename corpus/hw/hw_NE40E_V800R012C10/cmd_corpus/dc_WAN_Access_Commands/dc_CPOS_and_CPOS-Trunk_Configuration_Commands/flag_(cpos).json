@@ -1,0 +1,79 @@
+{
+    "PageTitle": "flag (CPOS interface view)",
+    "FuncDef": "The flag command sets overhead bytes of an SONET/SDH frame.\nThe undo flag command restores the default setting.\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.\nBy default, values of j0, j1 and j2 on a CPOS interface are NetEngine, the value of c2 on a CPOS interface is 0x02, in hexadecimal notation.",
+    "CLIs": [
+        "flag v5 1byte-mode e1 <e1-list> v5",
+        "flag j0 { sdh <j0-trace> | sonet <j0-value> }",
+        "flag j0 sdh <j0-trace>",
+        "flag c2 <c2>",
+        "flag j1 { 1byte-mode <1byte-value> | 16byte-mode <16byte-value> | 64byte-mode <64byte-value> }",
+        "flag j2 16byte-mode e1 <e1-list> j2",
+        "undo flag c2",
+        "undo flag v5 [ e1 <e1-list> ]",
+        "undo flag j2 [ e1 <e1-list> ]",
+        "undo flag j0",
+        "undo flag j1",
+        "undo flag"
+    ],
+    "ParentView": [
+        "CPOS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "v5 v5",
+            "Info": "Specifies the lower-order path signal label byte.\nThe value is an integer that ranges from 0 to 7, the default value is 2."
+        },
+        {
+            "Parameters": "j0",
+            "Info": "Specifies the regenerator section trace byte. It is contained in the section overhead and is used to check the continuity between two ports at the section layer.\n-"
+        },
+        {
+            "Parameters": "sdh j0-trace",
+            "Info": "Configures J0 to work in 16-byte mode.\nThe value is a string ranging from 1 to 15. By default, the value of J0 is \"NetEngine\"."
+        },
+        {
+            "Parameters": "sonet j0-value",
+            "Info": "Configures J0 to work in 1-byte mode.\nThe value is an integer ranging from 0 to 127. By default, the value of J0 is 1."
+        },
+        {
+            "Parameters": "c2 c2",
+            "Info": "Specifies the higher-order path signal label byte.\nThe value is an integer ranging from 0 to 255. The default value is 0x02."
+        },
+        {
+            "Parameters": "j1",
+            "Info": "Specifies the higher-order path trace byte. It is used to check the continuity between two ports at the path layer.\nBy default, J2 works in 16-byte mode and its value is \"NetEngine.\""
+        },
+        {
+            "Parameters": "1byte-mode 1byte-value",
+            "Info": "Configures J1 to work in 1-byte mode.\nThe value is an integer ranging from 0 to 127."
+        },
+        {
+            "Parameters": "16byte-mode 16byte-value",
+            "Info": "Configures J1 to work in 16-byte mode.\nThe value is a string of 1 to 15 characters."
+        },
+        {
+            "Parameters": "64byte-mode 64byte-value",
+            "Info": "Configures J1 to work in 64-byte mode.\nThe value is a string of 1 to 62 characters."
+        },
+        {
+            "Parameters": "j2 j2",
+            "Info": "Specifies the lower-order path trace byte. It is carried in the path overhead and is used to check the continuity between two ports on a lower-order channel.\nBy default, J2 works in 16-byte mode (sdh) and its value is \"NetEngine.\""
+        },
+        {
+            "Parameters": "e1 e1-list",
+            "Info": "Specifies the E1 channel list.\nThe value is an integer that ranges from 1 to 63. You can use ','' -' to connect."
+        },
+        {
+            "Parameters": "upgrade",
+            "Info": "Update flag j0, j1 or j2.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] controller cpos 1/0/0",
+            "[~HUAWEI-Cpos1/0/0] flag j1 16byte-mode TEST"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSONET or SDH frame has a variety of overhead bytes and can implement Operation and Maintenance (OAM) such as management of layers on the transmission network. j1, j0 and c2 are mainly used to provide interworking to devices from different manufacturers.\nPrecautions\nThe flag j0 sonet command only supports on subCard."
+}

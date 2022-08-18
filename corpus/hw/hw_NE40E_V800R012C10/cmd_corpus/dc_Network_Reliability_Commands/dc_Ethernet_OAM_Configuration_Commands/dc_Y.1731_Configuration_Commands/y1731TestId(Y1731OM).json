@@ -1,0 +1,68 @@
+{
+    "PageTitle": "test-id",
+    "FuncDef": "The test-id command configures a test instance ID.\nThe undo test-id command cancels the configuration.\nBy default, the test instance ID is not configured in an MA.",
+    "CLIs": [
+        "test-id <test-id-value> [ testid-file ] mep <mep-id> [ mac <mac-address> | remote-mep <mep-id> ] [ [ peer-ip <peer-ip> [ vc-id <vc-id> ] ] | [ 8021p <8021p-value> ] ] [ description <description> ]",
+        "undo test-id <test-id-value>"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "test-id-value",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "testid-file",
+            "Info": "Indicates the file recording the performance statistics collected by test ID.\n-"
+        },
+        {
+            "Parameters": "mep mep-id",
+            "Info": "Specifies the ID of a MEP.\nThe value is an integer ranging from 1 to 8191."
+        },
+        {
+            "Parameters": "mac mac-address",
+            "Info": "Specifies the MAC address of an RMEP.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        },
+        {
+            "Parameters": "remote-mep mep-id",
+            "Info": "Specifies the ID of an RMEP.\nThe value is an integer ranging from 1 to 8191."
+        },
+        {
+            "Parameters": "peer-ip peer-ip",
+            "Info": "Specifies the peer ip. Only measurement of PW link based on PW in VPLS scenario be supported.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id vc-id",
+            "Info": "Specifies the VC ID. Only measurement of PW link based on PW in VPLS scenario be supported.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "8021p 8021p-value",
+            "Info": "Sets a priority value for DMMs.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "description description",
+            "Info": "Specifies the description of test instance.\nThe value is a string ranging from 1 to 63."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/0 inward",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 mac 00e0-fc12-7890"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo collect link performance statistics using Y.1731, run this command to create a test instance for performance statistics collection.\nPrerequisites\nThis command takes effect only after the following configurations are complete:\nRun the cfm version standard command in the system view to specify IEEE Standard 802.1ag-2007 for CFM.The CFM function is enabled globally by using the cfm enable command in the system view.An MD is created by using the cfm md command in the system view.An MA is created by using the ma command in the MD view.Run the map mpls l2vc command in the MA view to bind an MA to a specified L2VC.An inward-facing MEP is created after the mep mep-id command is run in the MA view.A remote MEP in the MA is created using the remote-mep command in the MA view."
+}

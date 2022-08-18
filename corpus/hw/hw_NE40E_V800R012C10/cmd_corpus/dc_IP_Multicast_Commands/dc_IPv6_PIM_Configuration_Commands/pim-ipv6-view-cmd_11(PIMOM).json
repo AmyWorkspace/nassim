@@ -1,0 +1,27 @@
+{
+    "PageTitle": "holdtime assert",
+    "FuncDef": "The holdtime assert command globally sets a timeout period during which PIM interfaces wait to receive Assert messages from the forwarder.\nThe undo holdtime assert command restores the default timeout period.\nBy default, the timeout period is 180 seconds.",
+    "CLIs": [
+        "holdtime assert <assertHoldVal>",
+        "undo holdtime assert"
+    ],
+    "ParentView": [
+        "IPv6 PIM view",
+        "VPN instance IPv6 PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "assertHoldVal",
+            "Info": "Specifies a timeout period during which PIM interfaces wait to receive Assert messages from the forwarder.\nThe value is an integer ranging from 7 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] holdtime assert 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo prevent redundant traffic, a shared network segment should have only one forwarder. Therefore, a Router sends an Assert message immediately after its forwarding interface receives the same multicast packet on a shared network segment, which indicates that more than one forwarder exists. After all PIM Routers on the shared network segment receive Assert messages, the Routers elect a unique forwarder and refresh the outbound interface lists of (*, G) and (S, G) entries to prune redundant outbound interfaces. The Routerthat wins the election is called an assert winner, and all the other Routers are called assert losers. Only the assert winner forwards multicast data.\nThe assert winner periodically sends Assert messages to maintain its winner state. If the assert losers do not receive any Assert messages from the assert winner within a specified timeout period, the assert losers restore the pruned interfaces to forward packets. A new round of assert election is then triggered. To set such a timeout period, run the holdtime assert command.\nPrerequisites\nThe multicast routing function has been enabled using the multicast ipv6 routing-enable command in the public network instance view.\nConfiguration Impact\nIf the holdtime assert command is run more than once, the latest configuration overrides the previous one."
+}

@@ -1,0 +1,81 @@
+{
+    "PageTitle": "snmp-agent proxy rule",
+    "FuncDef": "The snmp-agent proxy rule command configures proxy rules for SNMP packets.\nThe undo snmp-agent proxy rule command deletes proxy rules for SNMP packets.\nBy default, no proxy rules are configured for SNMP packets.",
+    "CLIs": [
+        "snmp-agent proxy rule <rule-name> { read | write | trap } remote-engineid <remote-engineid> target-host <target-host-name> params-in securityname { <security-name> { v1 | v2c | v3 [ authentication | privacy ] } | cipher <cipher-text> { v1 | v2c } }",
+        "snmp-agent proxy rule <rule-name> inform remote-engineid <remote-engineid> target-host <target-host-name> params-in securityname { <security-name> { v2c | v3 [ authentication | privacy ] } | cipher <cipher-text> { v2c } }",
+        "undo snmp-agent proxy rule <rule-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "rule-name",
+            "Info": "Specifies the name of a proxy rule for SNMP packets.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "read",
+            "Info": "Enables an NMS to send GetRequest packets to a managed device.\n-"
+        },
+        {
+            "Parameters": "write",
+            "Info": "Enables an NMS to send SetRequest packets to a managed device.\n-"
+        },
+        {
+            "Parameters": "trap",
+            "Info": "Enables a managed device to send traps to an NMS.\n-"
+        },
+        {
+            "Parameters": "remote-engineid remote-engineid",
+            "Info": "Binds an SNMP proxy rule to the engine ID of a managed device.\nThe value is an integer ranging from 10 to 64 in hexadecimal notation. The values 0 and FFFFFFFF are invalid."
+        },
+        {
+            "Parameters": "target-host target-host-name",
+            "Info": "Specifies the name of a target host for receiving SNMP proxy packets.\nThe target host may be either the managed device or the NMS.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "params-in",
+            "Info": "Specifies the parameters to forward received SNMP messages.\n-"
+        },
+        {
+            "Parameters": "securityname security-name",
+            "Info": "Specifies the name of a security user or community, of which SNMP messages are forwarded.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nIn SNMPv1 or SNMPv2c, the value is set to an SNMP proxy community name. In SNMPv3, the value is set to an SNMP user name.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "v1",
+            "Info": "Enables SNMPv1.\n-"
+        },
+        {
+            "Parameters": "v2c",
+            "Info": "Enables SNMPv2c.\n-"
+        },
+        {
+            "Parameters": "v3",
+            "Info": "Enables SNMPv3.\n-"
+        },
+        {
+            "Parameters": "authentication",
+            "Info": "Authenticates SNMPv3 packets without encrypting them.\nThe authentication function is used to check the integrity and validity of SNMP packets. An authentication password is configured using the snmp-agent usm-user command.\n-"
+        },
+        {
+            "Parameters": "privacy",
+            "Info": "Authenticates and encrypts SNMPv3 packets.\nThe encryption function is used to protect packet data against theft. The authentication and encryption passwords are configured using the snmp-agent usm-user command.\n-"
+        },
+        {
+            "Parameters": "cipher cipher-text",
+            "Info": "Specifies a security name in ciphertext. You can type in the plain text or ciphertext, and it is displayed as the ciphertext in the configuration file.\nA simple text password is a string of 1 to 32 case-sensitive characters. A ciphertext password is a string of 32, 48, 56 or 68 case-sensitive characters.\nWhen quotation marks are used around the string, spaces are allowed in the string.\nCiphertext passwords with various lengths configured in an earlier version are also supported in the existing version."
+        },
+        {
+            "Parameters": "inform",
+            "Info": "Enables a managed device to send informs to an NMS.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent proxy rule proxy_rule_write@ccu2 write remote-engineId 01120025602101 target-host 10.1.1.1 params-in securityname hello v3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe SNMP proxy and the Cabinet Control Unit (CCU) of a managed device are placed in the same outdoor cabinet. The SNMP proxy enables communication between the NMS and managed device and allows you to manage the configurations and system software version of the managed device. The NMS manages the SNMP proxy and managed device as an independent network element, reducing the number of managed network elements and management costs. The NMS monitors the performance of managed devices in real time, helping to improve service quality. After you run the snmp-agent proxy rule command to configure proxy rules, the SNMP proxy can automatically forward SNMP requests from the NMS to the managed device and forward responses from the managed device to the NMS.\nPrerequisites\nThe proxy rules configured on an SNMP proxy must be unique.\nPrecautions\nIf trap or inform is specified, the proxy rule uniquely identifies a target host for receiving notifications.If read or write is specified, the proxy rule uniquely identifies a target host for receiving GetRequest or SetRequest PDUs.If you specify neither authentication nor privacy, SNMPv3 packets are neither authenticated nor encrypted.If the target host specified by the target-host target-host-name parameter does not exist, the proxy rule configured using this command does not take effect. If the security user or community specified by the securityname security-name parameter does not exist, the proxy rule configured using this command does not take effect."
+}

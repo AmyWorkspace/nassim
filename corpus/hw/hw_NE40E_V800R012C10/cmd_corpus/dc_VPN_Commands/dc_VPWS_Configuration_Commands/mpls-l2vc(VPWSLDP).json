@@ -1,0 +1,94 @@
+{
+    "PageTitle": "mpls l2vc",
+    "FuncDef": "The mpls static-l2vc command creates a static primary PW.\nThe undo mpls static-l2vc command deletes a static primary PW.\nBy default, no static PW is created.",
+    "CLIs": [
+        "mpls l2vc { <ip-address> | pw-template <pw-template-name> } * <vc-id> [ [ control-word | no-control-word ] | tunnel-policy <tnl-policy-name> | [ ip-interworking | ip-layer2 ] | [ secondary | bypass ] | ignore-standby-state ] *",
+        "mpls static-l2vc instance-name <instance-name> { { destination <ip-address> | pw-template <pw-template-name> <vc-id> } * | destination <ip-address> <vc-id> } transmit-vpn-label <transmit-label-value> receive-vpn-label <receive-label-value> [ tunnel-policy <tnl-policy-name> | [ control-word | no-control-word ] | ip-interworking ] *",
+        "undo mpls l2vc { <ip-address> | pw-template <pw-template-name> } * <vc-id> [ [ control-word | no-control-word ] | tunnel-policy <tnl-policy-name> | [ ip-interworking | ip-layer2 ] | [ secondary | bypass ] | ignore-standby-state ] *",
+        "undo mpls l2vc [ secondary | bypass ]"
+    ],
+    "ParentView": [
+        "Global MP-group interface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "POS-Trunk interface view",
+        "Trunk serial interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pw-template pw-template-name",
+            "Info": "Specifies the name of a static PW template.\nThe name is a string of 1 to 19 case-sensitive characters, spaces not supported.The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "vc-id",
+            "Info": "Specifies the ID of a PW.\nThe value is an integer that ranges from 1 to 4294967295."
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Enables the control word.\nBy default:\nFor PWs with the TDM or FR encapsulation type: If no PW template is used, the control word function is enabled by default. If a PW template is used, the control word function can be enabled only after a control word is explicitly specified.For PWs with the other encapsulation types: the control word function can be enabled only after a control word is explicitly specified."
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "Disables the control word.\n-"
+        },
+        {
+            "Parameters": "tunnel-policy tnl-policy-name",
+            "Info": "Specifies the name of a tunnel policy.\nThe value is a string of 1 to 39 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ip-interworking",
+            "Info": "Enables static PW interworking when devices in the interworking are all provided by Huawei.\n-"
+        },
+        {
+            "Parameters": "ip-layer2",
+            "Info": "Enables IP interworking for an LDP PW between a Huawei device and a non-Huawei device. ip-layer2 is required for IP interworking between a Huawei device and a non-Huawei device.\n-"
+        },
+        {
+            "Parameters": "secondary",
+            "Info": "Configures the PW as a secondary PW.\n-"
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Configures the PW as a bypass PW.\n-"
+        },
+        {
+            "Parameters": "ignore-standby-state",
+            "Info": "Configures the created PW to ignore the secondary state sent from the peer device.\n-"
+        },
+        {
+            "Parameters": "instance-name instance-name",
+            "Info": "Specifies the name of an L2VPN service. This parameter uniquely identifies an L2VPN service on a PE.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "destination ip-address",
+            "Info": "Specifies the LSR-ID of a peer device.\n-"
+        },
+        {
+            "Parameters": "transmit-vpn-label transmit-label-value",
+            "Info": "Indicates the label value of sent packets.\nThe value is an integer that ranges from 0 to 1048575."
+        },
+        {
+            "Parameters": "receive-vpn-label receive-label-value",
+            "Info": "Indicates the label value of received packets.\nThe value is an integer that ranges from 16 to 65551."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] pw-template pwt",
+            "[*HUAWEI-pw-template-pwt] peer-address 1.1.1.1",
+            "[*HUAWEI-pw-template-pwt] quit",
+            "[*HUAWEI] tunnel-policy policy1",
+            "[*HUAWEI-tunnel-policy-policy1] quit",
+            "[*HUAWEI] interface serial 1/0/1",
+            "[*HUAWEI-Serial1/0/1] mpls static-l2vc destination 1.1.1.1 transmit-vpn-label 100 receive-vpn-label 100 tunnel-policy policy1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a device is unable to support a large number of LDP sessions, or if you want to manually manage and allocate VC labels, use the undo mpls static-l2vc command to create static PWs. When you configure VC labels to create PWs, Layer 2 VC or link information does not need to be transmitted using LDP.\nTo configure static PWs, create the static primary PW first.\nStatic VCs must be created on the PEs at both ends. The destination address of a VC is the IP address of the peer PE. The transmit label of the PE at one end is the receive label of the PE at the other end.\nPrerequisites\nMPLS has been enabled in the system view.MPLS L2VPN has been enabled in the system view.\n\nConfiguration Impact\nIf a static PW is configured on an AC interface, the Layer 3 features of the interface, such as the IP address and routing protocol, will not take effect. An interface cannot serve as both an L2VPN AC interface and an L3VPN AC interface. If an interface is bound to both a PW and an L3VPN, only the PW configuration takes effect on the interface. After the PW is deleted, the L3VPN configuration will take effect on the interface.\nFollow-up Procedure\nRun the display mpls static-l2vc command to view PW configurations.\nPrecautions\nSince the static secondary PW protects the static primary PW, you cannot configure the static secondary PW before configuring the static primary PW. If you attempt to configure the static secondary PW before the static primary PW, the attempt fails. For the same reason, when deleting PWs, delete the static secondary PW and then the static primary PW.\nIn a PW redundancy scenario, configure the same parameters for the primary, secondary, and bypass PWs. A parameter inconsistency causes the secondary or bypass PW to fail to take over traffic if the primary PW fails.\nThe secondary PWs cannot be created on the same AC interface.\nIf VCCV is not required for a static VC, VC ID does not need to be specified. If VCCV is required, VC ID must be specified.\nIf a sub-interface is bound to a PW, the sub-interface can be deleted only after the binding is removed.If a sub-interface is bound to a PW, you cannot change the encapsulation type of the main interface.\nWhen configuring static VCs, note the following:\nThe transmit label of the VRP ranges from 0 to 1048575, allowing the VRP to interwork with different types of devices.The receive label of the VRP ranges from 16 to 1023. Packets with labels not in this range will be dropped by the VRP."
+}

@@ -1,0 +1,31 @@
+{
+    "PageTitle": "traffic-policy",
+    "FuncDef": "The traffic-policy command cascades a traffic policy.\nThe undo traffic-policy command cancels the configuration.\nBy default, no traffic policy is configured in the traffic behavior view.",
+    "CLIs": [
+        "traffic-policy <policy-name> [ ip-layer ]",
+        "undo traffic-policy [ <policy-name> [ ip-layer ] ]"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name",
+            "Info": "Specifies the name of a traffic policy. The value of policy-name must be different from the policy name default predefined by the system.\nThe value is a string of 1 to 127 case-sensitive characters."
+        },
+        {
+            "Parameters": "ip-layer",
+            "Info": "Classifies packets based on IP layer information.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic policy p1",
+            "[*HUAWEI-trafficpolicy-p1] quit",
+            "[*HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] traffic-policy p1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe ACL rules are generally used for redirection in the traffic behavior. However, the specification of ACL rules is limited. When ACL rules defined for MF classification do not meet the live network requirements, you can run the traffic policy command to redirect the traffic behavior to a configured traffic policy to implement cascaded MF classification.\nFollow-up Procedure\nAssociate the traffic classifier and traffic behavior in a traffic policy and apply the traffic policy to an interface.\nPrecautions\nWhen a cascaded traffic policy generates a traffic policy instance of two-levels:\nIf the action in the traffic behavior in the parent traffic policy is the same as that in the traffic behavior in the child traffic policy, the action in the traffic behavior in the child traffic policy is implemented.\nThe same action configuration refers to the same action type. Even if the parameters are different, the actions of the same type are considered the same action configuration. In this case, the action in the traffic behavior in the child traffic policy is implemented.\nIf the action in the traffic behavior in the parent traffic policy is different from that in the traffic behavior in the child traffic policy, the actions in the traffic behaviors are implemented separately.When the traffic behaviors for the parent and child policies are both service-class, service-class in the parent policy preferentially takes effect. However, if service-class in the parent policy carries no-remark, service-class in the child policy preferentially takes effect.\nOne traffic policy (parent policy) can cascade over multiple traffic policies (child policies), and one traffic policy (child policy) can be cascaded by multiple traffic policies (parent policies). However, the traffic policies cannot be circulated or nested.\nAfter the cascading relationship is set up, the shared attribute of the cascading policy cannot be changed.\nCascading a traffic policy over another will cause the device forwarding performance to deteriorate.When the traffic on an interface matches the cascaded traffic policy: The forwarding behavior and cascading a traffic policy are mutually exclusive. If the traffic behaviors in the two traffic policies are different, they can be individually implemented. If the traffic behaviors in the two traffic policies are the same, the specific behavior configuration in the cascaded traffic policy takes effect.On an interface, only one traffic policy can be applied to outgoing or incoming packets. If the traffic policy cascades over another traffic policy and is applied to an interface, both traffic policies take effect on the direction-specific interface.The parameters specified for a traffic policy, such as inbound, outbound, link-layer, mpls-layer, and all-layer, are inherited by the cascaded traffic policy.This command is mutually exclusive with the multicast-nat bind instance, nat bind instance, nat64 bind instance, ds-lite bind instance and service-chain bind instance commands."
+}

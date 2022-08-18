@@ -1,0 +1,30 @@
+{
+    "PageTitle": "load-balance unequal-cost weight",
+    "FuncDef": "The load-balance unequal-cost weight command sets a weight for a link before unequal cost multiple path (UCMP) is carried out among links.\nThe undo load-balance unequal-cost weight command restores the default weight for a link.\nBy default, the UCMP weight of each link is 0 after UCMP is enabled globally.",
+    "CLIs": [
+        "load-balance unequal-cost weight <weight>",
+        "undo load-balance unequal-cost weight"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "weight",
+            "Info": "Specifies a weight for a link. A link transmits traffic based on the configured UCMP weight.\nThe value is an integer ranging from 1 to 64."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] load-balance unequal-cost enable",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] load-balance unequal-cost weight 12"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an existing MPLS network, devices in the core area support TE, and devices in other areas use LDP. LDP over TE applies and allows a TE tunnel to function as a hop on an entire LDP LSP. On MPLS VPNs where LDP is widely used, LDP over TE is used to prevent VPN traffic congestion on some nodes. If multiple tunnels on a transit node have the same downstream node, load balancing can be configured on the transit node. This allows each link to carry traffic based on the proportion of the specific weight to the total weight.\nPrerequisites\nThe load-balance unequal-cost enable command has been run to enable UCMP globally before any UCMP-associated commands are used.\nConfiguration Impact\nThe load-balance unequal-cost weight command takes effect 10 minutes after being run.\nPrecautions\nNote the following issues when configuring UCMP weights:\nIf only some links are configured with weights, the system carries out load balancing based on bandwidth, the configured weights do not take effect. If some links are not assigned bandwidth resources, ECMP is performed.If all links are configured with weights, UCMP is carried out among links. Each link carries traffic based on a specified percent calculated using the following formula:\nTraffic percent on a specified link = 64 x (Weight of a specified link/Sum of weights).\nAs the sum of weights may not be divisible, the traffic volume of each link may deviate from the calculated result but the sum of weights remains 64."
+}

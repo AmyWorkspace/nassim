@@ -1,0 +1,72 @@
+{
+    "PageTitle": "ping mac-8021ag mep",
+    "FuncDef": "The ping mac-8021ag mep command allows the system to monitor the connectivity between the local MEP and the MEP or MIP at the same maintenance level on other devices. The detection mode is called 802.1ag MAC ping.",
+    "CLIs": [
+        "ping mac-8021ag mep mep-id <mep-id> md <md-name> ma <ma-name> { mac <mac-address> | remote-mep mep-id <mep-id> } [ -c <count> | -s <packetsize> | -t <timeout> | -p <priority-value> ] *"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mep-id mep-id",
+            "Info": "Specifies the ID of a MEP.\nAn integer that ranges from 1 to 8191."
+        },
+        {
+            "Parameters": "md md-name",
+            "Info": "Specifies the name of an MD. The MEP and the specified destination node must be in the same MD.\nA string of 1 to 43 characters, excluding spaces, a hyphen (-), or a question mark (?)."
+        },
+        {
+            "Parameters": "ma ma-name",
+            "Info": "Specifies the name of an MA. The MEP and the specified destination node must be in the same MA.\nA string of 1 to 43 characters, excluding spaces, a hyphen (-), or a question mark (?). The total length of the names of the MA and MD must be less than 44 characters."
+        },
+        {
+            "Parameters": "mac mac-address",
+            "Info": "Specifies the MAC address of the destination node. The destination node can be a MEP or a MIP.An MP's MAC address can be a bridge MAC address or the MAC address of the interface on which the MP resides, depending on the configured MP address model:\nIf the shared MP address model is configured on the destination MP, mac-address is a bridge MAC address.If the individual MP address model is configured on the destination MP, mac-address is the MAC address of the interface on which the destination MP resides.\nExpressed as a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. It cannot be a broadcast MAC address or a multicast MAC address."
+        },
+        {
+            "Parameters": "remote-mep mep-id",
+            "Info": "Specifies the ID of a destination RMEP.\nThe destination RMEP must have been created using the remote-mep command, and the bridge MAC address of the device where the REMP resides must have been specified.\nAn integer that ranges from 1 to 8191."
+        },
+        {
+            "Parameters": "-c count",
+            "Info": "Specifies the number of sent ping packets.\nThe value is an integer that ranges from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-s packetsize",
+            "Info": "Specifies the size of a ping packet.\nAn integer that ranges from 64 to 2000, in bytes. The default value is 95."
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies the timeout period for waiting for a reply packet.\nAn integer ranging from 1 to 65535, in ms. The default value is 2000 ms."
+        },
+        {
+            "Parameters": "-p priority-value",
+            "Info": "Specifies the priority of ping packets.\nAn integer ranging from 0 to 7. The default value is the same as 802.1p priority of the 802.1ag packets which was specified in MA view."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map vlan 100",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/0 outward",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send mep-id 1 enable",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 2",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep ccm-receive mep-id 2 enable",
+            "[*HUAWEI-md-md1-ma-ma1] commit",
+            "[~HUAWEI-md-md1-ma-ma1] ping mac-8021ag mep mep-id 1 md md1 ma ma1 remote-mep mep-id 2",
+            "Pinging 00e0-fc12-3456 with 95 bytes of data:",
+            "Reply from 00e0-fc12-3456: bytes = 95, time = 11ms",
+            "Reply from 00e0-fc12-3456: bytes = 95, time = 2ms",
+            "Reply from 00e0-fc12-3456: bytes = 95, time = 3ms",
+            "Reply from 00e0-fc12-3456: bytes = 95, time = 3ms",
+            "Reply from 00e0-fc12-3456: bytes = 95, time = 2ms",
+            "Packets: Sent = 5, Received = 5, Lost = 0 (0% loss)",
+            "Minimum = 2ms, Maximum = 11ms, Average = 4ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSimilar to the ping operation, 802.1ag MAC ping checks whether the destination device is reachable by sending test packets and receiving response packets. In addition, the ping operation time can be calculated at the transmitting end for network performance analysis.\nA device is usually configured with multiple MDs and MAs. To precisely detect the connectivity of a link between two or more devices, run the ping mac-8021ag mep command with the parameter md-name and the parameter ma-name in the MA view to test the connectivity of links based on the configured MA and MD.\nPrerequisites\nWhen implementing 802.1ag MAC ping, ensure that:\nMEPs are configured in the MA.If an outbound interface is specified, it cannot be configured with an inward-facing MEP. The interface must be added to the VLAN associated with the MA.\n\nPrecautions\n802.1ag MAC ping is initiated by a MEP in the MA and destined for a MEP or a MIP at the same maintenance level on other devices. The source node and the destination node can be within different MAs."
+}

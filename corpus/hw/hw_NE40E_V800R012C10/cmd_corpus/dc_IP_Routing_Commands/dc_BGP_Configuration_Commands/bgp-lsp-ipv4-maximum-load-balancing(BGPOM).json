@@ -1,0 +1,41 @@
+{
+    "PageTitle": "maximum load-balancing ingress-lsp (BGP-IPv4 unicast address family view)",
+    "FuncDef": "The maximum load-balancing ingress-lsp command sets the maximum number of equal-cost BGP labeled routes for ingress LSP load balancing.\nThe undo maximum load-balancing ingress-lsp command restores the maximum number of equal-cost BGP labeled routes to the default value 1.\nThe maximum load-balancing transit-lsp command sets the maximum number of equal-cost BGP labeled routes for transit LSP load balancing.\nThe undo maximum load-balancing transit-lsp command restores the maximum number of equal-cost BGP labeled routes to the default value 1.\nBy default, the maximum number of equal-cost BGP labeled routes is 1, and ingress LSP load balancing and transit LSP load balancing are not implemented.",
+    "CLIs": [
+        "maximum load-balancing ingress-lsp <ingressNumber>",
+        "maximum load-balancing transit-lsp <transitNumber>",
+        "undo maximum load-balancing ingress-lsp",
+        "undo maximum load-balancing ingress-lsp <ingressNumber>",
+        "undo maximum load-balancing transit-lsp",
+        "undo maximum load-balancing transit-lsp <transitNumber>"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view",
+        "BGP-Labeled address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "transit-lsp transitNumber",
+            "Info": "Specifies the maximum number of equal-cost routes for load balancing.\nThe value is an integer ranging from 1 to 8."
+        },
+        {
+            "Parameters": "ingress-lsp ingressNumber",
+            "Info": "Specifies the maximum number of equal-cost routes for load balancing.\nThe value is an integer ranging from 1 to 8."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] maximum load-balancing transit-lsp 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] maximum load-balancing ingress-lsp 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMultiple paths can be used for load balancing. To use this method, equal-cost routes must exist and you need to configure the maximum number of load-balancing routes.\nAfter BGP load balancing is configured, the routes that meet the following conditions can implement load balancing as equal-cost routes:\nThe PrefVal attributes of the BGP routes are the same.The Local_Pref attributes of the BGP routes are the same.All the BGP routes are summary or non-summary routes.The AS_Path lengths of the BGP routes are the same.The origin types (IGP, EGP, or incomplete) of the BGP routes are the same.The MED values of the BGP routes are the same.All the BGP routes are EBGP or IBGP routes.The IGP metric values of the BGP routes within an AS are the same.The AS_Path attributes of the BGP routes are the same.Original next-hop addresses of the BGP routes are different.\nFor BGP routes with the same prefix in a routing table:\nIf the optimal route and the routes selected for load balancing are all labeled routes, the number of routes used for load balancing depends on the maximum load-balancing ingress-lsp command configuration.If the optimal route and the routes selected for load balancing are all non-labeled routes, the number of routes used for load balancing depends on the maximum load-balancing command configuration.\nIf BGP labeled routes implement load balancing and the ingress LSP creation criteria are met, ingress LSPs are created for the labeled routes.\n\nPrecautions\nThe maximum load-balancing ingress-lsp and ingress-lsp protect-mode commands are mutually exclusive.\nAfter configuring transit LSP load balancing, run the display bgp routing-table and display ip routing-table commands to check whether load balancing has taken effect on the transit node.\nIf BGP labeled routes fail to recurse to tunnels, the routes cannot implement load balancing."
+}

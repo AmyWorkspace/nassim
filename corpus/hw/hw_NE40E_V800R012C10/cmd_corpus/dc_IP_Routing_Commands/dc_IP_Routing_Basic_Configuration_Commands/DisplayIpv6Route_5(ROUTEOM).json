@@ -1,0 +1,108 @@
+{
+    "PageTitle": "display ipv6 routing-table vpn-instance",
+    "FuncDef": "The display ipv6 routing-table vpn-instance command displays the routing table of an IPv6 address family-enabled VPN instance.",
+    "CLIs": [
+        "display ipv6 routing-table vpn-instance <vpn-instance-name> { <ipv6-address> [ <prefix-length> ] | host-name <host-name> } [ longer-match ] [ verbose ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the destination IPv6 address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the length of the IPv6 address prefix.\nThe value is an integer ranging from 0 to 128."
+        },
+        {
+            "Parameters": "host-name host-name",
+            "Info": "Specifies the hostname.\nThe value is a string of 1 to 255 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "longer-match",
+            "Info": "Displays only the VPN IPv6 routes that match the specified network and mask.\n-"
+        },
+        {
+            "Parameters": "verbose",
+            "Info": "Displays detailed information about active and inactive routes.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Displays information about the routing table of an IPv6 address family-enabled VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] display ipv6 routing-table vpn-instance vrf1",
+            "Routing Table : vrf1",
+            "         Destinations : 1        Routes : 1         ",
+            "",
+            "Destination  : 2001:db8::                              PrefixLength : 64",
+            "NextHop      : ::                                      Preference   : 60",
+            "Cost         : 0                                       Protocol     : Static",
+            "RelayNextHop : ::                                      TunnelID     : 0x0",
+            "Interface    : NULL0                                   Flags        : DB"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] display ipv6 routing-table vpn-instance vrf1 2001:db8:1::1 verbose",
+            "Route Flags: R - relay, D - download to fib, T - to vpn-instance, B - black hole route",
+            "------------------------------------------------------------------------------",
+            "Routing Table : vrf1",
+            "Summary Count : 1",
+            "",
+            "Destination  : 2001:db8:1::                            PrefixLength : 64",
+            "NextHop      : ::                                      Preference   : 60",
+            "Neighbour    : ::                                      ProcessID    : 0",
+            "Label        : NULL                                    Protocol     : Static",
+            "State        : Active Adv                              Cost         : 0",
+            "Entry ID     : 0                                       EntryFlags   : 0x00000000",
+            "Reference Cnt: 0                                       Tag          : 0",
+            "Priority     : low                                     Age          : 135sec",
+            "IndirectID   : 0x10000CD                               Instance     : ",
+            "RelayNextHop : ::                                      TunnelID     : 0x0",
+            "Interface    : NULL0                                   Flags        : DB"
+        ],
+        [
+            "[~HUAWEI] display ipv6 routing-table vpn-instance vpn1 2001:DB8:22:: verbose",
+            "Route Flags: R - relay, D - download to fib, T - to vpn-instance, B - black hole route",
+            "------------------------------------------------------------------------------",
+            "Routing Table : vpn1",
+            "Summary Count : 1",
+            "",
+            "Destination  : 2001:DB8:22::                           PrefixLength : 64",
+            "NextHop      : 2001:DB8:130::1:0:21                    Preference   : 255",
+            "Neighbour    : 2001:DB8:3::3                           ProcessID    : 0",
+            "Label        : NULL                                    Protocol     : IBGP",
+            "State        : Active Adv Relied                       Cost         : 0",
+            "Entry ID     : 0                                       EntryFlags   : 0x00000000",
+            "Reference Cnt: 0                                       Tag          : 0",
+            "Priority     : low                                     Age          : 13836sec",
+            "IndirectID   : 0x100016D                               Instance     : ",
+            "RelayNextHop : 2001:DB8:130::1:0:21                    TunnelID     : 0x0",
+            "Interface    : SRv6 BE                                 Flags        : RD",
+            "",
+            "[~HUAWEI] display ipv6 routing-table 2001:DB8:130::1:0:21 verbose",
+            "Route Flags: R - relay, D - download to fib, T - to vpn-instance, B - black hole route",
+            "------------------------------------------------------------------------------",
+            "Routing Table : _public_",
+            "Summary Count : 1",
+            "",
+            "Destination  : 2001:DB8:130::                          PrefixLength : 64",
+            "NextHop      : FE80::3AF2:EBFF:FE11:300                Preference   : 15",
+            "Neighbour    : ::                                      ProcessID    : 1",
+            "Label        : NULL                                    Protocol     : ISIS-L1",
+            "State        : Active Adv                              Cost         : 10",
+            "Entry ID     : 0                                       EntryFlags   : 0x00000000",
+            "Reference Cnt: 0                                       Tag          : 0",
+            "Priority     : medium                                  Age          : 1355sec",
+            "IndirectID   : 0x1000033                               Instance     : ",
+            "RelayNextHop : ::                                      TunnelID     : 0x0",
+            "Interface    : Ethernet3/0/0                           Flags        : D"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo check the routing table of the IPv6 address family-enabled VPN instance, run the display ipv6 routing-table vpn-instance command. The command output includes the destination address, prefix length, protocol type, priority, cost, next hop, and outbound interface.\na recursive route is counted as one route no matter how many outbound interfaces and next hops the route finds.\nThis command without verbose specified displays preferred routes only."
+}

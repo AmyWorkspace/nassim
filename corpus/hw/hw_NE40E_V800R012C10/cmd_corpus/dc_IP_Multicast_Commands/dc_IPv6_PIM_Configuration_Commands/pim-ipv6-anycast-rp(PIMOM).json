@@ -1,0 +1,27 @@
+{
+    "PageTitle": "anycast-rp (IPv6 PIM view)",
+    "FuncDef": "The anycast-rp command configures an anycast-rendezvous point (Anycast-RP) and displays the IPv6 Anycast-RP view or displays an existing IPv6 Anycast-RP view.\nThe undo anycast-rp command deletes an Anycast-RP.\nBy default, no Anycast-RP is configured.",
+    "CLIs": [
+        "anycast-rp <RpAddress>",
+        "undo anycast-rp <RpAddress>"
+    ],
+    "ParentView": [
+        "IPv6 PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "RpAddress",
+            "Info": "Specifies an Anycast-RP address.\nThe value is in hexadecimal notation. This address must be a valid IPv6 unicast address"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] anycast-rp 2001:db8:2::2",
+            "[*HUAWEI-pim6-anycast-rp-2001:db8:2::2]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a traditional Protocol Independent Multicast-Sparse Mode (PIM-SM) domain, all multicast groups map to one RP. When the network is overloaded or all traffic needs to be forwarded by only one RP, the RP may be overburdened. If the RP fails, routes are converged slowly or multicast packets are forwarded over non-optimal paths.\nTo resolve this issue, run the anycast-rp command to configure an Anycast-RP in the PIM-SM domain, enabling the network to automatically select a topologically closest RP for each source and receiver. This function releases burdens on RPs, implements RP backup, and optimizes the forwarding paths.\nConfiguration Impact\nIf PIM Anycast-RP is configured, after an RP receives a Register message, it checks the source address in the Register message. If the Register message is sent by the source's designated router (DR), the RP forwards the Register message to Anycast-RP peers. If the Register message is sent by an Anycast-RP peer, it does not forward the Register message. In such a manner, Anycast-RP peers can learn source and group information from each other.\nPrecautions\nAn Anycast-RP address must be the same as that of the elected RP on the current network.In a single instance, you can configure a maximum of four Anycast-RP addresses on each device.Either static or dynamic RPs can be used on the network. Configuring RPs on loopback interfaces is recommended. You need to configure the same RP address on the devices to be deployed with the Anycast-RP function. If dynamic RPs are used on the network, before configuring an Anycast-RP address, run the display pim ipv6 rp-info command to check the address of the RP on the current network."
+}

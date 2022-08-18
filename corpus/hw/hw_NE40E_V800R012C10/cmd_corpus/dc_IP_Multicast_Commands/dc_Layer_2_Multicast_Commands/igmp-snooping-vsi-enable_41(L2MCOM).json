@@ -1,0 +1,52 @@
+{
+    "PageTitle": "igmp-snooping prompt-leave (VSI E-Tree view)",
+    "FuncDef": "The igmp-snooping prompt-leave command enables member ports to promptly leave related multicast groups.\nThe undo igmp-snooping prompt-leave command restores the default configuration.\nBy default, a member port is not allowed to promptly leave a multicast group.",
+    "CLIs": [
+        "igmp-snooping prompt-leave [ group-policy { <acl6-number> | acl-name <acl-name> } ]",
+        "undo igmp-snooping prompt-leave"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-policy",
+            "Info": "Specifies a multicast group policy for prompt leave. The policy specifies the multicast groups that member ports can promptly leave.\n-"
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 2008",
+            "[*HUAWEI-acl-basic-2008] rule permit source 225.1.1.123 0",
+            "[*HUAWEI-acl-basic-2008] quit",
+            "[*HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan 2",
+            "[*HUAWEI-vlan2] igmp-snooping prompt-leave group-policy 2008"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 2008",
+            "[*HUAWEI-acl-basic-2008] rule permit source 225.1.1.123 0",
+            "[*HUAWEI-acl-basic-2008] quit",
+            "[*HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi v1",
+            "[*HUAWEI-vsi-vsia] pwsignal ldp",
+            "[*HUAWEI-vsi-vsia-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-vsia-ldp] quit",
+            "[*HUAWEI-vsi-v1] igmp-snooping prompt-leave group-policy 2008"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEnable igmp-snooping prompt-leave function.\nPrerequisites\nIGMP snooping is enabled globally and in a VLAN/VSI/BD.\nRules have been configured for a specified basic ACL. By default, the ACL rule in which the action is permit is applicable to all multicast groups. To enable prompt leave for a multicast group, you also need to run the rule (basic ACL view) deny source any or rule (advanced ACL view) deny source any command.\nConfiguration Impact\nRunning the igmp-snooping prompt-leave command on an interface connected to multiple user hosts is not recommended. If this command is run on the interface, the leave of one user host will cause other use hosts in the group to fail to receive multicast data.\nIf the igmp-snooping prompt-leave command is run several times, the latest configuration overrides the previous one."
+}

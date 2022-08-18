@@ -1,0 +1,40 @@
+{
+    "PageTitle": "host-connectivity-verify",
+    "FuncDef": "This command enables subscriber host connectivity verification for all hosts on this interface. This tool will periodically scan all known hosts (from dhcp-state) and perform a UC ARP request. The subscriber host connectivity verification will maintain state (connected vs. not-connected) for all hosts.",
+    "CLIs": [
+        "host-connectivity-verify [ source { vrrp | interface } ] [ interval <interval> ] [ action { remove | alarm } ] [ timeout <retry-timeout> ] [ retry-count <count> ]",
+        "host-connectivity-verify [ interval <interval> ] [ action { remove | alarm } ] [ timeout <retry-timeout> ] [ retry-count <count> ] [ family <family> ]"
+    ],
+    "ParentView": [
+        "config>service>ies>if",
+        "config>service>ies>sub-if>grp-if"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "source {interface}",
+            "Info": "Specifies the source to be used for generation of subscriber host connectivity verification packets. The interface keyword forces the use of the interface mac and ip addresses. There are up to 16 possible subnets on a given interface, therefore subscriber host connectivity verification tool will use always an address of the subnet to which the given host is pertaining. In case of group-interfaces. one of the parent subscriber-interface subnets (depending on host's address) will be used."
+        },
+        {
+            "Parameters": "interval interval",
+            "Info": "The interval, in minutes, which specifies the time interval which all known sources should be verified. The actual rate is then dependent on number of known hosts and interval. Values-1 to 6000."
+        },
+        {
+            "Parameters": "action {remove | alarm}",
+            "Info": "Defines the action taken on a subscriber host connectivity verification failure for a given host. The remove keyword raises an alarm and removes DHCP state and releases all allocated resources (queues, table entries and so on). DHCP release will be signaled to corresponding DHCP server. Static host will never be removed. The alarm keyword raises an alarm indicating that the host is disconnected."
+        },
+        {
+            "Parameters": "timeout retry-timeout",
+            "Info": "Specifies the timeout in seconds between consecutive retries of subscriber host connectivity verification checks, in case the host does not respond. Values-10 to 60 seconds."
+        },
+        {
+            "Parameters": "retry-count count",
+            "Info": "Specifies the number of retries that will be carried out before a subscriber host is considered to have failed the SHCV check. Values-2 to 29."
+        },
+        {
+            "Parameters": "family family",
+            "Info": "Indicates the IP address family for which subscriber host connectivity verification checks will be enabled. It can be set to ipv4 or ipv6, or both."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: no host-connectivity-verify"
+}

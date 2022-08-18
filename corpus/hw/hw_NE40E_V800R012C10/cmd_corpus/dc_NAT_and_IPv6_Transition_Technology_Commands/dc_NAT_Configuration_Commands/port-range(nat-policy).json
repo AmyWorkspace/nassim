@@ -1,0 +1,33 @@
+{
+    "PageTitle": "port-range (NAT policy view)",
+    "FuncDef": "The port-range command configures a port range for port pre-allocation.\nThe undo port-range command cancels the configuration.\nBy default, the dynamic port allocation mode is used.",
+    "CLIs": [
+        "port-range <port-num> [ extended-port-range <extended-port-range> extended-times <extended-times> ]",
+        "undo port-range [ <port-num> [ extended-port-range <extended-port-range> extended-times <extended-times> ] ]"
+    ],
+    "ParentView": [
+        "NAT policy View"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "port-num",
+            "Info": "Specifies the number of initially allocated ports.\nThe value is an integer multiple of 64, ranging from 64 to 64512."
+        },
+        {
+            "Parameters": "extended-port-range extended-port-range",
+            "Info": "Specifies the number of ports that can be incrementally assigned at every port allocation.\nThe value is an integer multiple of 64, ranging from 64 to 8192."
+        },
+        {
+            "Parameters": "extended-times extended-times",
+            "Info": "Specifies the number of times that incremental port allocation is supported.\nThe value is an integer ranging from 1 to 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat-policy template cpe1",
+            "[*HUAWEI--nat-policy-template1] port-range 1024 extended-port-range 512 extended-times 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe system supports port allocation modes: dynamic port allocation, static port pre-allocation, semi-dynamic port pre-allocation, and per-port allocation.\nDynamic port allocation mode: By default, the system dynamically allocates ports to users. In this mode, the number of ports allocated to users is not limited.Static port pre-allocation mode: This mode is supported when extended-port-range or extended-times is not specified. After the port-range command is run in the NAT instance view, the system pre-allocates a port range to private network users to perform NAT. Running the port-range command in the NAT instance view indicates that this NAT instance uses the static port pre-allocation mode. The port-range command also specifies the size of a port range. The start and end port numbers are automatically generated.Semi-dynamic port pre-allocation mode: This mode is supported when both extended-port-range and extended-times are specified. In this mode, the system pre-allocates a port range to private network users. The system uses ports in this port range to perform NAT. When all ports in this port range are allocated, a pre-set range of ports are assigned to users. The number of times that the port range can be extended is configurable to determine the maximum number of assignable ports. If a newly assigned port range is no longer used, this port range can be reclaimed and allocated to other users.Per-port allocation mode: This mode is configured by running the port-single enable command. Per-port allocation is a dynamic port allocation mode. Specifically, a port, instead of a port segment, is allocated each time a flow table entry is created. Such a mode features the highest port usage of a public IP address and therefore is used when few IPv4 public IP addresses exist or when few ports are required for services.\nIn either of the two modes, after you run the port-range command in the NAT policy template view, the RADIUS server delivers the NAT policy template name to a device, and the device pre-allocates ports based on the template.\nIf the number of ports exceeds the specified port range, NAT cannot be performed for newly generated traffic.\n\nPrecautions\nIf you have configured port-range for both the NAT instance and template, the configurations in the NAT policy template take precedence when the system matches an online user with the policy template issued by the RADIUS server.\nIf the port-range command is run more than once, the latest configuration overrides the previous one.\nIf a NAT instance has had online users, the port allocation mode of the instance cannot be changed to another port allocation mode. If the port pre-allocation mode or incremental port allocation mode has been configured, you can change the port-range parameter values in overriding mode. The change takes effect only for new users.\nIn VS mode, this command is supported only by the admin VS.\nThis command is applicable only to the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S."
+}

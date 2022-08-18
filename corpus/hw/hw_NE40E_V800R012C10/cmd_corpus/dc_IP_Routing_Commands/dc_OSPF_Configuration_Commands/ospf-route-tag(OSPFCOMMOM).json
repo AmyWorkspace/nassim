@@ -1,0 +1,34 @@
+{
+    "PageTitle": "route-tag (OSPF view)",
+    "FuncDef": "The route-tag command sets the VPN route tag for imported VPN routes.\nThe undo route-tag command restores the default setting.\nBy default, the first two bytes of a tag value are fixed at 0xD000, and the last two bytes are the local BGP AS number. For example, if the local BGP AS number is 100, the default tag value in decimal notation is 3489661028; if the BGP AS number is greater than 65535, the tag value is 0, and you can manually change the tag value. If BGP is not configured, the default tag value is 0.",
+    "CLIs": [
+        "route-tag <tag>",
+        "route-tag disable",
+        "undo route-tag"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tag",
+            "Info": "Specifies the VPN route tag.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "disable",
+            "Info": "Indicates that the VPN route tag is not used to detect loops.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance huawei",
+            "[*HUAWEI-vpn-instance-huawei] ipv4-family",
+            "[*HUAWEI-vpn-instance-huawei-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-huawei] quit",
+            "[*HUAWEI] ospf 100 vpn-instance huawei",
+            "[*HUAWEI-ospf-100] route-tag 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe route-tag command can only be used in VPN scenarios to prevent loops on Type-5 and Type-7 LSAs when a CE is dual-homed to PEs.\nIn a networking where a CE is dual-homed to PEs, PE1 generates Type-5 and Type-7 LSAs based on the imported BGP routes and sends the LSAs to the CE. Then the CE sends the LSAs to PE2. Because OSPF routes have higher priorities over BGP routes, PE2 replaces BGP routes with OSPF routes, causing loops. After the route-tag command is run, if the tag values of the PE and an LSA are the same, the PE will neglect the LSA and a loop is prevented.\nPrecautions\nConfiguring the same VPN route tag on the PEs within the same area is recommended.Different OSPF processes can be configured with the same VPN route tag.\nThe priority of VPN route tags varies with the command.\nThe priority of the VPN route tag configured using the import-route command is the highest.The priority of the VPN route tag configured using the route-tag command is medium.The priority of the VPN route tag configured using the default tag command is the lowest."
+}

@@ -1,0 +1,42 @@
+{
+    "PageTitle": "trust upstream remote",
+    "FuncDef": "The trust upstream remote command binds a DS domain to an interface to support BA classification and modify the priorities of IP packets and MPLS packets.\nThe undo trust upstream remote command unbinds a DS domain from an interface.\nBy default, no DS domain is bound to an interface.",
+    "CLIs": [
+        "trust upstream { 5p3d | <ds-domain-name> | default } inbound remote",
+        "undo trust upstream [ 5p3d | <ds-domain-name> | default ] inbound remote"
+    ],
+    "ParentView": [
+        "Port extension sub-interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "5p3d",
+            "Info": "Specifies the 5p3d DS domain, which is predefined in the system.\n-"
+        },
+        {
+            "Parameters": "ds-domain-name",
+            "Info": "Specifies the name of a DS domain. A DS domain consists of a group of connected DS nodes that provide the same service policy and implement the same PHB set.\nThe value is a string of 1 to 48 case-sensitive characters."
+        },
+        {
+            "Parameters": "default",
+            "Info": "Specifies the default DS domain, which is predefined in the system.\n-"
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies the inbound direction of an interface which the DS domain is bound.\n-"
+        },
+        {
+            "Parameters": "remote",
+            "Info": "Delivers BA classification on the interface  of the master device to AP devices.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet2000/3/0/0",
+            "[*HUAWEI-GigabitEthernet2000/3/0/0] trust upstream default inbound remote"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nExternal interfaces of APs function as inbound interfaces of traffic. To ensure that different queues are scheduled based on priorities, BA classification for AP devices is enabled on the interface of the master device.\nThe local BA classification configurations (not carrying the remote keyword) on the interface of the master device can coexist with the BA classification configurations (carrying the remote keyword) to be delivered to AP devices.\nIf remote is not configured, the local BA classification configurations on the master device are deleted.\nIf the undo trust upstream inbound remote command is run, the BA classification configurations to be delivered to AP devices are deleted.\nPrecautions\nThis command takes effect only for untagged packets after being configured on a Layer 2 interface configured with the port vlan-stacking ce-default-vlan stack-vlan command. This command can be delivered but does not take effect after being configured on a Layer 2 interface configured with the port vlan-stacking vlan command. This command is not supported on any other Layer 2 interface."
+}

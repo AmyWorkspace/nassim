@@ -1,0 +1,34 @@
+{
+    "PageTitle": "register-policy",
+    "FuncDef": "The register-policy command configures a policy used by a rendezvous point (RP) to filter Register messages.\nThe undo register-policy command restores the default configuration.\nBy default, no Register message filter policy is configured.",
+    "CLIs": [
+        "register-policy { <advanced-acl-number> | acl-name <acl-name> }",
+        "undo register-policy"
+    ],
+    "ParentView": [
+        "VPN instance PIM view",
+        "PIM view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "advanced-acl-number",
+            "Info": "Specifies the number of an advanced ACL.\nThe value is an integer ranging from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named advanced ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 3000",
+            "[*HUAWEI-acl4-advance-3000] rule permit ip source 10.10.0.0 0.0.255.255 destination 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-advance-3000] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] register-policy 3000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo prevent Register message attacks, run the register-policy command to enable a Router to permit or deny specific Register messages.\nThe register-policy command takes effect only for subsequently received Register messages. That is, the multicast entries that have been registered successfully are not deleted and can still be used for multicast data forwarding.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nConfiguration Impact\nIf the register-policy command is run more than once, the latest configuration overrides the previous one.\nIf the (S, G) information contained in a Register message is denied by ACL rules or if no ACL action is configured for the (S, G) information, the RP discards the Register message and does not register the multicast source indicated by the (S, G) information.\nThe RP accepts only Register messages permitted by ACL rules. If a specified ACL does not exist, the RP discards all Register messages and does not register any multicast sources."
+}

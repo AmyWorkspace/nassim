@@ -1,0 +1,57 @@
+{
+    "PageTitle": "pw-tag",
+    "FuncDef": "The pw-tag command configures a PW-tag action so that a sub-interface changes the P-Tag of packets before forwarding the packets over a PW in tagged mode.\nThe undo pw-tag command deletes a PW-tag action.\nBy default, a sub-interface does not change the P-Tag of packets before forwarding the packets over a PW in tagged mode.",
+    "CLIs": [
+        "pw-tag { <vlan-id> | inner-vlan | outer-vlan } [ 8021p { <8021p-value> | inner-vlan | outer-vlan } ]",
+        "undo pw-tag [ { <vlan-id> | inner-vlan | outer-vlan } [ 8021p { <8021p-value> | inner-vlan | outer-vlan } ] ]"
+    ],
+    "ParentView": [
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id",
+            "Info": "Specifies the VLAN ID in the new P-Tag of packets to be forwarded over a PW in tagged mode.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "inner-vlan",
+            "Info": "Indicates that a sub-interface changes the P-Tag to the inner VLAN tag carried in packets before forwarding the packets over a PW in tagged mode.This parameter can be configured only on a sub-interface for QinQ VLAN tag termination.\n-"
+        },
+        {
+            "Parameters": "inner-vlan",
+            "Info": "Indicates that a sub-interface changes the 802.1p priority of the P-Tag to that of the inner VLAN tag in packets before forwarding the packets over a PW in tagged mode.\n-"
+        },
+        {
+            "Parameters": "outer-vlan",
+            "Info": "Indicates that a sub-interface changes the P-Tag to the outer VLAN tag carried in packets before forwarding the packets over a PW in tagged mode.\n-"
+        },
+        {
+            "Parameters": "outer-vlan",
+            "Info": "Indicates that a sub-interface changes the 802.1p priority of the P-Tag to that of the outer VLAN tag in packets before forwarding the packets over a PW in tagged mode.\n-"
+        },
+        {
+            "Parameters": "8021p",
+            "Info": "Specifies the 802.1p field of packets which is need to map to the internal priorities.\n-"
+        },
+        {
+            "Parameters": "8021p-value",
+            "Info": "Specifies the new 802.1p priority of packets to be forwarded over a PW in tagged mode. A larger value indicates a higher priority.\n802.1p is represented by a 3-bit PRI (priority) field in an 802.1Q frame. If traffic is congested on a device, the device forwards high-priority frames first.8021pval: specifies the new 802.1p priority.\nThe value  is an integer ranging from 0 to 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] control-vid 1 qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] qinq termination pe-vid 1000 ce-vid 100 to 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] pw-tag 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a sub-interface accesses the L2VPN scenario, the packet encapsulation mode of the PW is tagged. Run this command on the user-side sub-interface to change the P-Tag when the packet enters the PW tunnel.\nPrerequisites\nThe pw-tag command applies only to dot1q sub-interfaces, dot1q and QinQ VLAN tag termination sub-interfaces, QinQ stacking sub-interfaces, QinQ mapping sub-interfaces. One of the following configurations has been completed on the sub-interface:\nA dot1q sub-interface has been configured using the vlan-type dot1q command.A sub-interface for dot1q VLAN tag termination has been configured using the dot1q termination vid command.A sub-interface for QinQ VLAN tag termination has been configured using the qinq termination pe-vid ce-vid command.A QinQ stacking sub-interface has been configured using the qinq stacking vid command.A 1 to 1 QinQ mapping sub-interface has been configured using the qinq mapping vid map-vlan vid command.\n\nConfiguration Impact\nThe default P-Tag values and the P-Tag values after the PW-tag action as follows:\nDot1q sub-interface and Sub-interface for dot1q VLAN tag termination : the default P-Tag value are VLAN ID in a packet,the P-Tag value after the PW-Tag action are new VLAN ID.Sub-interface for QinQ VLAN tag termination : the default P-Tag value is outer VLAN ID in a packet,the P-Tag value after the PW-Tag action is new VLAN ID.QinQ stacking sub-interface : the default P-Tag value is minimum VLAN ID in the VLAN ID range specified on the sub-interface,the P-Tag value after the PW-Tag action is new VLAN ID.QinQ stacking sub-interface : the default P-Tag value is fixed VLAN ID in the system,the P-Tag value after the PW-Tag action is new VLAN ID.\n\nPrecautions\nThe pw-tag command applies only to scenarios in which users access an L2VPN through a sub-interface and the PW on the L2VPN is in tagged mode. If the PW is in raw mode, this command does not take effect.\nThe pw-tag command cannot be configured together with IGMP snooping, DHCP snooping, and CCC local connection services."
+}

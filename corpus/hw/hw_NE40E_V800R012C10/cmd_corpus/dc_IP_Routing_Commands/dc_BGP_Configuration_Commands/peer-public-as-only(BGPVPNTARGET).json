@@ -1,0 +1,28 @@
+{
+    "PageTitle": "peer public-as-only (BGP-VPN-Target address family view)",
+    "FuncDef": "The peer public-as-only command configures the AS-Path attribute in a BGP Update message not to carry the private AS number. Only the public AS number is contained in the update messages.\nThe undo peer public-as-only command allows the AS-Path attribute in a BGP Update message to carry the private AS number.\nBy default, the AS-Path attribute in a BGP Update message is allowed to carry private AS numbers.",
+    "CLIs": [
+        "peer <ipv4-address> public-as-only",
+        "undo peer <ipv4-address> public-as-only"
+    ],
+    "ParentView": [
+        "BGP-VPN-target address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nIt is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.2.2.2 as-number 200",
+            "[*HUAWEI-bgp] ipv4-family vpn-target",
+            "[*HUAWEI-bgp-af-vpn-target] peer 10.2.2.2 enable",
+            "[*HUAWEI-bgp-af-vpn-target] peer 10.2.2.2 public-as-only"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn general, AS numbers range from 1 to 4294967295. The public AS numbers range from 1 to 64511, and 65536 (1.0 in the format of x.y) to 4294967295 (65535.65535 in the format of x.y), and private AS numbers range from 64512 to 65534, and 65535 is reserved for certain circumstances.\nIf the 4-byte private AS number function is enabled using the private-4-byte-as enable command, private AS numbers range from 64512 to 65534 and from 4200000000 to 4294967294 (64086.59904 to 65535.65534 in the format of x.y).\nPublic AS numbers can be used on the Internet. Private AS numbers cannot be advertised to the Internet, and they are used only within ASs. If private AS numbers are advertised to the Internet, a routing loop may occur. After this command is configured, if the AS path attribute contains only private AS numbers, BGP deletes the private AS numbers and then advertises these update routes.\nConfiguration Impact\nIf the peer public-as-only command is run for a peer group, the peers of the peer group inherit the configuration."
+}

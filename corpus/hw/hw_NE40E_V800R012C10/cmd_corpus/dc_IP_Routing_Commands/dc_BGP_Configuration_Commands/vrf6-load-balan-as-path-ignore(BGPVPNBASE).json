@@ -1,0 +1,35 @@
+{
+    "PageTitle": "load-balancing (BGP-VPN instance IPv6 address family view)",
+    "FuncDef": "The load-balancing as-path-ignore command prevents a router from comparing the AS_Path attributes of routes when selecting routes for load balancing.\nThe undo load-balancing as-path-ignore command cancels the configuration.\nThe load-balancing as-path-relax command configures a device to ignore comparing the AS_Path attributes of the same length when selecting routes for load balancing.\nThe undo load-balancing as-path-relax command cancels the configuration.\nBy default, a router compares the AS-Path attributes of routes when selecting routes for load balancing.",
+    "CLIs": [
+        "load-balancing { as-path-ignore | as-path-relax }",
+        "undo load-balancing { as-path-ignore | as-path-relax }"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] load-balancing as-path-relax"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] load-balancing as-path-ignore"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the load-balancing as-path-ignore command is run, a router does not compare the AS-Path attributes of routes (including the AS_Path length and content) when selecting routes for load balancing. Exercise caution when using the command because the execution of this command will change the conditions of load balancing.\nWhen selecting routes for load balancing, BGP processes the AS_Path attributes as follows:\nRequires that the routes for load balancing have the same AS_Path attribute.Ignores comparing the AS_Path attributes if the load-balancing as-path-ignore command is run. If the command is run, it is not required that the routes for load balancing have the same AS_Path attribute.Ignores comparing the AS_Path attributes of the same length if the load-balancing as-path-relax command is run. After this command is run, routes cannot participate in load balancing if their AS_Path attributes are of different lengths. For example, the AS_Path attribute of route A is 10, and the AS_Path attribute of route B is 10, 20. Because the two AS_Path attributes are of different lengths, the two routes cannot participate in load balancing.\nThe load-balancing as-path-relax command mainly applies to BGP route load balancing scenarios. Exercise caution when using the command because the execution of this command will change the conditions of load balancing.\n\nPrecautions\nThe load-balancing as-path-ignore command and the bestroute as-path-ignore command are mutually exclusive.\nIf both the load-balancing as-path-relax and load-balancing as-path-ignore commands are run, the latest configuration overrides the previous one.\nIf the peer load-balancing command without as-path-ignore or as-path-relax specified and the load-balancing as-path-ignore or load-balancing as-path-relax command are run, the load-balancing as-path-ignore or load-balancing as-path-relax command takes effect. If the peer load-balancing command with as-path-ignore or as-path-relax specified and the load-balancing as-path-ignore or load-balancing as-path-relax command are run, the peer load-balancing command takes effect."
+}

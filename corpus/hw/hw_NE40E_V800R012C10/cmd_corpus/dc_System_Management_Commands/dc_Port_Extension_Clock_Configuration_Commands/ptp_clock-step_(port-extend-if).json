@@ -1,0 +1,33 @@
+{
+    "PageTitle": "ptp clock-step (port extension interface view)",
+    "FuncDef": "The ptp clock-step command configures a timestamping mode on a 1588v2 device.\nThe undo ptp clock-step command restores the default timestamping mode.\nThe one-step timestamping mode is enabled by default.",
+    "CLIs": [
+        "ptp clock-step { one-step | two-step }",
+        "undo ptp clock-step"
+    ],
+    "ParentView": [
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "one-step",
+            "Info": "Enables the one-step timestamping mode. A Sync message in Delay mode and a PDelay_Resp message in PDelay mode are stamped with the time when these messages are sent.\n-"
+        },
+        {
+            "Parameters": "two-step",
+            "Info": "Enables the two-step timestamping mode. A Sync message in Delay mode and a PDelay_Resp message in PDelay mode only record the time when they are generated, but carry no timestamps. A Follow_Up message is stamped with the time when the Sync message was sent, and a PDelay_Resp_Follow_Up message is stamped with the time when the PDelay_Resp message was sent.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ap-id 1000",
+            "[~HUAWEI-ap1000] remote-interface GigabitEthernet1/0/0",
+            "[*HUAWEI-ap1000] commit",
+            "[~HUAWEI-ap1000] quit",
+            "[~HUAWEI] interface GigabitEthernet 1000/1/0/0",
+            "[~HUAWEI-GigabitEthernet1000/1/0/0] ptp clock-step two-step"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTwo devices exchange Announce packets to determine the master/slave relationship. The master device sends Sync packets to notify the slave device of time signal parameters and uses a delay measurement mechanism to achieve time signals accuracy.\n1588v2 adds timestamps into packets to record the time when these packets are sent. 1588v2 uses timestamps to adjust clock signals and implement clock synchronization.\nPrecautions\nThe device supports the one-step mode by default. The device that uses the one-step mode can identify Follow_Up messages sent by another device that uses the two-step mode.\n1588v2 interfaces that support different timestamping modes can communicate with each other."
+}

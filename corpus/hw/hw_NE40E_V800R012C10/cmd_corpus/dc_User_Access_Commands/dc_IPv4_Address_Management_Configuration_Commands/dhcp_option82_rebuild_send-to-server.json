@@ -1,0 +1,44 @@
+{
+    "PageTitle": "dhcp option82 rebuild send-to-server",
+    "FuncDef": "The dhcp option82 rebuild send-to-server command enables a device to encapsulate the Option 82 attribute into a message to be sent to the DHCP server based on the fixed OSP format. In this format, self-defined character strings can be encapsulated into the Option 82 attribute.\nThe undo dhcp option82 rebuild send-to-server command disables the function.\nBy default, the device is disabled from encapsulating the Option 82 attribute into a message to be sent to the DHCP server based on the fixed OSP format.",
+    "CLIs": [
+        "dhcp option82 rebuild self-define { circuit-id <circuit-id-value> | out-vlan <out-vlan-value> | inner-vlan <inner-vlan-value> | remote-id <remote-id-value> } * send-to-server",
+        "undo dhcp option82 rebuild self-define { circuit-id [ <circuit-id-value> ] | out-vlan [ <out-vlan-value> ] | inner-vlan [ <inner-vlan-value> ] | remote-id [ <remote-id-value> ] } * send-to-server",
+        "undo dhcp option82 rebuild all send-to-server"
+    ],
+    "ParentView": [
+        "BAS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "circuit-id circuit-id-value",
+            "Info": "Specifies a user-defined circuit ID, which carries access location information.\nThe value is a string of 1 to 64 characters."
+        },
+        {
+            "Parameters": "out-vlan out-vlan-value",
+            "Info": "Specifies the outer VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "inner-vlan inner-vlan-value",
+            "Info": "Specifies the inner VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "remote-id remote-id-value",
+            "Info": "Specifies a user-defined remote ID, which identifies a remote host.\nThe value is a string of 1 to 64 characters."
+        },
+        {
+            "Parameters": "self-define",
+            "Info": "Specifes a user-defined format.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI] commit",
+            "[~HUAWEI-interface GigabitEthernet1/0/1.1] bas",
+            "[~HUAWEI-interface GigabitEthernet1/0/1.1-bas] dhcp option82 rebuild self-define circuit-id huawei out-vlan 200 inner-vlan 100 remote-id huawei send-to-server"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen IP addresses are assigned from a remote address pool to Layer 2 access users, the DHCP server identifies a carrier based on the remote ID carried in the Option 82 attribute of a DHCP message. To allow a device to insert Sub-option 2 (remote ID) into the Option 82 attribute or replace Sub-option 2 carried in the Option 82 attribute of a message to be sent to the DHCP server based on the fixed OSP format, run the dhcp option82 rebuild send-to-server command. Self-defined character strings can be encapsulated into Sub-option 2. In actual applications, you can also run this command to define other sub-attributes of the Option 82 attribute.\nPrerequisites\nDHCP proxy has been enabled on the BAS interface.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf the dhcp option82 rebuild version3 send-to-server command has been run, running the undo dhcp option82 rebuild all send-to-server command can cancel the configuration of the former command.The dhcp option82 rebuild send-to-server and dhcp option82 rebuild version3 send-to-server commands are mutually exclusive.The dhcp option82 rebuild send-to-server and ipoe-server multi-sessions per-mac enable commands are mutually exclusive."
+}

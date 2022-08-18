@@ -1,0 +1,57 @@
+{
+    "PageTitle": "igmp-snooping proxy-uplink-port (Layer 2 sub-interface view)",
+    "FuncDef": "The igmp-snooping proxy-uplink-port command configures an interface as an IGMP snooping proxy uplink interface. No IGMP Query message can be sent to this interface.\nThe undo igmp-snooping proxy-uplink-port command cancels the configuration.\nBy default, no IGMP snooping proxy uplink interface exists in a VLAN/VSI/BD.",
+    "CLIs": [
+        "igmp-snooping proxy-uplink-port dot1q vid <vidValue>",
+        "igmp-snooping proxy-uplink-port qinq pe-vid <pe-vidValue> ce-vid <ce-vidValue>"
+    ],
+    "ParentView": [
+        "Layer 2 sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "400GE Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "qinq",
+            "Info": "Specifies an outer ID for a QinQ termination sub-interface.\n-"
+        },
+        {
+            "Parameters": "pe-vid pe-vidValue",
+            "Info": "Specifies an outer ID for a QinQ termination sub-interface.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid ce-vidValue",
+            "Info": "Specifies an inner ID for a QinQ termination sub-interface.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "dot1q",
+            "Info": "Specifies an ID for a Dot1q termination sub-interface.\n-"
+        },
+        {
+            "Parameters": "vid vidValue",
+            "Info": "Specifies an ID for a Dot1q termination sub-interface.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] interface GigabitEthernet1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] igmp-snooping proxy-uplink-port vlan 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] bridge-domain 5",
+            "[*HUAWEI-bd5] quit",
+            "[*HUAWEI] interface ethernet3/0/1.1 mode l2",
+            "[*HUAWEI] encapsulation dot1q vid 1",
+            "[*HUAWEI-Ethernet3/0/1.1] rewrite pop single",
+            "[*HUAWEI-Ethernet3/0/1.1] bridge-domain 5",
+            "[*HUAWEI-Ethernet3/0/1.1] igmp-snooping proxy-uplink-port dot1q vid 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the IGMP snooping proxy or querier function is enabled on a Layer 2 device, the Layer 2 device broadcasts IGMP Query messages to all interfaces (including router interfaces) in a VLAN/VSI/BD periodically, which may trigger IGMP querier reelection. To prevent IGMP querier reelection, run the igmp-snooping proxy-uplink-port command on the router interface to disable the Layer 2 device from sending IGMP Query messages to the router interface in a VLAN/VSI/BD.\nPrerequisites\nIGMP snooping proxy has been enabled using the igmp-snooping proxy in the VLAN/VSI/BD view, or IGMP snooping querier has been enabled using the igmp-snooping querier enable command in the VLAN/VSI/BD view.\nPrecautions\nOnly one IGMP snooping proxy unlink interface can be configured in a VLAN/VSI/BD.\nThe igmp-snooping proxy-uplink-port command is only used on an uplink interface; therefore, the specified VLAN cannot be a user VLAN of a multicast VLAN.\nFor a VSI, the igmp-snooping proxy-uplink-port command can be only used on a VSI in LDP mode or the leaf node of a VSI in BGPAD mode."
+}

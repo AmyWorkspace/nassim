@@ -1,0 +1,75 @@
+{
+    "PageTitle": "reset bgp instance vpnv4 flap-info",
+    "FuncDef": "The reset bgp instance vpnv4 flap-info command clears route flapping statistics.",
+    "CLIs": [
+        "reset bgp instance <instance-name> vpnv4 <peerIpv4Addr> flap-info",
+        "reset bgp instance <instance-name> vpnv4 flap-info",
+        "reset bgp instance <instance-name> vpnv4 flap-info as-path-filter { <as-path-filter-number> | <as-path-filter-name> }",
+        "reset bgp instance <instance-name> vpnv4 flap-info regexp <as-path-regexp>",
+        "reset bgp instance <instance-name> vpnv4 flap-info <ipv4-address> [ <mask> | <mask-length> ]"
+    ],
+    "ParentView": [
+        "User view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpnv4",
+            "Info": "Clears the route flapping statistics for BGP VPNv4 routes.\n-"
+        },
+        {
+            "Parameters": "peerIpv4Addr",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is an IPv4 address, in dotted decimal notation."
+        },
+        {
+            "Parameters": "instance instance-name",
+            "Info": "Specifies a BGP multi-instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "as-path-filter as-path-filter-name",
+            "Info": "Clears route flapping statistics based on a specified AS_Path filter.\nThe value is a string of 1 to 51 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "as-path-filter as-path-filter-number",
+            "Info": "Clears route flapping statistics based on a specified AS_Path filter.\nIt is an integer that ranges from 1 to 256."
+        },
+        {
+            "Parameters": "regexp as-path-regexp",
+            "Info": "Clears statistics about the flapping routes that match the AS_Path regular expression.\nThe value is a string of 1 to 80 case-sensitive characters, spaces supported."
+        },
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the network address of an IPv4 peer.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the network mask that is used to filter the BGP IPv4 routes. If neither of the mask nor mask length is specified, the address is considered as a classful address.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the network mask length that is used to filter the BGP IPv4 routes. If neither of the mask nor mask length is specified, the address is considered as a classful address.\nThe value is an integer that ranges from 0 to 32."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip as-path-filter 10 permit 1",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-instance-a-af-vpnv4] dampening",
+            "[*HUAWEI-bgp-instance-a-af-vpnv4] commit",
+            "[~HUAWEI-bgp-instance-a-af-vpnv4] return",
+            "<HUAWEI> reset bgp instance a vpnv4 flap-info as-path-filter 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-instance-a-af-vpnv4] dampening",
+            "[*HUAWEI-bgp-instance-a-af-vpnv4] commit",
+            "[~HUAWEI-bgp-instance-a-af-vpnv4] return",
+            "<HUAWEI> reset bgp instance a vpnv4 flap-info"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe process of adding a route to and then deleting the route from a routing table is called route flapping.\nWhen route flapping occurs, the routing protocol sends Update packets to neighbors. The neighbors that receive the Update packets need to recalculate routes and modify its routing table. Therefore, frequent route flapping consumes great bandwidth and CPU resources and even seriously affects network operations.\nThe reset bgp flap-info command is used to clear the flapping information about routes. This allows the Router to re-collect statistics about flapping routes and helps to monitor route changes and locate network problems.\nPrerequisites\nYou can use display bgp routing-table flap-info command to view the information about BGP route flapping.\nIf there are a large number of flapping routes, define an AS_Path filter or an AS_Path regular expression to be referenced in the reset bgp flap-info command. The flapping statistics of the routes matching the AS_Path filter or the AS_Path regular expression are then cleared.\nConfiguration Impact\nAfter the reset bgp flap-info command is run, the flapping statistics of routes are reset and cannot be displayed.\nFollow-up Procedure\nAfter the flapping statistics of routes are cleared, run the display bgp routing-table flap-info command again to display the flapping statistics about BGP routes in order to locate problems."
+}

@@ -1,0 +1,28 @@
+{
+    "PageTitle": "loopback-detect block",
+    "FuncDef": "The loopback-detect block command sets the delay time of the interface recovery after the self-loop on the interface is eliminated.\nThe undo loopback-detect block command restores the default delay time of the interface recovery after the self-loop on the interface is eliminated.\nBy default, the interface recovers 10 seconds later after the self-loop on the interface is eliminated.",
+    "CLIs": [
+        "loopback-detect block <block-time>",
+        "undo loopback-detect block"
+    ],
+    "ParentView": [
+        "Eth-Trunk member interface view",
+        "GE electrical interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "block-time",
+            "Info": "Specifies the delay time of the interface recovery.\nThe value is an integer that ranges from 5 to 255. The default value is 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] loopback-detect enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] loopback-detect block 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen detecting a loopback fault on a network, the device blocks the related ports to prevent a broadcast storm.\nWhen the device on a network detects a port loopback fault, it blocks its port. Then, only some packets (such as detection packets) can be sent upstream to the CPU through the port and other packets cannot be transmitted or forwarded through the port. When the loopback fault is rectified, it takes the port a certain period of time to cancel the block (when the network is stable), preventing unstable port status.\nAfter the loopback-detect command is run, the device sends special detection packets whose Ethernet type is 0x9998. In the packets, the destination MAC address is the interface's MAC address and the source MAC address is the interface's MAC address. If a port receives detection packets from itself, there may be a loopback fault and the port blocks itself while reporting an alarm. If the port does not receive the detection packets after the delay time elapses, the loopback fault has been rectified and the port automatically cancels the block. By default, 10s is required to cancel the block after the port does not receive detection packets. The delay time can be specified by running the loopback-detect block command.\nPrerequisites\nBefore configuring the loopback-detect block command, you must configure the loopback-detect enable command."
+}

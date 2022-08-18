@@ -1,0 +1,33 @@
+{
+    "PageTitle": "dot1q vid",
+    "FuncDef": "The dot1q vid command specifies the VLAN ID for packets on a sub-interface for dot1q VLAN tag termination, to which a BFD session is bound.\nThe undo dot1q command deletes the VLAN ID specified for packets on a sub-interface for dot1q VLAN tag termination, to which a BFD session is bound.\nBy default, no VLAN ID is specified.",
+    "CLIs": [
+        "dot1q vid <vid>",
+        "undo dot1q"
+    ],
+    "ParentView": [
+        "BFD session view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vid vid",
+            "Info": "Specifies the VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] encapsulation dot1q-termination",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] dot1q termination vid 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd test bind peer-ip default-ip interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-bfd-session-test] discriminator local 3",
+            "[*HUAWEI-bfd-session-test] discriminator remote 4",
+            "[*HUAWEI-bfd-session-test] dot1q vid 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDuring the configuration of a BFD session, after the BFD session bound to a sub-interface for dot1q VLAN tag termination, the dot1q command can be run to specify a VLAN ID to ensure that packets are sent over the correct VLAN.\nPrerequisites\nBefore using the dot1q command,\nThe control-vid command must be run on the sub-interface for dot1q VLAN tag termination, to which the BFD session is bound. Otherwise, the dot1q command will fail to be configured.Run the dot1q termination vid command on the sub-interface for dot1q VLAN tag termination, to which the BFD session is bound. Otherwise, the dot1q command will fail to take effect after being configured.\nThe dot1q command is applicable to the sub-interface for dot1q VLAN tag termination, to which the multicast BFD session is bound. This requires that the bfd bind peer-ip default-ip command be run during the establishment of the BFD session."
+}

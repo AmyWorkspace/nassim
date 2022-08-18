@@ -1,0 +1,52 @@
+{
+    "PageTitle": "isis timer holding-multiplier (interface view)",
+    "FuncDef": "The isis timer holding-multiplier command sets the IS-IS holdtime to be a multiple of the interval at which Hello packets are sent.\nThe undo isis timer holding-multiplier command restores the default value.\nBy default, the holdtime is three times the interval at which Hello packets are sent.",
+    "CLIs": [
+        "isis timer holding-multiplier <number> [ level-1 | level-2 ]",
+        "undo isis timer holding-multiplier [ <number> ] [ level-1 | level-2 ]"
+    ],
+    "ParentView": [
+        "VBDIF interface view",
+        "FlexE interface view",
+        "Cellular channel interface view",
+        "40GE interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "number",
+            "Info": "Specifies the IS-IS holdtime to be a multiple of the interval at which Hello packets are sent.\nThe value is an integer ranging from 3 to 1000."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Specifies the holdtime of a Level-1 neighbor.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Specifies the holdtime of a Level-2 neighbor.\nIf neither Level-1 nor Level-2 is specified, the default level is Level-1 and Level-2.\nlevel-1 and level-2 can be configured only on IS-IS broadcast interfaces.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis timer holding-multiplier 6 level-2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDevices at both ends of a link establish a neighbor relationship by sending Hello packets to each other. After the neighbor relationship is established, both devices need to send Hello packets at a specified interval to maintain the neighbor relationship. If a device does not receive any Hello packet from its neighbor within a specified period of time, the device considers the neighbor Down. The specified time period is known as the neighbor holdtime.\nFor example, the isis timer hello 20 command is run on a local device to set the interval at which Hello packets are sent to 20s. Then, the isis timer holding-multiplier 4 command is run. The holdtime is 80s (four times the interval at which Hello packets are sent). If the interval at which Hello packets are sent is changed using the isis timer hello command, the holdtime will be changed accordingly.\nOn broadcast networks, the DIS neighbor holdtime equals the interval at which Hello packets are sent multiplied by number, and non-DIS neighbor holdtime is one third of the DIS neighbor holdtime.\nConfiguration Impact\nIf the value of number is set too large, the local device needs to wait a long time before detecting its neighbor Down, which slows down IS-IS route convergence. If the value of number is set too small, the neighbor relationship will alternate between Up and Down when some Hello packets are lost due to transmission delays and errors on the network. This causes route flapping on the IS-IS network. Setting the same interval at which Hello packets are sent and the same neighbor holdtime for all devices on the IS-IS network is recommended so that all devices detect link failures at the same time.\nPrecautions\nIf a broadcast interface is emulated as a P2P interface using the isis circuit-type command or a P2P interface is restored to a broadcast interface using the undo isis circuit-type command, the number of Hello packets that IS-IS does not receive from a neighbor before the neighbor is declared Down is restored to the default value.\nIf conservative is specified in the isis timer hello command and the holdtime of the IS-IS neighbor relationship is less than 20s, the IS-IS neighbor relationship is disconnected when the hold time elapses. If conservative is not specified in the isis timer hello command and the holdtime of the IS-IS neighbor relationship is less than 20s, the IS-IS neighbor relationship is disconnected when the period of the hold time and a delay elapses."
+}

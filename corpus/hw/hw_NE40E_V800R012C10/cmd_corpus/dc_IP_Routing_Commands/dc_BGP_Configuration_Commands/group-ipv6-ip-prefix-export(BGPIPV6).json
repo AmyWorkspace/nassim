@@ -1,0 +1,37 @@
+{
+    "PageTitle": "peer ipv6-prefix export (BGP-IPv6 unicast address family view) (group)",
+    "FuncDef": "The peer ipv6-prefix export command configures a policy based on an IPv6 prefix list for filtering BGP routes to be advertised to a specified peer group.\nThe undo peer ipv6-prefix export command cancels this configuration.\nBy default, no route filtering policy based on an IP address prefix list is configured for a peer group.",
+    "CLIs": [
+        "peer <group-name> ipv6-prefix <ipv6-prefix-name> export",
+        "undo peer <group-name> ipv6-prefix [ <ipv6-prefix-name> ] export"
+    ],
+    "ParentView": [
+        "BGP-IPv6 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ipv6-prefix ipv6-prefix-name",
+            "Info": "Indicates the filtering policy that is based on the IPv6 prefix list of the peer group.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "export",
+            "Info": "Applies a filtering policy to the routes to be advertised to a peer group.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ipv6-prefix list1 permit 2001:DB8:1::1 8 greater-equal 17 less-equal 18",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group test external",
+            "[*HUAWEI-bgp] peer test as-number 200",
+            "[*HUAWEI-bgp] ipv6-family unicast",
+            "[*HUAWEI-bgp-af-ipv6] peer test ipv6-prefix list1 export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer ipv6-prefix export command can be used to configure a route filtering policy that is based on an IPv6 prefix list to filter routes to be advertised, implementing route control.\nPrerequisites\nIf the peer ipv6-prefix command specifies an IPv6 prefix list that does not exist for a peer group, use the ip ipv6-prefix command to create an IPv6 prefix list.\nConfiguration Impact\nIf an IPv6 prefix list is specified for a peer group, all the members of the peer group inherit the configuration.\nAfter an IPv6 prefix list is specified for a peer group, the peers in the peer group filter the routes to be advertised to other peers based on the IPv6 prefix list. Only the routes that pass the filtering of the IPv6 prefix list can be advertised.\nPrecautions\nThe peer ipv6-prefix export command is mutually exclusive with the peer route-filter export commands."
+}

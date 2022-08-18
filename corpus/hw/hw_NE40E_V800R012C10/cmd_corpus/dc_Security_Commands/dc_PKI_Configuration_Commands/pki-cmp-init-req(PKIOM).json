@@ -1,0 +1,39 @@
+{
+    "PageTitle": "pki cmp initial-request",
+    "FuncDef": "The pki cmp initial-request command configures a device to send an initiation request (IR) to a CMPv2 server based on CMP session information.",
+    "CLIs": [
+        "pki cmp initial-request"
+    ],
+    "ParentView": [
+        "PKI domain name configuration view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] rsa pki local-key-pair key-a create",
+            "Info: The name of the new RSA key will be:llj.",
+            "The range of public key size is (2048 ~ 4096).",
+            "NOTES: If the key modulus is greater than 2048,",
+            "       it will take a few minutes.",
+            "Input the bits in the modulus[default = 2048]:2048",
+            "Info: Operating, please wait for a moment.........done.",
+            "Info: Create RSA local-key-pair success.",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] pki entity entitya",
+            "[*HUAWEI-pki-entitya] common-name nameA",
+            "[*HUAWEI-pki-entitya] quit",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] pki domain domaina",
+            "[*HUAWEI-pki-domaina] pki cmp session session-a",
+            "[*HUAWEI-pki-domaina-pki-cmp-session-a] cmp request entity entitya",
+            "[*HUAWEI-pki-domaina-pki-cmp-session-a] cmp request rsa local-key-pair key-a regenerate",
+            "[*HUAWEI-pki-domaina-pki-cmp-session-a] cmp request ca-name \"/C=cn/ST=beijing/L=shangdi/O=BB/OU=BB/CN=AB\"",
+            "[*HUAWEI-pki-domaina-pki-cmp-session-a] cmp request server url http://172.16.73.168:8080",
+            "[*HUAWEI-pki-domaina-pki-cmp-session-a] cmp request authentication-cert cert-a.cer",
+            "[*HUAWEI-pki-domaina-pki-cmp-session-a] quit",
+            "[*HUAWEI-pki-domaina] pki cmp initial-request"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen other configurations need a certificate, you need to apply for the certificate first. For example, when configuring the IPSec of certificate authentication mode, you need to apply for the certificate first.\nConfiguration Impact\nThe system saves the obtained local and CA certificates as files to the CF card, not the memory. You must run the pki import-certificate command to import the certificates to the memory of the device.\nThe format of obtained local certificates by IR is session-name_ir.cer. session-name means session name of CMP.\nThe format of obtained CA certificates by IR is session-name_ca0.cer. session-name means session name of CMP.\nPrecautions\nAfter you run the pki cmp initial-request command, the system checks CMP session configurations to determine whether to apply for a certificate. If no, the system displays a prompt message. If yes, the system initiates an IR."
+}

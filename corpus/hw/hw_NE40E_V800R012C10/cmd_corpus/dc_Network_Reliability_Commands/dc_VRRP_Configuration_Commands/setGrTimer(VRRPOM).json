@@ -1,0 +1,24 @@
+{
+    "PageTitle": "vrrp smooth-switching timer",
+    "FuncDef": "The vrrp smooth-switching timer command enables smooth VRRP switching on a device and configures an interval carried in VRRP Advertisement packets during smooth VRRP switching.\nThe undo vrrp smooth-switching timer command disables smooth VRRP switching on a device.\nBy default, smooth VRRP switching is enabled on a device, and the interval carried in VRRP Advertisement packets is 100 seconds.",
+    "CLIs": [
+        "vrrp smooth-switching timer <timer-value>",
+        "undo vrrp smooth-switching timer"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "timer-value",
+            "Info": "Specifies an interval carried in VRRP Advertisement packets during smooth VRRP switching. After smooth VRRP switching is enabled on the master device, VRRP Advertisement packets are sent at the specified interval during a master/backup VRRP switchover.\nThe value is an integer ranging from 1 to 255, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vrrp smooth-switching timer 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the master device in a VRRP backup group performs a master/backup VRRP switchover, the master and backup devices may fail to communicate with each other during the switchover. During this period of time, the backup device with the highest priority becomes the new master device if backup devices receive no VRRP Advertisement packet after the interval at which VRRP Advertisement packets are sent expires. In this situation, two master devices coexist. After the original master device completes the master/backup VRRP switchover, it detects that it has a higher priority than the other master device, and therefore retains the Master state. The other master device switches back to the Backup state. During this process, the links between the VRRP backup group and user devices are switched twice, causing unstable service transmission.\nAfter smooth VRRP switching is enabled on a router, backup devices learn the smooth switching time and prolongs the timeout period for receiving VRRP Advertisement packets within the smooth switching time, ensuring the stability of the VRRP backup group status.\nPrerequisites\nThe function that learns the interval between sending VRRP Advertisement packets has been enabled using the vrrp timer-advertise learning enable command.\nPrecautions\nSetting an interval greater than the existing local interval is recommended. This prevents a backup device from incorrectly preempting the Master state when the master device is busy and delays the sending of a VRRP Advertisement packet during a master/backup VRRP switchover.The function that learns the interval at which VRRP Advertisement packets are sent must be enabled before this command is run. If the undo vrrp timer-advertise learning enable command is run to disable the function that learns the interval at which VRRP Advertisement packets are sent, smooth VRRP switching is also disabled."
+}

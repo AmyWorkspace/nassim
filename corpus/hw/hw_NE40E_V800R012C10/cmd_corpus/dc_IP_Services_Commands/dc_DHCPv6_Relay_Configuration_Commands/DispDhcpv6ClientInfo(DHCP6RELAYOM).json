@@ -1,0 +1,79 @@
+{
+    "PageTitle": "display dhcpv6 relay client-info",
+    "FuncDef": "The display dhcpv6 relay client-info command displays DHCPv6 client login failure and logout records on a DHCPv6 relay agent.",
+    "CLIs": [
+        "display dhcpv6 relay client-info { offline-record | online-fail-record } interface { <interface-name> | <interface-type> <interface-number> } [ pevlan <pevlan-id> [ <end-pevlan-id> ] [ cevlan <cevlan-id> [ <end-cevlan-id> ] ] ]",
+        "display dhcpv6 relay client-info { offline-record | online-fail-record } mac-address <mac-address-data>",
+        "display dhcpv6 relay client-info { offline-record | online-fail-record } client-duid <client-duid-data>",
+        "display dhcpv6 relay client-info { offline-record | online-fail-record }"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "offline-record",
+            "Info": "Displays DHCPv6 client logout records.\n-"
+        },
+        {
+            "Parameters": "online-fail-record",
+            "Info": "Displays DHCPv6 client login failure records.\n-"
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Displays DHCPv6 client login failure and logout records on a specified DHCPv6 relay interface.\n-"
+        },
+        {
+            "Parameters": "pevlan pevlan-id end-pevlan-id",
+            "Info": "Displays login failure and logout records of DHCPv6 clients that send packets with a specified outer VLAN ID.\npevlan-id specifies the start outer VLAN ID.end-pevlan-id specifies the end outer VLAN ID. end-pevlan-id must be greater than or equal to pevlan-id. pevlan-id and pevlan-id specify a VLAN range.If end-pevlan-id is not specified, only login failure and logout records of DHCPv6 clients that send packets with the outer VLAN ID specified by pevlan-id are displayed.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "cevlan cevlan-id end-cevlan-id",
+            "Info": "Displays login failure and logout records of DHCPv6 clients that send packets with a specified inner VLAN ID.\ncevlan-id specifies the start inner VLAN ID.end-cevlan-id specifies the end inner VLAN ID. end-cevlan-id must be greater than or equal to cevlan-id. end-cevlan-id and cevlan-id specify a VLAN range.If end-cevlan-id is not specified, only login failure and logout records of DHCPv6 clients that send packets with the inner VLAN ID specified by cevlan-id are displayed.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "mac-address mac-address-data",
+            "Info": "Displays login failure and logout records of the DHCPv6 client with a specified MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        },
+        {
+            "Parameters": "client-duid client-duid-data",
+            "Info": "Displays login failure and logout records of the DHCPv6 client with a specified DUID.\nThe value is a hexadecimal number that ranges from 1 to 260, excluding 0x."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display dhcpv6 relay client-info offline-record mac-address 0e0-fc00-0064",
+            "--------------------------------------------------------",
+            "Index                         : 67",
+            "Client DUID                   : 00030001000000000064",
+            "IA type                       : IA_NA",
+            "IA_ID                         : 100",
+            "Interface                     : Eth-Trunk1",
+            "PEVLAN/CEVLAN                 : 0/0",
+            "VPN instance                  : --",
+            "Client MAC address            : 00e0-fc00-0064",
+            "Client IPv6 address           : 2001:db8:1::1",
+            "  IA status                   : SEND_RELEASE",
+            "  Delete cause                : Client request",
+            "  Delete time                 : 2013-11-21 10:08:24",
+            "--------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display dhcpv6 relay client-info online-fail-record client-duid 00030001000000000006",
+            "--------------------------------------------------------",
+            "Index                         : 163",
+            "Client DUID                   : 00030001000000000006",
+            "IA type                       : IA_PD",
+            "IA_ID                         : 6",
+            "Interface                     : Eth-Trunk1",
+            "PEVLAN/CEVLAN                 : 0/0",
+            "VPN instance                  : --",
+            "Client MAC address            : 00e0-fc00-0006",
+            "Client IPv6 PD prefix         : --",
+            "  Online fail cause           : Up to interface or VLAN max session",
+            "  Online fail time            : 2013-11-21 06:03:11",
+            "--------------------------------------------------------"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo check DHCPv6 client login failure and logout records on a DHCPv6 relay agent, run the display dhcpv6 relay client-info command.\nIf an interface and a VLAN are specified, this command displays login failure and logout records of DHCPv6 clients that access from the specified interface and VLAN.If a MAC address is specified, this command displays login failure and logout records of the DHCPv6 client with the specified MAC address.If a DUID is specified, this command displays login failure and logout records of the DHCPv6 client with the specified DUID.If no parameter is specified, this command displays all DHCPv6 client login failure and logout records"
+}

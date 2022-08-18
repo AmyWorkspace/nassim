@@ -1,0 +1,52 @@
+{
+    "PageTitle": "isis timer ldp-sync hold-max-cost",
+    "FuncDef": "The isis timer ldp-sync hold-max-cost command sets the interval at which IS-IS sends LSPs to advertise the maximum cost.\nThe undo isis timer ldp-sync hold-max-cost command restores the default interval.\nBy default, IS-IS keeps sending LSPs to advertise the maximum cost of 16777214.",
+    "CLIs": [
+        "isis timer ldp-sync hold-max-cost <value>",
+        "isis timer ldp-sync hold-max-cost infinite",
+        "undo isis timer ldp-sync hold-max-cost"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "FlexE interface view",
+        "XGE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "value",
+            "Info": "Set the interval at which IS-IS sends LSPs to advertise the maximum cost.\nThe value is an integer ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "infinite",
+            "Info": "Indicates that IS-IS advertises the maximum cost all the time before an LDP session and an LDP adjacency are reestablished.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis ldp-sync",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis timer ldp-sync hold-max-cost 8"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe isis timer ldp-sync hold-max-cost command sets the interval at which IS-IS sends LSPs to advertise the maximum cost. When an LDP session or LDP adjacency on the primary LSP fails, traffic is switched to a backup LSP and transmitted along the backup LSP before the LDP session and LDP adjacency are reestablished for the primary LSP.\nSelect the parameters based on network requirements.\nIf IS-IS carries only LDP services, configure the infinite parameter so that the selected IS-IS routes are always the same as the LDP LSPs.If IS-IS carries multiple types of services, including LDP services, set the value parameter so that the teardown of LDP sessions does not affect IS-IS route selection or other services.If the current link works in Hold-max-cost suppression mode, the value of the hold-max-cost timer can be modified only after the timer expires and the current link re-enters the Hold-max-cost suppression mode.\n\nPrerequisites\nAn IS-IS process has been enabled using the isis enable command in the interface view.LDP and IS-IS synchronization has been enabled using the isis ldp-sync command in the interface view.\n\nConfiguration Impact\nIf the isis timer ldp-sync hold-max-cost command is run more than once, the latest configuration overrides the previous ones."
+}

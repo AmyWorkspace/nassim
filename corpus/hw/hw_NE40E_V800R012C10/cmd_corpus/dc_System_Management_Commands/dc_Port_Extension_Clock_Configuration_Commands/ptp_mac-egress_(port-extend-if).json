@@ -1,0 +1,37 @@
+{
+    "PageTitle": "ptp mac-egress (port extension interface view)",
+    "FuncDef": "The ptp udp-egress command configures the UDP encapsulation parameters for 1588v2 packets to be sent by an interface.\nThe undo ptp udp-egress destination-mac command restores the default MAC encapsulation mode.\nThe undo ptp udp-egress command restores the default UDP encapsulation settings.\nBy default, 1588v2 packets are encapsulated in UDP multicast mode.",
+    "CLIs": [
+        "ptp mac-egress { destination-mac <destination-mac> | vlan <vlan-id> [ priority <priority-value> ] }",
+        "undo ptp mac-egress { destination-mac | vlan [ priority ] }"
+    ],
+    "ParentView": [
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "destination-mac destination-mac",
+            "Info": "Specifies a destination MAC address for 1588v2 packets.\nThe value is in the format of H-H-H. Each H indicates one to four hexadecimal digits."
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies a virtual local area network (VLAN) ID for 1588v2 packets.\nSpecifies a virtual local area network (VLAN) ID for 1588v2 packets."
+        },
+        {
+            "Parameters": "priority priority-value",
+            "Info": "Specifies the VLAN priority value for 1588v2 packets. The value is an integer.\nSpecifies the VLAN priority value for 1588v2 packets. The value is an integer."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ap-id 1000",
+            "[~HUAWEI-ap1000] remote-interface GigabitEthernet1/0/0",
+            "[*HUAWEI-ap1000] commit",
+            "[~HUAWEI-ap1000] quit",
+            "[~HUAWEI] interface GigabitEthernet 1000/1/0/0",
+            "[~HUAWEI-GigabitEthernet1000/1/0/0] ptp udp-egress  source-ip 192.168.2.2 destination-ip 192.168.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can encapsulate 1588v2 messages into Layer 2 and Layer 3 packets and set the destination address and transmission priority.\nAn encapsulation mode depends on a specific link type:\nLayer 2 links: The ptp mac-egress command configures the MAC encapsulation mode.Layer 3 links: The undo ptp udp-egress command configures the UDP encapsulation mode.\nThe multicast MAC encapsulation mode is used by default.\nSpecify a destination IP address as needed.\nSpecify a destination IP address if unicast encapsulation mode is used.Use a default destination IP address if multicast UDP encapsulation is used.\n\nPrerequisites\nA delay measurement mechanism has been specified using the ptp delay-mechanism { delay | pdelay } command.\n1588v2 has been enabled on an interface using the ptp enable command.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe MAC encapsulation and UDP encapsulation modes are mutually exclusive. Before configuring UDP encapsulation, clear the configured MAC encapsulation mode.\nIf destination-mac and destination-ip are not specified, the multicast encapsulation mode is used.\n1588v2 services require a higher DSCP value and a higher priority value than other services. A high transmission priority minimizes the delay or congestion impact on clock signal recovery. Using the default highest DSCP value and priority value is recommended.\nAfter the undo ptp udp-egress source-ip command is run on an SMPTE-2059-2 interface, the PTP function is automatically disabled."
+}

@@ -1,0 +1,108 @@
+{
+    "PageTitle": "lldp tlv-enable (interface view)",
+    "FuncDef": "The lldp tlv-enable command configures time-length-values (TLVs) that can be advertised by an interface.\nThe undo lldp tlv-enable command configures TLVs that cannot be advertised by an interface.\nAn interface by default can advertise all TLVs except Protocol Identity TLVs.",
+    "CLIs": [
+        "lldp tlv-enable { { basic-tlv { all | management-address | port-description | system-capability | system-description | system-name } } | { dot1-tlv { all | port-vlan-id | protocol-identity | protocol-vlan-id [ <vlan-id> ] | vlan-name [ <vlan-id> ] } } | { dot3-tlv { all | link-aggregation | mac-physic | max-frame-size } } }",
+        "undo lldp tlv-enable { { basic-tlv { all | management-address | port-description | system-capability | system-description | system-name } } | { dot1-tlv { all | port-vlan-id | protocol-identity | protocol-vlan-id [ <vlan-id> ] | vlan-name [ <vlan-id> ] } } | { dot3-tlv { all | link-aggregation | mac-physic | max-frame-size } } }"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "GE interface view",
+        "Layer 2 50GE interface view",
+        "100GE interface view",
+        "50GE interface view",
+        "GE optical interface view",
+        "25GE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basic-tlv",
+            "Info": "Indicates types of basic TLVs that can be advertised:\nManagement-address TLV.Port Description TLV.System Capabilities TLV.System Description TLV.System Name TLV.\n-"
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates all optional TLVs contained in basic- TLVs.\n-"
+        },
+        {
+            "Parameters": "management-address",
+            "Info": "Indicates Management-address TLVs.\n-"
+        },
+        {
+            "Parameters": "port-description",
+            "Info": "Indicates Port Description TLVs.\n-"
+        },
+        {
+            "Parameters": "system-capability",
+            "Info": "Indicates System Capabilities TLVs.\n-"
+        },
+        {
+            "Parameters": "system-description",
+            "Info": "Indicates System Description TLVs.\n-"
+        },
+        {
+            "Parameters": "system-name",
+            "Info": "Indicates System Name TLVs.\n-"
+        },
+        {
+            "Parameters": "dot1-tlv",
+            "Info": "Indicates TLVs defined by IEEE 802.1, including:\nPort VLAN TLV.Port And Protocol VLAN ID TLV.VLAN Name TLV.Protocol Identity TLV.\n-"
+        },
+        {
+            "Parameters": "port-vlan-id",
+            "Info": "Indicates Port VLAN TLVs.\n-"
+        },
+        {
+            "Parameters": "protocol-identity",
+            "Info": "Indicates Protocol Identity TLVs.\n-"
+        },
+        {
+            "Parameters": "protocol-vlan-id",
+            "Info": "Indicates Port and Protocol VLAN ID TLVs.\n-"
+        },
+        {
+            "Parameters": "vlan-id",
+            "Info": "Specifies the VLAN ID carried in advertised VLAN Name TLVs.\nIf you do not specify this parameter, the device uses the smallest VLAN ID to which the interface that advertises VLAN Name TLVs belongs.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vlan-name",
+            "Info": "Indicates VLAN Name TLVs.\n-"
+        },
+        {
+            "Parameters": "dot3-tlv",
+            "Info": "Indicates TLVs defined by IEEE 802.3, including:\nLink Aggregation TLV.MAC/PHY Configuration/Status TLV.Maximum Frame Size TLV.EEE TLV.\n-"
+        },
+        {
+            "Parameters": "link-aggregation",
+            "Info": "Indicates Link Aggregation TLVs.\n-"
+        },
+        {
+            "Parameters": "mac-physic",
+            "Info": "Indicates MAC/PHY Configuration/Status TLVs.\n-"
+        },
+        {
+            "Parameters": "max-frame-size",
+            "Info": "Indicates Maximum Frame Size TLVs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] lldp enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] lldp tlv-enable dot3-tlv link-aggregation"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA TLV is the basic information unit of an LLDPDU. A device encapsulates information about its main capabilities, management address, device ID, and interface ID into TLVs, encapsulates multiple TLVs into an LLDPDU, and encapsulates an LLDPDU into an LLDP packet. A device exchanges information with neighbors using LLDP packets. During the process of exchanging LLDP packets between devices, the LLDPDU encapsulated in an LLDP packet carries various TLVs as needed. A device sends its status information and receives neighbor status information based on these different TLVs.\nTLVs that can be encapsulated into an LLDPDU include basic TLVs, TLVs defined by IEEE 802.1, TLVs defined by IEEE 802.3.\nBasic TLVs implement basic LLDP functions. In addition to optional management-address, port-description, system-capability, system-description, and system-name TLVs, basic TLVs include four mandatory TLVs that must be encapsulated into an LLDPDU to be advertised. For details, see \"LLDP Feature Description\" in \"VRP Feature Description - System Management\".TLVs defined by IEEE 802.1, TLVs defined by IEEE 802.3 are optional TLVs used to enhance the LLDP function. Determine whether to encapsulate these TLVs into LLDPDUs for advertisement as needed.\n\nPrerequisites\nLLDP has been enabled globally using the lldp enable command in the system view.\nPrecautions\nWhen configuring a device to advertise basic TLVs, TLVs defined by IEEE 802.1, and TLVs defined by IEEE 802.3:\nIf you configure the all parameter, all optional TLVs of the same type will be advertised.If you do not configure the all parameter, only one optional TLV of the same type can be configured and advertised at a time. You can configure the device repeatedly to advertise multiple optional TLVs of different types."
+}

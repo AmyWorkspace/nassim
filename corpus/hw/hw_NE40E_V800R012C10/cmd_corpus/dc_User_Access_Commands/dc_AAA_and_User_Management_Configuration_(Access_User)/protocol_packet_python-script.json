@@ -1,0 +1,45 @@
+{
+    "PageTitle": "protocol python-script",
+    "FuncDef": "The protocol python-script command configures the device to use a specified python script to process packets of a specified protocol, type, and direction (inbound or outbound).\nThe undo protocol python-script command cancels the configuration.\nBy default, no python script is configured to process packets based on the protocol type, packet type, or packet direction.",
+    "CLIs": [
+        "protocol <protocol-type> { packet <packet-type> [ direction { ingress | egress } ] } python-script <script-name>",
+        "undo protocol <protocol-type> { packet <packet-type> [ direction { ingress | egress } ] } python-script <script-name>"
+    ],
+    "ParentView": [
+        "Python policy template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "packet packet-type",
+            "Info": "Specifies a packet type.\nThe value is a string of characters, which can be any of the following 23 types: access-request, access-accept, accounting-request, accounting-response, access-reject, access-challenge, coa-request, coa-ack, coa-nak, dm-request, dm-ack, dm-nak, client-access-request, client-access-accept, client-access-reject, client-access-challenge, client-accounting-request, client-accounting-response, client-dm-request, server-access-request, server-access-accept, server-access-reject, or server-access-challenge, corresponding to Access-Request, Access-Accept, Accounting-Request, Accounting-Response packets, Access-Reject, Access-Challenge, CoA-Request, CoA-ACK, CoA-NAK, DM request, DM ACK, DM NAK, client's Access-Request, client's Access-Accept, client's Access-Reject, client's Access-Challenge, client's Accounting-Request, client's Accounting-Response, client's DM request, server's Access-Request, server's Access-Accept, server's Access-Reject, or server's Access-Challenge."
+        },
+        {
+            "Parameters": "direction",
+            "Info": "Packet direction.\n-"
+        },
+        {
+            "Parameters": "ingress",
+            "Info": "Packet Delivery Direction.\n-"
+        },
+        {
+            "Parameters": "egress",
+            "Info": "Packet sending direction.\n-"
+        },
+        {
+            "Parameters": "python-script script-name",
+            "Info": "Specifies a script name.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "protocol protocol-type",
+            "Info": "Specifies a protocol type.\nThe value is a string of characters, which can be radius, dhcp, or diameter. Currently, only radius is supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] access python-policy test1",
+            "[~HUAWEI-python-policy-test1] protocol radius packet access-request direction egress python-script radius_auth_req.py"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe device supports flexible interoperation with RADIUS servers by calling python scripts.By default, the packet direction includes inbound and outbound.To configure the device to call a specified python script to process packets of a specified protocol, type, and direction (inbound or outbound), run the protocol packet python-script command so that flexible interoperation with a RADIUS server group can be implemented.\nPrerequisites\nThe python script package has been uploaded to the cfcard: directory on the device.\nThe python script extension function has been enabled.\nPrecautions\nYou can specify different directions for different types of packets. The direction is strictly matched with the packet type. If no direction is specified, the configuration takes effect for both directions by default.\nThe same protocol type, packet type, and packet direction can be associated with only one script file name.If the protocol packet python-script command is run more than once, the latest configuration overrides the previous one. Different packet types can be associated with different script file names.\nIf no packet direction is specified when you run the undo protocol packet python-script command, the configuration takes effect for both directions by default."
+}

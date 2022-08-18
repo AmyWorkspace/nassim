@@ -1,0 +1,21 @@
+{
+    "PageTitle": "mpls te path-selection overload",
+    "FuncDef": "The mpls te path-selection overload command associates RSVP-LSP establishment with the IS-IS overload setting. This association allows CSPF to calculate paths excluding overloaded IS-IS nodes.\nThe undo mpls te path-selection command restores the default configuration.\nBy default, RSVP-LSP establishment is not associated with the IS-IS overload setting.",
+    "CLIs": [
+        "mpls te path-selection overload",
+        "undo mpls te path-selection"
+    ],
+    "ParentView": [
+        "MPLS view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls te path-selection overload"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn administrator can run the set-overload command to mark a node overloaded if the node is transmitting a large number of services or its CPU is overburdened. If there are overloaded nodes on an MPLS TE network, associate RSVP-LSP establishment with the IS-IS overload setting to ensure that RSVP-LSPs are established over paths excluding overloaded nodes. This configuration prevents overloaded nodes from being further burdened and improves RSVP-LSP reliability.\nPrerequisites\nCSPF has been enabled using the mpls te cspf command.\nThe route record has been enabled using the mpls te record-route command.\nConfiguration Impact\nAfter the mpls te path-selection overload command is run, and an LSP passes through overloaded nodes, the following situations occur:\nCSPF recalculates paths excluding overloaded nodes for established RSVP-LSPs.Traffic travels through an existing RSVP-LSP before a new RSVP-LSP is established. After the new RSVP-LSP is established, traffic switches to the new RSVP-LSP and the original RSVP-LSP is deleted. This traffic switchover is performed based on the make-before-break mechanism. Traffic is not dropped during the switchover.\nCSPF calculates paths excluding overloaded nodes for new RSVP-LSPs.\n\nPrecautions\nThis configuration does not take effect on bypass or P2MP TE tunnels.\nIf the ingress or egress is marked overloaded, the mpls te path-selection overload command does not take effect. The established RSVP-LSPs associated with the ingress or egress will not be reestablished and new RSVP-LSPs associated with the ingress or egress will also not be established.\nIf a TE LSP uses the local device as a transit node before the set-overload command is run, the TE LSP is not torn down and re-established and still uses the local device as a transit node after the set-overload command is run; if the local device is restarted after the command is run and fast convergence is not configured on the ingress of the RSVP-LSP, TE LSP forwarding fails, and services are affected. Therefore, the mpls te path-selection overload command needs to be run on the ingress of the RSVP-LSP before the device is restarted."
+}

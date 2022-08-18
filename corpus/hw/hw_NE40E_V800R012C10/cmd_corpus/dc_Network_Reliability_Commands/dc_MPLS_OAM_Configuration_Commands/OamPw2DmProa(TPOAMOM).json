@@ -1,0 +1,54 @@
+{
+    "PageTitle": "mpls oam l2vc delay-measure two-way proactive",
+    "FuncDef": "The mpls oam l2vc delay-measure two-way proactive command enables proactive two-way frame delay measurement (DM) for a PW.\nThe undo mpls oam l2vc delay-measure two-way proactive command disables proactive two-way frame DM for a PW.\nBy default, proactive two-way frame DM is disabled for a PW.",
+    "CLIs": [
+        "mpls oam l2vc delay-measure two-way proactive [ exp <exp-value> | packet-size <packet-size-value> [ padding-value { 0 | 1 } ] ] * peer-ip <peer-ip> vc-id <vc-id> vc-type <vc-type>",
+        "undo mpls oam l2vc delay-measure two-way proactive peer-ip <peer-ip> vc-id <vc-id> vc-type <vc-type>"
+    ],
+    "ParentView": [
+        "MPLS-OAM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "exp exp-value",
+            "Info": "Specifies a priority for DMMs.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7."
+        },
+        {
+            "Parameters": "packet-size packet-size-value",
+            "Info": "Specifies the size of a sent probe packet.\nThe value is an integer ranging from 64 to 1500, in bits."
+        },
+        {
+            "Parameters": "padding-value",
+            "Info": "Indicates the padding value in a packet.\nThe value is 0 or 1. The default value is 0.\nIf the value is set to 0, each bit in a packet is padded with 0.If the value is set to 1, each bit in a packet is padded with 1."
+        },
+        {
+            "Parameters": "peer-ip peer-ip",
+            "Info": "Specifies the destination IP address of a PW.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id vc-id",
+            "Info": "Specifies a PW ID.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "vc-type vc-type",
+            "Info": "Specifies the type of a remote L2VC.\nEncapsulation types supported:ATM PWE3atm-1to1-vcc: One PW carries the ATM cells of one PVC.atm-1to1-vpc: One PW carries the ATM cells of one PVP.atm-aal5-pdu: One PW carries the AAL5 PDUs of one PVC.atm-aal5-sdu: One PW carries the AAL5 SDUs of one PVC.atm-nto1-vcc: One PW carries the ATM cells of multiple PVCs.atm-nto1-vpc: One PW carries the ATM cells of multiple PVPs.atm-trans-cell: ATM cells are transmitted over PWE3 VCs.\nTDM PWE3cesopsn-basic: CES is sensitive to E1 and T1 frame structures. E1 or T1 signals can be encapsulated into packets based on timeslots.satop-e1: SAToP is insensitive to the E1 frame structure and encapsulates a whole E1 frame into a PW packet.satop-t1: SAToP is insensitive to the T1 frame structure and encapsulates a whole T1 frame into a PW packet.\nOther encapsulation types:cep: This encapsulation type is used for CEP services.ethernet: This encapsulation type is used when Ethernet packets do not carry VLAN information.hdlc: HDLC is a bit-oriented link layer protocol.ip-interworking: This encapsulation type is used for interworking between Huawei devices.ip-layer2: This encapsulation type is used for interworking between Huawei devices and non-Huawei devices.ppp: PPP is a link layer protocol that specifies how to encapsulate and transmit network layer packets over P2P links.vlan: This encapsulation type is used when Ethernet packets carry VLAN information."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] mpls-oam",
+            "[*HUAWEI-mpls-oam] mpls oam l2vc peer-ip 2.2.2.2 vc-id 100 vc-type ethernet type cv",
+            "[*HUAWEI-mpls-oam] mpls oam l2vc delay-measure two-way proactive exp 1 peer-ip 2.2.2.2 vc-id 100 vc-type ethernet"
+        ]
+    ],
+    "ExtraInfo": "DM is an MPLS-TP performance monitoring function.\nProactive two-way frame DM is performed by a local MEP to send a DMM to its RMEP and then receive a delay measurement reply (DMR) from the RMEP. After two-way frame DM is configured, a MEP sends a DMM with the TxTimeStampf value (the time when the DMM was sent) at specified intervals. After receiving the DMM, the RMEP replies with a DMR. This reply carries RxTimeStampf (the time when the DMM was received) and TxTimeStampb (the time when the DMR was sent). The value in every field of the DMM is copied to the DMR, with the exception that the source and destination MAC addresses are interchanged. Upon receipt of the DMR, the MEP calculates the two-way frame delay using the following equation:\nFrame delay = (RxTimeb - TxTimeStampf) - (TxTimeStampb - RxTimeStampf)"
+}

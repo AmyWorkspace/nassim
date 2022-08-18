@@ -1,0 +1,25 @@
+{
+    "PageTitle": "warning-threshold",
+    "FuncDef": "The warning-threshold command sets an alarm threshold for the usage of IP addresses in an address pool.\nThe undo warning-threshold command restores the default configuration.\nBy default, the alarm threshold for the usage of IP addresses in an address pool is 80%.",
+    "CLIs": [
+        "warning-threshold <threshold-value>",
+        "undo warning-threshold"
+    ],
+    "ParentView": [
+        "IP address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "threshold-value",
+            "Info": "Specifies the alarm threshold of the usage of IP addresses in an address pool. If the value is 80, an alarm is generated when the usage of IP addresses in the address pool reaches 80%. Value 0 indicates that the address usage alarm is disabled.\nThe value ranges from 0 to 100, in percentage."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei server",
+            "[~HUAWEI-ip-pool-huawei] warning-threshold 85"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the status of IP addresses in an address pool is changed, the DHCP server re-calculates the address pool usage.\nThe address status is divided into the following types:\nidle: The IP address is available for allocation.used: The IP address has been allocated.conflict: The IP address is in conflict with another.disable: The IP address is disabled.static-bind: The IP address is for static allocation.\nAddress pool usage = Number of non-idle IP addresses/Total number of IP addresses\nIf the address pool usage exceeds the threshold specified using the warning-threshold command, the system generates the alarm DHCPSERVER_1.3.6.1.4.1.2011.6.8.2.2.0.6_hwUsedIPReachThreshold, asking the administrator to plan IP addresses in order to prevent client online failures due to IP address exhaustion. If the address pool usage falls below 90% of the threshold, the clear alarm DHCPSERVER_1.3.6.1.4.1.2011.6.8.2.2.0.7_hwUsedIPReachThresholdResume is generated.\n\nPrecautions\nAfter the command is run repeatedly in the same view, the latest configuration overrides the previous configurations.\nAn address pool can be bound to multiple domains. The usage of IP addresses in the address pool will be changed regardless of which domain is allocated with IP addresses in the address pool.\nTo enable an alarm to be generated when the address pool is exhausted, run the warning-exhaust command."
+}

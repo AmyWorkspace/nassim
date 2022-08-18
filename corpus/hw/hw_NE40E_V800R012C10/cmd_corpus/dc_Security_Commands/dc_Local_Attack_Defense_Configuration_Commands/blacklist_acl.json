@@ -1,0 +1,36 @@
+{
+    "PageTitle": "blacklist acl",
+    "FuncDef": "The blacklist acl command adds packets matching specific ACL rules to the blacklist.\nThe undo blacklist command deletes added packets from the blacklist.\nBy default, no ACL rules are specified to add matching packet to the blacklist.",
+    "CLIs": [
+        "blacklist [ ipv6 ] acl { <acl-number> | name <acl-name> }",
+        "undo blacklist [ ipv6 ]"
+    ],
+    "ParentView": [
+        "Attack defense policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6",
+            "Info": "Configures an IPv6 blacklist. If this parameter is not specified, an IPv4 blacklist is configured.\n-"
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of an ACL.\nIt is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "name acl-name",
+            "Info": "Specifies the name of an ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2001",
+            "[*HUAWEI-acl4-basic-2001] rule permit source 10.1.1.1 0",
+            "[*HUAWEI-acl4-basic-2001] quit",
+            "[*HUAWEI] cpu-defend policy 8",
+            "[*HUAWEI-cpu-defend-policy-8] blacklist acl 2001"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf you consider that some IP packets should not be sent to the CPU, or that some IP packets are illegal, you can set an ACL rule to add these IP packets to a blacklist to drop the packets. All users need to be manually added to the blacklist, and there is no default users in the blacklist.\nA user-defined blacklist can be bound to only one ACL. If the blacklist is bound to multiple ACLs, the last bound ACL takes effect.\nWhen an ACL is bound to a blacklist, the rules containing NEQ, time-range, or vpn-instance in the ACL do not take effect. The other rules can take effect.\nBy default, attack defense against TCP SYN flooding is enabled. This function has a higher priority than the blacklist function. Therefore, TCP SYN packets are preferentially matched against the ACL rules defined for attack defense against TCP SYN flooding, instead of the ACL rules defined by blacklist acl.\nTo match TCP SYN packets against ACL rules defined in the blacklist, run the undo tcpsyn-flood enable command to disable attack defense against TCP SYN flooding.\nAfter attack defense against TCP SYN flooding is disabled, the TCP SYN attack packets that do not match the ACL rules in the blacklist will be sent to the CPU. Therefore, exercise caution when running the undo tcpsyn-flood enable command.\nPrerequisites\nThe ACL to which a blacklist is bound must be configured. You cannot bind a blacklist to an ACL that does not exist. When a blacklist is bound to an ACL, all the packets that match the ACL rules are automatically added to the blacklist.\nBefore running the blacklist acl command, you must have already enabled the blacklist function; otherwise, the blacklist can still be configured but does not take effect.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

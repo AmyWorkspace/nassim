@@ -1,0 +1,31 @@
+{
+    "PageTitle": "virtual-channel",
+    "FuncDef": "The virtual-channel command configures a ring auto protection switching protocol data unit (R-APS PDU) transmission mode for a sub-ring.\nThe undo virtual-channel enablecommand restores the default configuration.\nBy default, R-APS PDUs on sub-rings are transmitted in non-virtual channel (NVC) mode.",
+    "CLIs": [
+        "virtual-channel { disable | enable }",
+        "undo virtual-channel enable"
+    ],
+    "ParentView": [
+        "ERPS ring view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "disable",
+            "Info": "Disables the VC mode for R-APS PDU transmission on a sub-ring, which means the NVC mode is used.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables the VC mode for R-APS PDU transmission on a sub-ring.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] erps ring 5",
+            "[*HUAWEI-erps-ring5] version v2",
+            "[*HUAWEI-erps-ring5] sub-ring",
+            "[*HUAWEI-erps-ring5] virtual-channel enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo specify whether to use VCs or NVCs to transmit R-APS PDUs on sub-rings, run the virtual-channel command.ERPSv2 supports single and multi-ring topologies.In multi-ring topologies, sub-rings either have VCs or NVCs to transmit R-APS PDUs.With VCs: R-APS PDUs on sub-rings are transmitted to the major ring through interconnection nodes. The ring protection link (RPL) owner port of a sub-ring blocks both R-APS PDUs and data traffic.With NVCs: R-APS PDUs on sub-rings are terminated on the interconnection nodes. The RPL owner port blocks data traffic but not R-APS PDUs on each sub-ring.\n\nPrerequisites\nERPSv2 has been configured using the version v2 command, and the ERPS ring has been configured as a sub-ring using the sub-ring command.\nConfiguration Impact\nIf a sub-ring uses VCs to transmit R-APS PDUs, you must run the virtual-channel disable command to restore the R-APS PDU transmission mode to NVC before running the undo sub-ring command to restore the sub-ring to a major ring.\nIf the VC mode is used for sub-ring R-APS PDU transmission, it is recommended that the major ring's VLAN with an ID same as that of the sub-ring's control VLAN transmit only sub-ring R-APS PDUs. If this major ring's VLAN also transmits data packets, attackers may construct bogus sub-ring R-APS PDUs, causing sub-ring loops or even a major ring failure."
+}

@@ -1,0 +1,37 @@
+{
+    "PageTitle": "ptp-adaptive duration",
+    "FuncDef": "The ptp-adaptive duration command sets a duration for each type of 1588 ACR/ATR packet.\nThe undo ptp-adaptive duration command restores the default duration of each type of 1588 ACR/ATR packet.\nBy default, the duration of each type of 1588 ACR packet is 300s.",
+    "CLIs": [
+        "ptp-adaptive { announce-duration | sync-duration | delay-resp-duration } <duration-value>",
+        "undo ptp-adaptive { announce-duration | sync-duration | delay-resp-duration }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "announce-duration",
+            "Info": "Indicates the duration of Announce packets.\n-"
+        },
+        {
+            "Parameters": "sync-duration",
+            "Info": "Indicates the duration of a Sync packet.\n-"
+        },
+        {
+            "Parameters": "delay-resp-duration",
+            "Info": "Indicates the duration of a Delay_Resp packet.\n-"
+        },
+        {
+            "Parameters": "duration-value",
+            "Info": "Specifies the duration value.\nThe value is an integer ranging from 60 to 1000, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp-adaptive enable",
+            "[~HUAWEI] ptp-adaptive announce-duration 600"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAnnounce packets carry clock source information about 1588v2 devices and are used for BMC source selection in 1588 ACR/ATR Layer 3 unicast negotiation. Delay_Resp and Sync packets are used to transmit frequency information during 1588 ACR/ATR Layer 3 unicast negotiation. If the client and the server do not receive any of the three types of packets within a certain period, the Layer 3 unicast negotiation between them fails.\nThe duration of a packet indicates whether a connection is valid. For example, a client on which the duration of a Sync packet is set records the interval for receiving Sync packets. If the client does not receive the second Sync packet within the duration of a Sync packet, the client considers that the connection with the server fails.\nPrerequisites\n1588 ACR/ATR has been enabled.\nPrecautions\nThis command is supported only on the admin VS.\nThe duration expiration of any type of packets triggers a client to resend a request for establishing a connection to the server. Generally, modifying the duration of a packet is not recommended.\nThis command is used on clients.\nIf the ptp-adaptive duration command is run for multiple times, the latest configuration of this command overrides the previous one."
+}

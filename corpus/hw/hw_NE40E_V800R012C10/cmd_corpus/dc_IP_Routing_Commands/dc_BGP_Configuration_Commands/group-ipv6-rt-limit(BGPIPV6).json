@@ -1,0 +1,52 @@
+{
+    "PageTitle": "peer route-limit (BGP-IPv6 unicast address family view) (group)",
+    "FuncDef": "The peer route-limit command sets the maximum number of routes that can be received from a peer.\nThe undo peer route-limit command cancels the configuration.\nBy default, there is no limit on the number of routes that can be received from a peer.",
+    "CLIs": [
+        "peer <group-name> route-limit [ accept-prefix ] <limit> [ <percentage> ] [ alert-only | idle-forever | idle-timeout <times> ]",
+        "undo peer <group-name> route-limit"
+    ],
+    "ParentView": [
+        "BGP-IPv6 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "accept-prefix",
+            "Info": "Calculates the number of routes that match a policy only.\nIf accept-prefix is specified and the keep-all-routes command is run, only the routes that match the policy are accepted.If accept-prefix and alert-only are both set, the system keeps receiving routes and the routes are valid after the proportion of the number of received routes to limit reaches percentage or 100%.\n-"
+        },
+        {
+            "Parameters": "limit",
+            "Info": "Specifies the maximum number of routes that can be received from a peer.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "percentage",
+            "Info": "Specifies the proportion threshold of the number of received routes to limit.\nIf the proportion reaches percentage and is less than 100%, the device sends a threshold-reaching alarm named BGP_1.3.6.1.4.1.2011.5.25.177.1.3.1 ROUTETHRESHOLDEXCEED and properly receives routes.If the proportion reaches 100%, the device sends a threshold-crossing alarm named BGP_1.3.6.1.4.1.2011.5.25.177.1.3.6 ROUTEEXCEED and stops receiving routes.\nThe value is an integer ranging from 1 to 100. The default value is 75."
+        },
+        {
+            "Parameters": "alert-only",
+            "Info": "Enables the device to send a threshold-reaching or threshold-crossing alarm and stops receiving excess routes if the proportion of the number of received routes to limit reaches percentage or 100%. In this situation, the peer relationship is not disconnected.\n-"
+        },
+        {
+            "Parameters": "idle-forever",
+            "Info": "Enables the device to send an alarm if the proportion of the number of received routes to limit reaches percentage. After the number of received routes exceeds the limit, the connection is interrupted and will not be automatically re-established.\n-"
+        },
+        {
+            "Parameters": "idle-timeout times",
+            "Info": "Enables the device to send an alarm if the proportion of the number of received routes to limit reaches percentage. After the number of received routes exceeds the limit, the connection is interrupted, and the device does not automatically re-establish the connection until the timer expires.\nThe value is an integer ranging from 1 to 1200, in minutes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group test",
+            "[~HUAWEI-bgp] ipv6-family unicast",
+            "[*HUAWEI-bgp-af-ipv6] peer test enable",
+            "[*HUAWEI-bgp-af-ipv6] peer test route-limit 10000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer route-limit command is used to set the maximum number of routes that a BGP device is allowed to receive from its peer. This provides a mechanism for controlling the routes received from peers in addition to distribution lists, filtering lists, and route mappings.\nConfiguration Impact\nIf the peer route-limit command is run for a peer group, the peers of the peer group inherit the configuration.\nIf a peer relationship between two devices is in the Established state, the following situations occur:\nIf the number of routes received by the Router exceeds the maximum limit after you run the peer route-limit command for the first time or run the command to reduce the maximum limit:\nIf you specified alert-only in the command, the Router does not disconnect its BGP peer. The received routes are not removed, and no additional routes will be accepted.If you specified idle-forever in the command, the Router disconnects its BGP peer. To re-establish the connection, run the reset bgp command.If you specified idle-timeout in the command, the Router disconnects its BGP peer and re-establishes its BGP peer relationship automatically after the timeout timer expires. To re-establish the connection before the timeout timer expires, run the reset bgp command.\nIf the upper limit set on the Router is increased to be greater than the number of received routes, the Router sends Refresh packets to receive routes again. If the Router does not support the route-refresh capability, the Router needs to re-establish the connection with its peer.If the upper limit set on the Router is reduced but is still greater than the number of received routes, only configuration parameters need to be modified.\nIf the alert-only, idle-forever, and idle-timeout are not specified and the proportion of the number of received routes to limit reaches percentage, the device generates an alarm; after the number of received routes exceeds the limit, the connection is interrupted and is automatically re-established in 30s.\n\nPrecautions\nIf the specified peer has the capability and the peer relationship is interrupted when the number of routes exceeds the threshold, the same peer in all address families will be affected, and the peer relationship will be re-established."
+}

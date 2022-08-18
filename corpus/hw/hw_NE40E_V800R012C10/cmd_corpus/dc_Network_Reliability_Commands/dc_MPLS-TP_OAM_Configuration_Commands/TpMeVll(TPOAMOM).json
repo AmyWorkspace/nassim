@@ -1,0 +1,62 @@
+{
+    "PageTitle": "me l2vc",
+    "FuncDef": "The me l2vc command creates an ME instance and binds it to a single-segment PW (SS-PW) or multi-segment PW (MS-PW).\nThe undo me l2vc command deletes an ME instance bound to an SS-PW or MS-PW.\nBy default, no ME instance is created.",
+    "CLIs": [
+        "me l2vc peer-ip <peer-ip-value> vc-id <vc-id-value> vc-type <vc-type-value> [ remote-peer-ip <remote-peer-ip-value> | ttl <ttl-number> ] mep-id <mep-id-value> remote-mep-id <remote-mep-id-value> [ gal { 13 | 14 } ]",
+        "undo me l2vc peer-ip <peer-ip-value> vc-id <vc-id-value> vc-type <vc-type-value> [ remote-peer-ip <remote-peer-ip-value> | ttl <ttl-number> ]"
+    ],
+    "ParentView": [
+        "Maintenance entity group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-ip peer-ip-value",
+            "Info": "Specifies the LSR ID for the peer PE on an SS-PW or the LSR ID for the switch on an MS-PW.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id vc-id-value",
+            "Info": "Specifies the VC ID. VCs of the same type on a PE must be uniquely identified by the VC ID.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "vc-type vc-type-value",
+            "Info": "Specifies the virtual circuit (VC) type.\nEncapsulation types supported:ATM PWE3atm-1to1-vcc: One PW carries the ATM cells of one PVC.atm-1to1-vpc: One PW carries the ATM cells of one PVP.atm-aal5-pdu: One PW carries the AAL5 PDUs of one PVC.atm-aal5-sdu: One PW carries the AAL5 SDUs of one PVC.atm-nto1-vcc: One PW carries the ATM cells of multiple PVCs.atm-nto1-vpc: One PW carries the ATM cells of multiple PVPs.atm-trans-cell: ATM cells are transmitted over PWE3 VCs.\nTDM PWE3cesopsn-basic: CES is sensitive to E1 and T1 frame structures. E1 or T1 signals can be encapsulated into packets based on timeslots.satop-e1: SAToP is insensitive to the E1 frame structure and encapsulates a whole E1 frame into a PW packet.satop-t1: SAToP is insensitive to the T1 frame structure and encapsulates a whole T1 frame into a PW packet.\nOther encapsulation types:cep: This encapsulation type is used for CEP services.ethernet: This encapsulation type is used when Ethernet packets do not carry VLAN information.hdlc: HDLC is a bit-oriented link layer protocol.ip-interworking: This encapsulation type is used for interworking between Huawei devices.ip-layer2: This encapsulation type is used for interworking between Huawei devices and non-Huawei devices.ppp: PPP is a link layer protocol that specifies how to encapsulate and transmit network layer packets over P2P links.vlan: This encapsulation type is used when Ethernet packets carry VLAN information."
+        },
+        {
+            "Parameters": "remote-peer-ip remote-peer-ip-value",
+            "Info": "Specifies the peer IP address on the MS-PW.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mep-id mep-id-value",
+            "Info": "Specifies the local MEP ID. A MEP ID identifies a MEP. The MEP ID must be unique in an ME.\nThe value is an integer ranging from 1 to 8191."
+        },
+        {
+            "Parameters": "remote-mep-id remote-mep-id-value",
+            "Info": "Specifies the remote MEP (RMEP) ID. A MEP ID identifies a MEP. The MEP ID must be unique in an ME.\nThe value is an integer ranging from 1 to 8191."
+        },
+        {
+            "Parameters": "gal",
+            "Info": "Specifies the value of the generic associated channel header label (GAL).\nThe value is 13 or 14.\nThe value 13 complies with the Y.1731 standard, whereas the value 14 is Huawei-specific."
+        },
+        {
+            "Parameters": "ttl ttl-number",
+            "Info": "Specifies the number of hops between the ingress and the egress.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls static-l2vc destination 4.4.4.4 400 transmit-vpn-label 100 receive-vpn-label 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] mpls-tp meg test",
+            "[*HUAWEI-mpls-tp-meg-test] me l2vc peer-ip 4.4.4.4 vc-id 400 vc-type vlan mep-id 1 remote-mep-id 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf OAM monitors an SM- or MS-PW on a VPLWS or VPLS network. If an SS-PW or an MS-PW is used as a transport path, a MEG has a single ME for this SS-PW or MS-PW.\nThe me l2vc command is used to perform OAM detection on an SS-PW or an MS-PW in one of the following modes:\nIf the PW is an SS-PW, the configuration steps are as follows:Run the me l2vc peer-ip vc-id vc-type mep-id remote-mep-id command on the MEP to create an ME instance and bind it to an SS-PW.Run the me l2vc peer-ip vc-id vc-type mep-id remote-mep-id command on the RMEP to create an ME instance and bind it to the same SS-PW.If the PW is an MS-PW, remote-peer-ip or ttl must be specified.The procedure for binding an ME instance to a static MS-PW by specifying remote-peer-ip is as follows:Run the me l2vc peer-ip vc-id vc-type remote-peer-ip mep-id remote-mep-id command on the MEP to create an ME instance and bind it to an MS-PW with a specified peer IP address.Run the me l2vc peer-ip vc-id vc-type remote-peer-ip mep-id remote-mep-id command on the RMEP to create an ME instance and bind it to the same MS-PW with a specified peer IP address.The procedure for binding an ME instance to a static MS-PW by specifying ttl is as follows:Run the me l2vc peer-ip vc-id vc-type ttl mep-id remote-mep-id command on the MEP to create an ME instance and bind it to an MS-PW.Run the me l2vc peer-ip vc-id vc-type ttl mep-id remote-mep-id command on the RMEP to create an ME instance and bind it to the same MS-PW.\n\nPrerequisites\nAn SS-PW or an MS-PW has been established.\nPrecautions\nIf MPLS-TP OAM is already associated with an APS tunnel protection group, an ME instance bound to an SS-PW or MS-PW cannot be deleted."
+}

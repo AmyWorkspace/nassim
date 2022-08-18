@@ -1,0 +1,64 @@
+{
+    "PageTitle": "ipv6 address eui-64",
+    "FuncDef": "The ipv6 address eui-64 command configures an EUI-64 global unicast address for an interface.\nThe undo ipv6 address eui-64 command deletes the configuration.\nBy default, no EUI-64 global unicast address is configured for an interface.",
+    "CLIs": [
+        "ipv6 address { <ipv6-address> <prefix-length> | <ipv6-address/prefix-length> } eui-64",
+        "undo ipv6 address { <ipv6-address> <prefix-length> | <ipv6-address/prefix-length> } eui-64"
+    ],
+    "ParentView": [
+        "PW-VE interface view",
+        "PW-VE sub-interface view",
+        "Tunnel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address to be configured for the interface.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the prefix length of the IPv6 address.\nThe value is an integer that ranges from 1 to 128. In the EUI-64 address format, the prefix length must be less than 64."
+        },
+        {
+            "Parameters": "ipv6-address/prefix-length",
+            "Info": "Specifies the IPv6 address and prefix length of an interface.\nThe value is the IPv6 address/IPv6 address prefix length."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 address 2001:db8:1::1 64 eui-64"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the IPv6 addressing scheme, every IPv6 unicast address needs an interface identifier. The interface identifier is unique, similar to a 48-bit MAC address.\nThe interface identifier of an IPv6 host address complies with the IEEE EUI-64 format. A 64-bit interface identifier is generated based on an existing MAC address; therefore, such an interface identifier is unique globally.\nIf the interface has been configured with a MAC address, the EUI-64 address is generated based on the MAC address of the interface, with FFFE added in the middle.\nIf the interface has not been configured with a MAC address, the EUI-64 address is generated based on the following rules:\nFor Layer 3 physical interfaces and sub-interfaces, the EUI-64 address is generated based on the MAC address of a physical interface, with FFFE added in the middle.For loopback interfaces , VBDIF interfaces, and tunnel interface, the EUI-64 address is generated based on the MAC address of an interface, with the last two bytes following the interface index added in the middle.For Eth-Trunk interfaces and its sub-interfaces, Global-VE sub-interfaces, VE sub-interfaces, and VLANIF interfaces, the EUI-64 address is generated based on the MAC address of an interface, with FFFE added in the middle.\n\nPrerequisites\nBefore running the ipv6 address eui-64 command to configure an EUI-64 global unicast address for an interface, you need to run the ipv6 enable command in the interface view to enable the IPv6 function on the interface.\nConfiguration Impact\nIf the ipv6 address eui-64 is run to configure an EUI-64 IPv6 address for an interface but no link-local address is configured for the interface, the system automatically generates a link-local address for the interface.\nPrecautions\nThe following conditions are prohibited for different interfaces on the same device:\nThe EUI-64 IPv6 addresses are the same.The network prefixes of the EUI-64 IPv6 addresses are the same. For example, if the IPv6 address of interface A is 2001:db8:1::1/32 and its network prefix is 2001:db8:: and the IPv6 address of interface B is 2001:db8::1/16 and its network prefix is 2001::, the configuration succeeds. If the IPv6 address of interface B is 2001:db8:2::1/32 and its network prefix is also 2001:db8::, the configuration fails.\nAn interface can be configured with a maximum of 64 global unicast addresses.\nThe following EUI-64 IPv6 addresses cannot be configured for an interface:\nLoopback address (::1/128)Unspecified address (::/128)Multicast addressAnycast address\nIPv4-mapped IPv6 addresses (0:0:0:0:0:FFFF:IPv4-address) can be configured on public networks but not on VPNs.\nThe ipv6 address command is used to specify a 128-bit IP address. Using the ipv6 address eui-64 command, you can specify the high-order 64 bits of an IPv6 address. The low-order 64 bits of an IP address are automatically generated in the EUI-64 format. Even when the low-order 64 bits are manually specified, the automatically generated ones will override them."
+}

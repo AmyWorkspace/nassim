@@ -1,0 +1,25 @@
+{
+    "PageTitle": "monitor-group",
+    "FuncDef": "The monitor-group command creates an interface monitoring group or displays the view of an interface monitoring group.\nThe undo monitor-group command deletes an interface monitoring group.\nBy default, no interface monitoring group is created.",
+    "CLIs": [
+        "monitor-group <monitor-group-name>",
+        "undo monitor-group <monitor-group-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "monitor-group-name",
+            "Info": "Specifies the name of an interface monitoring group.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] monitor-group group1",
+            "[*HUAWEI-monitor-group-group1]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nInterfaces on the network side can be added to an interface monitoring group. Each interface monitoring group is identified by a unique group name. The network-side interface monitored by the group is a binding interface, and the user-side interface that is associated with the group is a track interface, whose status changes with the binding interface status. The interface monitoring group monitors the status of all binding interfaces.\nIf the sum of Down weights of all Binding interfaces in an interface monitoring group is greater than or equal to the Down weight triggering a Track interface to automatically go Down, the Track interface is prompted to go Down and services are switched to the backup link. If the sum of Down weights of all the Binding interfaces is less than the Down weight triggering the Track interface to automatically go Down, the Track interface status recovers accordingly and services are switched back to the primary link. The Down weight of a Bind interface is set using the binding interface command, and the default value is 10. The Down weight triggering a Track interface to automatically go Down is set using the track monitor-group command. By default, a track interface goes down only when all binding interfaces in the interface monitoring group go down.\nIn a dual-device backup scenario, when a network-side interface goes Down, user-side devices cannot detect the Down event and therefore do not switch traffic to the backup link. As a result, traffic overloads or interruptions occur. To prevent these problems, run the monitor-group command to create an interface monitoring group to monitor the network-side interface status and instruct the user-side interface to change its status accordingly. An interface monitoring group allows traffic to be switched between the master and backup links and prevents traffic overloads or interruptions.\nConfiguration Impact\nAfter the monitor-group command is run:\nIf no interface monitoring group named groupName exists in the system, a new interface monitoring group is created.If an interface monitoring group named groupName exists in the system, the interface monitoring group view is displayed.\n\nFollow-up Procedure\nAfter an interface monitoring group is created, perform the following operations:\nRun the display monitor-group command to check information about the interface monitoring group.Run the binding interface command to add interfaces to the interface monitoring group.\n\nPrecautions\nA maximum of 32 interface monitoring groups can be created on a device.After the undo monitor-group command is run, the system deletes the interface monitoring group specified using groupName. If a track interface has been associated with the interface monitoring group, the system does not delete the group."
+}

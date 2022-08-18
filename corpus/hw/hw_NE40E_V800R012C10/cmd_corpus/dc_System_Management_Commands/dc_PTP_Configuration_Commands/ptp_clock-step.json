@@ -1,0 +1,37 @@
+{
+    "PageTitle": "ptp clock-step",
+    "FuncDef": "The ptp clock-step command configures a timestamping mode on a PTP device.\nThe undo ptp clock-step command restores the default timestamping mode.\nBy default, the one-step timestamping mode is enabled.",
+    "CLIs": [
+        "ptp clock-step { one-step | two-step }",
+        "undo ptp clock-step"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "GE optical interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "one-step",
+            "Info": "Enables the one-step timestamping mode. A Sync message in Delay mode and a PDelay_Resp message in PDelay mode are stamped with the time when these messages are sent.\n-"
+        },
+        {
+            "Parameters": "two-step",
+            "Info": "Enables the two-step timestamping mode. A Sync message in Delay mode and a PDelay_Resp message in PDelay mode only record the time when they are generated, but carry no timestamps. A Follow_Up message is stamped with the time when the Sync message was sent, and a PDelay_Resp_Follow_Up message is stamped with the time when the PDelay_Resp message was sent.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ptp clock-step two-step"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTwo devices exchange Announce packets to determine the master/slave relationship. The master device sends Sync packets to notify the slave device of time signal parameters and uses a delay measurement mechanism to achieve time signals accuracy.\nPTP adds timestamps into packets to record the time when these packets are sent. PTP uses timestamps to adjust clock signals and implement clock synchronization. Either of the following parameters can be specified in the\nptp clock-step command to configure a command:\none-step: A Sync message in Delay mode and a PDelay_Resp message in PDelay mode are stamped with the time when these messages are sent.two-step: A Sync message in Delay mode and a PDelay_Resp message in PDelay mode only record the time when they are generated, but carry no timestamps. A Follow_Up message is stamped with the time when the Sync message was sent, and a PDelay_Resp_Follow_Up message is stamped with the time when the PDelay_Resp message was sent.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe device supports the one-step mode by default. The device that uses the one-step mode can identify Follow_Up messages sent by another device that uses the two-step mode.\nPTP interfaces that support different timestamping modes can communicate with each other.\nThis command cannot be run on an OTN subcard.\nIn FlexEth mode, the device only supports the two-step mode in the send direction."
+}

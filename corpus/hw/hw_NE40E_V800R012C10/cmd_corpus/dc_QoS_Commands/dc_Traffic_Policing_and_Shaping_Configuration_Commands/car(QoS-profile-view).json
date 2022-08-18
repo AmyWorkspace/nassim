@@ -1,0 +1,86 @@
+{
+    "PageTitle": "car (QoS profile view)",
+    "FuncDef": "The car command configures user-specific traffic policing in a QoS profile.\nThe undo car command cancels user-specific traffic policing in a QoS profile.\nBy default, user-specific traffic policing is not configured in a QoS profile.",
+    "CLIs": [
+        "car { cir <cir-value> [ pir <pir-value> ] | cir cir-percentage <cir-percentage-value> [ pir pir-percentage <pir-percentage-value> ] } [ cbs <cbs-value> [ pbs <pbs-value> ] ] [ green { discard | pass [ service-class <class> color <color> ] } | yellow { discard | pass [ service-class <class> color <color> ] } | red { discard | pass [ service-class <class> color <color> ] } ] * [ inbound | outbound ] [ color-aware ]",
+        "car { cir <cir-value> [ pir <pir-value> ] } [ cbs <cbs-value> [ pbs <pbs-value> ] ] [ green { discard | pass [ service-class <class> color <color> ] } | yellow { discard | pass [ service-class <class> color <color> ] } | red { discard | pass [ service-class <class> color <color> ] } ] * [ inbound | outbound ] [ color-aware ]",
+        "undo car [ inbound | outbound ]"
+    ],
+    "ParentView": [
+        "QoS profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the committed information rate (CIR).\nThe value is an integer ranging from 0 to 4294967295, in kbit/s."
+        },
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the peak information rate (PIR).\nThe value is an integer ranging from 0 to 4294967295, in kbit/s. The pir-value must be greater than or equal to the configured cir-value unless pir-value is 0."
+        },
+        {
+            "Parameters": "cir-percentage cir-percentage-value",
+            "Info": "Specifies a CIR percentage.\nThe value is an integer ranging from 0 to 100, in percentage."
+        },
+        {
+            "Parameters": "pir-percentage pir-percentage-value",
+            "Info": "Specifies a PIR percentage.\nThe value is an integer ranging from 0 to 100, in percentage."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the committed burst size (CBS). The CBS indicates the committed volume of traffic that an interface allows to pass and the depth of the first bucket (assuming it is bucket C).\nThe value is an integer ranging from 0 to 4294967295, in bytes. The cbs-value must be greater than the configured cir-value. The default value of CBS varies with the configured cir-value. The CBS value is calculated using the following formula: cbs-value = cir-value*187.\nIf the cir-value is less than 100000 kbit/s, the CBS that is expressed in bytes is calculated using the following formula: cbs-value = cir-value*187.If the cir-value is greater than or equal to 100000 kbit/s, the default cbs-value that is expressed in bytes is equal to 18700000 (100000*187)."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies the peak burst size (PBS). The PBS indicates the depth of the second token bucket (assuming that it is bucket P).\nThe value is an integer ranging from 0 to 4294967295, in bytes. The default value of PBS varies with pir-value and can be calculated using the following formula: pbs-value = pir-value*187\nIf cbs-value and pir-value are not set, the default pbs-value is 0.If pir-value is set to a value less than 100000 kbit/s, the default pbs-value that is expressed in bytes is calculated using the following formula: pbs-value = pir-value*187.If pir-value is set to a value greater than or equal to 100000 kbit/s, the default pbs-value that is expressed in bytes is equal to 18700000 (100000*187)."
+        },
+        {
+            "Parameters": "green",
+            "Info": "Indicates the action to be taken on the traffic whose rate conforms to the CIR. The default action is pass.\n-"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "Discards packets of a specific color (green, yellow, or red).\n-"
+        },
+        {
+            "Parameters": "pass",
+            "Info": "Allows packets of a specific color (green, yellow, or red) to pass.\n-"
+        },
+        {
+            "Parameters": "service-class class",
+            "Info": "Specifies the service class to which packets are re-marked.\nThe value can be cs7, cs6, ef, af4, af3, af2, af1, or be."
+        },
+        {
+            "Parameters": "color color",
+            "Info": "Specifies the color to which packets are re-marked.\nThe value can be green, yellow, or red."
+        },
+        {
+            "Parameters": "yellow",
+            "Info": "Indicates the action to be taken on the traffic whose rate is greater than the CIR but less than or equal to the PIR. The default action is pass.\n-"
+        },
+        {
+            "Parameters": "red",
+            "Info": "Indicates the action to be taken on the traffic whose rate exceeds the PIR. The default action is discard.\n-"
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies the inbound direction.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the outbound direction.\n-"
+        },
+        {
+            "Parameters": "color-aware",
+            "Info": "Specifies the color-aware mode. By default, the color-blind mode is used.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile p1",
+            "[*HUAWEI-qos-profile-p1] car cir 1000 pir 6000 inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure CAR in a QoS profile, run the car command. After the QoS profile is applied to an interface, CAR applies to traffic on the interface.\nIf color-aware is specified in this command, CAR works in color-aware mode. CAR works in color-blind mode by default. The packet matching rules vary between the color-aware mode and color-blind mode.\nPrecautions\nThe PIR values displayed on the device and NMS are as follows:\nWhen only the CIR is configured and the PIR is not configured, the default value of the PIR is 0. The PIR is not displayed in the command configuration file or on the NMS.When the PIR is set to 0, it is displayed in the configuration file.\n\nThe car command is used to specify traffic policing parameters for users in the QoS profile view. If a QoS profile in which CAR is configured is applied to an interface, the QoS profile is mutually exclusive with the user-queue command on the interface.\nIf no direction is specified, the command takes effect on both directions by default.\nThe value of the CBS must be greater than the value of the CIR.\nAfter packets are marked colors, they are re-marked with service classes. If the service class of a packet is re-marked as EF, BE, CS6, or CS7, the packet can be re-marked only green. Both the upstream and the downstream packets can be re-marked with CoSs and colors.\nThis command is cyclic in nature. That is, if the command is configured in the same QoS profile view more than once, the last configuration takes effect. If uni-directional traffic policing (on either incoming traffic or outgoing traffic) is already configured, you cannot configure traffic policing without specifying the traffic direction. Conversely, if directionless traffic policing is already configured, you cannot configure uni-directional traffic policing.\nDirection-specific and directionless CAR cannot be configured at the same time. If direction-oriented CAR is configured on an interface, the configuration takes effect only when the direction to which the QoS profile applies is the same as the direction configured for CAR.\nIf member interfaces of a trunk interface reside on different forwarding or traffic management modules, the effective CIR or PIR for CAR or user-queue can be a multiple of the configured one."
+}

@@ -1,0 +1,47 @@
+{
+    "PageTitle": "bfd-detect",
+    "FuncDef": "The bfd-detect command configures dynamic BFD for VPLS PW and sets BFD detection parameters for BFD control packets.\nThe undo bfd-detect command deletes the dynamic BFD for VPLS PW configuration.\nBy default, dynamic BFD for VPLS PW is not configured.",
+    "CLIs": [
+        "bfd-detect [ detect-multiplier <multiplier> | min-rx-interval <rx-interval> | min-tx-interval <tx-interval> | option-tlv ] *",
+        "undo bfd-detect [ detect-multiplier <multiplier> | min-rx-interval <rx-interval> | min-tx-interval <tx-interval> | option-tlv ] *"
+    ],
+    "ParentView": [
+        "VSI-LDP-PW view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "detect-multiplier multiplier",
+            "Info": "Specifies a local detection multiplier for a dynamic BFD session.\nThe value is an integer ranging from 3 to 50. The default value is 3."
+        },
+        {
+            "Parameters": "min-rx-interval rx-interval",
+            "Info": "Specifies the minimum receive interval for dynamic BFD control packets.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-tx-interval tx-interval",
+            "Info": "Specifies the minimum transmit interval for dynamic BFD control packets.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "option-tlv",
+            "Info": "Indicates the option field in the IP header of a dynamic BFD control packet.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi1-ldp] peer 2.2.2.2",
+            "[*HUAWEI-vsi-vsi1-ldp] peer 2.2.2.2 pw 1",
+            "[*HUAWEI-vsi-vsi1-ldp-pw-1] bfd-detect detect-multiplier 25 min-rx-interval 15 min-tx-interval 16 option-tlv"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a VPLS network, to speed up link fault detection, run the bfd-detect command to configure a dynamic BFD session to monitor a VPLS PW. If a VPLS PW to be monitored goes Up, the device informs the BFD module of peer information and detection parameters so that the BFD module can establish a BFD session. Upon the session establishment, BFD starts to monitor the VPLS PW. If the primary PW fails, BFD allows service traffic to be quickly switched to the secondary PW, ensuring the service quality.\nVirtual circuit connectivity verification (VCCV) is an E2E PW fault detection and diagnosis mechanism. VCCV is a control channel used to send connection verification messages between the ingress and egress of a PW. VCCV control channels working in label alert mode or control word modes. The label alert mode is used by default. To check the connectivity of a VPLS PW, run the control-word enable command to enable the control word detection function.\nPrerequisites\nBFD has been globally enabled using the bfd command.\nPrecautions\nStatic BFD for VPLS PW and dynamic BFD for VPLS PW are mutually exclusive. A VPLS PW can have either a static or dynamic BFD session configured.\nYou do not have to specify any dynamic BFD parameters when running the undo bfd-detect command. If a BFD parameter is specified, the specified parameter value must be the same as the configured parameter value so that the BFD configuration can be deleted."
+}

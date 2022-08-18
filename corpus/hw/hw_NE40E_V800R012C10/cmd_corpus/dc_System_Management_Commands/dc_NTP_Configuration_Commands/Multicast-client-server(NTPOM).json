@@ -1,0 +1,67 @@
+{
+    "PageTitle": "ntp-service multicast-server",
+    "FuncDef": "The ntp-service multicast-server command configures an interface on the local device to send NTP multicast packets. The local device runs in the multicast server mode.\nThe undo ntp-service multicast-server command removes the local device from the NTP multicast server mode.\nBy default, the multicast service is not configured.",
+    "CLIs": [
+        "ntp-service multicast-server [ <ip-address> ] [ authentication-keyid <key-id> | ttl <ttl-number> | version <number> | port <port-number> ] *",
+        "ntp-service multicast-client [ <ip-address> ]",
+        "undo ntp-service multicast-server [ <ip-address> ]",
+        "undo ntp-service multicast-client [ <ip-address> ]"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "Loopback interface view",
+        "POS interface view",
+        "Remote-AP interface view",
+        "Tunnel interface view",
+        "VLANIF interface view",
+        "Virtual template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "authentication-keyid key-id",
+            "Info": "Specifies a key ID used when sending messages to a multicast client.\nThe value is an integer ranging from: 1 to 4294967295 (version 1 to 3), or 1 to 65535 (version 4)."
+        },
+        {
+            "Parameters": "ttl ttl-number",
+            "Info": "Specifies the life span of multicast packets.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "version number",
+            "Info": "Specifies an NTP version number.\nThe value is an integer ranging from 1 to 4. The default value is 3."
+        },
+        {
+            "Parameters": "port port-number",
+            "Info": "Specifies the port number to be used as the destination port in NTP multicast packets.\nThe number is an integer that can be 123, or ranges from 1025 to 65535. The default value is 123."
+        },
+        {
+            "Parameters": "multicast-server ip-address",
+            "Info": "Specifies a multicast IPv4 address, which is a Class D address.\nThe value is in dotted decimal notation. The default IP address is 224.0.1.1."
+        },
+        {
+            "Parameters": "multicast-client ip-address",
+            "Info": "Specifies a multicast IPv4 address.\nThe value is in dotted decimal notation. The default value is 224.0.1.1."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ntp-service authentication-keyid 4 authentication-mode hmac-sha256 Huawei-1234",
+            "[*HUAWEI] interface 10GE 1/0/0",
+            "[*HUAWEI-10GE1/0/0] ip address 10.1.1.1 24",
+            "[*HUAWEI-10GE1/0/0] ntp-service multicast-server 224.0.1.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface 10GE 1/0/0",
+            "[~HUAWEI-10GE1/0/0] ntp-service multicast-server port 5000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can configure a device to determine whether NTP multicast packets need to be sent through an existing interface to a configured multicast group address or not. Based on this, the local device acts as multicast server and sends multicast messages periodically for time synchronization to multicast clients.\nIn VS mode, this command is supported only by the admin VS.\nPrecautions\nIf this command is the first NTP configuration command, the system automatically adds the ntp-service [ ipv6 ] server disable command in the configuration file to disable the NTP service. To enable the NTP service, run the undo ntp-service [ ipv6 ] server disable command. If this command is the last NTP configuration command to be deleted, the system automatically deletes the ntp-service [ ipv6 ] server disable command from the configuration file."
+}

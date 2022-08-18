@@ -1,0 +1,41 @@
+{
+    "PageTitle": "md5-password all",
+    "FuncDef": "The md5-password all command enables LDP MD5 authentication in a batch for all LDP peers.\nThe undo md5-password all command disables LDP MD5 authentication in a batch for all LDP peers.\nBy default, MD5 authentication in a batch is disabled for all LDP peers.",
+    "CLIs": [
+        "md5-password plain all <password>",
+        "md5-password cipher all <password-cipher>",
+        "undo md5-password all"
+    ],
+    "ParentView": [
+        "MPLS-LDP-VPN instance view",
+        "MPLS-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "password",
+            "Info": "Specifies an authentication password.\nThe new password is at least eight characters long and contains at least two of the following types: upper-case letters, lower-case letters, digits, and special characters.For security purposes, you are advised to configure a password in ciphertext mode. To further improve device security, periodically change the password.\nA password must not contain spaces. A simple text password is a string of 1 to 255 characters. A ciphertext password is a string of 1 to 255 characters. An MD5 ciphertext password is 20 bits to 432 bits long.\nThe string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "cipher",
+            "Info": "Indicates a ciphertext password.\n-"
+        },
+        {
+            "Parameters": "password-cipher",
+            "Info": "Specifies an authentication password.\nA password must not contain spaces.\nThe string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "plain",
+            "Info": "Indicates a simple text password.\nA simple text password is saved in simple text in a configuration file. This format poses risks. A ciphertext password is recommended. To improve device security, periodically modify the password.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] md5-password cipher all Huawei-123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMD5 authentication can be configured for a TCP connection over which an LDP session is established, improving security. LDP MD5 authentication generates a unique digest for an information segment to prevent LDP packets from being modified. LDP MD5 authentication is stricter than common checksum verification for TCP connections.\nIf a great number of LDP peers are configured, run the md5-password all command to enable MD5 authentication in a batch for all LDP peers.\nConfiguration Impact\nAfter the md5-password all command is run, MD5 authentication takes effect on all LDP peers. If MD5 authentication fails, an LDP session fails to be established.\nPrecautions\nLDP authentication configurations are prioritized in descending order: for a single peer, for a specified peer group, for all peers. Keychain and MD5 configurations of the same priority are mutually exclusive. Keychain authentication and MD5 authentication can be configured simultaneously for a specified LDP peer, for this LDP peer in a specified peer group, and for all LDP peers. The configuration with a higher priority takes effect. For example, if MD5 authentication is configured for Peer1 and then keychain authentication is configured for all LDP peers, MD5 authentication takes effect on Peer1.The session is not re-established if the passwords on both ends are the same. If the interval between password settings on both ends exceeds the session Keepalive time and the passwords become different, the sessions are disconnected due to a timeout, causing an LSP to be deleted.Note that the peers of an LDP session can be configured with different authentication modes (simple text or ciphertext), but must be configured with a single password.The encryption algorithm MD5 has a low security, which may bring security risks. Using more secure authentication is recommended."
+}

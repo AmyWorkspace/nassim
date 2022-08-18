@@ -1,0 +1,36 @@
+{
+    "PageTitle": "ipv6 prefix-limit",
+    "FuncDef": "The ipv6 prefix-limit command configures a limit on the number of IPv6 public route prefixes.\nThe undo ipv6 prefix-limit command restores the default configuration.\nBy default, the maximum number of IPv6 public route prefixes is not limited.",
+    "CLIs": [
+        "ipv6 prefix-limit <number> { <alert-percent> [ route-unchanged ] | simply-alert }",
+        "undo ipv6 prefix-limit"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "number",
+            "Info": "Specifies the maximum number of IPv6 public route prefixes.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "alert-percent",
+            "Info": "Specifies the percentage of the maximum number of IPv6 public route prefixes. If you specify alert-percent in the command, when the number of IPv6 public route prefixes exceeds the value calculated by number x alert-percent/100, an alarm is generated. Additional IPv4 public route prefixes can still be added to the routing table until the number of IPv6 public route prefixes reaches number. Subsequent route prefixes are discarded.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "route-unchanged",
+            "Info": "Indicates that the routing table remains unchanged. If you decrease alert-percent after the number of IPv4 public route prefixes exceeds number, whether the routing table remains unchanged is determined by route-unchanged:\nIf you specify route-unchanged in the command, the routing table remains unchanged.If you do not specify route-unchanged in the command, the system deletes the routes from the routing table and re-adds routes.\nBy default, the system deletes the routes from the routing table and re-adds routes.\n-"
+        },
+        {
+            "Parameters": "simply-alert",
+            "Info": "Indicates the following function: If you specify simply-alert in the command, new IPv6 public route prefixes can still be added to the routing table and only an alarm is generated after the number of IPv6 public route prefixes exceeds number.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 prefix-limit 1000 simply-alert"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the Router imports a large number of routes, system performance may be affected when processing services because the routes consume excessive system resources. To improve system security and reliability, run the ipv6 prefix-limit command to configure a limit on the number of IPv6 public route prefixes. When the number of IPv6 public route prefixes exceeds the limit, an alarm is generated, prompting you to check whether unneeded IPv6 public route prefixes exist.\nConfiguration Impact\nAfter the ipv6 prefix-limit command is run, the Router may discard unneeded IPv6 public route prefixes.\nIf the number of IPv6 public route prefixes exceeds the value calculated from number x alert-percent/100, an alarm (RM_1.3.6.1.4.1.2011.5.25.145.19.2.3 hwPublicIpv6PrefixThresholdExceed) is generated.If the number of IPv6 public route prefixes exceeds number, an alarm (RM_1.3.6.1.4.1.2011.5.25.145.19.2.1 hwPublicIpv6PrefixExceed) is generated.If the number of IPv6 public route prefixes falls below the value calculated from number x alert-percent/100, a clear alarm (RM_1.3.6.1.4.1.2011.5.25.145.19.2.4 hwPublicIpv6PrefixThresholdExceedClear) is generated.If the number of IPv6 public route prefixes exceeds number, a clear alarm (RM_1.3.6.1.4.1.2011.5.25.145.19.2.2 hwPublicIpv6PrefixExceedClear) is generated.\n\nPrecautions\nIf the ipv6 prefix-limit command is run more than once, the last configuration overrides the previous one.\nAfter the number of IPv6 public route prefixes exceeds the limit, note the following rules:\nIf you run the ipv6 prefix-limit command to increase or the undo ipv6 prefix-limit command to delete the limit, the Router relearns IPv6 public route prefixes.IPv6 direct and static routes can still be added to the IP routing table."
+}

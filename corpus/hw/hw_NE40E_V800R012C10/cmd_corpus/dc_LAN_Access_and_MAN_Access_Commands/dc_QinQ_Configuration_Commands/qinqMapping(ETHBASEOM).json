@@ -1,0 +1,47 @@
+{
+    "PageTitle": "qinq mapping",
+    "FuncDef": "The qinq mapping command configures QinQ mapping.\nThe undo qinq mapping command cancels QinQ mapping.\nBy default, QinQ mapping is not configured on sub-interfaces.",
+    "CLIs": [
+        "qinq mapping vid <vid> map-vlan vid <map-vid> [ vlan-group <group-id> ]",
+        "qinq mapping",
+        "undo qinq mapping vid <vid> map-vlan vid <map-vid> [ vlan-group <group-id> ]",
+        "undo qinq mapping"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vid vid",
+            "Info": "Specifies the VLAN ID carried in single-tagged packets that the interface receives.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "map-vlan vid map-vid",
+            "Info": "Specifies the VLAN ID to be mapped to the VLAN tag of single-tagged packets.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vlan-group group-id",
+            "Info": "Specifies the number of a VLAN group.\nIf vlan-group group-id is specified, the command adds mapped VLAN IDs to a specified VLAN group. You can apply different QoS profiles to the VLAN groups.\nThe value is an integer ranging from 1 to 16."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan batch 10 100",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-group 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1-vlangroup1] quit",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] qinq mapping vid 100 map-vlan vid 10 vlan-group 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nQinQ mapping allows a device to map a user VLAN ID to a carrier VLAN ID, shielding different user VLAN IDs in packets. QinQ mapping is deployed on edge devices on Layer 2 networks to map user VLAN IDs in packets received from users. The devices map the VLAN IDs in user packets to specified VLAN IDs before forwarding the packets to the public network. QinQ mapping is applicable but not limited to the following scenarios:\nVLAN IDs deployed in new sites and old sites conflict, but the new sites need to communicate with the old sites.VLAN ID planning at each site on the public network is different. As a result, the VLAN IDs conflict. These sites, however, do not need to communicate with each other.VLAN IDs on both ends of the public network are different.\nConfiguring the qinq mapping command on a sub-interface is similar to configuring the port vlan-mapping command on an interface. The configuration differences are as follows:\nQinQ mapping is configured on sub-interfaces to provide L2VPN services.VLAN mapping is configured on interfaces to enable users from different VLANs to communicate over a Layer 2 metropolitan area network (MAN).Configuring QinQ mapping reduces the consumption of physical interfaces.\n\nPrecautions\nIf the qinq mapping vid map-vlan vid command has been run on an Ethernet sub-interface, the sub-interface cannot be configured with commands for QinQ stacking/QinQ termination/Dot1q termination functions."
+}

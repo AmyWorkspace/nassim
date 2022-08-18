@@ -1,0 +1,37 @@
+{
+    "PageTitle": "ipv6 metric-delay suppress timer",
+    "FuncDef": "The ipv6 metric-delay suppress timer command configures suppression parameters for IPv6 delay information advertisement.\nThe undo ipv6 metric-delay suppress timer command restores the default configuration.\nBy default, the timeout period for the delay suppression timer and the threshold and absolute value threshold for suppressing delay information advertisement are 120, 10, and 1000, respectively.",
+    "CLIs": [
+        "ipv6 metric-delay suppress timer <timer-value> percent-threshold <percent-value> absolute-threshold <absolute-value>",
+        "undo ipv6 metric-delay suppress timer <timer-value> percent-threshold <percent-value> absolute-threshold <absolute-value>"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "timer-value",
+            "Info": "Specifies a timeout period for the delay suppression timer.\nThe value is an integer ranging from 0 to 600, in seconds. The default value is 120.\nThe value 0 indicates that the delay suppression timer is not started."
+        },
+        {
+            "Parameters": "percent-threshold percent-value",
+            "Info": "Specifies a threshold over which delay information advertisement is suppressed.\nThe value is an integer ranging from 0 to 100, in percentage. The default value is 10. The value 0 indicates that delay information advertisement is not suppressed based on this parameter."
+        },
+        {
+            "Parameters": "absolute-threshold absolute-value",
+            "Info": "Specifies an absolute value threshold over which delay information advertisement is suppressed.\nThe value is an integer ranging from 0 to 10000, in microseconds. The default value is 1000.The value 0 indicates that delay information advertisement is not suppressed based on this parameter."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] cost-style wide",
+            "[*HUAWEI-isis-1] ipv6 enable topology ipv6",
+            "[*HUAWEI-isis-1] ipv6 traffic-eng level-2",
+            "[*HUAWEI-isis-1] ipv6 metric-delay advertisement enable level-2",
+            "[*HUAWEI-isis-1] ipv6 metric-delay suppress timer 300 percent-threshold 20 absolute-threshold 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf delay variation occurs frequently, link delay information is flooded and reported repeatedly, causing the optimal path calculated by a controller based on delay information to change frequently. To prevent this issue, run the ipv6 metric-delay suppress timer command to suppress the advertisement of IPv6 delay information. Suppression is performed in compliance with the following rules:\nIf a delay change is detected, the delay information is not immediately advertised or reported. Instead, the maximum and minimum delays are recorded within the suppression timer specified using timer-value. When the timer expires, IS-IS starts to suppress the advertisement of delay information.If the calculated percentage threshold is greater than or equal to the percentage threshold specified using percent-value, and the calculated absolute threshold is greater than or equal to the absolute threshold specified using absolute-value, then IS-IS updates the delay information accordingly and uses BGP-LS to report the new delay information to the controller. Otherwise, IS-IS does not perform the update and suppresses the advertisement of the delay information instead.\n\nPrecautions\nIf the values of timer-value, percent-value, and absolute-value are all set to 0 on a device, the device is disabled from suppressing the advertisement of delay information.\nIf IPv6 delay information advertisement enabled using the ipv6 metric-delay advertisement enable command does not take effect, the ipv6 metric-delay suppress timer command cannot be run.\nIt is recommended that the value specified by timer-value be greater than the interval at which sampled TWAMP data is sent to IS-IS."
+}

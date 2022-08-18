@@ -1,0 +1,51 @@
+{
+    "PageTitle": "trap-target",
+    "FuncDef": "This command adds/modifies a trap receiver and configures the operational parameters for the trap receiver. A trap reports significant events that occur on a network device such as errors or failures.",
+    "CLIs": [
+        "trap-target name [ address ip-address ] [ port <port> ] [ snmpv1 | snmpv2c | snmpv3 ] notify-community { <communityName> | <snmpv3SecurityName> } [ security-level { no-auth-no-privacy | auth-no-privacy | privacy } ] [ replay ]",
+        "no trap-target name"
+    ],
+    "ParentView": [
+        "config>service>vprn>log>snmp-trap-group"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "name",
+            "Info": "specifies the name of the trap target up to 28 characters in length."
+        },
+        {
+            "Parameters": "address ip-address",
+            "Info": "The IP address of the trap receiver in dotted decimal notation. Only one IP address destination can be specified per trap destination group."
+        },
+        {
+            "Parameters": "port port",
+            "Info": "The destination UDP port used for sending traps to the destination, expressed as a decimal integer. Only one port can be specified per trap-target statement. If multiple traps need to be issued to the same address then multiple ports must be configured. Values-1 to 65535. ParamDefault: Default- 162"
+        },
+        {
+            "Parameters": "snmpv1 | snmpv2c | snmpv3",
+            "Info": "Specifies the SNMP version format to use for traps sent to the trap receiver. Values-snmpv1, snmpv2c, snmpv3. ParamDefault: Default- snmpv3"
+        },
+        {
+            "Parameters": "notify-community community | security-name",
+            "Info": "Specifies the community string for snmpv1 or snmpv2c or the snmpv3 security-name. If no notify-community is configured, then no alarms nor traps will be issued for the trap destination. If the SNMP version is modified, the notify-community must be changed to the proper form for the SNMP version."
+        },
+        {
+            "Parameters": "community",
+            "Info": "The community string as required by the snmpv1 or snmpv2c trap receiver. The community string can be an ASCII string up to 31 characters in length."
+        },
+        {
+            "Parameters": "security-name",
+            "Info": "The security-name as defined in the config>system>security>user context for SNMP v3. The security-name can be an ASCII string up to 31 characters in length."
+        },
+        {
+            "Parameters": "security-level {no-auth-no-privacy | auth-no-privacy | privacy}",
+            "Info": "Specifies the required authentication and privacy levels required to access the views configured on this node when configuring an snmpv3 trap receiver. Values-no-auth-no-privacy, auth-no-privacy, privacy. ParamDefault: Default- no-auth-no-privacy. This parameter can only be configured if SNMPv3 is also configured."
+        },
+        {
+            "Parameters": "replay",
+            "Info": "Enable replay of missed events to target. If replay is applied to an SNMP trap target address, the address is monitored for reachability. Reachability is determined by whether or not there is a route in the routing table by which the target address can be reached. Before sending a trap to a target address, the SNMP module asks the PIP module if there is either an in-band or out-of-band route to the target address. If there is no route to the SNMP target address, the SNMP module saves the sequence-id of the first event that will be missed by the trap target. When the routing table changes again so that there is now a route by which the SNMP target address can be reached, the SNMP module replays (for example, retransmits) all events generated to the SNMP notification log while the target address was removed from the route table. Because of route table change convergence time, it is possible that one or more events may be lost at the beginning or end of a replay sequence.\nThe cold-start-wait and route-recovery-wait timers under config>log>app-route-notifications can help reduce the probability of lost events."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: No SNMP trap targets are defined."
+}

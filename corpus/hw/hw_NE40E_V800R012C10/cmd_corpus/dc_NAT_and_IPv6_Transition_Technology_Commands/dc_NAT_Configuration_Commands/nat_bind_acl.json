@@ -1,0 +1,78 @@
+{
+    "PageTitle": "nat bind acl",
+    "FuncDef": "The nat bind acl command binds a NAT instance to an ACL on a specified interface.\nThe undo nat bind acl command removes the binding between a NAT instance and an ACL on a specified interface.\nBy default, no NAT instance is bound to an ACL on an interface.",
+    "CLIs": [
+        "nat bind acl { <acl-index> | name <acl-name> } [ mode deny-forward ] instance <instance-name> [ precedence <precedence-index> ]",
+        "undo nat bind acl { <acl-index> | name <acl-name> } [ mode deny-forward ] instance <instance-name> [ precedence <precedence-index> ]"
+    ],
+    "ParentView": [
+        "100GE-Trunk member interface view",
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "400GE interface view",
+        "CPOS interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk member Layer 3 interface view",
+        "Eth-Trunk member interface view",
+        "Eth-Trunk interface view",
+        "Eth-Trunk interface view",
+        "GE-Trunk member Layer 3 interface view",
+        "GE-Trunk member interface view",
+        "Layer 3 GE interface view",
+        "GE optical interface view",
+        "GE sub-interface view",
+        "GE interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "Serial-Trunk member interface view",
+        "Trunk serial interface view",
+        "VBDIF interface view",
+        "VLANIF interface view",
+        "XGE interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "name acl-name",
+            "Info": "Specifies the name of an ACL.\nThe value is a string of 1 to 64 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "mode",
+            "Info": "Specifies the NAT mode.\n-"
+        },
+        {
+            "Parameters": "deny-forward",
+            "Info": "Transparently transmits traffic matching an ACL deny rule. If the mode deny-forward parameter is configured, traffic matching the ACL deny rule is transparently transmitted.\n-"
+        },
+        {
+            "Parameters": "instance instance-name",
+            "Info": "Specifies the name of a NAT instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "precedence precedence-index",
+            "Info": "Specifies a precedence index.\nThe value is an integer that ranges from 0 to 8191. The smaller the precedence value, the higher the precedence."
+        },
+        {
+            "Parameters": "acl acl-index",
+            "Info": "Specifies an ACL index.\nThe value is an integer. Basic ACLs are numbered from 2000 to 2999, and advanced ACLs are numbered from 3000 to 3999."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 3000",
+            "[*HUAWEI-acl-adv-3000] rule 1 permit source 10.1.1.0 0.0.0.255",
+            "[*HUAWEI-acl-adv-3000] commit",
+            "[~HUAWEI-acl-adv-3000] quit",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[~HUAWEI-nat-instance-cpe1] commit",
+            "[~HUAWEI-nat-instance-cpe1] quit",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] nat bind acl 3000 instance cpe1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo bind a NAT instance to an ACL on a specified interface, run the nat bind acl command. The command helps direct traffic to a service board for NAT processing.\nThe device processes traffic matching an ACL deny rule as follows:\nIf the mode deny-forward parameter is configured, traffic matching the ACL deny rule is transparently transmitted.If the mode deny-forward parameter is not configured, traffic matching the ACL deny rule is discarded.\n\nPrerequisites\nACL rules have been configured.\nPrecautions\nNAT traffic distribution on the public network outbound interface: This command is not supported by dot1q and QinQ VLAN tag termination sub-interfaces.\nIf ECMP with multiple equal-cost outbound interfaces specified is configured, traffic distribution configurations must be the same on these outbound interfaces.\nIn VS mode, this command is supported only by the admin VS."
+}

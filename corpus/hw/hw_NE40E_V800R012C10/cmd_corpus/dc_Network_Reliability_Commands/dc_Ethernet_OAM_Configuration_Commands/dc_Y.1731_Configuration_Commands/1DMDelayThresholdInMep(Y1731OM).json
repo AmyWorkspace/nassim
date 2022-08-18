@@ -1,0 +1,49 @@
+{
+    "PageTitle": "delay-measure one-way delay-threshold",
+    "FuncDef": "The delay-measure one-way delay-threshold command sets alarm thresholds for a one-way frame delay in proactive one-way frame delay measurement.\nThe undo delay-measure one-way delay-threshold command deletes the alarm thresholds configured for a one-way frame delay in proactive one-way frame delay measurement.\nBy default, no alarm threshold is set for a one-way frame delay in proactive one-way frame delay measurement.",
+    "CLIs": [
+        "delay-measure one-way delay-threshold mep <mep-id> upper-limit <upper-limit> lower-limit <lower-limit> [ 8021p <8021p-value> ]",
+        "undo delay-measure one-way delay-threshold mep <mep-id> [ upper-limit <upper-limit> lower-limit <lower-limit> ] [ 8021p <8021p-value> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "upper-limit upper-limit",
+            "Info": "Specifies an upper threshold for a one-way frame delay.\nThe value is an integer ranging from 0 to 4294967295, in microseconds."
+        },
+        {
+            "Parameters": "lower-limit lower-limit",
+            "Info": "Specifies a lower threshold for a one-way frame delay.\nThe value is an integer ranging from 0 to 4294967295, in microseconds. The lower threshold must be less than or equal to the upper threshold."
+        },
+        {
+            "Parameters": "8021p 8021p-value",
+            "Info": "Specifies the priority of frames in proactive one-way frame delay measurement. This parameter applies only to VLL scenarios.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "mep mep-id",
+            "Info": "Specifies the ID of a MEP.\nThe value is an integer ranging from 1 to 8191."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] delay-measure one-way delay-threshold mep 1 upper-limit 400 lower-limit 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe delay-measure one-way delay-threshold command can be used to set upper and lower thresholds for a one-way frame delay in proactive one-way frame delay measurement, which is used to measure unidirectional transmission delays for links between MEPs and monitor the quality of the links. If the delay on the links between MEPs exceeds the configured upper threshold, an alarm is generated and sent to the NMS. A network administrator uses the alarm information to rectify the fault that causes the delay and to ensure service quality.\nPrerequisites\nAn MD, an MA, and a MEP have been created using the cfm md, ma, and mep mep-id commands, respectively."
+}

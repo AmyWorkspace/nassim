@@ -1,0 +1,36 @@
+{
+    "PageTitle": "allow l2tp virtual-template",
+    "FuncDef": "The allow l2tp virtual-template command sets the L2TP group to the LNS type, binds it to the virtual template, and specifies the name of the peer (tunnel name of the peer L2TP group).\nThe undo allow command deletes the configuration and restores the default setting.\nBy default, no virtual template is bound to an L2TP group.",
+    "CLIs": [
+        "allow l2tp virtual-template <virtual-template-number> remote <lac-name> [ ip-address <address> ]",
+        "undo allow"
+    ],
+    "ParentView": [
+        "L2TP group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-template-number",
+            "Info": "Specifies the number of the VT bound to the Layer 2 Tunneling Protocol (L2TP) group.\nThe value is an integer of ranging from 0 to 1023."
+        },
+        {
+            "Parameters": "remote lac-name",
+            "Info": "Indicates the tunnel name of the remote L2TP Access Concentrator (LAC) of an L2TP Network Server (LNS).\nThis parameter is optional if the command is run in the view of the default L2TP group default-lns. Otherwise, this parameter is mandatory.\nThe value is a string of 1 to 253 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "ip-address address",
+            "Info": "Specifies a source address based on which an L2TP tunnel is set up. After this parameter is configured, the LNS checks the source address carried in packets sent from the LAC when establishing an L2TP tunnel. The tunnel can be established only when the source address is the same as the configured one.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface virtual-template 1",
+            "[~HUAWEI-Virtual-Template1] commit",
+            "[~HUAWEI-Virtual-Template1] quit",
+            "[~HUAWEI] l2tp-group default-lns",
+            "[*HUAWEI-l2tp-huawei] allow l2tp virtual-template 1 remote 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn LNS can use different virtual templates to receive tunnel establishment requests from different LACs. To specify a virtual template and tunnel name of an LAC, run the allow l2tp virtual-template command on an LNS.\nPrerequisites\nThe virtual template has been configured using the interface virtual-template command.\nPrecautions\nThe value of lac-name must be the same as the tunnel name configured on the LAC.\nThe allow l2tp virtual-template command cannot be run if the default L2TP request group (default-lac) is used.\nThe allow l2tp virtual-template and start l2tp commands are mutually exclusive.\nThe remote lac-name parameter must be configured. Otherwise, the configuration fails. A remote tunnel name can be bound to only one L2TP group. Re-configure a remote tunnel name if the one specified by remote lac-name has been bound to another L2TP group."
+}

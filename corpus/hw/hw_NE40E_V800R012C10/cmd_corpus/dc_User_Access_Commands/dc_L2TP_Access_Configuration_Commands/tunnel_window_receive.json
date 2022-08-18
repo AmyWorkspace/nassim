@@ -1,0 +1,25 @@
+{
+    "PageTitle": "tunnel window receive",
+    "FuncDef": "The tunnel window receive command sets an L2TP receive window size for out-of-order packets.\nThe undo tunnel window receive command restores the default L2TP receive window size.\nBy default, the L2TP receive window size is 0.",
+    "CLIs": [
+        "tunnel window receive <window-size>",
+        "undo tunnel window receive [ <window-size> ]"
+    ],
+    "ParentView": [
+        "L2TP group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "window-size",
+            "Info": "Specifies an L2TP receive window size, indicating the number of packets allowed by the receive window.\nThe value is an integer ranging from 0 to 5000. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2tp-group huawei",
+            "[*HUAWEI-l2tp-huawei] tunnel window receive 128"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf there are many out-of-order packets, run the tunnel window receive command to set a larger L2TP receive window size for the out-of-order packets. This configuration allows the system to buffer the out-of-order packets with the NSs within the receive window size. After the packet with the NS equal to the upper limit of the receive window arrives, the system processes the packet and increases the upper limit of the receive window by 1. By now, if there are out-of-order packets in the receive window, the system processes the out-of-order packets. If not, the system waits for the packet with the NS equal to the upper limit of the receive window. The system discards the packets exceeding the receive window size.\nBy default, the L2TP receive window size is 0. If the L2TP receive window size is not manually adjusted and L2TP tunnel receives out-of-order packets, the L2TP receive window size will be automatically adjusted to 128. After that, if there are still out-of-order packets (excluding repetitive packets), the receive window size will be adjusted to 1024, which is the largest value for dynamic adjustment. If there are still out-of-order packets even after, the packets are discarded. After the out-of-order packets buffered in the receive window are processed, the receive window size is restored to 0. If the tunnel window receive command is run to set an L2TP receive window size for out-of-order packets, the configured receive window size takes effect.\nPrecautions\nThe sum of receive window sizes of all L2TP groups on the device cannot exceed 5000. Otherwise, memory resources may be exhausted, and service interruptions occur.\nIf the tunnel window receive command is run more than once in the same view, the latest configuration overrides the previous one. Configuring an L2TP receive window size in the range 4-128 is recommended. A larger L2TP receive window size will result in high memory usage.\nThe configuration takes effect only for tunnels established after the command is run. The command takes effect on both the LAC and LNS."
+}

@@ -1,0 +1,37 @@
+{
+    "PageTitle": "apply dampening",
+    "FuncDef": "The apply dampening command sets dampening parameters for EBGP routes.\nThe undo apply dampening command cancels the configuration.\nBy default, no dampening parameters are set for EBGP routes.",
+    "CLIs": [
+        "apply dampening <half-life-reach> <reuse> <suppress> <ceiling>",
+        "undo apply dampening"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "half-life-reach",
+            "Info": "Specifies the half-life of a reachable route.\nThe value is an integer ranging from 1 to 45, in minutes."
+        },
+        {
+            "Parameters": "reuse",
+            "Info": "Specifies the threshold for routes to be released from the dampening state. When the penalty value falls below the threshold, routes are reused.\nThe value is an integer ranging from 1 to 20000."
+        },
+        {
+            "Parameters": "suppress",
+            "Info": "Specifies the threshold for routes to enter the dampening state. When the penalty value exceeds the threshold, routes are suppressed.\nThe value is an integer ranging from 1 to 20000. The configured value of suppress must be greater than the value of reuse."
+        },
+        {
+            "Parameters": "ceiling",
+            "Info": "Specifies the upper limit of the penalty value of routes.\nThe value is an integer ranging from 1001 to 20000. The configured value of ceiling must be greater than the value of suppress."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy aa permit node 10",
+            "[*HUAWEI-route-policy] apply dampening 20 2000 10000 16000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe apply dampening command, which is mostly used in BGP, is used to prevent frequent route dampening from affecting devices on the network.\nYou can configure different route dampening parameters for different nodes in the same route-policy. When route flapping occurs, BGP can use different route dampening parameters to suppress the routes that match the route-policy.\nImplementation Procedure\nIf the apply dampening command is run more than once, the latest configuration overwrites the previous one.\nConfiguration Impact\nIf the apply dampening command is run, each time route flapping occurs, BGP adds a certain penalty value to this route.\nPrecautions\nThe parameters in this command must be set because they do not have default values. The values of reuse, suppress, and ceiling are listed in ascending order: reused < suppressed <ceiling. According to the formula, MaxSuppressTime = half-life-reach * 60 * (ln (ceiling/reused)/ln (2)), routes are released from the dampening state if the value of MaxSuppressTime is less than 1. Therefore, the value of the ceiling/reused must be great enough so that the value of MaxSuppressTime can be greater than or equal to 1."
+}

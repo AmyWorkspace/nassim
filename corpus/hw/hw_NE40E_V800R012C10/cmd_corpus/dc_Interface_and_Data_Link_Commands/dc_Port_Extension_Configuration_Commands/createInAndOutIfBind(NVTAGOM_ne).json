@@ -1,0 +1,33 @@
+{
+    "PageTitle": "remote-interface binding",
+    "FuncDef": "The remote-interface binding command binds an AP's external communication interface to a master's internal communication interface, and creates a port extension interface.\nThe undo remote-interface binding command restores the default configuration.\nBy default, an AP's external communication interface is not bound to a master's internal communication interface, and no port extension interface exists on a master.",
+    "CLIs": [
+        "remote-interface { <ap-interface-name> | <ap-interface-type> <ap-interface-number> } [ to <max-port-number> ] binding { <master-interface-name> | <master-interface-type> <master-interface-number> }",
+        "undo remote-interface { <ap-interface-name> | <ap-interface-type> <ap-interface-number> } [ to <max-port-number> ] binding { <master-interface-name> | <master-interface-type> <master-interface-number> }"
+    ],
+    "ParentView": [
+        "Virtual access AP-ID view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ap-interface-name ap-interface-type ap-interface-number",
+            "Info": "Specifies the type and number of an external communication interface on an AP.\nThe value is a three-dimensional Ethernet interface."
+        },
+        {
+            "Parameters": "to max-port-number",
+            "Info": "Specifies a maximum number for an external communication interface on an AP. If this parameter is specified, the command binds a group of external communication interfaces on an AP to a master's internal communication interface, and creates a group of port extension interfaces. The number range of external communication interfaces bound is the last dimension of ap-interface-number to max-port-number.\nThe value is an integer ranging from 0 to 95."
+        },
+        {
+            "Parameters": "master-interface-name master-interface-type master-interface-number",
+            "Info": "Specifies the type and number of an internal communication interface on a master.\nThe value can be a four-dimensional Ethernet physical interface, and the first dimension is 1. The value can also be an internal trunk interface."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ap-id 1025",
+            "[*HUAWEI-ap1025] remote-interface GigabitEthernet 1/0/1 binding GigabitEthernet 1/1/0/1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a port extension system, an AP can be considered as a card for extending master interfaces. An AP receives configurations and forwarding entries from a master and provides an external communication interface. To improve interface density on a master, run the remote-interface binding command on the master to bind an AP's external communication interface to the master's internal communication interface and create a port extension interface. A port extension interface is a four-dimensional interface, which is an extended interface of an AP's external communication interface mapped on a master. For example, GigabitEthernet 1025/1/0/1 indicates that the port extension interface corresponds to AP 1025's external communication interface GigabitEthernet 1/0/1. After creating a port extension interface, you can treat the AP's external communication interface as the master's local interface for service configurations.To improve configuration efficiency, specify to max-port-number in the command to bind a group of external communication interfaces on an AP to a master's internal communication interface and create a group of port extension interfaces.\nConfiguration Impact\nBy default, port extension is automatically enabled on an AP's all Ethernet interfaces. After the remote-interface binding command is run on a master, port extension is automatically disabled on the AP's external communication interface, because an interface cannot function as both an internal communication interface and an external communication interface.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

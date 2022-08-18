@@ -1,0 +1,75 @@
+{
+    "PageTitle": "static-cr-lsp transit",
+    "FuncDef": "The static-cr-lsp transit command configures a static CR-LSP on a transit LSR.\nThe undo static-cr-lsp transit command deletes a static CR-LSP from the transit LSR.\nBy default, no static CR-LSP on a transit LSR is configured.",
+    "CLIs": [
+        "static-cr-lsp transit <lsp-name> [ incoming-interface { <incoming-interfacename> | { <incoming-interfacetype> <incoming-interfacenum> } } ] in-label <in-label> { outgoing-interface { <outgoing-interfacename> | { <outgoing-interfacetype> <outgoing-interfacenum> } } | nexthop <next-hop-address> } * out-label <out-label> [ [ bandwidth { [ ct0 ] bandwidth } ] | [ pir <pir> ] ] *",
+        "undo static-cr-lsp transit <lsp-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lsp-name",
+            "Info": "Specifies LSP name.\nThe value is a string of 1 to 19 case-sensitive characters It cannot contain spaces.\nThe string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "incoming-interface incoming-interfacename",
+            "Info": "Specifies the incoming interface name.\n-"
+        },
+        {
+            "Parameters": "incoming-interfacetype",
+            "Info": "Specifies the incoming interface type.\n-"
+        },
+        {
+            "Parameters": "incoming-interfacenum",
+            "Info": "Specifies the incoming interface number.\n-"
+        },
+        {
+            "Parameters": "in-label in-label",
+            "Info": "Specifies an incoming label value.\nThe value is an integer and the value ranges from 16 to 32783."
+        },
+        {
+            "Parameters": "outgoing-interface outgoing-interfacename",
+            "Info": "Specifies the outgoing interface name.\n-"
+        },
+        {
+            "Parameters": "outgoing-interfacetype",
+            "Info": "Specifies the outgoing interface type.\n-"
+        },
+        {
+            "Parameters": "outgoing-interfacenum",
+            "Info": "Specifies the outgoing interface number.\n-"
+        },
+        {
+            "Parameters": "nexthop next-hop-address",
+            "Info": "nexthop address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "out-label out-label",
+            "Info": "Specifies an outgoing label value.\nThe value is an integer ranging from 16 to 1048575."
+        },
+        {
+            "Parameters": "bandwidth",
+            "Info": "Bandwidth configuration.\n-"
+        },
+        {
+            "Parameters": "ct0 bandwidth",
+            "Info": "Specifies the bandwidth to be reserved for CT0.\nThe value is an integer ranging from 0 to 4000000000, in kbit/s."
+        },
+        {
+            "Parameters": "pir pir",
+            "Info": "Specifies the peak information rate (PIR) of the reservable bandwidth. If ct0 bandwidth is not set to 0, the PIR parameter must be set.\nThe value is an integer ranging from 0 to 4000000000, in kbit/s. The value cannot be smaller than the value of bandwidth."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] static-cr-lsp transit tunnel34 incoming-interface GigabitEthernet2/0/0 in-label 123 outgoing-interface GigabitEthernet1/0/0 nexthop 10.2.0.2 out-label 253 bandwidth ct0 20 pir 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn devices with low routing and processing performance, a static CR-LSP can be established to implement MPLS TE functions. Labels for a static CR-LSP are assigned manually. Static CR-LSP configuration involves the operations on the following types of nodes:\nIngress: configured using the static-cr-lsp ingress command.Transit node: configured using the static-cr-lsp transit command.Egress: configured using the static-cr-lsp egress command.\nTo modify the inbound interface name, incoming label value, next-hop address, outbound interface name, or outgoing label value, run the static-cr-lsp transit command to set a new value. There is no need to run the undo static-cr-lsp transit command before changing a configured value.\n\nPrerequisites\nMPLS TE has been enabled globally using the mpls te command."
+}

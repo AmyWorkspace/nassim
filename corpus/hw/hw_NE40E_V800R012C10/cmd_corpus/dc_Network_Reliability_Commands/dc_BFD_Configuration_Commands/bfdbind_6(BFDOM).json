@@ -1,0 +1,45 @@
+{
+    "PageTitle": "bfd bind mpls-te group",
+    "FuncDef": "The bfd bind mpls-te group command binds a BFD session group to a TE tunnel or an LSP bound to the TE tunnel, and generates the BFD session group.\nBy default, no BFD session group is set.",
+    "CLIs": [
+        "bfd <sessname-value> bind mpls-te interface { <interface-type> <interface-number> | <interface-name> } te-lsp [ backup ] group",
+        "bfd <sessname-value> bind mpls-te interface { <interface-type> <interface-number> | <interface-name> } group"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sessname-value",
+            "Info": "Specifies the name of a BFD session.\nThe value is a string of 1 to 64 characters, spaces not supported. When the string entered is enclosed with quotation marks (\"), spaces are supported in the string.\nWhen you configure the name of a BFD session, the uppercase and lowercase letters in the name must be consistent with what you entered.The system does not distinguish between uppercase and lowercase letters when checking the name of a BFD session. For example, the system regards ABC and abc as a BFD session name. If a BFD session named ABC has been configured and abc is specified, the system directly displays the ABC view."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of a local Layer 3 interface bound to a BFD session.\n-"
+        },
+        {
+            "Parameters": "te-lsp",
+            "Info": "Specifies that BFD detects the primary LSP bound to a tunnel.\n-"
+        },
+        {
+            "Parameters": "backup",
+            "Info": "Specifies that BFD detects the backup LSP bound to a tunnel.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] quit",
+            "[*HUAWEI] bfd atob bind mpls-te interface Tunnel 1 te-lsp group",
+            "[*HUAWEI-bfd-lsp-session-atob]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe two devices are connected through an Eth-Trunk link, and the two member interfaces of the Eth-Trunk interface are located on two different interface boards. Normally, after a BFD session is bound to an Eth-Trunk interface, only one BFD session is created. BFD selects the interface board on which a member interface resides as the board of the state machine and monitors the member link. When the interface board where the BFD session resides is different from the interface board selected for the current service traffic, if the member interface of the BFD session, the member link, or the board of the state machine is faulty, the BFD module considers that the Eth-Trunk interface is faulty. Actually, the path used for transmitting service traffic is still functioning properly. Then, a BFD detection error occurs.\nThis problem can be solved by creating a BFD session group. Create a BFD session group for an inter-board Eth-Trunk link. The BFD session group contains two BFD sub-sessions. The service components detect only the status of the BFD session group. The status of a BFD session group depends on the status of the two BFD sub-sessions. As long as one BFD sub-session is Up, the status of the BFD session group is Up. When both sub-sessions are Down, the BFD session group is Down.\nPrerequisites\nBFD has been enabled globally using the bfd command in the system view.\nFollow-up Procedure\nAfter a BFD session group is created:\nRun the sub-session discriminator local, command to create sub-session 1 for the BFD session group.Run the sub-session discriminator local, command to create sub-session 2 for the BFD session group."
+}

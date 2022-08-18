@@ -1,0 +1,51 @@
+{
+    "PageTitle": "static-mapping",
+    "FuncDef": "The static-mapping command configures parameters for the static source tracing algorithm, including private and public IP address pools, the size of a port range, and the port range.\nThe undo static-mapping command deletes the existing parameter configurations.\nBy default, the static source tracing algorithm is not configured.",
+    "CLIs": [
+        "static-mapping <static-mapping-id> inside-pool <inside-pool-id> global-pool <global-pool-id> port-range <start-port> <end-port> [ port-size <port-size> ]",
+        "undo static-mapping <static-mapping-id> [ inside-pool <inside-pool-id> global-pool <global-pool-id> port-range <start-port> <end-port> [ port-size <port-size> ] ]"
+    ],
+    "ParentView": [
+        "Static mapping algorithm configuration view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "static-mapping-id",
+            "Info": "Indicates the ID of the static source tracing algorithm.\nThe value is an integer ranging from 1 to 2000."
+        },
+        {
+            "Parameters": "inside-pool inside-pool-id",
+            "Info": "Indicates the ID of a private IP address pool.\nThe value is an integer ranging from 1 to 2000."
+        },
+        {
+            "Parameters": "global-pool global-pool-id",
+            "Info": "Indicates the ID of a public IP address pool.\nThe value is an integer ranging from 1 to 2000."
+        },
+        {
+            "Parameters": "port-range start-port",
+            "Info": "Indicates the start port number of a port range.\nThe value is an integer multiple of 256 ranging from 256 to 65535."
+        },
+        {
+            "Parameters": "end-port",
+            "Info": "Indicates the end port number of a port range.\nThe value is an integer ranging from 256 to 65535, larger than that of start-port. The (value+1) is an integer multiple of 256."
+        },
+        {
+            "Parameters": "port-size port-size",
+            "Info": "Indicates the size of the port range. The parameter port-size port-size is optional, and its default value is 4096.\nThe value is an integer ranging from 64 to 65280. The value of port-size must be a multiple of 64. The port-size value must be less than or equal to the number of ports between end-port and start-port."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat static-mapping",
+            "[*HUAWEI-nat-static-mapping] inside-pool 1",
+            "[*HUAWEI-nat-static-mapping-inside-pool-1] section 1 10.0.0.1 10.0.0.255",
+            "[*HUAWEI-nat-static-mapping-inside-pool-1] quit",
+            "[*HUAWEI-nat-static-mapping] global-pool 1",
+            "[*HUAWEI-nat-static-mapping-global-pool-1] section 1 172.20.0.1 172.20.0.100",
+            "[*HUAWEI-nat-static-mapping-global-pool-1] quit",
+            "[*HUAWEI-nat-static-mapping] static-mapping 10 inside-pool 1 global-pool 1 port-range 256 65535 port-size 256"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run the static-mapping command to configure parameters for the static source tracing algorithm, including private and public IP address pools, size of a port range, and the port range, in which the private IP address pool is configured using the inside-pool command, and the public IP address pool is configured using the global-pool command.\nPrecautions\nThe static source tracing algorithm is mutually exclusive with the exclude port function, IP change function (periodically updating public IP addresses of private network users for source tracing), and port-forwarding function.\nThe static source tracing algorithm does not support VPN. If a private network user belongs to a VPN instance, the IP address of this user is used alone to match against the algorithm to create a flow.\nThis command cannot be run after the vsm on-board-mode enable command is run."
+}

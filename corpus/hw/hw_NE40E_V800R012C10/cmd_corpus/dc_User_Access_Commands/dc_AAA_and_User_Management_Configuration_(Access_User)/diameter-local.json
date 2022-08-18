@@ -1,0 +1,41 @@
+{
+    "PageTitle": "diameter-local",
+    "FuncDef": "The diameter-local command creates a Diameter client entity and configures the entity information such as the host name, domain name, product name, and interface used to send packets to a Diameter server. The interface must be assigned an IP address that can be used as a source address for sending Diameter packets.\nThe undo diameter-local command deletes a Diameter client entity.\nBy default, the device does not have Diameter client entities.",
+    "CLIs": [
+        "diameter-local <localname> interface { <interface-type> <interface-number> | <interface-name> } [ host <host-name> | product <product-name> | realm <realm-name> ] *",
+        "undo diameter-local <localname>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "localname",
+            "Info": "Specifies the name of the client entity.\nThe name is a string of 1 to 32 case-insensitive characters."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the interface, which can be a GE or a loopback interface.\nIf the interface is a GE interface, the interface number is in the format of slot number/card number/interface number. If the interface is a loopback interface (it must be an existing one), the interface number must range from 0 to 1023."
+        },
+        {
+            "Parameters": "host host-name",
+            "Info": "Specifies the host name of the Diameter client.\nThe name is a string of 1 to 127 case-insensitive characters."
+        },
+        {
+            "Parameters": "product product-name",
+            "Info": "Specifies the product name of the Diameter client, which is given by the manufacturer.\nThe name is a string of 1 to 127 case-insensitive characters."
+        },
+        {
+            "Parameters": "realm realm-name",
+            "Info": "Specifies the domain name of the Diameter client, which identifies the domain where the Diameter message generator resides and is contained in every Diameter message sent from the Diameter client.\nThe name is a string of 1 to 127 case-insensitive characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] diameter enable",
+            "[~HUAWEI] diameter-local huawei interface loopback 0 host pcef product NE40E realm huawei.com"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe diameter-local command is used to configure information about a Diameter client entity. The information serves as a basis for establishing a connection between a policy server (the Diameter server) and the device (the Diameter client). In addition, the information, or more specific, the connection parameters on the Router, must be consistent with the Diameter client parameters specified on the policy server.\nPrerequisites\nThe Diameter protocol has been enabled on the device.\nConfiguration Impact\nA Diameter link is set up over a TCP connection and uniquely identified by the IP addresses and port numbers of the client and server. The IP address of the client is the IP address of the interface specified in the diameter-local command on the client.When the diameter-local command is run to create a client entity, all the host-name, product-name, and realm-name must be configured. After the creation, the parameters can be modified separately.\nFollow-up Procedure\nAfter configuring the Diameter client information, configure the Diameter server information and then enter the Diameter server group view to set up a connection between the client and the server.\nPrecautions\nThe device can be configured with only one Diameter client entity.\nA client entity that already has a link set up with a server entity cannot be modified or deleted.\nIn VS mode, this command is supported only by the admin VS."
+}

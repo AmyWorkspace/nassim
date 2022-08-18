@@ -1,0 +1,37 @@
+{
+    "PageTitle": "mld-snooping lastmember-queryinterval (VSI view)",
+    "FuncDef": "The mld-snooping lastmember-queryinterval command sets an interval at which a querier sends group-specific or source-and group-specific Query messages.\nThe undo mld-snooping lastmember-queryinterval command restores the default interval.\nBy default, a querier sends group-specific or source-and group-specific Query messages at an interval of 1s.",
+    "CLIs": [
+        "mld-snooping lastmember-queryinterval <lastmember-queryinterval>",
+        "undo mld-snooping lastmember-queryinterval"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lastmember-queryinterval",
+            "Info": "Sets an interval at which a querier sends group-specific or source-and group-specific Query messages.\nThe value is an integer ranging from 1 to 5, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "~HUAWEI> mld-snooping enable",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi aa",
+            "[*HUAWEI-vsi-aa] pwsignal ldp",
+            "[*HUAWEI-vsi-aa-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-aa-ldp] quit",
+            "[*HUAWEI-vsi-aa] quit",
+            "[*HUAWEI-vsi-aa] mld-snooping lastmember-queryinterval 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe mld-snooping lastmember-queryinterval command provides the following functions:\nSets an interval at which a querier sends group-specific or source-and group-specific multicast group Query messages.\nAfter the querier function is enabled, run this command to set a shorter interval if multicast group members change frequently. The device can then rapidly respond to users' requests.\nAdjusts the aging time of member interfaces.\nAfter receiving an MLD Snooping Done message from a host, a device sets the aging time of the corresponding member interface based on the following formula: Member interface aging time = Interval at which group-specific or source-and group-specific Query messages are sent x Number group-specific or source-and group-specific multicast group Query messages to be sent. By default, the device sets the aging time to 2s. To adjust the aging time, run the mld-snooping lastmember-queryinterval command to set the message sending interval, and run the mld-snooping robust-count command to set the number of group-specific or source-and group-specific multicast group Query messages to be sent.\nIf the querier receives a Report message for the multicast group from another host within the robust-count x lastmember-queryinterval period, it continues to maintain the member interface information for the group. Otherwise, the querier considers that there is no member of the group on the network segment, and does not maintain the member interface information for the group any more.\n\nPrerequisites\nMLD snooping has been enabled globally and in the VSI view.\nConfiguration Impact\nIf the mld-snooping lastmember-queryinterval command is run more than once in the same VSI view, the latest configuration overrides the previous one.\nPrecautions\nTo use the mld-snooping lastmember-queryinterval command configuration as a factor of adjusting the member interface aging time, set the same interval as that specified on its upstream device. Otherwise, multicast data transmission will be interrupted between the Layer 2 and Layer 3 devices.\nThe\nmld-snooping lastmember-queryinterval command fails to be run in a VSI in the following condition:\nThe VSI is bound to a BD."
+}

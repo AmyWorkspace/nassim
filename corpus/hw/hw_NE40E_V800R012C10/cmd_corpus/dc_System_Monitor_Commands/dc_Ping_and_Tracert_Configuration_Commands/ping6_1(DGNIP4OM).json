@@ -1,0 +1,66 @@
+{
+    "PageTitle": "ping ipv6-sid",
+    "FuncDef": "The ping ipv6-sid command tests the connectivity of an SRv6 network based on a specified SID.",
+    "CLIs": [
+        "ping ipv6-sid [ -a <source-ipv6-address> | -c <echo-number> | -m <wait-time> | -s <packetsize> | -t <timeout> | -tc <traffic-class-value> ] * [ segment-by-segment ] <sid1> [ <sid2> [ <sid3> [ <sid4> [ <sid5> [ <sid6> [ <sid7> [ <sid8> [ <sid9> [ <sid10> [ <sid11> ] ] ] ] ] ] ] ] ] ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ipv6-address",
+            "Info": "Specifies a source IPv6 address for ICMPv6 Echo Request messages to be sent.\nIf the source IPv6 address is not specified, the encapsulation source-address address is preferentially used in the SRv6 BE scenario. In other scenarios, the IPv6 address of the outbound interface is used as the source address of ICMPv6 ECHO-REQUEST packets.\nThe address is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-c echo-number",
+            "Info": "Specifies the number of ICMPv6 Echo Request messages to be sent.\nIf network quality is poor, you can increase the parameter value to check network quality based on the packet loss rate.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-m wait-time",
+            "Info": "Specifies an interval at which ICMPv6 Echo Request messages are sent.\nBy default, if a device does not receive an ICMPv6 Echo Reply message within 500 ms after it sends an ICMPv6 Echo Request message, the device sends another ICMPv6 Echo Request message. You can use the -m parameter to configure an interval at which ICMPv6 Echo Request messages are sent. If network quality is poor, setting this parameter to a value greater than or equal to 2000 ms is recommended.\nThe value is an integer ranging from 1 to 10000, in milliseconds. The default value is 500."
+        },
+        {
+            "Parameters": "-s packetsize",
+            "Info": "Specifies the length of an ICMPv6 Echo Request message, excluding the IP and ICMPv6 headers.\nThe value is an integer ranging from 20 to 9600, in bytes. The default value is 56."
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies a timeout period for waiting for an ICMPv6 Echo Reply message after an ICMPv6 Echo Request message is sent.\nAfter the command is run on a device, the device sends an ICMPv6 Echo Request message to a destination. If the device receives an ICMPv6 Echo Reply message before the time specified by timeout expires, the destination is reachable. If the device fails to receive an ICMPv6 Echo Reply message before the time specified by timeout expires, a timeout occurs.\nIn normal cases, a device receives an ICMPv6 Echo Reply message within 1 to 10 seconds after it sends an ICMPv6 Echo Request message. If network transmission is slow, you can increase this parameter value.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-tc traffic-class-value",
+            "Info": "Specifies a traffic class for ICMPv6 Echo Request messages.\nThe value is an integer ranging from 0 to 255. The default value is 0."
+        },
+        {
+            "Parameters": "segment-by-segment",
+            "Info": "Indicates a segment-by-segment test on an SRv6 network.\nIf a destination device does not support the function of running the opcode func-opcode end-op command to specify an End.OP SID, you can specify this parameter for a segment-by-segment test.\n-"
+        },
+        {
+            "Parameters": "sid1",
+            "Info": "Specifies an SRv6 SID.\nThe address is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X.\nA maximum of 11 SRv6 SIDs can be specified. They are separated by spaces, and the first specified SID is the outer SID."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping ipv6-sid A2::C31 A4::C50 A4::C52",
+            "  PING ipv6-sid A2::C31 A4::C50 A4::C52 : 56  data bytes, press CTRL_C to break",
+            "    Reply from A4::C52 ",
+            "    bytes=56 Sequence=1 hop limit=64 time=2 ms",
+            "    Reply from A4::C52 ",
+            "    bytes=56 Sequence=2 hop limit=64 time=1 ms",
+            "    Reply from A4::C52 ",
+            "    bytes=56 Sequence=3 hop limit=64 time=1 ms",
+            "    Reply from A4::C52 ",
+            "    bytes=56 Sequence=4 hop limit=64 time=1 ms",
+            "    Reply from A4::C52 ",
+            "    bytes=56 Sequence=5 hop limit=64 time=1 ms",
+            "- -- ipv6-sid ping statistics---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max=1/1/2 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo test the network connectivity, run the ping ipv6 command. It uses ICMPv6 packets to monitor the following items:\nWhether the remote device is available.Round-trip delay of packets transmitted between the local and remote devices.Whether packet loss occurs and what is the packet loss ratio.\n\nPrecautions\nAn End.OP SID must be specified as the penultimate SRv6 SID. Otherwise, the ping ipv6-sid command fails to be run.If router ID is not configured, source address need to configure manually when initiating a ping operation to the SRv6 TE Policy.If a fault occurs during command execution, you can press Ctrl+C to terminate the command execution."
+}

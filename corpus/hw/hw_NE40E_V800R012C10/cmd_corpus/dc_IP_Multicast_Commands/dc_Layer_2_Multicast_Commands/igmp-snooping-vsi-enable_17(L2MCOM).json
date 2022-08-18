@@ -1,0 +1,59 @@
+{
+    "PageTitle": "igmp-snooping ip-policy (VSI E-Tree view)",
+    "FuncDef": "The igmp-snooping ip-policy command configures a policy for filtering Report or Leave messages sent by hosts. This means that you can limit users that can enjoy multicast services.\nThe undo igmp-snooping ip-policy command restores the default setting.\nBy default, no policy is configured for filtering Report or Leave messages sent by hosts. This means that any user can enjoy multicast services.",
+    "CLIs": [
+        "igmp-snooping ip-policy { <acl-number> | acl-name <acl-name> }",
+        "undo igmp-snooping ip-policy"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of an ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 3000",
+            "[*HUAWEI-acl-adv-3000] rule deny ip destination 225.0.0.1 0 source 10.0.0.1 0",
+            "[*HUAWEI-acl-adv-3000] rule permit ip",
+            "[*HUAWEI-acl-adv-3000] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsia",
+            "[*HUAWEI-vsi-vsia] pwsignal ldp",
+            "[*HUAWEI-vsi-vsia-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-vsia-ldp] quit",
+            "[*HUAWEI-vsia] igmp-snooping ip-policy 3000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2000",
+            "[*HUAWEI-acl-basic-2000] rule deny source 10.0.0.1 0",
+            "[*HUAWEI-acl-basic-2000] rule permit source any",
+            "[*HUAWEI-acl-basic-2000] quit",
+            "[*HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan 11",
+            "[*HUAWEI-vlan11] igmp-snooping ip-policy 2000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 3000",
+            "[*HUAWEI-acl-adv-3000] rule deny ip destination 225.0.0.1 0 source 10.0.0.1 0",
+            "[*HUAWEI-acl-adv-3000] rule permit ip",
+            "[*HUAWEI-acl-adv-3000] quit",
+            "[*HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] igmp-snooping ip-policy 3000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo improve multicast service deployment security, configure a policy to filter out IGMP Report or Leave messages sent by specific hosts.\nIf a basic ACL is specified in the igmp-snooping ip-policy command, IGMP Report or Leave messages with specified source IP addresses are accepted or rejected. If an advanced ACL is specified in this command, IGMP Report or Leave messages with specified source and destination IP addresses are accepted or rejected."
+}

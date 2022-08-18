@@ -1,0 +1,35 @@
+{
+    "PageTitle": "ipv6-pool(Remote backup service view)",
+    "FuncDef": "The ipv6-pool command binds an IPv6 address pool to the remote backup service so that the address pool functions as a hot backup address pool.\nThe undo ipv6-pool command unbinds an IPv6 address pool from the remote backup service.\nBy default, IPv6 address pools are not bound to the remote backup service.",
+    "CLIs": [
+        "ipv6-pool <pool-name> [ metric <metric-value> ]",
+        "undo ipv6-pool <pool-name> [ metric <metric-value> ]"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pool-name",
+            "Info": "Specifies the name of an IPv6 address pool.\nThe value is a string of 1 to 32 case-insensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "metric metric-value",
+            "Info": "Specifies the network segment route cost of the IPv6 address pool.\nThe value is an integer ranging from 1 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 prefix test local",
+            "[~HUAWEI-ipv6-prefix-test] quit",
+            "[~HUAWEI] ipv6 pool pool-v6-01 bas local",
+            "[~HUAWEI-ipv6-pool-pool-v6-01] prefix test",
+            "[~HUAWEI-ipv6-pool-pool-v6-01] quit",
+            "[~HUAWEI] remote-backup-service ab",
+            "[*HUAWEI-rm-backup-srv-ab] commit",
+            "[~HUAWEI-rm-backup-srv-ab] ipv6-pool pool-v6-01 metric 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe network segment route cost of the IPv6 address pool can be any of the following:\nIf metric is specified, the network segment route cost of the IPv6 address pool is the specified one.If metric is not specified:For an rui-slave address pool, its network segment route cost is 20 by default.For a primary address pool, its network segment route cost is 10 by default.\nAfter a non-rui-slave address pool is bound to the remote backup service, its network segment route cost is determined by the track interface status and switching policy in the remote backup service:\nIf the track interface is Down, the switching policy is met so that the routes to the address pool are withdrawn and the network segment route cost is changed to 65535.If the system is restarted, the routes to the address pool are delayed advertisement, and the network segment route cost is changed to 65535. After the track interface goes Up, service data is restored. Then routes to the address pool are advertised, and the network segment route cost is restored to the configured value or default value.\n\nPrerequisites\nAn IPv6 prefix pool and an IPv6 address pool have been configured.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf an IPv6 address pool of the rui-slave type has been bound to a domain and the accounting-stop-packet include all-stack-ip user-type ipoe command has been run on the domain, the IPv6 address pool cannot be bound to the RBS view."
+}

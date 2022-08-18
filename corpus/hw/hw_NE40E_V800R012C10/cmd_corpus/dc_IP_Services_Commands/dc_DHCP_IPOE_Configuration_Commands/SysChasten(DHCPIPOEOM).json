@@ -1,0 +1,40 @@
+{
+    "PageTitle": "dhcp connection chasten",
+    "FuncDef": "The dhcp connection chasten command limits the number of DHCP user connection requests.\nThe undo dhcp connection chasten command restores the default configuration.\nThe undo dhcp connection chasten slot command deletes the configured limit on the number of DHCP user connection requests on an interface board.\nBy default, the device limits the number of connection requests from a DHCP user. Within 180 seconds, if the number of request packets for a DHCP user exceeds 10 or the number of authentication failure packets for a DHCP user exceeds 5, the DHCP user enters the suppression state, and the suppression time is 300 seconds.",
+    "CLIs": [
+        "dhcp connection chasten { request-packets <request-packets> | authen-packets <authen-packets> | request-packets <request-packets> authen-packets <authen-packets> | authen-packets <authen-packets> request-packets <request-packets> } check-period <check-period> restrain-period <restrain-period> [ slot <slotid> ]",
+        "undo dhcp connection chasten [ slot <slotid> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "request-packets request-packets",
+            "Info": "Specifies the maximum number of DHCP request packets allowed.\nThe value is an integer ranging from 0 to 10000. The-default-value-is-10."
+        },
+        {
+            "Parameters": "authen-packets authen-packets",
+            "Info": "Specifies the maximum number of DHCP authentication failure packets allowed.\nThe value is an integer ranging from 0 to 10000. The-default-value-is-5."
+        },
+        {
+            "Parameters": "check-period check-period",
+            "Info": "Specifies a check period. DHCP users are in the check state during this period.\nThe value is an integer ranging from 1 to 3600, in seconds. The-default-value-is-180."
+        },
+        {
+            "Parameters": "restrain-period restrain-period",
+            "Info": "Specifies a suppression period. DHCP users are in the suppression state during this period.\nThe value is an integer ranging from 0 to 3600, in seconds. The-default-value-is-300. If this parameter is set to 0, the function of limiting connection requests from a DHCP user is disabled."
+        },
+        {
+            "Parameters": "slot slotid",
+            "Info": "Specifies the ID of a slot.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp connection chasten request-packets 1000 check-period 60 restrain-period 120"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a large number of invalid connection request packets exist on a network, the network may be overloaded and even authorized users may not go online. To resolve this issue, run the dhcp connection chasten command to limit the number of connection requests from a DHCP user.\nThis command supports the following numbers:\nNumber of request packets: After receiving request packets, the DHCP module counts them into the number.Number of authentication failure packets: After receiving request packets, the DHCP module sends them to the service module for authentication. If the authentication fails, the DHCP module counts them into the number.\nTo disable the function of limiting connection requests from a DHCP user, set the suppression period to 0s.\nIn VS mode, this command is supported only by the admin VS.\n\nConfiguration Impact\nThe following scenarios are involved:\nOnly authen-packets is specified: If the number of authentication failure packets for a DHCP user exceeds the value specified by authen-packets within a check period, the DHCP user enters the suppression state.Only request-packets is specified: If the number of request packets for a DHCP user exceeds the value specified by request-packets within a check period, the DHCP user enters the suppression state.Both authen-packets and request-packets are specified: If the number of request packets for a DHCP user exceeds the value specified by request-packets within a check period, the DHCP user enters the suppression state. If the number of request packets for a DHCP user does not exceed the value specified by request-packets within a check period, the DHCP module sends the request packets to the service module for authentication. If the authentication fails and the number of authentication failure packets exceeds the value specified by authen-packets, the DHCP user enters the suppression state.\nWhen a user is in the suppression state, the user's packets are discarded regardless of whether the user is online."
+}

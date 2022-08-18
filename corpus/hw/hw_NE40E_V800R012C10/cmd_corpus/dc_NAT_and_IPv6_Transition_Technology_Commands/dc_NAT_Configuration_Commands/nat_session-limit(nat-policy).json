@@ -1,0 +1,38 @@
+{
+    "PageTitle": "nat session-limit (NAT policy View)",
+    "FuncDef": "The nat session-limit command configures user-based NAT session number limit in a NAT policy template.\nThe undo nat session-limit command cancels the configured NAT session number limit.\n\nBy default, the maximum number of network-to-user IP sessions for each user of a specific or all three protocols is as follows:\n\n\nTCP or UDP: 10240\n\nICMP: 512\n\nSummation of TCP, UDP and ICMP: 8192.",
+    "CLIs": [
+        "nat session-limit { tcp <session-number> | udp <session-number> | icmp <session-number> | total <session-number> }",
+        "undo nat session-limit { tcp | udp | icmp | total } [ <session-number> ]"
+    ],
+    "ParentView": [
+        "NAT policy View"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tcp session-number",
+            "Info": "Sets the maximum number of TCP sessions.\nThe value is an integer ranging from 50 to 65535."
+        },
+        {
+            "Parameters": "udp session-number",
+            "Info": "Sets the maximum number of UDP sessions.\nThe value is an integer ranging from 50 to 65535."
+        },
+        {
+            "Parameters": "icmp session-number",
+            "Info": "Sets the maximum number of ICMP sessions.\nThe value is an integer ranging from 50 to 65535."
+        },
+        {
+            "Parameters": "total session-number",
+            "Info": "Sets the maximum number of total sessions.\nIf the total number of TCP, UDP, and ICMP sessions used for NAT has exceeded the maximum, NAT cannot be performed even if the number of TCP, UDP, or ICMP sessions used for NAT has not reached the maximum number.\nThe value is an integer ranging from 50 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat-policy template tpl",
+            "[*HUAWEI-nat-policy-tpl] nat session-limit tcp 20000",
+            "[*HUAWEI-nat-policy-tpl] nat session-limit udp 10000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a user is being authenticated, the RADIUS server delivers the name of the NAT policy template to the device. The device delivers the maximum number of NAT sessions (NAT connections) defined in the template for the user. When the number of NAT sessions of a user reaches the upper limit, additional NAT sessions cannot be established. After you run the nat session-limit command in the NAT policy template view, the device restricts the number of NAT session connections for each user to which the template applies according to the configured maximum number.\nPrecautions\nIf you have configured nat session-limit for both the instance and the NAT template, the configurations in the NAT policy template take precedence when the system matches an online user with the policy template issued by the RADIUS server.\nThis command is used only in distributed scenarios and can only take effect on VSUF-80/VSUF-160/VSUI-160-E in NAT and DS-Lite.\nThis command is supported only by the admin-VS."
+}

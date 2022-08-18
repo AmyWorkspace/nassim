@@ -1,0 +1,36 @@
+{
+    "PageTitle": "peer route-policy import (BGP-EVPN address family view) (group)",
+    "FuncDef": "The peer route-policy import command specifies a route-policy for filtering routes received from a peer group.\nThe undo peer route-policy import command deletes a specified route-policy.\nBy default, no route-policy is configured for filtering routes received from a peer group.",
+    "CLIs": [
+        "peer <peerGroupName> route-policy <route-policy-name> import",
+        "undo peer <peerGroupName> route-policy <route-policy-name> import"
+    ],
+    "ParentView": [
+        "BGP-EVPN address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerGroupName",
+            "Info": "Specifies the name of a BGP EVPN peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy test-policy permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group gp1 internal",
+            "[*HUAWEI-bgp] peer 1.1.1.2 as-number 100",
+            "[*HUAWEI-bgp] l2vpn-family evpn",
+            "[*HUAWEI-bgp-af-evpn] peer gp1 enable",
+            "[*HUAWEI-bgp-af-evpn] peer 1.1.1.2 group gp1",
+            "[*HUAWEI-bgp-af-evpn] peer gp1 route-policy test-policy import"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a route-policy is created, the peer route-policy import command is used to apply a Route-Policy to a peer group so that the routes received from a peer group can be controlled. To be specific, only the necessary routes are received from the peer group. In this manner, route management is implemented, the scale of the routing table is reduced, and fewer network resources are consumed.\nPrerequisites\nIf the command specifies a route-policy that does not exist, use the route-policy command to create the route-policy.\nConfiguration Impact\nIf the peer route-policy command is run for a peer group, all the members of the peer group inherit the configuration.\nThe peer route-policy command is mutually exclusive with the peer route-filter commands.\nBinding a route-policy after a BGP peer relationship is established may cause peer flapping."
+}

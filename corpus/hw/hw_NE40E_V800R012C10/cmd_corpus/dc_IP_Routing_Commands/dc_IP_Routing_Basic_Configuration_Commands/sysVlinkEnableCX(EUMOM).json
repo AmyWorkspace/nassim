@@ -1,0 +1,30 @@
+{
+    "PageTitle": "arp vlink-direct-route advertise (System view)",
+    "FuncDef": "The arp vlink-direct-route advertise command advertises ARP Vlink direct routes on the public network.\nThe undo arp vlink-direct-route advertise command restores the default setting.\nBy default, ARP Vlink direct routes are not advertised on the public network.",
+    "CLIs": [
+        "arp vlink-direct-route advertise [ route-policy <route-policy-name> | route-filter <route-filter-name> ]",
+        "undo arp vlink-direct-route advertise"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy that is used to filter ARP Vlink direct routes on the public network.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter used to filter public network ARP Vlink direct routes.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy rp1 permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] arp vlink-direct-route advertise route-policy rp1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, ARP Vlink direct routes are only used for packet forwarding in the same VLAN and cannot be imported to dynamic routing protocols. This is because importing Vlink direct routes to dynamic routing protocols will increase the number of routing entries and affect routing table stability. In some cases, some operations need to be performed based on Vlink direct routes of VLAN users. For example, different VLAN users use different route exporting policies to guide traffic from the remote device. In this scenario, ARP Vlink direct routes are needed to be imported by a dynamic routing protocol and advertised to the remote device. After advertisement of ARP Vlink direct routes is enabled, these direct routes can be imported by a dynamic routing protocol (IGP or BGP) and advertised to the remote device.\nIf ARP Vlink direct routes have to be advertised to only certain VLAN users, you can run the command, with route-policy or route-filter specified. This configuration ensures that only filtered ARP Vlink direct routes are advertised, which controls the scale of the routing table and ensures the security of other sites in the VLAN.\nConfiguration Impact\nAfter route-policy or route-filter is specified in the arp vlink-direct-route advertise command, only filtered ARP Vlink direct routes are advertised.\nFollow-up Procedure\nImport advertised ARP Vlink direct routes to the routing table of each dynamic routing protocol on the Router so that the ARP Vlink direct routes can be advertised by each dynamic routing protocol.\nPrecautions\nRoute-policies and route-filters can filter ARP Vlink direct routes only based on IPv4 or IPv6 route prefixes.\nroute-policy must be specified using the route-policy command. If the parameter is not specified, ARP Vlink direct routes cannot be filtered.\nThe specified route-filter must have been configured; otherwise, it cannot be used to filter ARP Vlink direct routes."
+}

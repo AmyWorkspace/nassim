@@ -1,0 +1,52 @@
+{
+    "PageTitle": "preference (OSPF view)",
+    "FuncDef": "The preference command sets a priority for OSPF routes.\nThe undo preference command restores the default value.\nBy default, the priority of OSPF routes is 10. When ASE is specified, the default value is 150.",
+    "CLIs": [
+        "preference { <preferencevalue> | { route-policy <route-policy-name> | route-filter <route-filter-name> } } *",
+        "preference { ase | intra | inter } { <preferencevalue> | { route-policy <route-policy-name> | route-filter <route-filter-name> } } *",
+        "undo preference",
+        "undo preference { ase | intra | inter }"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "preferencevalue",
+            "Info": "Specifies a priority of OSPF routes.\nThe smaller the priority value, the higher the priority.\nThe value of the priority is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of route filter policy.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "ase",
+            "Info": "Sets a priority for AS external routes.\n-"
+        },
+        {
+            "Parameters": "intra",
+            "Info": "Sets a priority for intra-area routes.\n-"
+        },
+        {
+            "Parameters": "inter",
+            "Info": "Sets a priority for inter-area routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] preference 150"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 200",
+            "[*HUAWEI-ospf-200] preference ase 130"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMultiple dynamic routing protocols can be run on a router. The system needs to set a default priority for each routing protocol. If different protocols have routes to the same destination, the protocol with the higher priority is selected to forward IP packets. To set a priority for OSPF routes, run the preference command.\nYou can apply a route-policy to set the priority of a specific route by setting route-policy in the preference command:\nIf the apply preference clause has been configured for the route-policy, the route priority is determined as follows:For the routes matching the route-policy, the priority is determined by the apply clause.For the routes that do not match the route-policy, the priority is determined by the preference command.In the following example, the priority of the routes matching the route-policy abc is set to 50, and the priority of the routes that do not match the route-policy is set to 30.\nroute-policy abc permit node 1\nif-match cost 20\napply preference 50\nospf 1\npreference 30 route-policy abc\n\nIf the apply preference clause has not been configured for the route-policy, the priority of routes is determined by the preference command.\nIn the above example, if the apply preference 50 clause has not been configured for the route-policy abc, the priority of all routes is set to 30.\n\nConfiguration Impact\nWhen there are routes discovered by multiple routing protocols on the same router, you can enable the router to prefer OSPF routes by setting highest priority for them."
+}

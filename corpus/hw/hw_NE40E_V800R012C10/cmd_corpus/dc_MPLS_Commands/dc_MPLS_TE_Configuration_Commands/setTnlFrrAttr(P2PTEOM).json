@@ -1,0 +1,53 @@
+{
+    "PageTitle": "mpls te bypass-attributes (Tunnel interface view)",
+    "FuncDef": "The mpls te bypass-attributes command configures bypass tunnel attributes.\nThe undo mpls te bypass-attributes command restores the default bypass tunnel attributes.\nBy default, no bypass tunnel attributes are configured.",
+    "CLIs": [
+        "mpls te bypass-attributes [ bandwidth <bandwidth> ] [ priority <setup-priority> [ <hold-priority> ] ]",
+        "undo mpls te bypass-attributes"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "bandwidth bandwidth",
+            "Info": "Specifies the bandwidth value for a bypass tunnel.\nThe value is an integer ranging from 0 to 4000000000, and the actual maximum value is the maximum reservable bandwidth of a primary tunnel, in kbit/s. After bandwidth protection is enabled, the default bypass tunnel bandwidth is equal to the primary tunnel bandwidth."
+        },
+        {
+            "Parameters": "priority setup-priority",
+            "Info": "Specifies the setup priority.\nThe value is an integer ranging from 0 to 7. The smaller the value, the higher the priority. The default setup priority is 7."
+        },
+        {
+            "Parameters": "hold-priority",
+            "Info": "Tunnel hold priority value, the default is 7.\nThe value is an integer ranging from 0 to 7. A holding priority value must be less than or equal to a setup priority value. The smaller the value, the higher the priority. The default value is the same as the configured setup priority value."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] destination 2.2.2.2",
+            "[*HUAWEI-Tunnel1] mpls te fast-reroute bandwidth",
+            "[*HUAWEI-Tunnel1] mpls te bandwidth ct0 20000",
+            "[*HUAWEI-Tunnel1] mpls te bypass-attributes bandwidth 2048"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] destination 2.2.2.2",
+            "[*HUAWEI-Tunnel1] mpls te fast-reroute bandwidth",
+            "[*HUAWEI-Tunnel1] mpls te bandwidth ct0 20000",
+            "[*HUAWEI-Tunnel1] mpls te priority 4 3",
+            "[*HUAWEI-Tunnel1] mpls te bypass-attributes bandwidth 2048 priority 3 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe mpls te bypass-attributes command is used to configure constraints for setting up a bypass tunnel for a primary tunnel. A path satisfying the following constraints can be set up:\nIts bandwidth value is greater than or equal to the value specified using the mpls te bypass-attributes bandwidth bandwidth command.Its setup priority value is greater than or equal to the value specified using the mpls te bypass-attributes priority setup-priority command.Its holding priority value is greater than or equal to the value specified using the mpls te bypass-attributes priority hold-priority command.\n\nPrerequisites\nFRR has been enabled using the mpls te fast-reroute command.\nPrecautions\nThe bypass tunnel bandwidth cannot exceed the primary tunnel bandwidth. The setup priority of a bypass tunnel must be less than or equal to the holding priority. Both must be less than or equal to those of the primary tunnel."
+}

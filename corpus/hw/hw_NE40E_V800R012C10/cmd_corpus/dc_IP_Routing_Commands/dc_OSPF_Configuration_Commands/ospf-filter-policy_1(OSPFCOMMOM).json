@@ -1,0 +1,104 @@
+{
+    "PageTitle": "filter-policy export (OSPF view)",
+    "FuncDef": "The filter-policy export command filters imported routes to be advertised based on a filtering policy.\nThe undo filter-policy export command restores the default setting.\nBy default, the imported routes to be advertised are not filtered.",
+    "CLIs": [
+        "filter-policy { acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> } export direct",
+        "filter-policy { acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> } export bgp",
+        "filter-policy { acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> } export static",
+        "filter-policy { acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> } export rip [ <protocolID> ]",
+        "filter-policy { acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> } export isis [ <protocolID> ]",
+        "filter-policy { acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> } export ospf [ <protocolID> ]",
+        "filter-policy <acl-number> export direct",
+        "filter-policy <acl-number> export bgp",
+        "filter-policy <acl-number> export static",
+        "filter-policy <acl-number> export rip [ <protocolID> ]",
+        "filter-policy <acl-number> export isis [ <protocolID> ]",
+        "filter-policy <acl-number> export ospf [ <protocolID> ]",
+        "filter-policy <acl-number> export",
+        "filter-policy { acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> } export",
+        "filter-policy <acl-number> export unr",
+        "filter-policy { acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> } export unr",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> ] export direct",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> ] export bgp",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> ] export static",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> ] export rip [ <protocolID> ]",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> ] export isis [ <protocolID> ]",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> ] export ospf [ <protocolID> ]",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> ] export",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> ] export unr"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Filters direct routes.\n-"
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Filters BGP routes.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Filters static routes.\n-"
+        },
+        {
+            "Parameters": "rip",
+            "Info": "Filters RIP routes.\n-"
+        },
+        {
+            "Parameters": "protocolID",
+            "Info": "Specifies the process ID of the imported protocol.\nThe value is an integer ranging from 1 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Filters IS-IS routes.\n-"
+        },
+        {
+            "Parameters": "ospf",
+            "Info": "Filters OSPF routes.\n-"
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the basic ACL number.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Imports UNR routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix1 deny 1.1.1.1 24",
+            "[*HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] import-route isis",
+            "[*HUAWEI-ospf-100] filter-policy ip-prefix prefix1 export"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2000",
+            "[*HUAWEI-acl4-basic-2000] rule deny source 1.1.1.1 24",
+            "[*HUAWEI-acl4-basic-2000] quit",
+            "[*HUAWEI] route-policy poacl permit node 10",
+            "[*HUAWEI-route-policy] if-match acl 2000",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] filter-policy route-policy poacl export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter OSPF imports external routes using the import-route command, you can use the filter-policy export command to filter the imported routes to be advertised. Only the external routes that match the filtering rules can be translated into AS-external LSAs and advertised.\nThe or parameter can be specified to determine a specified protocol or process. If the or parameter is not specified, OSPF filters all imported routes.\nPrecautions\nThis command can be configured only on the ASBR because AS-external-LSAs are generated by an ASBR."
+}

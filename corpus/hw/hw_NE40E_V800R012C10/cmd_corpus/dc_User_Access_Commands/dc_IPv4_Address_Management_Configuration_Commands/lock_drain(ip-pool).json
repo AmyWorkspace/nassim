@@ -1,0 +1,25 @@
+{
+    "PageTitle": "lock drain(Bas IP address pool view)",
+    "FuncDef": "The lock drain command locks an IP address pool so that the address pool cannot be used to assign IP addresses to new users and DHCP Request messages for lease renewal from online users using the address pool are discarded. In the through packet phase, discover and request packets of online users are discarded.\nThe undo lock drain command unlocks an IP address pool.\nBy default, no address pool is locked.",
+    "CLIs": [
+        "lock drain",
+        "undo lock drain"
+    ],
+    "ParentView": [
+        "Bas IP address pool view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool pool1 bas local",
+            "[~HUAWEI-ip-pool-pool1] lock drain"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool pool1 bas local",
+            "[~HUAWEI-ip-pool-pool1] undo lock drain"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn IP address pool with an in-use IP address cannot be deleted. Therefore, lock an IP address pool before you delete the address pool. The address pool can be deleted after all online users using the address pool go offline upon lease expiry. To lock an IP address pool, run the lock drain command.The lock drain function of the address pool cannot be configured in the overlap address pool, but does not support PPPoE users.\nAfter the bas remote address pool is configured and the undo dhcp-proxy command is run on the BAS interface, the BAS device does not process the lease renewal packets from the client and directly sends the packets to the server. In this case, the Drain function of the address pool is invalid.\nConfiguration Impact\nAfter the lock drain command is run, no IP address in the address pool can be assigned to new users and the Request messages sent at 1/2 and 7/8 of the lease from online users are discarded so that the users go offline due to lease renewal failures. To unlock an IP address pool, run the undo lock drain command. The address pool can be used again after being unlocked.\nPrecautions\nThis command is supported only on the admin VS.\nThe lock drain command does not take effect for overlapping address pools or PPPoE users.\nFor a remote BAS address pool, if the undo dhcp-proxy enable command is run in the BAS interface view, the device directly sends Request messages for lease renewal from clients to the DHCP server instead of processing the messages. In this case, the lock drain command does not take effect for the remote BAS address pool.\nUsers whose IP addresses are delivered by the RADIUS server from a locked address pool are not allowed to go online or renew the lease."
+}

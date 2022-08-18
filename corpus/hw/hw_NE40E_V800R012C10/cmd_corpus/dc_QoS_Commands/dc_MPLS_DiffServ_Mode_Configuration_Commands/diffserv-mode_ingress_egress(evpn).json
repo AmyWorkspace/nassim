@@ -1,0 +1,75 @@
+{
+    "PageTitle": "diffserv-mode ingress egress(evpn)",
+    "FuncDef": "The diffserv-mode ingress egress command configures an MPLS DiffServ mode to implement end-to-end QoS.\nThe undo diffserv-mode command restores the default MPLS DiffServ mode.\nBy default, the MPLS DiffServ mode is uniform.",
+    "CLIs": [
+        "diffserv-mode ingress uniform egress uniform",
+        "diffserv-mode ingress uniform egress { pipe | short-pipe [ trust { inner-vlan-8021p | ip-dscp } ] [ domain <ds-name> ] }",
+        "diffserv-mode ingress { pipe <service-class> <color> | short-pipe <service-class> <color> } egress { uniform | pipe | short-pipe [ trust { inner-vlan-8021p | ip-dscp } ] [ domain <ds-name> ] }",
+        "undo diffserv-mode"
+    ],
+    "ParentView": [
+        "EVPL SRv6 view",
+        "EVPL instance MPLS mode view",
+        "EVPN instance view",
+        "bd-evpn-instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ingress",
+            "Info": "Indicates an MPLS ingress.\n-"
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Indicates the uniform mode.\n-"
+        },
+        {
+            "Parameters": "egress",
+            "Info": "Indicates an MPLS egress.\nIf the uniform or pipe mode is configured on an egress, the egress forwards packets based on EXP values.\nBy default, if the short-pipe mode is configured on an egress, the egress forwards packets based on VLAN priority values. If the packets do not carry VLAN priority values, the egress forwards the packets based on IP DSCP values.\n-"
+        },
+        {
+            "Parameters": "pipe",
+            "Info": "Indicates the pipe mode.\n-"
+        },
+        {
+            "Parameters": "short-pipe",
+            "Info": "Indicates the short-pipe mode.\n-"
+        },
+        {
+            "Parameters": "trust",
+            "Info": "Specifies the label value trusted by the egress node in short-pipe mode.\n-"
+        },
+        {
+            "Parameters": "inner-vlan-8021p",
+            "Info": "Enables an egress working in short-pipe mode to forward packets based on 802.1p values carried in inner VLAN tags.\n-"
+        },
+        {
+            "Parameters": "ip-dscp",
+            "Info": "Enables an egress working in short-pipe mode to forward packets based on IP DSCP values.\n-"
+        },
+        {
+            "Parameters": "domain ds-name",
+            "Info": "Specifies the name of a DiffServ domain that uses a specified PHB on an egress node in short-pipe mode.\nThe value is a string of 1 to 48 characters."
+        },
+        {
+            "Parameters": "service-class",
+            "Info": "Specifies a class of service (CoS) value for packets that enter a public network from a private network.\nThe value can be cs7, cs6, ef, af4, af3, af2, af1, or be."
+        },
+        {
+            "Parameters": "color",
+            "Info": "Specifies the color of a packet that enters a public network from a private network. The color marks the discard priority of the packet.\nThe value can be green, yellow, or red."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn vpn-instance evpn1",
+            "[*HUAWEI-evpn-instance-evpn1] diffserv-mode ingress pipe af1 green egress pipe"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn vpn-instance evpn1 bd-mode",
+            "[*HUAWEI-evpn-instance-evpn1] diffserv-mode ingress pipe af1 green egress short-pipe trust inner-vlan-8021p"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDiff-Serv models include Pipe, Short Pipe, and Uniform.\nIn the Pipe model, the EXP value in the label assigned by the ingress PE to the packet is determined by the user-defined parameters. Before the packet leaves the MPLS network, the MPLS label is popped out, but the DSCP value of the IP packet remains unchanged. The egress PE then forwards the packet based on the EXP value in the MPLS label.In short-pipe mode, the EXP value assigned by the ingress to a packet is determined by the user-defined parameters. When the packet leaves the MPLS network, the egress removes the MPLS label, but the DSCP value of the IP packet remains unchanged. The egress forwards the packet based on the trust field in the MPLS label. If no trust field is configured, the egress forwards the packet based on its outer VLAN priority. If the packet does not have a VLAN priority, the egress forwards the packet based on its IP DSCP value.In uniform mode, the EXP value assigned by the ingress is determined by the inbound queue and egress DS domain. When the packet leaves the MPLS network, the egress removes the MPLS label and maps the EXP value to the DSCP value of the IP packet. The egress then forwards the packet based on the mapped DSCP value.\nWhen you configure the service type of packets transmitted from a private network to the public network:\nConfigure the service type as cs7 or cs6 to send signaling protocol packets.Configure the service type as ef to ensure low latency.Configure the service type as af4, af3, af2, or af1 to ensure the bandwidth key data.Configure the service type as be for the best effort delivery without strict QoS assurance.\nThe preceding service types are listed in the descending order of sending priorities.\nThe colors of the packets sent from private network to the public network are arranged in the ascending order of the discard priorities, specifically, green, yellow, and red.\n\nPrecautions\nThe pipe or short-pipe mode takes precedence over behavior aggregate classification or forcible traffic classification.\nMulti-field classification takes precedence over the pipe or short-pipe mode.\nThe diffserv-mode ingress egress command and diffserv-mode command can overwrite each other. The two commands provide the same function. The only difference is that the diffserv-mode ingress egress command allows you to configure different DiffServ modes on the ingress and egress, whereas the diffserv-mode command allows you to configure only the same DiffServ mode on the ingress and egress."
+}

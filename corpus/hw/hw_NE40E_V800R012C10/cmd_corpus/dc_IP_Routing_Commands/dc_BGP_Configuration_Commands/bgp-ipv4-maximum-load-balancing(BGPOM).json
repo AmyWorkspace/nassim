@@ -1,0 +1,51 @@
+{
+    "PageTitle": "maximum load-balancing (BGP-IPv4 unicast address family view)",
+    "FuncDef": "The maximum load-balancing command configures the maximum number of equal-cost routes for load balancing.\nThe undo maximum load-balancing command restores the default setting.\nBy default, the maximum number of equal-cost routes for load balancing is 1, and load balancing is not implemented.",
+    "CLIs": [
+        "maximum load-balancing <number>",
+        "maximum load-balancing ebgp <ebgpNumber>",
+        "maximum load-balancing ibgp <ibgpNumber>",
+        "maximum load-balancing <number> ecmp-nexthop-changed",
+        "maximum load-balancing ebgp <ebgpNumber> ecmp-nexthop-changed",
+        "maximum load-balancing ibgp <ibgpNumber> ecmp-nexthop-changed",
+        "undo maximum load-balancing",
+        "undo maximum load-balancing ebgp",
+        "undo maximum load-balancing ibgp"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "number",
+            "Info": "Specifies the maximum number of equal-cost routes for load balancing.\nThe value is an integer ranging from 1 to 128."
+        },
+        {
+            "Parameters": "ebgp ebgpNumber",
+            "Info": "Specifies the maximum number of equal-cost EBGP routes for load balancing.\nThe value is an integer ranging from 1 to 128."
+        },
+        {
+            "Parameters": "ibgp ibgpNumber",
+            "Info": "Specifies the maximum number of equal-cost IBGP routes for load balancing.\nThe value is an integer ranging from 1 to 128."
+        },
+        {
+            "Parameters": "ecmp-nexthop-changed",
+            "Info": "Configures a BGP device to change the next hop addresses of the routes that carry out load balancing to its address.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] maximum load-balancing 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] maximum load-balancing 3 ecmp-nexthop-changed"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure the maximum number of equal-cost routes for load balancing, run the maximum load-balancing command. Load balancing improves the usage of network resources.\nAfter BGP load balancing is configured, the routes that meet the following conditions can carry out load balancing as equal-cost routes.\nOriginal next-hop addresses are different.PrefVal values are the same.Local_Pref attributes are the same.The routes are either summarized or non-summarized.Origin attributes (IGP, EGP, or incomplete) are the same.MED values are the same.The routes are EBGP or IBGP routes.The IGP costs within an AS are the same.AS_Path attributes are the same.\nAfter the maximum load-balancing ebgp command is run, only EBGP routes implement road balancing. After the maximum load-balancing ibgp command is run, only IBGP routes implement load balancing. If neither ebgp nor ibgp is configured, both EBGP and IBGP routes participate in load balancing, and the number of EBGP routes for load balancing is the same as the number of IBGP routes for load balancing.\nBy default, after the maximum load-balancing command is run on a BGP device, the BGP device changes the next-hop of a route to itself before advertising the route to a peer, regardless of whether the route participates in load balancing. After ecmp-nexthop-changed is set, a BGP device changes the next-hop of only routes that participate in load balancing to itself before advertising them to peers and keeps the next-hop of the routes that do not participate in load balancing unchanged.\nIf you run the maximum load-balancing command, the device changes the next hop addresses of the routes to be advertised to a local address no matter whether the routes are used for load balancing. However, in RR or BGP confederation scenarios, the device does not change the next hop addresses of non-local routes to be advertised to a local address.\nIf you run the maximum load-balancing { ebgp | ibgp } command, the device does not change the next hop addresses of the routes to be advertised to a local address no matter whether the routes are used for load balancing.\nIf you run the maximum load-balancing [ ebgp | ibgp ] ecmp-nexthop-changed command, the device changes the next-hop of only routes that participate in load balancing to itself before advertising them to peers and keeps the next-hop of the routes that do not participate in load balancing unchanged.\n\nConfiguration Impact\nIf the maximum load-balancing command is run for multiple times, the latest configuration overrides the previous one.\nPrecautions\nIf either the ebgp or the ibgp parameter is configured in the maximum load-balancing command, this parameter must be also configured in the undo maximum load-balancing command to delete load balancing.\nBGP peer or peer group-based load balancing configured using the peer load-balancing command has a lower priority than global load balancing configured using the maximum load-balancing command. If both commands are run, a maximum number (specified in the maximum load-balancing command) of BGP routes received from all peers have the opportunity to balance traffic."
+}

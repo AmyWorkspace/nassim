@@ -1,0 +1,33 @@
+{
+    "PageTitle": "local-block",
+    "FuncDef": "The local-block command configures a segment routing local block (SRLB) range.\nThe undo local-block command deletes an SRLB range.\nBy default, no SRLB range is configured.",
+    "CLIs": [
+        "local-block <begin-value> <end-value> [ ignore-conflict ]",
+        "undo local-block [ <begin-value> <end-value> [ ignore-conflict ] ]"
+    ],
+    "ParentView": [
+        "Segment routing view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "begin-value",
+            "Info": "Sets a start label value in an SRLB.\nThe value will change dynamically, depending on the actual situation of the equipment."
+        },
+        {
+            "Parameters": "end-value",
+            "Info": "Sets an end label value in an SRLB.\nThe value will change dynamically, depending on the actual situation of the equipment.\nThe maximum SRLB length is 65535."
+        },
+        {
+            "Parameters": "ignore-conflict",
+            "Info": "Flag indicating that a label conflict is ignored.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing",
+            "[*HUAWEI-segment-routing] local-block 51000 52000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSR-MPLS TE Policy can be configured with binding SID. Binding SID can be reused for SR-MPLS TE path calculation like other types of SID. To prevent the binding SID from colliding with other types of SIDs, you can use the local-block command to configure the segment routing local block (SRLB) range, after which the binding SID will be allocated in the SRLB range.\nIn a scenario with a controller, the SRLB information configured on the local device can be advertised to the BGP LS by the IS-IS protocol and then reported to the controller by the BGP LS.\nWhen you run the local-block command and specify the ignore-conflict parameter, if a label conflict occurs, the configuration is forcibly delivered but does not consume label resources. Specifying this parameter in the command is mainly used for pre-deployment, and the configuration takes effect after a device restart.\nPrecautions\nIf the SRLB is configured and the Binding SID carried by the BGP-provided SR-MPLS TE Policy is in the SRLB range, then:\n After the SRLB configuration is deleted, the same SRLB or a segment of the original SRLB is reconfigured. The configuration fails. The above scenario configuration rollback will also fail.\nIf the system displays a message indicating that the SRLB is used, run the display segment-routing local-block command to view the SRLB ranges that can be set. Alternatively, delete unwanted configurations related to the used label to release the label space."
+}

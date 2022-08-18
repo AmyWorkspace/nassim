@@ -1,0 +1,39 @@
+{
+    "PageTitle": "radius-server retransmit timeout(RADIUS server group view)",
+    "FuncDef": "The radius-server retransmit timeout command configures the number of transmission times and retransmission timeout period used by the device to send request packets to RADIUS servers.\nThe undo radius-server retransmit timeout command restores the default configuration.\nBy default, the number of transmission times used by the device to send request packets to all RADIUS authentication servers and RADIUS accounting servers is 3, and the retransmission timeout period is 5s.",
+    "CLIs": [
+        "radius-server { retransmit <retry-times> | timeout <time-value> } *",
+        "radius-server { authentication | accounting } retransmit <retry-times> timeout <time-value>",
+        "undo radius-server { retransmit | timeout } *",
+        "undo radius-server { authentication | accounting } retransmit timeout"
+    ],
+    "ParentView": [
+        "RADIUS server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "retry-times",
+            "Info": "Specifies the number of transmission times.\nThe value is an integer ranging from 1 to 5. The default value is 3."
+        },
+        {
+            "Parameters": "timeout time-value",
+            "Info": "Specifies the retransmission timeout period.\nThe value ranges from 3 to 25, in seconds. The default value is 5."
+        },
+        {
+            "Parameters": "authentication",
+            "Info": "Indicates the number of transmission times or the retransmission timeout period for all RADIUS authentication servers in the RADIUS server group view.\n-"
+        },
+        {
+            "Parameters": "accounting",
+            "Info": "Indicates the number of transmission times or the retransmission timeout period for all RADIUS accounting servers in the RADIUS server group view.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group test1",
+            "[*HUAWEI-radius-test1] radius-server retransmit 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the device sends a request packet to a RADIUS server but does not receive a response packet from the RADIUS server within a retransmission timeout period, the device resends the request packet to the RADIUS server. If the device does not receive a response packet from the RADIUS server after the second retransmission timeout period expires, the device continues to resend the request packet to the RADIUS server. You can run the radius-server retransmit timeout command on the device to configure the number of transmission times and the retransmission timeout period used by the device to resend request packets to RADIUS servers. If the device does not receive a response packet from a RADIUS server after the number of transmission times is exceeded, the device concludes that the RADIUS server is Down.\nRADIUS client sends the request packets to RADIUS server. The RADIUS server provides response to the RADIUS client. If the RADIUS client does not receive any response from the RADIUS server before timeout, the request packet needs to be retransmitted. If the number of retransmission events exceeds the set number, the server is considered to be out of service.\nPrecautions\nOnly when there are no users in the RADIUS server group view, you can modify the number of transmission times or the retransmission timeout period used by the device to send request packets to RADIUS servers.If you do not specify authentication or accounting in the radius-server retransmit timeout command, the command sets the number of transmission times or the retransmission timeout period for all RADIUS authentication servers and RADIUS accounting servers in the RADIUS server group view.If authentication is specified in the command, the configurations of this command apply to all RADIUS authentication servers in the RADIUS server group.If accounting is specified in the command, the configurations of this command apply to all RADIUS accounting servers in the RADIUS server group.If both the radius-server { retransmit  | timeout  }* command and the radius-server { authentication | accounting } retransmit  timeout  command are configured, the latter command takes precedence over the former command."
+}

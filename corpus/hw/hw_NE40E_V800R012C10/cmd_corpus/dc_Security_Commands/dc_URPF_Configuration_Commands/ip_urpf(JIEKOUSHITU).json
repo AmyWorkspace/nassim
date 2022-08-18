@@ -1,0 +1,63 @@
+{
+    "PageTitle": "ip urpf(interface view)",
+    "FuncDef": "The ip urpf command enables URPF check in the interface view.\nThe undo ip urpf command disables URPF check in the interface view.\nBy default, URPF check is disabled.",
+    "CLIs": [
+        "ip urpf loose allow-default",
+        "ip urpf strict allow-default",
+        "ip urpf strict",
+        "ip urpf { loose | strict } [ allow-default ] statistics enable",
+        "ip urpf loose",
+        "undo ip urpf"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "40GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "VBDIF interface view",
+        "VLANIF interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "strict",
+            "Info": "Indicates URPF strict check. After receiving a packet, a router searches for the interface board slot ID, interface number, and VLAN ID (only for VLAN packets) information corresponding to the source IP address of the packet in the FIB table, and matches the obtained interface board slot ID, interface number, and VLAN ID information against the information of the packet. If they match, the router forwards the packet; if they do not match, the router discards the packet.\n-"
+        },
+        {
+            "Parameters": "allow-default",
+            "Info": "Enables the device to forward the packets that pass the URPF check and match the default route.\n-"
+        },
+        {
+            "Parameters": "loose",
+            "Info": "Indicates URPF loose check. After receiving a packet, a router uses the source IP address in the packet as the destination address, and searches the FIB table for an outbound interface mapped to the destination IP address. If the outbound interface is found, the router forwards the packet; if the outbound interface is not found, the router discards the packet.\n-"
+        },
+        {
+            "Parameters": "statistics",
+            "Info": "Indicates the URPF statistics function.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables the URPF statistics function.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ip urpf strict allow-default"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/0",
+            "[*HUAWEI-GigabitEthernet2/0/0] ip urpf loose allow-default statistics enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGenerally, when receiving a packet, a router obtains the destination address of the packet and searches the forwarding table for a route to the destination address. If a route to the destination address is found, the packet is forwarded; otherwise, the packet is discarded. When a packet is received on a URPF-enabled interface, the interface obtains the source address and inbound interface of the packet, takes the source address as the destination address to search for the corresponding inbound interface, and then compares the found interface with the inbound interface. If the two interfaces do not match, the interface considers the source address as a spoofing one and discards the packet. In this manner, URPF can effectively protect against malicious attacks by blocking packets with bogus source addresses.\nPrecautions\nIn the application of URPF in the view of an interface, you can configure URPF check on the interface to perform URPF check on all the traffic on the interface.\nCheck the FIB table based on the source IP address of the received packet. If the packet matches the default route, run the ip urpf { loose | strict } allow-default command to allow the packet to pass the URPF check."
+}

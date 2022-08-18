@@ -1,0 +1,44 @@
+{
+    "PageTitle": "radius-server pending-limit",
+    "FuncDef": "The radius-server pending-limit command sets the maximum number of pending packets that can be sent to the RADIUS server.\nThe undo radius-server pending-limit command restores the default settings.\nBy default, the number of pending packets that can be sent to the RADIUS server is not restricted.",
+    "CLIs": [
+        "radius-server { authentication | accounting } [ <ip-address> [ vpn-instance <vpn-instance> ] [ <port> ] ] pending-limit <pending-limit>",
+        "undo radius-server { authentication | accounting } [ <ip-address> [ vpn-instance <vpn-instance> ] [ <port> ] ] pending-limit"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "authentication",
+            "Info": "Indicates the maximum number of pending packets that can be sent to the RADIUS authentication server.\n-"
+        },
+        {
+            "Parameters": "accounting",
+            "Info": "Indicates the maximum number of pending packets that can be sent to the RADIUS accounting server.\n-"
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of a RADIUS server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance",
+            "Info": "Specifies the name of the VPN instance to which the RADIUS server belongs.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "port",
+            "Info": "Specifies the interface number of a RADIUS server. If the port value is specified, the command sets the maximum number of pending packets that the device can send to the RADIUS server with the specified interface number. If the port value is specified, the command sets the maximum number of pending packets that the device can send to all RADIUS servers.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "pending-limit pending-limit",
+            "Info": "Specifies the maximum number of pending packets that can be sent to the RADIUS server.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server authentication pending-limit 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo confirm whether each pending packet is responded to, the system allows the pending number to increase by 1 once a pending packet is sent from the NE40E to the RADIUS server and to decrease by 1 once a pending packet is responded to. If the RADIUS server can concurrently process only a certain number of pending packets, the radius-server pending-limit command is used to restrict the number of pending packets that are sent to the RADIUS server.\nTo improve the usage of RADIUS server resources on a live network, divide a RADIUS server into several logical RADIUS servers. These logical RADIUS servers share one IP address and one VPN instance and need to be differentiated using interface numbers.\nIn this situation, you can run the radius-server speed-limit command to specify the same IP address and VPN instance name but different interface numbers for these logical RADIUS servers and the limit on the number of packets that the device can send to these logical RADIUS servers within a specified period.\nConfiguration Impact\nThe larger the pending number is, the more packets the RADIUS server has to process within a certain period.\nThe display radius-server packet command can be used to display the number of authentication and accounting packets that are not responded to.\nPrecautions\nIf the maximum number of pending packets that can be sent to the RADIUS server is not set, the number of pending packets that are allowed on each RADIUS server is consistent with the global settings. If the maximum number of pending packets that can be sent to the RADIUS server is set globally and for specified RADIUS servers, the settings for specified RADIUS servers take effect.If you specify the same RADIUS server type, IP address, and VPN instance name, the following commands cannot both be configured. When you have configured one command, you must run the undo command before you configure the other command.radius-server accounting ip-address [ vpn-instance <vpn-instance-name> ] pending-limit <max-number>radius-server accounting ip-address [ vpn-instance <vpn-instance-name> ] <port> pending-limit <max-number>"
+}

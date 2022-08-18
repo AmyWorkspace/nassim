@@ -1,0 +1,41 @@
+{
+    "PageTitle": "mpls te binding bidirectional",
+    "FuncDef": "The mpls te binding bidirectional command binds a tunnel interface to a static bidirectional co-routed LSP on the egress.\nThe undo mpls te binding bidirectional command unbinds a tunnel interface from a static bidirectional co-routed LSP on the egress.\nBy default, a tunnel interface on the egress is not bound to a static bidirectional co-routed LSP.",
+    "CLIs": [
+        "mpls te binding bidirectional static-cr-lsp egress <tunnel-name>",
+        "undo mpls te binding bidirectional"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "egress tunnel-name",
+            "Info": "Egress node reverse LSP name.\nThe value is a string of 1 to 35 characters."
+        },
+        {
+            "Parameters": "static-cr-lsp",
+            "Info": "Static CR-LSP configuration.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] bidirectional static-cr-lsp egress Tunnel10",
+            "[*HUAWEI-bi-static-egress-Tunnel10] forward in-label 17 lsrid 1.1.1.1 tunnel-id 2",
+            "[*HUAWEI-bi-static-egress-Tunnel10] backward nexthop 10.2.3.2 out-label 27",
+            "[*HUAWEI-bi-static-egress-Tunnel10] quit",
+            "[*HUAWEI] interface Tunnel10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] destination 3.3.3.3",
+            "[*HUAWEI-Tunnel10] mpls te signal-protocol cr-static",
+            "[*HUAWEI-Tunnel10] mpls te tunnel-id 1",
+            "[*HUAWEI-Tunnel10] mpls te passive-tunnel",
+            "[*HUAWEI-Tunnel10] mpls te binding bidirectional static-cr-lsp egress Tunnel10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA static CR-LSP is easy to configure: labels are manually allocated, and no signaling protocol is used to exchange control packets. The setup of a static CR-LSP consumes only a few resources, and you do not need to configure IGP TE or CSPF for the static CR-LSP. However, static CR-LSP application is limited. A static CR-LSP cannot dynamically adapt to network changes, and it uses the same label range (16 to 1023) as a common static LSP.\nA static bidirectional co-routed LSP is a tunnel that consists of a CR-LSP and a reverse CR-LSP and supports MPLS forwarding in opposite directions.\nIn addition to two forwarding tables for packets sent in opposite directions, the following configurations need to be performed on the egress:\nRun the mpls te passive-tunnel command to enable the reverse tunnel attribute. The tunnel interface that is configured and enabled with the reverse tunnel attribute on the egress can only be bound to a reverse CR-LSP. This allows the reverse LSP to be used by upper-layer applications.Run the mpls te binding bidirectional command to bind a tunnel interface to the specified static bidirectional co-routed LSP on the egress. This allows the tunnel interface to go Up.\n\nPrerequisites\nStatic CR-LSP signaling has been enabled using the mpls te signal-protocol cr-static command in the tunnel interface view.\nPrecautions\nA tunnel interface on the egress can only be bound to a static bidirectional co-routed LSP."
+}

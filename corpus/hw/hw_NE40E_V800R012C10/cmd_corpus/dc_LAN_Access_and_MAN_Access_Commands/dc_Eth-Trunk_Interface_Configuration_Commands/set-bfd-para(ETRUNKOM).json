@@ -1,0 +1,60 @@
+{
+    "PageTitle": "e-trunk bfd",
+    "FuncDef": "The e-trunk bfd command configures dynamic Bidirectional Forwarding Detection (BFD) session parameters in E-Trunk scenarios so that a dynamic BFD session is negotiated based on the configured parameters.\nThe undo e-trunk bfd command restores the default values of dynamic BFD session parameters.\nThe default local detection multiplier, minimum interval between receiving BFD packets, and minimum interval between sending BFD packets are 3, 10 ms, and 10 ms, respectively.",
+    "CLIs": [
+        "e-trunk bfd { min-tx-interval <mintx> | min-rx-interval <minrx> | detect-multiplier <multiplier> } *",
+        "undo e-trunk bfd { min-tx-interval | min-rx-interval | detect-multiplier } *"
+    ],
+    "ParentView": [
+        "E-Trunk view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-tx-interval mintx",
+            "Info": "Specifies the minimum interval at which BFD packets are sent.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-rx-interval minrx",
+            "Info": "Specifies the minimum interval at which BFD packets are received.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "detect-multiplier multiplier",
+            "Info": "Specifies a local detection multiplier of a dynamic BFD session.\nYou can specify different detection multipliers for both ends of a BFD session as required. Detection multipliers do not need to be negotiated during BFD session establishment.\nThe value is an integer ranging from 3 to 50."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] e-trunk 1",
+            "[*HUAWEI-e-trunk-1] e-trunk bfd enable",
+            "[*HUAWEI-e-trunk-1] e-trunk bfd detect-multiplier 6"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] e-trunk 1",
+            "[*HUAWEI-e-trunk-1] e-trunk bfd enable",
+            "[*HUAWEI-e-trunk-1] e-trunk bfd min-rx-interval 30"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] e-trunk 1",
+            "[*HUAWEI-e-trunk-1] e-trunk bfd enable",
+            "[*HUAWEI-e-trunk-1] e-trunk bfd min-tx-interval 30"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] e-trunk 1",
+            "[*HUAWEI-e-trunk-1] e-trunk bfd enable",
+            "[*HUAWEI-e-trunk-1] e-trunk bfd detect-multiplier 8 min-rx-interval 20 min-tx-interval 40"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can set proper BFD session parameters as required.\nIf a device does not receive BFD packets from its peer before a specified detection period expires, the device considers the link faulty and sets the BFD session to Down. To reduce system resource consumption, the device automatically changes the local receive interval to a random value greater than 1000 ms after detecting that the BFD session goes Down. When the BFD session goes Up again, the device restores the configured receive interval.\nInterval at which BFD packets are sent= max (Local minimum interval between sending BFD packets, Peer minimum interval between receiving BFD packets)Interval at which BFD packets are received = max (Peer minimum interval between sending BFD packets, Local minimum interval between receiving BFD packets)Detection period = Peer detection multiplier x max (Peer minimum interval between sending BFD packets, Local minimum interval between receiving BFD packets)\n\nPrerequisites\nA device has been enabled to create a dynamic BFD session using the e-trunk bfd enable command in the E-Trunk view.\nPrecautions\nWhen dynamic BFD session parameters are configured in E-Trunk scenarios:\nIf you specify a large local detection multiplier, it takes a long period for the device to detect link faults through the BFD session. Traffic switches to the backup link only after the specified period elapses. Packet loss may occur within the period.If you specify a large value for min-rx-interval or min-tx-interval, packet loss may occur."
+}

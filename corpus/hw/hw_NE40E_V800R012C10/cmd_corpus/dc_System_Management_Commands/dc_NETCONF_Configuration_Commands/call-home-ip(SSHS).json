@@ -1,0 +1,50 @@
+{
+    "PageTitle": "peer-ip",
+    "FuncDef": "The peer-ip command sets the IP address and TCP port number of an NMS with which a device is to establish a NETCONF connection as well as the source IP address and network status (public/private) of the device.\nThe undo peer-ip command deletes the IP address and TCP port number of an NMS with which a device is to establish a NETCONF connection as well as the source IP address and network status (public/private) of the device.\nBy default, the IP address and TCP port number of an NMS with which a device is to establish a NETCONF connection as well as the source IP address and network status (public/private) of the device are not configured.",
+    "CLIs": [
+        "peer-ip <ip-address> port <port-number> [ [ local-address <source-ip> ] | [ vpn-instance <vpn-instance> | public-net ] ] *",
+        "undo peer-ip [ <ip-address> ]"
+    ],
+    "ParentView": [
+        "Endpoint view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of an NMS.\nIPv4 address: The value is in dotted decimal notation.\nIPv6 address: The value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "port port-number",
+            "Info": "Specifies the TCP port number of an NMS.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "local-address source-ip",
+            "Info": "Specifies the source IP address of a device to be connected with an NMS.\nIPv4 address: The value is in dotted decimal notation.\nIPv6 address: The value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance",
+            "Info": "Specifies the VPN instance name of a NETCONF connection.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "public-net",
+            "Info": "Establish a NETCONF connection on a public network.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] netconf",
+            "[~HUAWEI-netconf] callhome root",
+            "[*HUAWEI-netconf-callhome-root] endpoint huawei",
+            "[*HUAWEI-netconf-callhome-root-endpoint-huawei] peer-ip 10.1.1.2 port 8032"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] netconf",
+            "[~HUAWEI-netconf] callhome root",
+            "[*HUAWEI-netconf-callhome-root] endpoint huawei",
+            "[*HUAWEI-netconf-callhome-root-endpoint-huawei] peer-ip 2001::db8:1::1 port 8030 local-address 2001::db8:1::2 vpn-instance vpn1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf an NMS does not support automatic device discovery, it cannot manage devices in time. To address this problem, you can configure proactive NETCONF registration for a device to send a NETCONF connection request to the NMS when the device goes online so that the NMS can manage the device.\nWhen configuring proactive NETCONF registration, you need to configure the IP address and TCP port number for the NMS with which the device is to establish a NETCONF connection using the peer-ip command in the NETCONF connection instance view.\nPrerequisites\nVPN configuration must be successful, to configure the vpn instance using this command.\nPrecautions\nA device can establish NETCONF connections with only one NMS, and port-number must be the same as that used on the NMS to establish the NETCONF connection.\nIf you run the command without carrying the vpn-instance or public-net parameter, the network to which the NETCONF connection belongs is the same as the network configured using the set net-manager [ ipv6 ] vpn-instance vpn-instance-name command."
+}

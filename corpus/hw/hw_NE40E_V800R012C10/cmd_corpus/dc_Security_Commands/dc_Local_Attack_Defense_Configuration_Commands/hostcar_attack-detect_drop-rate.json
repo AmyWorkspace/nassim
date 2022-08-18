@@ -1,0 +1,47 @@
+{
+    "PageTitle": "attack-detect drop-rate",
+    "FuncDef": "The hostcar attack-detect drop-rate command configures the attack detection threshold for the rate at which packets are dropped by Host-CAR. After the threshold is exceeded, attack detection is started.\nThe undo hostcar attack-detect drop-rate command restores the default attack detection threshold for the rate at which packets are dropped by Host-CAR.\nThe http-hostcar attack-detect drop-rate command configures the threshold for the rate at which packets are dropped by HTTP-Host-CAR.\nThe undo http-hostcar attack-detect drop-rate command restores the default threshold for the rate at which packets are dropped by HTTP-Host-CAR.\nThe vlan-host-car attack-detect drop-rate command configures the threshold for the rate at which packets are dropped by VLAN-Host-CAR.\nThe undo vlan-host-car attack-detect drop-rate command restores the default threshold for the rate at which packets are dropped by VLAN-Host-CAR.\nBy default, the attack detection threshold for the rate at which packets are dropped by Host-CAR, HTTP-Host-CAR, VLAN-Host-CAR is 1 pps.",
+    "CLIs": [
+        "{ hostcar | http-hostcar | vlan-host-car } attack-detect drop-rate <rate-value>",
+        "undo { hostcar | http-hostcar | vlan-host-car } attack-detect drop-rate [ <rate-value> ]"
+    ],
+    "ParentView": [
+        "Slot view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "hostcar",
+            "Info": "Configure the attack detection threshold for the rate at which packets are dropped by Host-CAR.\n-"
+        },
+        {
+            "Parameters": "http-hostcar",
+            "Info": "Configure the threshold for the rate at which packets are dropped by HTTP-Host-CAR.\n-"
+        },
+        {
+            "Parameters": "vlan-host-car",
+            "Info": "Configure the threshold for the rate at which packets are dropped by VLAN-Host-CAR.\n-"
+        },
+        {
+            "Parameters": "drop-rate rate-value",
+            "Info": "Specifies the threshold for the rate at which packets are dropped.\nIf the packet dropping rate is lower than the configured threshold, no deadly attacks exist, or no attack source tracing is performed.\nThe value is an integer ranging from 1 to 400, in pps. The default value is 1."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[*HUAWEI-slot-1] hostcar attack-detect drop-rate 123"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[*HUAWEI-slot-1] http-hostcar attack-detect drop-rate 123"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[*HUAWEI-slot-1] vlan-host-car attack-detect drop-rate 123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe security Operating Center (SOC) determines whether the system security is being attacked based on the statistics analysis. To correctly obtain these statistics on a live network, you must set proper alarm thresholds for security attack events. For different networkings in different scenarios, the traffic statistics modules, however, vary from one another.\nOn small-scale networks where the traffic rate is low, router bandwidth is low, and number of users is small, setting a small rate-value is recommended.On large-scale networks where the traffic rate is high, router bandwidth is high, and number of users is great, setting a high rate-value is recommended.\nYou can adjust rate-value based on the traps.\nIf a large number of unexpected attack traps are generated (some reported attacks are actually not attacks), setting a higher rate-value is recommended.If some attacks are not reported (attacks are detected by other detection systems but not reported in the SOC), setting a lower rate-value is recommended.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf the packet dropping rate is lower than the configured rate-value, no deadly attacks exist, or no attack source tracing is performed.\nSetting a proper rate-value helps accurately locate attack events.\nWhen the threshold is set too high, some not severe attacks are ignored and not reported.When the threshold is set too low, some events that cause high traffic rates may be mistaken for attacks.\nTherefore, choose a proper threshold based on the live network situation. For example, if a router has two physical interfaces, the attack source tracing threshold must be set to 50% or higher. Otherwise, attack locating is fruitless.\nIn most cases, this command does not require manual configuration. If this command is required, run this command with assistance from Huawei engineers."
+}

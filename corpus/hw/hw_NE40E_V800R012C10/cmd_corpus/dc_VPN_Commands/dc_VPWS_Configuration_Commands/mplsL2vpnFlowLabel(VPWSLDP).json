@@ -1,0 +1,85 @@
+{
+    "PageTitle": "mpls l2vpn flow-label",
+    "FuncDef": "The mpls l2vpn flow-label command enables flow-label-based load balancing for PWs on an interface.\nThe undo mpls l2vpn flow-label command disables flow-label-based load balancing of PWs on an interface.\n\nBy default, flow-label-based load balancing of PWs is disabled on an interface.",
+    "CLIs": [
+        "mpls l2vpn flow-label { both | send | receive } [ secondary ] [ static ]",
+        "undo mpls l2vpn flow-label { both | send | receive } [ secondary ] [ static ]",
+        "undo mpls l2vpn flow-label [ secondary ]"
+    ],
+    "ParentView": [
+        "Global IMA-group sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "Global MP-group interface view",
+        "XGE sub-interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "MP-group interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "Trunk serial interface view",
+        "50|100GE sub-interface view",
+        "IMA-group sub-interface view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "POS-Trunk interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "IMA group interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "400GE Layer 2 sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "both",
+            "Info": "Indicates both the send and receive capabilities of flow-label-based load balancing for the local device.\n-"
+        },
+        {
+            "Parameters": "send",
+            "Info": "Indicates the send capability of flow-label-based load balancing for the local device.\n-"
+        },
+        {
+            "Parameters": "receive",
+            "Info": "Indicates the receive capability of flow-label-based load balancing for the local device.\n-"
+        },
+        {
+            "Parameters": "secondary",
+            "Info": "Indicates flow-label-based load balancing of a secondary PW. flow-label-based load balancing can be configured for a secondary PW only if the secondary PW exists. If secondary is not configured, flow-label-based load balancing is configured for the primary PW.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Statically configures flow-label-based load balancing.\n\nFor dynamic PWs, if static is not configured, the flow-label-based load balancing capability of the local end is negotiated by the remote end.\nFor static PWs, the flow-label-based load balancing capability is statically configured, irrespective of whether static is configured.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vpn flow-label both"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nWhen multiple links exist between P devices, configure flow-label-based load balancing to improve L2VPN traffic forwarding efficiency. After flow-label-based load balancing is enabled on a PE, the PE adds different labels for different L2VPN data flows to distinguish them one from the other. After a P device receives a data packet carrying a flow label, it performs the Hash calculation and selects a forwarding path based on the flow label in the data packet. This processing implements load balancing. To enable flow-label-based load balancing for PWs on an interface, run the mpls l2vpn flow-label command.\n\nPrerequisites\n\nMPLS L2VPN has been enabled, and PWs have been created.\n\nPrecautions\n\nWhen configuring flow-label-based load balancing, note the following:\n\nflow-label-based load balancing can be enabled only when any of the following conditions is met:\n         \nThe receive parameter is configured on the local PE, and the send parameter is configured on the remote PE.\nThe send parameter is configured on the local PE, and the receive parameter is configured on the remote PE.\nBoth the send and receive parameters are configured on the local and remote PEs.\n \nIf the static flow-label-based load balancing configuration does not match on both ends, the device discards packets carrying a flow label, causing packet loss."
+}

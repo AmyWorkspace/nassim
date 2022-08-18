@@ -1,0 +1,115 @@
+{
+    "PageTitle": "snmp-agent target-host inform",
+    "FuncDef": "The snmp-agent target-host inform command configures a target host for receiving Inform messages.\nThe undo snmp-agent target-host command deletes a target host configured to receive Inform messages.\nBy default, no proxy target host is configured.",
+    "CLIs": [
+        "snmp-agent target-host [ host-name <host-name> ] inform address udp-domain <ip-address> [ [ udp-port <server-port> ] | [ { vpn-instance <vpn-instance-name> | public-net } ] | [ source { <interface-name> | <interface-type> <interface-number> } ] ] * params securityname { <security-name> { v2c | v3 [ authentication | privacy ] } | cipher host-name v2c } [ [ private-netmanager | ext-vb | notify-filter-profile <profile-name> ] * ] *",
+        "undo snmp-agent target-host { host-name <host-name> | <ip-address> securityname { <security-name> | cipher host-name } [ vpn-instance <vpn-instance-name> | public-net ] | { trap | inform } address udp-domain <ip-address> [ { [ source { <interface-name> | <interface-type> <interface-number> } ] | udp-port <server-port> | { vpn-instance <vpn-instance-name> | public-net } } * ] params securityname { <security-name> | cipher host-name } }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "host-name host-name",
+            "Info": "Specifies an SNMP target host name.\nThe name is a string of 1 to 32 characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "inform",
+            "Info": "Specifies the inform message.\n-"
+        },
+        {
+            "Parameters": "address",
+            "Info": "Specifies an IP address of a target host for receiving SNMP Inform messages.\n-"
+        },
+        {
+            "Parameters": "udp-domain ip-address",
+            "Info": "Specifies the IP address of a specified target host within a UDP transmission domain.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "udp-port server-port",
+            "Info": "Specifies the number of a UDP port for receiving Inform messages.\nThe value is an integer ranging from 0 to 65535. The default value is 162."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies a VPN instance name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string.\nOn a VPN network, use the VPN instance specified using vpn-instance, IP address, and security name together to identify a target host."
+        },
+        {
+            "Parameters": "public-net",
+            "Info": "Indicates that the host generating a trap message is connected to a public network.\n-"
+        },
+        {
+            "Parameters": "source",
+            "Info": "Specifies the type and number of a source interface for sending Inform messages.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of a source interface for sending Inform messages.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of a source interface for sending Inform messages.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of a source interface for sending Inform messages.\n-"
+        },
+        {
+            "Parameters": "params",
+            "Info": "Indicates information about a target host that generates SNMP notifications.\n-"
+        },
+        {
+            "Parameters": "securityname security-name",
+            "Info": "Specifies a user security name displayed on the NMS.\nFor SNMPv3, securityname must be configured as the user name. securityname configured on the host must be the same as that configured on the NMS, or the NMS cannot receive the trap messages sent by the host.\nFor SNMPv1 and SNMPv2c, the NMS can receive trap messages from all hosts without having securityname configured. securityname is used to distinguish multiple hosts that generate trap messages.\nThe name is a string of 1 to 32 characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "v2c v3",
+            "Info": "Indicates SNMPv2c and SNMPv3, respectively.\n-"
+        },
+        {
+            "Parameters": "authentication",
+            "Info": "Indicates that messages are authenticated without being encrypted. authentication takes effect only in SNMPv3.\n-"
+        },
+        {
+            "Parameters": "privacy",
+            "Info": "Indicates that messages are authenticated and encrypted. privacy takes effect only in SNMPv3.\n-"
+        },
+        {
+            "Parameters": "cipher host-name",
+            "Info": "Specifies a password in ciphertext. You can type in the plain text or the ciphertext, and it is displayed as the ciphertext in the configuration file.\nA simple text password is a string of 1 to 32 case-sensitive characters. A ciphertext password is a string of 32, 48, 56 or from 68 to 168 case-sensitive characters.\nWhen quotation marks are used around the string, spaces are allowed in the string.\nCiphertext passwords with various lengths configured in an earlier version are also supported in the existing version."
+        },
+        {
+            "Parameters": "private-netmanager",
+            "Info": "Specifies the target host as the Huawei NMS.\n-"
+        },
+        {
+            "Parameters": "ext-vb",
+            "Info": "Indicates that Inform messages sent to the NM station carry extended bound variables.If alarm objects defined in public MIBs are extended on a Huawei data communication device, use.\next-vb to determine whether the corresponding Inform messages sent by the device to the NM station carry extended bound variables.\nIf ext-vb is not specified, the Inform message does not carry extended bound variables.\nThis parameter is not recommended if the NMS is a third-party NMS. This ensures that the third-party NMS can receive Inform messages from Huawei data communication devices.\nBy default, an Inform message sent by a Huawei data communication device does not carry extended bound variables.\nIf ext-vb is specified, the inform message carries extended bound variables.\nThis parameter is recommended if the NMS is a Huawei NMS. This allows more abundant information in Inform messages.\n-"
+        },
+        {
+            "Parameters": "notify-filter-profile profile-name",
+            "Info": "Specifies the notification profile name for notification filtering.\nThe value is a string of 1 to 32 characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "trap",
+            "Info": "Specifies the trap message.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent trap enable",
+            "[*HUAWEI] snmp-agent target-host inform address udp-domain 10.1.1.1 params securityname 123 v3 privacy"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent trap enable",
+            "[*HUAWEI] snmp-agent target-host inform address udp-domain 10.1.1.1 params securityname public v2c ext-vb"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent trap enable",
+            "[*HUAWEI] snmp-agent target-host host-name 1 inform address udp-domain 10.1.1.1 source GigabitEthernet1/0/1 params securityname 1 v2c"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the target host to receive SNMP notifications, run the snmp-agent target-host command. When Inform messages are sent to notify the NMS of the network status, configure the engine ID for the NMS to ensure that the NMS receives Inform messages. The NMS receives an Inform message and returns an ACK message to the SNMP agent only if the engine ID contained in the Inform message and actual engine ID are the same. If the IDs are inconsistent, the NMS discards the Inform message.\nIf there are multiple target hosts, run the snmp-agent target-host inform command on each target host. If the snmp-agent target-host inform command is run for multiple times on the target host, only the last successful operation takes effect. For example, if you run the snmp-agent target-host inform command twice on a target host, the second operation overwrites the previous one.\nConfiguration Impact\nAfter the snmp-agent target-host trap command is run, no matter whether a trap message sent by the SNMP agent reaches the NMS, the SNMP agent deletes the trap message to reduce the resource consumption.\nAfter the snmp-agent target-host inform command is run, the SNMP agent, after sending an Inform message, waits for an Inform ACK message from the NMS and will retransmit the same Inform message only when no Inform ACK message is received from the NMS within the specified period. If the SNMP agent does not receive the Inform ACK message from the NMS during the retransmission period, the SNMP agent deletes this Inform message from the trap message queue. This ensures that the NMS can receive the SNMP Inform messages to the maximum extent. The transmission of Inform messages, however, consumes more resources than that of trap messages.\nPrecautions\nTo enable a Device to propagate Inform messages, run at least one of the two commands, namely, snmp-agent target-host inform and snmp-agent trap enable on the Device.\nIf you run the snmp-agent target-host trap command to configure a target host for receiving trap messages and then run the snmp-agent target-host inform command to configure a target host with the same host name and address, the configurations of the latter command overwrite those of the former command.\nIf the VPN instance specified by the vpn-instance vpn-instance-name parameter does not exist, the Inform messages cannot be sent to the target host.If the security user name specified by the securityname security-name parameter does not exist, the Inform messages cannot be sent to the target host.If the notify view is not configured for the SNMP user group to which the security user specified by the securityname security-name parameter belongs, the Inform messages cannot be sent to the target host."
+}

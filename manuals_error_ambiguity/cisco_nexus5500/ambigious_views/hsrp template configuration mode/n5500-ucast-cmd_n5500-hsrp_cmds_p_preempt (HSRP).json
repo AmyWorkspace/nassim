@@ -1,0 +1,42 @@
+{
+    "PageTitle": "preempt (HSRP)",
+    "FuncDef": "To configure a preemption delay, use the preempt command. To disable this feature, use the no form of this command.",
+    "CLIs": [
+        "preempt [ delay { minimum <min-delay> | reload <rel-delay> | <> sync <sync-delay> } ]",
+        "no preempt [ delay { minimum <min-delay> | reload <rel-delay> | <> sync <sync-delay> } ]"
+    ],
+    "ParentView": [
+        "interface configuration mode",
+        "hsrp template configuration mode"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay minimum min-delay",
+            "Info": "(Optional) Specifies the minimum number of seconds that preemption is delayed to allow routing tables to be updated before a router becomes active. The default value is 0."
+        },
+        {
+            "Parameters": "reload rel-delay",
+            "Info": "(Optional) Specifies the time delay after the router has reloaded. This period applies only to the first interface-up event after the router has reloaded. The default value is 0."
+        },
+        {
+            "Parameters": "sync sync-delay",
+            "Info": "(Optional) Specifies the maximum number of seconds to allow IP redundancy clients to prevent preemption. When this period expires, preemption occurs regardless of the state of the IP redundancy clients. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "switch# configure terminal",
+            "switch( config)# interface ethernet 0/1",
+            "switch(config-if)# no switchport",
+            "switch( config-if)# ip address 10.0.0.1 255.255.255.0",
+            "switch( config-if)# hsrp 4",
+            "switch(config-if-hsrp)# priority 110",
+            "switch(config-if-hsrp)# preempt",
+            "switch(config-if-hsrp)# authentication text sanjose",
+            "switch(config-if-hsrp)# ip 10.0.0.3",
+            "switch(config-if-hsrp)# end"
+        ]
+    ],
+    "ExtraInfo": "Specifying a minimum delay allows routing tables to be updated before a router becomes active. When a router first comes up, it does not have a complete routing table. A high-priority router will only delay preemption if it first receives a hello packet from a low-priority active router. If the high-priority router does not receive a hello packet from the low-priority active router when it is starting up, it assumes there is no active router for the group and becomes active as soon as possible.\nCommand Default:The default delay time for all options is 0 seconds.",
+    "HTMLPage": "data/manuals/cisco/cisco_nexus5500/n5500-ucast-cmd_n5500-hsrp_cmds_p.html"
+}

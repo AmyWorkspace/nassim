@@ -1,0 +1,30 @@
+{
+    "PageTitle": "ptp-adaptive local-ip",
+    "FuncDef": "The ptp-adaptive local-ip command assigns an IP address to a client initiating Layer 3 unicast negotiation.\nThe undo ptp-adaptive local-ip command deletes the IP address assigned to a client initiating Layer 3 unicast negotiation.\nBy default, no IP address is configured.",
+    "CLIs": [
+        "ptp-adaptive local-ip <ip-address>",
+        "undo ptp-adaptive local-ip"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "local-ip ip-address",
+            "Info": "Specifies the IP address of a client.\nThe value is an IPv4 address in dotted decimal notation. The value is usually a loopback address."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback 0",
+            "[*HUAWEI-Loopback0] ip address 1.1.1.1 32",
+            "[*HUAWEI-Loopback0] quit",
+            "[*HUAWEI] ptp-adaptive enable",
+            "[*HUAWEI] ptp-adaptive device-type client",
+            "[*HUAWEI] ptp-adaptive local-ip 1.1.1.1",
+            "[*HUAWEI] ptp-adaptive acr unicast-negotiate enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe clock server's and client's IP addresses uniquely identify a connection, over which a client initiates Layer 3 1588 ACR/ATR unicast negotiation with a clock server. 1588v2 packets are exchanged over the Layer 3 unicast negotiation connection.\nPrerequisites\nThe ptp-adaptive enable command must have been run to enable 1588 ACR/ATR before the ptp-adaptive local-ip command is run.\nConfiguration Impact\nOne device is assigned only one local-ip. The undo ptp-adaptive acr/undo ptp-adaptive atr command must be run before the local-ip is modified.\nFollow-up Procedure\nIf a client and a server are connected by a VPN, the VPN instance must be specified by using the ptp-adaptive vpn-instance command in addition to the configuration of the client's IP address.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nConfiguring the loopback address as the client's IP address is recommended, ensuring that packets sent by the clock server are directed to the client.\nThe ptp-adaptive local-ip command needs to be run on both a clock server and a client before they perform 1588 ACR/ATR clock/time synchronization."
+}

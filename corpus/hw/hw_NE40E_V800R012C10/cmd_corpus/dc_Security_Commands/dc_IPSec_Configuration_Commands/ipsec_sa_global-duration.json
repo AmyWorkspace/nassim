@@ -1,0 +1,37 @@
+{
+    "PageTitle": "ipsec sa global-duration",
+    "FuncDef": "The ipsec sa global-duration command sets a global SA duration.\nThe undo ipsec sa global-duration command restores the default setting.\nBy default, the traffic-based SA duration is 1843200 KB and the time-based one is 3600 seconds.",
+    "CLIs": [
+        "ipsec sa global-duration { traffic-based { <kilobytes> | disable } | time-based <seconds> }",
+        "undo ipsec sa global-duration traffic-based [ disable ]",
+        "undo ipsec sa global-duration time-based"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "traffic-based kilobytes",
+            "Info": "Indicates the traffic-based SA duration.\nThe value is an integer ranging from 8000 to 200000000, in kilobytes.\nSetting a value lower than the configured one is not recommended."
+        },
+        {
+            "Parameters": "disable",
+            "Info": "Disables the traffic-based SA duration. After the traffic-based SA duration is disabled, only the time-based SA duration takes effect.\n-"
+        },
+        {
+            "Parameters": "time-based seconds",
+            "Info": "Indicates the time-based SA duration.\nThe value is an integer ranging from 480 to 604800, in seconds.\nRetaining the default value is recommended. Using the minimum value is not recommended. If the traffic rate increases, using a larger value is recommended."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipsec sa global-duration time-based 7200"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipsec sa global-duration traffic-based 20000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the SA is set up through the IKE negotiation, define a global duration using ipsec sa global-duration command to negotiate with the remote peer, only if the adopted security policy is not configured with its own duration. If the adopted security policy has been configured, the system uses the duration of security policy to negotiate with the remote.\nThere are two methods to measure the duration:\nTime-based duration: Indicates the period that starts from setup of the SA to expiration of the SA.Traffic-based duration: Indicates the maximum of traffic volume that this SA is permitted to process.\nIf the duration reaches the specified time or traffic volume, the SA loses effect. Before expiration of SA, IKE negotiates to establish a new SA for IPsec. Before the new SA is established, the old one continues functioning. After the new SA is well prepared, it is used immediately.\n\nPrecautions\nThe kilobytes parameter specified in the ipsec sa global-duration traffic-based kilobytes command cannot be the lower specification of current services."
+}

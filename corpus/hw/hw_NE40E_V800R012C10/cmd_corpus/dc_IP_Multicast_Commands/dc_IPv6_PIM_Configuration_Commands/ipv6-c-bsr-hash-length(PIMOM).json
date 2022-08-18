@@ -1,0 +1,27 @@
+{
+    "PageTitle": "c-bsr hash-length",
+    "FuncDef": "The c-bsr hash-length command sets a global hash mask length for candidate-bootstrap routers (C-BSRs).\nThe undo c-bsr hash-length command restores the default value.\nBy default, the global hash mask length of C-BSRs is 126.",
+    "CLIs": [
+        "c-bsr hash-length <hash-length>",
+        "undo c-bsr hash-length"
+    ],
+    "ParentView": [
+        "IPv6 PIM view",
+        "VPN instance IPv6 PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "hash-length",
+            "Info": "Specifies a global hash mask length for C-BSRs.\nThe value is an integer ranging from 0 to 128."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] c-bsr hash-length 16"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an IPv6 PIM-SM network where a rendezvous point (RP) is dynamically elected using the BSR mechanism, each candidate-rendezvous point (C-RP) sends to the BSR an Advertisement message carrying the C-RP address, range of multicast groups that the C-RP serves, and C-RP priority. Then, the BSR collects all those information and the BSR hash mask length as an RP-set, encapsulates the RP-set into a bootstrap message, and advertises the message to all routers on the network. All routers use the RP-set and follow the same RP election rules to elect an RP for a specific group.\nThe RP election rules are as follows:\nThe C-RP with the highest priority wins (a larger priority value indicates a lower priority).If all C-RPs have the same priority, the hash function is operated. The C-RP with the largest calculated value is elected as the RP.If all C-RPs have the same priority and calculated hash value, the C-RP with the largest address wins the election.\nTo configure a global hash mask length for C-BSRs, run the c-bsr hash-length command.\n\nPrerequisites\nThe multicast routing function has been enabled using the multicast ipv6 routing-enable command in the public network instance view.\nConfiguration Impact\nIf the c-bsr hash-length command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nA hash mask length configured for the global domain has the highest priority.\nA global hash mask length configured using the c-bsr hash-length command is effective for all C-BSRs on the router. To change the hash mask length of a C-BSR on an interface, run the c-bsr command.The c-bsr command is valid only for the specified interface. The c-bsr command configuration takes precedence over the c-bsr hash-length command configuration."
+}

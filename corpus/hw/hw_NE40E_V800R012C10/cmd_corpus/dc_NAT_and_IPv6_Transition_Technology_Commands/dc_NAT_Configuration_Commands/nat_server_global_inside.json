@@ -1,0 +1,49 @@
+{
+    "PageTitle": "nat server global inside(NAT instance view)",
+    "FuncDef": "The nat server global inside command configures an internal server.\nThe undo nat server global inside command deletes internal server configurations.\nBy default, no internal server is configured.",
+    "CLIs": [
+        "nat server global <ip-addr> [ vpn-instance <vpn-instance-name> ] inside <ip-addr> [ vpn-instance <vpn-instance-name> ] [ outbound | extendable ]",
+        "undo nat server global <ip-addr> [ vpn-instance <vpn-instance-name> ] inside <ip-addr> [ vpn-instance <vpn-instance-name> ] [ outbound | extendable ]"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a private-network VPN instance to which an internal server belongs.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "inside ip-addr",
+            "Info": "Specifies the private IP address of an internal server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates that public network users can access an internal server only after private network users get online.\n-"
+        },
+        {
+            "Parameters": "extendable",
+            "Info": "Indicates the extended NAT server identifier, meaning that an internal server with a private IP address and different public IP addresses can be configured.\n-"
+        },
+        {
+            "Parameters": "global ip-addr",
+            "Info": "Specifies the public IP address of the internal server.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 200:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 101:101 export-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 101:101 import-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-vpn1] quit",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat server global 10.12.12.12 inside 192.168.12.12 vpn-instance vpn1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nNAT shields the structure of an internal network, including devices on the internal network. However, a device on an external network may need to access an internal host, such as a web or FTP server on the internal network.\nConfiguration Impact\nThe internal server function enables a NAT device to translate the public IP address to the private IP address based on a static mapping entry that contains a private IP address, a private port number, a public IP address, and a public port number or a static mapping entry that contains a private IP address and a public IP address.\nPrecautions\nIn a NAT scenario, it is recommended that the public IP address of a NAT server be different from that in an address pool. Otherwise, user traffic is incorrectly forwarded.\nWhen you configure the internal server function, note the following:\nThe must be different from an existing IP address assigned to a device or its interface, preventing IP address conflicts.After the outbound parameter is configured, the internal server can take effect only if the internal server user triggers an access attempt and the user table is created.Do not configure the outbound parameter, which prevents traffic from being discarded if a public network user initiates an access attempt to visit an internal server.After the extendable parameter is configured, the mapping between a pair of a private IP address and a private port number and different pairs of public IP addresses and public port numbers can be configured for an internal server in a NAT instance.After the extendable parameter is configured, the command and nat server-mode enable commands are mutually exclusive, and the static source tracing algorithm cannot be bound to the NAT instance.After the extendable parameter is configured, a public network-side user cannot access different public IP addresses of the same private network server."
+}

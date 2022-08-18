@@ -1,0 +1,32 @@
+{
+    "PageTitle": "nd vlink-direct-route advertise",
+    "FuncDef": "The nd vlink-direct-route advertise command advertises NDP Vlink direct routes in a VPN instance IPv6 address family.\nThe undo nd vlink-direct-route advertise command restores the default setting.\nBy default, NDP Vlink direct routes are not advertised in a VPN instance IPv6 address family.",
+    "CLIs": [
+        "nd vlink-direct-route advertise [ route-policy <route-policy-name> | route-filter <route-filter-name> ]",
+        "undo nd vlink-direct-route advertise"
+    ],
+    "ParentView": [
+        "VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy that is used to filter NDP Vlink direct routes in a VPN instance IPv6 address family.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string. It must be a unique value."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter used to filter NDP Vlink direct routes in the VPN instance IPv6 address family.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy rp1 permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] ip vpn-instance vrf1",
+            "[*HUAWEI-vpn-instance-vrf1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv6] nd vlink-direct-route advertise route-policy rp1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, IPv6 NDP Vlink direct routes are only used for packet forwarding in the same VLAN and cannot be imported to dynamic routing protocols. This is because importing Vlink direct routes to dynamic routing protocols will increase the number of routing entries and affect routing table stability. In some cases, some operations need to be performed based on Vlink direct routes of VLAN users. For example, different VLAN users use different route exporting policies to guide traffic from the remote device. In this scenario, IPv6 NDP Vlink direct routes are needed to be imported by a dynamic routing protocol and advertised to the remote device. After advertisement of IPv6 NDP Vlink direct routes is enabled, these direct routes can be imported by a dynamic routing protocol (IGP or BGP) and advertised to the remote device.\nIn a VPN, a local PE connects to multiple CEs using VLANIF interfaces. Based on NDP, the local PE learns IP addresses of these CEs and advertises NDP Vlink direct routes.\nIf NDP Vlink direct routes to a few CEs have to be advertised, you can configure the nd vlink-direct-route advertise command with route-policy-name or route-filter-name specified. This configuration allows the device to advertise only the NDP Vlink direct routes that match the route-policy, which controls the routing table size and guarantees the security of users.\nConfiguration Impact\nAfter route-policy-name or route-filter-name is specified in the nd vlink-direct-route advertise command, the device advertises only the NDP Vlink direct routes that match the route-policy.\nFollow-up Procedure\nImport NDP Vlink direct routes to the routing table of each dynamic routing protocol on the Router so that they can be advertised by each dynamic routing protocol module.\nPrecautions\nRoute-policies and route-filters can filter NDP Vlink direct routes only based on IPv4 or IPv6 route prefixes.\nThe route-policy route-policy-name parameter must be specified in the nd vlink-direct-route advertise command. If the parameter is not specified, NDP Vlink direct routes cannot be filtered.\nThe specified route-filter must have been configured; otherwise, it cannot be used to filter NDP Vlink direct routes."
+}

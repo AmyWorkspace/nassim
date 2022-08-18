@@ -1,0 +1,43 @@
+{
+    "PageTitle": "ssm-policy(IPv6 PIM view/VPN instance IPv6 PIM view)",
+    "FuncDef": "The ssm-policy command sets the range of IPv6 Source-Specific Multicast (SSM) group addresses.\nThe undo ssm-policy command restores the default value.\nBy default,the range of IPv6 SSM group addresses is FF3x::/32. (The value of x cannot be 1 or 2.)",
+    "CLIs": [
+        "ssm-policy { <basic-acl6-number> | acl6-name <acl6-name> }",
+        "undo ssm-policy"
+    ],
+    "ParentView": [
+        "IPv6 PIM view",
+        "VPN instance IPv6 PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basic-acl6-number",
+            "Info": "Specifies the number of a basic IPv6 ACL. This ACL defines the range of IPv6 SSM group addresses.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named basic IPv6 ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 2000",
+            "[*HUAWEI-acl6-basic-2000] rule permit source ff31:0:8192:: 96",
+            "[*HUAWEI-acl6-basic-2000] quit",
+            "[*HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] ssm-policy 2000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 name myacl6 basic",
+            "[*HUAWEI-acl6-basic-myacl6] rule permit source ff31:0:8192:: 96",
+            "[*HUAWEI-acl6-basic-myacl6] quit",
+            "[*HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] ssm-policy acl6-name myacl6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the ssm-policy command is configured on a device, all PIM-SM interfaces on the device consider that multicast groups whose addresses are within the SSM group address range adopt the PIM-SSM model.\nThe SSM group address range can be out of FF3x::/32. The groups that are not in the SSM group address range all adopt the Any-Source Multicast (ASM) model.\nThe SSM model is triggered in the following situations:\nMulticast group addresses are in the SSM group address range, Multicast Listener Discovery version 2 (MLDv2) is run on the user network segment, and multicast source addresses are specified in Report messages.Multicast group addresses are in the SSM group address range, MLDv1 is run on the user network segment, and SSM mapping is configured on the Router connected with user hosts.\n\nPrerequisites\nThe multicast ipv6 routing-enable command is run in the public network instance view.\nRelevant ACL rules have been defined.\nConfiguration Impact\nIf the ssm-policy command is run several times, the latest configuration overrides the previous one."
+}

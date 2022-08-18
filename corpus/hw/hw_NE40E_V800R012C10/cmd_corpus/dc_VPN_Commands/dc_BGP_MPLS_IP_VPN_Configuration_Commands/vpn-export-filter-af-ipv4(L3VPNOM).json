@@ -1,0 +1,31 @@
+{
+    "PageTitle": "export route-filter (VPN instance IPv4 address family view)",
+    "FuncDef": "The export route-filter command associates the current VPN instance IPv4 address family with an export route-filter.\nThe undo export route-filter command disassociates the current VPN instance IPv4 address family from the export route-filter.\nBy default, the current VPN instance IPv4 address family is not associated with any export route-filter.",
+    "CLIs": [
+        "export route-filter <route-filter-name> [ add-ert-first ]",
+        "undo export route-filter <route-filter-name> [ add-ert-first ]"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-filter-name",
+            "Info": "Specifies the name of the export route-filter to be associated with the VPN instance IPv4 address family.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "add-ert-first",
+            "Info": "Adds ERTs to VPN routes after these routes are matched against an export routing policy.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vrf1",
+            "[*HUAWEI-vpn-instance-vrf1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] export route-filter filter1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo advertise the routes of a VPN instance IPv4 address family in a way more precise than the way based on the extended community attribute, use the export route-filter. The export route-filter is used to filter the routing information and to set the routing attributes of the routes that pass the filtering.\nThe export route-filter command advertises the local routes of a VPN instance IPv4 address family to other VPN instances IPv4 address families. The peer route-filter command run in the BGP VPN instance IPv4 address family view filters the routes of a VPN instance IPv4 address family advertised to or received from CE neighbors.\nBy default, ERTs are added to VPN routes after these routes are matched against an export routing policy. If the export routing policy contains RT-related filtering rules, these rules cannot apply to these routes. If you want to apply the RT-related filtering rules defined in an export routing policy to VPN routes, run the add-ert-first command to configure the system to add ERTs to VPN routes after matching these routes against the export routing policy.\nIn local cross scenarios, you can run the export route-filter command to filter out locally crossed routes and set the attributes of these routes. Locally crossed routes include both locally imported routes and routes learned from VPN peers.\nConfiguration Impact\nThe current VPN instance IPv4 address family can be associated with only one export route-filter. If the export route-filter command is run more than once, the latest configuration overrides the previous one.\nFollow-up Procedure\nIf the export route-filter to be associated with a VPN instance IPv4 address family does not exist, configure the export route-filter."
+}

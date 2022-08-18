@@ -1,0 +1,89 @@
+{
+    "PageTitle": "radius-server(RADIUS server group view)",
+    "FuncDef": "The radius-server command configures the IP address, interface number, VPN instance, and weight of the server in a RADIUS server group.\nThe undo radius-server command deletes the server from a RADIUS server group.\nBy default, no RADIUS authentication and accounting server is configured.",
+    "CLIs": [
+        "radius-server { accounting | authentication } ip-address <port> { vpn-instance <instance-name> | { shared-key <key-string> | shared-key-cipher <cipher-string> } | source { <interface-name> | <interface-type> <interface-num> | ip-address <ip-address> } } * [ weight <weight-value> ]",
+        "radius-server { accounting | authentication } <ipv6-address> <port> [ weight <weight-value> ]",
+        "radius-server { accounting | authentication } ip-address [ vpn-instance <instance-name> | source { { <interface-name> | <interface-type> <interface-num> } | ip-address <source-ip-address> } | { shared-key <key-string> | shared-key-cipher <cipher-string> } ] * <port> [ weight <weight-value> ]",
+        "radius-server { accounting | authentication } ip-address [ vpn-instance <instance-name> ] ppp-user-port <port>",
+        "undo radius-server { accounting | authentication } <ipv6-address> [ <port> ]",
+        "undo radius-server { accounting | authentication }",
+        "undo radius-server { accounting | authentication } ip-address [ vpn-instance <instance-name> ] [ <port> ]",
+        "undo radius-server { accounting | authentication } [ ip-address [ vpn-instance <instance-name> ] ] ppp-user-port [ <port> ]"
+    ],
+    "ParentView": [
+        "RADIUS server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "accounting",
+            "Info": "Indicates the number of transmission times or the retransmission timeout period for all RADIUS accounting servers in the RADIUS server group view.\n-"
+        },
+        {
+            "Parameters": "authentication",
+            "Info": "Indicates the number of transmission times or the retransmission timeout period for all RADIUS authentication servers in the RADIUS server group view.\n-"
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IPv4 address of the server. The value is in the format of \"X.X.X.X\" and must be a valid unicast address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "port",
+            "Info": "Specifies the interface number of the server.\nThe value is an integer that ranges from 1 to 65535."
+        },
+        {
+            "Parameters": "vpn-instance instance-name",
+            "Info": "Specifies the VPN instance name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "shared-key key-string",
+            "Info": "Specifies the shared-key password.\nThe value is a string of 1 to 128 case-sensitive characters. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "shared-key-cipher cipher-string",
+            "Info": "Specifies the shared-key in encrypted or plain text, and the configured text will be displayed as encrypted text.\nIn the case of a simple text password, the value is a string of 1 to 128 case-sensitive characters, without spaces. In the case of a cipher text password, the value is a string of 1 to 268 case-sensitive characters, without spaces."
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the source interface name.\nThe value is a string of 1 to 63."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the source interface type.\n-"
+        },
+        {
+            "Parameters": "interface-num",
+            "Info": "Specifies the source interface number.\n-"
+        },
+        {
+            "Parameters": "weight",
+            "Info": "Indicates the weight of the accounting server. The weight-value parameter is valid only when loading-share is used in the radius-server algorithm command.\n-"
+        },
+        {
+            "Parameters": "weight-value",
+            "Info": "Specifies the weight of the server. The default value is 0.\nThe value is an integer ranging from 0 to 100."
+        },
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of the server. The value is in the format of \"X:X::X:X\" .\nThe value is a 32-digit hexadecimal number."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group huawei",
+            "[*HUAWEI-radius-huawei] radius-server accounting 10.163.155.13 1813 weight 50"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group group1",
+            "[*HUAWEI-radius-group1] radius-server accounting 10.1.155.12 1812 source loopback 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group huawei",
+            "[*HUAWEI-radius-huawei] radius-server authentication 10.163.155.13 1813 weight 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the RADIUS authentication or accounting server is used for authentication or accounting, use the radius-server command to configure the IP address, interface number, VPN instance, and weight of the authentication or accounting server in a RADIUS server group.\nTo improve the usage of RADIUS authentication or accounting server resources on a live network, divide a RADIUS authentication or accounting server into several logical RADIUS authentication or accounting servers. These logical RADIUS authentication or accounting servers share one IP address and one VPN instance and need to be differentiated using interface numbers. In this situation, you can run the radius-server command to configure the same IP address and VPN instance name but different interface numbers for the logical RADIUS servers.\nPrecautions\nA maximum of sixteen RADIUS authentication servers and a maximum of sixteen RADIUS accounting servers can be configured in the same RADIUS server group view.A maximum of 512 RADIUS authentication servers and RADIUS accounting servers can be configured on a device.A logical RADIUS authentication or accounting servers with different interface numbers can be configured on a RADIUS authentication server with one IP address and one VPN instance name.If you specify the parameter port value in the undo radius-server authentication command, the command deletes the RADIUS authentication server with the specified interface number. If you do not specify the parameter port value in the undo radius-server authentication command, the command deletes all RADIUS authentication servers.You are advised to configure a shared-key that has no less than 16 bytes and consists of at least two types of the following characters: lowercase letters, uppercase letters, numerals, and special characters."
+}

@@ -1,0 +1,74 @@
+{
+    "PageTitle": "mpls oam bidirectional-tunnel",
+    "FuncDef": "The mpls oam bidirectional-tunnel command configures MPLS OAM to monitor static bidirectional co-routed LSPs.\nThe undo mpls oam bidirectional-tunnel command deletes the configuration of MPLS OAM that monitors static bidirectional co-routed LSPs.\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.\nBy default, MPLS OAM is not configured to monitor static bidirectional co-routed LSPs.",
+    "CLIs": [
+        "mpls oam bidirectional-tunnel { <tunnel-name> | <tunnel-type> <tunnel-number> } type { cv | ffd frequency { 3 | 10 | 20 | 50 | 100 | 200 | 500 } } [ auto-protocol [ overtime <overtime> ] ] [ compatibility-mode <compati-mode-val> ] [ bdi-frequency <bdi-frep-value> ] [ exp <exp-value> ]",
+        "undo mpls oam bidirectional-tunnel { <tunnel-name> | <tunnel-type> <tunnel-number> }"
+    ],
+    "ParentView": [
+        "MPLS-OAM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tunnel-name",
+            "Info": "Specifies the name of a tunnel interface.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "tunnel-type tunnel-number",
+            "Info": "Specifies the type and number of a tunnel interface.\n-"
+        },
+        {
+            "Parameters": "type",
+            "Info": "Indicates the detection type.\n-"
+        },
+        {
+            "Parameters": "cv",
+            "Info": "Enables connectivity verification (CV) detection. CV packets are sent every second.\n-"
+        },
+        {
+            "Parameters": "ffd",
+            "Info": "Enables fast failure detection (FFD).\n-"
+        },
+        {
+            "Parameters": "frequency",
+            "Info": "Specifies the interval at which FFD packets are sent, in milliseconds.\n-"
+        },
+        {
+            "Parameters": "auto-protocol",
+            "Info": "Enables OAM auto protocol extension.\n-"
+        },
+        {
+            "Parameters": "overtime overtime",
+            "Info": "Specifies the timeout period for the OAM auto protocol.\novertime specifies the timeout period of waiting for the first packet. After OAM auto protocol extension is enabled, the system waits for receiving the first packet to perform OAM detection. If no packet is received after the specified period of time elapses, a fault is considered to occur. BDI packets are then sent to the ingress.\nThe value is an integer ranging from 0 to 255. The step is 30 seconds. The default value is 10, meaning 5 minutes (10 x 30s)."
+        },
+        {
+            "Parameters": "compatibility-mode compati-mode-val",
+            "Info": "Specifies a compatibility mode.\nThe same compatibility mode must be configured on two ends of an LSP that OAM monitors. This setting allows different types of devices, such as transport and aggregation devices, to perform MPLS OAM.\nThe values can be:\nptn-mode: allows a local device to communicate with a PTN device.router-mode: allows a local device to communicate with a router."
+        },
+        {
+            "Parameters": "bdi-frequency bdi-frep-value",
+            "Info": "Specifies the interval at which BDI packets are sent.\nBDI packets are sent if OAM detects a fault. The default interval is 1s.\nThe values can be:\nper-second: Indicates that BDI packets are sent every second.detect-freq: Indicates that the interval at which BDI packets are sent is the same as that at which testing packets are sent."
+        },
+        {
+            "Parameters": "exp exp-value",
+            "Info": "The value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] mpls te signal-protocol cr-static",
+            "[*HUAWEI-Tunnel10] mpls te bidirectional",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] mpls-oam",
+            "[*HUAWEI-mpls-oam] mpls oam bidirectional-tunnel Tunnel 10 type cv auto-protocol overtime 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMPLS OAM can monitor the connectivity of static bidirectional co-routed LSPs and is widely used in IPRAN scenarios.\nThe mpls oam bidirectional-tunnel command can be run to set MPLS OAM parameters as needed. The functionality of this command helps rapidly detect faults to trigger a traffic switchover with minimum traffic loss.\nEither cv or ffd can be configured to monitor connectivity. Select one as needed:\ncv: enables MPLS OAM to send CV packets every second. CV detection applies to a highly reliable network on which MPLS OAM only detects faults.ffd: enables MPLS OAM to send FFD packets at specific intervals. A 3.3 ms interval is used to monitor LSP connectivity and perform a protection switchover if a fault occurs. A 100 ms interval is selected to monitor LSP performance.\novertime parameter: specifies the time that elapses before the egress receives OAM packets from the ingress. If no packet is received after the time specified by overtime elapses, the egress considers that a link fault occurs. Set a large value for a network with a heavy load.\n\nPrerequisites\nMPLS and MPLS OAM have been enabled globally, and an LSP to be monitored has been established.\nConfiguration Impact\nMPLS OAM cannot be configured together with BFD or MPLS-TP OAM for a static bidirectional co-routed LSP.\nPrecautions\nMPLS OAM does not support LDP over TE.\nIf auto-protocol is not configured, the mpls oam bidirectional-tunnel enable command must be run on both the ingress and egress."
+}

@@ -1,0 +1,80 @@
+{
+    "PageTitle": "ntp-service access",
+    "FuncDef": "The ntp-service access command sets the access control authority of a local NTP service.\nThe undo ntp-service access command deletes the access control authority.\nBy default, no access authority is set.",
+    "CLIs": [
+        "ntp-service access { peer | query | server | synchronization | limited } { { <acl-number> | acl-name <aclname> } [ ipv6 { <acl6-number> | acl6-name <acl6name> } ] | ipv6 { <acl6-number> | acl6-name <acl6name> } [ { <acl-number> | acl-name <aclname> } ] }",
+        "undo ntp-service access { { peer | query | server | synchronization | limited } | { peer | query | server | synchronization | limited } { { <acl-number> | acl-name <aclname> } [ ipv6 { <acl6-number> | acl6-name <acl6name> } ] | ipv6 [ { <acl6-number> | acl6-name <acl6name> } | { <acl6-number> | acl6-name <acl6name> } { <acl-number> | acl-name <aclname> } ] | all } }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer",
+            "Info": "Indicates to maximum access. Both time request and control query can be performed on the local NTP service, and the local clock can be synchronized to the remote server.\nIf the matching result is configured as permit for the source IP address configured in the ACL:\nThe local clock can be synchronized with the peer clock.The peer clock can be synchronized with the local clock.\n-"
+        },
+        {
+            "Parameters": "query",
+            "Info": "Indicates to minimum access. Only control query can be performed on the local NTP service.\n-"
+        },
+        {
+            "Parameters": "server",
+            "Info": "Permits server access and query. Both time requests and control query can be performed on the local NTP service, but the local clock cannot be synchronized to the remote server.\nIf the matching result is configured as permit for the source IP address configured in the ACL:\nThe local clock cannot be synchronized with the peer clock.The peer clock can be synchronized with the local clock.\n-"
+        },
+        {
+            "Parameters": "synchronization",
+            "Info": "Permits server access only. Only time request can be performed on the local NTP service.\nIf the matching result is configured as permit for the source IP address configured in the ACL:\nThe local clock cannot be synchronized with the peer clock.The peer clock can be synchronized with the local clock.\n-"
+        },
+        {
+            "Parameters": "limited",
+            "Info": "Controls the incoming packet rate and kiss code is sent when KoD is enabled.\n-"
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies a basic ACL number for IPv4 addresses.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name aclname",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ipv6 acl6-number",
+            "Info": "Specifies an IPv6 address access list number.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6name",
+            "Info": "Specifies the name of a named basic ACL6.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates the IP address can be of both IPv6 and IPv4 types.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2000",
+            "[*HUAWEI-acl4-basic-2000] quit",
+            "[*HUAWEI] ntp-service access peer 2000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2002",
+            "[*HUAWEI-acl4-basic-2002] quit",
+            "[*HUAWEI] ntp-service access synchronization 2002"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 2000",
+            "[*HUAWEI-acl6-basic-2000] quit",
+            "[*HUAWEI] ntp-service access peer ipv6 2000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2000",
+            "[*HUAWEI-acl4-basic-2000] quit",
+            "[*HUAWEI] ntp-service access limited 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCompared with NTP authentication, the ntp-service access command is simpler to implement network security. When receiving an access query, an NTP server matches it with peer, query, server, and synchronization in descending order of access restriction strictness.\nIn VS mode, this command is supported only by the admin VS.\nPrecautions\nUse this command based on the access limitation.\nUnicast NTP server or client mode: In client, the restricted NTP query is synchronizing the client with the server.Unicast NTP server or client mode: In server, the restricted NTP query is clock synchronization request from the client.NTP peer mode: In symmetric active end, the restricted NTP query is clock synchronization with each other.NTP peer mode: In symmetric passive end, the restricted NTP query is clock synchronization request from the active end.NTP multicast mode: In NTP multicast client, the restricted NTP query is synchronizing the client with the server.NTP broadcast mode: In NTP broadcast client, the restricted NTP query is synchronizing the client with the server.NTP manycast mode: In NTP manycast client, the restricted NTP query is synchronizing the client with the server.NTP manycast mode: In NTP manycast Server, the restricted NTP query is clock synchronization request from the client.\nIf this command is the first NTP configuration command, the system automatically adds the ntp-service [ ipv6 ] server disable command in the configuration file to disable the NTP service. If this command is the last NTP configuration command to be deleted, the system automatically deletes the ntp-service [ ipv6 ] server disable command from the configuration file.\nBefore configuring access control rights in an ACL, check the ACL rule configuration.\nIf the ACL rule of a source IP address is set to permit, packets from the source IP address are permitted.If the ACL rule of a source IP address is set to deny, packets from the source IP address are denied.If a source IP address is not in an ACL rule, packets from the source IP address are denied.If no rule exists in the ACL or the referenced ACL does not exist, packets from all source IP addresses are denied."
+}

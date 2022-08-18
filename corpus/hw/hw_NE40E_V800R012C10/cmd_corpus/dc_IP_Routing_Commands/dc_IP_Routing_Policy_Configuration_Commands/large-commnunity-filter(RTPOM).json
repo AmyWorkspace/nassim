@@ -1,0 +1,40 @@
+{
+    "PageTitle": "ip large-community-filter basic",
+    "FuncDef": "The ip large-community-filter basic command sets a basic Large-Community filter.\nThe undo ip large-community-filter basic command deletes a configured basic Large-Community filter.\nBy default, no basic Large-Community filter is configured.",
+    "CLIs": [
+        "ip large-community-filter basic <large-comm-filter-name> [ index <index-number> ] <matchMode> { <cmntyStr> } &<1-16>",
+        "undo ip large-community-filter basic <large-comm-filter-name> [ index <index-number> ] [ <matchMode> { <cmntyStr> } &<1-16> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "large-comm-filter-name",
+            "Info": "Specifies the name of a basic Large-Community filter.\nThe value is a string of 1 to 51 case-sensitive characters. The string cannot be all digits."
+        },
+        {
+            "Parameters": "index index-number",
+            "Info": "Specifies the index of a Large-Community filter.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "matchMode",
+            "Info": "Sets the matching mode of a Large-Community filter.\nThe value is an enumerated type:\npermit: Sets the matching mode of a Large-Community filter to permit.deny: Sets the matching mode of a Large-Community filter to deny."
+        },
+        {
+            "Parameters": "cmntyStr",
+            "Info": "Specifies a value of the Large-Community attribute.\nThe value is in the format of aa:bb:cc. The values of aa, bb, and cc are integers ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "basic",
+            "Info": "Sets a basic Large-Community filter.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip large-community-filter basic a deny 1:1:1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe Large-Community attribute is a private attribute of BGP and can be flexibly applied to route-policies. The ip large-community-filter command works with the if-match large-community-filter command so that a filtering rule based on a specific Large-Community filter can be used to filter BGP routes.\nFollow-up Procedure\nRun the display ip large-community-filter command to view detailed configuration of the Large-Community filter.\nPrecautions\nThe relationship between the rules in a Large-Community filter is \"AND\", which is different from that in an RD filter. This is because each route has only one RD but can have multiple Large-Community values.\nLarge-Community filters in different formats lead to different matching results. Take the following formats as an example:\nFormat 1:\nip large-community-filter basic a permit 100:1:1 200:1:1 300:1:1\nThe relationship between 100:1:1, 200:1:1, and 300:1:1 is AND.\nFormat 2:\nip large-community-filter basic a permit 100:1:1\nip large-community-filter basic a permit 200:1:1 300:1:1\nThe relationship between 200:1:1 and 300:1:1 is AND. The relationship between 100:1:1 and 200:1:1 is OR, and the relationship between 100:1:1 and 300:1:1 is also OR.\nIn format 2, the Large-Community value in each matching rule must be a subset of the Large-Community set in BGP routes.\nHowever, the RD filters in the following formats have the same matching result:\nFormat 1:\nip rd-filter 100 permit 100:1 200:1 2.2.2.2:1 3.3.3.3:1\nFormat 2:\nip rd-filter 100 permit 100:1 200:1\nip rd-filter 100 permit 2.2.2.2:1\nip rd-filter 100 permit 3.3.3.3:1\nBy default, a Large-Community filter works in deny mode. BGP routes that fail one of the filtering rules do not match the Large-Community filter. If all matching rules in a Large-Community filter work in deny mode, all BGP routes are denied by the filter. To prevent this problem, configure a matching rule in permit mode after one or more matching rules in deny mode so that the routes except for those denied by the preceding filtering rules match the filter."
+}

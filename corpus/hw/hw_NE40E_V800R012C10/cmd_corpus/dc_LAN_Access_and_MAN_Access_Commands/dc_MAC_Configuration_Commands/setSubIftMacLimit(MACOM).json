@@ -1,0 +1,65 @@
+{
+    "PageTitle": "mac-limit (Layer 2 sub-interface view)",
+    "FuncDef": "The mac-limit command applies a global MAC address learning limit rule on an interface.\nThe undo mac-limit command deletes a global MAC address learning limit rule applied on an interface.\nBy default, no global MAC address learning limit rule is applied on a sub-interface.",
+    "CLIs": [
+        "mac-limit { maximum <max> [ rate <hours> ] | action { discard | forward } | alarm { enable | disable } } *",
+        "mac-limit rule-name <rule-name>",
+        "undo mac-limit"
+    ],
+    "ParentView": [
+        "400GE Layer 2 sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "PW-VE sub-interface view",
+        "Layer 2 sub-interface view",
+        "Sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "maximum max",
+            "Info": "Specifies the maximum number of MAC address that can be learned.\nThe value is an integer ranging from 0 to 131072.\nWhen the value is 0, no limitation is set on the address learning number."
+        },
+        {
+            "Parameters": "rate hours",
+            "Info": "Indicates the interval at which MAC addresses are learned.\nThe parameter must be configured when configuring the global MAC address learning limit rule.\nThe value is an integer ranging from 0 to 1000, in milliseconds.\nWhen the value is 0, no limitation is set on the address learning interval."
+        },
+        {
+            "Parameters": "action",
+            "Info": "Specifies an action to be taken when the number of MAC address entries in the MAC address table reaches the limit.\n-"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "The packet with the source MAC address not contained in the MAC address table is discarded.\n-"
+        },
+        {
+            "Parameters": "forward",
+            "Info": "The packet with the source MAC address not contained in the MAC address table is forwarded but its MAC address is not recorded.\n-"
+        },
+        {
+            "Parameters": "alarm",
+            "Info": "Specifies whether an alarm is generated when the number of the MAC address entries in the MAC address table reaches the limit.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "An alarm is generated.\n-"
+        },
+        {
+            "Parameters": "disable",
+            "Info": "No alarm is generated.\n-"
+        },
+        {
+            "Parameters": "rule-name rule-name",
+            "Info": "Specifies the name of a global MAC address learning limit rule.\nThe value is a string of 1 to 31 characters. It does not support space, question mark, or subtraction sign."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mac-limit rule-name name1 maximum 10000 rate 100 alarm enable",
+            "[*HUAWEI] interface GigabitEthernet2/0/1.1",
+            "[*HUAWEI-GigabitEthernet2/0/1.1] mac-limit rule-name name1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo control the number of users and protect a MAC address table against attacks, you can limit the number of MAC addresses that a device can learn. You can also configure the system to discard packets or generate an alarm to improve network security.\nTo apply a global MAC address learning limit rule on an interface, run the mac-limit rule-name command in the sub-interface view.\nConfiguration Impact\nIf a global MAC address learning limit rule has been applied on an interface, another MAC address learning rule cannot be configured on the interface using the mac-limit command.\nPrecautions\nGE interface, and Eth-Trunk interface must be Layer 2 interfaces."
+}

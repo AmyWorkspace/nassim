@@ -1,0 +1,60 @@
+{
+    "PageTitle": "cc enable",
+    "FuncDef": "The cc enable command enables a device to send or receive CCMs.\nThe undo cc enable command disables a device from sending or receiving CCMs.\nBy default, a device is disabled from sending or receiving CCMs.",
+    "CLIs": [
+        "cc send enable",
+        "cc receive enable [ auto-protocol ]",
+        "undo cc send enable",
+        "undo cc receive enable"
+    ],
+    "ParentView": [
+        "Maintenance entity group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "receive",
+            "Info": "Enables a device to receive CCMs.\n-"
+        },
+        {
+            "Parameters": "auto-protocol",
+            "Info": "Enables OAM auto protocol extension.\n-"
+        },
+        {
+            "Parameters": "send",
+            "Info": "Enables a device to send CCMs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls static-l2vc destination 4.4.4.4 400 transmit-vpn-label 100 receive-vpn-label 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] mpls-tp meg abc",
+            "[*HUAWEI-mpls-tp-meg-abc] me l2vc peer-ip 4.4.4.4 vc-id 400 vc-type vlan mep-id 1 remote-mep-id 2",
+            "[*HUAWEI-mpls-tp-meg-abc] cc send enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls static-l2vc destination 4.4.4.4 400 transmit-vpn-label 100 receive-vpn-label 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] mpls-tp meg abc",
+            "[*HUAWEI-mpls-tp-meg-abc] me l2vc peer-ip 4.4.4.4 vc-id 400 vc-type vlan mep-id 1 remote-mep-id 2",
+            "[*HUAWEI-mpls-tp-meg-abc] cc receive enable auto-protocol"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMPLS-TP OAM provides proactive monitoring. To enable proactive monitoring, run the cc enable command.\nMPLS-TP OAM is configured for a maintenance entity (ME). An ME consists of two maintenance entity group end points (MEPs) on both ends of a transport path. MPLS-TP OAM detects faults in the MEP. The mpls-tp meg command must be run to create a MEG before the cc enable command is run to implement MPLS-TP OAM.\nThe OAM auto protocol enabled on the egress provides the following functions:\nTriggers OAM. If the sink node does not support OAM CC and CC parameters (including the detection packet type and interval at which packets are sent), upon the receipt of the first CV or FFD packet, the sink node automatically records the packet type and interval at which the packet is sent and uses these parameters in CC detection that starts.Dynamically stops running the OAM. If the detection packet type or interval at which detection packets are sent is to be changed on the source node, the source node sends an FDI packet to instruct the sink node to stop the OAM state machine. If an OAM function is to be disabled on the source node, the source node also sends an FDI packet to instruct the sink node to stop the OAM state machine.\n\nPrerequisites\nThe ME of the MEG has been bound to a tunnel.\nConfiguration Impact\nAfter the cc enable command is run on a device, the device sends CCMs every 1000 ms.\nPrecautions\nTo prevent unnecessary alarms, run the cc enable and undo cc enable commands in the following sequence:\nRun the cc send enable command on the ingress and then the cc receive enable command on the egress. Run the cc receive enable command on the egress and then the cc send enable command on the ingress.Run the undo cc receive enable command on the egress and then the undo cc send enable command on the ingress. Run the undo cc receive enable command on the ingress and then the undo cc send enable command on the egress.\nRunning the cc enable command enables both CC and CV.\nIf MPLS-TP OAM is already associated with an APS tunnel protection group, the device cannot be disabled from sending or receiving CCMs."
+}

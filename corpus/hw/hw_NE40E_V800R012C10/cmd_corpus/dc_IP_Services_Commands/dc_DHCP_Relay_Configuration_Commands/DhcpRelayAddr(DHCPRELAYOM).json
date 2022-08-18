@@ -1,0 +1,86 @@
+{
+    "PageTitle": "ip relay address",
+    "FuncDef": "The ip relay address command configures a DHCP server address.\nThe undo ip relay address command deletes the configured DHCP server address.\nBy default, no DHCP server address is configured.",
+    "CLIs": [
+        "ip relay address <ip-address> [ dhcp-option { <code_60> [ <option-text> ] | <code_1to59> | <code_61to254> } ]",
+        "undo ip relay address { all | <ip-address> [ dhcp-option { <code_60> [ <option-text> ] | <code_1to59> | <code_61to254> } | all ] }"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Global MP-group interface view",
+        "Remote-AP interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "Trunk serial interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Vbridge interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of a DHCP server. A maximum of 20 DHCP server addresses can be configured for each relay interface.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "dhcp-option code_61to254",
+            "Info": "Specifies a DHCP option ID.\nThe value is an integer ranging from 61 to 254."
+        },
+        {
+            "Parameters": "dhcp-option code_1to59",
+            "Info": "Specifies a DHCP option ID.\nThe value is an integer ranging from 1 to 59."
+        },
+        {
+            "Parameters": "dhcp-option option-text",
+            "Info": "Specifies the Option 60 content.\nThe value is a string of 1 to 128 characters."
+        },
+        {
+            "Parameters": "dhcp-option code_60",
+            "Info": "Indicates DHCP Option 60. The Option 60 field carries the vendor identifier. A maximum of 100 Option 60 fields carrying different vendor identifiers can be configured to identify clients. The vendor identifier is configured based on that used on clients.\nThe value is an integer 60."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates either of the following:\nIf ip-address is not specified, all DHCP server addresses on the interface are deleted.If ip-address is specified, all configurations of the specified DHCP server address are deleted.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ip relay address 10.38.1.2",
+            "[~HUAWEI-GigabitEthernet1/0/0] ip relay address 10.38.1.3"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ip relay address 1.1.1.1 dhcp-option 12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ip relay address 1.1.1.1 dhcp-option 60 abc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can associate either multiple DHCP server addresses with one DHCP option or multiple DHCP options with one DHCP server address.\nThis command is available only on carrier IP devices.\nPrerequisites\nDHCP relay has been enabled using the dhcp select relay command in the interface view.\nConfiguration Impact\nA DHCP relay agent searches for a server IP address based on DHCP options in the following ways:\nIf a DHCP message carries multiple DHCP options and these DHCP options have matching server addresses, the server address mapped to the DHCP option with the largest number is used.If DHCP Option 60 is specified and a character string is configured for Option 60, the server address mapped to Option 60 with the character string is preferred. If no matching server address is found, the server address mapped to Option 60 without a character string is used.If no server addresses map DHCP options, a server address that is not mapped to any DHCP options is used.If no DHCP server address is configured, the DHCP relay agent discards the DHCP messages.\nThe IP address of a DHCP server configured using the ip relay address command takes effect irrespective of whether the relay agent processes DHCP options. Relay agents process the Option 82 information only and directly forward other options carried in the DHCPv6 Request packet to the server without any processing.\n\nPrecautions\nIf the DHCP relay interface is configured with a VPN instance, the IP address of the DHCP server belongs to the same VPN instance. If the DHCP relay interface belongs to the public network instance, the IP address of the DHCP server belongs to the public network instance.\nA maximum of 20 DHCP server addresses can be configured for every DHCP relay interface."
+}

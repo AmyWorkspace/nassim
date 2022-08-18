@@ -1,0 +1,37 @@
+{
+    "PageTitle": "peer ip-prefix import (BGP-VPNv4 address family view) (IPv6)",
+    "FuncDef": "The peer ip-prefix import command configures a policy based on an IP prefix list for filtering BGP routes received from a specified peer.\nThe undo peer ip-prefix import command cancels this configuration.\nBy default, no route filtering policy based on an IP address prefix list is configured for a peer.",
+    "CLIs": [
+        "peer <ipv6-address> ip-prefix <ip-prefix-name> import",
+        "undo peer <ipv6-address> ip-prefix [ <ip-prefix-name> ] import"
+    ],
+    "ParentView": [
+        "BGP-VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a peer.\nThe prefix is in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "specifies the name of an IP address prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "import",
+            "Info": "Applies a filtering policy to the routes received from a peer.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix list1 permit 0.0.0.0 32 greater-equal 32 less-equal 32",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 2001:DB8:1::1 as-number 100",
+            "[*HUAWEI-bgp] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-af-vpnv4] peer 2001:DB8:1::1 enable",
+            "[*HUAWEI-bgp-af-vpnv4] peer 2001:DB8:1::1 ip-prefix list1 import"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer ip-prefix import command can be used to configure a route filtering policy that is based on an IP prefix list for filtering BGP routes to be received from a specified peer, implementing route control.\nPrerequisites\nIf the peer ip-prefix command specifies an IP prefix list that does not exist for a peer, use the ip ip-prefix command to create an IP prefix list.\nConfiguration Impact\nIf an IP prefix list is specified for a peer group, all the members of the peer group inherit the configuration.\nAfter an IP prefix list is specified for a peer, the peer filter the routes received from other peers based on the IP prefix list. Only the routes that pass the filtering of the IP prefix list can be received.\nPrecautions\nThe peer ip-prefix import command is mutually exclusive with the peer route-filter import commands."
+}

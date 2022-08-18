@@ -1,0 +1,83 @@
+{
+    "PageTitle": "capture-packet forwarding",
+    "FuncDef": "The capture-packet forwarding command configures an instance for obtaining incoming or outgoing packet headers on a specified interface and are not destined for the local device.\nThe undo capture-packet forwarding command deletes a configured instance.",
+    "CLIs": [
+        "capture-packet forwarding interface { <interface-type> <interface-num> | <interface-name> } [ inbound | outbound ] [ vlan <vlan-id> [ to <vlan-id> ] | pvlan <pe-vlan-value> cvlan <ce-vlan-vlaue> [ to <vlan-id> ] ] [ [ ipv6 ] acl { <acl-number> | name <acl-name> } ] [ [ time-out <time-out> ] | [ packet-num <packet-number> ] | [ overwrite ] | [ packet-len <length> ] | { [ file <file-name> [ <filesize> ] ] | [ buffer-only ] } ] *",
+        "undo capture-packet forwarding interface { <interface-type> <interface-num> | <interface-name> } [ inbound | outbound ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "inbound",
+            "Info": "Obtains incoming packet headers.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Obtains outgoing packet headers.\n-"
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies the VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "pvlan pe-vlan-value",
+            "Info": "Specifies the out tag VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "cvlan ce-vlan-vlaue",
+            "Info": "Specifies the inner tag VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Obtains IPv6 packet headers.\nIf this parameter is not configured, IPv4 packet headers are obtained."
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of an ACL used for filtering packet headers. If the ACL does not contain rules, all packet headers on an interface are obtained. The router supports a basic ACL, an advance ACL, an Ethernet frame header-based ACL, and an MPLS ACL.\nThe value is an integer ranging from 2000 to 4999 and 10000 to 10999."
+        },
+        {
+            "Parameters": "name acl-name",
+            "Info": "Specifies the name of an ACL used for filtering packets. If this parameter is not configured, all packet headers are obtained.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "time-out time-out",
+            "Info": "Specifies a timeout period. The system stops obtaining packet headers after the timeout period expires or the configured maximum number of packet headers have been obtained.\nThe value is an integer ranging from 1 to 86400, in seconds. The default value is 15."
+        },
+        {
+            "Parameters": "packet-num packet-number",
+            "Info": "Specifies the maximum number of packet headers to be obtained for an instance.\nThe value is an integer ranging from 1 to 6000. The default value is 10."
+        },
+        {
+            "Parameters": "overwrite",
+            "Info": "Sets the overwrite function. When the number of obtained packets header reaches the configured upper limit, an instance continues obtained packets header. Newly obtained packets header overwrite the most previously obtained packets header. Packet head getting stops when the stop time arrives or is manually terminated by a command.\n-"
+        },
+        {
+            "Parameters": "packet-len length",
+            "Info": "Obtains packet header with a specified length.\nThe value is an integer ranging from 20 to 64, in bytes. The default value is 20."
+        },
+        {
+            "Parameters": "file file-name",
+            "Info": "Name of the file of obtaining packet headers.\nThe value is a string of 5 to 64 case-sensitive characters without spaces. The file name extension must be .cap."
+        },
+        {
+            "Parameters": "filesize",
+            "Info": "Size of the file of obtaining packet headers.\nThe value is an integer ranging from 1 to 10, in M. The default value is 2."
+        },
+        {
+            "Parameters": "buffer-only",
+            "Info": "Indicates that a file (packet head getting file) that contains information about obtained packets header is saved only to the main control board's memory. By default, the file is saved to the main control board's memory or CF card.\n-"
+        },
+        {
+            "Parameters": "interface",
+            "Info": "Specifies the type and number of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> capture-packet forwarding interface GigabitEthernet 1/0/0 inbound acl 3011 time-out 3600 packet-num 1000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIncorrect packets or packet loss on the router may cause voice or video services to deteriorate on a network. To analyze packets and identify faults, run the capture-packet forwarding command to obtained packet headers. Remote packet header obtaining allows you to obtain packet headers remotely, without going to a site in person or reproducing the problem in a laboratory. This function helps reduce expenditures and speed up fault identification. Packet head getting is easier and more rapid to configure than port mirroring.\nPrerequisites\nAn ACL to be used must have rules. If no rule is configured in the ACL to be used, all packet headers on a specified interface will be obtained.\nIf port mirroring, packet sampling, or complex traffic classification in the same direction has been configured, packet head getting cannot be configured.\nConfiguration Impact\nAfter the capture-packet forwarding command is run, the system generates an index to identify the configured instance. Each obtaining instance is saved in a separate file for storing obtained packet headers.\nObtaining packet headers destined for a device other than the local one may affect forwarding performance. Therefore, exercise caution when running this command.\nPrecautions\nLocal packet header obtaining and traffic cleaning (flowspec refluence) are mutually exclusive.\nLocal packet header obtaining and local mirroring (mirrored port and observing port) are mutually exclusive.\nLocal packet header obtaining and MF classification (PBR) are mutually exclusive. Therefore, you can select only one of the functions. If you select the local packet header obtaining function, restore the MF classification (PBR) function after local packet header obtaining is complete.\nThe system stops obtaining packet headers if the configured timeout period expires or the configured maximum number of packet headers for an instance have been obtained.\nProtocol packets delivered by the device do not support packet header obtaining.\nNote the following points when saving instances:\nEach file storing an instance is saved into a CF card by default. A CF card with available space less than 2 MB is unable to save a file.\nAn instance for incoming packets is saved into a file named capture_fwd_InterfaceName_in(out)_vlan_yyyy-mm-dd-hh-mm-ss.cap; an instance for outgoing packet headers is saved into another file named capture_fwd_InterfaceName_out_yyyy-mm-dd-hh-mm-ss.cap.\nAn instance for obtaining packet headers destined for the local device and that for obtaining packet headers destined for a device other than the local one can be configured together and they do no affect each other.\nThe following rules are used for obtaining packet headers destined for a device other than the local one:\nThe device supports only one instance for incoming or outgoing packet headers on each interface.The main control board on the device supports a maximum of eight instances for obtaining packet headers."
+}

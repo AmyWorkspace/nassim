@@ -1,0 +1,41 @@
+{
+    "PageTitle": "forward-mode",
+    "FuncDef": "The forward-mode command sets the forwarding mode of a VE interface of global VE interface to high-performance forwarding or half-line-rate forwarding, or forwarding mode whose performance is between high-performance forwarding and half-line-rate forwarding.\nThe undo forward-mode command restores the default configuration.\nBy default, a VE interface or a global VE interface works in half-line-rate forwarding mode.",
+    "CLIs": [
+        "forward-mode { through | loopback | half-through }",
+        "undo forward-mode [ through | half-through ]"
+    ],
+    "ParentView": [
+        "Global VE interface view",
+        "VE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "through",
+            "Info": "Indicates high-performance forwarding mode, in which the interface bandwidth is set to the bandwidth of an interface board.\n-"
+        },
+        {
+            "Parameters": "loopback",
+            "Info": "Indicates half-line-rate forwarding mode, in which the interface bandwidth is set to half of the bandwidth of an interface board.\n-"
+        },
+        {
+            "Parameters": "half-through",
+            "Info": "Indicates forwarding performance between high-performance forwarding and half-line-rate forwarding.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface virtual-ethernet 1/0/0",
+            "[*HUAWEI-VirtualEthernet 0/1/0] ve-group 1 l2-terminate",
+            "[*HUAWEI-VirtualEthernet 0/1/0] forward-mode through"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface global-ve 2",
+            "[*HUAWEI-global-ve 2] ve-group 2 l2-terminate",
+            "[*HUAWEI-global-ve 2] forward-mode loopback"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe prerequisite for selecting the high-performance forwarding mode is that at least one of the inbound and outbound interfaces of the packets resides where the VE interface resides. Otherwise, packets will be forwarded in half-line-rate forwarding mode.\nIf the traffic rate of a VE interface is lower than half the total bandwidth, using the default configuration is recommended. Disable the high-performance forwarding mode of the VE interface in this situation.\nPackets that can be forwarded only in half-line-rate forwarding mode include:\nAnycast packetsMulticast packetsPackets to which the padding field is added\nScenarios where packets can be forwarded only in half-line-rate forwarding mode are as follows:\nPhysical interfaces mapping to VE interfaces are configured with TE tunnel bandwidth limits or HQoS services:\n L2VPN or L3VPN public network tunnels are configured as MPLS TE tunnels and configured with bandwidth limits. MPLS HQoS services are deployed. Network-side HQoS services are deployed.\nVE interfaces are enabled with the Netstream.\nA VE interface and a global VE interface are different:\nA VE interface is a logical Ethernet interface taking effect only on the board the interface resides. Services on the VE interface will be unavailable if the board has a fault.A global VE interface is a logical Ethernet interface taking effect on all boards of a device. A global VE can be an L2VE or L3VE. As long as an L2VPN or L3VPN is working properly, the global VE interface can properly send services to a VPN. If the service on a board is not an L2VPN or L3VPN service, reseating the board does not affect services on a global VE interface.\nWhen half-line-rate forwarding is configured for a VE interface or a global VE interface, HQoS is supported for upstream and downstream traffic.\nWhen high-performance forwarding is configured for a VE interface or a global VE interface or the forwarding performance of the interface is set between high-performance forwarding and half-line-rate forwarding, HQoS is supported for both upstream and downstream traffic, but the HQoS service has a higher priority.\nWhen high-performance forwarding is configured for a VE interface or a global VE interface or the forwarding performance of the interface is set between high-performance forwarding and half-line-rate forwarding, HQoS is supported for both upstream and downstream traffic, but the HQoS service has a higher priority.\nIf a VE interface is configured to work in high-performance forwarding mode, the HQoS and port queue service may be affected according to different TM service.\nThe service which needs to copy TM, (for example, Layer 2 multicast, Layer 3 multicast, and multicast VPN).\nIf VE interface, traffic inbound interface and traffic outbound interface set in three different boards, these three interfaces all support HQoS and port queue function in inbound and outbound direction.If VE interface, traffic inbound interface and traffic outbound interface set in one board, VE interface supports HQoS and port queue function in outbound direction, and traffic inbound interface supports HQoS and port queue function in inbound direction and traffic outbound interface does not support HQoS and port queue function in outbound direction.If VE interface and traffic outbound interface set in one board, and traffic inbound interface set in other board, VE interface supports HQoS and port queue function in outbound direction, and traffic outbound interface does not support HQoS and port queue function in outbound direction.If VE interface and traffic inbound interface set in one board, and traffic outbound interface set in other board, these three interfaces all support HQoS and port queue function in inbound and outbound direction.\nThe service which does not need to copy TM, (for example, unicast).\nIf VE interface, traffic inbound interface and traffic outbound interface set in three different boards, these three interfaces all support HQoS and port queue function in inbound and outbound direction.If VE interface, traffic inbound interface and traffic outbound interface set in one board, VE interface supports HQoS and port queue function in inbound direction, and traffic inbound interface does not support HQoS and port queue function in inbound direction and traffic outbound interface supports HQoS and port queue function in outbound direction.If VE interface and traffic outbound interface set in one board, and traffic inbound interface set in other board, VE interface supports HQoS and port queue function in outbound direction, and traffic outbound interface does not support HQoS and port queue function in outbound direction.If VE interface and traffic inbound interface set in one board, and traffic outbound interface set in other board, VE interface supports HQoS and port queue function in inbound direction and traffic inbound interface does not support HQoS and port queue function in inbound direction.\n\nPrerequisites\nBefore running the forward-mode command on a global VE interface, ensure that the global VE interface has been bound to a VE-Group.\nConfiguration Impact\nIn half-line-rate forwarding mode, the bandwidth of the VE interface equals half the total bandwidth of the interface board. After you run the forward-mode through command, the VE interface switches to the high-performance forwarding mode, and the bandwidth of the VE interface equals the total bandwidth of the interface board.\nPrecautions\nThis command can be run only on an L2VE main interface.\nThis command is supported only on the admin VS."
+}

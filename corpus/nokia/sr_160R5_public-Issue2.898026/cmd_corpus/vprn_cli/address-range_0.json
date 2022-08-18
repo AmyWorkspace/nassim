@@ -1,0 +1,40 @@
+{
+    "PageTitle": "address-range",
+    "FuncDef": "This command configures a range of IP addresses to be served from the pool. All IP addresses between the start and end IP addresses will be included (other than specific excluded addresses).",
+    "CLIs": [
+        "address-range <start-ip-address> <end-ip-address> [ failover { local | remote | access-driven } ]",
+        "no address-range <start-ip-address> <end-ip-address>"
+    ],
+    "ParentView": [
+        "config>service>vprn>dhcp>server>pool>subnet",
+        "config>router>dhcp>server>pool>subnet"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "start-ip-address",
+            "Info": "Specifies the start address of this range to include. This address must be unique within the subnet and specified in dotted decimal notation. Allowed values are IP addresses in the range 1.0.0.0 - 223.255.255.255 (with support of /31 subnets)."
+        },
+        {
+            "Parameters": "end-ip-address",
+            "Info": "Specifies the end address of this range to include. This address must be unique within the subnet and specified in dotted decimal notation. Allowed values are IP addresses in the range 1.0.0.0 - 223.255.255.255 (with support of /31 subnets)."
+        },
+        {
+            "Parameters": "failover",
+            "Info": "This command designates an address range as local, remote or access-driven. This is used when multi-chassis synchronization is enabled."
+        },
+        {
+            "Parameters": "local",
+            "Info": "An IPv4 address-range designated as local is used for new lease grants or to renew the existing lease grants. Local address-range designation should be always paired with the remote designation of the same address-range on the peering node."
+        },
+        {
+            "Parameters": "remote",
+            "Info": "An IPv4 address-range designated as remote is used only to renew the existing DHCP leases. The new leases will be delegated from it only after the maximum-client-lead-time + partner-down-delay time elapses. At that point we say that the remote IP address range has been taken over."
+        },
+        {
+            "Parameters": "access-driven",
+            "Info": "An IPv4 address-range designated as access-driven is used for new lease grants or to renew the existing lease grants regardless of the state of the intercommunication link (operational or failed). In this mode of operation the IP address-range is actively shared between the two DHCP server nodes. This can be used on both DHCP servers only in cases where the access protection mechanism (SRRP or MC-LAG) will ensure that there is only a single active path for DHCP clients using the same IP address range available to one of the redundant DHCP nodes."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: failover local"
+}

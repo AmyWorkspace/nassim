@@ -1,0 +1,35 @@
+{
+    "PageTitle": "section exclude-ip-address (DS-Lite instance address pool view)",
+    "FuncDef": "The section exclude-ip-address command excludes a specific IP address or a range of IP addresses from an IP address pool.\nThe undo section exclude-ip-address command restores a specific IP address or a range of IP addresses in an IP address pool.\nNo IP address is excluded from an address pool by default.",
+    "CLIs": [
+        "section <section-id> exclude-ip-address <start-address> [ <end-address> ]",
+        "undo section <section-id> exclude-ip-address <start-address> [ <end-address> ]"
+    ],
+    "ParentView": [
+        "DS-Lite instance address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "section-id",
+            "Info": "Specifies the ID of an IP address pool.\nThe value is an integer ranging from 0 to 15."
+        },
+        {
+            "Parameters": "start-address",
+            "Info": "Specifies a start address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "end-address",
+            "Info": "Specifies an end address.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ds-lite instance 1 id 1",
+            "[*HUAWEI-ds-lite-instance-1] ds-lite address-group 1 group-id 1",
+            "[*HUAWEI-ds-lite-instance-1-ds-lite-address-group-1] section 1 10.0.0.0 10.0.0.255",
+            "[*HUAWEI-ds-lite-instance-1-ds-lite-address-group-1] section 1 exclude-ip-address 10.0.0.0 10.0.0.5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a specific IP address or a range of IP addresses is removed from a DS-Lite address pool, the address pool has to be divided into multiple sub-pools so that each one contains a continuous range of IP addresses. Then the same configurations or operations have to be repeatedly performed on these pools. To address this problem, run the section exclude-ip-address command to remove a specific IP address or a range of IP addresses from a DS-Lite address pool. Then the configurations or operations can be performed once on the address pool that has excluded the specified IP addresses.\nPrerequisites\nA DS-Lite instance, its address pool, and address pool sections have been configured. Addresses in the DS-Lite address pool cannot match an ACL rule used in a DS-Lite outbound policy configured using the ds-lite outbound command.\nPrecautions\nThe section exclude-ip-address command only removes a public IP address or a public IP address segment.A maximum of 10 IP addresses can be removed from a public IP address segment. The excluded IP addresses must be different.When you restore an IP address or an IP address range in a DS-Lite address pool using the undo section exclude-ip-address command, the specified IP address or IP address range must be within the excluded IP address range.If an address pool is configured by specifying mask, the device advertises specific UNRs instead of network segment UNRs after this command is run. If you run this command to exclude some public IP addresses, routes to the public IP addresses may fail to be advertised, and services may be interrupted."
+}

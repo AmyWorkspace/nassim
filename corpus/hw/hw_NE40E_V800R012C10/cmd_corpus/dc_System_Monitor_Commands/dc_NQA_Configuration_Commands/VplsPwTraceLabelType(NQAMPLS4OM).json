@@ -1,0 +1,35 @@
+{
+    "PageTitle": "label-type (VPLS PW Trace test instance)",
+    "FuncDef": "The label-type command specifies a packet encapsulation type in the NQA view for VPLS PW Trace test.\nThe undo label-type command restores the default packet encapsulation type.\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.\nThe default encapsulation type is label-alert.",
+    "CLIs": [
+        "label-type { label-alert | control-word }",
+        "label-type { label-alert no-control-word }",
+        "undo label-type"
+    ],
+    "ParentView": [
+        "NQA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "label-alert",
+            "Info": "Indicates that the router alert label is encapsulated into packets.\n-"
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Indicates that the control word is encapsulated into packets.\n-"
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "Disables control-word. This parameter is used for PWE3 ping.\nIf the device interworks with a device running an earlier version, specify this parameter in label-alert or normal mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance admin pwe3",
+            "[*HUAWEI-nqa-admin-pwe3] test-type vplspwtrace",
+            "[*HUAWEI-nqa-admin-pwe3] label-type label-alert"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPW ping supports several detection modes as below:\nControl-word: Supports single-segment PW and multi-segment PW detection.An MPLS Echo Request packet carries the control word between the PW label and the IP header. After the destination device receives the packet and finds that it carries the control word, the device sends the packet to the CPU for processing.This check mode only applies when you enable the control-word on both ends of a PW.\nLabel-alert: Supports only the single-segment PW detection.An MPLS Echo Request packet carries the label-alert label between the PW and LSP labels. After the destination device receives the packet and finds that it carries the control word, the device sends the packet to the CPU for processing.This check mode only applies when you enable the label-alert on both ends of a PW.\nTTL: Supports single-segment PW and multi-segment PW detection.\nYou must specify a TTL value to ensure that the destination device sends the packet to the CPU for processing after the TTL expires.\n\nPrecautions\nf you change a packet encapsulation type during the running of a test instance, the system displays a message, asking you whether to stop the test instance. You can press \"Y\" or \"N\" as required.\nIf you press \"Y\", the system stops the test instance and changes the packet encapsulation type. After you run the commit command, the change takes effect. To restart the test instance, run the start command.If you press \"N\", the test instance keeps running, and the packet encapsulation type fails to be modified."
+}

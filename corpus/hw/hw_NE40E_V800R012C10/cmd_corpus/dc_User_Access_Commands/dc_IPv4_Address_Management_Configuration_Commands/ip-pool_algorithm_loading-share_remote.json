@@ -1,0 +1,32 @@
+{
+    "PageTitle": "ip-pool algorithm loading-share",
+    "FuncDef": "The ip-pool algorithm loading-share remote command configures a device to assign addresses from IPv4 remote address pools based on weights of the address pools.\nThe undo ip-pool algorithm loading-share remote command restores the default configuration.\nBy default, a device assigns addresses from IPv4 remote address pools in the sequence the address pools are bound to a domain.",
+    "CLIs": [
+        "ip-pool algorithm loading-share remote [ chasten { restrain-period <period-value> | timeout-threshold <threshold-value> } * ]",
+        "undo ip-pool algorithm loading-share [ remote [ chasten [ restrain-period <period-value> | timeout-threshold <threshold-value> ] * ] ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "chasten",
+            "Info": "Specifies a chasten item.\n-"
+        },
+        {
+            "Parameters": "restrain-period period-value",
+            "Info": "Specifies a period during which a remote address pool is suppressed.\nThe value is an integer ranging from 1 to 60, in minutes.\nThe default value is 10 min."
+        },
+        {
+            "Parameters": "timeout-threshold threshold-value",
+            "Info": "Specifies a threshold for the number of NAK packets in a suppressed remote address pool.\nThe value is an integer ranging from 1 to 255.\nThe default value is 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip-pool algorithm loading-share remote"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, IPv4 addresses are assigned in the sequence the address pools are bound to a domain. Specifically, one address pool is used only after addresses in the preceding address pool are used up. This address assignment mode results in unbalanced address pool usage. Moreover, the BRAS is unable to know the number of available addresses in a remote address pool on a DHCPv4 server in real time. As a result, the remote address pool may still have available addresses on the BRAS but actually does not have any addresses on the DHCPv4 server. In this case, clients may fail to obtain IPv4 addresses. To resolve the problems, the algorithm for assigning addresses from address pools has been optimized. Specifically, run the ip-pool algorithm loading-share remote command to configure a device to assign addresses from IPv4 remote address pools based on the weights of the address pools.\nIf the NAK count in the remote address pool selected based on weights is greater than or equal to the threshold specified by and the address pool is within the period specified by , the remote address pool is not selected.\nThe ip-pool algorithm loading-share remote [ chasten { restrain-period period-value | timeout-threshold threshold-value } * ] command configures a period during which a remote address pool is suppressed and a threshold for the number of NAK packets in a suppressed remote address pool.\nThe undo ip-pool algorithm loading-share [ remote [ chasten ] ] command cancels the configuration and restores restrain-period and timeout-threshold  to the default values.\nThe undo ip-pool algorithm loading-share [ remote [ chasten { restrain-period period-value | timeout-threshold threshold-value } * ] ] command deletes a configured period and threshold and restores either restrain-period or timeout-threshold or both to the default values.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nBy default, IPv4 addresses are assigned in the sequence the address pools are bound to a domain. After the ip-pool algorithm loading-share remote command is run, the device assigns addresses from IPv4 remote address pools based on weights configured using the weight command for the address pools."
+}

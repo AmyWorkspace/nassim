@@ -1,0 +1,55 @@
+{
+    "PageTitle": "l2-multicast limit per-trunk-member bandwidth",
+    "FuncDef": "The l2-multicast limit per-trunk-member bandwidth command limits the bandwidth to a specific value for each Eth-Trunk member interface.\nThe undo l2-multicast limit per-trunk-member bandwidth command cancels the configuration.\nBy default, the bandwidth is not limited to a specific value for any Eth-Trunk member interface.",
+    "CLIs": [
+        "l2-multicast limit per-trunk-member bandwidth <bandwidth> dot1q vid { <vid1> [ to <vid2> ] } &<1-10>",
+        "undo l2-multicast limit per-trunk-member bandwidth [ bandwidth ] dot1q vid { <vid1> [ to <vid2> ] } &<1-10>"
+    ],
+    "ParentView": [
+        "Eth-Trunk sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "bandwidth",
+            "Info": "Sets a bandwidth limit.\nThe value is an integer ranging from 1 to 4194304, in kbit/s."
+        },
+        {
+            "Parameters": "dot1q",
+            "Info": "Sets the dot1q termination mode.\n-"
+        },
+        {
+            "Parameters": "vid",
+            "Info": "Indicates a VLAN ID.\n-"
+        },
+        {
+            "Parameters": "vid1",
+            "Info": "Sets a start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to vid2",
+            "Info": "Sets an end VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 3",
+            "[*HUAWEI-Eth-Trunk3] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] quit",
+            "[*HUAWEI] interface Eth-Trunk 3.1",
+            "[*HUAWEI-Eth-Trunk3.1] encapsulation dot1q-termination",
+            "[*HUAWEI-Eth-Trunk3.1] dot1q termination vid 1",
+            "[*HUAWEI-Eth-Trunk3.1] l2 binding vsi vsi1",
+            "[*HUAWEI-Eth-Trunk3.1] l2-multicast limit per-trunk-member bandwidth 1000 dot1q vid 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn Eth-Trunk interface's member interfaces may change dynamically. To implement refined bandwidth control, you can run the l2-multicast per-trunk-member limit bandwidth command to limit the bandwidth to a specific value for each Eth-Trunk member interface.\nAfter the l2-multicast per-trunk-member limit bandwidth command is run, the total bandwidth limit for an Eth-Trunk interface is calculated using the following formula: Total bandwidth limit for an Eth-Trunk interface = Number of this Eth-Trunk interface's Up member interfaces x Bandwidth limit for each member interface.\nPrerequisites\nA sub-interface has been configured as a dot1q termination sub-interface, and the sub-interface has been bound to an LDP-based VSI."
+}

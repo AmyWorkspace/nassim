@@ -1,0 +1,31 @@
+{
+    "PageTitle": "tcp adjust-mss inbound",
+    "FuncDef": "The tcp adjust-mss inbound command sets the maximum segment size (MSS) for received TCP SYN/SYN+ACK packets.\nThe undo tcp adjust-mss inbound command cancels the configuration.\nBy default, no MSS is set for received TCP SYN/SYN+ACK packets.",
+    "CLIs": [
+        "tcp adjust-mss <mss-value> inbound",
+        "undo tcp adjust-mss <mss-value> inbound"
+    ],
+    "ParentView": [
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "Eth-Trunk interface view",
+        "GE sub-interface view",
+        "GE interface view",
+        "POS interface view",
+        "VLANIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mss-value",
+            "Info": "Specifies the MSS for received TCP SYN/SYN+ACK packets.\nThe value is an integer ranging from 32 to 9500, in bytes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/0.1",
+            "[~HUAWEI-GigabiteEhernet0/2/0.1] tcp adjust-mss 1450 inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a user device and carrier device negotiate an MSS value in TCP packets and set up a TCP connection, the intermediate device forwards TCP packets between the two ends. The device may encapsulate additional headers into the TCP packets to be forwarded. If the packet length exceeds the negotiated MSS after the additional headers are encapsulated, the TCP packets are fragmented, deteriorating the transmission efficiency. To prevent this issue, run the tcp adjust-mss inbound command on the device. The device will then compare the MSS in received SYN/SYN+ACK packets with the one specified using the command. If the MSS specified in the command is smaller, the device changes the MSS to the specified value before forwarding the TCP packets. Otherwise, the device does not change the MSS in the packets.\nPrecautions\nThe command configuration is effective only for TCP?SYN/SYN+ACK packets in IPv4 unicast scenarios and TCP?SYN/SYN+ACK packets on the public network side in L3VPN scenarios.\nTo run the tcp adjust-mss inbound command on a sub-interface, ensure that the sub-interface is bound to a VLAN and configured with dot1q encapsulation.\nIf the tcp adjust-mss inbound command is run more than once on the same interface, the latest configuration overrides the previous one."
+}

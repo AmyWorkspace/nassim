@@ -1,0 +1,40 @@
+{
+    "PageTitle": "ipv6-pool include",
+    "FuncDef": "The ipv6-pool include command maps the IPv6 address pool bound to an RBP to a destination address pool.\nThe undo ipv6-pool include command cancels the configuration.\nBy default, no IPv6 address pool bound to an RBP is mapped to a destination address pool.",
+    "CLIs": [
+        "ipv6-pool <source-pool-name> include <destination-pool-name> [ node <node-id> ]",
+        "undo ipv6-pool <source-pool-name> include <destination-pool-name>"
+    ],
+    "ParentView": [
+        "Remote backup profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "source-pool-name",
+            "Info": "Specifies the name of a source IPv6 address pool.\nThe value is a string of 1 to 32 case-insensitive characters, spaces not supported. The value can be any combination of letters, digits, dots (.), hyphens (-), and underscores (_)."
+        },
+        {
+            "Parameters": "destination-pool-name",
+            "Info": "Specifies the name of a destination IPv6 address pool.\nThe value is a string of 1 to 32 case-insensitive characters, spaces not supported. The value can be any combination of letters, digits, dots (.), hyphens (-), and underscores (_)."
+        },
+        {
+            "Parameters": "node node-id",
+            "Info": "Specifies the priority of an address pool.\nIf node-id is not specified, the system automatically assigns node IDs based on the configuration sequence. Node IDs are the multiples of 5. For instance, if the first node ID is set to 5, the second node ID is 10. Node IDs of the address pools mapped to the same source IPv6 address pool are assigned based on the preceding rule.Node IDs of the destination address pools mapped to different source IPv6 address pools are independent of each other. You can adjust the priorities of destination address pools by specifying node-id for the address pools. The same node ID cannot be assigned to destination address pools mapped to the same source IPv6 address pool. If a specified node ID already exists (either specified earlier or automatically assigned by the system), the node ID configured later overrides the previous one.A source IPv6 address pool can be mapped to multiple destination IPv6 address pools. The destination IPv6 address pools are selected based on their node IDs in ascending order, that is, the destination IPv6 address pool with the smallest node ID is selected first.\nThe value is an integer ranging from 1 to 65534."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 prefix test local",
+            "[~HUAWEI-ipv6-prefix-test] prefix 2001::1/64",
+            "[~HUAWEI-ipv6-prefix-test] quit",
+            "[~HUAWEI] ipv6 pool test bas local",
+            "[~HUAWEI-ipv6 pool test] prefix test",
+            "[~HUAWEI-ipv6-pool-test] quit",
+            "[~HUAWEI] remote-backup-profile p1",
+            "[*HUAWEI-rm-backup-prf p1] commit",
+            "[~HUAWEI-rm-backup-prf p1] ipv6-pool HSI include test node 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a dual device hot backup scenario in which the primary link becomes faulty, to allow the source IPv6 address pool to continue to assign IPv6 addresses to users, run the ipv6-pool command in the remote backup profile view to map the source IPv6 address pool to different types of destination address pools. IPv6 addresses are then assigned from the destination address pools based on their node-id priorities.\nPrerequisites\nEnsure that the following operations have been performed:\nAn IPv6 address pool (the destination address pool) has been created using the ipv6 poolbas local command in the system view. An IPv6 prefix pool has been bound to the IPv6 address pool using the prefix / command in the IPv6 address pool view.Prefixes have been configured in the IPv6 prefix pool using the prefix command in the IPv6 prefix pool view.\n\nConfiguration Impact\nThe ipv6-pool command is valid for IPoE, static, PPPoE, or web users.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nFor the ipv6-pool command to take effect, the destination address pool group cannot contain remote-type address pools. Only BAS-type destination address pools can be included. If the VPN instance bound to a destination address pool differs from that bound to the user domain, the destination address pool cannot be selected for assigning addresses. A source address pool can be mapped to a maximum of 128 destination address pools. A maximum of 512 mapping entries can be configured under an RBP."
+}

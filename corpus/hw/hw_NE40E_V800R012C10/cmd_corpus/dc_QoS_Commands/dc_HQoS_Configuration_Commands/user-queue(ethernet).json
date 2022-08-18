@@ -1,0 +1,73 @@
+{
+    "PageTitle": "user-queue (interface view)",
+    "FuncDef": "The user-queue command sets scheduling parameters for the SQ.\nThe undo user-queue command removes the setting.\nBy default, HQoS is disabled on the interface.",
+    "CLIs": [
+        "user-queue cir <cir-value> [ [ pir <pir-value> ] | [ flow-queue <flow-queue-name> ] | [ user-group-queue <group-name> ] ] * { inbound | outbound } [ service-template <template-name> ]",
+        "user-queue cir <cir-value> flow-mapping <mapping-name> { inbound | outbound } [ service-template <template-name> ]",
+        "undo user-queue { inbound | outbound }"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "40GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "GE sub-interface view",
+        "GE interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the value of PIR.\nThe value is an integer in the range of 0, 16 to 4294967294 in kbit/s.\npir-value should be no less than the configured cir-value.\nIf pir pir-value is not configured, pir-value = cir-value by default."
+        },
+        {
+            "Parameters": "flow-queue flow-queue-name",
+            "Info": "Specifies the name of the flow queue template.\nThe name is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "user-group-queue group-name",
+            "Info": "Specifies the name of a user group name and applies the GQ.\nThe name is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates that the scheduling parameters for the SQ is applied to the incoming traffic on interfaces.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates that the scheduling parameters for the SQ is applied to the outgoing traffic on interfaces.\n-"
+        },
+        {
+            "Parameters": "service-template template-name",
+            "Info": "Specifies the name of the service template.\nThe name is a string of 1 to 31 characters. The system defines fourteen service templates based on different service."
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR value for the user queue. The value must be smaller than the bandwidth of the interface.\nThe value is an integer in the range of 0, 16 to 4294967294 in kbit/s."
+        },
+        {
+            "Parameters": "flow-mapping mapping-name",
+            "Info": "Specifies the name of the flow queue mapping.\nThe name is a string of 1 to 31 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] flow-mapping test",
+            "[*HUAWEI-flow-mapping-test] quit",
+            "[*HUAWEI] user-group-queue test",
+            "[*HUAWEI-user-group-queue-test] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] user-queue cir 200 pir 600 flow-mapping test user-group-queue test inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] user-group-queue test",
+            "[*HUAWEI-user-group-queue-test] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] user-queue cir 200 pir 600 user-group-queue test inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe user-queue command is used to configure HQoS scheduling parameters on an interface to control the bandwidth and delay on the interface.\nPrerequisites\nThe flow queue mapping object, flow queue template, and GQ used in the command must have been created before application and properly configured.\nConfiguration Impact\nAfter the user-queue command is run, the user queue parameters on an interface are modified, affecting traffic scheduling on the interface.\nPrecautions\nThe value of pir-value must not exceed the interface bandwidth. It must be greater than or equal to the CIR value.\nIf member interfaces of a trunk interface reside on TM subcards of different types on the same board, this command cannot be configured for outgoing traffic on the trunk interface. Precision compensation takes effect only on TM subcards.\nIf member interfaces of a trunk interface reside on different forwarding or traffic management module, the effective CIR or PIR for CAR or user-queue can be a multiple of the configured one."
+}

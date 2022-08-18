@@ -1,0 +1,42 @@
+{
+    "PageTitle": "apply-label (VPN instance IPv6 address family view)",
+    "FuncDef": "The apply-label command configures a label allocation mode in a VPN instance IPv6 address family.\nThe undo apply-label per-instance command restores the default label allocation mode in a VPN instance IPv6 address family.\nThe command varies in transport and router modes. For detailed differences, see \"Differences Between Commands in Transport and Router Modes.\" The command implementation in router mode is described here.\nBy default, the VPN instance IPv6 address family assigns mode is a unique label to each instance.",
+    "CLIs": [
+        "apply-label { per-instance | per-nexthop | per-route }",
+        "undo apply-label { per-instance | per-nexthop | per-route }"
+    ],
+    "ParentView": [
+        "VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "per-instance",
+            "Info": "Enables the one-label-per-VPN-instance mode.\n-"
+        },
+        {
+            "Parameters": "per-nexthop",
+            "Info": "Enables the one-label-per-next-hop mode.\n-"
+        },
+        {
+            "Parameters": "per-route",
+            "Info": "Enables the one-label-per-route mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] apply-label per-route"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] apply-label per-nexthop"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, all routes of a VPN instance IPv6 address family is assigned a specified label. If a large number of routes of the VPN instance IPv6 address family need to apply for labels, the apply-label per-instance command saves label resources of PEs and lowers the requirements for PE capacities.\nIn private network packet forwarding, labels are allocated based on routes and next hops. Packets are forwarded based on the next hop information of the labels, and do not need to be forwarded again. The forwarding speed is fast. However, one-label-per-instance label allocation requires devices to additionally search the routing table, lowering the forwarding speed. If label resources are sufficient and a rapid forwarding speed is required, you can configure the one-label-per-route or one-label-per-next-hop mode.\nPrerequisites\nAn RD has been configured using the route-distinguisher command in the VPN instance IPv6 address family view.\nPrecautions\nChanging the label allocation mode will cause re-advertisement of the routes of a VPN instance IPv6 address family and transient service interruption. Exercise caution when using the command.\nThis command and the apply-label per-nexthop pop-go commands are overwritten. The latest configuration overrides the previous one.\nThis command applies only to the scenario where MPLS labels are allocated to VPN instances."
+}

@@ -1,0 +1,158 @@
+{
+    "PageTitle": "display current-configuration (All views)",
+    "FuncDef": "The display current-configuration command displays the set parameters that take effect on the device.\nThe display this command displays the configurations of the system in the current view that inherit the configuration template.",
+    "CLIs": [
+        "display current-configuration [ configuration [ <configuration-type> [ <configuration-instance> ] | <config-type-no-inst> ] | all | inactive ] [ include-default ]",
+        "display current-configuration inheritance [ no-comment ]",
+        "display this inheritance [ no-comment ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "configuration configuration-type",
+            "Info": "Specifies the configuration type.\nThis value depends on the existing configuration, including AAA configuration, system configuration, user interface configuration and configuration output."
+        },
+        {
+            "Parameters": "configuration-instance",
+            "Info": "Specifies the configuration instance.\nThe instance is a string of 1 to 200 characters."
+        },
+        {
+            "Parameters": "config-type-no-inst",
+            "Info": "Specifies the configuration module.\n-"
+        },
+        {
+            "Parameters": "all",
+            "Info": "Specifies all the online configuration information.\n-"
+        },
+        {
+            "Parameters": "inactive",
+            "Info": "Specifies all configurations of the board in the offline state.\n-"
+        },
+        {
+            "Parameters": "include-default",
+            "Info": "Displays both the configurations that users have performed and default configurations.\n-"
+        },
+        {
+            "Parameters": "inheritance",
+            "Info": "Displays configurations that inherit the configuration template.\n-"
+        },
+        {
+            "Parameters": "no-comment",
+            "Info": "Displays configurations that do not contain comments of commands in the configuration template.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback2",
+            "[~HUAWEI-LoopBack2] display this inheritance",
+            "#",
+            "interface LoopBack2",
+            " apply-command-group g1",
+            " !",
+            " ! inherited from group g1",
+            " clear ip df",
+            "#"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback2",
+            "[~HUAWEI-LoopBack2] display this inheritance no-comment",
+            "#",
+            "interface LoopBack2",
+            " apply-command-group g1",
+            " clear ip df",
+            "#"
+        ],
+        [
+            "<HUAWEI> display current-configuration",
+            "#",
+            "sysname HUAWEI",
+            "#",
+            "info-center source default channel 4 log level debugging",
+            "#",
+            "fan speed auto",
+            "#",
+            "service-template template-default0",
+            "#",
+            "service-template template-default1",
+            "#",
+            "service-template template-default2",
+            "#",
+            "service-template template-default3",
+            "#",
+            "service-template template-default4",
+            "#",
+            "snmp-agent trap type entity-trap",
+            "#"
+        ],
+        [
+            "<HUAWEI> display current-configuration | begin user",
+            "user-interface con 0",
+            " set authentication password cipher $1c$k4:o79a_DJ$dkxW!,\\@7Cjr*k+Q}gb'{g{x)#wS1GjQST'EZ]/F$",
+            " history-command max-size 30",
+            "#",
+            "return"
+        ],
+        [
+            "<HUAWEI> display current-configuration | include user",
+            "undo user-security-policy enable ",
+            " local-user aaa password irreversible-cipher $1c$]f(3Q<j7uS$!0!)8@e`\\+lj]vQx\\2l",
+            "&y-$M(|\\n_ERFU_BF$!6X$"
+        ],
+        [
+            "<HUAWEI> display current-configuration include-default | include user",
+            "undo user-security-policy enable         ",
+            " user-password min-len 6   ",
+            " undo user-password complexity-check  ",
+            " user-password expire 0 prompt 0  ",
+            " undo user-password change   ",
+            " user-block failed-times 5 period 5",
+            " user-block reactive 5",
+            " local-user aaa password irreversible-cipher $1c$]f(3Q<j7uS$!0!)8@e`\\+lj]vQx\\2l",
+            "&y-$M(|\\n_ERFU_BF$!6X$"
+        ],
+        [
+            "<HUAWEI> display current-configuration configuration xpl-pfx pf-instance",
+            "# ",
+            "xpl ip-prefix-list pf-instance ",
+            " !sdsdfk  end-list ",
+            "#"
+        ],
+        [
+            "<HUAWEI> display current-configuration inheritance",
+            "!Software Version V800R012C10",
+            "!Last configuration was updated at 2018-02-24 09:19:01+00:00",
+            "#",
+            "command group g1",
+            " interface Loopback1",
+            "  clear ip df",
+            "end-group",
+            "#",
+            "interface LoopBack1",
+            " apply-command-group g1",
+            " !",
+            " ! inherited from group g1",
+            " clear ip df",
+            "#",
+            "return"
+        ],
+        [
+            "<HUAWEI> display current-configuration inheritance no-comment",
+            "!Software Version V800R012C10",
+            "!Last configuration was updated at 2018-02-24 09:19:01+00:00",
+            "#",
+            "command group g1",
+            " interface Loopback1",
+            "  clear ip df",
+            "end-group",
+            "#",
+            "interface LoopBack1",
+            " apply-command-group g1",
+            "return"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a set of configurations are complete, you can run the display current-configuration command to check the parameters that take effects. The parameters that do not take effect are not displayed. If some running configuration parameters are the same as the default parameters, they are not displayed.When the display current-configuration command is configured:If include-default is not specified, the display current-configuration command displays only configurations that users have performed.If include-default is specified, the display current-configuration command displays both default configurations and configurations that users have performed.The display current-configuration inheritance [ no-comment ] command displays configurations that are performed by users and contained in the configuration template.\nAfter a set of configurations are complete in a certain view, you can run the display this command to check whether the configurations are correct.To view user configuration template information in the existing view, run the display this inheritance command.\n\nConfiguration Impact\nYou can filter the output using regular expressions in the case of a large amount of configuration information. For usage of regular expressions, see \"CLI Overview\" in Configuration Guide - Basic Configurations.\nPrecautions\nThe following configurations are not displayed in the command output.\nConfigurations that are the same as default onesConfigurations that have not been committedIn different view, this command displays the configurations associated with the view."
+}

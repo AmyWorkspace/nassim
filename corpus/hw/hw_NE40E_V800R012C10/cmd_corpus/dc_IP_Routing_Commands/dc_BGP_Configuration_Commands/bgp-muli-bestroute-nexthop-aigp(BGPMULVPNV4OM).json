@@ -1,0 +1,27 @@
+{
+    "PageTitle": "bestroute nexthop-resolved aigp (BGP multi-instance VPN instance IPv4 address family view)",
+    "FuncDef": "The bestroute nexthop-resolved aigp command allows VPN routes to participate in route selection using the AIGP attribute of the BGP LSP through which they are transmitted.\nThe undo bestroute nexthop-resolved aigp command deletes the configuration.\nBy default, VPN routes are not allowed to participate in route selection using the AIGP attribute of the BGP LSP through which they are transmitted.",
+    "CLIs": [
+        "bestroute nexthop-resolved aigp",
+        "undo bestroute nexthop-resolved aigp"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vrf1",
+            "[*HUAWEI-vpn-instance-vrf1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vrf1] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vrf1",
+            "[*HUAWEI-bgp-instance-a-vrf1] bestroute nexthop-resolved aigp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn AIGP administrative domain is a set of autonomous systems (ASs) managed by the same administrative department.\nRouting protocols, such as IGPs that run within an administrative domain, assign a metric to each link, and then choose the path with the minimum metric as the optimal path. BGP, as an inter-AS routing protocol, does not select paths based on metrics. If a single administrative domain runs several contiguous BGP networks, it is desirable for BGP to select paths based on metrics, just as an IGP does.\nAfter the AIGP attribute is configured in an AIGP administrative domain, BGP selects paths based on metrics, just as an IGP does, and all devices in the domain forward data along optimal routes.\nIf a BGP LSP is set up between BGP peers, the local peer sends VPN routes to the remote peer through the BGP LSP. Upon reception of the routes, the remote peer adds them to a VPN instance through remote cross. Then the routes in the VPN instance participate in route selection. If the unicast route used to set up a BGP LSP carries the AIGP attribute and the AIGP capability is enabled on BGP peers, you can run the bestroute nexthop-resolved aigp command to allow VPN routes to participate in route selection using the AIGP attribute.\nPrerequisites\nThe AIGP capability has been enabled on BGP peers using the peer aigp command.\nPrecautions\nIf the AIGP capability is enabled on both ends of a BGP LSP, but not on the two ends of another BGP LSP with the same destination, this command does not take effect."
+}

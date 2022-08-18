@@ -1,0 +1,45 @@
+{
+    "PageTitle": "peer capability-advertise (BGP multi-instance VPN instance IPv4 address family view) (group)",
+    "FuncDef": "The peer capability-advertise command enables optional BGP functions when a BGP peer advertises routes to its peer. The optional BGP functions include route-refresh, general router function, 4-byte AS number, and Add-Path.\nThe undo peer capability-advertise command restores the default setting.\nBy default, the route-refresh and 4-byte AS number functions are enabled, but the general router function and Add-Path are disabled.",
+    "CLIs": [
+        "peer <group-name> capability-advertise { conventional | route-refresh | 4-byte-as }",
+        "undo peer <group-name> capability-advertise { conventional | route-refresh | 4-byte-as }"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "conventional",
+            "Info": "Indicates the regular router function.\nconventional takes effect only in the BGP view or BGP-VPN instance IPv4 address family view.If conventional is specified, the device does not support all extended functions, such as route-refresh, GR, multi-address family negotiation, and Add-Path.\n-"
+        },
+        {
+            "Parameters": "route-refresh",
+            "Info": "Indicates the route-refresh function.\n-"
+        },
+        {
+            "Parameters": "4-byte-as",
+            "Info": "Indicates the 4-byte AS number function.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-a-vpna] group test",
+            "[*HUAWEI-bgp-instance-a-vpna] peer test capability-advertise route-refresh"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThere are multiple optional BGP functions when a BGP peer advertises routes to its peer. The optional BGP functions include route-refresh, general router function, 4-byte AS number, and Add-Path. You can run the peer capability-advertise command to select one of the functions based on the needs on the live network.\nConfiguration Impact\nIf you enable or disable the route-refresh, general router, 4-byte AS number, or Add-Path function, the BGP peer relationship will be re-established, which can lead to a temporary network interruption. Therefore, exercise caution when running the related commands."
+}

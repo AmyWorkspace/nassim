@@ -1,0 +1,46 @@
+{
+    "PageTitle": "nat address-group bind-ip-pool",
+    "FuncDef": "The nat address-group bind-ip-pool command binds a global static address pool to a NAT instance.\nThe nat address-group bind-ip-pool over-load command configures a global static address pool as an overloaded address pool in a specified NAT instance.\nThe undo nat address-group bind-ip-pool command unbinds a global static address pool from a NAT instance.\nThe undo nat address-group bind-ip-pool over-load command disables a global static address pool from functioning as an overloaded address pool in a specified NAT instance.\nBy default, no global static address pool is bound to a NAT instance, no global static address pool is used as an overloaded address pool in a specified NAT instance.",
+    "CLIs": [
+        "nat address-group <address-group-name> group-id <group-id> bind-ip-pool <pool-name> [ over-load ]",
+        "undo nat address-group <address-group-name> [ group-id <group-id> [ bind-ip-pool <pool-name> ] ] [ over-load ]"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "address-group-name",
+            "Info": "Specifies the name of a NAT public IP address pool.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "group-id group-id",
+            "Info": "Specifies the index of a public address pool.\nThe value is an integer ranging from 0 to 127."
+        },
+        {
+            "Parameters": "bind-ip-pool pool-name",
+            "Info": "Specifies the name of a global static address pool.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "over-load",
+            "Info": "Configures a global static address pool as an overloaded address pool in a specified NAT instance.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat ip-pool groupglobal",
+            "[*HUAWEI-nat-ip-pool-groupglobal] commit",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat address-group group2 group-id 2 bind-ip-pool groupglobal over-load"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat ip-pool pool1",
+            "[*HUAWEI-nat-ip-pool-pool1] quit",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat address-group group1 group-id 1 bind-ip-pool pool1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA NAT address pool is a collection of public IPv4 addresses. After receiving IPv4 packets sent by users, a NAT device translates private IPv4 addresses carried in the IPv4 packets to public IPv4 addresses and transmits the packets to a public network. The NAT address pool used in NAT is determined by a specific traffic policy.\nAfter public IP addresses in a NAT address pool are used up, traffic of new users is dropped because no IP addresses are available. To prevent traffic loss, the overloaded IP address pool function is used to assign IP addresses to new users for NAT forwarding in the preceding situation. To configure a global static address pool as an overloaded address pool in a specified NAT instance, run the nat address-group bind-ip-pool over-load command.\nPrerequisites\nA global static address pool, an address range of the NAT overloaded address pool, and a NAT instance have been configured.\nFollow-up Procedure\nRun the nat address-group bind-over-load command to bind the global static address pool in the NAT instance to the overloaded address pool.\nPrecautions\nWhen a global static address pool is configured as an overloaded address pool, note the following issues:\nWhen the global static address pool is used as a load balancing address pool, the global static address pool cannot be bound to the overloaded address pool.Multiple overloaded address pools in the same NAT instance can only be bound to a single global static address pool. Multiple overloaded address pools in different NAT instances can only be bound to the same global static address pool.\n\nThe nat address-group bind-ip-pool over-load command takes effect only on the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S."
+}

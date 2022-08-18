@@ -1,0 +1,53 @@
+{
+    "PageTitle": "damp-interface level",
+    "FuncDef": "The damp-interface level command configures a suppression level for interfaces' physical status flappings.\nThe undo damp-interface level command restores the default configuration.\nBy default, no suppression level is configured for interfaces' physical status flappings.",
+    "CLIs": [
+        "damp-interface level { light | middle | heavy | manual { <half-life-period> <suppress> <reuse> <max-suppress-time> } }",
+        "undo damp-interface level { middle | heavy | manual }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "light",
+            "Info": "Indicates that a flapping interface is suppressed at a light level.\nThe values are as follows:half-life-period:11suppress:7700reuse:6000max-suppress-time:10"
+        },
+        {
+            "Parameters": "middle",
+            "Info": "Indicates that a flapping interface is suppressed at a middle level.\nThe values are as follows:half-life-period:16suppress:5500reuse:4300max-suppress-time:12"
+        },
+        {
+            "Parameters": "heavy",
+            "Info": "Indicates that a flapping interface is suppressed at a heavy level.\nThe values are as follows:half-life-period:25suppress:3500reuse:2700max-suppress-time:18"
+        },
+        {
+            "Parameters": "manual",
+            "Info": "Indicates that a flapping interface is manually suppressed.\nThe value ranges are as follows:half-life-period:1~60suppress:1~20000reuse:1~20000max-suppress-time:1~255"
+        },
+        {
+            "Parameters": "half-life-period",
+            "Info": "Specifies a half-life period for a penalty value.\nThe value is an integer ranging from 1 to 60, in seconds."
+        },
+        {
+            "Parameters": "suppress",
+            "Info": "Specifies a suppression value, which is 1000 times the suppression threshold of an interface. The interface is suppressed when the penalty value (inceased by 1 each time the interface goes down) is greater than the suppression value.\nThe value is an integer ranging from 1 to 20000. The suppress value must be greater than the reuse value."
+        },
+        {
+            "Parameters": "reuse",
+            "Info": "Specifies a reuse value, which is 1000 times the reuse threshold of an interface. The interface is no longer suppressed when the penalty value (inceased by 1 each time the interface goes down) is less than the reuse value.\nThe value is an integer ranging from 1 to 20000. The reuse value must be less than the suppress value."
+        },
+        {
+            "Parameters": "max-suppress-time",
+            "Info": "Specifies the maximum suppression time.\nThe value is an integer ranging from 1 to 255, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] damp-interface enable",
+            "[*HUAWEI] damp-interface level middle"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIntermittent disconnections of optical fibers connecting to physical interfaces cause these interfaces' status to alternate frequently between Up and Down. To prevent this problem and improve the link-layer and network-layer stability, these interfaces' status can be suppressed. You can run the damp-interface level command to configure a desired suppression level:light: If light suppression is configured, the system triggers suppression only when an interface's status flaps frequently and rapidly.heavy: If heavy suppression is configured, the system triggers suppression when detecting an interface's status begins to flap, even if the flapping is not severe. In the heavy suppression level, an interface is prone to be suppressed.middle: The intensity of middle suppression is between the light and heavy levels.manual: If light, middle, or heavy suppression cannot meet your requirement, you can specify manual.\n\n\nPrerequisites\nSuppression on interfaces' physical status flappings has been enabled using the damp-interface enable command."
+}

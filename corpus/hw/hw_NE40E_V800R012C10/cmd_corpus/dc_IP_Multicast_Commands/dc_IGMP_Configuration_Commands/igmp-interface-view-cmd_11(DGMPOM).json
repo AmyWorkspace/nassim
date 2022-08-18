@@ -1,0 +1,73 @@
+{
+    "PageTitle": "igmp query ip-source-policy",
+    "FuncDef": "The igmp query ip-source-policy command configures a policy for filtering IGMP Query messages based on source addresses.\nThe undo igmp query ip-source-policy command restores the default configuration.\n\nBy default, no policy is configured for filtering IGMP Query messages based on source addresses.",
+    "CLIs": [
+        "igmp query ip-source-policy { <basic-acl-number> | acl-name <acl-name> }",
+        "undo igmp query ip-source-policy"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "PW-VE sub-interface view",
+        "Tunnel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basic-acl-number",
+            "Info": "Specifies the number of a basic ACL, which defines the range of source addresses.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] acl number 2001",
+            "[*HUAWEI-acl4-basic-2001] rule permit source 10.10.1.2 0",
+            "[*HUAWEI-acl4-basic-2001] rule deny source 10.10.1.1 0",
+            "[*HUAWEI-acl4-basic-2001] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp query ip-source-policy 2001"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] acl name myacl basic",
+            "[*HUAWEI-acl4-basic-myacl] rule permit source 10.10.1.2 0",
+            "[*HUAWEI-acl4-basic-myacl] rule deny source 10.10.1.1 0",
+            "[*HUAWEI-acl4-basic-myacl] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp query ip-source-policy acl-name myacl"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nOn a multicast network, some attackers may forge IGMP Query messages with small IP addresses to cause the actual querier to become invalid. If such attacks occur, group members cannot promptly leave, wasting network resources. To prevent this problem, run the igmp query ip-source-policy command to configure an interface to filter IGMP Query messages based on packet source addresses. This function enables the interface to filter out IGMP Query messages whose source addresses do not match the permit action in a specified ACL rule, thus implementing querier election control.\n\nPrerequisites\n\nThe multicast routing function has been enabled using the multicast routing-enable command.\n\nConfiguration Impact\n\nIf the igmp query ip-source-policy command is run more than once, the latest configuration overrides the previous one.\n\nPrecautions\n\nThe igmp query ip-source-policy command requires an ACL configured using the acl command. In the basic ACL view, specify the source parameter in the rule command to configure an ACL rule."
+}

@@ -1,0 +1,55 @@
+{
+    "PageTitle": "mpls te bit-error-detection",
+    "FuncDef": "The mpls te bit-error-detection command enables bit-error-triggered RSVP-TE tunnel switching.\nThe undo mpls te bit-error-detection command disables bit-error-triggered RSVP-TE tunnel switching.\nBy default, bit-error-triggered RSVP-TE tunnel switching is disabled.",
+    "CLIs": [
+        "mpls te bit-error-detection mode { unidirectional | bidirectional }",
+        "mpls te bit-error-detection",
+        "undo mpls te bit-error-detection"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "unidirectional",
+            "Info": "Indicates unidirectional switching. A tunnel with TE hot standby protection supports primary/backup LSP switchovers. In unidirectional switching mode, a tunnel performs a primary/backup LSP switchover only when the current unidirectional tunnel encounters a bit error event.\n-"
+        },
+        {
+            "Parameters": "bidirectional",
+            "Info": "Indicates bidirectional switching. A tunnel with TE hot standby protection supports primary/backup LSP switchovers. In bidirectional switching mode, a tunnel performs a primary/backup LSP switchover no matter whether the current unidirectional tunnel or its reverse tunnel encounters a bit error event.\n-"
+        },
+        {
+            "Parameters": "mode",
+            "Info": "Indicates the switching type. Bidirectional switching is used by default.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls rsvp-te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] destination 1.1.1.1",
+            "[*HUAWEI-Tunnel10] mpls te tunnel-id 10",
+            "[*HUAWEI-Tunnel10] mpls te bit-error-detection",
+            "[*HUAWEI-Tunnel10] mpls te reverse-lsp protocol rsvp-te ingress-lsr-id 3.3.3.3 tunnel-id 100"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls rsvp-te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] destination 1.1.1.1",
+            "[*HUAWEI-Tunnel10] mpls te tunnel-id 10",
+            "[*HUAWEI-Tunnel10] mpls te bit-error-detection mode unidirectional",
+            "[*HUAWEI-Tunnel10] mpls te reverse-lsp protocol rsvp-te ingress-lsr-id 1.1.1.1 tunnel-id 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a scenario in which an RSVP-TE tunnel with TE hot standby protection carries services, bit errors may result in the interruption of services with high quality requirements. To resolve this problem, configure bit-error-triggered RSVP-TE tunnel switching. Then, if an interface along the RSVP-TE tunnel encounters a bit error event, the RSVP-TE tunnel switches traffic between its primary and backup CR-LSPs based on the bit error status of the CR-LSPs to ensure service transmission quality.\nPrerequisites\nThe mpls rsvp-te command has been run in the MPLS view to enable RSVP-TE.\nPrecautions\nBefore establishing each unidirectional RSVP-TE tunnel, you must run the label advertise non-null command to enable the egress of each unidirectional tunnel to allocate a non-null label to the penultimate hop. Otherwise, the mpls te bit-error-detection command cannot take effect."
+}

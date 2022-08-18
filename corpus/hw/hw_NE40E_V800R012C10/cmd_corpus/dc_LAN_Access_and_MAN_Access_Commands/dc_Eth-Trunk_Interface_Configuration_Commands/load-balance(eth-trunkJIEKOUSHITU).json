@@ -1,0 +1,43 @@
+{
+    "PageTitle": "load-balance",
+    "FuncDef": "The load-balance command configures a load balancing mode for an Eth-Trunk interface, and this command is used for unicast packets only.\nThe undo load-balance command restores the default load balancing mode, and this command is used for unicast packets only.\nBy default, the load balancing mode of an Eth-Trunk interface is per-flow load balancing, which uses hash factors configured in the slot view for each service.",
+    "CLIs": [
+        "load-balance { src-dst-mac | src-dst-ip | packet-all }",
+        "load-balance symmetric-hash [ complement ]",
+        "undo load-balance"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view",
+        "IP-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "src-dst-mac",
+            "Info": "Indicates that Eth-Trunk interfaces perform load balancing based on source and destination MAC addresses.\n-"
+        },
+        {
+            "Parameters": "src-dst-ip",
+            "Info": "Indicates that Eth-Trunk interfaces perform load balancing based on source and destination IP addresses.\n-"
+        },
+        {
+            "Parameters": "packet-all",
+            "Info": "Indicates that Eth-Trunk interfaces perform load balancing based on all the packets.\n-"
+        },
+        {
+            "Parameters": "symmetric-hash",
+            "Info": "Indicates symmetric load balancing.\n-"
+        },
+        {
+            "Parameters": "complement",
+            "Info": "Indicates the compensation mode for symmetric load balancing.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] load-balance symmetric-hash"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA data flow is a group of datagrams with the same source and destination MAC addresses and source and destination IP addresses. For example, a Telnet or FTP connection between two devices is a data flow.\nFrames of the same data flow sent from an interface rather than a trunk interface can arrive at the destination in sequence because only one physical connection exists between the two devices. However, if a trunk interface is configured, multiple physical links exist between two devices. The first sent frame may arrive later than the second sent frame.\nTo prevent frame disorder, a data forwarding mechanism is introduced into the trunking technology to ensure that the frames of the same data flow are sent to the destination in sequence. This mechanism distinguishes data flows based on MAC or IP addresses and sends diagrams that belong to the same data flow over the same physical link.\nAfter the data forwarding mechanism is introduced:\nFrames with the same source and destination MAC addresses are transmitted over the same physical link.Packets with the same source and destination IP addresses are transmitted over the same physical link.\nTo ensure the bandwidth usage of each link of an Eth-Trunk interface, specify packet-all to perform per-packet load balancing.\nTo ensure that data packets arrive at the destination in sequence, specify src-dst-mac or src-dst-ip to perform per-flow load balancing based on MAC or IP addresses.\nTo transmit a data flow and its reverse flow on the same link, run the load-balance command. Specify symmetric-hash on the source device to configure the symmetrical load balancing mode and specify symmetric-hash complement on the destination device to configure the compensation mode for symmetrical load balancing.\n\nConfiguration Impact\nIf packet-all is specified to perform per-packet load balancing, note the following points:\nPer-packet load balancing takes a packet as a transmission unit and distributes packets among member links for transmission.Per-packet load balancing guarantees the bandwidth usage but not the data sequence. It may cause packet disorder. Therefore, it applies to scenarios where the data sequence is not strictly required. If parameter packet-all is specified, the command load-balance hash-fields ip { l2 | l3 | l4 } configured does not take effect.\nIf src-dst-mac or src-dst-ip is specified to perform per-flow load balancing, note the following points:\nPer-destination load balancing differentiates data flows based on MAC or IP addresses. Datagrams that belong to the same data flow are transmitted over the same physical link.Per-destination load balancing guarantees the data sequence but not the bandwidth usage.The parameter src-dst-mac takes effect after running the command portswitch to change the mode of an Eth-Trunk interface from Layer 3 to Layer 2.\n\nPrecautions\nIf the load-balance command is run more than once, the latest configuration overrides the previous one, and the load-balance command can take effect to the unicast traffic.\nSymmetric load balancing support only Eth-Trunk interfaces, and does not support non Eth-Trunk interfaces and ECMP scenarios.\nWhen the function is configured on P-nodes, hash factors of traffic on different directions of GRE, L2TP,IPv6 over IPv4 and GTP, tunnels may be different, which may cause traffic to be hashed to different links.Whether to reverse IP addresses on both directions is ensured by configuration. Choose the parameter symmetric-hash to configure symmetric load balancing, and choose the parameter symmetric-hash complement to configure the compensation mode for symmetric load balancing."
+}

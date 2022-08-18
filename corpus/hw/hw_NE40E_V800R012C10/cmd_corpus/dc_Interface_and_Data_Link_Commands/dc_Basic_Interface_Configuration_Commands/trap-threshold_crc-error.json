@@ -1,0 +1,48 @@
+{
+    "PageTitle": "trap-threshold crc-error",
+    "FuncDef": "The trap-threshold crc-error command sets an upper threshold, lower threshold, and detection interval for the CRC error alarm.\nThe undo trap-threshold crc-error command restores the upper threshold, lower threshold, and detection interval of the CRC error alarm to the default values..\nBy default, the upper threshold of the CRC error alarm is 1000, the lower alarm threshold is 100, and the detection interval is 10 seconds.",
+    "CLIs": [
+        "trap-threshold crc-error <threshold> interval-second <interval> [ shutdown ]",
+        "undo trap-threshold crc-error"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "FlexE interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "threshold",
+            "Info": "Specifies an alarm threshold for CRC errors.\nThe value is an integer ranging from 1 to 65535. The default upper alarm threshold is 1000, and the default lower alarm threshold is 100."
+        },
+        {
+            "Parameters": "interval-second interval",
+            "Info": "Specifies a detection interval for CRC error frames.\nThe value is an integer ranging from 1 to 65535, in seconds. The default value is 10."
+        },
+        {
+            "Parameters": "shutdown",
+            "Info": "Shuts down an interface at the physical layer if the number of CRC error frames received by the interface reaches the alarm threshold for three consecutive detection intervals.\nBy default, an interface is not shut down at the physical layer if the number of CRC error frames received by the interface reaches the alarm threshold for three consecutive detection intervals."
+        },
+        {
+            "Parameters": "crc-error",
+            "Info": "This object indicates that an alarm is generated when the number of CRC error packets exceeds the threshold.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] trap-threshold crc-error 5 interval-second 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set a threshold and detection interval for the CRC error alarm, run the trap-threshold crc-error command. After this configuration is performed, a device generates an alarm and sends it to an NMS only when the number of CRC error frames sent or received by the device reaches the specified threshold for three consecutive detection intervals. The device sends a clear alarm to the NMS only when the number of CRC error frames sent or received by the device falls below the threshold for three consecutive detection intervals.\nIf an interface receives a large number of CRC error frames, the interface is prone to flapping. Such interface flapping may easily be left unnoticed. To address this issue, specify shutdown in the command so that the interface is shut down at the physical level if the number of CRC error frames received within the specified interval reaches the configured alarm threshold.\nConfiguration Impact\nIf shutdown is specified in the command and the interface is deactivated because the number of CRC error frames received within the specified interval reaches the configured alarm threshold, the interface remains Down even if a clear alarm is generated. To prevent services from being affected, activate the interface manually after a clear alarm is generated.\nPrecautions\nThe configured threshold takes effect only when the CRC alarm function is enabled.\nThe following commands cannot coexist. The most recently run command overwrites the previous one.\ntrap-threshold crc-errortrap-threshold crc-error bit-error-ratiotrap-threshold crc-error high-thresholdtrap-threshold crc-error { mac-fcs-exc | mac-fcs-sd }trap-threshold crc-error percenttrap-threshold crc-error packet-error-ratio"
+}

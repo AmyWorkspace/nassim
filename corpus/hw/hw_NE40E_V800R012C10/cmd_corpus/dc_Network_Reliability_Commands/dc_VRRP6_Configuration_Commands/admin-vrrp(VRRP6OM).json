@@ -1,0 +1,62 @@
+{
+    "PageTitle": "admin-vrrp6 vrid",
+    "FuncDef": "The admin-vrrp6 vrid command creates a management Virtual Router Redundancy Protocol for IPv6 (mVRRP6) backup group or specifies an existing common VRRP6 backup group as an mVRRP6 backup group.\nThe undo admin-vrrp6 vrid command deletes an mVRRP6 backup group or restores an mVRRP6 backup group with a virtual IPv6 address configured to a common VRRP6 backup group.\nBy default, no mVRRP6 backup group exists on an interface.",
+    "CLIs": [
+        "admin-vrrp6 vrid <virtual-router-id> [ ignore-if-down ]",
+        "undo admin-vrrp6 vrid <virtual-router-id>"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "100GE interface view",
+        "10GE sub-interface view",
+        "10GE interface view",
+        "25GE sub-interface view",
+        "25GE interface view",
+        "400GE sub-interface view",
+        "400GE interface view",
+        "40GE sub-interface view",
+        "40GE interface view",
+        "50GE sub-interface view",
+        "50GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE sub-interface view",
+        "GE interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "PW-VE sub-interface view",
+        "VE sub-interface view",
+        "VLANIF interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ignore-if-down",
+            "Info": "Configures an mVRRP6 backup group to ignore an interface Down event.\nIf you specify this parameter and the interface on which an mVRRP6 backup group resides goes Down, the VRRP6 backup groups bound to the mVRRP6 backup group directly switch to the Master state.\n-"
+        },
+        {
+            "Parameters": "vrid virtual-router-id",
+            "Info": "Specifies the ID of an mVRRP6 backup group.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 address 2001:db8::1 64",
+            "[*HUAWEI-GigabitEthernet1/0/0] vrrp6 vrid 1 virtual-ip FE80::1 link-local",
+            "[*HUAWEI-GigabitEthernet1/0/0] admin-vrrp6 vrid 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 address 2001:db8:1::1 64",
+            "[*HUAWEI-GigabitEthernet1/0/0] vrrp6 vrid 2 virtual-ip FE80::200:1FF:FE04:5D01 link-local",
+            "[*HUAWEI-GigabitEthernet1/0/0] admin-vrrp6 vrid 2 ignore-if-down"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf you configure multiple common VRRP6 backup groups, the master router generates a large number of VRRP packets, which consume bandwidth resources and increase system loads. To resolve this issue, run the admin-vrrp6 vrid command to create an mVRRP6 backup group or specifies an existing common VRRP6 backup group as an mVRRP6 backup group. The mVRRP6 backup group processes VRRP packets and determines the status of the common VRRP6 backup groups bound to it.\nConfiguration parameters are required in the following scenario:\nIf user-side devices do not provide broadcast functions, create an mVRRP6 backup group on the directly connected interfaces on two routers with a VRRP6 backup group configured so that VRRP packets sent by the master router are transmitted on the directly connected link. If a router fails, the other router's interface that is directly connected to the router goes Down. As a result, the mVRRP6 backup group on the two routers both switches to the Initialize state and service traffic forwarding fails. To resolve this issue, specify the ignore-if-down parameter for both routers to enable the mVRRP6 backup group to ignore an interface Down event. After a router receives an interface Down event from the other router, this router does not respond to the event and service traffic is forwarded properly.To ensure intermediate link reliability when an mVRRP6 backup group is configured on a directly connected interface, deploy an inter-board trunk. To prevent both directly connected routers from switching to the Master state, do not run the shutdown command on the directly connected interfaces unless an interface Down event is caused by a master router failure.\n\nPrerequisites\nA VRRP6 backup group has been created using the vrrp6 vrid virtual-ip command in the interface view if an mVRRP6 backup group functions as a gateway.\nAn mVRRP6 backup group that functions as a gateway processes both VRRP and service packets, whereas an mVRRP6 backup group that does not function as a gateway processes only VRRP packets.\nFollow-up Procedure\nRun the vrrp6 vrid track admin-vrrp command on the interface on which a common VRRP6 backup group resides to bind the common VRRP6 backup group to the mVRRP6 backup group."
+}

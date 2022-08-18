@@ -1,0 +1,42 @@
+{
+    "PageTitle": "keepalive (Tunnel interface view)",
+    "FuncDef": "The keepalive command enables the Keepalive function for a GRE tunnel.\nThe undo keepalive command disables the Keepalive function for a GRE tunnel.\nBy default, the Keepalive function of a GRE tunnel is disabled.",
+    "CLIs": [
+        "keepalive [ period <period> [ retry-times <retry-times> ] ]",
+        "undo keepalive [ period <period> [ retry-times <retry-times> ] ]"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "period period",
+            "Info": "Specifies the interval for sending Keepalive messages.\nThe value is an integer ranging from 1 to 32767, in seconds. The default value is 5."
+        },
+        {
+            "Parameters": "retry-times retry-times",
+            "Info": "Specifies the count of the unreachable counter.\nThe value is an integer ranging from 1 to 255. The default value is 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface tunnel 100",
+            "[*HUAWEI-Tunnel100] tunnel-protocol gre",
+            "[*HUAWEI-Tunnel100] keepalive"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface tunnel 100",
+            "[*HUAWEI-Tunnel100] tunnel-protocol gre",
+            "[*HUAWEI-Tunnel100] keepalive period 12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface tunnel 100",
+            "[*HUAWEI-Tunnel100] tunnel-protocol gre",
+            "[*HUAWEI-Tunnel100] keepalive period 12 retry-times 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo prevent an unavailable GRE tunnel from being selected to transmit packets, enable the Keepalive function for GRE tunnels. Before the Keepalive function is enabled, the local tunnel interface may be Up even if the peer tunnel interface is unreachable. After the Keepalive function is enabled, the local tunnel interface goes Down if the peer tunnel interface is unreachable.\nAfter the Keepalive function is enabled on a GRE tunnel, the tunnel periodically sends Keepalive messages. The unreachable counter increases by one each time a message is sent. If no Keepalive response message is received when the value of the counter reaches the configured retry-times, the peer is considered unreachable.\nThe Keepalive function immediately takes effect after the keepalive command is run on a GRE tunnel interface. The undo keepalive command disables this function.\nPrerequisites\nA tunnel interface has been created using the interface tunnel command.\nThe tunnel encapsulation type has been set to GRE using the tunnel-protocol gre command.\nConfiguration Impact\nIf the keepalive command is run more than once, the latest configuration overrides the previous one.\nFollow-up Procedure\nAfter configuring the Keepalive function, you can run the display keepalive packets count command to check the numbers of Keepalive messages and Keepalive response messages sent and received by a GRE tunnel interface.\nPrecautions\nThe Keepalive function is unidirectional. If you want a GRE tunnel to have the Keepalive function in both directions, enable the Keepalive function on both ends of the GRE tunnel. The Keepalive functions on the local and remote ends of a GRE tunnel do not interfere with each other. It is recommended that you configure the Keepalive function on both ends of a GRE tunnel."
+}

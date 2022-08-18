@@ -1,0 +1,50 @@
+{
+    "PageTitle": "user-group-queue (interface view)",
+    "FuncDef": "The user-group-queue command configures a user group queue for Layer 3 common users and Layer 3 leased-line users.\nThe undo user-group-queue command cancels the configuration.\nBy default, user group queue is not configured for Layer 3 common users and Layer 3 leased-line users.",
+    "CLIs": [
+        "user-group-queue <user-group-queue-name> { inbound | outbound } [ identifier none ] [ group <group-name> ]",
+        "undo user-group-queue [ <user-group-queue-name> ] { inbound | outbound } [ identifier none ] [ group <group-name> ]"
+    ],
+    "ParentView": [
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "GE sub-interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-group-queue-name",
+            "Info": "Specifies the name of a user group queue.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.. The value must start with an English letter (a to z, or A to Z) and can be a mixture of English letters, numbers, hyphens (-), or underlines (_)."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Configures scheduling parameters for incoming traffic in the user group queue.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Configures scheduling parameters for outgoing traffic in the user group queue.\n-"
+        },
+        {
+            "Parameters": "identifier none",
+            "Info": "Indicates that users share the bandwidth of one user-group-queue.\n-"
+        },
+        {
+            "Parameters": "group group-name",
+            "Info": "Specifies the name of a shared group.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.. The value must start with an English letter (a to z, or A to Z) and can be a mixture of English letters, numbers, hyphens (-), or underlines (_)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] user-group-queue test",
+            "[*HUAWEI-user-group-queue-test] shaping 60000 outbound",
+            "[*HUAWEI-user-group-queue-test] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] user-group-queue test outbound group g1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0.2",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] user-group-queue test outbound group g1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nHQoS uses multi-level scheduling to distinguish user-specific or service-specific traffic and provide differentiated bandwidth management. When the traffic rate of the upstream device exceeds the capability of the downstream device and bandwidth insufficiency and network congestion occur, configure a user group queue to implement bandwidth management. This command is used to configure scheduling for a user group queue used for Layer 3 common users, Layer 3 leased-line users even on different sub-interfaces. You can apply a user group queue in the user-vlan view of a sub-interface to users on another sub-interface that belongs to the same interface for unified scheduling.\nPrerequisites\nA GQ profile has been created using the user-group-queue command in the system view.\nFollow-up Procedure\nHave users go online again or reconfigure the update qos-profile command in the AAA domain to allow the function to take effect.\nPrecautions\nWhen this command is run on a trunk interface, the command takes effect only on the eTM subcard in the downstream direction.\nThis command is configured in the interface view and takes effect only for Layer 3 common users, and Layer 3 leased-line users.\nThe command is exclusive with the user-vlan command used in the interface view."
+}

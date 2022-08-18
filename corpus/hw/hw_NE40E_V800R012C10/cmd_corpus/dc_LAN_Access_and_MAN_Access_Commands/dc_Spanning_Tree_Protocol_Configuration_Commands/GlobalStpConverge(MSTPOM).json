@@ -1,0 +1,28 @@
+{
+    "PageTitle": "stp converge",
+    "FuncDef": "The stp converge command sets a convergence mode for a spanning tree protocol.\nThe undo stp converge command restores the default mode.\nBy default, the convergence mode is normal.",
+    "CLIs": [
+        "stp converge { fast | normal }",
+        "undo stp converge"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "fast",
+            "Info": "Directly deletes ARP entries.\n-"
+        },
+        {
+            "Parameters": "normal",
+            "Info": "Ages ARP entries quickly.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] stp converge normal"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a Layer 2 network running STP, if the topology of a spanning tree instance changes, the forwarding paths of VLANs that are mapped to this instance change. As a result, ARP entries related to these VLANs need to be updated. Two methods are available:\nfast: Entries that need to be updated in an ARP table are directly deleted.normal: Entries that need to be updated in an ARP table are quickly aged out. The lifetime of these ARP entries is set to 0. If the number of aging detection times is greater than 0, the device sends ARP probe packets before aging them.\nTo set a convergence mode based on the method for processing ARP entries, run the stp converge command.\n\nConfiguration Impact\nIf the stp converge fast command is run and the topology of a spanning tree instance changes, ARP entries that need to be updated are directly deleted from the ARP table.\nIf the stp converge normal command is run and the topology of a spanning tree instance changes, ARP entries that need to be updated are aged out in the ARP table.\nPrecautions\nSetting the convergence mode to normal is recommended. If the fast mode is used, frequent ARP entry deletion will affect services and even may cause the CPU usage of main control boards and interface boards to reach 100%. As a result, packet processing times out, causing network flapping.\nIn either fast or normal mode, MAC address entries that need to be updated are deleted."
+}

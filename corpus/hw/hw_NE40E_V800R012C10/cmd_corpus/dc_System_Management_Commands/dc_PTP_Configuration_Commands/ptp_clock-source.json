@@ -1,0 +1,99 @@
+{
+    "PageTitle": "ptp clock-source",
+    "FuncDef": "The ptp clock-source command sets clock source parameters.\nThe undo ptp clock-source command restores default clock source parameters.\nFor information about default values, see the Value column in the \"Parameters\" part.",
+    "CLIs": [
+        "ptp clock-source local { time-source <time-source-value> | clock-accuracy <clock-accuracy-value> | clock-class <clock-class-vlaue> | priority1 <priority1-value> | priority2 <priority2-value> }",
+        "ptp clock-source bits1 { time-source <time-source-value> | clock-accuracy <clock-accuracy-value> | clock-class <clock-class-vlaue> | priority1 <priority1-value> | priority2 <priority2-value> | grandmaster-clockid <clockid-value> | offsetscaled-logvariance <offsetscaled-value> } [ slot <slotid> ]",
+        "ptp clock-source [ chassis <chassis-id> ] { bits1 | bits0 | bits2 } { time-source <time-source-value> | clock-accuracy <clock-accuracy-value> | clock-class <clock-class-vlaue> | priority1 <priority1-value> | priority2 <priority2-value> | grandmaster-clockid <clockid-value> | offsetscaled-logvariance <offsetscaled-value> }",
+        "ptp clock-source [ chassis <chassis-id> ] bits1 { time-source <time-source-value> | clock-accuracy <clock-accuracy-value> | clock-class <clock-class-vlaue> | priority1 <priority1-value> | priority2 <priority2-value> | grandmaster-clockid <clockid-value> | offsetscaled-logvariance <offsetscaled-value> } [ slot <slotid> ]",
+        "undo ptp clock-source local { time-source | clock-accuracy | clock-class | priority1 | priority2 }",
+        "undo ptp clock-source bits1 { time-source | clock-accuracy | clock-class | priority1 | priority2 | grandmaster-clockid | offsetscaled-logvariance } [ slot <slotid> ]",
+        "undo ptp clock-source [ chassis <chassis-id> ] { bits1 | bits0 | bits2 } { time-source | clock-accuracy | clock-class | priority1 | priority2 | grandmaster-clockid | offsetscaled-logvariance }",
+        "undo ptp clock-source [ chassis <chassis-id> ] bits1 { time-source | clock-accuracy | clock-class | priority1 | priority2 | grandmaster-clockid | offsetscaled-logvariance } [ slot <slotid> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time-source time-source-value",
+            "Info": "Specifies the value of a time source attribute. This parameter is configured only for the grandmaster.\nThe value is a 2-character hexadecimal number. The default value is 8. The mapping between time source attributes and their values is as follows:\n1 ATOMIC_CLOCK2 GPS3 TERRESTRIAL_RADIO4 PTP5 NTP6 HAND_SET7 OTHER8 INTERNAL_OSCILLATOR"
+        },
+        {
+            "Parameters": "clock-accuracy clock-accuracy-value",
+            "Info": "Specifies the accuracy value of a clock source.\nThe value is a 2-character hexadecimal number.\nThe default value is 0x20 for a BITS source. The mapping between clock accuracy attributes and their values is as following:\n20 The time is accurate to within 25 ns.21 The time is accurate to within 100 ns.22 The time is accurate to within 250 ns.23 The time is accurate to within 1 micros.24 The time is accurate to within 2.5 micros.25 The time is accurate to within 10 micros.26 The time is accurate to within 25 micros.27 The time is accurate to within 100 micros.28 The time is accurate to within 250 micros.29 The time is accurate to within 1 ms.2A The time is accurate to within 2.5 ms.2B The time is accurate to within 10 ms.2C The time is accurate to within 25 ms.2D The time is accurate to within 100 ms.2E The time is accurate to within 250 ms.2F The time is accurate to within 1s.30 The time is accurate to within 10s.31 The time is accurate to greater than 10s.80-FD Reserved for a PTP template.\nThe default value is 0x31 for a local source in 1588v2 mode. The mapping between clock accuracy attributes and their values in 1588v2 mode is the same as the preceding information.\nThe default value is 0xFE (unknown time accuracy) for a local source in G.8275.1 mode and CU-106 mode. The value cannot be configured."
+        },
+        {
+            "Parameters": "clock-class clock-class-vlaue",
+            "Info": "Specifies a clock class.\nThe value is an integer ranging from 0 to 255.\nThe default value is 6 for a BITS source. The mapping between clock class attributes and their values is as follows:\n6 A clock of class 6 traces clock signals of the primary reference time source. The timescale distributed is PTP. A clock of class 6 cannot function as a slave for another clock in the same domain.7 If a clock of class 6 becomes incapable of tracing clock signals of the primary reference time source, the clock obtains class 7 and works in holdover mode. The timescale distributed is PTP. A clock of class 7 cannot function as a slave for another clock in the same domain.13 A clock of class 13 synchronizes clock signals with a specific clock source. The timescale distributed is ARB. A clock of class 13 cannot function as a slave for another clock in the same domain.14 If a clock of class 13 becomes incapable of tracing clock signals of a specific clock source, the clock obtains class 14 and works in holdover mode. The timescale distributed is ARB. A clock of class 14 cannot function as a slave for another clock in the same domain.52 A clock of class 7 becomes an alternative A clock because this clock cannot meet holdover requirements. A clock of class 52 cannot function as a slave for another clock in the same domain.58 A clock of class 14 becomes an alternative A clock because this clock cannot meet holdover requirements. A clock of class 58 cannot function as a slave for another clock in the same domain.187 A clock of class 7 becomes an alternative B clock because this clock cannot meet holdover requirements. A clock of class 187 can function as a slave for another clock in the same domain.193 A clock of class 14 becomes an alternative B clock because this clock cannot meet holdover requirements. A clock of class 193 can function as a slave for another clock in the same domain.248 Default clock class. A clock obtains class 248 if no class is defined for the clock.255 A clock of class 255 works in slave-only mode.\nThe default value is 187 for a local source in 1588v2 mode. The mapping between clock class attributes and their values in 1588v2 mode is the same as the preceding information.\nThe default value is 248 for a local source in G.8275.1 mode and CU-106 mode. clock-class-value cannot be configured. If a device lost its tracked T-GM, clock-class-value becomes 165. The mapping between clock class attributes and their values G.8275.1 mode and CU-106 mode is as follows:\n165 When a T-BC enters the holdover status but cannot meet holdover requirements, it obtains a class of 165.248 Default value for a T-BC and T-GM.clock-class-value of the grandmaster clock cannot be smaller than 187."
+        },
+        {
+            "Parameters": "priority1 priority1-value",
+            "Info": "Specifies the value of clock signal priority1.\nThe value is an integer ranging from 0 to 255. The default value is 128. A smaller value indicates a higher priority.The G.8275.1 mode and CU-106 mode do not support\npriority1."
+        },
+        {
+            "Parameters": "priority2 priority2-value",
+            "Info": "Specifies the value of clock signal priority2.\nThe value is an integer ranging from 0 to 255. The default value is 128. A smaller value indicates a higher priority."
+        },
+        {
+            "Parameters": "bits1",
+            "Info": "External reference source bit1.\n-"
+        },
+        {
+            "Parameters": "grandmaster-clockid clockid-value",
+            "Info": "Grand master clockid.\nThe value is a string of 16 characters. The value is a string of 0 to 9, a to f, and A to F."
+        },
+        {
+            "Parameters": "offsetscaled-logvariance offsetscaled-value",
+            "Info": "Offset scaled log variance.\n1: 0xFFFF  2: 0x4E5D  3: 0x4B32, the default is 1:0xFFFF."
+        },
+        {
+            "Parameters": "slot slotid",
+            "Info": "Specify slot id.\nThe value is a string of 1 to 16 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "chassis chassis-id",
+            "Info": "Specifies a chassis, which is represented in the form of chassis type+chassis ID.\nFor the NE40E-X8 and NE40E-X16:The value is a string of 1 to 20 case-sensitive characters, spaces not supported.\nFor the NE40E-X8 and NE40E-X16:The value is a string of 1 to 20 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "bits0",
+            "Info": "External reference source bit0.\n-"
+        },
+        {
+            "Parameters": "bits2",
+            "Info": "External reference source bit2.\n-"
+        },
+        {
+            "Parameters": "local",
+            "Info": "Indicates the type of a clock source:\nlocal: a local clock source.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp enable",
+            "[*HUAWEI] ptp clock-source local time-source 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp enable",
+            "[*HUAWEI] ptp clock-source local priority1 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp enable",
+            "[*HUAWEI] ptp clock-source local priority2 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp enable",
+            "[*HUAWEI] ptp clock-source local clock-accuracy 31"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp enable",
+            "[*HUAWEI] ptp clock-source local clock-class 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe best master clock (BMC) algorithm enables dynamic 1588v2, G.8275.1, or CU-106 devices to automatically select the grandmaster and master clocks. To set parameters used by the BMC algorithm, run the ptp clock-source command.\nPrecautions\nThis command is supported only on the admin VS.\nWhen a 1588v2-enabled Router uses the BMC algorithm to dynamically select a clock source, the device compares the following parameters in sequence: priority1>clock-class>clock-accuracy>priority2. The clock source with the highest priority is selected as the master clock.\nWhen G.8275.1 or CU-106 uses the BMC algorithm to select a master clock, candidate clocks are first compared by clock-class, then clock-accuracy, and finally priority2. The clock with the highest priority will be selected as the master clock."
+}

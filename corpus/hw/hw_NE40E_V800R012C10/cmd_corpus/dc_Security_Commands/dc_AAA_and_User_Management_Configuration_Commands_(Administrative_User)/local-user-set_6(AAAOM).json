@@ -1,0 +1,30 @@
+{
+    "PageTitle": "local-user expire",
+    "FuncDef": "The local-user expire command sets the expiration date of a local user account.\nThe undo local-user expire command restores the default expiration date of a local user account.\nBy default, a local user account is permanently valid.",
+    "CLIs": [
+        "local-user <user-name> expire <date>",
+        "undo local-user <user-name> expire"
+    ],
+    "ParentView": [
+        "AAA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-name",
+            "Info": "Specifies a local user account.\nThe value is a string of 1 to 253 case-insensitive characters without spaces. If the value includes @, the characters before @ are the user name and the characters after @ are the domain name. If the value excludes @ or the domain name does not exist, the entire string is the user name and the user belongs to the default domain. A user name cannot contain two or more @s."
+        },
+        {
+            "Parameters": "date",
+            "Info": "Specifies the expiration date of a local user account.\nThe format is YYYY-MM-DD. The value of YYYY ranges from 2000 to 2099, the value of MM ranges from 1 to 12, and the value of DD ranges from 1 to 31. The date cannot be earlier than the current date."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] local-user localuser1 password irreversible-cipher Hello-13579",
+            "[~HUAWEI-aaa] local-user localuser1 expire 2020-11-11"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run the local-user expire command to set the expiration date of a local user account. When the expiration date is reached, the account expires. This configuration enhances network security.\nPrecautions\nIf the system time is changed, the expiration date of a local user account is affected.If all accounts on a device are configured with expiration dates, after the last account expires, no more accounts can log in to the device. As a result, the device is out of management. To resolve this problem, new configurations allow the last account to keep valid when all the management accounts (terminal, Telnet, FTP, or SSH accounts) are configured with expiration dates.\nFor example, if two management accounts, user A and user B, are configured on a device and the expiration dates of user A and user B are respectively August 1, 2013 and August 31, 2013, the user A account expires on August 1, 2013.\nIf the expiration data of user A is not reconfigured and only one management account user B exists on the device on August 31, 2013, the user B account does not expire.If a user goes online using the user B account and reconfigures the expiration date of user A, the case can be either of the following:If the expiration date of user A is set to December 1, 2013 before August 31, 2013, the user A account becomes the management user that will expire last. In this case, the user A account never expires, and the user B account will expire on August 31, 2013. If the expiration date of user A is set to December 1, 2013 after August 31, 2013, for example, on September 1, 2013, the user A account becomes the management user that will expire last. In this case, the user A account never expires, and the user B account expires immediately.If the expiration date of a user is different from the aging time, the date or time that expires later takes effect. Only the account with the date or time that expires last can never expire or age.\nA local user attribute change does not apply to online users. The change takes effect after the online users relog in."
+}

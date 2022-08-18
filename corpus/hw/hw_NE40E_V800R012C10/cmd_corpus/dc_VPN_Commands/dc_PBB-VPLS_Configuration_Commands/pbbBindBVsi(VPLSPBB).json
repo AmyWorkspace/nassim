@@ -1,0 +1,41 @@
+{
+    "PageTitle": "pbb binding b-vsi",
+    "FuncDef": "The pbb binding b-vsi command binds an I-VSI to a B-VSI.\nThe undo pbb binding b-vsi command unbinds an I-VSI from the B-VSI.\nBy default, an I-VSI is not bound to any B-VSI.",
+    "CLIs": [
+        "pbb binding b-vsi <vsi-name>",
+        "undo pbb binding b-vsi",
+        "undo pbb binding b-vsi <vsi-name>"
+    ],
+    "ParentView": [
+        "VSI-IVSI-P2P view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vsi-name",
+            "Info": "Specifies the name of a B-VSI.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi bvsi1 b-vsi",
+            "[*HUAWEI-vsi-bvsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-bvsi1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-bvsi1-ldp] quit",
+            "[*HUAWEI-vsi-bvsi1] quit",
+            "[*HUAWEI] vsi ivsi1 i-vsi p2p",
+            "[*HUAWEI-vsi-ivsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-ivsi1-ldp] vsi-id 11",
+            "[*HUAWEI-vsi-ivsi1-ldp] quit",
+            "[*HUAWEI-vsi-ivsi1] pbb i-tag 2000",
+            "[*HUAWEI-vsi-ivsi1] pbb backbone-source-mac 00e0-fc02-0002",
+            "[*HUAWEI-vsi-ivsi1] pbb backbone-destination-mac 00e0-fc00-2000 static",
+            "[*HUAWEI-vsi-ivsi1] pbb binding b-vsi bvsi1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn PBB VPLS, an I-VSI encapsulates packets into PBB frames and is bound to an attachment circuit (AC) interface for local customer edge (CE) identification. A B-VSI processes B-MAC addresses and uses the configured peer address to determine a PW's remote PE. To bind multiple I-VSIs to a B-VSI, run the pbb binding b-vsi command. PEs or SPEs on the backbone network can identify only B-VSIs.\nPrerequisites\nTo bind an I-VSI to a B-VSI after enabling them, perform the following configurations first:\nRun the pbb service-type p2p command to configure P2P as the service type for the I-VSI.Run the pbb i-tag command to configure an I-tag for the I-VSI.Run the pbb backbone-source-mac command to configure a B-SMAC address for the I-VSI or B-VSI.Run the pbb backbone-destination-mac command to configure a B-DMAC address for the I-VSI.\n\nConfiguration Impact\nTo bind an I-VSI to a new B-VSI, run the undo pbb binding b-vsi command to delete the existing binding, and then run the pbb binding b-vsi vsi-name command to configure the new binding.\nPrecautions\nThe pbb binding b-vsi command applies only to I-VSIs.Two I-VSIs with the same I-tag cannot be bound to different B-VSIs. The B-DMAC address of one I-VSI must be the same as the B-SMAC address of the other I-VSI in local PBB VPLS.Before binding I-VSI and B-VSI, ensure that I-VSI and B-VSI are enabled in the same mode."
+}

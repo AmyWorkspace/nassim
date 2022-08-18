@@ -1,0 +1,45 @@
+{
+    "PageTitle": "me te interface",
+    "FuncDef": "The me te interface command creates an ME instance and binds it to a bidirectional TE tunnel.\nThe undo me te interface command deletes an ME instance bound to a bidirectional TE tunnel.\nBy default, no ME instance is created.",
+    "CLIs": [
+        "me te interface { <interface-type> <interface-number> | <interface-name> } mep-id <mep-id> remote-mep-id <remote-mep-id>",
+        "undo me te interface { <interface-type> <interface-number> | <interface-name> }"
+    ],
+    "ParentView": [
+        "Maintenance entity group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\n-"
+        },
+        {
+            "Parameters": "mep-id mep-id",
+            "Info": "Specifies the local MEP ID. A MEP ID identifies a MEP. The MEP ID must be unique in an ME.\nThe value is an integer ranging from 1 to 8191."
+        },
+        {
+            "Parameters": "remote-mep-id remote-mep-id",
+            "Info": "Specifies the remote MEP (RMEP) ID. A MEP ID identifies a MEP. The MEP ID must be unique in an ME.\nThe value is an integer ranging from 1 to 8191."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] mpls te signal-protocol cr-static",
+            "[*HUAWEI-Tunnel10] mpls te bidirectional",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] mpls-tp meg abc",
+            "[*HUAWEI-mpls-tp-meg-abc] me te interface Tunnel 10 mep-id 1 remote-mep-id 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTwo P2P label switched paths (LSPs) in opposite directions are established over a bidirectional co-routed transport path in a MEG. This means that there is a single LSP in both directions between a MEP and its RMEP. A single ME operates along this P2P LSP. The ingress and egress of a bidirectional co-routed LSP function as the MEPs.\nThe me te interface command is run to perform OAM detection on a bidirectional co-routed P2P LSP. The configuration procedure is as follows:\nRun the me te interface mep-id remote-mep-id command on the local MEP to create an ME instance and bind it to a bidirectional co-routed P2P LSP.Run the me te interface mep-id remote-mep-id command on the RMEP to create an ME instance and bind it to the same bidirectional co-routed P2P LSP.\n\nPrerequisites\nA static bidirectional co-routed P2P LSP has been established.\nPrecautions\nMPLS-TP OAM does not support LDP over TE.\nIf MPLS-TP OAM is already associated with an APS tunnel protection group, an ME instance bound to a bidirectional co-routed TE tunnel cannot be deleted."
+}

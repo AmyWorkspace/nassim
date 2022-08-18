@@ -1,0 +1,30 @@
+{
+    "PageTitle": "peer update-group-independent (BGP-LS address family view)",
+    "FuncDef": "The peer update-group-independent enable command sets a specified peer or each peer in a peer group as an independent update peer-group.\nThe peer update-group-independent disable command removes the setting of a specified peer or each peer in a peer group as an independent update peer-group.\nThe undo peer update-group-independent enable command removes the setting of a specified peer or each peer in a peer group as an independent update peer-group.\nThe undo peer update-group-independent disable command sets a specified peer or each peer in a peer group as an independent update peer-group.\nBy default, no peer is set as an independent update peer-group.",
+    "CLIs": [
+        "peer <ipv4-address> update-group-independent enable",
+        "peer <ipv4-address> update-group-independent disable",
+        "undo peer <ipv4-address> update-group-independent enable",
+        "undo peer <ipv4-address> update-group-independent disable"
+    ],
+    "ParentView": [
+        "BGP-LS address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is an IPv4 address, in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.2.2.2 as-number 200",
+            "[*HUAWEI-bgp] link-state-family unicast",
+            "[*HUAWEI-bgp-af-ls] peer 10.2.2.2 enable",
+            "[*HUAWEI-bgp-af-ls] peer 10.2.2.2 update-group-independent enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo improve the efficiency of route advertisement, BGP uses the dynamic update peer-group mechanism. The BGP peers with the same configurations are placed in an update peer-group. These routes are grouped once and then sent to all peers in the update peer-group. However, the routes learned from a peer may be sent back to the peer, for example, the preferred route learned from an EBGP peer is sent back to the EBGP peer, or the preferred route that an RR learns from a client is reflected back to the client. In this case, messages are discarded, wasting network resources.\nTo address this problem, you can run the peer update-group-independent command to set a specified peer or each peer in a peer group as an independent update peer-group so that the routes learned from the peer are not sent back to the peer. However, if a specified peer or each peer in a peer group is set as an independent update peer-group, the advantages of the dynamic update peer-group mechanism cannot be brought into full play. Therefore, this command is used only when users have such a requirement.\nPrerequisites\nA peer has been added to an update peer-group using the peer group command.\nPrecautions\nThe configuration of a peer takes precedence over that of the peer group to which the peer belongs. For example, if the peer update-group-independent disable command is run for a peer and the peer update-group-independent command is run for the peer group to which the peer belongs, the configuration of the peer prevails. That is, the peer is not set as an independent update peer-group."
+}

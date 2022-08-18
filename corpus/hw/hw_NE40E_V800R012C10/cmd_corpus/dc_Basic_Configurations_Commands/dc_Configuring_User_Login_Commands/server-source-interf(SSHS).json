@@ -1,0 +1,50 @@
+{
+    "PageTitle": "ssh server-source",
+    "FuncDef": "The ssh server-source command specifies a source interface for an SSH server.\nThe undo ssh server-source command cancels the specified source interface for an SSH server.\nThe ssh server-source physic-isolate command specifies the isolation source interface of the SSH server.\nhe undo ssh server-source physic-isolate command cancels the isolation source interface of the SSH server.\nBy default, no source interface is specified for an SSH server.",
+    "CLIs": [
+        "ssh server-source -i { <interface-type> <interface-number> | <interface-name> }",
+        "ssh server-source all-interface",
+        "ssh server-source physic-isolate -i { <interface-type> <interface-number> | <interface-name> } -a <ip-address>",
+        "undo ssh server-source -i { <interface-type> <interface-number> | <interface-name> }",
+        "undo ssh server-source all-interface",
+        "undo ssh server-source physic-isolate -i { <interface-type> <interface-number> | <interface-name> } -a <ip-address>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the source interface type and interface number of an SSH server.\n-"
+        },
+        {
+            "Parameters": "all-interface",
+            "Info": "Indicates that any interface having an IP address configured can be used as the source interface of an SSH server.\n-"
+        },
+        {
+            "Parameters": "-i interface-name",
+            "Info": "Specifies the source interface name of an SSH server.\n-"
+        },
+        {
+            "Parameters": "-a ip-address",
+            "Info": "Specifies the source IP address.\nThe value is in the decimal format."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback 0",
+            "[~HUAWEI-LoopBack0] ip address 10.1.1.1 24",
+            "[*HUAWEI-LoopBack0] quit",
+            "[*HUAWEI] ssh server-source -i loopback 0",
+            "Warning: SSH server source configuration will take effect in the next login. Do you want to continue? [Y/N]:y"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssh server-source physic-isolate -i GigabitEthernet 1/0/0 -a 10.1.1.1",
+            "Warning: SSH server source configuration will take effect in the next login. Do you want to continue? [Y/N]:y",
+            "Info: Succeeded in setting the source interface of the SSH server to GigabitEthernet1/0/0."
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe SSH server receives login requests from all interfaces and addresses, leading to low system security. To improve system security, you can run this command to specify the source interface of the SSH server so that only authorized users can log in to the server.\nPrerequisites\nIf the source interface of the SSH server is a logical interface, the logical interface must have been created. Otherwise, the command cannot be executed successfully.\nConfiguration Impact\nAfter the source interface of the SSH server is specified, the system allows only SFTP, STelnet, SCP, and SNETCONF users to log in to the server through the specified source interface, and SFTP, STelnet, SCP, and SNETCONF users who log in through other interfaces will be rejected. However, the SFTP, STelnet, SCP, and SNETCONF users who have logged in to the server are not affected.\nPrecautions\nThe configuration takes effect upon the next login. The system will prompt you to determine whether to continue the operation.If the specified source interface is bound to a VPN instance, the SSH server is bound to the VPN instance.After a bound VPN instance is deleted, the VPN configuration specified using the ssh server-source command will not be cleared but does not take effect. In this case, the SSH server uses a public IP address. If you configure the VPN instance with the same name again, the VPN function is restored.After the bound source interface is deleted, the interface configuration in this command is not deleted, but the function does not take effect. After the source interface with the same name is configured again, the function is restored.If both the ssh server-source -i and ssh server-source all-interface commands are run, the interface specified in the ssh server-source -i command is preferentially used as the source interface of the ssh server. If the specified source interface fails to be used for login, the system selects an interface from other valid interfaces for login.In the interface unnumbered scenario, if the source interface and common source interface (not isolated) are configured and the same IP address and VPN are listened to, the common source interface takes effect. That is, the non-isolation configuration takes effect.Both all-zero listening and interface isolation are configured on the source interface. If the isolation configuration is matched, the isolation configuration takes effect. If the isolation configuration is not matched, the all-zero listening configuration takes effect.The specified IP address is decoupled from the corresponding interface IP address when you configure the isolation source interface. The IP address does not need to be on the specified interface."
+}

@@ -1,0 +1,88 @@
+{
+    "PageTitle": "test-session (Twamp-light-responder view)",
+    "FuncDef": "The test-session command creates a TWAMP Light test session on the Session-Reflector.\nThe undo test-session command deletes a TWAMP Light test session on the Session-Reflector.\nBy default, no TWAMP Light test session is created on the Session-Reflector.",
+    "CLIs": [
+        "test-session <session-id> { local-ip <local-ip-address> remote-ip <remote-ip-address> | local-ipv6 <local-ipv6-address> remote-ipv6 <remote-ipv6-address> } local-port <local-port> remote-port <remote-port> [ vpn-instance <vpn-instance-name> ] [ anti-loop-on ] [ description <description> ]",
+        "test-session <session-id> { local-ip <local-ip-address> remote-ip <remote-ip-address> | local-ipv6 <local-ipv6-address> remote-ipv6 <remote-ipv6-address> } local-port <local-port> remote-port <remote-port> interface { <interface-type> <interface-number> | <interface-name> } [ anti-loop-on ] [ description <description> ]",
+        "undo test-session <session-id> [ { local-ip <local-ip-address> remote-ip <remote-ip-address> | local-ipv6 <local-ipv6-address> remote-ipv6 <remote-ipv6-address> } local-port <local-port> remote-port <remote-port> [ vpn-instance <vpn-instance-name> ] [ anti-loop-on ] [ description <description> ] ]",
+        "undo test-session <session-id> { local-ip <local-ip-address> remote-ip <remote-ip-address> | local-ipv6 <local-ipv6-address> remote-ipv6 <remote-ipv6-address> } local-port <local-port> remote-port <remote-port> interface { <interface-type> <interface-number> | <interface-name> } [ anti-loop-on ] [ description <description> ]"
+    ],
+    "ParentView": [
+        "TWAMP-light-responder view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "session-id",
+            "Info": "Specifies the ID of a test session.\nFor the X3 device, the value is an integer ranging from 1 to 6144.For the X8/X16 device, the value is an integer ranging from 1 to 16384."
+        },
+        {
+            "Parameters": "local-ip local-ip-address",
+            "Info": "Indicates the IP address of a Session-Reflector.\nThis value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "remote-ip remote-ip-address",
+            "Info": "Indicates the IP address of a Session-Sender.\nThis value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "local-ipv6 local-ipv6-address",
+            "Info": "Indicates the IPv6 address of a Session-Reflector.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "remote-ipv6 remote-ipv6-address",
+            "Info": "Indicates the IPv6 address of a Session-Sender.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "local-port local-port",
+            "Info": "Indicates the UDP port number of a Session-Reflector.\nThe value can be 862, 863 or is an integer ranging from 1025 to 65535."
+        },
+        {
+            "Parameters": "remote-port remote-port",
+            "Info": "Indicates the UDP port number of a Session-Sender.\nThe value can be 862, 863 or is an integer ranging from 1025 to 65535."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Indicates the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "description description",
+            "Info": "Indicates the description of a test session. You can add a description for a test session to facilitate information query and session maintenance.\nThe value is a string of 3 to 32 characters, spaces not supported. The character string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the interface name.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        },
+        {
+            "Parameters": "anti-loop-on",
+            "Info": "Enable a reflector from breaking a loop.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] nqa twamp-light",
+            "[*HUAWEI-twamp-light] responder",
+            "[*HUAWEI-twamp-light-responder] test-session 1 local-ip 10.1.1.1 remote-ip 10.1.1.2 local-port 3000 remote-port 3000 vpn-instance vpn1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa twamp-light",
+            "[*HUAWEI-twamp-light] responder",
+            "[*HUAWEI-twamp-light-responder] test-session 1 local-ipv6 2001:db8:1::1 remote-ipv6 2001:db8:2::2 local-port 1235 remote-port 1234"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBefore implementing TWAMP Light, create a TWAMP Light test session and configure the 5-tuple parameters, including the IP address and UDP port number of a Session-Sender, IP address and UDP port number of a Session-Reflector, and VPN instance name, for the test session. After a test session is created, you can run specific commands to start a TWAMP Light test.\nPrecautions\nAfter a test session is configured, the 5-tuple parameters cannot be modified.The IP address configured for a test session must be a unicast address.The UDP port number of a Session-Reflector must be an unused port number.The VPN instance specified for a test session must have been created."
+}

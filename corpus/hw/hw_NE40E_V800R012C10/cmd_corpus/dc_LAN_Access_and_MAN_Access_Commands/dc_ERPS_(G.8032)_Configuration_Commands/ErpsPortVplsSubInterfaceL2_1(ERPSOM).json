@@ -1,0 +1,36 @@
+{
+    "PageTitle": "erps bd-subinterface enable",
+    "FuncDef": "The erps bd-subinterface enable command enables the topology change (TC) notification function on an interface. After the function is enabled, the interface instructs its bridge domain (BD)-bound sub-interfaces to update their ARP and MAC address entries after the interface receives TC packets.\nThe undo erps bd-subinterface enable command disables the TC change notification function on an interface.\nBy default, an interface does not instruct its BD-bound sub-interfaces to update their ARP and MAC address entries after receiving TC packets.",
+    "CLIs": [
+        "erps bd-subinterface enable",
+        "undo erps bd-subinterface enable"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Layer 2 50GE interface view",
+        "Eth-Trunk interface view",
+        "25GE-L2 view",
+        "Port extension Layer 2 interface view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] erps ring 2",
+            "[*HUAWEI-erps-ring2] control-vlan 100",
+            "[*HUAWEI-erps-ring2] protected-instance all",
+            "[*HUAWEI-erps-ring2] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] stp disable",
+            "[*HUAWEI-GigabitEthernet1/0/1] erps ring 2",
+            "[*HUAWEI-GigabitEthernet1/0/1] erps bd-subinterface enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn normal situations, when the topology of an ERPS ring changes and an interface receives TC packets, the ERPS ring reselects an interface for blocking, and accordingly all devices update their ARP and MAC address entries. However, if an ERPS-enabled interface has BD-bound sub-interfaces, the sub-interfaces cannot detect the TC event immediately. As a result, other devices in the BD cannot be promptly instructed to update their ARP and MAC address entries. To prevent this problem, run the erps bd-subinterface enable command to enable the ERPS-enabled interface to instruct its BD-bound sub-interfaces to update their ARP and MAC address entries after the interface receives TC packets.\nPrerequisites\nAn interface has been added to an ERPS ring using the erps ring command.\nConfiguration Impact\nIf an interface enters the Discarding state after the erps bd-subinterface enable command is run, the BD-bound sub-interfaces on the interface changes to the Flowdown state.\nPrecautions\nThe erps bd-subinterface enable command is required only when an ERPS ring connects to a BD network through sub-interfaces.\nIf an interface is deleted from an ERPS ring using the undo erps ring command, the erps bd-subinterface enable command configuration on the interface is automatically deleted."
+}

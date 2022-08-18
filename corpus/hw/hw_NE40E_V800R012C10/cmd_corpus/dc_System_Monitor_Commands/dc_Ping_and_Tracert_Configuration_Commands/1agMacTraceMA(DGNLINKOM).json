@@ -1,0 +1,79 @@
+{
+    "PageTitle": "trace mac-8021ag mep (MA view)",
+    "FuncDef": "The trace mac-8021ag mep command helps you locate a connectivity fault between the local MEP and the MEP or MIP at the same maintenance level on other devices. The operation is called 802.1ag MAC trace.",
+    "CLIs": [
+        "trace mac-8021ag mep mep-id <mep-id> { mac <mac-address> | remote-mep mep-id <mep-id> } [ -t <timeout> | ttl <ttl> ] *"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mep-id mep-id",
+            "Info": "Specifies the ID of a MEP.\nThe MEP must have been created using the mep mep-id command.\nAn integer ranging from 1 to 8191"
+        },
+        {
+            "Parameters": "mac mac-address",
+            "Info": "Specifies the MAC address of the destination node. The destination node can be a MEP or a MIP.An MP's MAC address can be a bridge MAC address or the MAC address of the interface on which the MP resides, depending on the configured MP address model:\nIf the shared MP address model is configured on the destination MP, mac-address is a bridge MAC address.If the individual MP address model is configured on the destination MP, mac-address is the MAC address of the interface on which the destination MP resides.\nExpressed as a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. It cannot be a broadcast MAC address or a multicast MAC address."
+        },
+        {
+            "Parameters": "remote-mep mep-id",
+            "Info": "Specifies the ID of a destination RMEP.\nThe destination RMEP must have been created using the remote-mep command, and the bridge MAC address of the device on which the REMP resides must have been specified.\nThe ID is an integer that ranges from 1 to 8191."
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies the timeout period for waiting for an LTR.\nAn integer ranging from 1 to 65535, in ms. The default value is 2000 ms."
+        },
+        {
+            "Parameters": "ttl ttl",
+            "Info": "Specifies the maximum hop of LTMs.\nAn integer ranging from 1 to 255. The default value is 64"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md mdcustomer",
+            "[*HUAWEI-md-mdcustomer] ma macustomer",
+            "[*HUAWEI-md-mdcustomer-ma-macustomer] trace mac-8021ag mep mep-id 1 mac 00e0-fc24-3459 ttl 64",
+            "Tracing the route to 00e0-fc24-3459 over a maximum of 64 hops:",
+            " Hops  Ingress Mac    Ingress Port                Ingress Action    Relay Action",
+            "       Egress Mac     Egress Port                 Egress Action     Ismep",
+            " 1     00e0-fc12-3459 GigabitEthernet1/0/0.1      IngOK             RlyFDB",
+            "       --             --                          --                NoMep",
+            " 2     00e0-fc24-3459 GigabitEthernet1/0/0        IngOK             RlyHit   ",
+            "       --             --                          --                IsMep",
+            "Info: Succeeded in tracing the destination address 00e0-fc24-3459."
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md mdcustomer",
+            "[*HUAWEI-md-mdcustomer] ma macustomer",
+            "[*HUAWEI-md-mdcustomer-ma-macustomer] trace mac-8021ag mep mep-id 1 remote-mep mep-id 8",
+            "Tracing the route to 00e0-fc12-3458 over a maximum of 64 hops:",
+            " Hops  Ingress Mac    Ingress Port                Ingress Action    Relay Action",
+            "       Egress Mac     Egress Port                 Egress Action     Ismep",
+            " 1     00e0-fc23-3459 GigabitEthernet1/0/1        IngOK             RlyFDB",
+            "       00e0-fc22-3459 GigabitEthernet1/0/2        EgrOK             NoMep",
+            " 2     --             --                          --                RlyHit",
+            "       00e0-fc12-3458 GigabitEthernet1/0/3        EgrOK             IsMep",
+            "Info: Succeeded in tracing the destination address 00e0-fc12-3458."
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md mdcustomer",
+            "[*HUAWEI-md-mdcustomer] ma macustomer",
+            "[*HUAWEI-md-mdcustomer-ma-macustomer] trace mac-8021ag mep mep-id 1 mac 00e0-fc12-3457 ttl 64",
+            "Tracing the route to 00e0-fc24-3459 over a maximum of 64 hops:",
+            " Hops  Ingress Mac    Ingress Port                Ingress Action    Relay Action",
+            "       Egress Mac     Egress Port                 Egress Action     Ismep",
+            " 1     00e0-fc12-3456 GigabitEthernet1/0/0        EgrOK             IsMep",
+            " 2     00e0-fc12-3457 GigabitEthernet1/0/0        IngOK             RlyHit   ",
+            "       --             --                          --                IsMep",
+            "Info: Succeeded in tracing the destination address 00e0-fc24-3459."
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSimilar to traceroute or tracert, 802.1ag MAC trace monitors a path between a local device and a destination device or locates faulty nodes by sending test packets and receiving reply packets. Run this command in the MA view to check the forwarding path or locate link faults in a specified MA.\nPrerequisites\nWhen implementing 802.1ag MAC trace, ensure that:\nMEPs are configured in the MA.If an outbound interface is specified, it cannot be configured with an inward-facing MEP.\n\nPrecautions\n802.1ag MAC trace is initiated by a MEP in the MA and destined for a MEP or a MIP at the same maintenance level on other devices. The source node and the destination node can be within different MAs.In a QinQ termination scenario, you must specify a proper timeout period to prevent test failures or timeouts. If 100 QinQ termination VLAN tag pairs are configured for an unloaded device, set the timeout period to 5s. The timeout period must be increased by 5s every time 100 QinQ termination VLAN tag pairs are added.\nFor example, if 300 QinQ termination VLAN tag pairs are configured, set the timeout period to 15s."
+}

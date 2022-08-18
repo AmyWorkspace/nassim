@@ -1,0 +1,35 @@
+{
+    "PageTitle": "mpls bfd-trigger-tunnel",
+    "FuncDef": "The mpls bfd-trigger-tunnel command configures a policy for dynamically establishing a BFD session to monitor LSPs in an LDP tunnel.\nThe undo mpls bfd-trigger-tunnel command deletes a policy for dynamically establishing a BFD session to monitor LSPs in an LDP tunnel.\nBy default, no trigger policy is configured.",
+    "CLIs": [
+        "mpls bfd-trigger-tunnel { host | ip-prefix <ip-prefix-name> | fec-list <list-name> }",
+        "undo mpls bfd-trigger-tunnel"
+    ],
+    "ParentView": [
+        "MPLS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "host",
+            "Info": "Indicates the host address-based policy for dynamically establishing a BFD session to monitor LSPs in an LDP tunnel.\n-"
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP address prefix used to dynamically establish a BFD session to monitor an LDP tunnel.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "fec-list list-name",
+            "Info": "Specifies the name of a FEC list used to dynamically establish a BFD session to monitor LSPs in an LDP tunnel.\nThe value is a string of 1 to 31 characters, spaces not supported.When quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls bfd-trigger-tunnel host"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen LDP LSPs transmit application traffic, such as VPN, LDP FRR and upper-layer protection mechanism, such as VPN FRR or VPN equal-cost multipath (ECMP), are used to improve network reliability. If both the primary and FRR LSPs fail, BFD for LDP tunnel can be used to instruct a specific LDP upper-layer application to perform a protection switchover. After MPLS is enabled to dynamically establish BFD sessions using mpls bfd enable, run the mpls bfd-trigger-tunnel command to configure a policy for dynamically establishing a BFD session to monitor LSPs in an LDP tunnel.\nEither of the following trigger policies can be used:\nHost address-based policy: used when all host addresses are available to trigger the creation of BFD sessions. This is the default trigger method.FEC list- or IP prefix list-based policy: used when only some host addresses can be used to establish BFD sessions.\nIf not parameter is configured in the mpls bfd-trigger-tunnel command, the host address-based policy is used by default.\n\nPrerequisites\nBFD has been globally enabled using the bfd command.\n(Optional) If the FEC list-based policy is used, ensure that no outbound interface name or next-hop address is specified for a FEC node in a specified FEC list.\n(Optional) Configure an IP address prefix list before using it to trigger LDP LSP establishment.\nPrecautions\nThe undo mpls bfd-trigger-tunnel command without a parameter configured deletes a host address-based policy by default."
+}

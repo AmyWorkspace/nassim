@@ -1,0 +1,57 @@
+{
+    "PageTitle": "link-protocol transport",
+    "FuncDef": "The link-protocol transport command configures the type of link-layer-protocol packets that can be transparently transmitted by an interface.\nThe undo link-protocol transport command deletes the type of link-layer-protocol packets that can be transparently transmitted by an interface.\nBy default, Layer 2 protocol tunneling is disabled on sub-interfaces.",
+    "CLIs": [
+        "link-protocol transport { lacp | lldp | bpdu | cdp | udld }",
+        "link-protocol transport { lacp | lldp | bpdu | cdp | udld } untag",
+        "undo link-protocol transport { lacp | lldp | bpdu | cdp | udld }"
+    ],
+    "ParentView": [
+        "Eth-Trunk sub-interface view",
+        "Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lacp",
+            "Info": "Indicates that only LACP packets can be transparently transmitted by the sub-interface bound to an L2VPN instance.\n-"
+        },
+        {
+            "Parameters": "lldp",
+            "Info": "Indicates that only LLDP packets can be transparently transmitted by the sub-interface bound to an L2VPN instance.\nIf LLDP is enabled on the physical interface, you must run the undo lldp enable command in the physical interface view before configuring LLDP transparent transmission on the sub-interface.\n-"
+        },
+        {
+            "Parameters": "bpdu",
+            "Info": "Indicates that only BPDU packets can be transparently transmitted by the sub-interface bound to an L2VPN instance.\nIf STP is enabled on the Layer 2 interface, you must run the stp disable command in the Layer 2 interface view before configuring BPDU transparent transmission on the Layer 2 sub-interface.\n-"
+        },
+        {
+            "Parameters": "cdp",
+            "Info": "Indicates that only CDP packets can be transparently transmitted by the sub-interface bound to an L2VPN instance.\n-"
+        },
+        {
+            "Parameters": "udld",
+            "Info": "Indicates that only UDLD packets can be transparently transmitted by the sub-interface bound to an L2VPN instance.\n-"
+        },
+        {
+            "Parameters": "untag",
+            "Info": "No VLAN tag.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback 1",
+            "[*HUAWEI-loopback1] ip address 1.1.1.1 32",
+            "[*HUAWEI-loopback1] quit",
+            "[*HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls l2vc 1.1.1.1 32",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] link-protocol transport lldp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nUntagged link-layer-protocol packets, such as LACP, LLDP, BPDU, CDP, and UDLD packets, can be transparently transmitted over VPLS,VLL,EVPN VXLAN,EVPN and EVPL networks.\nlink-protocol transport supports VPLS,VLL,EVPN VXLAN,EVPN and EVPL.\nlink-protocol transport untag supports EVPN VXLAN,EVPN and EVPL.\nThe link-protocol transport supports vlan-type dot1q interfaces and evc dot1q interfaces.\nThe link-protocol transport untag supports the following interface types:\nvlan-type dot1q\nflex vlan-type dot1q\nqinq stacking\nflex qinq stacking\ndot1q termination\nflex dot1q termination\nqinq termination\nevc dot1q\nflex evc dot1q\nevc untag\nevc default\nevc qinq termination\nPrerequisites\nYou can run the link-protocol transport command on an Ethernet sub-interface only after the sub-interface has VLAN IDs configured and is bound to a VPWS/VSI/EVPN/EVPL.\nYou can run the link-protocol transport command on an EVC sub-interface only after the sub-interface has VLAN IDs configured and is bound to a BD-EVPN."
+}

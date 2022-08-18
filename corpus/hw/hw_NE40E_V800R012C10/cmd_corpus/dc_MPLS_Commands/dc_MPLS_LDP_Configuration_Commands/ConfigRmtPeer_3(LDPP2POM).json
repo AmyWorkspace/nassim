@@ -1,0 +1,28 @@
+{
+    "PageTitle": "mpls ldp timer keepalive-hold",
+    "FuncDef": "The mpls ldp timer keepalive-hold command sets the Keepalive hold timer value.\nThe undo mpls ldp timer keepalive-hold command restores the default Keepalive hold timer value.\nBy default, the value of the Keepalive hold timer is 45s.",
+    "CLIs": [
+        "mpls ldp timer keepalive-hold <interval>",
+        "undo mpls ldp timer keepalive-hold"
+    ],
+    "ParentView": [
+        "Remote MPLS LDP peer view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the Keepalive hold timer value.\nThe value is an integer ranging from 30 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls ldp",
+            "[*HUAWEI-mpls-ldp] quit",
+            "[*HUAWEI] mpls ldp remote-peer bji",
+            "[*HUAWEI-mpls-ldp-remote-bji] mpls ldp timer keepalive-hold 40"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLDP peers maintain LDP sessions using LDP PDUs transmitted over session connections. If a node does not receive any LDP PDU before the Keepalive hold timer times out, the node terminates the session by closing the connection.\nThe default timer value is recommended. On a network where the link status is unstable, you can increase the Keepalive hold timer value properly. This helps prevent LDP flapping.\nThere are two types of Keepalive hold timers:\nKeepalive hold timer of the local session: used to maintain the local LDP session. You can run the mpls ldp timer keepalive-hold command in the interface view to set the timer value.Keepalive hold timer of the remote session: used to maintain the remote LDP session. You can run the mpls ldp timer keepalive-hold command in the remote MPLS LDP peer view to set the timer value.\nThe timer value that takes effect is the smaller one of the Keepalive hold timer values configured on both ends of an LDP session.\n\nPrerequisites\nThe remote LDP peer must be configured.\nImplementation Procedure\nAfter the mpls ldp timer keepalive-hold command is run, the system displays the following message:\nWarning: All the related sessions will be deleted if the operation is performed. Continue? [Y/N]:y\nTo confirm to run the command, enter y.\nConfiguration Impact\nAfter the mpls ldp timer keepalive-hold command is run, the Keepalive hold timer value that takes effect is the smaller one of the Keepalive hold timer values configured on both ends of an LDP session.\nPrecautions\nIf an LDP session is a multi-link local session, the Keepalive hold time of all links must be the same. Otherwise, the LDP session and LSP may be unstable.\nIf an LDP session is a local and remote session, the Keepalive hold time of all links must be the same as that of the remote peer. Otherwise, the LDP session and LSP may be unstable.\nIf the Keepalive hold time is different for multiple links and remote peers, LDP uses the configuration of the first-time adjacency discovery to establish a session. Other adjacencies with different configurations cannot be bound to the session, and LSPs cannot be established on these adjacencies.\nThe Keepalive Hold timer of 9s takes effect even if two ends of an LDP session reach an agreement on a value less than 9s through negotiation.\nChanging the value of the Keepalive hold timer causes the reestablishment of corresponding LDP sessions."
+}

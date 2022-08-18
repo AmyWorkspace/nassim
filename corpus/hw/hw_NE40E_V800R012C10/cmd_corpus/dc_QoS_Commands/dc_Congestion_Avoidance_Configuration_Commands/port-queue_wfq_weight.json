@@ -1,0 +1,78 @@
+{
+    "PageTitle": "port-queue wfq weight (low-speed interface)",
+    "FuncDef": "The port-queue wfq weight command configures WFQ scheduling parameters, including the weight and shaping rate, for an outbound port queue on a low-speed interface. To configure WFQ scheduling parameters for other interfaces, run the port-queue command.\nThe undo port-queue command restores the default WFQ scheduling parameters.\nBy default, the traffic shaping rate of an interface is the interface bandwidth, and the traffic shaping rate percentage is 100%. PQ scheduling is applied to EF, CS6, and CS7 queues, with no weight value. WFQ scheduling is applied to BE, AF1, AF2, AF3, and AF4 queues, with the weight values being 15, 15, 20, 25, and 25, respectively.",
+    "CLIs": [
+        "port-queue { be | af1 | af2 | af3 | af4 | ef | cs6 | cs7 } { wfq weight <weight-value> | shaping { <shaping-value> | shaping-percentage <shaping-percentage-value> } } * outbound",
+        "undo port-queue { be | af1 | af2 | af3 | af4 | ef | cs6 | cs7 } shaping outbound",
+        "undo port-queue { be | af1 | af2 | af3 | af4 | ef | cs6 | cs7 } wfq outbound",
+        "undo port-queue { be | af1 | af2 | af3 | af4 | ef | cs6 | cs7 } outbound"
+    ],
+    "ParentView": [
+        "Global MP-group interface view",
+        "MP-group interface view",
+        "Trunk serial interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "be",
+            "Info": "Specifies the service level of a queue as be.\n-"
+        },
+        {
+            "Parameters": "af1",
+            "Info": "Specifies the service level of a queue as af1.\n-"
+        },
+        {
+            "Parameters": "af2",
+            "Info": "Specifies the service level of a queue as af2.\n-"
+        },
+        {
+            "Parameters": "af3",
+            "Info": "Specifies the service level of a queue as af3.\n-"
+        },
+        {
+            "Parameters": "af4",
+            "Info": "Specifies the service level of a queue as af4.\n-"
+        },
+        {
+            "Parameters": "ef",
+            "Info": "Specifies the service level of a queue as ef.\n-"
+        },
+        {
+            "Parameters": "cs6",
+            "Info": "Specifies the service level of a queue as cs6.\n-"
+        },
+        {
+            "Parameters": "cs7",
+            "Info": "Specifies the service level of a queue as cs7.\n-"
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Specifies the scheduling weight of a port queue.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "shaping",
+            "Info": "Specify shaping parameters.\n-"
+        },
+        {
+            "Parameters": "shaping-value",
+            "Info": "Specifies the shaping rate of a port queue.\nThe value is an integer. When the bandwidth is 0, the value can only be 0. In other cases, the value ranges from 8 to the interface bandwidth, in kbit/s. The value cannot be greater than 64,000."
+        },
+        {
+            "Parameters": "shaping-percentage shaping-percentage-value",
+            "Info": "Specifies the shaping percentage of a port queue.\nThe value is an integer. When the bandwidth is 0, the value can only be 0. In other cases, the value ranges from the value of dividing 8 into the interface bandwidth to 100, in percentage."
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the outbound direction of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Serial 1/0/0/1:0",
+            "[*HUAWEI-Serial1/0/0/1:0] port-queue be wfq weight 20 outbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter this command is used to configure queue scheduling for packets, the quality of high-priority services can be preferentially guaranteed in case of traffic congestion.\nAfter packets enter the queues on an interface, the interface schedules packets based on policies. If no congestion occurs on an interface, the rate at which packets are transmitted can reach the shaping value. If congestion occurs on an interface, the rate at which packets are transmitted is higher than the weight-based bandwidth. You can increase the weight value for queues with high priorities, when a network is congested, to prevent packet loss.\nPrerequisites\nThe WFQ queue scheduling mode of the interface has been set to Weight using the set port-queue weight-mode command.\nPrecautions\nIf you run the port-queue wfq weight command repeatedly, the latest configuration overrides the previous one.\nConfigure the WFQ queue scheduling mode for a queue before configuring the shaping value.\nThe port-queue wfq weight and port-queue wfq shaping cir commands are mutually exclusive.\nThis command is supported only on the following subcards:\n2-Port Channelized STM-1c POS-SFP Flexible Card (P50)4-Port Channelized STM-1c POS-SFP Flexible Card (P50)8-Port Channelized STM-1c POS-SFP Flexible Card (P50)"
+}

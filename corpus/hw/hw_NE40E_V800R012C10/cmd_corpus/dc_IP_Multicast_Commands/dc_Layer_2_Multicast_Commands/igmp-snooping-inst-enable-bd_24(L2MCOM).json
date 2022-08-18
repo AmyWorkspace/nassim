@@ -1,0 +1,33 @@
+{
+    "PageTitle": "igmp-snooping designated-vlan",
+    "FuncDef": "The igmp-snooping designated-vlan command enables the transparent transmission function in a BD for IGMP snooping messages with a specified VLAN ID.\nThe undo igmp-snooping designated-vlan command disables the transparent transmission function.\nBy default, the transparent transmission function is disabled.",
+    "CLIs": [
+        "igmp-snooping designated-vlan <vlan-id>",
+        "undo igmp-snooping designated-vlan"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id",
+            "Info": "Specifies a VLAN ID. The BD then transparently transmits IGMP snooping messages with the specified VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] bridge-domain 1",
+            "[*HUAWEI-bd1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1.3 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] encapsulation dot1q vid 10 to 20",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] bridge-domain 1",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] quit",
+            "[*HUAWEI] bridge-domain 1",
+            "[*HUAWEI-bd1] igmp-snooping designated-vlan 10",
+            "[*HUAWEI-bd1] igmp-snooping enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, an IGMP snooping-capable BD only supports VLAN tag termination sub-interfaces, so that VLAN tags in user IGMP snooping messages will be removed after they arrive at the BD. If you want the BD to transparently transmit the VLAN tags of IGMP snooping messages to a peer PE, bind dot1q sub-interfaces with the default traffic behavior to the BD, and run the igmp-snooping designated-vlan command to enable transparent transmission in the BD.\nAfter the igmp-snooping designated-vlan command is run and then IGMP snooping is enabled, only IGMP snooping messages of which the Ethernet headers carry the specified VLAN ID can be successfully forwarded in the BD, and all other IGMP snooping messages will be discarded.\nPrecautions\nThe igmp-snooping designated-vlan command must be run before IGMP snooping is enabled in a BD. If IGMP snooping has been enabled in a BD, the command cannot be run. If the command is run and then IGMP snooping is enabled, the command configuration cannot be modified. After the command is run in a BD, only dot1q sub-interfaces with the default traffic behavior can be bound to the BD.\nIf a static multicast group and a static router interface are configured on a dot1q sub-interface, the VLAN ID of the static multicast group and static router interface must be the same as the VLAN ID specified in vlan-id of this command."
+}

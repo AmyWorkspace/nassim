@@ -1,0 +1,79 @@
+{
+    "PageTitle": "ipv6 route-static topology",
+    "FuncDef": "The ipv6 route-static topology command configures IPv6 static routes for an IPv6 topology instance.\nThe undo ipv6 route-static topology command deletes the configured static routes from an IPv6 topology instance.\nBy default, no IPv6 static routes are configured for an IPv6 topology instance.",
+    "CLIs": [
+        "ipv6 route-static topology <topology-name> <dest-ipv6-address> <prefix-length> <nexthop-ipv6-address> [ recursive-lookup host-route ] [ preference <preference> | tag <tag> ] * [ no-advertise | no-install ] [ description <text> ]",
+        "ipv6 route-static topology <topology-name> <dest-ipv6-address> <prefix-length> { <interface-name> | <interface-type> <interface-number> } [ <nexthop-ipv6-address> ] [ preference <preference> | tag <tag> ] * [ no-advertise | no-install ] [ description <text> ]",
+        "undo ipv6 route-static [ topology <topology-name> ] <dest-ipv6-address> <prefix-length> [ <nexthop-ipv6-address> | { <interface-name> | <interface-type> <interface-number> } [ <nexthop-ipv6-address> ] ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "topology-name",
+            "Info": "Specifies the name of the topology to which a static route belongs.\nThe value is a string of 1 to 31 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive) and can contain numbers, hyphens (-), or underlines (_). When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "dest-ipv6-address",
+            "Info": "Specifies a destination IPv6 address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the length of an IPv6 prefix.\nIt is an integer ranging from 0 to 128."
+        },
+        {
+            "Parameters": "nexthop-ipv6-address",
+            "Info": "Specifies the next hop IPv6 address of a static route.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "recursive-lookup",
+            "Info": "Recursive route lookup policy.\n-"
+        },
+        {
+            "Parameters": "host-route",
+            "Info": "Recurses the static route to a 128-bit host route.\n-"
+        },
+        {
+            "Parameters": "preference preference",
+            "Info": "Specifies the route priority.\nThe value is an integer ranging from 1 to 255. The default value is 60. The smaller the value, the higher the priority."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies the tag attribute value of a static route. To implement different route management policies, you can configure different tag attribute values to classify static routes. For example, other protocols can import the static routes with specified tag attribute values based on a routing policy.\nThe value is an integer ranging from 1 to 4294967295. The default value is 0."
+        },
+        {
+            "Parameters": "no-advertise",
+            "Info": "Prevents static routes from being advertised.\nAfter this function is enabled, the static route can be imported to the BGP routing table but is not advertised to BGP peers.\n-"
+        },
+        {
+            "Parameters": "no-install",
+            "Info": "Prevents the static route from being delivered to the FIB.\n-"
+        },
+        {
+            "Parameters": "description text",
+            "Info": "Specifies the description of a static route.\nThe description parameter cannot be followed by other parameters, such as bfd and preference. Otherwise, the configuration will be used only as the description. For example, if ipv6 route-static 2001:db8:1::1 128 NULL0 description aa preference 10 is run, aa preference 10 is used as the description.\nThe value is a string of 1 to 150 characters, spaces supported."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 topology red",
+            "[*HUAWEI] ipv6 route-static topology red 2001:db8:2::1 128 2001:db8:1::1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 route-static 2001:db8:2::1 128 2001:db8:1::1",
+            "[~HUAWEI] undo ipv6 route-static 2001:db8:2::1 128"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a simple network or when the Router cannot use a dynamic routing protocol to establish a route to a destination, you can configure static routes.\nIn network maintenance scenarios, static routes are required to verify services. If you do not want these static routes to be imported by other protocols, specify no-advertise to prevent these static routes from being advertised.\nno-advertise takes effect only when it is configured for all the active static routes with the same destination address and mask. After this function is enabled, the static route can be imported to the BGP routing table but is not advertised to BGP peers.\nTo easily view and maintain a static route, specify description to configure a description for the static route. To check the configured description, run the display this command in the system view or run the display current-configuration command.\nPrecautions\nWhen configuring unicast static routes, note the following rules:\nIf no priority is set for a static route, the static route uses the default priority (60).If the destination address and mask of a static route are all 0s, the static route is a default route.If the outbound interface type is not Point-to-Point (P2P), a next hop address must be specified. If the outbound interface type is P2P, you can specify an outbound interface only, without a next hop address specified.\nRunning the undo ipv6 route-static topology command deletes all IPv6 routes in a specified topology. Therefore, exercise caution when running this command."
+}

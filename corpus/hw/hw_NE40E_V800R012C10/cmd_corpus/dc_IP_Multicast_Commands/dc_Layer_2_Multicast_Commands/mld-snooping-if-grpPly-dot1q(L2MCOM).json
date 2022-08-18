@@ -1,0 +1,65 @@
+{
+    "PageTitle": "mld-snooping group-policy (sub-interface view)",
+    "FuncDef": "The mld-snooping group-policy command sets the range of multicast groups that hosts can join.\nThe undo mld-snooping group-policy command cancels the configuration.\nBy default, hosts can join any multicast groups.",
+    "CLIs": [
+        "mld-snooping group-policy { <acl-number> | acl6-name <acl-name> } [ version <number> ] dot1q vid { <vid1> [ to <vid2> ] } &<1-10>",
+        "undo mld-snooping group-policy [ { <acl-number> | acl6-name <acl-name> } [ version <number> ] ] dot1q vid { <vid1> [ to <vid2> ] } &<1-10>"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies an ACL6 number.\nThe value is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "acl6-name acl-name",
+            "Info": "Specifies the name of a named ACL6.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "version number",
+            "Info": "Specifies an MLD version.\nThe value can be 1 or 2."
+        },
+        {
+            "Parameters": "dot1q vid vid1",
+            "Info": "Specifies a VLAN ID for a dot1q termination sub-interface.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to vid2",
+            "Info": "Specifies a VLAN ID for a dot1q termination sub-interface. vid2 must be greater than vid1.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 2008",
+            "[*HUAWEI-acl6-basic-2008] rule permit source ff15::1 128",
+            "[*HUAWEI-acl6-basic-2008] quit",
+            "[*HUAWEI] mld-snooping enable",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi1-ldp] quit",
+            "[*HUAWEI-vsi1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vlan-type  dot1q 10",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] l2 binding vsi vsi1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] mld-snooping group-policy 2008 dot1q vid 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo limit the range of multicast groups that hosts can join, run the mld-snooping group-policy command.\nPrerequisites\nMLD snooping has been enabled globally.\nRules have been configured in the specified ACL6.\nConfiguration Impact\nAfter the mld-snooping group-policy command is run, hosts cannot join multicast groups out of the configured multicast group range. If the mld-snooping group-policy command is run more than once in the same view, the latest configuration overrides the previous one.\nPrecautions\nIf an MLD version is not set, the device will apply the configured group policy to all MLDv1 and MLDv2 messages. The ACL6 configured for the group policy must be a basic ACL6."
+}

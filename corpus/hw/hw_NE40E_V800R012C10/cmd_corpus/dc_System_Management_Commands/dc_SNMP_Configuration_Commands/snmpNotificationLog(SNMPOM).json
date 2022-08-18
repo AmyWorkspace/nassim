@@ -1,0 +1,40 @@
+{
+    "PageTitle": "snmp-agent notification-log",
+    "FuncDef": "The snmp-agent notification-log enable command enables the alarm logging function.\nThe undo snmp-agent notification-log enable command disables the alarm logging function.\nBy default, the alarm logging function is disabled.",
+    "CLIs": [
+        "snmp-agent notification-log { enable | { global-ageout <ageout> [ minute <minute> ] | global-limit <limit> } * }",
+        "undo snmp-agent notification-log { enable | { global-ageout | global-limit } * }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "global-ageout ageout",
+            "Info": "Specifies the aging time of alarm logs in hours..\nThe value is 0, 12 to 36, in hours. By default, the value is 24. Value 0 indicates alarm logs do not age."
+        },
+        {
+            "Parameters": "minute minute",
+            "Info": "Specifies the aging time of alarm logs in minutes.\nThe value is 1 to 59, in minutes."
+        },
+        {
+            "Parameters": "global-limit limit",
+            "Info": "Specifies the maximum number of alarm logs allowed to be cached in the log buffer.\nThe value ranges from 1 to 15000. The default value is 500."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent notification-log global-ageout 36"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent notification-log global-limit 1000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent notification-log enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf notification logs in the log buffer do not need to be aged, set the aging time of these notification logs to 0.\nIf the number of notification logs saved to the log buffer within the aging time exceeds the upper limit, new notification logs can still be saved but overwrites the earlier logs in the log buffer.\nTo enable the alarm logging function, run the snmp-agent notification-log enable command.\nAn alarm can be propagated using either of the following types of messages:\nInform messageTrap message\nOnly the alarms propagated using Inform messages are to be logged. The alarms propagated using trap messages are not logged.\nThe alarms propagated using Inform messages are logged only when the following conditions are met:\nNo Inform ACK message is returned when the maximum number of attempts to resend the Inform message in the alarm queue reaches the configured threshold.An Inform message is discarded as the number of logged Inform messages reaches the maximum that the alarm queue supports.\n\nConfiguration Impact\nIf the size of the log buffer is excessively large, more network resources are consumed. In this case, reduce the size of the log buffer.\nOnly Inform logs are saved to the log buffer, and trap logs are not saved to the log buffer."
+}

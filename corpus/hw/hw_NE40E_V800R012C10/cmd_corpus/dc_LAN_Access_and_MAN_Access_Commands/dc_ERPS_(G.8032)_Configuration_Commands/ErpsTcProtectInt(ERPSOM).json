@@ -1,0 +1,25 @@
+{
+    "PageTitle": "tc-protection interval",
+    "FuncDef": "The tc-protection interval command sets the topology change protection interval at which topology change notification messages are sent.\nThe undo tc-protection interval command restores the default topology change protection interval.\nBy default, the topology change protection interval is 2s.",
+    "CLIs": [
+        "tc-protection interval <interval-value>",
+        "undo tc-protection interval"
+    ],
+    "ParentView": [
+        "ERPS ring view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval-value",
+            "Info": "Specifies the topology change protection interval.\nA longer interval ensures stable ERPS operation but may cause poor ring convergence performance.\nThe value is an integer ranging from 1 to 600, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] erps ring 1",
+            "[*HUAWEI-erps-ring1] tc-protection interval 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a user terminal connects to an upper-layer network through multiple ERPS rings and the ERPS ring closest to the user terminal has topology changes, the topology change notification messages will be twice multiplied each time they pass through a ring until they reach the upper-layer network. As a result, the upper-layer network will receive the same copy of topology change notification messages multiple times.To prevent this problem, run the tc-protection interval command to set a topology change protection interval at which the maximum number of topology change notification messages specified in the tc-protection threshold command are processed. Then, during the topology change protection interval, the device processes only the specified maximum number of topology change notification messages. If there are excess messages, the device processes all the excess messages for once after the topology change protection interval elapses. For example, if the time is set to 10 seconds and the maximum number is set to 5, when a device receives topology change notification messages, the device processes only the first 5 topology change notification messages within 10 seconds and processes the subsequent topology change notification messages only after the time elapses. This prevents the device from frequently deleting MAC and ARP entries.\n\nPrerequisites\nAn ERPS ring has been created using the erps ring command, and ERPSv2 has been specified using the version v2 command.\nConfiguration Impact\nSuppressing the number of topology change notification transmissions allows the upper-layer network to receive and process only one message during the topology change protection interval and prevents ERPS nodes against topology change (TC) attacks."
+}

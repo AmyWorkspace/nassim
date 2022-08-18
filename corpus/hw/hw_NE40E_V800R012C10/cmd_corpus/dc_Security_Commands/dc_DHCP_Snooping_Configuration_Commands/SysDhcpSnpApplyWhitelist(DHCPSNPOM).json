@@ -1,0 +1,29 @@
+{
+    "PageTitle": "dhcp snooping apply packet whitelist",
+    "FuncDef": "The dhcp snooping apply packet whitelist command applies a whitelist to DHCP packets for DHCP snooping.\nThe undo dhcp snooping apply packet whitelist command cancels a whitelist for DHCP packets.\nBy default, no whitelist is applied, and packets are not filtered based on whitelist rules.",
+    "CLIs": [
+        "dhcp snooping apply packet whitelist <whitelist-name>",
+        "undo dhcp snooping apply packet whitelist [ <whitelist-name> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "whitelist-name",
+            "Info": "Specifies the name of a whitelist.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. The value can be any combination of letters, digits, dots (.), or underscores (_)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] dhcp snooping packet whitelist whitelist1",
+            "[*HUAWEI-dhcpsnp-whitelist-whitelist1] dhcp packet-rule 1 source-ip 1.1.1.1 255.255.255.0",
+            "[*HUAWEI-dhcpsnp-whitelist-whitelist1] commit",
+            "[~HUAWEI-dhcpsnp-whitelist-whitelist1] quit",
+            "[~HUAWEI] dhcp snooping apply packet whitelist whitelist1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDHCP snooping whitelist is used on the AC and network sides of the UPE to filter DHCP packets to be sent to the CPU. After a whitelist is created and whitelist rules are configured, run the dhcp snooping apply packet whitelist command to apply the whitelist to DHCP packets. Only DHCP packets listed in the whitelist are sent to the CPU, and the DHCP packets not listed in the whitelist are simply forwarded. This protects the device against attacks.\nPrerequisites\nThe whitelist rules have been configured using the dhcp packet-rule command.\nPrecautions\nNote the following when applying a whitelist:\nOnly one whitelist can be applied for a VS.The whitelist function allows the device to send only the DHCP packets that match the whitelist to the CPU. Therefore, you must ensure the completeness of whitelist configurations. Otherwise, packets cannot be properly sent to the CPU after the whitelist is applied, causing DHCP snooping to function improperly.If a whitelist has been applied, you must check the whitelist configurations for completeness before enabling DHCP snooping. Otherwise, packets cannot be properly sent to the CPU, causing DHCP snooping to function improperly.To make a whitelist take effect, you must run the dhcp snooping enable command to enable DHCP snooping after the whitelist is applied.The maximum number of whitelist rules allowed to apply to a device is 1023.In VS mode, this command is supported only by the admin VS.\nIf the device receives a DHCP broadcast packet, the device by default sends it to the CPU for processing.In DHCP snooping scenarios or DHCP snooping and DHCP relay scenarios, add the DHCP server to the whitelist so that DHCP unicast lease renewal and release packets matching the whitelist are sent to the CPU for processing. Otherwise, DHCP snooping binding entries cannot be deleted when users go offline."
+}

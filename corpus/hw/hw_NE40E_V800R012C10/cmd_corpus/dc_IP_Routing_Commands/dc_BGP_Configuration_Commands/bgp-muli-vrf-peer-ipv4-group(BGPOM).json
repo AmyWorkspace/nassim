@@ -1,0 +1,38 @@
+{
+    "PageTitle": "peer group (BGP multi-instance VPN instance IPv4 address family view)",
+    "FuncDef": "The peer group command adds a peer to a peer.\nThe undo peer group command deletes a peer from a peer group and all configurations of the peer.\nBy default, no peer group is created.",
+    "CLIs": [
+        "peer <ipv4-address> group <group-name>",
+        "undo peer <ipv4-address> group <group-name>"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-a-vpna] peer 10.1.1.1 as-number 100",
+            "[*HUAWEI-bgp-instance-a-vpna] group test internal",
+            "[*HUAWEI-bgp-instance-a-vpna] peer 10.1.1.1 group test"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a large-scale BGP network, there are a large number of peers and many of them have the same routing policies. To configure these peers, you have to repeatedly use some commands. In such a case, configuring peer groups can simplify configurations. If you intend to perform the same configuration on several peers, create and configure a peer. Then, add the peers to the peer group. The peers will inherit the configurations of the peer group.\nPrecautions\nPeers with different AS numbers can be added to the same peer group. If a peer has an AS number, the peer keeps its own AS number after being added to a peer. If a peer has no AS number but the peer group to which the peer will be added has an AS number, the peer inherits the AS number of the peer group after being added to the peer group.\nThe members of a peer group can be configured with different route receiving and advertising policies.\nThe undo peer group command has the same function with the undo peer command and the undo peer enable command."
+}

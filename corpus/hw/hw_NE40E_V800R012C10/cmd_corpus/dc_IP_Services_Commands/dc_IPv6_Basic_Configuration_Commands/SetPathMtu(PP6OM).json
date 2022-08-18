@@ -1,0 +1,40 @@
+{
+    "PageTitle": "ipv6 pathmtu",
+    "FuncDef": "The ipv6 pathmtu command sets a static path maximum transmission unit (PMTU) for a specified destination IPv6 address.\nThe undo ipv6 pathmtu command deletes the static PMTU set for a specified destination IPv6 address.\nBy default, no static PMTU is set for a specified destination IPv6 address.",
+    "CLIs": [
+        "ipv6 pathmtu <ipv6-address> [ vpn-instance <vpn-instance-name> ] [ <path-mtu> ]",
+        "undo ipv6 pathmtu <ipv6-address> [ vpn-instance <vpn-instance-name> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address for which a PMTU is to be set.\nThe address is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X. The address can be a unicast address only."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of an IPv6 VPN instance for which a PMTU is to be set.\nThe value is a string of 1 to 31."
+        },
+        {
+            "Parameters": "path-mtu",
+            "Info": "Specifies the path MTU, that is, the maximum size of IPv6 packets allowed to be sent along the path.\nThe value is an integer ranging from 1280 to 10000, in bytes. The default value is 1500."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 pathmtu 2001:db8::12 1300"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn6",
+            "[*HUAWEI-vpn-instance-vpn6] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn6-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpn6] quit",
+            "[*HUAWEI] ipv6 pathmtu 2001:db8::1 vpn-instance vpn6 1600"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA Path Maximum Transmission Unit (PMTU) is used to determine the proper size of packets to be transmitted along the path from a source to a destination. Commonly, a device fragments and forwards packets based on the dynamic PMTU learning function of the system, trying not to fragment packets during transmission. In this manner, loads on intermediate Routers are reduced and effective network resource use.\nIn some special cases, however, to protect devices on the network and avoid the large-sized packet attacks, you can run the ipv6 pathmtu command to set a static PMTU for the specified destination IPv6 address to control the maximum size of packets that can be transmitted between the source and the destination.\nConfiguration Impact\nOn the path along which packets are transmitted, a node discards the received packets if its MTU is smaller than the PMTU of the received packets. Therefore, in most cases, dynamic PMTU learning is recommended unless there are security vulnerabilities on the network. You do not need to run the ipv6 pathmtu command to set a static PMTU, that is, use the default PMTU.\nPrecautions\nThe priorities of the static PMTU, dynamic PMTU, and default PMTU of the system are in a descending order."
+}

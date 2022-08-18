@@ -1,0 +1,50 @@
+{
+    "PageTitle": "mpls ldp transport-address",
+    "FuncDef": "The mpls ldp transport-address command sets an LDP transport address.\nThe undo mpls ldp transport-address command restores the default LDP transport address.\nBy default, the LDP transport address is the LSR ID of the local LSR.",
+    "CLIs": [
+        "mpls ldp transport-address { <interface-type> <interface-number> | <interface-name> }",
+        "mpls ldp transport-address interface",
+        "undo mpls ldp transport-address"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10GE interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "Eth-Trunk interface view",
+        "FlexE interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "GMPLS-UNI interface view",
+        "IP-Trunk interface view",
+        "POS interface view",
+        "VLANIF interface view",
+        "XGE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the type and number of an interface. LDP uses the address of the interface as the TCP transport address.\n-"
+        },
+        {
+            "Parameters": "interface",
+            "Info": "Indicates that LDP uses the IP address of the current interface as the TCP transport address.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls ldp",
+            "[*HUAWEI-mpls-ldp] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls ldp",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls ldp transport-address interface",
+            "Warning: All the related sessions will be deleted if the operation is performed! Continue? [Y/N]:y"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBefore two LSRs establish an LDP session, the two LSRs need to establish a TCP connection to exchange label messages. In this case, run the mpls ldp transport-address command to set the address for the TCP connection, that is, the LDP transport address.\nThe transport address is used to set up the TCP connection with the peer. Therefore, the peer needs to have a route to the transport address. Generally, an LSR ID (address of a loopback interface) is used as the transport address. When the address of the loopback interface is a public network address, configure different transport addresses for LSRs to enable them to set up connections using private network addresses.\nYou can run the mpls ldp transport-address command in the interface view to set the transport address for a TCP connection. When there is more than one link between two LSRs, if the links are bound to VPN instances, the default transport address is the IP address of an interface rather than the LSR ID of an LSR.\nWhen there are multiple links between two LSRs, if an LDP session needs to be set on the links, the interfaces at the same side of the links need to use the default transport address or be configured with the same transport address. Otherwise, the LDP session can be established on only one link.When the LDP transport address is changed, the session is not interrupted immediately. Instead, the session is interrupted after the Hello hold timer times out.\n\nPrerequisites\nMPLS and MPLS LDP must be enabled on the associated interface.\nProcedure\nAfter the mpls ldp transport-address command is run, the system displays the following prompt:\nWarning: All the related sessions will be deleted if the operation is performed! Continue? [Y/N]:y\nTo confirm to run the command, enter y.\nImplementation Procedure\nAfter the mpls ldp transport-address command is run, the system displays the following prompt:\nWarning: All the related sessions will be deleted if the operation is performed! Continue? [Y/N]:y\nTo confirm to run the command, enter y.\nConfiguration Impact\nAfter the mpls ldp transport-address command is run, the transport address configured through the command is used by LDP to establish a TCP connection.\nPrecautions\nIf an LDP session is a local and remote LDP session, the LDP transport address of the interface used by the local LDP session must be the same as the LSR ID used by the remote LDP session.\nAfter an LDP transport address is changed, an LDP session is interrupted. Therefore, exercise caution when changing the LDP transport address."
+}

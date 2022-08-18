@@ -1,0 +1,51 @@
+{
+    "PageTitle": "ppp connection chasten",
+    "FuncDef": "The ppp connection chasten command restricts the number of connection requests from a PPP user.\nThe undo ppp connection chasten command removes the restriction on the number of connection requests from a PPP user.\nBy default, a PPP user is restricted if the user fails to be authenticated for 5 times during 180 seconds, the user account is frozen for 300 seconds.",
+    "CLIs": [
+        "ppp connection chasten [ option105 ] <request-sessions> <request-period> <blocking-period> [ padi-discard ] [ quickoffline ]",
+        "ppp connection chasten <request-sessions> <request-period> <blocking-period> [ padi-discard ] [ quickoffline ] [ multi-sessions-permac ]",
+        "undo ppp connection chasten [ option105 ] [ padi-discard ] [ quickoffline ]",
+        "undo ppp connection chasten [ padi-discard ] [ quickoffline ] [ multi-sessions-permac ]"
+    ],
+    "ParentView": [
+        "User VLAN view",
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "option105",
+            "Info": "Restricts the number of connection requests from a PPP user based on the Option 105 information. By default, the number of connection requests from a PPP user is restricted based on MAC addresses.\n-"
+        },
+        {
+            "Parameters": "request-sessions",
+            "Info": "Specifies the number of PPP connection requests.\nThe value is an integer that ranges from 1 to 10000."
+        },
+        {
+            "Parameters": "request-period",
+            "Info": "Specifies the period for sending PPP connection requests.\nThe value is an integer that ranges from 1 to 3600, in seconds."
+        },
+        {
+            "Parameters": "blocking-period",
+            "Info": "Specifies the period when a PPP connection request is blocked.\nThe value is an integer that ranges from 0 to 3600, in seconds."
+        },
+        {
+            "Parameters": "padi-discard",
+            "Info": "Specifies that the packets of the users whose accounts are frozen are discarded in the PPPoE active discovery initiation (PADI) phase. By default, the packets of the users whose accounts are frozen are discarded in the PPPoE active discovery request (PADR) phase.\n-"
+        },
+        {
+            "Parameters": "quickoffline",
+            "Info": "Specifies the maximum number of times that a PPP user can go offline immediately after going online during a specific time period. If a large number of users go offline immediately after going online on a live network, the CPU is overloaded or the RADIUS server may go Down. After you specify quickoffline, PPP user accounts are frozen for blocking-period seconds if the PPP users go offline immediately after going online for request-sessions times during request-period seconds.\n-"
+        },
+        {
+            "Parameters": "multi-sessions-permac",
+            "Info": "Restricts the number of PPP connection requests based on the MAC address in scenarios in which one-to-many mappings between one MAC address and multiple PPP sessions are configured.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ppp connection chasten 10 60 1000 quickoffline multi-sessions-permac"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo prevent unauthorized users from initiating the brute force attack to crack the password of the authorized user, you can restrict the number of access attempts. If a user fails to be authenticated for N times, the user account is blocked for a period of time, thwarting unauthorized users' efforts in cracking the password of the authorized user. You can set the authentication interval of a user to the <request-period> seconds. If the authentication of the same user fails for <request-sessions> times during <request-period> seconds, the user account is frozen for <blocking-period> seconds.\nIn a scenario in which a large number of users go offline immediately after they go online, the CPU may be overloaded and the RADIUS server may even go Down. To prevent this problem, you can configure quickoffline to restrict the number of a user's quick offline attempts within a specified time. If a PPP user immediately goes offline after going online for <request-sessions> times within <request-period> seconds, the user account is frozen for <blocking-period> seconds.\nConfiguration Impact\nIf padi-discard is configured, the packets of the users whose accounts are frozen are discarded in the PADI phase, saving a response message from the system and improving system performance. The option 105 information is filtered only in PADI when padi-discard is configured. However, when option105 and padi-discard are both configured and even if the user packet carries option 105 only in the PADR phase, the matching packet is discarded in the PADR phase.\nIf the\nppp connection chasten is run more than once in the same view, the latest configuration overrides the previous one.\nIf you run the ppp connection chasten command without quickoffline and another ppp connection chasten command with quickoffline on a device, both commands can coexist. The command without quickoffline freezes user accounts if the users fail to be authenticated for a specific number of times. The command with quickoffline freezes user accounts if the users go offline immediately after going online for a specific number of times. If you modify the configuration of one of these commands, the modification does not override the configuration of the other command.\nFor example, if you configure the ppp connection chasten 100 500 1000 and ppp connection chasten 300 500 1000 quickoffline commands in the system view, both command can coexist. Suppose that you configure the ppp connection chasten option105 100 500 2000 and ppp connection chasten 300 500 2000 quickoffline commands to adjust the original configurations. In this situation, the ppp connection chasten option105 100 500 2000 command overrides only the original ppp connection chasten 100 500 1000 command. Similarly, the ppp connection chasten 300 500 2000 quickoffline command overrides only the original ppp connection chasten 300 500 1000 quickoffline command.\nPrecautions\nThis command is supported only on the admin VS.\nOn the MAC address in scenarios, after the maximum number of access users is set to more than 1 using the pppoe-server max-sessions remote-mac command and option105 is not specified in the ppp connection chasten command, restriction on the number of connection requests from a PPP user based on MAC addresses does not take effect. To allow it to take effect, configure multi-sessions-permac. If option105 is specified in the ppp connection chasten command, restriction on the number of connection requests from a PPP user based on the Option 105 information takes effect.\nIn the system view, this command takes effect on all users that access the . In the VLAN view, the command takes effect only on VLAN users that access the interface where the VLAN resides. If this command is configured in both the system and VLAN views, the command that first meets the restriction condition takes effect."
+}

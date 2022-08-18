@@ -1,0 +1,55 @@
+{
+    "PageTitle": "l2tpv3 local cookie secondary",
+    "FuncDef": "The l2tpv3 local cookie secondary command changes the local cookie value of an L2TPv3 tunnel.\nThe undo l2tpv3 local cookie secondary command restores the local cookie value of an L2TPv3 tunnel.\nBy default, the local cookie value of an L2TPv3 tunnel is not changed.",
+    "CLIs": [
+        "l2tpv3 local cookie secondary { key cipher <local-cookie> | length 4 plain lower-value <local-low-value> | length 8 plain lower-value <local-low-value> upper-value <local-high-value> }",
+        "undo l2tpv3 local cookie secondary [ key cipher <local-cookie> | length 4 plain lower-value <local-low-value> | length 8 plain lower-value <local-low-value> upper-value <local-high-value> ]"
+    ],
+    "ParentView": [
+        "L2TPv3-PW view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "key",
+            "Info": "Specifies the local cookie.\n-"
+        },
+        {
+            "Parameters": "cipher local-cookie",
+            "Info": "Specifies the local cookie value to be in ciphertext.\nThe value is a string of 1 to 8 case-sensitive characters. After the configuration, the value is saved in the configuration file as a string of 48/108 case-sensitive characters in ciphertext. SHA256 is used to encrypt the value, providing high security.\nWhen the root key is configured, a string of 108 characters in ciphertext is generated. When the root key is not configured, a string of 48 characters in ciphertext is generated."
+        },
+        {
+            "Parameters": "length",
+            "Info": "Specifies the length of the local cookie.\n-"
+        },
+        {
+            "Parameters": "4",
+            "Info": "Specifies a 4-byte local cookie value in plaintext.\nWhen configuring an authentication password, select the ciphertext mode because the password is saved in the configuration file as a simple text if you select the simple text mode, which has a high risk. To ensure device security, change the password periodically.\n-"
+        },
+        {
+            "Parameters": "plain",
+            "Info": "Indicates the simple text mode. Only the simple text can be entered. The password in the configuration file is displayed as a simple text. Simple authentication uses the simple text mode by default.\nWhen configuring an authentication password, select the ciphertext mode because the password is saved in the configuration file as a simple text if you select the simple text mode, which has a high risk. To ensure device security, change the password periodically.\n-"
+        },
+        {
+            "Parameters": "lower-value local-low-value",
+            "Info": "Specifies a 4-byte local cookie value in plaintext.\nWhen configuring an authentication password, select the ciphertext mode because the password is saved in the configuration file as a simple text if you select the simple text mode, which has a high risk. To ensure device security, change the password periodically.\nThe value is a hexadecimal integer ranging from 0 to 0xffffffff."
+        },
+        {
+            "Parameters": "8",
+            "Info": "Specifies the four high-order bytes of an 8-byte local cookie value in plaintext.\n-"
+        },
+        {
+            "Parameters": "upper-value local-high-value",
+            "Info": "Specifies the four high-order bytes of an 8-byte local cookie value in plaintext.\nThe value is a hexadecimal integer ranging from 0 to 0xffffffff."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2tpv3 enable",
+            "[~HUAWEI] l2tpv3 pw huawei",
+            "[*HUAWEI-l2tpv3-pw-huawei] l2tpv3 local cookie key cipher Huawei@1",
+            "[*HUAWEI-l2tpv3-pw-huawei] l2tpv3 local cookie secondary key cipher Huawei-2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAll packets must match the configured cookie value or be discarded. Cookies are used in security checks performed at the endpoints of a tunnel to prevent network spoofing and attacks. After you run the l2tpv3 local cookie command to configure a local cookie value, you can run the l2tpv3 local cookie secondary command to change the local cookie value without interrupting services.\nPrerequisites\nL2TPv3 has been enabled using the l2tpv3 enable command.\nAn L2TPv3 tunnel has been configured using the l2tpv3 pw command.\nA local cookie value has been configured using the l2tpv3 local cookie command.\nPrecautions\nIf you run the l2tpv3 local cookie command to change the local cookie value of an L2TPv3 tunnel, services will be temporarily interrupted. It is recommended that you use the l2tpv3 local cookie secondary command to change the local cookie value of an L2TPv3 tunnel."
+}

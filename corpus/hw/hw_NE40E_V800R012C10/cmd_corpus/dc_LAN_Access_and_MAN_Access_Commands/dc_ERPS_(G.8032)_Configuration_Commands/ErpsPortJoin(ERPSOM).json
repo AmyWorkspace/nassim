@@ -1,0 +1,52 @@
+{
+    "PageTitle": "erps ring (Layer 2 Ethernet interface view)",
+    "FuncDef": "The erps ring command adds a port to an ERPS ring and specifies a role for the port.\nThe undo erps ring command removes a port from an ERPS ring and the port role configuration.\nBy default, ports are not added to ERPS rings, and no port roles are specified.",
+    "CLIs": [
+        "erps ring <ring-id> [ rpl { neighbour | owner } ]",
+        "undo erps ring <ring-id>"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Layer 2 50GE interface view",
+        "Eth-Trunk interface view",
+        "25GE-L2 view",
+        "Port extension Layer 2 interface view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ring-id",
+            "Info": "Specifies the ID of an ERPS ring.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "rpl",
+            "Info": "Specifies the port type to be added to an ERPS ring.\n-"
+        },
+        {
+            "Parameters": "neighbour",
+            "Info": "Specifies the port to be added to an ERPS ring as the RPL neighbor port.\n-"
+        },
+        {
+            "Parameters": "owner",
+            "Info": "Specifies the port to be added to an ERPS ring as the RPL owner port.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] erps ring 2",
+            "[*HUAWEI-erps-ring2] control-vlan 100",
+            "[*HUAWEI-erps-ring2] protected-instance all",
+            "[*HUAWEI-erps-ring2] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] stp disable",
+            "[*HUAWEI-GigabitEthernet1/0/1] erps ring 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter an ERPS ring is created, run the erps ring command in the interface view to add Layer 2 ports to the ERPS ring to allow transmission of R-APS PDUs. Each device that is added to an ERPS ring is a node, and each node cannot have more than two ports being added to the ERPS ring.\nERPS defines three port roles: RPL owner port, RPL neighbor port (only in ERPSv2), and ordinary port. The link where the RPL owner port resides is the RPL.\nRPL owner port\nAn RPL owner port is a ring port responsible for blocking traffic over the RPL to prevent loops. An ERPS ring has only one RPL owner port.\nWhen the node on which the RPL owner port resides receives an R-APS PDU indicating that a link or node on the ring fails, it unblocks the RPL owner port to allow the port to send and receive traffic. This mechanism ensures that traffic is not interrupted.\nRPL neighbor port\nAn RPL neighbor port is a ring port directly connected to an RPL owner port and helps reduce the number of times FDB entries are refreshed.\nRPL owner and neighbor ports are both blocked under normal conditions to prevent loops.\nIf an ERPS ring fails, both RPL owner and neighbor ports are unblocked.\nOrdinary port\nOrdinary ports are ring ports other than the RPL owner and neighbor ports.\nAn ordinary port monitors the status of the directly-connected ERPS link and sends R-APS PDUs to inform the other ports if the link status changes.\n\nPrerequisites\nThe erps ring command has been run to create the specific ERPS ring.\nBefore adding a port to an ERPS ring, ensure that:\nSpanning Tree Protocol (STP) is not enabled on the port. If the port has STP enabled, run the stp disable command to disable STP.The port is not a Layer 3 port. If the port is a Layer 3 port, run the portswitch command to switch the port to the Layer 2 mode.The control VLAN and ERP instance have been configured using the control-vlan and protected-instance commands in the ERPS ring view.ERPSv2 has been specified for the ERPS ring using the version v2 command if the port will be specified as an RPL neighbor port.\n\nConfiguration Impact\nIf any port has been added to the ERPS ring, the control VLAN cannot be changed. If the configured control VLAN needs to be deleted, run the undo erps ring command in the interface view or the undo port command in the ERPS ring view, and run the undo control-vlan command to delete the control VLAN.\nIf any port has been added to the ERPS ring, no ERP instance can be modified. If the configured ERP instance needs to be deleted, run the undo erps ring command in the interface view or the undo port command in the ERPS ring view, and run the undo protected-instance command to delete the ERP instance.\nPrecautions\nBefore removing a port from an ERPS ring or changing the port role, run the shutdown command to shut down the port. Then remove the port or change the port role and run the undo shutdown command to enable the port. If the port is left disabled, traffic will be interrupted.\nIf ports added to an ERPS ring are all ordinary ports, any port on the device with the largest MAC address will be blocked.\nA port cannot be added to an ERPS ring in any of the following conditions:\nThe port is enabled with a spanning tree protocol.The port is added to an Eth-Trunk interface.The port is added to a Monitor Link group."
+}

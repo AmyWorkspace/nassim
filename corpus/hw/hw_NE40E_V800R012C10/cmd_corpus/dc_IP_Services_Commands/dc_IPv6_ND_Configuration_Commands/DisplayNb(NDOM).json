@@ -1,0 +1,121 @@
+{
+    "PageTitle": "display ipv6 neighbors",
+    "FuncDef": "The display ipv6 neighbors command displays information about ND entries.",
+    "CLIs": [
+        "display ipv6 neighbors [ <ipv6-address> | vpn-instance <vpn-instance-name> | { <interface-name> | <interface-type> <interface-number> } ]",
+        "display ipv6 neighbors vid <vlan-id> { <port-name> | <port-type> <port-num> }",
+        "display ipv6 neighbors { <interface-name> | <interface-type> <interface-number> } vid <vlan-id> [ cevid <ce-vid> ]",
+        "display ipv6 neighbors brief",
+        "display ipv6 neighbors slot <slot-num>"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address. If this parameter is specified, information about ND entries of the specified IPv6 address is displayed.\nThe address is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of an IPv6 VPN instance. If this parameter is specified, information about ND entries of the specified IPv6 VPN instance is displayed.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Displays neighbor entries on a specified interface.\n-"
+        },
+        {
+            "Parameters": "vid vlan-id",
+            "Info": "Specifies the ID of the VLAN to which an interface belongs.\nAn integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "port-type port-num",
+            "Info": "Displays neighbor entries on a specified interface.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "cevid ce-vid",
+            "Info": "Specifies the VLAN ID of CE(the vlaue of inside tag).\nAn integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "brief",
+            "Info": "Specifies brief information about neighbor entries.\n-"
+        },
+        {
+            "Parameters": "slot slot-num",
+            "Info": "Specifies the slot ID. If this parameter is specified, information about neighbor entries on the specified slot ID is displayed.\nThe value is an integer. You can enter a question mark (?) and select a value from the displayed value range."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display ipv6 neighbors Vlanif 1",
+            "-----------------------------------------------------------------------------",
+            "IPv6 Address : 2001:DB8::1                                                          ",
+            "Link-layer   : 00e0-fce0-0089                     State     : INCMP               ",
+            "Interface    : GE1/0/1                            Age       : -                   ",
+            "VLAN         : 1                                  CEVLAN    : -                   ",
+            "VPN name     : -                                  Is Router : TRUE               ",
+            "Secure FLAG  : SECURESource IP    : -          ",
+            "Destination IP: -                                 ",
+            "VNI          : -                                  BD        : -",
+            "",
+            "-----------------------------------------------------------------------------",
+            "Total: 1        Dynamic: 0      Static: 1      Remote:0"
+        ],
+        [
+            "<HUAWEI> display ipv6 neighbors gigabitethernet 1/0/1",
+            "-----------------------------------------------------------------------------",
+            "IPv6 Address : 2001:DB8::1                                         ",
+            "Link-layer   : 00e0-fc89-fe6e                     State     : INCMP               ",
+            "Interface    : GE1/0/1                            Age       : -                   ",
+            "VLAN         : -                                  CEVLAN    : -                   ",
+            "VPN name     : vpn1                               Is Router : TRUE               ",
+            "Secure FLAG  : SECURESource IP    : -          ",
+            "Destination IP: -                                 ",
+            "VNI          : -                                  BD        : -",
+            "",
+            "-----------------------------------------------------------------------------",
+            "Total: 1        Dynamic: 0      Static: 1      Remote:0"
+        ],
+        [
+            "<HUAWEI> display ipv6 neighbors 2001:db8::2",
+            "-----------------------------------------------------------------------------",
+            "IPv6 Address : 2001:DB8::2                                         ",
+            "Link-layer   : 00e0-fc89-fe6e                     State     : STALE               ",
+            "Interface    : GE1/0/1                            Age       : -                   ",
+            "VLAN         : -                                  CEVLAN    : -                   ",
+            "VPN name     : -                                  Is Router : TRUE               ",
+            "Secure FLAG  : SECURESource IP    : -          ",
+            "Destination IP: -                                 ",
+            "VNI          : -                                  BD        : -",
+            "",
+            "-----------------------------------------------------------------------------",
+            "Total: 1        Dynamic: 0      Static: 1      Remote:0"
+        ],
+        [
+            "<HUAWEI> display ipv6 neighbors vpn-instance vpnA",
+            "-----------------------------------------------------------------------------",
+            "IPv6 Address : 2001:DB8::2                                         ",
+            "Link-layer   : 00e0-fc89-fe6e                     State     : INCMP               ",
+            "Interface    : GE1/0/1                            Age       : -",
+            "VLAN         : -                                  CEVLAN    : -                   ",
+            "VPN name     : vpnA                               Is Router : TRUE               ",
+            "Secure FLAG  : SECURE-----------------------------------------------------------------------------",
+            "Total: 1        Dynamic: 0      Static: 1      Remote:0"
+        ],
+        [
+            "<HUAWEI> display ipv6 neighbors brief",
+            "D-Dynamic,S-Static,R-Remote",
+            "I-INCMP,R-REACH,S-STALE,D-DELAY,P-PROBE",
+            "-----------------------------------------------------------------",
+            "IPv6 Address         Link-layer       State Type Interface ",
+            "-----------------------------------------------------------------",
+            "2001:DB8::3                                                                            ",
+            "                     00e0-fc02-0003   I     S    GE1/0/1                                     ",
+            "2001:DB8::4                                                                            ",
+            "                     000e0-fc02-0004   I     S    GE1/0/2                                     ",
+            "-----------------------------------------------------------------",
+            "Total: 2        Dynamic: 0      Static: 2      Remote:0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThrough the output of the display ipv6 neighbors command displays information about dynamic and static ND entries and check the following:\nWhether the local Router has learnt MAC addresses from neighborsStatus of the neighbors of the local Router, including neighbor unreachable, neighbor reachable, or unknown\n\nPrecautions\nIf no parameter is specified when the display ipv6 neighbors command is run, information about all ND entries is displayed."
+}

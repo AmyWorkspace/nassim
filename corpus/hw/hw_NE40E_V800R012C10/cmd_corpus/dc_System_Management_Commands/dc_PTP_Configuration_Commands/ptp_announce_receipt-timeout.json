@@ -1,0 +1,33 @@
+{
+    "PageTitle": "ptp announce receipt-timeout",
+    "FuncDef": "The ptp announce receipt-timeout command sets the maximum number of Announce packets that a PTP interface fails to receive consecutively.\nThe undo ptp announce receipt-timeout command restores the default maximum number of Announce packets that a PTP interface fails to receive consecutively.\nBy default, a PTP interface enters the Master state if the PTP interface fails to receive three consecutive Announce packets.",
+    "CLIs": [
+        "ptp announce receipt-timeout <receipt-timeout>",
+        "undo ptp announce receipt-timeout"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "GE optical interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "receipt-timeout",
+            "Info": "Specifies the maximum number of Announce packets that a PTP interface fails to receive consecutively.\nIn 1588v2 mode, the value is an integer ranging from 2 to 255, and the default value is 3. In G.8275.1 mode, the value ranges from 3 to 255, and the default value is 3.In SMPTE-2059-2 mode, the value ranges from 2 to 10, and the default value is 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ptp announce receipt-timeout 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTwo devices exchange Announce packets to determine the master/slave relationship. The master device sends Sync packets to notify the slave device of time signal parameters and uses a delay measurement mechanism to achieve time signals accuracy.\nTo set the maximum number of Announce packets that a PTP interface fails to receive consecutively, run the ptp announce receipt-timeout command. If the PTP interface on a device fails to receive a specified number of Announce packets, the interface status becomes Master, and the device stops attempting to synchronize the time with other PTP devices. The device uses the BMC algorithm to select a clock source and synchronize the time with the clock source. Increase receipt-timeout to reduce the clock source switching frequency; reduce receipt-timeout to switch clock sources. Using the default value is recommended.\nPrecautions\nLocal timeout period of receiving Announce packets = Locally configured receipt-timeout x Remotely configured announce-interval\nThe ptp announce-interval announce-interval command sets the interval at which Announce packets are sent."
+}

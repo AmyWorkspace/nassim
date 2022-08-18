@@ -1,0 +1,56 @@
+{
+    "PageTitle": "nat64 address-group",
+    "FuncDef": "The nat64 address-group command creates a NAT64 address pool or enters the view of a specified NAT64 address pool.\nThe undo nat64 address-group command deletes a NAT64 address pool.\nNo NAT64 address pool is configured by default.",
+    "CLIs": [
+        "nat64 address-group <address-group-name> group-id <id> [ no-pat | vpn-instance <vpn-instance-name> [ no-pat ] ]",
+        "nat64 address-group <address-group-name> group-id <id> <start-address> { mask { <mask-length> | <address-mask> } | <end-address> } [ vpn-instance <vpn-instance-name> ] [ no-pat ]",
+        "nat64 address-group <address-group-name>",
+        "undo nat64 address-group <address-group-name> [ group-id <id> [ vpn-instance <vpn-instance-name> ] [ no-pat ] ]",
+        "undo nat64 address-group <address-group-name> [ group-id <id> [ <start-address> { mask { <mask-length> | <address-mask> } | <end-address> } ] [ vpn-instance <vpn-instance-name> ] [ no-pat ] ]"
+    ],
+    "ParentView": [
+        "NAT64 instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "address-group-name",
+            "Info": "Specifies an address pool name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "group-id id",
+            "Info": "Specifies an address pool ID.\nThe value is an integer ranging from 0 to 127."
+        },
+        {
+            "Parameters": "no-pat",
+            "Info": "Indicates the No-PAT translation mode.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "start-address",
+            "Info": "Specifies a start IP address in a public address pool.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask mask-length",
+            "Info": "Specifies the mask length of public IP addresses.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "address-mask",
+            "Info": "Specifies the mask of public IP addresses.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "end-address",
+            "Info": "Specifies an end IP address in a public IP address pool.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat64 instance nat1 id 1",
+            "[*HUAWEI-nat64-instance-nat1] nat64 address-group group1 group-id 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn IPv4 address pool can be configured in a NAT64 instance. To allow an IPv6 user to access an IPv4 network through a NAT64 device, the device translates the source IPv6 address in user packets into an IPv4 address from the IPv4 address pool and forwards the user packets to the IPv4 network.\nThe address pool supports the PAT and No-PAT modes. By default, the PAT mode is used. In PAT mode, the IPv6 addresses of multiple users can be translated into one IPv4 address, and the maximum number of users who are assigned the same IPv4 address is determined by the port range configured in the NAT64 instance. In No-PAT mode, a single IPv4 address is assigned to each IPv6 user, regardless of the port range configured in the NAT64 instance.\nFollow-up Procedure\nIf you do not specify an address range for a NAT64 address pool created using the nat64 address-group command, run the section command in the NAT64 address pool view to configure an address range.\nPrecautions\nAddresses in different NAT64 address pools cannot be identical. The IP address added to a NAT64 address pool must be different from an interface address or a server address on the NAT64 device.The mask-length and mask values are used only to simplify the configuration of a NAT64 address pool and are not the masks used in route advertisement on the device."
+}

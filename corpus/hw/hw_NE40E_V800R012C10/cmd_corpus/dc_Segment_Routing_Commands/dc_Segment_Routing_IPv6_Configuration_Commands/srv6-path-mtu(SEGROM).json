@@ -1,0 +1,25 @@
+{
+    "PageTitle": "path-mtu (Segment routing IPv6 view)",
+    "FuncDef": "The path-mtu command is used to set the global path MTU value for all SRv6 TE Policy and SRv6 BE.\nThe undo path-mtu command is used to restore the default.\nBy default, the global path MTU value for all SRv6 TE Policy and SRv6 BE is 9600.",
+    "CLIs": [
+        "path-mtu <mtu-value>",
+        "undo path-mtu [ <mtu-value> ]"
+    ],
+    "ParentView": [
+        "Segment routing IPv6 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mtu-value",
+            "Info": "Global path MTU for all SRv6 TE Policy and SRv6 BE.\nThe value is an integer that ranges from 1280 to 9600."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] path-mtu 5000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe path-mtu command is used to set the path MTU value for all SRv6 TE Policy and SRv6 BE.\nThe path-mtu reserved command is used to set the path MTU reserved value for all SRv6 TE Policy and SRv6 BE.\nIPv6 packets cannot be fragmented on transit nodes for forwarding. If the size of an IPv6 packet entering a transit node exceeds the IPv6 MTU of the specified outbound interface, the node discards the packet. Conversely, if the size of an IPv6 packet is smaller than the MTU configured for an SRv6 BE path or an SRv6 TE Policy, the bandwidth of the associated link is not fully utilized. Therefore, an appropriate SRv6 path MTU needs to be configured to prevent packet loss and maximize link bandwidth utilization.\nIn TI-LFA protection or binding SID scenarios, an SRH that has segment lists associated with TI-LFA or the binding SID needs to be inserted into IPv6 packets. This increases the packet size and must be taken into account when an SRv6 path MTU is configured. To allow for this additional length, configure a path MTU reserved value on the SRv6 ingress. The configured SRv6 path MTU minus the reserved value is called the active MTU. The smaller of either the active MTU or the IPv6 MTU of physical interfaces takes effect on SRv6 packets.\nSRv6 path MTU configuration takes effect for packets forwarded through either an SRv6 BE path or an SRv6 TE Policy. You need to configure a proper SRv6 path MTU according to the size of SRv6-encapsulated packets.\nBoth SRv6 TE Policies and SRv6 BE paths support the global configuration of an SRv6 path MTU and reserved value. For example, if an SRv6 path MTU is set to 1600 bytes and the reserved value is set to 100 bytes globally, the active MTU is 1500 bytes. In this case, if the IPv6 MTU of physical interfaces is greater than or equal to 1500 bytes, the MTU used by the SRv6 ingress is 1500 bytes. However, if the IPv6 MTU of physical interfaces is less than 1500 bytes, the ingress uses this IPv6 MTU.\nSRv6 TE Policies also support the configuration of SRv6 path MTUs on a per segment list basis. An SRv6 path MTU configured for a segment list overrides the global SRv6 path MTU. For example, if an SRv6 path MTU is set to 1600 bytes globally, the SRv6 path MTU of all segment lists is 1600 bytes by default. If an SRv6 path MTU is set to a value other than 1600 bytes for a segment list, this segment list uses the newly configured value. The SRv6 path MTU of the segment list minus the globally configured reserved value is the active MTU of the segment list. This active MTU is then compared with the IPv6 MTU of physical interfaces. The smaller value between them is the MTU that the SRv6 ingress actually uses.\nPrecautions\nThe path MTU value minus the path MTU reserved value must be greater than or equal to 1280."
+}

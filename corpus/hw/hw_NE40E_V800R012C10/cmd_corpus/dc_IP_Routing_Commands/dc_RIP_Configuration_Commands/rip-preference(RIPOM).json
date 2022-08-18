@@ -1,0 +1,42 @@
+{
+    "PageTitle": "preference (RIP view)",
+    "FuncDef": "The preference command specifies the priority for RIP routes. Alternatively, you can set a priority for a specific route using a route-policy.\nThe undo preference command restores the default setting.\nBy default, the priority of RIP routes is 100.",
+    "CLIs": [
+        "preference { { route-policy <route-policy-name> | route-filter <route-filter-name> } | <value> } *",
+        "undo preference"
+    ],
+    "ParentView": [
+        "RIP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy used to filter routes.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter used to filter routes.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "value",
+            "Info": "Specifies the priority of RIP routes.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy filter1 permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] rip 1",
+            "[*HUAWEI-rip-1] preference route-policy filter1 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] xpl route-filter filter2",
+            "[~HUAWEI-xpl-filter] end-filter",
+            "[*HUAWEI] rip 1",
+            "[*HUAWEI-rip-1] preference route-filter filter2 120"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe smaller the priority value, the higher the priority. To enable RIP routes to have a higher priority than the routes learned by other IGPs, set a smaller priority value for the RIP routes. The priority determines the algorithm through which the optimal route is obtained from the routes in the IP routing table.\nPrerequisites\nBefore setting a route priority using a route-policy, the route-policy must have been configured using the route-policy command.\nConfiguration Impact\nIf the preference command is run more than once, the latest configuration overrides the previous one."
+}

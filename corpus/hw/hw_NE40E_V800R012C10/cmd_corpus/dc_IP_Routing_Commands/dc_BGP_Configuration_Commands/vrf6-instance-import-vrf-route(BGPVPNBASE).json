@@ -1,0 +1,52 @@
+{
+    "PageTitle": "import-rib (BGP-VPN instance IPv6 address family view)",
+    "FuncDef": "The import-rib command imports public network BGP routes or BGP routes in a specified VPN instance into a BGP-VPN instance routing table.\nThe undo import-rib command cancels the configuration.\nBy default, a device does not import public network BGP routes or BGP routes in a VPN instance into a BGP-VPN instance routing table.",
+    "CLIs": [
+        "import-rib { public | vpn-instance <vpn-instance-name> } [ include-label-route ] [ valid-route ] [ route-policy <route-policy-name> | route-filter <route-filter-name> ]",
+        "undo import-rib { public | vpn-instance <vpn-instance-name> } [ include-label-route ] [ valid-route ] [ route-policy <route-policy-name> | route-filter <route-filter-name> ]"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "public",
+            "Info": "Indicates the public network instance.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "include-label-route",
+            "Info": "Includes labeled routes received from BGP peers as well as locally and remotely leaked VPN routes.\n-"
+        },
+        {
+            "Parameters": "valid-route",
+            "Info": "Imports all valid BGP routes.\n-"
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] import-rib public"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a device to import public network BGP routes into a BGP-VPN instance IPv6 routing table, run the import-rib public command in the BGP-VPN instance IPv6 address family view.\nTo configure a device to import BGP routes from a specified VPN instance into a BGP-VPN instance IPv6 routing table, run the import-rib vpn-instance command in the BGP-VPN instance IPv6 address family view.\nPrecautions\nIf the route-policy route-policy-name parameter is specified in the import-rib vpn-instance command, the if-match interface command configuration in the route-policy will not take effect.\nThe import-rib command configuration does not take effect for unlabeled routes that are leaked locally or remotely. Nor does this configuration take effect for the routes imported using the import-route command or network command."
+}

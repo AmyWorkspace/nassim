@@ -1,0 +1,33 @@
+{
+    "PageTitle": "vrrp vrid peer-ip",
+    "FuncDef": "The vrrp vrid peer-ip command enables unicast VRRP, creates a unicast VRRP backup group, and specifies a peer IP address and a source IP for this group.\nThe undo vrrp vrid command disables unicast VRRP and deletes a created unicast VRRP backup group.\nBy default, unicast VRRP is disabled and no unicast VRRP backup group is created on a device.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id> peer-ip <peer-ip-address> [ source-ip <source-ip-address> ]",
+        "undo vrrp vrid <virtual-router-id>"
+    ],
+    "ParentView": [
+        "Loopback interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-ip peer-ip-address",
+            "Info": "Specifies a peer IP address for a unicast VRRP backup group.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "source-ip source-ip-address",
+            "Info": "Specifies a source IP address for a unicast VRRP backup group.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vrid virtual-router-id",
+            "Info": "Specifies an ID for a unicast VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack 1",
+            "[~HUAWEI-LoopBack1] vrrp vrid 1 peer-ip 1.1.1.1 source-ip 1.1.1.2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCommon VRRP is multicast VRRP and only allows VRRP Advertisement packets to be multicast. Multicast VRRP Advertisement packets, however, can be forwarded within only one broadcast domain (for example, one VLAN or VSI). Therefore, common VRRP backup groups apply only to Layer 2 networks. This limitation means that common VRRP does not apply to devices on a Layer 3 network that need to negotiate their master/backup status using VRRP.\nYou can configure a unicast VRRP backup group to meet this requirement. Unicast VRRP is a Huawei proprietary protocol based on VRRPv2. After a unicast VRRP backup group is configured on two devices on a Layer 3 network, the master device in this group sends unicast VRRP Advertisement packets to the backup device through the Layer 3 network, implementing the master/backup status negotiation between the two devices.\nConfiguration Impact\nAfter a unicast VRRP backup group is configured, this group cannot be changed to a common VRRP backup group.\nPrecautions\nIt is recommended to configure the source IP address. Otherwise, the device will listen to all packets of the configured port, which may cause security risks.The peer IP address and source IP address cannot be the same."
+}

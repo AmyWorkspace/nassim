@@ -1,0 +1,48 @@
+{
+    "PageTitle": "radius-server(System view)",
+    "FuncDef": "The radius-server command sets the intervals at which the RADIUS server switches between the Up and Down states.\nThe undo radius-server command restores the default setting.\nBy default, the RADIUS server switches between the Up and Down states at default intervals.",
+    "CLIs": [
+        "radius-server { dead-count <count> [ fail-rate <fail-rate> ] | dead-time <time-value> [ recover-count invalid ] | dead-interval <interval> } *",
+        "undo radius-server { dead-count | dead-time | dead-interval | fail-rate | recover-count } *"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dead-count count",
+            "Info": "Specifies the number of the consecutive times that the RADIUS server does not respond.\nThe value is an integer ranging from 3 to 65535. The default value is 10."
+        },
+        {
+            "Parameters": "fail-rate count",
+            "Info": "Specifies the packet loss rate of timeout packets calculated by diving the number of timeout packets into the number of sent packets.\nThe value is an integer ranging from 1 to 100. The default value is 100."
+        },
+        {
+            "Parameters": "fail-rate fail-rate",
+            "Info": "Specifies the packet loss rate of timeout packets calculated by diving the number of timeout packets into the number of sent packets.\nThe value is an integer ranging from 1 to 100. The default value is 100."
+        },
+        {
+            "Parameters": "dead-time time-value",
+            "Info": "Specifies the recovery time of the RADIUS server.\nThe value is an integer ranging from 1 to 65535, in minutes. The default value is 3."
+        },
+        {
+            "Parameters": "recover-count",
+            "Info": "Indicates that the device sets the RADIUS server status to Up only after the Up timer expires, irrespective of whether the device receives packets from the RADIUS server after it goes Up. This parameter is not configured by default.\n-"
+        },
+        {
+            "Parameters": "dead-interval interval",
+            "Info": "Specifies the interval between the first ignored packet and the packet ignored for the specified time.\nThe value is an integer ranging from 0 to 60, in seconds. The default value is 5."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server dead-count 20 dead-interval 30 dead-time 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server dead-count 20 fail-rate 50 dead-time 10 recover-count invalid dead-interval 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the device sends RADIUS packets to the RADIUS server consecutively for specified times but receives no response, and the interval between the first ignored packet and the packet ignored for the specified time is longer than the value of dead-interval or the packet loss rate of timeout packets reaches the specified value, the device considers that the RADIUS server is abnormal and sets its status to Down.\nAfter the device sets the status of the RADIUS server to Down, the device waits a period specified by dead-time. Then, the device sets the status of the RADIUS server to Up (assumed Up) and tries to set up a connection with it. (The display radius-server configuration command displays RADIUS server status. If the ui-mode type1 command is configured, the RADIUS server status is displayed as UNKNOWN; otherwise, the status is displayed as UP. If the actual RADIUS server status is not Up, the system does not generate a RADIUS server Up log.) If the connection cannot be set up, the device re-sets the status of the RADIUS server to Down.\nIf recover-count invalid is configured, the device sets the RADIUS server status to Up only after the Up timer expires, irrespective of whether the device receives packets from the RADIUS server after it goes Up. This parameter is not configured by default.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

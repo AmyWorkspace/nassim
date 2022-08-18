@@ -1,0 +1,43 @@
+{
+    "PageTitle": "nat log tcp host",
+    "FuncDef": "The nat log tcp host command configures a NAT log host to receive user syslogs in TCP format.\nThe undo nat log tcp host command deletes a NAT log host that receives user syslogs in TCP format.\nBy default, no NAT log host is configured to receive user syslogs in TCP format.",
+    "CLIs": [
+        "nat log tcp host <host-ip-address> <host-port> source <source-ip-address> [ name <name> ] [ vpn-instance <vpn-instance-name> ]",
+        "undo nat log tcp host <host-ip-address> <host-port> source <source-ip-address> [ name <name> ] [ vpn-instance <vpn-instance-name> ]"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "host-port",
+            "Info": "Specifies the port number of a log host.\nThe host-port value is an integer ranging from 1 to 65535. The value cannot be a well-known port number, for example, 6653."
+        },
+        {
+            "Parameters": "source source-ip-address",
+            "Info": "Specifies a source IP address used by a NAT device to communicate with a NAT log host.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "name name",
+            "Info": "Specifies the name of a NAT log host.\nThe value is a string of 1 to 31 case-sensitive characters. It cannot contain spaces. If spaces are used, the string must start and end with double quotation marks (\")."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which a DS-Lite log host belongs.\nThe value is a string of 1 to 31 case-sensitive characters. It cannot contain spaces. The value cannot start with an underscore (_). If spaces are used, the string must start and end with double quotation marks (\")."
+        },
+        {
+            "Parameters": "host host-ip-address",
+            "Info": "Specifies the IP address of a log host.\nThe host-ip-address value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat log tcp start-port 2000",
+            "[*HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat log user enable syslog",
+            "[*HUAWEI-nat-instance-cpe1] nat log tcp host 10.10.10.10 2334 source 10.10.10.1 name host1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a NAT log host, run the nat log host command. After NAT translates a source private IP address to a source public IP address, the source that initiates a request to access a network cannot be located, which decreases network security. To improve network security, the log function can be configured. NAT logs record information about NAT users so that administrators can obtain addresses before NAT translation is performed to query and trace network activities and operations. This improves network availability and security.\nThe NAT log host is configured using the nat log host command to support logs in UDP mode. To reliably transmit user logs without loss, run the nat log tcp host command to configure a log host to support the TCP log format so that user syslogs are sent to the log host in TCP format.\nPrerequisites\nThe start and end port numbers have been set using the nat log tcp start-port command for the NAT device to send user syslog information in TCP format to a NAT log host.\nThe NAT user log function has been enabled using the nat log user enable syslog command.\nPrecautions\nThe nat log tcp start-port command is mutually exclusive with the nat log host command. A single user log transmission mode can be configured in a NAT instance.\nA single log host can be configured in a NAT instance to receive user syslogs in TCP format.\nThe IP address, port number, and VPN instance name uniquely identify a log host.\nThe commands are supported only by NAT444 instances, and user logs, not flow logs, can be sent using TCP.\nThe nat log tcp start-port command takes effect only on the VSUF-80/VSUF-160/VSUI-160-E."
+}

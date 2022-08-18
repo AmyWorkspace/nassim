@@ -1,0 +1,42 @@
+{
+    "PageTitle": "remote-backup interface peer (Service location view)",
+    "FuncDef": "The remote-backup interface peer command specifies an interface of an inter-chassis backup channel and a peer IP address and enables backup tunnel authentication.\nThe undo remote-backup interface peer command restores the default configuration.\nBy default, no interface of an inter-chassis backup channel or peer IP address is specified.",
+    "CLIs": [
+        "remote-backup interface { <interface-type> <interface-number> | <interface-name> } peer <ip-address> [ authentication-key <key-value> ]",
+        "undo remote-backup [ interface { <interface-type> <interface-number> | <interface-name> } peer <ip-address> [ authentication-key <key-value> ] ]"
+    ],
+    "ParentView": [
+        "Service location view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of an interface of an inter-chassis backup channel.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "peer ip-address",
+            "Info": "Specifies the peer IPv4 address of an inter-chassis backup channel.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "authentication-key key-value",
+            "Info": "Specifies an authentication key for an inter-chassis backup channel.\nThe value is a string of 8 to 16 case-sensitive characters in plaintext or a string of 48 case-sensitive characters in ciphertext. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of an interface of an inter-chassis backup channel.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] service-location 1",
+            "[*HUAWEI-service-location-1] remote-backup interface GigabitEthernet 1/0/1 peer 10.1.1.2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] service-location 2",
+            "[*HUAWEI-service-location-2] remote-backup interface GigabitEthernet 1/0/1 peer 10.2.2.2 authentication-key 1234Aa@#"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an inter-chassis hot backup scenario, backup packets are transmitted along an intermediate link between the master and backup devices, and a backup channel needs to be established between HA chassis. If the remote-backup interface peer command is not run to configure an inter-chassis backup channel, inter-chassis backup fails.\nNote the following issues about the HA dual-device inter-chassis backup channel:\nIf the two CGN devices in inter-chassis hot backup reside within the same equipment room, connect them using physical optical fibers or a cable.If a switch or an L2VPN resides between the two CGN devices, HA packets may be obtained and tampered with or used to initiate replay attacks by a third party, causing the devices to become abnormal. In this situation, configure the authentication-key key-value parameter to enable authentication for HA backup between the chassis to improve security.\n\nPrerequisites\nBasic NAT functions have been enabled on the master and backup devices.\nPrecautions\nThe remote-backup interface peer command can only be used in inter-chassis backup scenarios.The HA backup group (service-location) cannot be used in IPsec, and the interface of the remote backup tunnel can be set to an Eth-Trunk interface or its sub-interface, GE interface or its sub-interface, global-VE sub-interface, or VE sub-interface.When you configure authentication, configure the same authentication key on both ends, which prevents inter-chassis backup failures.\nThe remote-backup command takes effect only on VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S.\nYou are advised to use the MACsec function to improve the security of the remote backup tunnel.If an HA backup group (service-location) is bound to a VSUF-80/VSUF-160/VSUI-400A/VSUI-400/VSUI-400A-E/VSUI-400-E, note the following issues:If the vrrp trace command is run before authentication is enabled for the inter-chassis backup channel, setting the VRRP switchback delay time to 400s is recommended for the HA backup group.After authentication is enabled for the inter-chassis backup channel, setting the VRRP switchback delay time to 1200s is recommended.If an HA backup group (service-location) is bound to a VSUI-160-E, note the following issues:If the vrrp trace command is run before authentication is enabled for the inter-chassis backup channel, setting the VRRP switchback delay time to 800s is recommended for the HA backup group.After authentication is enabled for the inter-chassis backup channel, setting the VRRP switchback delay time to 2400s is recommended.remote-backup interface { interface-type interface-number | interface-name } peer ip-address authentication-key key-value is conflict with the command set master-key."
+}

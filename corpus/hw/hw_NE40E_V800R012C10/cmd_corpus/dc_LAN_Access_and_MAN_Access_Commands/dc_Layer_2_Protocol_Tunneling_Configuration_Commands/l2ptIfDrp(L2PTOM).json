@@ -1,0 +1,72 @@
+{
+    "PageTitle": "l2protocol-tunnel",
+    "FuncDef": "The l2protocol-tunnel reverse command enables reverse Layer 2 protocol tunneling on an interface.\nThe undo l2protocol-tunnel reverse command cancels reverse Layer 2 protocol tunneling on an interface.\nThe l2protocol-tunnel drop command enables an interface to discard Layer 2 PDUs.\nThe undo l2protocol-tunnel drop command disables an interface from discarding Layer 2 PDUs.\nBy default, reverse Layer 2 protocol tunneling is not enabled on interfaces, interfaces do not discard Layer 2 PDUs.",
+    "CLIs": [
+        "l2protocol-tunnel { all | { <protocol> } &<1-19> } { [ reverse ] drop }",
+        "undo l2protocol-tunnel { all | { <protocol> } &<1-19> } { [ reverse ] drop }"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "40GE interface view",
+        "GE Layer 2 sub-interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 Eth-Trunk interface view",
+        "Layer 2 GE interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "Layer 2 sub-interface view",
+        "Interface group view",
+        "GE interface view",
+        "Layer 2 50GE interface view",
+        "100GE interface view",
+        "Sub-interface view",
+        "50GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "400GE Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "all",
+            "Info": "Enables reverse tunneling for Layer 2 protocol data units (PDUs) of all protocols.\n-"
+        },
+        {
+            "Parameters": "protocol",
+            "Info": "Enables the Layer 2 PDUs of a specified protocol.\nThe protocol as follows:\nstplacpdtpgmrpgvrplldpvtpudldpagpcdpeoam3ahdldpmvrpmmrpe-lmisstp\nOne or up to all of the preceding Layer 2 protocols can be specified."
+        },
+        {
+            "Parameters": "reverse",
+            "Info": "Enables reverse tunneling for Layer 2 PDUs of a specified protocol.\n-"
+        },
+        {
+            "Parameters": "drop",
+            "Info": "Discards packets after the packets' specified multicast MAC address is replaced with the multicast destination MAC address in Layer 2 PDUs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2protocol-tunnel stp group-mac 0180-C200-0000",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] l2protocol-tunnel stp reverse"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] l2protocol-tunnel stp drop"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGenerally, the destination MAC addresses in Layer 2 PDUs of the same Layer 2 protocol are the same. For example, the destination MAC addresses of MSTP PDUs (called BPDUs) are all 0180-C200-0000. To allow a backbone network device to determine whether a Layer 2 PDU is from a user or backbone network, the l2protocol-tunnel group-mac command can be run on the user-side interface of the backbone device to replace the multicast destination MAC address of the Layer 2 PDU sent by the user network with a specified MAC address, so that devices between the user networks can complete Layer 2 spanning tree calculation.If you do not need PDUs of some Layer 2 protocols, such as MSTP and LACP, to traverse a backbone network, run the l2protocol-tunnel drop command to enable an interface to discard Layer 2 PDUs. This implementation allows the interface to discard received Layer 2 PDUs.\n\nPrerequisites\nThe multicast destination MAC addresses in Layer 2 PDUs have been replaced with a specified multicast MAC address using the l2protocol-tunnel group-mac command run on an edge device of a backbone network.\nConfiguration Impact\nIf the l2protocol-tunnel reverse command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nThe l2protocol-tunnel { all | protocol } reverse and l2protocol-tunnel { all | protocol } reverse vlan low-id commands cannot be run on the same interface."
+}

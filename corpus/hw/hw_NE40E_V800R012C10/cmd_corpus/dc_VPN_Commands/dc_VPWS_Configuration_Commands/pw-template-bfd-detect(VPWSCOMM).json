@@ -1,0 +1,40 @@
+{
+    "PageTitle": "bfd-detect (PW template view)",
+    "FuncDef": "The bfd-detect command configures dynamic BFD for VPWS PW and sets BFD detection parameters in a PW template.\nThe undo bfd-detect command deletes dynamic BFD for VPWS PW from a PW template.\nBy default, dynamic BFD for VPWS PW is not configured in PW templates.",
+    "CLIs": [
+        "bfd-detect [ detect-multiplier <multiplier> | min-rx-interval <rx-interval> | min-tx-interval <tx-interval> ] *",
+        "undo bfd-detect"
+    ],
+    "ParentView": [
+        "PW template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "detect-multiplier multiplier",
+            "Info": "Specifies a local dynamic BFD detection multiplier.\nThe value is an integer ranging from 3 to 50. The default value is 3."
+        },
+        {
+            "Parameters": "min-rx-interval rx-interval",
+            "Info": "Specifies the minimum interval at which dynamic BFD packets are received.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-tx-interval tx-interval",
+            "Info": "Specifies the minimum interval at which dynamic BFD packets are sent.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] pw-template pwt",
+            "[*HUAWEI-pw-template-pwt] control-word",
+            "[*HUAWEI-pw-template-pwt] bfd-detect min-rx-interval 100 min-tx-interval 100 detect-multiplier 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA large number of BFD sessions consume lots of system resources. To reduce the number of BFD sessions, run the bfd-detect command to configure dynamic BFD for VPWS PW in a PW template. If the VPWS PW to be detected goes Up, the system informs the BFD module of neighbor information and detection parameters so that the BFD module can establish a BFD session. After the BFD session is established, BFD starts VPWS PW detection. If the BFD session goes Down, the intervals at which packets are sent and received are automatically adjusted. The configured intervals resume after the BFD session goes Up again.\nPrerequisites\nBFD has been globally enabled using the bfd command.\nPrecautions\nStatic BFD for VPWS PW and dynamic BFD for VPWS PW are mutually exclusive. A VPWS PW can have either a static or dynamic BFD session configured."
+}

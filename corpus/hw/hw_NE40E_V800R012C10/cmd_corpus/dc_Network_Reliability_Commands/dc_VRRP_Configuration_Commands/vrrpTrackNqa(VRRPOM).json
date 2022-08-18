@@ -1,0 +1,64 @@
+{
+    "PageTitle": "vrrp vrid track nqa",
+    "FuncDef": "The vrrp vrid track nqa command enables a VRRP backup group to track an NQA test instance to implement a rapid master/backup VRRP switchover.\nThe undo vrrp vrid track nqa command disables a VRRP backup group from tracking an NQA test instance to implement a rapid master/backup VRRP switchover.\n\nBy default, a VRRP backup group does not track an NQA test instance.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id> track nqa <admin-name> <test-name> [ reduced <value-reduced> ]",
+        "undo vrrp vrid <virtual-router-id> track nqa [ <admin-name> <test-name> ]"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "admin-name",
+            "Info": "Specifies the administrator name for an NQA test instance.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "test-name",
+            "Info": "Specifies the name of an NQA test instance.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "vrid virtual-router-id",
+            "Info": "Specifies the ID of a VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "reduced value-reduced",
+            "Info": "Specifies a value by which the priority reduces when a tracked NQA test instance detects that the uplink is unreachable.\nThe value is an integer ranging from 1 to 255. The value 0 is reserved for special use. If a backup device receives a VRRP Advertisement packet carrying a priority of 0, the backup device immediately preempts the Master state. By default, the priority reduces by 10 when a tracked NQA test instance detects that the uplink is unreachable."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance user user1",
+            "[*HUAWEI-nqa-user-user1] test-type icmp",
+            "[*HUAWEI-nqa-user-user1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 virtual-ip 10.10.10.11",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 track nqa user user1 reduced 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nTo improve network reliability, VRRP can be configured on a device to track the following objects:\n\nInterface.\nEFM session.\nBFD session.\n\nFailure of a tracked object can trigger a rapid master/backup VRRP switchover to ensure service continuity. If a cross-device uplink fails, VRRP is unable to detect the fault. As a result, user traffic is dropped. To resolve the preceding issue, you can associate VRRP with an NQA test instance.\nAfter the association is complete, the NQA test instance periodically sends ICMP packets to check the reachability of destination IP addresses. If the NQA test instance detects that the destination IP address is unreachable, it notifies VRRP of the fault. VRRP then reduces the priority by a specified value, implementing a rapid master/backup VRRP switchover.\n\nPrerequisites\n\n\nA VRRP backup group has been created using the vrrp vrid command.\nAn NQA test instance has been created using the nqa test-instance command.\nRun the test-type specifies the test type for an NQA test instance.\n\n\nPrecautions\n\nYou cannot enable an IP address owner or a service VRRP group to track an NQA test instance."
+}

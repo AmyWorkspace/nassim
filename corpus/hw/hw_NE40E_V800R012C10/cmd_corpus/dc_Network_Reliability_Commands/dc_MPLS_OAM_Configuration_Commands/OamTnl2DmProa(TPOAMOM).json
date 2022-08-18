@@ -1,0 +1,47 @@
+{
+    "PageTitle": "mpls oam bidirectional-tunnel delay-measure two-way proactive",
+    "FuncDef": "The mpls oam bidirectional-tunnel delay-measure two-way proactive command enables proactive two-way frame delay measurement (DM) for a bidirectional LSP.\nThe undo mpls oam bidirectional-tunnel delay-measure two-way proactive command disables proactive two-way frame DM for a bidirectional LSP.\nBy default, proactive two-way frame DM is disabled for a bidirectional LSP.",
+    "CLIs": [
+        "mpls oam bidirectional-tunnel delay-measure two-way proactive [ exp <expvalue> | packet-size <packSizeValue> [ padding-value { 0 | 1 } ] ] * { <tunnelType> <tunnelNum> | <tunnelName> }",
+        "undo mpls oam bidirectional-tunnel delay-measure two-way proactive { <tunnelType> <tunnelNum> | <tunnelName> }"
+    ],
+    "ParentView": [
+        "MPLS-OAM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "exp expvalue",
+            "Info": "Specifies a priority for DMMs.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7."
+        },
+        {
+            "Parameters": "packet-size packSizeValue",
+            "Info": "Specifies the size of a sent probe packet.\nThe value is an integer ranging from 64 to 1500, in bits."
+        },
+        {
+            "Parameters": "padding-value",
+            "Info": "Indicates the padding value in a packet.\nThe value is 0 or 1. The default value is 0.\nIf the value is set to 0, each bit in a packet is padded with 0.If the value is set to 1, each bit in a packet is padded with 1."
+        },
+        {
+            "Parameters": "tunnelType tunnelNum",
+            "Info": "Specifies the tunnel type and number.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] mpls te signal-protocol cr-static",
+            "[*HUAWEI-Tunnel10] mpls te bidirectional",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] mpls-oam",
+            "[*HUAWEI-mpls-oam] mpls oam bidirectional-tunnel Tunnel 10 type cv auto-protocol overtime 30",
+            "[*HUAWEI-mpls-oam] mpls oam bidirectional-tunnel delay-measure two-way proactive Tunnel 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDM is an MPLS-TP performance monitoring function.\nProactive two-way frame DM is performed by a local MEP to send a DMM to its RMEP and then receive a delay measurement reply (DMR) from the RMEP. After two-way frame DM is configured, a MEP sends a DMM with the TxTimeStampf value (the time when the DMM was sent) at specified intervals. After receiving the DMM, the RMEP replies with a DMR. This reply carries RxTimeStampf (the time when the DMM was received) and TxTimeStampb (the time when the DMR was sent). The value in every field of the DMM is copied to the DMR, with the exception that the source and destination MAC addresses are interchanged. Upon receipt of the DMR, the MEP calculates the two-way frame delay using the following equation:\nFrame delay = (RxTimeb - TxTimeStampf) - (TxTimeStampb - RxTimeStampf)\nPrecautions\nThe system can display a maximum of 60 proactive two-way frame DM records. If the number of proactive two-way frame DM records exceeds 60, the earlier records are overwritten."
+}

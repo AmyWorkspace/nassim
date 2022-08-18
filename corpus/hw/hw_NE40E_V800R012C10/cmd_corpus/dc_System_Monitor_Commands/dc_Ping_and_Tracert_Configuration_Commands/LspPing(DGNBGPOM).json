@@ -1,0 +1,231 @@
+{
+    "PageTitle": "ping lsp",
+    "FuncDef": "The ping lsp command tests whether the LSP connectivity and LSP forwarding are normal.",
+    "CLIs": [
+        "ping lsp [ -a <source-ip> | -c <count> | -exp <exp-value> | -h <ttl-value> | -m <interval> | -r <reply-mode> | -s <packet-size> | -t <time-out> | -v | -g ] * bgp <destination-iphost> <mask-length> [ vpn-instance <vpn-name> ] [ <ip-address> ] [ nexthop <nexthop-address> ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ip",
+            "Info": "Specifies the source address of an MPLS Echo Request packet to be sent.\nIf no source address is specified, the MPLS LSR-ID through which an MPLS Echo Request packet is sent will be used.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-c count",
+            "Info": "Specifies the number of times an MPLS Echo Request packet will be sent.\nIn the case of a poor network quality, you can set this parameter to a comparatively large value to test the network quality based on the packet loss percentage.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies an EXP value of the MPLS Echo Request packet to be sent.\nThe value is an integer ranging from 0 to 7. The default value is 0."
+        },
+        {
+            "Parameters": "-h ttl-value",
+            "Info": "Specifies a TTL value.\nIf the TTL value in a packet is reduced to 0 during forwarding, the router that receives the packet sends a timeout packet to the source, indicating that the destination is unreachable.\nThe value is an integer ranging from 1 to 255. The default value is 255."
+        },
+        {
+            "Parameters": "-m interval",
+            "Info": "Specifies an interval at which MPLS Echo Request packets are sent.\nAfter the ping lsp command is run, the device sends an MPLS Echo Request packet and by default waits for 2000 ms before sending the next MPLS Echo Request packet if no reply is received. You can use this parameter to set the packet sending interval as required. Setting this parameter to less than 2000 ms is not recommended on an unstable network.\nThe value is an integer that ranges from 1 to 10000, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies a mode in which the peer sends MPLS Echo Reply packets in response.\nThe value is an integer ranging from 1 to 4. The default value is 2.\n1: no reply\n2: reply with an IPv4 or IPv6 UDP packet\n3: reply with an IPv4 or IPv6 UDP packet carrying the router-alert option\n4: reply through the control channel of the application plane"
+        },
+        {
+            "Parameters": "-s packet-size",
+            "Info": "Specifies a packet payload length, excluding the IP header and UDP header.\nThe value is an integer ranging from 65 to 9600, in bytes. The default value is 100."
+        },
+        {
+            "Parameters": "-t time-out",
+            "Info": "Specifies a timeout period for waiting for an MPLS Echo Reply packet after an MPLS Echo Request packet is sent.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-v",
+            "Info": "Specifies the verbose information.\n-"
+        },
+        {
+            "Parameters": "-g",
+            "Info": "Specifies the fragment flag in packets.\n-"
+        },
+        {
+            "Parameters": "bgp destination-iphost",
+            "Info": "Specifies the BGP LSP's destination.\nThe value is a string of 1 to 255 characters."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the IPv4 LSP's destination mask.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "vpn-instance vpn-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IPv4 LSP's destination address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "nexthop nexthop-address",
+            "Info": "Specifies the next hop address.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping lsp -c 10 -s 200 ip 1.1.1.1 32",
+            "LSP PING FEC: IPV4 PREFIX 1.1.1.1/32 : 200  data bytes, press CTRL_C to break",
+            "    Reply from 1.1.1.1: bytes=200 Sequence=1 time = 11 ms",
+            "    Reply from 1.1.1.1: bytes=200 Sequence=2 time = 6 ms",
+            "    Reply from 1.1.1.1: bytes=200 Sequence=3 time = 6 ms",
+            "    Reply from 1.1.1.1: bytes=200 Sequence=4 time = 6 ms",
+            "    Reply from 1.1.1.1: bytes=200 Sequence=5 time = 12 ms",
+            "    Reply from 1.1.1.1: bytes=200 Sequence=6 time = 9 ms",
+            "    Reply from 1.1.1.1: bytes=200 Sequence=7 time = 12 ms",
+            "    Reply from 1.1.1.1: bytes=200 Sequence=8 time = 9 ms",
+            "    Reply from 1.1.1.1: bytes=200 Sequence=9 time = 12 ms",
+            "    Reply from 1.1.1.1: bytes=200 Sequence=10 time = 12 ms",
+            "",
+            "  --- FEC: IPV4 PREFIX 1.1.1.1/32 ping statistics ---",
+            "    10 packet(s) transmitted",
+            "    10 packet(s) received",
+            "    0.00% packet loss    round-trip min/avg/max = 6/10/12 ms"
+        ],
+        [
+            "<HUAWEI> ping lsp te Tunnel 1",
+            "  LSP PING FEC: TE TUNNEL IPV4 SESSION QUERY Tunnel1 : 100  data bytes, press CTRL_C to break",
+            "    Reply from 1.1.1.1: bytes=100 Sequence=1 time = 4 ms",
+            "    Reply from 1.1.1.1: bytes=100 Sequence=2 time = 2 ms",
+            "    Reply from 1.1.1.1: bytes=100 Sequence=3 time = 2 ms",
+            "    Reply from 1.1.1.1: bytes=100 Sequence=4 time = 2 ms",
+            "    Reply from 1.1.1.1: bytes=100 Sequence=5 time = 2 ms",
+            "",
+            "  --- FEC: RSVP IPV4 SESSION QUERY Tunnel1 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss    round-trip min/avg/max = 2/2/4 ms"
+        ],
+        [
+            "<HUAWEI> ping lsp -c 3 segment-routing te Tunnel10",
+            "  LSP PING FEC: TE TUNNEL IPV4 SESSION QUERY Tunnel10 : 100 data bytes, press CTRL_C to break",
+            "    Reply from 10.1.1.2: bytes=100 Sequence=1 time=11 ms",
+            "    Reply from 10.1.1.2: bytes=100 Sequence=2 time=9 ms",
+            "    Reply from 10.1.1.2: bytes=100 Sequence=3 time=6 ms",
+            "",
+            "  --- FEC: TE TUNNEL IPV4 SESSION QUERY Tunnel10 ping statistics ---",
+            "    3 packet(s) transmitted",
+            "    3 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 6/8/11 ms"
+        ],
+        [
+            "<HUAWEI> ping lsp -c 3 segment-routing auto-tunnel Tunnel10 version draft4",
+            "  LSP PING FEC: AUTO TE TUNNEL IPV4 SESSION QUERY Tunnel10 : 100 data bytes, press CTRL_C to break",
+            "    Reply from 10.1.1.2: bytes=100 Sequence=1 time=11 ms",
+            "    Reply from 10.1.1.2: bytes=100 Sequence=2 time=9 ms",
+            "    Reply from 10.1.1.2: bytes=100 Sequence=3 time=6 ms",
+            "",
+            "  --- FEC: AUTO TE TUNNEL IPV4 SESSION QUERY Tunnel10 ping statistics ---",
+            "    3 packet(s) transmitted",
+            "    3 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 6/8/11 ms"
+        ],
+        [
+            "<HUAWEI> ping lsp -c 3 segment-routing te ipv6 Tunnel 1 nil-fec",
+            "LSP PING FEC: SEGMENT ROUTING TE IPV6 SESSION QUERY Tunnel1 : 100  data bytes, press CTRL_C to break",
+            "  Reply from 2001:db8:1::1 ",
+            "  bytes=100 Sequence=1 time=13 ms",
+            "  Reply from 2001:db8:1::1 ",
+            "  bytes=100 Sequence=2 time=2 ms",
+            "  Reply from 2001:db8:1::1 ",
+            "  bytes=100 Sequence=3 time=3 ms",
+            "",
+            "--- FEC: SEGMENT ROUTING TE IPV6 SESSION QUERY Tunnel1 ping statistics ---",
+            "  3 packet(s) transmitted",
+            "  3 packet(s) received",
+            "  0.00% packet loss",
+            "  round-trip min/avg/max = 2/6/13 ms"
+        ],
+        [
+            "<HUAWEI> ping lsp segment-routing ip 3.3.3.9 32 version draft2",
+            "LSP PING FEC: SEGMENT ROUTING IPV4 PREFIX 3.3.3.9/32 : 100  data bytes, press CTRL_C to break",
+            "  Reply from 3.3.3.9: bytes=100 Sequence=1 time=13 ms",
+            "  Reply from 3.3.3.9: bytes=100 Sequence=2 time=9 ms",
+            "  Reply from 3.3.3.9: bytes=100 Sequence=3 time=2 ms",
+            "  Reply from 3.3.3.9: bytes=100 Sequence=4 time=3 ms",
+            "  Reply from 3.3.3.9: bytes=100 Sequence=5 time=6 ms",
+            "--- FEC: SEGMENT ROUTING IPV4 PREFIX 3.3.3.9/32 ping statistics ---",
+            "  5 packet(s) transmitted",
+            "  5 packet(s) received",
+            "  0.00% packet loss",
+            "  round-trip min/avg/max = 2/6/13 ms"
+        ],
+        [
+            "<HUAWEI> ping lsp -s 2000 -g ip 4.4.4.9 32",
+            "  LSP PING FEC: IPV4 PREFIX 4.4.4.9/32 : 2000  data bytes, press CTRL_C to break",
+            "    Reply from 4.4.4.9: bytes=2000 Sequence=1 time = 11 ms",
+            "    Reply from 4.4.4.9: bytes=2000 Sequence=2 time = 6 ms",
+            "    Reply from 4.4.4.9: bytes=2000 Sequence=3 time = 6 ms",
+            "    Reply from 4.4.4.9: bytes=2000 Sequence=4 time = 6 ms",
+            "    Reply from 4.4.4.9: bytes=2000 Sequence=5 time = 12 ms",
+            "",
+            "  --- FEC: IPV4 PREFIX 4.4.4.9/32 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss    round-trip min/avg/max = 6/10/12 ms"
+        ],
+        [
+            "<HUAWEI> ping lsp general labels 200001 -i GigabitEthernet 3/0/5 nexthop 10.1.1.2",
+            "  LSP PING FEC: Nil FEC : 100  data bytes, press CTRL_C to break",
+            "    Reply from 3.3.3.9: bytes=100 Sequence=1 time=13 ms",
+            "    Reply from 3.3.3.9: bytes=100 Sequence=2 time=9 ms",
+            "    Reply from 3.3.3.9: bytes=100 Sequence=3 time=2 ms",
+            "    Reply from 3.3.3.9: bytes=100 Sequence=4 time=3 ms",
+            "    Reply from 3.3.3.9: bytes=100 Sequence=5 time=6 ms",
+            "  --- FEC: Nil FEC ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 2/6/13 ms"
+        ],
+        [
+            "<HUAWEI> ping lsp sr-te policy policy-name test",
+            "LSP PING FEC:  Nil FEC  : 100 data bytes, press CTRL_C to break",
+            "sr-te policy segment list:",
+            "Preference : 300; Path Type: main; Protocol-Origin : local; Originator: 0, 0.0.0.0; Discriminator: 300; Segment-List ID : 1;  Xcindex : 1",
+            "Reply from 3.3.3.9: bytes=100 Sequence=1 time=13 ms     ",
+            "Reply from 3.3.3.9: bytes=100 Sequence=2 time=9 ms    ",
+            "Reply from 3.3.3.9: bytes=100 Sequence=3 time=2 ms     ",
+            "Reply from 3.3.3.9: bytes=100 Sequence=4 time=3 ms     ",
+            "Reply from 3.3.3.9: bytes=100 Sequence=5 time=6 ms   ",
+            "--- FEC: Nil FEC ping statistics ---",
+            "5 packet(s) transmitted     ",
+            "5 packet(s) received     ",
+            "0.00% packet loss     ",
+            "round-trip min/avg/max = 2/6/13 ms",
+            "sr-te policy segment list:",
+            "Preference : 400; Path Type: backup; Protocol-Origin : local; Originator: 0, 0.0.0.0; Discriminator: 400; Segment-List ID : 2;  Xcindex : 2     ",
+            "Reply from 3.3.3.9: bytes=100 Sequence=1 time=13 ms     ",
+            "Reply from 3.3.3.9: bytes=100 Sequence=2 time=9 ms     ",
+            "Reply from 3.3.3.9: bytes=100 Sequence=3 time=2 ms     ",
+            "Reply from 3.3.3.9: bytes=100 Sequence=4 time=3 ms     ",
+            "Reply from 3.3.3.9: bytes=100 Sequence=5 time=6 ms   ",
+            "--- FEC: Nil FEC ping statistics --- ",
+            "5 packet(s) transmitted     ",
+            "5 packet(s) received     0.00% packet loss"
+        ],
+        [
+            "<HUAWEI> ping lsp -v ip 3.3.3.3 32",
+            "   LSP PING FEC: IPV4 PREFIX 3.3.3.3/32 : 100  data bytes, press CTRL_C to break",
+            "     Reply from 3.3.3.3: bytes=100 Sequence=1 time = 4 ms Return Code 3, Subcode 1",
+            "     Reply from 3.3.3.3: bytes=100 Sequence=2 time = 4 ms Return Code 3, Subcode 1",
+            "     Reply from 3.3.3.3: bytes=100 Sequence=3 time = 4 ms Return Code 3, Subcode 1",
+            "     Reply from 3.3.3.3: bytes=100 Sequence=4 time = 4 ms Return Code 3, Subcode 1",
+            "     Reply from 3.3.3.3: bytes=100 Sequence=5 time = 5 ms Return Code 3, Subcode 1",
+            "   --- FEC: IPV4 PREFIX 3.3.3.3/32/ ping statistics ---",
+            "     5 packet(s) transmitted",
+            "     5 packet(s) received",
+            "     0.00% packet loss     round-trip min/avg/max = 4/4/5 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe ping lsp command can be used to check the connectivity of LSPs on an MPLS network, and the tracert lsp command can be used to locate the faulty node.\nBGP LSP: You can run the ping lsp bgp destination-iphost mask-length [ ip-address ] [ nexthop nexthop-address ] command on the ingress to initiate a ping test to the egress to check the connectivity of a BGP LSP carrying IPv4 packets.\nPrerequisites\nBefore using the ping lsp command, ensure that the MPLS module works properly.\nConfiguration Impact\nTo prevent the egress from forwarding a received MPLS Echo Request packet to other nodes, you can set the destination address in the IP header of the packet to 127.0.0.1/8 (the local loopback address) and the TTL value to 1."
+}

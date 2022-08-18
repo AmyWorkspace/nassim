@@ -1,0 +1,37 @@
+{
+    "PageTitle": "nat64 outbound (NAT64 instance view)",
+    "FuncDef": "The nat64 outbound command configures a NAT64 translation policy in a NAT64 address pool to match ACL rules or not to match ACL rules.\nThe undo nat64 outbound command cancels the NAT64 translation policy.\nBy default, no NAT64 translation policy is configured.",
+    "CLIs": [
+        "nat64 outbound { any | <acl-number> | acl-name <acl-name> } address-group <address-group-name>",
+        "undo nat64 outbound { any | <acl-number> | acl-name <acl-name> } [ address-group <address-group-name> ]"
+    ],
+    "ParentView": [
+        "NAT64 instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "any",
+            "Info": "Indicates that user traffic distributed to a service board does not need to match any ACL rule. NAT64 is performed for user traffic using addresses from a NAT64 address pool.\n-"
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic or an advanced ACL.\nThe value is an integer. Basic ACLs are numbered from 2000 to 2999, and advanced ACLs are numbered from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of an ACL.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "address-group address-group-name",
+            "Info": "Specifies the name of a NAT64 public IP address pool.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat64 instance nat1 id 1",
+            "[*HUAWEI-nat64-instance-nat1] nat64 outbound 2001 address-group add-group1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a NAT64 translation policy in a NAT64 address pool to match ACL rules or not to match ACL rules, run the\nnat64 outbound command. If packets match a specified ACL, NAT64 translates addresses of the packets in to other addresses in a matching NAT64 address pool. NAT64 address translation is performed in either ACL mach or mismatch mode.\nACL mach mode: If packets match an ACL rule and the action specified in an ACL rule is permit, IP addresses in packets are translated by NAT64 to addresses in a NAT64 address pool.ACL mismatch: If this mode is used, IP addresses in packets matching the translation policy are translated by NAT64 to addresses in a NAT64 address pool.\n\nPrerequisites\nA NAT64 address pool has been configured. If the ACL match mode is used, an ACL rule must have been configured.\nPrecautions\nOutbound ACLv6 rules configured in an NAT64 instance do not support fragmentation, VPN instances, ICMPv6 type, or source pool functions.Each ACL rule in a NAT64 instance can be bound only to a single NAT64 address pool.NAT is not performed for user packets that match a deny ACL rule or do not match a permit ACL rule. In this case, packets are discarded, causing services to be affected."
+}

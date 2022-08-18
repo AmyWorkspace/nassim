@@ -1,0 +1,38 @@
+{
+    "PageTitle": "track route-monitor-group",
+    "FuncDef": "The track route-monitor-group command enables the network-side device to track the status of a route group and configures a link failure ratio threshold for triggering a master/slave switchover.\nThe undo track route-monitor-group command disables the network-side device from tracking the status of a route group and deletes the configured link failure ratio threshold for triggering a master/slave switchover.\nBy default, the network-side device is disabled from tracking the status of a route group and deletes the configured link failure ratio threshold for triggering a master/slave switchover.",
+    "CLIs": [
+        "track route-monitor-group <group-name> switchover failure-ratio <percent>",
+        "undo track route-monitor-group <group-name> [ switchover failure-ratio <percent> ]"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a route group.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "switchover",
+            "Info": "Indicates a master/slave switchover.\n-"
+        },
+        {
+            "Parameters": "failure-ratio",
+            "Info": "Specifies an uplink bandwidth fault threshold.\n-"
+        },
+        {
+            "Parameters": "failure-ratio percent",
+            "Info": "Specifies an uplink bandwidth fault threshold percentage.\nThe value is an integer ranging from 1 to 100."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service rbs",
+            "[*HUAWEI-rm-backup-service-rbs] commit",
+            "[~HUAWEI-rm-backup-service-rbs] track route-monitor-group RG1 failure-ratio 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo enable the network-side device to track the status of a route group, run the track route-monitor-group switchover failure-ratio command. When the link on the network-side device fails, terminals cannot access the network. If the device is deployed on the network-side device, tracking interfaces cannot implement end-to-end detection between the NE40E and core router. If BFD is used, devices must support BFD. Tracking IGP routes is easy to implement. When hot backup is deployed, a device must monitor the status of the IGP route on the network-side device. If the IGP route fails, a master/slave switchover is triggered on the access side, ensuring that terminals can properly access the network.\nGenerally, multiple links are deployed on the network-side device. If some links fail, downstream traffic may be congested. In this situation, a master/slave switchover must also be promptly triggered on the access side.\nConfiguration Impact\nAfter you run the track route-monitor-group switchover failure-ratio command in the remote backup service view in which the track interface command has been run, the device automatically deletes the track monitor-group and switchover uplink configurations and then controls service switchover based on the track route-monitor-group switchover failure-ratio configuration.After you run the track route-monitor-group switchover failure-ratio command in the remote backup service view, you can no longer run the track interface or switchover uplink command.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nYou can configure a remote backup service view to simultaneously track two interface groups and two route groups. If an interface or route group meets switchover conditions, a switchover is triggered. A switchback can be triggered only when all interface or route groups recover and meet switchback conditions."
+}

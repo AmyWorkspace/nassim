@@ -1,0 +1,81 @@
+{
+    "PageTitle": "qos-profile pe-vid",
+    "FuncDef": "The qos-profile pe-vid command applies the QoS template to packets with double tags on sub-interfaces.\nThe undo qos-profile pe-vid command removes the QoS template that is applied to packets with double tags on sub-interfaces.\nBy default, no QoS profile is applied to a sub-interface for QinQ VLAN tag termination.",
+    "CLIs": [
+        "qos-profile <qos-profile-name> { inbound | outbound } pe-vid <pe-vlan-id> ce-vid { <ce-vlan-id-begin> [ to <ce-vlan-id-end> ] } [ identifier { pe-vid | ce-vid | pe-ce-vid | none } ] [ group <group-name> ]",
+        "qos-profile <qos-profile-name> { inbound | outbound } pe-vid <pe-vlan-id> ce-vid { <ce-vlan-id-begin> [ to <ce-vlan-id-end> ] } [ identifier { pe-vid | ce-vid | pe-ce-vid | none } ] linkage-bandwidth",
+        "undo qos-profile { inbound | outbound } pe-vid <pe-vlan-id> ce-vid { <ce-vlan-id-begin> [ to <ce-vlan-id-end> ] }"
+    ],
+    "ParentView": [
+        "GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "qos-profile-name",
+            "Info": "Specifies the name of a QoS template.\nThe value is a string of 1 to 63 characters."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies the inbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the outbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "pe-vid",
+            "Info": "Indicates that packets enter different queues for scheduling according to the VLAND ID of the PE. Packets with the same PE-VID use the bandwidth of one SQ alone.\n-"
+        },
+        {
+            "Parameters": "pe-vid pe-vlan-id",
+            "Info": "Specifies the PE VLAN ID of packets.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid",
+            "Info": "Indicates that packets enter different queues for scheduling according to the VLAND ID of the CE. Packets with the same CE-VID use the bandwidth of one SQ alone.\n-"
+        },
+        {
+            "Parameters": "ce-vlan-id-begin",
+            "Info": "Specifies the start CE VLAN ID of a packet (the value of the inner tag) of a packet.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to ce-vlan-id-end",
+            "Info": "Specifies the end CE VLAN ID of a packet (the value of the inner tag).\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "identifier",
+            "Info": "Specifies which queue packets should enter.\nWhen the identifier is not specified, all users share the bandwidth of one SQ.\n-"
+        },
+        {
+            "Parameters": "pe-ce-vid",
+            "Info": "Indicates that packets enter different queues for scheduling according to the PE-CE VLAND ID. Packets with the same PE-CE VLANID use the bandwidth of one SQ alone.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "Indicates that the allocation mode is not specified. Indicates that users share the bandwidth of one SQ.\n-"
+        },
+        {
+            "Parameters": "group group-name",
+            "Info": "Specifies the name of a shared group of QoS template instances.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "linkage-bandwidth",
+            "Info": "Enables bandwidth association. By default, bandwidth association is disabled.\nIf bandwidth association is disabled, the percentage base value of the CIR and PIR in the user-queue command is the physical bandwidth of the interface.If bandwidth association is enabled, the percentage base value of the CIR and PIR in the user-queue command is the interface bandwidth configured using the bandwidth command.\nThis parameter is mutually exclusive with the group parameter.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile p1",
+            "[*HUAWEI-qos-profile-p1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] encapsulation qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-group 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1-vlangroup1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/0.1-vlangroup1] quit",
+            "[~HUAWEI-GigabitEthernet1/0/0.1] qinq termination pe-vid 1000 ce-vid 100 vlan-group 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] qos-profile p1 inbound pe-vid 1000 ce-vid 100 identifier pe-vid"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo achieve uniform scheduling of incoming traffic flows on multiple interfaces, you need to implement traffic management by user levels. Profile-based HQoS, by comparison, allows traffic on multiple interfaces to enter an SQ for scheduling. It implements uniform scheduling of traffic on multiple interfaces by defining a QoS profile and applying the profile to different interfaces. In addition, an identity attribute allows traffic with different P-VLAN and C-VLAN tags on an interface to share an SQ bandwidth or individually use an SQ bandwidth.\nWhen QinQ termination is configured on an Ethernet-interface, the qos-profile pe-vid command can be used to apply a QoS profile to all double-tagged packets.\nPrerequisites\nBefore applying the qos-profile pe-vid command, make sure that packets are already configured with PE VLAN IDs and CE VLAN IDs.\nPrecautions\nIf an interface is configured with user-queue or Layer 2 suppression, you can apply a QoS profile to the interface only after you delete these configurations.\nIf the direction configured in the QoS template is different from the direction to which the QoS template is applied on the interface, the template does not take effect. If directionless traffic control is configured in the QoS template, the QoS template takes effect on traffic in the direction that is specified when the QoS template is applied to the interface.\nWhen the identifier is not specified, all users share the bandwidth of one SQ.\nAn outbound QoS profile cannot be configured based on VLANs on a sub-interface for QinQ VLAN tag termination that works in symmetric mode."
+}

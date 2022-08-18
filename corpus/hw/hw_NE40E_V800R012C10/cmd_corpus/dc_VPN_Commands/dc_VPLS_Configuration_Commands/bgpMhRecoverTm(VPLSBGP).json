@@ -1,0 +1,33 @@
+{
+    "PageTitle": "recover delay-time",
+    "FuncDef": "The recover delay-time command configures a delay after which an AC interface becomes active upon a device restart.\nThe undo recover delay-time command restores the default delay after which an AC interface becomes active upon a device restart.\nBy default, AC interfaces become active after a delay of 180s upon a device restart.",
+    "CLIs": [
+        "recover delay-time <delay-time>",
+        "undo recover delay-time [ delay-time ]"
+    ],
+    "ParentView": [
+        "VSI-BGP-SITE view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay-time",
+            "Info": "Specifies a delay after which an AC interface becomes active.\nThe value is an integer ranging from 0 to 3600, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal bgp multi-homing",
+            "[*HUAWEI-vsi-vsi1-bgp] route-distinguisher 192.168.1.1:1",
+            "[*HUAWEI-vsi-vsi1-bgp] site name company1",
+            "[*HUAWEI-vsi-vsi1-bgp-site-company1] site-id 20",
+            "[*HUAWEI-vsi-vsi1-bgp-site-company1] recover delay-time 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn VPLS multi-homing scenarios, if an AC interface becomes active immediately after the PE is restarted, the following problems may occur:\nThe local PE immediately becomes the master device. Because the remote PE becomes the backup device only after receiving BGP Update messages carrying the local PE status from the local PE, both PEs become the master devices, forming a loop between the multi-homed CE and the PEs.The local PE immediately becomes the master device, but the remote PE cannot converge routes in time, causing traffic loss.\nTo prevent these problems, run the recover delay-time command to configure a delay after which an AC interface becomes active. Before delay-time elapses, the AC interface remains in the blocked state. After delay-time elapses, the AC interface is unblocked and becomes active. This prevents dual master devices and traffic loss.\n\nPrerequisites\nA multi-homing site ID has been configured using the site-id site-id command."
+}

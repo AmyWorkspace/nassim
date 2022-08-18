@@ -1,0 +1,39 @@
+{
+    "PageTitle": "stp edged-port (Ethernet interface view)",
+    "FuncDef": "The stp edged-port command sets a port as an edge or a non-edge port.\nThe undo stp edged-port command restores the default setting.\nBy default, all ports are non-edge ports.",
+    "CLIs": [
+        "stp edged-port { enable | disable }",
+        "undo stp edged-port"
+    ],
+    "ParentView": [
+        "50GE interface view",
+        "40GE interface view",
+        "50|100GE interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "100GE interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "enable",
+            "Info": "Sets the current port as an edge port.\n-"
+        },
+        {
+            "Parameters": "disable",
+            "Info": "Sets the current port as a non-edge port.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] portswitch",
+            "[*HUAWEI-Eth-Trunk1] stp edged-port enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a Layer 2 network running STP, if a port connected to a terminal is configured as an edge port using the stp edged-port enable command, the port will not participate in spanning tree calculation. This speeds up network convergence and improves network stability.\nRunning the stp edged-port enable command in the interface view configures only the current port as a bridge protocol data unit (BPDU)-filter port. If multiple BPDU-filter ports are required on a device, run the stp edged-port default command in the system view to configure all the ports as BPDU-filter ports, and then run the stp edged-port disable command in the view of the interfaces that need to participate in spanning tree calculation.\nIf a port has been configured as a non-BPDU filter port using the stp edged-port disable command, it remains a non-BPDU filter port, even if the stp edged-port default command is run.\nConfiguration Impact\nAfter the stp edged-port enable or stp edged-port disable command is run to set the current port to an edge or a non-edge port, the edge-port automatic detection function does not take effect. After the undo stp edged-port command is used to restore the default setting, the edge-port automatic detection function takes effect.\nPrecautions\nAn edge port is automatically changed to a non-edge port after receiving a BPDU, and the spanning tree is recalculated.A non-edge port configured using the undo stp edged-port command will become an edge port if the stp edged-port default command is run in the system view. However, a non-edge port configured using the stp edged-port disable command remains a non-edge port, even if the stp edged-port default command is run in the system view.To prevent an edge port from becoming a non-edge port after the edge port receives bogus BPDUs, run the stp bpdu-protection command in the system view to configure BPDU protection. After BPDU protection is configured, if an edge port receives a BPDU, the device where the edge port resides shuts down the edge port but retains the edge port attribute. Meanwhile, the device notifies the NMS of the shutdown event."
+}

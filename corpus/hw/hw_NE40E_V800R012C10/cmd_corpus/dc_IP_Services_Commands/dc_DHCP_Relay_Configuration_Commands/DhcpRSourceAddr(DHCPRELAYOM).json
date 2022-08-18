@@ -1,0 +1,85 @@
+{
+    "PageTitle": "dhcp relay source-ip-address",
+    "FuncDef": "The dhcp relay source-ip-address command configures a DHCP relay source IP address.\nThe undo dhcp relay source-ip-address command restores the default DHCP relay source IP address.\nBy default, a DHCP relay interface uses its primary IP address as the source IP address.",
+    "CLIs": [
+        "dhcp relay source-ip-address <ip-address> [ dhcp-option { <code_60> [ <option-text> ] | <code_1to59> | <code_61to254> } ]",
+        "undo dhcp relay source-ip-address { all | <ip-address> [ dhcp-option { <code_60> [ <option-text> ] | <code_1to59> | <code_61to254> } | all ] }"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Global MP-group interface view",
+        "Remote-AP interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "Trunk serial interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Vbridge interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies a DHCP relay source IP address. A DHCP relay interface can have a maximum of 20 source IP addresses configured.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "dhcp-option code_60",
+            "Info": "Indicates DHCP Option 60. The Option 60 field carries the vendor identifier. A maximum of 100 Option 60 fields carrying different vendor identifiers can be configured to identify clients. The vendor identifier is configured based on that used on clients.\nThe value is an integer 60."
+        },
+        {
+            "Parameters": "option-text",
+            "Info": "Specifies the Option 60 content.\nThe value is a string of 1 to 128 characters."
+        },
+        {
+            "Parameters": "code_1to59",
+            "Info": "Specifies a DHCP option ID.\nThe value is an integer ranging from 1 to 59."
+        },
+        {
+            "Parameters": "code_61to254",
+            "Info": "Specifies a DHCP option ID.\nThe value is an integer ranging from 61 to 254."
+        },
+        {
+            "Parameters": "all",
+            "Info": "If no source IP address is specified, all source IP addresses of a DHCP relay interface are deleted.If a source IP address is specified, all configurations of this source IP address are deleted.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] dhcp relay source-ip-address 10.1.1.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] dhcp relay source-ip-address 10.1.1.1 dhcp-option 12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] dhcp relay source-ip-address 10.1.1.1 dhcp-option 60 abc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn L2+L3 N:1 scenarios, DHCP request and reply messages may travel along different paths. Therefore, base stations may fail to receive DHCP relay messages and accordingly cannot go online. Two methods are available to address this problem: use DHCP Option 82 or change the source IP address and GiAddr address in DHCP messages. On live networks, however, devices of some vendors may not support DHCP Option 82. If this is the case, change the source IP address and GiAddr address in DHCP messages to allow the base stations to go online. The ip relay giaddr command configures the GiAddr address. To configure a source IP address, run the dhcp relay source-ip-address command on a DHCP relay interface.\nThen the DHCP relay interface generates the mapping between DHCP options and source IP addresses. After the DHCP relay interface receives a DHCP request message, it searches for a source IP address based on the DHCP option carried in the message and fills the mapped source IP address in the source address field in the IP header of the message.\nConfiguration Impact\nThe DHCP relay interface searches for a source IP address based on DHCP options in the following ways:\nIf a DHCP message carries multiple DHCP options and these DHCP options have matching source IP addresses, the source IP address mapped to the DHCP option with the largest number is used.If DHCP Option 60 is specified and a character string is configured for Option 60, the source IP address mapped to Option 60 with the character string is preferred. If no matching source IP address is found, the source IP address mapped to Option 60 without a character string is used.If no source IP addresses map DHCP options, a source IP address that is not mapped to any DHCP options is used.If no DHCP relay source IP address is configured, the primary IP address of the DHCP relay interface is used as the source IP address by default.\n\nPrecautions\nThe DHCP relay source IP address must be the primary or secondary IP address of the relay interface. Configuring another address as the source IP address may cause the clients to fail to obtain IP addresses.\nA relay interface can have a maximum of 20 source IP addresses configured, which can be mapped to DHCP options or not.\nA DHCP relay source IP address can be mapped to a maximum of 254 DHCP options, but a DHCP option can be mapped to only one source IP address. The DHCP options and source IP addresses are in a many-to-one mapping.\nThis command is mutually exclusive with the ip relay source-ip-address command."
+}

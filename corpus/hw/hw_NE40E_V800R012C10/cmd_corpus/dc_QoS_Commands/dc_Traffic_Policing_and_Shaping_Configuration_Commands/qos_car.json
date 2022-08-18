@@ -1,0 +1,145 @@
+{
+    "PageTitle": "qos car",
+    "FuncDef": "The qos car command configures traffic policing on an interface.\nThe undo qos car command deletes the traffic policing configuration.\nBy default, the traffic policing is not configured on an interface.",
+    "CLIs": [
+        "qos car { cir-percentage <cir-percentage-value> [ pir-percentage <pir-percentage-value> ] } [ cbs <cbs-value> [ pbs <pbs-value> ] ] [ green { discard | pass [ service-class <class> color <color> ] } | yellow { discard | pass [ service-class <class> color <color> ] } | red { discard | pass [ service-class <class> color <color> ] } ] * { inbound | outbound } [ color-aware ]",
+        "qos car { cir <cir-value> [ pir <pir-value> ] } [ cbs <cbs-value> [ pbs <pbs-value> ] ] [ adjust <adjust-value> ] [ green { discard | pass [ service-class <class> color <color> ] } | yellow { discard | pass [ service-class <class> color <color> ] } | red { discard | pass [ service-class <class> color <color> ] } ] * { inbound | outbound } [ vlan { <vlan-id1> [ to <vlan-id2> ] &<1-10> } ] [ identifier { none vid ce-vid vid-ce-vid } ] [ color-aware ]",
+        "undo qos car { inbound | outbound } [ vlan { <vlan-id1> [ to <vlan-id2> ] &<1-10> | all } ]",
+        "undo qos car { inbound | outbound }"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "EVC view of a 10GE interface",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "Eth-Trunk interface view",
+        "FlexE interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "PW-VE sub-interface view",
+        "Tunnel interface view",
+        "Serial interface view",
+        "EVC view of an Eth-Trunk interface",
+        "EVC view of an Ethernet interface",
+        "EVC view of a GE interface",
+        "Port extension Layer 2 interface view",
+        "Port extension sub-interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir-percentage cir-percentage-value",
+            "Info": "Specifies the percentage value of cir.\nThe value is an integer ranging from 0 to 100."
+        },
+        {
+            "Parameters": "pir-percentage pir-percentage-value",
+            "Info": "Specifies the percentage value of pir.\nThe value is an integer ranging from 0 to 100."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the CBS, that is, the depth of the first token bucket that is assumed to be bucket C. The CBS indicates the volume of the traffic that can pass at a burst. It is recommended to set the CBS to a value greater than 10 times the length of a packet.\nThe value is an integer ranging from 0 to 4294967295, in bytes."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies the PBS, that is, the volume of the peak traffic that can pass at a burst. PBS is considered the depth of the second bucket that is assumed to be bucket P. It is recommended to set the PBS to a value greater than 10 times the packet length.\nThe default value of pbs-value is related to the set value of pir-value.\nThe value is an integer ranging from 0 to 4294967295, in bytes."
+        },
+        {
+            "Parameters": "green",
+            "Info": "Indicates the action to be taken on the packets when the traffic reaches the CIR. The default action is pass.\n-"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "Indicate discard action to be taken on packets of a color (green, yellow, and red).\n-"
+        },
+        {
+            "Parameters": "pass",
+            "Info": "Indicate pass action to be taken on packets of a color (green, yellow, and red).\n-"
+        },
+        {
+            "Parameters": "service-class class",
+            "Info": "Specifies the CoS of packets to be re-marked.\nThe CoS can be CS7, CS6, EF, AF4, AF3, AF2, AF1, or BE."
+        },
+        {
+            "Parameters": "color color",
+            "Info": "Specifies the color of packets to be re-marked.\nThe color can be green, yellow, or red."
+        },
+        {
+            "Parameters": "yellow",
+            "Info": "Indicates the action to be taken on data packets when the traffic rate of the data packets exceeds the CIR but is smaller than the PIR. The default action is pass.\n-"
+        },
+        {
+            "Parameters": "red",
+            "Info": "Indicates the action to be taken on data packets when the traffic rate of the data packets exceeds the PIR. The default action is discard.\n-"
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Configures traffic policing for incoming (upstream) packets.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Configures traffic policing for outgoing (downstream) packets.\n-"
+        },
+        {
+            "Parameters": "color-aware",
+            "Info": "Specifies the color-aware mode. By default, the color-blind mode is used.\n-"
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR, that is, the rate at which traffic is allowed to pass.\nThe value is an integer ranging from 0 to 4294967295, in kbit/s."
+        },
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the PIR, that is, the maximum rate at which traffic is allowed to pass. In addition, pir-value should not be smaller than cir-value.\nThe value is an integer ranging 0 to 4294967295, in kbit/s."
+        },
+        {
+            "Parameters": "adjust adjust-value",
+            "Info": "Specifies a precise compensation value.\nThe value is an integer that ranges from -32 to 31.The precision compensation value is based on the L2 length of the packet (including the Ethernet header and CRC but excluding the CRC preamble)."
+        },
+        {
+            "Parameters": "vlan vlan-id1",
+            "Info": "Specifies a start VLAN ID.\nThe value is an integer in the range 1 to 4094."
+        },
+        {
+            "Parameters": "to vlan-id2",
+            "Info": "Specifies an end VLAN ID.\nvlan-id2 must be greater than or equal to vlan-id1. vlan-id2 and vlan-id1 specify a VLAN ID range.\nIf you do not specify to vlan-id2, CAR is only implemented for the VLAN specified by vlan-id1.\nThe value is an integer in the range 1 to 4094."
+        },
+        {
+            "Parameters": "identifier",
+            "Info": "Specifies the allocation type.\nIf the identifier parameter is not specified, all users share one CAR bandwidth.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "The allocation type is not specified, and all users share one CAR bandwidth.\n-"
+        },
+        {
+            "Parameters": "vid",
+            "Info": "Indicates that bandwidth is allocated to packets based on VLAN IDs in outer VLAN tags. Packets with the same VLAN ID in outer VLAN tags share one CAR bandwidth.\n-"
+        },
+        {
+            "Parameters": "ce-vid",
+            "Info": "Indicates that bandwidth is allocated to packets based on VLAN IDs in inner VLAN tags. Packets with the same VLAN ID in inner VLAN tags share one CAR bandwidth.\n-"
+        },
+        {
+            "Parameters": "vid-ce-vid",
+            "Info": "Indicates that bandwidth is allocated to packets based on VLAN IDs in both inner and outer VLAN tags. Packets with the same inner and outer VLAN IDs share one CAR bandwidth.\n-"
+        },
+        {
+            "Parameters": "all",
+            "Info": "All Vlan.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] qos car cir 1000 pir 6000 green pass yellow pass service-class af1 color green red discard inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThere are a large number of users in the network and they send data constantly. Continuous burst data from numerous users can make the network congested. As a result, the running and service quality of the network are affected to a great extent. The interface-based traffic policing can be configured to limit the traffic that is sent to internet so that the bandwidth resources are available regardless of whether the network is idle or congested.\nTo limit the bandwidth of an interface, run the qos car command to limit the traffic rate of the interface.\nThe traffic policing policy is used to police the total traffic on an interface, that is, the sum of IPv4 and IPv6 traffic.\nPrecautions\nWhen QoS is configured on an interface and the PBS is 0, actions cannot be configured for packets colored yellow.\nThe PIR values displayed on the device and NMS are as follows:\nWhen only the CIR is configured and the PIR is not configured, the default value of the PIR is 0. The PIR is not displayed in the command configuration file or on the NMS.When the PIR is set to 0, it is not displayed in the configuration file.\nThis command is valid for IP packets only.\nIf you run the qos car command repeatedly on an interface, the latest configuration overrides the previous one.\nAn interface does not distinguish protocol packets from data packets during the CAR control. Therefore, it is recommended that you configure a larger CIR; otherwise, protocol packets may be discarded.\nIf member interfaces of a trunk interface reside on different forwarding or traffic management modules, the effective CIR or PIR for CAR or user-queue can be a multiple of the configured one.\n\nIf the traffic policing is needed to be reconfigured in the EVC interface, the previous qos car configuration should be cleared.\nIf an interface is bound to a VSI instance, the hard-pipe enable command configured for the VSI instance is mutually exclusive with the qos car command."
+}

@@ -1,0 +1,70 @@
+{
+    "PageTitle": "ipv6 default-route-advertise",
+    "FuncDef": "The ipv6 default-route-advertise command enables a device to advertise a default IPv6 route.\nThe undo ipv6 default-route-advertise command disables a device from advertising a default IPv6 route.\nBy default, a device does not advertise default IPv6 routes.",
+    "CLIs": [
+        "ipv6 default-route-advertise [ always | match default | route-policy <route-policy-name> | route-filter <route-filter-name> ] [ [ cost <cost> ] | [ tag <tag> ] | [ level-1 | level-2 | level-1-2 ] ] * [ avoid-learning | learning-avoid-loop ]",
+        "undo ipv6 default-route-advertise"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "always",
+            "Info": "Enables an IS-IS device to advertise the default IPv6 route unconditionally. This parameter is specified by default when the ipv6 default-route-advertise command is run. In this case, if the avoid-learning parameter is not specified, the device is allowed to calculate the IS-IS default IPv6 routes advertised by other devices, which may cause routing loops.\n-"
+        },
+        {
+            "Parameters": "match",
+            "Info": "When a device has an active default IPv6 route, which belongs to a process of another routing protocol or belongs to another IS-IS process, this parameter enables the device to advertise the default route through a local LSP. However, if the avoid-learning parameter is not specified, the device is allowed to calculate the IS-IS default routes advertised by other neighbors. As a result, the default route that belongs to the process of another routing protocol or belongs to another IS-IS process on the local device may become inactive. If this problem occurs, the device no longer advertises the default route through a local LSP.\n-"
+        },
+        {
+            "Parameters": "default",
+            "Info": "When a device has an active default IPv6 route, which belongs to a process of another routing protocol or belongs to another IS-IS process, this parameter enables the device to advertise the default route through a local LSP. However, if the avoid-learning parameter is not specified, the device is allowed to calculate the IS-IS default routes advertised by other neighbors. As a result, the default route that belongs to the process of another routing protocol or belongs to another IS-IS process on the local device may become inactive. If this problem occurs, the device no longer advertises the default route through a local LSP.\n-"
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nIf the routes that match the route-policy include non-default routes, a default IPv6 route that belongs to a process of another routing protocol, or a default IPv6 route that belongs to another IS-IS process, the device advertises a default route through a local LSP. In this case, if the avoid-learning parameter is not specified, the device is allowed to calculate the IS-IS default routes advertised by other devices, which may cause routing loops.If only the default IPv6 route in the current local IS-IS process matches the route-policy, the device does not advertise a default route through a local LSP.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nIf the routes that match the route-filter include non-default routes, a default IPv6 route that belongs to a process of another routing protocol, or a default IPv6 route that belongs to another IS-IS process, the device advertises a default IPv6 route through a local LSP. In this case, if the avoid-learning parameter is not specified, the device is allowed to calculate the IS-IS default routes advertised by other devices, which may cause routing loops.If only the default IPv6 route in the current local IS-IS process matches the route-filter, the device does not advertise a default IPv6 route through a local LSP.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "cost cost",
+            "Info": "Specifies a cost for the default route.\nThe value is an integer ranging from 0 to 4261412864."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies a tag for the default route to be advertised.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Sets the level as Level-1.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Sets the level as Level-2.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Sets the level as Level-1-2.\nIf you do not specify a level, Level-2 routes are generated by default.\n-"
+        },
+        {
+            "Parameters": "avoid-learning",
+            "Info": "Prevents the specified IS-IS process from adding a learned default IPv6 route to the routing table.\nIf the local device has advertised a default route in the specified IS-IS process, the device no longer adds a learned IS-IS default route to the routing table.If the device has not advertised a default route in the specified IS-IS process, the device can still add a learned IS-IS default route to the routing table even if avoid-learning is specified.\n-"
+        },
+        {
+            "Parameters": "learning-avoid-loop",
+            "Info": "Generate backup routes for default route to prevent loops.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] ipv6 enable",
+            "[*HUAWEI-isis-1] ipv6 default-route-advertise"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThis command can be run on a Level-1 or Level-2 device.\nBy using a route-policy, you can configure IS-IS to generate default routes only when there is a matched entry in the routing table.\nIf the apply isis level-1 command is used in the route-policy view, IS-IS can generate default routes in Level-1 LSPs.If the apply isis level-2 command is used in the route-policy view, IS-IS can generate default routes in Level-2 LSPs.If the apply isis level-1-2 command is used in the route-policy view, IS-IS can generate default routes in Level-1 and Level-2 LSPs.\nOn a network, at least two devices (A and B for example) advertise the default route. If device C preferentially selects the default route advertised by device A and sends traffic destined for the default route, to device A, but the outbound interface of the specific route on device A fails, device C keeps sending the traffic to device A because device C fails to detect the fault in time. Due to the outbound interface failure, device A sends the traffic back to device C, leading to a routing loop. To prevent this problem, specify the learning-avoid-loop parameter when configuring the default route on device A so that a backup path (passing through device B) is generated for the default route.\n\nPrerequisites\nThe ipv6 default-route-advertise command takes effect only after IPv6 is enabled for the IS-IS process. For details, see isis ipv6 enable.\nPrecautions\nThe learning-avoid-loop parameter takes effect only after the ipv6 frr and segment-routing ipv6 locator commands are run.The learning-avoid-loop parameter takes effect only for default route on a network, and two or more devices must advertise the default route on the network.The learning-avoid-loop parameter may not be applicable to all scenarios. You need to determine a specific loop prevention method based on the actual networking scenario."
+}

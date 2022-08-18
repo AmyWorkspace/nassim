@@ -1,0 +1,84 @@
+{
+    "PageTitle": "y1731 measure-granularity",
+    "FuncDef": "The y1731 measure-granularity command configures the granularity for Y.1731 statistics collection.\nThe undo y1731 measure-granularity command restores the default value.\n\nBy default, the granularity for Y.1731 statistics collection is port-vlan.",
+    "CLIs": [
+        "y1731 measure-granularity { port | port-vlan }",
+        "undo y1731 measure-granularity"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "50GE Layer 2 sub-interface view",
+        "40GE interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "VE layer2 subinterface view",
+        "Global-VE layer2 subinterface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "Layer 2 50GE interface view",
+        "100GE interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "Eth-Trunk interface view",
+        "400GE Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "port",
+            "Info": "Indicates that Y.1731 statistics are collected based on a port.\n-"
+        },
+        {
+            "Parameters": "port-vlan",
+            "Info": "Indicates that Y.1731 statistics are collected based on a port and all VLANs that the port joins.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] mpls ldp",
+            "[*HUAWEI-mpls-ldp] quit",
+            "[*HUAWEI] mpls ldp remote-peer pe2",
+            "[*HUAWEI-ldp-remote-pe2] remote-ip 2.2.2.2",
+            "[*HUAWEI-ldp-remote-pe2] vsi y1731 static",
+            "[*HUAWEI-vsi-y1731] pwsignal ldp",
+            "[*HUAWEI-vsi-y1731] vsi-id 220",
+            "[*HUAWEI-vsi-y1731] peer 2.2.2.2",
+            "[*HUAWEI-vsi-y1731] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] l2 binding vsi y1731",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map vsi y1731",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/0.1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send mep-id 1 enable",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 2",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep ccm-receive mep-id 2 enable",
+            "[*HUAWEI-md-md1-ma-ma1] quit",
+            "[*HUAWEI-md-md1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] y1731 measure-granularity port"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nIn VLL or VPLS networking, to configure the granularity for Y.1731 statistics collection on the AC interface of a PW, run the y1731 measure-granularity command. You can specify either of the following parameters on the AC interface as needed:\n\nTo configure a port as the granularity for Y.1731 statistics collection, specify the port parameter. Statistics about all services on the port are collected.\nTo configure a port and all VLANs that the port joins as the granularity for Y.1731 statistics collection, specify the port-vlan parameter. Statistics about specified services on the port are collected.\n\n\nPrerequisites\n\nA MEP has been created using the mep mep-id command in the interface view."
+}

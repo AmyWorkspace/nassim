@@ -1,0 +1,46 @@
+{
+    "PageTitle": "bfd bind peer-ip group",
+    "FuncDef": "The bfd bind peer-ip group command binds a BFD session group to an IP link and generates the BFD session group.\nBy default, no BFD session group is set.",
+    "CLIs": [
+        "bfd <sessname-value> bind peer-ip <ip-address> [ vpn-instance <vpn-name> ] [ source-ip <ip-address> ] track-interface interface { <interface-name> | <interface-type> <interface-number> } group",
+        "bfd <sessname-value> bind peer-ip <ip-address> [ vpn-instance <vpn-name> ] [ source-ip <ip-address> ] group"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sessname-value",
+            "Info": "Specifies the name of a BFD session.\nThe value is a string of 1 to 64 characters, spaces not supported. When the string entered is enclosed with quotation marks (\"), spaces are supported in the string.\nWhen you configure the name of a BFD session, the uppercase and lowercase letters in the name must be consistent with what you entered.The system does not distinguish between uppercase and lowercase letters when checking the name of a BFD session. For example, the system regards ABC and abc as a BFD session name. If a BFD session named ABC has been configured and abc is specified, the system directly displays the ABC view."
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the peer IP address bound to a BFD session.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-name",
+            "Info": "Specifies the name of a VPN instance bound to a BFD session.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "source-ip ip-address",
+            "Info": "Specifies the source IP address carried in BFD packets.\nThis parameter usually does not need to be specified. If this parameter is not specified, the system searches the local routing table for the IP address of an outbound interface connected to the remote end and uses the IP address as the source IP address before sending BFD packets.\nWhen both the BFD and URPF features are enabled, you need to set the source IP address of BFD packets because the URPF feature checks the source IP address of each received packet.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "track-interface",
+            "Info": "Specifies an interface monitored by a BFD session.\n-"
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies an interface monitored by a BFD session.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd atob bind peer-ip 10.1.1.1 group"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe two devices are connected through an Eth-Trunk link, and the two member interfaces of the Eth-Trunk interface are located on two different interface boards. Normally, after a BFD session is bound to an Eth-Trunk interface, only one BFD session is created. BFD selects the interface board on which a member interface resides as the board of the state machine and monitors the member link. When the interface board where the BFD session resides is different from the interface board selected for the current service traffic, if the member interface of the BFD session, the member link, or the board of the state machine is faulty, the BFD module considers that the Eth-Trunk interface is faulty. Actually, the path used for transmitting service traffic is still functioning properly. Then, a BFD detection error occurs.\nThis problem can be solved by creating a BFD session group. Create a BFD session group for an inter-board Eth-Trunk link. The BFD session group contains two BFD sub-sessions. The service components detect only the status of the BFD session group. The status of a BFD session group depends on the status of the two BFD sub-sessions. As long as one BFD sub-session is Up, the status of the BFD session group is Up. When both sub-sessions are Down, the BFD session group is Down.\nPrerequisites\nBFD has been enabled globally using the bfd command in the system view.\nFollow-up Procedure\nAfter a BFD session group is created:\nRun the sub-session discriminator local, command to create sub-session 1 for the BFD session group.Run the sub-session discriminator local, command to create sub-session 2 for the BFD session group."
+}

@@ -1,0 +1,33 @@
+{
+    "PageTitle": "multicast-domain share-group",
+    "FuncDef": "The multicast-domain share-group command specifies the Share-Group and binds the Multicast Tunnel Interface (MTI) to a VPN instance.\nThe undo multicast-domain share-group command restores the default configuration.\nBy default, the Share-Group and the MTI are not specified.",
+    "CLIs": [
+        "multicast-domain share-group <group-address> binding mtunnel <mtunnel-number>",
+        "undo multicast-domain share-group"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-address",
+            "Info": "Specifies the multicast group address.\nThe address is in the dotted decimal notation, ranging from 224.0.1.0 to 239.255.255.255."
+        },
+        {
+            "Parameters": "mtunnel mtunnel-number",
+            "Info": "Specifies the MTI number.\nThe value is an integer ranging from 0 to 4095."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance mytest",
+            "[*HUAWEI-vpn-instance-mytest] ipv4-family",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain share-group 224.1.1.1 binding mtunnel 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAll the VPN instances on the PEs that belong to the same multicast domain (MD) must be added to a public group (share-group). MTIs are multicast tunnel interfaces. The local PE sends VPN data through its MTI, and the remote PE receives VPN data through its MTI. To implement multicast VPN, you need to specify a share-Group in the VPN instance and bind an MTI to the VPN instance.\nPrerequisites\nThe command applies only to the scenario where multicast routing is enabled in the VPN instance.\nPrecautions\nOn the same provider edge (PE), different Share-Group addresses are configured for different VPN instances. The value of shareGrpAddr must be different from the Switch-Group addresses of all the instances on this PE and mtunnel-number must be different from that of the MTI that has been created.\nYou cannot perform the same configuration repeatedly in the same VPN instance view. Instead, you can configure the new address and the MTI only after the previous configuration is deleted.\nThe IP address and maximum transmission unit (MTU) can be configured on the MTI. The MTU is an integer that ranges from 46 to 1500 bytes.After the undo multicast-domain share-group command is run, the MTI and the configurations related to the multicast-domain switch-group-pool, multicast-domain log switch-group-reuse, and multicast-domain switch-delay commands are deleted.\nIf multicast is enabled in a VPN instance and the multicast-domain share-group command is used to specify an Mtunnel interface to be bound to the VPN instance, the Mtunnel interface will be automatically bound to the VPN instance. The configuration of the binding between the Mtunnel and VPN instance can be displayed in the configuration file."
+}

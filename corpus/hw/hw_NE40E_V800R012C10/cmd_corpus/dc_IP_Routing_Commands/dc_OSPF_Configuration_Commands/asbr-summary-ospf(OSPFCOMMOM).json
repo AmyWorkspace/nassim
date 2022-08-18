@@ -1,0 +1,49 @@
+{
+    "PageTitle": "asbr-summary",
+    "FuncDef": "The asbr-summary command configures an AS boundary router (ASBR) to summarize routes imported by OSPF.\nThe undo asbr-summary command disables ASBRs from summarizing routes imported by OSPF.\nBy default, ASBRs do not summarize routes imported by OSPF.",
+    "CLIs": [
+        "asbr-summary <ip-address> <mask> [ [ not-advertise | generate-null0-route ] | tag <tag-value> | cost <cost-value> | distribute-delay <interval> ] *",
+        "undo asbr-summary <ip-address> <mask>"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of a summary route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the mask of the IP address of the summary route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "not-advertise",
+            "Info": "Prevents the summary route from being advertised.\nIf this parameter is not specified, the summary route is advertised.\n-"
+        },
+        {
+            "Parameters": "generate-null0-route",
+            "Info": "Generates a black-hole route in the RM module to prevent routing loops.\n-"
+        },
+        {
+            "Parameters": "tag tag-value",
+            "Info": "Specifies the tag of the summary route.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "cost cost-value",
+            "Info": "Specifies the cost of the summary route.\nThe value is an integer ranging from 0 to 16777214.\nBy default:\nFor Type 1 external routes, the largest cost of the routes for summarization is used as the cost of the summary route.For Type 2 external routes, the largest cost of the routes for summarization plus 1 is used as the cost of the summary route."
+        },
+        {
+            "Parameters": "distribute-delay interval",
+            "Info": "Specifies the delay for advertising the summary route.\nThe value is an integer ranging from 1 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] asbr-summary 10.2.0.0 255.255.0.0 not-advertise tag 2 cost 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a large-scale OSPF network, route lookup may slow down because of the large size of the routing table. To reduce the size of the routing table and simplify management, configure route summarization.\nRoutes with the same IP prefix can be summarized into one route. If a link connected to a device within an IP address range that has been summarized alternates between Up and Down, the link status change is not advertised to the devices beyond the IP address range. This prevents route flapping and improves network stability.\nImported routes with the same prefix can be summarized into one route and advertised as one route using the asbr-summary command. Route summarization reduces the routing table size and improves router performance.\nAfter route summarization:\nIf the local router is an ASBR in a common area, the local router summarizes all imported Type 5 LSAs within the summarized address range.If the local router is an ASBR in an NSSA, the local router summarizes all imported Type 7 LSAs within the summarized address range.If the local router functions as both an ASBR and ABR in an NSSA, the local router summarizes all imported Type 5 and Type 7 LSAs within the address range. It also summarizes the Type 5 LSAs that are translated from Type 7 LSAs.\n\nPrecautions\nIn case of a large number of summary routes, you can set a delay in advertising them. This ensures that the summary routes advertised each time contain more valid routes and prevents incorrect routing information in case of network flapping."
+}

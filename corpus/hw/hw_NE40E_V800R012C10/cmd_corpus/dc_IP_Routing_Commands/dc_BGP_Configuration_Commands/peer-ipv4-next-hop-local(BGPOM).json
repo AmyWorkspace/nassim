@@ -1,0 +1,28 @@
+{
+    "PageTitle": "peer next-hop-local (BGP-IPv4 unicast address family view)",
+    "FuncDef": "The peer next-hop-local command configures a BGP device to set its IP address as the next hop of routes when the BGP device advertises routes to an IBGP peer.\nThe undo peer next-hop-local command restores the default setting.\n\nBy default:\n\n\nA BGP router sets IP address of the local interface connected to the peer as the next-hop address of routes when advertising these routes to an EBGP peer.\n\nA BGP router does not change the next-hop address of non-labeled routes if the routes are from an EBGP peer and are to be sent to an IBGP peer. The router sets IP address of the local interface connected to the peer as the next-hop address of labeled routes if the routes are from an EBGP peer and are to be sent to an IBGP peer.\n\nA BGP router does not change the next-hop address of routes if the routes are from an IBGP peer and are to be sent to an IBGP peer.\n\nA BGP router sets the IP address of the local interface connected to the peer as the next-hop address of the locally originated routes to be advertised to an IBGP peer.",
+    "CLIs": [
+        "peer <ipv4-address> next-hop-local",
+        "undo peer <ipv4-address> next-hop-local"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view",
+        "BGP-Labeled address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 1.1.1.1 as-number 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] peer 1.1.1.1 next-hop-local"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer next-hop-local command is usually run on an ASBR. By default, when an ASBR forwards a route learned from an EBGP peer to its IBGP peers, the ASBR does not change the Next_Hop of the route. Therefore, the Next_Hop address of the route remains the EBGP peer IP address. After being forwarded to the IBGP peers, the route cannot become active because of the unreachable Next_Hop. The peer next-hop-local command needs to be run to configure the ASBR to modify the Next_Hop of the route to the local IP address before advertising the route to IBGP peers. After being forwarded to the IBGP peers, the route can be active because the Next_Hop is reachable (an IGP is configured in the AS).\nConfiguration Impact\nIf the peer next-hop-local command is run more than once, the latest configuration overrides the previous one.\nAfter the peer next-hop-local command is configured on a device, the device sets its IP address as the next hop of routes when the BGP device advertises the routes to its IBGP peer.\nPrecautions\nThe peer next-hop-local command is applicable to IBGP peers.\nWhen the BGP device advertises routes to an IBGP peer or peer group, the peer next-hop-local command and the peer next-hop-invariable command are mutually exclusive.\nIf the peer next-hop-local command is run on a route reflector, the command takes effect for BGP labeled routes, VPNv4 routes, and VPNv6 routes.\nIf the peer next-hop-local command is run on a route reflector or confederation peer, the command takes effect only for BGP labeled routes, VPNv4 routes, and VPNv6 routes over the public network and does not take effect for the other types of routes."
+}

@@ -1,0 +1,44 @@
+{
+    "PageTitle": "process-interface-status",
+    "FuncDef": "The process-interface-status command associates the status of a BFD session with the status of the interface to which the BFD session is bound.\nThe undo process-interface-status command cancels the association between the status of a BFD session and the status of the interface to which the BFD session is bound.\nBy default, the status of the multicast IP single-hop BFD session is not associated with the status of the bound interface, and the status of the link-bundle single-hop BFD session is associated with the status of the bound interface.",
+    "CLIs": [
+        "process-interface-status [ sub-if ] [ reboot-no-impact ]",
+        "undo process-interface-status [ sub-if ] [ reboot-no-impact ]"
+    ],
+    "ParentView": [
+        "BFD session view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sub-if",
+            "Info": "Associates a BFD session with a sub-interface. If a BFD session is bound to an interface, the BFD session status change affects the status of this interface and its sub-interfaces.\nThis parameter applies only to multicast IP single-hop BFD sessions.\n-"
+        },
+        {
+            "Parameters": "reboot-no-impact",
+            "Info": "Indicates that the BFD session bound to an interface or sub-interface does not trigger the interface or sub-interface to go Down when the initial state is Down after configuration restoration.\nThis parameter applies to multicast IP single-hop BFD sessions and link-bundle single-hop BFD sessions.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd s1 bind peer-ip default-ip interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-bfd-session-s1] process-interface-status"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 1",
+            "[*HUAWEI-Eth-Trunk1] ip address 10.1.1.1 24",
+            "[*HUAWEI-Eth-Trunk1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] eth-trunk 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd test bind link-bundle peer-ip 10.1.1.2 interface Eth-Trunk 1 source-ip 10.1.1.1",
+            "[*HUAWEI-bfd-session-test] process-interface-status reboot-no-impact"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen transmission devices exist on a link and a fault occurs on the link, the devices on both ends of the link need a long time to detect the fault. To shorten the fault detection time, run the process-interface-status command to associate a multicast BFD session with an interface to trigger fast route convergence.\nPrerequisites\nA multicast IP single-hop BFD session or link-bundle single-hop BFD session has been configured.\nConfiguration Impact\nIf the process-interface-status command is run, the following situations occur:\nIf a BFD session detects a fault and goes down, the associated interface status becomes BFD_Down. As a result, the direct route of the interface is deleted from the routing table. The link layer status of the interface is not affected.Although the process-interface-status command has been run, the BFD status will not be reported to the interface if the BFD status changes while the commit command is being executed. This prevents an incorrect BFD status message (when the BFD session is not established or does not go Up) from causing an incorrect interface status change. After the commit command is run, if the BFD status changes, the interface is notified of the change and sets the BFD status to Down.This implements association between the BFD session status and the interface status.\n\nPrecautions\nWhen multiple multicast IP single-hop BFD sessions are bound to the same interface, the process-interface-status command can be configured for only one BFD session. This means that the BFD status of the interface is affected by only one BFD session. Between link-bundle sessions and multicast sessions, and between link-bundle sessions, multiple BFD sessions can be bound to one interface enabled with the process-interface-status command. If an interface is bound to multiple BFD sessions, the interface goes down as long as one BFD session is down. Likewise, the interface goes up as long as one BFD session is up.Before the BFD session status is associated with the interface status, the BFD configurations on two ends must be correct and matched. If the local BFD status is Down, check the remote BFD configurations and ensure that the shutdown command is not run on the remote router.If the networking requires that the BFD status must be synchronized with the interface status, you can run the shutdown and undo shutdown commands to change the status of the BFD session after ensuring the configurations on both routers are correct.After the BFD session is configured with the undo shutdown command, a detection timer is started. Before the timer expires, if the BFD session can go Up after the negotiation, the BFD session reports the Up status to the interface. Otherwise, the link is considered faulty, and the BFD session reports the Down status to the interface after the timer expires. In this manner, the BFD status can keep consistent with the interface status.If the shutdown command is run, the BFD status will not be sent to the interface.If the process-interface-status [ sub-if ] command setting exists in the configuration file, after the router is restarted, the BFD session reports the Down state to the interface so that the interface sets its BFD status to Down. This prevents traffic loss in the situation where the BFD session is Up but the interface is Down during initialization of the router.The process-interface-status command associates the status of a BFD session with the protocol status of the interface to which the BFD session is bound."
+}

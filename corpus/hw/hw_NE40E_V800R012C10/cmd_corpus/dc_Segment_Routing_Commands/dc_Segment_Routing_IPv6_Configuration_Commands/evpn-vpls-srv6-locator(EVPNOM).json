@@ -1,0 +1,39 @@
+{
+    "PageTitle": "segment-routing ipv6 locator (BD EVPN view)",
+    "FuncDef": "The segment-routing ipv6 locator command adds the SID attribute to the EVPN routes to be sent.\nThe undo segment-routing ipv6 locator command restores the default configuration.\nBy default, the SID attribute is not added to the EVPN routes to be sent.",
+    "CLIs": [
+        "segment-routing ipv6 locator <locator-name> [ unicast-locator <unicast-locator-name> ]",
+        "undo segment-routing ipv6 locator [ [ <locator-name> ] | [ <locator-name> unicast-locator <unicast-locator-name> ] ]"
+    ],
+    "ParentView": [
+        "BD EVPN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "locator-name",
+            "Info": "Specifies the name of a SID node route locator.\nThe value is a string of 1 to 31 case-sensitive characters. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "unicast-locator unicast-locator-name",
+            "Info": "Specifies the name of a unicast SID node route locator.\nThe value is a string of 1 to 31 case-sensitive characters. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] encapsulation source-address 2001:db8:1::1",
+            "[*HUAWEI-segment-routing-ipv6] locator PE1 ipv6-prefix 2001:db8:1:: 64 args 10",
+            "[*HUAWEI-segment-routing-ipv6-locator] quit",
+            "[*HUAWEI-segment-routing-ipv6] locator PE2 ipv6-prefix 2001:db8:2:: 64",
+            "[*HUAWEI-segment-routing-ipv6-locator] quit",
+            "[*HUAWEI-segment-routing-ipv6] quit",
+            "[*HUAWEI] evpn vpn-instance evrf1 bd-mode",
+            "[*HUAWEI-evpn-instance-evrf1] route-distinguisher 2:2",
+            "[*HUAWEI-evpn-instance-evrf1] vpn-target 1:1",
+            "[*HUAWEI-evpn-instance-evrf1] segment-routing ipv6 best-effort",
+            "[*HUAWEI-evpn-instance-evrf1] segment-routing ipv6 locator PE1 unicast-locator PE2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an EVPN VPLS scenario, if service traffic needs to be transmitted over an SRv6 path, run the segment-routing ipv6 locator command to add the SID attribute to the EVPN routes to be sent. Upon receipt of EVPN routes, the BGP EVPN peer recurses routes over an SRv6 path based on the SID attribute carried in the EVPN routes and then generates forwarding entries.\nFor the SID node route locator named locator-name, SIDs of the End.DT2M type must be configured and the args parameter must be specified.\nCurrently, the args parameter is specified based on route locators. If the args parameter has been specified for a route locator, the related bits of all the associated SIDs are occupied. In an EVPN VPLS dual-homing scenario, the args parameter is specified for splicing ESI labels for SIDs of the End.DT2M type. This causes a waste of SIDs of the End.DT2U type. In this case, you can configure a SID node route locator of the End.DT2U type and a SID node route locator of the End.DT2M type. The args parameter does not need to be specified for the SID node route locator of the End.DT2U type. The two SID node route locators can be bound to the same EVPN instance to conserve SIDs.\nPrerequisites\nThe name of the SID node route locator has been configured using the locator command. If this command specifies the unicast SID node route locator, the name of the unicast SID node route locator must be available."
+}

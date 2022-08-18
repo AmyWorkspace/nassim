@@ -1,0 +1,44 @@
+{
+    "PageTitle": "access-ip-limit",
+    "FuncDef": "The access-ip-limit command configures the maximum number of IP addresses for PPP users who log in from a specified slot or a specified BAS interface.\nThe undo access-ip-limit command deletes the preconfigured limit on the number of IP addresses for PPP users who log in from a specified slot or a BAS interface.\nBy default, no limit on the number of IP addresses for PPP users is configured on a slot or a BAS interface.",
+    "CLIs": [
+        "access-ip-limit <max-number> user-type ppp [ exclude ]",
+        "undo access-ip-limit [ <max-number> user-type ppp [ exclude ] ]"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)",
+        "Slot view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "max-number",
+            "Info": "Specifies the maximum number of IP addresses for users allowed to log in.\nThe value is an integer ranging from 0 to 131072."
+        },
+        {
+            "Parameters": "user-type ppp",
+            "Info": "Indicates that the number of login PPP users is restricted.\n-"
+        },
+        {
+            "Parameters": "exclude",
+            "Info": "Indicates that the number of users logging in from a BAS interface is not added to, and is therefore not limited by, the number of users logging in from a slot.\nThis parameter is specified on BAS interfaces.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.2",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] commit",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] bas",
+            "[*HUAWEI-GigabitEthernet1/0/1.2-bas] access-type layer2-subscriber",
+            "[*HUAWEI-GigabitEthernet1/0/1.2-bas] access-ip-limit 3000 user-type ppp"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[~HUAWEI-slot-1] access-ip-limit 5000 user-type ppp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo balance the traffic load of users among different slots and interfaces, run the access-ip-limit command to configure the maximum number of IP addresses for PPP users allowed to log in from a specified slot or BAS interface. When the number of PPP users reaches the maximum number, the slot or interface stops responding the PADO packets of PPP users, and no additional users can log in.\nPrerequisites\nThe access-type command has been run to configure the BAS interface as a Layer 2 common user interface.\nConfiguration Impact\nThe command applies only to PPPoE users. The single-stack users are counted as one user, and dual-stack users are counted as two users, dual-stack LAC users are counted as one user. When the number of login PPP users reaches the maximum value configured on a BAS interface or slot, the interface or slot stops responding PADO packets of new access PPP users.\nIf the number of PPP users logging in from a BAS interface reaches the maximum number of IP addresses for PPP users configured on a slot, the BAS interface stops responding PADO packets of new access PPP users. However, the BAS interfaces configured with exclude have no such limitation.\nIf the BAS interface is a member of an inter-board Eth-Trunk interface, the number of login PPP users counted on the interface may not be accurate. Running this command is not recommended if the BAS interface is a member of the inter-board Eth-Trunk interface.\nIf the BAS interface is an inter-board PW-VE interface, the number of login PPP users counted on the interface may not be accurate. Running this command is not recommended if a BAS interface is a PW-VE interface.\nThis command limits the number of PPP users who have been assigned IP addresses. If the AAA server responds slowly with authentication response packets, the number of login PPP users counted on the interface may not be accurate.\nIn an inter-board trunk scenario, the IP address limit based on the slot ID must be configured on all member boards. Otherwise, the IP address limit configured using this command may be inaccurate.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

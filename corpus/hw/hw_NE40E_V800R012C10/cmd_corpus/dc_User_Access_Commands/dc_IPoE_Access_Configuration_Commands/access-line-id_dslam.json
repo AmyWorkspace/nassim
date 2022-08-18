@@ -1,0 +1,32 @@
+{
+    "PageTitle": "option82-relay-mode dslam",
+    "FuncDef": "The access-line-id dslam command configures the device to fill in the Agent-CircuitID attribute and Agent-RemoteID attribute with the access-line-id information sent from the DSLAM.\nThe undo access-line-id dslam command restores the default setting.\nThe option82-relay-mode dslam command configures the device to fill in the Agent-CircuitID attribute and Agent-RemoteID attribute with the access-line-id information sent from the DSLAM.\nThe undo option82-relay-mode dslam command restores the default setting.\nBy default, the device does not fill in the Agent-CircuitID attribute and Agent-RemoteID attribute with the access-line-id information sent from the DSLAM.",
+    "CLIs": [
+        "{ option82-relay-mode | access-line-id } dslam { auto-identify | config-identify }",
+        "undo { option82-relay-mode | access-line-id } dslam"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "auto-identify",
+            "Info": "Configures a device to automatically identify access-line-id information.\n-"
+        },
+        {
+            "Parameters": "config-identify",
+            "Info": "Configures a device to identify access-line-id information based on a specified rule.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] bas",
+            "[~HUAWEI-GigabitEthernet1/0/1-bas] access-line-id dslam auto-identify"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe access-line-id information may be carried by DHCPv4 Option 82, DHCPv6 Options 18, 37, and 17, or a PPPoE+ option.\nOn a network where a DSLAM is deployed, the DSLAM sends information about user locations to the RADIUS server. The information is contained in the access-line-id information. After having received the information, the device adds the information to the attributes of a RADIUS packet and sends the packet to the RADIUS server.\nAfter having received the information about user locations, the device adds access-line-id information to Agent-CircuitID and Agent-RemoteID attributes of a RADIUS packet based on sub-attribute numbers, and then sends the packet to the RADIUS server.\nIf auto-identify is configured, the device automatically identifies access-line-id information, adds the converted value to the Agent-CircuitID or Agent-CircuitID attribute of a RADIUS packet, and sends the packet to the RADIUS server.If config-identify is configured, the device converts the value of each attribute of the access-line-id information based on a specific rule, adds the converted value to the Agent-CircuitID or Agent-CircuitID attribute of a RADIUS packet, and sends the packet to the RADIUS server. By default, the value of each attribute of the access-line-id information is not converted.\nThe option82-relay-mode dslam config-identify command can be effective only after the client-option82 or client-access-line-id command has been run on the BAS interface and theaccess-line-id information is not empty.\nThe rule of converting an attribute value can be configured by using the option82-relay-mode subopt or access-line-id translate command.\n\nPrerequisites\nBefore running this command, set the access type of the userto layer2 subscriber, layer2-leased-line, or layer3 subscriber by the access-type command.\nPrecautions\nThis command is supported only on the admin VS.\nThe functions of the option82-relay-mode dslam command and the access-line-id dslam command are the same. Both of them are used to configure a mode of identifying the access-line-id information. If they have been both run more than once in the same view, the last configuration overrides the previous one."
+}

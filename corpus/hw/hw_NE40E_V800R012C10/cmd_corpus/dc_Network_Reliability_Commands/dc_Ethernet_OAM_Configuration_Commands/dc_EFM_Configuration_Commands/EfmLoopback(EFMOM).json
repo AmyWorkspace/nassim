@@ -1,0 +1,63 @@
+{
+    "PageTitle": "efm loopback",
+    "FuncDef": "The efm loopback command configures an interface to initiate or stop remote loopback.\nBy default, remote loopback is not configured.",
+    "CLIs": [
+        "efm loopback { start [ timeout <timeout> ] | stop }"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "40GE interface view",
+        "GE interface view",
+        "Layer 2 50GE interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "50GE interface view",
+        "Layer 2 GE interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "Layer 2 100GE interface view",
+        "25GE interface view",
+        "Layer 2 50|100GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "start",
+            "Info": "Configures an interface to initiate remote loopback.\n-"
+        },
+        {
+            "Parameters": "timeout timeout",
+            "Info": "Specifies a timeout period for remote loopback.\nThe value is an integer ranging from 0 to 1000, in minutes. The default value is 20 minutes. The value 0 indicates that no timeout period is set. That is, an interface always remains in the remote loopback state."
+        },
+        {
+            "Parameters": "stop",
+            "Info": "Configures an interface to stop remote loopback.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] efm enable",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] efm mode active",
+            "[*HUAWEI-GigabitEthernet1/0/0] efm enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] commit",
+            "[*HUAWEI-GigabitEthernet1/0/0] efm loopback start"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] efm enable",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] efm mode active",
+            "[*HUAWEI-GigabitEthernet1/0/0] efm enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] commit",
+            "[*HUAWEI-GigabitEthernet1/0/0] efm loopback stop"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEFM OAM remote loopback can be used for fault locating and link quality testing. After remote loopback is enabled, configure the local device to send test packets to the peer device. Statistics about the sent and received test packets indicate link quality.\nIf start is specified, the specified interface on the local device sends a remote loopback start message to the peer device. After receiving the message, the peer device enters the loopback state. In the loopback state, the peer device sends back all received packets except EFM OAM PDUs to the local device through the interface that has received these packets.If stop is specified, the specified interface on the local device sends a remote loopback stop message to the peer device. After receiving the message, the peer device exits the loopback state.If EFM OAM remote loopback is enabled, the link will fail to forward service data. To prevent this issue, you can specify timeout so that EFM OAM remote loopback will be automatically disabled after a timeout period. The default timeout period for remote loopback is 20 minutes. After the timeout period expires, remote loopback automatically stops. You can set the timeout period of a link to 0 seconds if you want the link to remain in the remote loopback state.\nThe link in the remote loopback state will not forward service data. Therefore, exercise caution when setting the timeout parameter to 0.\n\nPrerequisites\nEFM OAM has been enabled and is in the detect state.The working mode of EFM OAM has been set to active using the efm mode active command on a device for remote loopback.\n\nConfiguration Impact\nIn the loopback state, a device sends back all received packets except EFM OAM PDUs through the interface that has received these packets.\nPrecautions\nEnable remote loopback only on links that do not transmit service data to prevents service interruptions.\nRemote loopback can be performed successfully only when EFM OAM is in the detect state and the local device works in active mode. You can run the display efm session command to check the status of EFM OAM between the local and peer devices."
+}

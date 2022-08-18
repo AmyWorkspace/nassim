@@ -1,0 +1,27 @@
+{
+    "PageTitle": "conflict auto-recycle(Bas IP address pool view)",
+    "FuncDef": "The conflict auto-recycle command sets the interval at which conflicting addresses are automatically recycled.\nThe undo conflict auto-recycle command restores the default interval at which conflicting addresses are automatically recycled.\nBy default, conflicting addresses are automatically recycled at an interval of 30 minutes.",
+    "CLIs": [
+        "conflict auto-recycle interval <interval-time>",
+        "undo conflict auto-recycle [ interval <interval-time> ]"
+    ],
+    "ParentView": [
+        "Bas IP address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval interval-time",
+            "Info": "Interval at which conflicting addresses are automatically recycled.\nThe value is an integer ranging from 30 to 1440 and 0, in minutes. By default, it is 30. If the value is 0, the function of conflicting addresses automatic recycling is disabled."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei bas local",
+            "[~HUAWEI-ip-pool-huawei] gateway 10.10.110.1 255.255.255.0",
+            "[~HUAWEI-ip-pool-huawei] section 0 10.10.110.2 10.10.110.253",
+            "[~HUAWEI-ip-pool-huawei] conflict auto-recycle interval 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf an address is repeatedly assigned to different users because the device receives a decline packet or an internal error occurs, the device sets the state of this address to conflicting. Addresses in the conflicting state will not be assigned to other users. If automatic recycling of conflicting addresses is disabled, you can only recycle conflicting addresses by running the recycle command. After open the conflict auto-recycle interval command, when the pool useage reach more than 80% and the time for the pool address conflict reach the recycled time, it will start to recycle the address. Because of the interval at which conflicting addresses are automatically recycled is 30 minutes, the address recycled may be 30 minutes delay.\nConfiguration Impact\nIf interval-time is set to 0, automatic recycling is disabled. Conflicting addresses will be isolated and must be manually recycled.\nIf interval-time is set to a non-zero value, when the address pool usage exceeds the alarm threshold and the address conflicting duration exceeds the value of interval-time, the device automatically recycles conflicting addresses for assignment.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThis command is valid only to the local and server address pool."
+}

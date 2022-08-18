@@ -1,0 +1,80 @@
+{
+    "PageTitle": "ping evpn",
+    "FuncDef": "The ping evpn command checks EVPN connectivity and whether EVPN tunnels forward data properly.",
+    "CLIs": [
+        "ping evpn vpn-instance <evpn-name> mac <mac-address> [ -a <source-ip> | -c <count> | -m <interval> | -s <packet-size> | -t <time-out> | -r <reply-mode> | -nexthop <nexthop-address> ] *",
+        "ping evpn bridge-domain <bd-id> mac <mac-address> [ -a <source-ip> | -c <count> | -m <interval> | -s <packet-size> | -t <time-out> | -r <reply-mode> | -nexthop <nexthop-address> ] *"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac mac-address",
+            "Info": "Specifies a destination MAC address.\nThe value is in the format of H-H-H."
+        },
+        {
+            "Parameters": "-a source-ip",
+            "Info": "Specifies a source IP address for EVPN echo request packets.If the source address is not specified, the encapsulation source-address address is preferentially used in the SRv6 BE scenario. In other scenarios, the address of the outbound interface is used as the source address of EVPN ECHO-REQUEST packets.\nThe value is in dotted decimal notation or a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-c count",
+            "Info": "Specifies the number of EVPN echo request packets to be sent.\nIf the network quality is low, you can increase the parameter value to determine the network quality based on the packet loss rate.\nSpecifies the number of EVPN echo request packets to be sent.\nIf the network quality is low, you can increase the parameter value to determine the network quality based on the packet loss rate.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-m interval",
+            "Info": "Specifies the waiting period for sending the next EVPN echo request packet.\nBy default, if a device does not receive an EVPN echo reply packet within 2000 ms after it sends an EVPN echo request packet, the device sends another EVPN echo request packet. This parameter specifies an EVPN echo request packet sending interval. If the network quality is low, setting this parameter greater than or equal to 2000 ms is recommended.\nThe value is an integer ranging from 1 to 10000, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-s packet-size",
+            "Info": "Specifies the size of a payload packet to be sent without the IP header or UDP head.\nThe value is an integer ranging from 100 to 9568, in bytes. The default value is 110."
+        },
+        {
+            "Parameters": "-t time-out",
+            "Info": "Specifies a timeout period for waiting an EVPN echo reply packet after an EVPN echo request packet is sent.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies the mode in which the peer responds with EVPN echo reply messages.\nThe value is an integer ranging from 1 to 4. The default value is 2.\n1: indicates no reply.\n2: indicates a reply with an IPv4 or IPv6 UDP packet.\n3: a reply with an IPv4 or IPv6 UDP packet carrying the router-alert option.\n4: a reply through the control channel on the application plane.Currently, only modes 2 and 4 are supported."
+        },
+        {
+            "Parameters": "-nexthop nexthop-address",
+            "Info": "Specifies a next hop IP address.\nThe value is in dotted decimal notation or a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "bridge-domain bd-id",
+            "Info": "Specifies a bridge domain (BD) ID.\nThe value is an integer ranging from 1 to 16777215."
+        },
+        {
+            "Parameters": "vpn-instance evpn-name",
+            "Info": "Specifies the name of an EVPN instance.\nThe value is a string of 1 to 31 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping evpn vpn-instance evpna mac 00e0-fc12-3456 -c 3 -s 200",
+            "  Ping vpn-instance evpna mac 00e0-fc12-3456 : 200 data bytes, press CTRL_C to break  ",
+            "    Reply from 1.1.1.1: bytes=200 sequence=1 time = 11ms    ",
+            "    Reply from 1.1.1.1: bytes=200 sequence=2 time = 10ms    ",
+            "    Reply from 1.1.1.1: bytes=200 sequence=3 time = 10ms  ",
+            "  --- vpn-instance: evpna 00e0-fc12-3456 ping statistics ---    ",
+            "    3 packet(s) transmitted    ",
+            "    3 packet(s) received    ",
+            "    0.00% packet loss    ",
+            "    round-trip min/avg/max = 10/10/11 ms"
+        ],
+        [
+            "<HUAWEI> ping evpn bridge-domain 101 mac 00e0-fc12-3456 -c 3 -s 200",
+            "  Ping bridge-domain 101 mac 00e0-fc12-3456 : 200 data bytes, press CTRL_C to break  ",
+            "    Reply from 1.1.1.1: bytes=200 sequence=1 time = 11ms    ",
+            "    Reply from 1.1.1.1: bytes=200 sequence=2 time = 10ms    ",
+            "    Reply from 1.1.1.1: bytes=200 sequence=3 time = 10ms  ",
+            "  --- bridge-domain: 101 00e0-fc12-3456 ping statistics ---    ",
+            "    3 packet(s) transmitted    ",
+            "    3 packet(s) received    ",
+            "    0.00% packet loss    ",
+            "    round-trip min/avg/max = 10/10/11 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo check EVPN LSPs and fast locate an EVPN tunnel forwarding fault, run the ping evpn command.\nEVPN MAC ping checks EVPN connectivity by sending EVPN echo request and EVPN echo reply messages. Both types of packets are UDP packets transmitted using port 3503. The receive end uses the UDP port number to identify EVPN echo request and reply packets. An EVPN echo request message carries information about the forwarding equivalence class (FEC) for an EVPN tunnel to be monitored. The EVPN echo request message is forwarded with other service packets of the same FEC along the EVPN tunnel. This procedure enables EVPN connectivity check. EVPN echo request packets are transmitted to the destination along EVPN tunnels, whereas EVPN echo reply packets are transmitted to the source through IP.\nEVPN MAC ping can check the following tunnels.\nEVPN public network type is MPLS (MPLS networks support only LDP and TE).EVPN public network type is VXLAN.EVPN public network type is SR(SR-MPLS BE or SR-MPLS TE).EVPN public network type is BGP.EVPN public network type is SRv6(SRv6 BE or SRv6 TE Policy)."
+}

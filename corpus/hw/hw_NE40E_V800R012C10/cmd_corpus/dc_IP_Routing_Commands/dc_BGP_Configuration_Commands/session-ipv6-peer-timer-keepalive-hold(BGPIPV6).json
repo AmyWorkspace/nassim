@@ -1,0 +1,45 @@
+{
+    "PageTitle": "peer timer (BGP-VPN instance view) (IPv6)",
+    "FuncDef": "The peer timer command sets the Keepalive time and hold time for a peer.\nThe undo peer timer command restores the default Keepalive time and hold time.\nBy default, the Keepalive time is 60s, and the hold time is 180s.",
+    "CLIs": [
+        "peer <ipv6-address> timer keepalive <keepalive-time> hold <hold-time>",
+        "peer <ipv6-address> timer keepalive <keepalive-time> hold <hold-time> min-holdtime <min-hold-value>",
+        "undo peer <ipv6-address> timer keepalive hold [ min-holdtime ]",
+        "undo peer <ipv6-address> timer keepalive <keepalive-time> hold <hold-time>",
+        "undo peer <ipv6-address> timer",
+        "undo peer <ipv6-address> timer keepalive <keepalive-time> hold <hold-time> min-holdtime <min-hold-value>"
+    ],
+    "ParentView": [
+        "BGP-VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a peer.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "keepalive keepalive-time",
+            "Info": "Specifies the Keepalive time.\nThe value is an integer ranging from 0 to 21845, in seconds. The default value is 60 seconds."
+        },
+        {
+            "Parameters": "hold hold-time",
+            "Info": "Indicates the hold time.\nThe value is an integer that can be 0, or ranges from 3 to 65535, in seconds. The default value is 180 seconds.\nSetting the hold time of a BGP peer to be longer than 20s is recommended. If the hold time of a BGP peer is shorter than 20s, the session may be closed."
+        },
+        {
+            "Parameters": "min-holdtime min-hold-value",
+            "Info": "Specifies the minimum hold time. On the same device, min-hold-value must be less than hold-time.\nThe value is an integer ranging from 20 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpn1",
+            "[*HUAWEI-bgp-instance-vpn1] peer 2001:DB8:1::1 as-number 200",
+            "[*HUAWEI-bgp-instance-vpn1] peer 2001:DB8:1::1 timer keepalive 10 hold 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter establishing a BGP connection, two peers send Keepalive messages periodically to each other to detect the status of the BGP connection. If a device receives no Keepalive message or any other types of packets from its peer within the holdtime, the device considers the BGP connection closed, and it closes the BGP connection.\nWhen the peers set up a connection, keepalive-time and hold-time are determined by negotiations between the peers. Each of the two peers sends the other an Open packet containing hold-time. The smaller hold-time contained in the Open packets from both peers is used. The smaller of the locally configured keepalive-time and one third of the negotiated hold-time is used as the actual keepalive-time.\nThe peer timer command is used to set the Keepalive time and hold time:\nIf a short Keepalive time and hold time are set, BGP can detect a link fault quickly and implement link switching. The number of Keepalive messages on the network, however, is increased. This increases device loads and consumption of network bandwidth resources.If a long Keepalive time and hold time are set, the number of Keepalive messages on the network is reduced. This reduces device loads. If, however, the Keepalive time is too long, BGP is unable to detect link status changes in time, causing many packets to be lost.\nIf the hold time configured on a remote device is less than the min-hold-value configured on the local device, no BGP peer relationship can be established between the two devices. However, if the hold time configured on the remote device is 0s, a BGP peer relationship can be established between the two devices.\n\nConfiguration Impact\nIf the value of a timer changes, the BGP peer relationship between devices is disconnected. This is because the devices need to re-negotiate keepalive-time and hold-time. Therefore, exercise caution before changing the value of a timer.\nPrecautions\nThe Keepalive time must be at least three times of the hold time.\nWhen setting keepalive-time and hold-time, note the following points:\nIt is recommended that keepalive-time and hold-time are not both set to 0; otherwise, the BGP timers are invalid, and BGP is unable to detect link faults using the timers.The hold-time parameter cannot be significantly greater than the keepalive-time parameter. A setting of timer keepalive 1 hold 65535, for example, would be improper. If the hold time is too long, link faults cannot be detected in time.\nThe Keepalive time and hold time can be configured globally, or on a specified peer. The Keepalive time and hold time configured on a specific peer or peer group takes precedence over the global Keepalive time and hold time. Using this command can still change the Keepalive time and hold time configured on a peer or peer group, although they were globally configured through the timer command.\nAfter the keep-all-routes command is run, the undo peer timer keepalive command becomes ineffective. To have the undo peer timer keepalive command become effective, run the undo keep-all-routes command and then the peer timer keepalive command."
+}

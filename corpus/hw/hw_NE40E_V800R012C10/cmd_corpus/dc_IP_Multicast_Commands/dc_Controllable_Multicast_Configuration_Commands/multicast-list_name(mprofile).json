@@ -1,0 +1,46 @@
+{
+    "PageTitle": "multicast-list (Multicast profile view)",
+    "FuncDef": "The multicast-list command binds a created multicast list to the multicast profile.\nThe undo multicast-list command unbinds a multicast list from the multicast profile.\nBy default, no multicast list is bound to a multicast profile.",
+    "CLIs": [
+        "multicast-list { name <list-name> | list-index <start-index> [ <end-index> ] } [ static ]",
+        "undo multicast-list { name <list-name> | list-index <start-index> [ <end-index> ] } [ static ]"
+    ],
+    "ParentView": [
+        "Multicast profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "name list-name",
+            "Info": "Specifies the name of a multicast program list.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported. The string can contain letters, digits, underscores (_), hyphens (-), and dots (.). It must start with a letter or digit."
+        },
+        {
+            "Parameters": "list-index start-index",
+            "Info": "Specifies the start index of the IPv4 multicast list to be bound to the IPv4 multicast profile.\nThe value is an integer ranging from 0 to 8191."
+        },
+        {
+            "Parameters": "end-index",
+            "Info": "Specifies the end index of an IPv4 multicast program list.\nThe value is an integer ranging from 0 to 8191."
+        },
+        {
+            "Parameters": "static",
+            "Info": "Specifies statically binds.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] multicast-list list1 group-address 239.0.0.1",
+            "[*HUAWEI-aaa] multicast-profile profile1",
+            "[*HUAWEI-aaa-mprofile-profile1] multicast-list name list1 static"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] multicast-profilelist1 group-address 239.0.0.1",
+            "[~HUAWEI-aaa] multicast-profile profile1",
+            "[~HUAWEI-aaa-mprofile-profile1] multicast-list name list1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBind a created multicast list to the multicast profile.\nAfter running the multicast-list static command in the AAA view to create a multicast program list and add the group address of the program to the list, run the multicast-list static (multicast profile view) command to bind the multicast program list to a multicast profile. Then, users of this multicast profile can receive the service flows of the program without sending IGMP Report messages after they go online. Use these commands when a program (such as an advertisement program) needs to be pushed to users, delivered to users' STBs before users join the program, or delivered to Layer 2 devices before users join the program. These commands help shorten the program switching duration.\nPrecautions\nA maximum of ten multicast program lists can be bound to the same multicast profile.Before running the multicast-list static command in the multicast profile view, ensure that the target multicast program lists have been created.When specifying the index of the multicast list, note that the value of end-index cannot be smaller than that of start-index.An IPv4 multicast program list cannot be bound to an IPv4 multicast profile if masks are configured for multicast source or group addresses in the program list."
+}

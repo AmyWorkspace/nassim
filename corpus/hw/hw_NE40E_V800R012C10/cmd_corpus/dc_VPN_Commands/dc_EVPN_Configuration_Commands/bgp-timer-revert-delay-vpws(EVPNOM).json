@@ -1,0 +1,26 @@
+{
+    "PageTitle": "timer revert delay (VPWS-EVPN instance view)",
+    "FuncDef": "The timer revert delay command configures the delay switchback time for an EVPN VPWS instance.\nThe undo timer revert delay command restores the default configuration.\nBy default, the delay switchback time is 0, indicating that the device performs switchback without a delay.",
+    "CLIs": [
+        "timer revert delay <delay-value>",
+        "undo timer revert delay <delay-value>"
+    ],
+    "ParentView": [
+        "VPWS-EVPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay-value",
+            "Info": "Specifies the switchback delay time.\nThe value is an integer ranging from 0 to 3600, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn vpn-instance evrf1 vpws",
+            "[*HUAWEI-vpws-evpn-instance-evrf1] route-distinguisher 100:1",
+            "[*HUAWEI-vpws-evpn-instance-evrf1] timer revert delay 288"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn dual-homing scenarios, if a fault on the access-side link of the primary PE or the primary PE is rectified, EVI AD routes are generated on the primary PE. Then, EVI AD routes can be advertised to the remote PE based on the BGP EVPN peer relationship. After receiving the EVI AD routes and generating forwarding entries, the remote PE switches traffic from the path destined for the secondary PE to the path destined for the primary PE. In this case, a few packets may be lost on the primary PE because not all forwarding entries are generated. To address this problem, run the timer revert delay delay-value command on the remote PE to configure a switchback delay time so that the generation of forwarding entries is delayed after the remote PE receives EVI AD routes. Specifically, the forwarding entries are generated after they become stable. If the delay times out, the remote PE generates new forwarding entries and traffic is switched to the primary PE, avoiding packet loss."
+}

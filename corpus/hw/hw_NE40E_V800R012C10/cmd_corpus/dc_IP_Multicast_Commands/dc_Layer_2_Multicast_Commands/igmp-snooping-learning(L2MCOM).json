@@ -1,0 +1,52 @@
+{
+    "PageTitle": "igmp-snooping learning vlan",
+    "FuncDef": "The igmp-snooping learning vlan command enables an interface to dynamically learn forwarding entries of VLAN.\nThe undo igmp-snooping learning vlan command disables an interface from dynamically learning forwarding entries of VLAN.\nBy default, an interface is enabled to dynamically learn forwarding entries.",
+    "CLIs": [
+        "igmp-snooping learning vlan { { <vlan-id1> [ to <vlan-id2> ] } &<1-10> | all }",
+        "undo igmp-snooping learning vlan { { <vlan-id1> [ to <vlan-id2> ] } &<1-10> | all }"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Eth-Trunk interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies a start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to vlan-id2",
+            "Info": "Specifies an end VLAN ID. If you do not specify to vlan-id2 interfaces are added only to the VLAN specified by vlan-id1.\nThe value is an integer ranging from 1 to 4094. vlan-id2 must be greater than or equal to vlan-id1. vlan-id2 and vlan-id1 specify a VLAN ID range."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates that dynamic forwarding entry learning is enabled in all the VLANs to which a specific interface belongs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan 3",
+            "[*HUAWEI-vlan3] igmp-snooping enable",
+            "[*HUAWEI-vlan3] quit",
+            "[*HUAWEI] vlan 4",
+            "[*HUAWEI-vlan4] igmp-snooping enable",
+            "[*HUAWEI-vlan4] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] port link-type trunk",
+            "[*HUAWEI-GigabitEthernet1/0/0] port trunk allow-pass vlan 3 to 4",
+            "[*HUAWEI] undo igmp-snooping learning vlan 3 to 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter you run the igmp-snooping learning vlan command to enable an interface dynamically to learn forwarding entries, the interface can both be added to a multicast group statically and learn forwarding entries dynamically based on received IGMP Report messages. After the interface is disabled from dynamically learning forwarding entries, you can only add the interface to a multicast group statically.If the igmp-snooping learning vlan command is run more than once, all configurations take effect."
+}

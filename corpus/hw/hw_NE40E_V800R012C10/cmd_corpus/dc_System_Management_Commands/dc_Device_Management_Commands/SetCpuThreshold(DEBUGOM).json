@@ -1,0 +1,36 @@
+{
+    "PageTitle": "set cpu-usage threshold",
+    "FuncDef": "The set cpu-usage threshold command sets the overload threshold and alarm recovery threshold of CPU usage.\nBy default, the overload threshold value of CPU usage is 90, and the alarm recovery threshold of CPU usage is 75.",
+    "CLIs": [
+        "set cpu-usage threshold <threshold> [ restore <restore-threshold-value> ] [ interval <interval-value> ] [ slot <slot-id> ]",
+        "undo set cpu-usage threshold [ threshold [ restore [ <restore-threshold-value> ] ] ] [ interval [ <interval-value> ] ] [ slot <slot-id> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "threshold threshold",
+            "Info": "Sets the overload threshold value of CPU usage. Overload threshold of CPU usage = threshold/100.\nThe value is an integer ranging from 4 to 100. The default value is 90. The default value is recommended."
+        },
+        {
+            "Parameters": "restore restore-threshold-value",
+            "Info": "Sets the alarm recovery threshold of CPU usage. Alarm recovery threshold of CPU usage = restore-threshold-value/100.\nThe value is an integer ranging from 1 to threshold-value minus 3. The default value is 75. The default value is recommended."
+        },
+        {
+            "Parameters": "interval interval-value",
+            "Info": "Specifies a detection period.\nThe value is an integer ranging from 1 to 60, in minutes. The default value is 8 and is recommended."
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Specifies the slot ID of an interface board.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] set cpu-usage threshold 80"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA CPU usage threshold is set as required, which helps monitor CPU usage in time.\nConfiguration Impact\nWhen the CPU usage reaches the overload threshold, the system triggers the SYSTEM_1.3.6.1.4.1.2011.5.25.129.2.4.1 hwCPUUtilizationRisingAlarm alarm.\nWhen the CPU usage decreases to the non-overload threshold, the system triggers the SYSTEM_1.3.6.1.4.1.2011.5.25.129.2.4.2 hwCPUUtilizationResume alarm.\nRun\nset cpu-usage threshold interval command specifies a detection period, the sampling interval is 10s.\nIf CPU usage sample exceeded the pre-set overload threshold during a sampling cycle, SYSTEM_1.3.6.1.4.1.2011.5.25.129.2.4.1 hwCPUUtilizationRisingAlarm alarm was generated.If CPU usage sample continues to fall below the threshold during a sampling cycle, SYSTEM_1.3.6.1.4.1.2011.5.25.129.2.4.2 hwCPUUtilizationResume alarm was generated.\n\nPrecautions\nThis command is supported only on the admin VS.\nIf the overload threshold value of CPU usage is set too small, the system will frequently trigger alarms.If the overload threshold value of CPU usage is set too large, you cannot obtain information about high CPU usage in time.In a board replacement scenario, if the board types are different before and after the replacement, board configurations are re-reported after the replacement. As a result, original board configurations are lost, and the new board configurations are restored as default configurations."
+}

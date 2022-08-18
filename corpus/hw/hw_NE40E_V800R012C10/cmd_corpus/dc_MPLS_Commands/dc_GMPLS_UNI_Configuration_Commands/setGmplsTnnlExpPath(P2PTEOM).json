@@ -1,0 +1,31 @@
+{
+    "PageTitle": "explicit-path (GMPLS tunnel view)",
+    "FuncDef": "The explicit-path command specifies an explicit path for a GMPLS UNI tunnel.\nThe undo explicit-path command restores the default setting.\nBy default, no explicit path is specified for a GMPLS UNI tunnel.",
+    "CLIs": [
+        "explicit-path <path-name>",
+        "undo explicit-path"
+    ],
+    "ParentView": [
+        "GMPLS tunnel view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "path-name",
+            "Info": "Specifies the name of an explicit path for the GMPLS UNI tunnel. The explicit path is configured using the explicit-path (system view) command.\nThe value is a string of 1 to 128 case-insensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] explicit-path path1",
+            "[*HUAWEI-explicit-path-path1] next hop 2.2.2.2",
+            "[*HUAWEI-explicit-path-path1] quit",
+            "[*HUAWEI] gmpls-tunnel toRt2",
+            "[*HUAWEI-gmpls-tunnel-toRt2] explicit-path path1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe device supports the GMPLS technology using the UNI model. Edge nodes (ingress EN and egress EN) of an IP network cannot automatically discover edge nodes (ingress CN and egress CN) of a transport network. Therefore, an explicit path must be specified when a GMPLS UNI tunnel is established. After an explicit path is specified for a GMPLS UNI tunnel:\nThe ingress EN can find the corresponding ingress CN, egress CN, and egress EN based on the explicit path information and send a UNI tunnel connection request to the egress EN.The transport network sets up a forwarding adjacency tunnel between the ingress CN and egress EN based on the explicit path information. (The ingress CN uses the RSVP-TE protocol to set up the tunnel based on the routing information of the transport network.)The nodes along the explicit path generate and forward Path and Resv messages one by one to complete the UNI tunnel establishment.\nSince GMPLS UNI tunnel establishment is triggered by a request sent from the ingress EN, you only need to run the explicit-path command on the ingress EN.\n\nPrerequisites\nThe following operations have been performed:\nThe gmpls-tunnel command has been run to create a GMPLS UNI tunnel.The explicit-path (system view) command has been run to configure the explicit path to be used by the GMPLS UNI tunnel.\n\nConfiguration Impact\nAfter the explicit-path command is run, the ingress EN will send a UNI tunnel connection request to the egress EN based on the explicit path information.\nPrecautions\nThis command is mutually exclusive with the passive command.\nDifferent from a conventional MPLS TE tunnel, a GMPLS UNI tunnel must use an explicit path with four hops (ingress EN, ingress CN, egress CN, and egress EN). If more or less hops are configured, the GMPLS UNI tunnel cannot be established."
+}

@@ -1,0 +1,84 @@
+{
+    "PageTitle": "nat session long-link",
+    "FuncDef": "The nat session long-link command configures a policy for establishing a long TCP connection.\nThe undo nat session long-link command deletes a policy for establishing a long TCP connection.\nBy default, no policy for establishing a long TCP connection is configured.",
+    "CLIs": [
+        "nat session long-link [ inbound | outbound ] tcp { source-ip <ip-address> { <ip-mask> | <mask-length> } [ source-port <port-number> ] [ vpn-instance <vpn-instance-name> ] | { destination-ip <ip-address> { <ip-mask> | <mask-length> } [ destination-port <port-number> ] | destination-port <port-number> } [ vpn-instance <vpn-instance-name> ] } *",
+        "undo nat session long-link [ inbound | outbound ] tcp { source-ip <ip-address> { <ip-mask> | <mask-length> } [ source-port <port-number> ] [ vpn-instance <vpn-instance-name> ] | { destination-ip <ip-address> { <ip-mask> | <mask-length> } [ destination-port <port-number> ] | destination-port <port-number> } [ vpn-instance <vpn-instance-name> ] } *"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "inbound",
+            "Info": "Configures a policy for establishing a long TCP connection in the public network-to-private network direction.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Configures a policy for establishing a long TCP connection in the public private-to-network network direction.\n-"
+        },
+        {
+            "Parameters": "tcp",
+            "Info": "Specifies the TCP protocol.\n-"
+        },
+        {
+            "Parameters": "source-ip ip-address",
+            "Info": "Specifies a source IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "source-ip ip-mask",
+            "Info": "Specifies the mask of a specified IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "source-ip mask-length",
+            "Info": "Specifies the length of a specified source IP address mask.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "source-port port-number",
+            "Info": "Specifies a source TCP port number.\nThe value is an integer ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "destination-ip ip-address",
+            "Info": "Specifies a destination IP address.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "destination-ip ip-mask",
+            "Info": "Specifies the mask of a specified destination IP address.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "destination-ip mask-length",
+            "Info": "Specifies the length of a specified destination IP address mask.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "destination-port port-number",
+            "Info": "Specifies a destination port number.\nThe value is an integer ranging from 0 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 101:101 export-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 101:101 import-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-vpn1] quit",
+            "[~HUAWEI] ip vpn-instance vpn2",
+            "[*HUAWEI-vpn-instance-vpn2] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn2-af-ipv4] route-distinguisher 200:1",
+            "[*HUAWEI-vpn-instance-vpn2-af-ipv4] vpn-target 201:101 export-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn2-af-ipv4] vpn-target 201:101 import-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn2-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-vpn2-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-vpn2] quit",
+            "[~HUAWEI] nat session long-link inbound tcp source-ip 10.1.1.1 24 source-port 1 vpn-instance vpn1 destination-ip 10.2.2.2 24 destination-port 2 vpn-instance vpn2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn some scenarios, for example, financial broke services are transmitted. Such services require TCP session entries to remain without aging if no data is transmitted within a long period. In this situation, run the nat session long-link command to configure a policy for creating a long TCP connection. A first TCP packet matching this policy is used to create a long TCP session entry that lasts for a maximum period of 2,4000 hours.\nPrecautions\nUse the outbound parameter to configure a policy for using forward traffic to establish a TCP session. Use the inbound parameter to configure a policy for using reverse traffic to establish a TCP session. If the outbound and inbound parameters are not configured, the device by default creates policies for both the forward and reverse traffic.\nAfter a policy for creating a long TCP session is created, the performance of using the first packet to establish a NAT session deteriorates, and the aging time of NAT session entries is also affected.\nThe IP address to be specified cannot be within the network segment 0.0.0.0/8 or 127.0.0.0/8 and cannot be a class D or E address. In addition, after an AND operation is performed for the IP address and the mask, the value cannot be within the network segment 0.0.0.0/8.\nThe nat session long-link command takes effect only on NAT44 instance-related session entries. A maximum of 128 TCP-long-connection policies can be created on a device."
+}

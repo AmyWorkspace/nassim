@@ -1,0 +1,42 @@
+{
+    "PageTitle": "qos-profile lns-gts",
+    "FuncDef": "The qos-profile command applies a QoS profile to an AAA domain.\nThe undo qos-profile command cancels the QoS profile that is bound to an AAA domain.\nBy default, no QoS profile is applied to a domain.",
+    "CLIs": [
+        "qos-profile <profile-name> { inbound | outbound } lns-gts",
+        "undo qos-profile { inbound | outbound } lns-gts"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "profile-name",
+            "Info": "Specifies the name of a QoS profile.\nThe value is a string of 1 to 63 characters."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Applies a QoS profile to the incoming traffic of an AAA domain.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Applies a QoS profile to the outgoing traffic of an AAA domain.\n-"
+        },
+        {
+            "Parameters": "lns-gts",
+            "Info": "Applies a QoS profile to L2TP users on an LNS device.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile l2tpin",
+            "[*HUAWEI-qos-l2tpin] commit",
+            "[~HUAWEI-qos-l2tpin] quit",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain test",
+            "[*HUAWEI-aaa-domain-test] commit",
+            "[~HUAWEI-aaa-domain-test] qos-profile l2tpin inbound lns-gts"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can specify the parameter lns-gts only when you need to perform QoS scheduling on user services on an LNS device. Generally, user traffic is mainly controlled on Layer 2 access devices that are on the edge of the network. According to the TR059 model, Layer 2 network traffic should be limited through controlling the traffic brought by the BRAS into the access network. In the wholesales of L2TP service, the LAC implements the service wholesales only, while the LNS actually controls the service; between the LAC and the LNS is an L2TP tunnel. Therefore, traffic that goes into the L2TP tunnel and the service traffic in the tunnel need to be carefully planned and controlled on the LNS to minimize the impact on service quality due to the unchecked resource contention between the LAC and the LNS. This can enable carriers to control the traffic of different services that goes into the backbone network to limit burst traffic from users in the tunnel.\nConfiguration Impact\nThe QoS profile and scheduling direction take effect for new access L2TP users.\nPrecautions\nThis command is supported only on the admin VS.\nWhen lns-gts is not configured, the qos-profile command applies a QoS profile to common users. When lns-gts is configured, the qos-profile command applies a QoS profile to L2TP users on the LNS side. When a QoS profile in which both CAR and user-queue are configured applies to both common and L2TP users, CAR applies to upstream traffic and user-queue applies to downstream traffic for both common and L2TP users.\nAfter user queue is configured in a QoS profile that is applied to LTS users' traffic, user queue does not take effect for incoming traffic.\nThe qos-profile { inbound | outbound } lns-gts command cannot be configured for a domain if a flow queue in four-flow-queue mode is configured in the specified profile.\nThe command cannot be configured while the qos-profile is in time-range mode.\nThe command cannot be configured while the qos-profile is in 8cos-enhance mode."
+}

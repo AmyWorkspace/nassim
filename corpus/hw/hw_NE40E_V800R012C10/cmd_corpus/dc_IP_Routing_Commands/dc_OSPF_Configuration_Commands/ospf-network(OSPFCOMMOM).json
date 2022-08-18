@@ -1,0 +1,35 @@
+{
+    "PageTitle": "network (OSPF area view)",
+    "FuncDef": "The network command specifies the interface that runs OSPF and the area to which the interface belongs.\nThe undo network command disables OSPF from an interface.\nBy default, the interface does not belong to any area.",
+    "CLIs": [
+        "network <address> <wildcard-mask>",
+        "network <address> <wildcard-mask> description <text>",
+        "undo network <address> <wildcard-mask>"
+    ],
+    "ParentView": [
+        "OSPF area view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "address",
+            "Info": "Specifies the address of a network segment where an interface resides.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "wildcard-mask",
+            "Info": "Specifies the wildcard mask of an IP address, which is similar to the reversed form of an IP address mask. \"1\" represents that the corresponding bit in the IP address is ignored, and \"0\" represents that this bit must be reserved.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "description text",
+            "Info": "Specifies the description of an OSPF network segment.\nThe value is a string of 1 to 80 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] area 2",
+            "[*HUAWEI-ospf-100-area-0.0.0.2] network 192.168.1.0 0.0.0.255 description this network is connected to Beijing"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWith the two parameters, address and wildcard-mask, you can configure one or more interfaces in an area. For an interface that runs OSPF, the primary IP address of this interface must be in the range of the network segment specified by the network (OSPF) command. If the secondary IP address of the interface is in the range of the network segment specified by this command, the interface does not run OSPF.\nOSPF can be run on the interface only when the following two requirements are met:\nMask length of the IP address of an interface is not less than that in the network (OSPF) command.Primary IP address of an interface must be in the range of the network segment specified by the network (OSPF) command. Otherwise, even if the secondary IP address of the interface is in the range of the network segment specified by the network (OSPF)\n\nPrecautions\nFor the same network address wildcard-mask, the last description specified by description takes effect.For the loopback interface, by default, OSPF advertises its IP address through 32-bit host routes, which is irrelevant to the mask length of the IP address on the interface.To advertise the network segment route of a loopback interface, run the ospf network-type command to configure the network type as broadcast or NBMA.If a large number of interfaces that do not need to run OSPF services borrow the IP address of a loopback interface, running the ospf enable command rather than the network command on the loopback interface is recommended. If the network command is run on the loopback interface, the configurations of some commands, such as the command used to configure, delete, or modify the loopback interface's IP address or the undo network command, may fail to be delivered, and device performance is affected after a master/slave main control board switchover is performed."
+}

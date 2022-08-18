@@ -1,0 +1,53 @@
+{
+    "PageTitle": "igmp-snooping group-policy vlan",
+    "FuncDef": "The igmp-snooping group-policy vlan command limits the range of multicast groups that hosts in VLANs can join.\nThe undo igmp-snooping group-policy command cancels the configuration.\nBy default, hosts can join any multicast group.",
+    "CLIs": [
+        "igmp-snooping group-policy { <acl-number> | acl-name <acl-name> } [ version <number> ] vlan { <vid1> [ to <vid2> ] } &<1-10>",
+        "undo igmp-snooping group-policy [ { <acl-number> | acl-name <acl-name> } [ version <number> ] ] [ vlan { all | { <vid1> [ to <vid2> ] } &<1-10> } ]"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Eth-Trunk interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of an ACL.\nThe value is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "version number",
+            "Info": "Specifies the version number of IGMP packets.\nThe value is an integer that is 1, 2, or 3."
+        },
+        {
+            "Parameters": "vid1",
+            "Info": "Specifies the start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to vid2",
+            "Info": "Specifies the end VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl name a1",
+            "[*HUAWEI-acl4-advance-a1] rule 1 permit ip source any destination 225.0.0.1 0",
+            "[*HUAWEI-acl4-advance-a1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet 1/0/1.1] igmp-snooping group-policy acl-name a1 vlan 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe igmp-snooping group-policy command is used to limit the range of multicast groups that user hosts can join.\nPrerequisites\nIGMP snooping has been enabled globally.\nRules have been configured for a specified basic ACL.\nConfiguration Impact\nAfter the igmp-snooping group-policy command is run, user hosts cannot join multicast groups beyond the configured multicast group range. If the igmp-snooping group-policy command is run more than once, all configurations take effect.\nPrecautions\nIf no IGMP version is specified, the device will apply the configured group policy to all IGMP messages (IGMPv1/IGMPv2/IGMPv3 messages) and the ACL configured for the group policy must be a basic ACL."
+}

@@ -1,0 +1,45 @@
+{
+    "PageTitle": "ppp chap user",
+    "FuncDef": "The ppp chap user command configures a local user name.\nThe undo ppp chap user command deletes the configured local user name.\nBy default, no local user name is configured.",
+    "CLIs": [
+        "ppp chap user <user-name>",
+        "undo ppp chap user"
+    ],
+    "ParentView": [
+        "LMP configuration view",
+        "POS interface view",
+        "POS-Trunk interface view",
+        "Trunk serial interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-name",
+            "Info": "Specifies a local user name.\nThe value is a string of 1 to 253 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface pos 1/0/1",
+            "[~HUAWEI-Pos1/0/1] ppp chap user Huawei"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface serial 1/0/0:2",
+            "[~HUAWEI-Serial1/0/0:2] ppp chap user Huawei"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI-lmp] lmp",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] quit",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] lmp interface enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] interface Lmpif1/0/0",
+            "[*HUAWEI-Lmpif1/0/0] ppp chap user Huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe devices on both ends of a PPP link must complete the authentication phase before entering the network-layer protocol phase during the PPP link establishment in most cases. There are two major PPP authentication modes: PAP and CHAP. CHAP authentication is available in two modes: unidirectional and bidirectional. In former mode, one end functions as the authenticator, and the other end as the authenticatee. In latter end, both ends function as the authenticator as well as the authenticatee. In practice, only the unidirectional CHAP authentication is adopted. The unidirectional CHAP authentication can be either of the following: the authenticator is configured with a user name or the authenticator is not configured with a user name.\nThe ppp chap user command is similar to the ppp chap password command, and is used to specify the user name with which the local Device is authenticated by the peer in CHAP mode when the peer (authenticator) is not configured with a user name. In this situation, the authenticator sends a Challenge packet to the authenticatee. Based on the password configured on its interface and the Challenge packet, the authenticatee calculates a value using encryption algorithm. Then the authenticatee sends its host name and the calculated value in a response packet to the authenticator.\nPrerequisites\nInterfaces are connected, and physical parameters of the interfaces are configured so that the physical layer status of the interfaces is Up.\nPPP has been configured as the link layer protocol of the interface.\nThe authentication mode is CHAP.\nConfiguration Impact\nIf the ppp chap user command is run more than once, the latest configuration overrides the previous one. After the configuration, the peer authenticates the local Device using the configured user name.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIn CHAP authentication mode, the user names and passwords on two Devices must be the same.\nAfter the configuration, you must run the shutdown, commit, and undo shutdown commands in the corresponding interface view for the configuration to take effect."
+}

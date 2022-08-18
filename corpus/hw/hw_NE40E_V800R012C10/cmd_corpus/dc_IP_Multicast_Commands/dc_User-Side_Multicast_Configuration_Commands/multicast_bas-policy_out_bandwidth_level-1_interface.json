@@ -1,0 +1,39 @@
+{
+    "PageTitle": "multicast bas-policy out interface gigabitethernet",
+    "FuncDef": "The multicast bas-policy out interface gigabitethernet command specifies a multicast bandwidth limit policy and sets bandwidth limits in an AAA domain.\nThe undo multicast bas-policy out interface gigabitethernet deletes a multicast bandwidth limit policy and bandwidth limits in an AAA domain.\nBy default, no multicast bandwidth limit policy or bandwidth limits are configured in an AAA domain.",
+    "CLIs": [
+        "multicast bas-policy <policy-name> out bandwidth <traffic-rate> level-1 <level-1-traffic-rate> interface gigabitethernet",
+        "undo multicast bas-policy <policy-name> out [ bandwidth <traffic-rate> level-1 <level-1-traffic-rate> ] interface gigabitethernet"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name",
+            "Info": "Specifies the name of a multicast bandwidth limit policy.\nThe value is a string of 1 to 15 case-sensitive characters. Digits, letters, and underscores (_) are supported, but spaces are not."
+        },
+        {
+            "Parameters": "bandwidth traffic-rate",
+            "Info": "Specifies the total maximum bandwidth on an interface.\nThe value is an integer ranging from 1 to 1048576, in kbit/s."
+        },
+        {
+            "Parameters": "level-1 level-1-traffic-rate",
+            "Info": "Specifies the maximum level-1 bandwidth available to each user in a specified AAA domain.\nThe value is an integer ranging from 1 to 1048576, in kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast bas-policy",
+            "[*HUAWEI-multicast-bas-policy] policy policy1",
+            "[*HUAWEI-multicast-bas-policy-policy1] quit",
+            "[*HUAWEI-multicast-bas-policy] quit",
+            "[*HUAWEI] aaa",
+            "[*HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-domain-huawei] commit",
+            "[*HUAWEI-domain-huawei] multicast bas-policy policy1 out bandwidth 10000 level-1 8000 interface GigabitEthernet"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo specify a multicast bandwidth limit policy and set bandwidth limits in a specific AAA domain, run the multicast bas-policy out bandwidth level-1 interface command in the AAA domain view.\nIf the consumed level-1 bandwidth is A1 and the consumed level-2 bandwidth is A2, the device calculates the remaining level-1 bandwidth B1 and remaining level 2 bandwidth B2 when receiving a new service request from a user:\nB1 = Maximum level-1 bandwidth - A1B2 = Maximum level-2 bandwidth - A2\nIf the user's remaining bandwidth B1 or B2 (determined by the level of bandwidth that the user is configured to consume) is sufficient, the device permits the service request; otherwise, the device denies the service request.\n\nPrerequisites\nA multicast bandwidth limit policy has been configured.\nPrecautions\nIf the maximum number of multicast programs allowed is also specified in an AAA domain view, the device denies a new service request when either the maximum number of multicast programs or the bandwidth limit is exceeded.An AAA domain allows you to specify only one multicast bandwidth limit policy.The command configuration is effective only for users on GE interfaces.The command configuration is effective only for new access requests of users."
+}

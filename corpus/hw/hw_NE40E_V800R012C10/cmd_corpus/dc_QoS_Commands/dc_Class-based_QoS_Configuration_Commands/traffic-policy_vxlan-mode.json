@@ -1,0 +1,56 @@
+{
+    "PageTitle": "traffic-policy vxlan-mode",
+    "FuncDef": "The traffic-policy vxlan-mode command configures an MF traffic policy for packets entering or exiting a VXLAN tunnel based on the BD (L2VNI scenario) or VPN instance (L3VNI scenario).\nThe undo traffic-policy vxlan-mode command deletes the traffic policy applied to a BD/VPN instance.\nBy default, traffic classification is implemented for packets entering or exiting a VXLAN tunnel based on Layer 3 information.",
+    "CLIs": [
+        "traffic-policy <policy-name> { inbound [ link-layer ] | outbound } vxlan-mode",
+        "undo traffic-policy [ <policy-name> ] { inbound [ link-layer ] | outbound } vxlan-mode"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance view",
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name",
+            "Info": "Specifies the name of a traffic policy.\nThe value is a string of 1 to 127 case-sensitive characters."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies inbound direction.\n-"
+        },
+        {
+            "Parameters": "link-layer",
+            "Info": "Classifies traffic based on Layer 2 information.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies outbound direction.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic policy policy1",
+            "[*HUAWEI-trafficpolicy-policy1] quit",
+            "[*HUAWEI] bridge-domain 1",
+            "[*HUAWEI-bd1] traffic-policy policy1 outbound vxlan-mode",
+            "[*HUAWEI-bd1] commit",
+            "[~HUAWEI-bd1] quit",
+            "[~HUAWEI] ip vpn vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] traffic-policy policy1 outbound vxlan-mode"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic policy policy2",
+            "[*HUAWEI-trafficpolicy-policy2] quit",
+            "[*HUAWEI] bridge-domain 1",
+            "[*HUAWEI-bd1] traffic-policy policy2 inbound vxlan-mode",
+            "[*HUAWEI-bd1] commit",
+            "[~HUAWEI-bd1] quit",
+            "[~HUAWEI] ip vpn vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] traffic-policy policy2 inbound vxlan-mode"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure an MF traffic policy for packets entering or exiting a VXLAN tunnel based on the BD (L2VNI scenario) or VPN instance (L3VNI scenario), run the traffic-policy vxlan-mode command.\nFor packets entering a VXLAN tunnel, you can run the traffic-policy outbound vxlan-mode command to configure an MF traffic policy based on the BD (L2VNI scenario) or VPN instance (L3VNI scenario).\nFor packets exiting a VXLAN tunnel, you can run the traffic-policy inbound link-layer vxlan-mode command to configure an MF traffic policy based on the BD (L2VNI scenario) or VPN instance (L3VNI scenario) to match Layer 2 packets.\nFor packets exiting a VXLAN tunnel, you can run the traffic-policy inbound vxlan-mode command to configure an MF traffic policy based on the BD (L2VNI scenario) or VPN instance (L3VNI scenario) to match Layer 3 packets.\nPrerequisites\nA VXLAN tunnel has been configured.\nPrecautions\nWhen packets enter/exit a VXLAN tunnel, a traffic policy is bound based on the BD (L2VNI scenario) or VPN (L3VNI scenario) instance and the corresponding traffic behavior is performed.\nThe traffic-statistic function cannot be configured for the traffic behavior in a traffic policy for VXLAN in a BD view."
+}

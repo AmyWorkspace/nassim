@@ -1,0 +1,53 @@
+{
+    "PageTitle": "match dscp",
+    "FuncDef": "The match dscp command sets a DSCP value for IPv4 and IPv6 packets to be imported into the SR-MPLS TE tunnel.\nThe undo match dscp command deletes the DSCP value for IPv4 and IPv6 packets.\nBy default, IPv4/IPv6 packets are not sent to an SR-MPLS TE tunnel based on DSCP values.",
+    "CLIs": [
+        "match dscp ipv4 { <dscp-value> [ to <dscp-value> ] } &<1-32>",
+        "match dscp ipv4 default",
+        "match dscp ipv6 default",
+        "match dscp ipv6 { <dscp-value> [ to <dscp-value> ] } &<1-32>",
+        "undo match dscp ipv4 default",
+        "undo match dscp ipv4 { <dscp-value> [ to <dscp-value> ] } &<1-32>",
+        "undo match dscp { ipv4 | ipv6 }",
+        "undo match dscp ipv6 { <dscp-value> [ to <dscp-value> ] } &<1-32>",
+        "undo match dscp ipv6 default"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dscp-value",
+            "Info": "Sets a start DSCP value for packets that enter an SR-MPLS TE tunnel.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "to dscp-value",
+            "Info": "Sets an end DSCP value for packets that enter an SR-MPLS TE tunnel.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "ipv4",
+            "Info": "Specifies a DSCP value of IPv4 packets that enter an SR-MPLS TE tunnel.\n-"
+        },
+        {
+            "Parameters": "default",
+            "Info": "Forwards traffic to pass through the default SR-MPLS TE tunnel if the traffic has the DSCP values that do not match the specified value.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Specifies a DSCP value of IPv6 packets that enter an SR-MPLS TE tunnel.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[~HUAWEI] interface tunnel 102",
+            "[~HUAWEI-tunnel102] tunnel-protocol mpls te",
+            "[~HUAWEI-tunnel102] mpls te signal-protocol segment-routing",
+            "[*HUAWEI-tunnel102] match dscp ipv4 20 to 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an SR-MPLS TE scenario, DSCP values can be set for packets so that the packets can pass through tunnels that match the specified DSCP values. The priority setting in CBTS mode for traffic transmitted over TE tunnels cannot meet service requirements because service segments are increasing. Similar to CBTS, DSCP values can be set for IPv4 and IPv6 packets. Each packet with a specified DSCP value enters a specific SR-MPLS TE tunnel.\nPrerequisites\nSR-MPLS TE tunnels have been configured on tunnel interfaces.\nPrecautions\nThe match dscp command takes effect on IPv4 and IPv6 services only in the EVPN L3VPN, IP/L3VPN over SR-MPLS TE, and IP/L3VPN over LDP over SR-MPLS TE (on a node where LDP and SR-MPLS TE LSPs overlap) scenarios.\nWhen L3VPNv4/v6 services are transmitted, they can enter intra-domain SR-MPLS TE tunnels or inter-domain E2E SR-MPLS TE tunnels that match specified DSCP values in the following scenarios:L3VPNv4/v6 over SR-MPLS TE and its load balancing scenariosL3VPNv4/v6 over LDP over SR-MPLS TE and its load balancing scenariosWhen IPv4 (IPv6) services are transmitted, they can enter intra-domain SR-MPLS TE tunnels or inter-domain E2E SR-MPLS TE tunnels that match specified DSCP values in the following scenarios:IPv4 (IPv6) over SR-MPLS TE scenarioIPv4 (IPv6) over LDP over SR-MPLS TE scenario\nIf the match dscp command is run repeatedly on a tunnel interface, the latest configuration overrides the previous one.\nBoth the match dscp ipv4 and match dscp ipv6 commands can be run to set a maximum of 32 DSCP values (DSCP ranges) in total.\nThe match dscp command is mutually exclusive with the service-class command on the SR-MPLS TE tunnel interface. If both commands are run, an error message is displayed.\nWhen services are load balanced among multiple SR-MPLS TE tunnels, the service-class command is run for some tunnels and the DSCP values are set for the other tunnels. In this case, the DSCP function does not take effect.\nWhen IPv4 (IPv6) packets enter SR-MPLS TE tunnels based on DSCP values, a maximum of 16 public network tunnels that match the same DSCP value can work in load balancing mode."
+}

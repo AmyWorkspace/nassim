@@ -1,0 +1,39 @@
+{
+    "PageTitle": "timer keepalive hold (BGP view)",
+    "FuncDef": "The timer keepalive hold command sets the Keepalive time and hold time.\nThe undo timer keepalive hold command restores the default Keepalive time and hold time.\nBy default, the Keepalive time is 60s, and the hold time is 180s.",
+    "CLIs": [
+        "timer keepalive <keepalive-time> hold <hold-time> [ min-holdtime <min-hold-value> ]",
+        "undo timer keepalive hold [ min-holdtime ]",
+        "undo timer keepalive <keepalive-time> hold <hold-time> [ min-holdtime <min-hold-value> ]"
+    ],
+    "ParentView": [
+        "BGP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "hold hold-time",
+            "Info": "Specifies the hold time.\nThe value is an integer that can be 0, or ranges from 3 to 65535, in seconds."
+        },
+        {
+            "Parameters": "min-holdtime min-hold-value",
+            "Info": "Specifies the minimum hold time. On the same device, min-hold-value must be less than hold-time.\nThe value is an integer ranging from 20 to 65535, in seconds."
+        },
+        {
+            "Parameters": "keepalive keepalive-time",
+            "Info": "Specifies the Keepalive time.\nThe value is an integer ranging from 0 to 21845, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] timer keepalive 30 hold 90"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] timer keepalive 30 hold 90 min-holdtime 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a connection is established between peers, keepalive-time and hold-time are negotiated by the peers.\nThe smaller hold-time carried by Open messages of both peers is used as the hold-time.The smaller value of one third of hold-time and the locally configured keepalive-time is used as the keepalive-time.\nIf the hold time configured on a remote device is less than the min-hold-value configured on the local device, no BGP peer relationship can be established between the two devices. However, if the hold time configured on the remote device is 0s, a BGP peer relationship can be established between the two devices.\n\nConfiguration Impact\nThe timers configured for a specific peer or peer group using the peer timer command override the timers configured for all BGP peers using the timer command.\nPrecautions\nIf the value of a timer changes, the BGP peer relationship between devices is disconnected. This is because the devices need to re-negotiate keepalive-time and hold-time. Therefore, exercise caution before changing the value of a timer.\nSetting the hold time to a value at least three times the Keepalive time is recommended. When setting keepalive-time and hold-time, note the following points:\nThe keepalive-time and hold-time parameters cannot both be set to 0; otherwise, the BGP timers are invalid, and BGP is unable to detect link faults using the timers.The hold-time parameter cannot be significantly greater than the keepalive-time parameter. A setting of timer keepalive 1 hold 65535, for example, would be improper. If the hold time is too long, link faults cannot be detected in time."
+}

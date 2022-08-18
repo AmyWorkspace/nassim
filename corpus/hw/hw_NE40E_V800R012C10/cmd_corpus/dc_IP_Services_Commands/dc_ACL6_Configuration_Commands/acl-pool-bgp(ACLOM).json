@@ -1,0 +1,48 @@
+{
+    "PageTitle": "apply bgp-peer",
+    "FuncDef": "The apply bgp-peer command associates BGP peers with the address pools to which their addresses belong.\nThe undo apply bgp-peer command disassociates BGP peers from the address pools to which their addresses belong.\nBy default, BGP peers are not associated with the address pools to which their addresses belong.",
+    "CLIs": [
+        "apply bgp-peer [ public-vpn | all-private-vpn | vpn-instance <vpn-instance-name> ]",
+        "undo apply bgp-peer [ public-vpn | all-private-vpn | vpn-instance <vpn-instance-name> ]"
+    ],
+    "ParentView": [
+        "ACL IPv6 address pool view",
+        "ACL address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "public-vpn",
+            "Info": "Associates all public-network BGP peers with the address pools to which their addresses belong.\n-"
+        },
+        {
+            "Parameters": "all-private-vpn",
+            "Info": "Associates all VPN BGP peers with the address pools to which their addresses belong.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Associates BGP peers in a specified VPN with the address pools to which their addresses belong.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ip-pool test",
+            "[~HUAWEI-acl-ip-pool-test] apply bgp-peer"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] acl ip-pool test",
+            "[*HUAWEI-acl-ip-pool-test] apply bgp-peer vpn-instance vpn1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6-pool test",
+            "[~HUAWEI-acl-ipv6-pool-test] apply bgp-peer"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf you need to filter packets based on the source IP addresses of BGP peers, run the apply bgp-peer command to associate the IP addresses of BGP peers with the ACL/ACL IPv6 address pools to which these addresses belong. Then, reference ACL/ACL6 address pool in QoS or device security service to filter packets based on the source IP addresses of BGP peers.\nYou can configure multiple addresses in the ACL address pool view and bound these addresses to ACL rules. After address association is configured between ACL address pool and BGP peers, if the IP address of a BGP peer changes, the IP address changes accordingly in the ACL address pool. This simplifies configurations and provides flexibility.\nPrecautions\nThe address association function and manual IP configuration function are mutually exclusive. Only one of the apply bgp-peer and ip address commands can be run in the ACL address pool view.\nThis command is applicable only to QoS or device security services."
+}

@@ -1,0 +1,41 @@
+{
+    "PageTitle": "ptp clock-source local (virtual access port-extension view)",
+    "FuncDef": "The ptp clock-source local time-source time-source-value command configures attributes of a clock source. This command applies only to grandmaster clocks.\nThe ptp clock-source local clock-accuracy clock-accuracy-value command configures the precision of a clock source.\nThe ptp clock-source local clock-class clock-class-value command configures a clock level.\nThe ptp clock-source local priority1 priority1-value command configures priority1 of a clock source. The value of priority1 ranges from 0 to 255. The default value is 128.\nThe ptp clock-source local priority2 priority2-value command configures priority2 of a clock source. The value of priority2 ranges from 0 to 255. The default value is 128.\n\ntime-source-value: The default value is INTERNAL_OSCILLATOR.\n\n\nclock-accuracy-value: The default value is 0x20 for BITS interfaces and 0x31 for local interfaces.\n\n\nclock-class-value: The default value is 6 for BITS interfaces and 187 for local interfaces.\n\n\npriority1-value: The default value is 128.\n\n\npriority2-value: The default value is 128.",
+    "CLIs": [
+        "ptp clock-source local { time-source <time-source-value> | clock-accuracy <clock-accuracy-value> | clock-class <clock-class-vlaue> | priority1 <priority1-value> | priority2 <priority2-value> }",
+        "undo ptp clock-source local { time-source | clock-accuracy | clock-class | priority1 | priority2 }"
+    ],
+    "ParentView": [
+        "Virtual access port-extension view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time-source-value",
+            "Info": "Specifies the value of a time source attribute. This parameter is configured only for the grandmaster.\nThe value is a 2-character hexadecimal number. The default value is 8."
+        },
+        {
+            "Parameters": "clock-accuracy clock-accuracy-value",
+            "Info": "Specifies the accuracy value of a clock source.\nThe value is a 2-character hexadecimal number.\nThe default value is 0x20 for a BITS source. Table 2 lists the mapping between clock accuracy attributes and their values.\nThe default value is 0x31 for a local source in 1588v2 mode.\nThe default value is 0xFE (unknown time accuracy) for a local source in G.8275.1 mode and CU-106 mode. The value cannot be configured."
+        },
+        {
+            "Parameters": "clock-class clock-class-vlaue",
+            "Info": "Specifies a clock class.\nThe value is an integer ranging from 0 to 255.\nThe default value is 6 for a BITS source.\nThe default value is 187 for a local source in 1588v2 mode.\nThe default value is 248 for a local source in G.8275.1 mode and CU-106 mode. clock-class-value cannot be configured. If a device lost its tracked T-GM, clock-class-value becomes 165. clock-class-value of the grandmaster clock cannot be smaller than 187."
+        },
+        {
+            "Parameters": "priority1 priority1-value",
+            "Info": "Specifies the value of clock signal priority1.\nThe value is an integer ranging from 0 to 255. The default value is 128. A smaller value indicates a higher priority. The G.8275.1 mode and CU-106 mode do not support priority1."
+        },
+        {
+            "Parameters": "priority2 priority2-value",
+            "Info": "Specifies the value of clock signal priority2.\nThe value is an integer ranging from 0 to 255. The default value is 128. A smaller value indicates a higher priority."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] virtual-access port-extend",
+            "[~HUAWEI-virtual-access-portextend] ptp clock-source local clock-accuracy 31"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe best master clock (BMC) algorithm enables dynamic 1588v2, G.8275.1, or CU-106 devices to automatically select the grandmaster and master clocks. To set parameters used by the BMC algorithm, run the ptp clock-source command.\nPrecautions\nWhen a 1588v2-enabled router uses the BMC algorithm to dynamically select a clock source, the device compares the following parameters in sequence: priority1>clock-class>clock-accuracy>priority2. The clock source with the highest priority is selected as the master clock."
+}

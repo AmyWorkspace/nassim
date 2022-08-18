@@ -1,0 +1,73 @@
+{
+    "PageTitle": "tunnel select-seq",
+    "FuncDef": "The tunnel select-seq command configures the sequence in which different types of tunnels are selected and the number of tunnels participating in load balancing.\nThe undo tunnel select-seq command restores the default setting.\nBy default, LSPs are applied, and multiple LDP LSPs can implement load balancing. If only BGP LSPs exist on a network, only one is selected, and load balancing cannot be implemented. If only SR LSPs exist on a network, the system selects SR LSPs for use, and multiple SR LSPs can implement load balancing.",
+    "CLIs": [
+        "tunnel select-seq { gre | lsp | cr-lsp | sr-te-policy } * load-balance-number <load-balance-number> [ unmix ]",
+        "tunnel select-seq { gre | ldp | bgp | cr-lsp | sr-lsp | sr-te-policy } * load-balance-number <load-balance-number> [ unmix ]",
+        "tunnel select-seq { gre | lsp | te | sr-te | sr-te-policy } * load-balance-number <load-balance-number> [ unmix ]",
+        "tunnel select-seq { gre | ldp | bgp | te | sr-te | sr-lsp | sr-te-policy } * load-balance-number <load-balance-number> [ unmix ]",
+        "undo tunnel select-seq"
+    ],
+    "ParentView": [
+        "Tunnel policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "gre",
+            "Info": "Specifies the sequence of GRE tunnels. The earlier it is listed, the higher the priority.\n-"
+        },
+        {
+            "Parameters": "lsp",
+            "Info": "Specifies the sequence of conventional LSPs. The earlier it is listed, the higher the priority.\n-"
+        },
+        {
+            "Parameters": "cr-lsp",
+            "Info": "Specifies the sequence of CR-LSPs. The earlier it is listed, the higher the priority.\nCR-LSPs include RSVP-TE tunnels and SR-MPLS TE tunnels. If cr-lsp is specified in the command, the tunnel that goes up earlier has a higher priority. If you create an RSVP-TE or SR-MPLS TE tunnel and do not want the tunnel to be selected using a tunnel priority policy with cr-lsp configured, run the mpls te reserved-for-binding command on the RSVP-TE or SR-MPLS TE tunnel interface.\nThe cr-lsp parameter is mutually exclusive with the te and sr-te parameters.\n-"
+        },
+        {
+            "Parameters": "sr-te-policy",
+            "Info": "Indicates the preference sequence of SR-MPLS TE policy tunnels. The earlier this type of tunnel is listed, the higher the priority is.\n-"
+        },
+        {
+            "Parameters": "load-balance-number load-balance-number",
+            "Info": "Specifies the number of tunnels participating in load balancing.\nThe value is an integer ranging from 1 to 64."
+        },
+        {
+            "Parameters": "unmix",
+            "Info": "Indicates that only one type of tunnel can be selected.\n-"
+        },
+        {
+            "Parameters": "ldp",
+            "Info": "Indicates the preference sequence of LDP LSPs.\n-"
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Indicates the preference sequence of BGP LSPs.\n-"
+        },
+        {
+            "Parameters": "sr-lsp",
+            "Info": "Indicates the preference sequence of SR LSPs.\n-"
+        },
+        {
+            "Parameters": "te",
+            "Info": "Indicates the preference sequence of RSVP-TE tunnels.\n-"
+        },
+        {
+            "Parameters": "sr-te",
+            "Info": "Indicates the preference sequence of SR-MPLS TE tunnels.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-policy lsp-only",
+            "[*HUAWEI-tunnel-policy-lsp-only] tunnel select-seq lsp load-balance-number 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-policy policy1",
+            "[*HUAWEI-tunnel-policy-policy1] tunnel select-seq sr-te-policy load-balance-number 1 unmix"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, a VPN instance uses LSPs for service transmission on the backbone network. To use other types of tunnels or configure load balancing for service transmission of the VPN instance, apply a tunnel policy to the VPN instance.\nA tunnel policy determines the selection of tunnels for VPN services. Two types of tunnel policies are available:\nTunnel type prioritizing policy: This policy specifies the sequence in which different types of tunnels are selected. The tunnel select-seq command is used to configure a tunnel type prioritizing policy.Tunnel binding policy: This policy binds a tunnel to a VPN for service transmission. The tunnel binding command is used to configure a tunnel binding policy.\nAfter the tunnel select-seq command is run, the VPN instance preferentially selects the tunnel type with the highest priority according to the specified sequence. For example, after the tunnel select-seq cr-lsp lsp load-balance-number 2 command is run in the tunnel policy view, the VPN instance will preferentially select CR-LSPs to transmit services on the backbone network:\nIf two or more CR-LSPs are available on the network, the VPN instance randomly selects two of them for service transmission.If no CR-LSP or only one CR-LSP is available on the network, the VPN instance selects an LSP as the substitute to work with the existing CR-LSP for service transmission.If the number of CR-LSPs used by the VPN instance falls to 1, the VPN instance uses the tunnel policy to re-select LSPs as substitutes to work with the existing CR-LSP.If the number of CR-LSPs used by the VPN instance falls to 0, the VPN instance uses the tunnel policy to re-select LSPs for service transmission.\nCR-LSPs include RSVP-TE tunnels and SR-MPLS TE tunnels. If cr-lsp is specified in the tunnel select-seq command, the tunnel that goes Up earlier has a higher priority.\nIf lsp is specified in the command, the following LSPs can be selected: LDP LSP, SR LSP (SR-MPLS BE) , BGP LSP and static LSP. The priority sequence of LSPs participating in load balancing is LDP LSP > BGP LSP > static LSP > SR LSP. For example, in a scenario where the tunnel select-seq lsp load-balance-number 2 command is configured for the tunnel policy:\nIf there is one LDP LSP available on the network, this LDP LSP is preferentially selected.If there are BGP LSPs on the network, BGP LSPs are selected for compensation.If there are no BGP LSPs on the network, static LSPs and SR LSPs are selected for compensation.\nIf you want a VPN to select LDP LSPs, SR LSPs or BGP LSPs first, configure ldp, sr-lsp or bgp when running the tunnel select-seq command.\nIf you want a VPN to select RSVP-TE tunnels or SR-MPLS TE tunnels first, configure te or SR-MPLS TE when running the tunnel select-seq command.\nIf unmix is configured, only one type of tunnel can be selected. For example, in a scenario where the tunnel select-seq cr-lsp lsp load-balance-number 3 unmix command is configured for the tunnel policy:\nIf three or more CR-LSPs are available on the network, the system randomly selects three of them for service transmission.If less than three CR-LSPs are available on the network, the system selects only the available CR-LSPs for service transmission.\n\nConfiguration Impact\nIf the tunnel select-seq command has been configured for a tunnel policy, you cannot configure the tunnel binding command for the tunnel policy.\nFollow-up Procedure\nAfter the tunnel type prioritizing policy is configured, you need to associate it with a VPN instance so that tunnels can be selected in sequence to carry VPN services and carry out load balancing.\nPrecautions\nlsp cannot be used with ldp, sr-lsp or bgp in the tunnel select-seq command.\ncr-lsp cannot be used with te or SR-MPLS TE in the tunnel select-seq command.\nIf you specify the SR-MPLS TE-policy parameter, the unmix parameter must also be specified because an SR-MPLS TE policy tunnel cannot work in load balancing mode with the other types of tunnels."
+}

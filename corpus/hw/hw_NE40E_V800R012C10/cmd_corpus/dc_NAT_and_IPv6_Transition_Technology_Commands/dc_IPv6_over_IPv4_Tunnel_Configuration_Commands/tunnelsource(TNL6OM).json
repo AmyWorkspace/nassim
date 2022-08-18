@@ -1,0 +1,79 @@
+{
+    "PageTitle": "source (IPv6 over IPv4 Tunnel)",
+    "FuncDef": "The source command configures a source IP address or source interface for an IPv6 over IPv4 tunnel interface.\nThe undo source command deletes a source IP address or source interface for an IPv6 over IPv4 tunnel interface.\nBy default, no source IP address or source interface is configured for an IPv6 over IPv4 tunnel interface.",
+    "CLIs": [
+        "source <ipv6-address>",
+        "source { <interface-name> | <interface-type> <interface-number> }",
+        "undo source"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the source IP address for an IPv6 over IPv4 tunnel interface.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the source interface name for an IPv6 over IPv4 tunnel.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the source interface type for an IPv6 over IPv4 tunnel.\nThe value is an enumerated type, case-insensitive and can only be loopback."
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the source interface number for an IPv6 over IPv4 tunnel. The interface-type and interface-number parameters can be separated by spaces or configured without a space in between.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol ipv6-ipv4",
+            "[*HUAWEI-Tunnel1] source 1.1.1.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack 1",
+            "[*HUAWEI-LoopBack1] quit",
+            "[*HUAWEI] interface Tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol ipv6-ipv4",
+            "[*HUAWEI-Tunnel1] source LoopBack 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol ipv6-ipv4 6to4",
+            "[*HUAWEI-Tunnel1] source 1.1.1.1",
+            "Info: The source of this tunnel cannot be the same as that of other tunnels that do not require the destination address."
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack 1",
+            "[*HUAWEI-LoopBack1] quit",
+            "[*HUAWEI] interface Tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol ipv6-ipv4 6to4",
+            "[*HUAWEI-Tunnel1] source LoopBack 1",
+            "Info: The source of this tunnel cannot be the same as that of other tunnels that do not require the destination address."
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol ipv6-ipv4 6rd",
+            "[*HUAWEI-Tunnel1] source 1.1.1.1",
+            "Info: The source of this tunnel cannot be the same as that of other tunnels that do not require the destination address."
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack 1",
+            "[*HUAWEI-LoopBack1] quit",
+            "[*HUAWEI] interface Tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol ipv6-ipv4 6rd",
+            "[*HUAWEI-Tunnel1] source LoopBack 1",
+            "Info: The source of this tunnel cannot be the same as that of other tunnels that do not require the destination address."
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen configuring an IPv6 over IPv4 tunnel, you need to create a tunnel interface and run the source command to configure a source IP address or source interface for the tunnel interface.\nPrerequisites\nThe tunnel encapsulation mode has been set to IPv6 over IPv4 using the tunnel-protocol ipv6-ipv4 command.\nPrecautions\nThe same source and destination addresses cannot be configured for two or more tunnel interfaces that use the same encapsulation protocol.\nThe source IP address specified for the tunnel interface at one end of an IPv6 over IPv4 tunnel must be the same as the destination IP address specified for the tunnel interface on the other end of the tunnel. In addition, you must ensure that the route to the interface that receives packets on the other end of the tunnel is reachable."
+}

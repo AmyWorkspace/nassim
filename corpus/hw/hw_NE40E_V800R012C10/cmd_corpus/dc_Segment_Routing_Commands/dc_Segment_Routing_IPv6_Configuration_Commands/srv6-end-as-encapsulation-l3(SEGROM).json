@@ -1,0 +1,55 @@
+{
+    "PageTitle": "encapsulation ipv4 (SRv6 locator End-AS view)",
+    "FuncDef": "The encapsulation ipv4 command is used to configure the Layer 3 forwarding function from SFF to SF.\nThe undo encapsulation ipv4 command is used to remove the Layer 3 forwarding configuration from SFF to SF.\nBy default, no SFF to SF Layer 3 forwarding configuration is configured.",
+    "CLIs": [
+        "encapsulation ipv4 nexthop <nexthop-addr> out-interface { <outInterfaceName> | <outInterfaceType> <outInterfaceNum> } in-interface { <inInterfaceName> | <inInterfaceType> <inInterfaceNum> } [ symmetric-index <index-value> ]",
+        "undo encapsulation ipv4 nexthop <nexthop-addr> out-interface { <outInterfaceName> | <outInterfaceType> <outInterfaceNum> } in-interface { <inInterfaceName> | <inInterfaceType> <inInterfaceNum> } [ symmetric-index <index-value> ]"
+    ],
+    "ParentView": [
+        "SRv6 locator End-AS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "out-interface outInterfaceName",
+            "Info": "Specifies the name of an outbound interface.\n-"
+        },
+        {
+            "Parameters": "outInterfaceType",
+            "Info": "Specifies the type of the outbound interface.\n-"
+        },
+        {
+            "Parameters": "outInterfaceNum",
+            "Info": "Specifies the number of an outbound interface.\n-"
+        },
+        {
+            "Parameters": "in-interface inInterfaceName",
+            "Info": "Specifies the name of an inbound interface.\n-"
+        },
+        {
+            "Parameters": "inInterfaceType",
+            "Info": "Specifies the type of the inbound interface.\n-"
+        },
+        {
+            "Parameters": "inInterfaceNum",
+            "Info": "Specifies the number of an inbound interface.\n-"
+        },
+        {
+            "Parameters": "symmetric-index index-value",
+            "Info": "Specifies the symmetric index for the forward and reverse traffic on the same VM.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "nexthop nexthop-addr",
+            "Info": "Next hop address.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] locator test1 ipv6-prefix 100:: 64 static 32",
+            "[*HUAWEI-segment-routing-ipv6-locator] opcode ::12 end-as",
+            "[*HUAWEI-segment-routing-ipv6-locator-endas-::12] encapsulation ipv4 nexthop 10.2.3.4 out-interface Vbdif1 in-interface Vbdif1 symmetric-index 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSupports Layer 3 forwarding from the SFF to the SF. Only one type can be configured. In the preceding command, nexthop is the IPv4 address. out-interface and in-interface can be set to the same interface or different interfaces.\nService chain traffic is generally bidirectional. When an SF is stored on multiple VMs, the forward and reverse traffic on the same service chain must be forwarded along the same VM. If no controller is configured, if forward and reverse traffic needs to be forwarded on the same VM, you can configure symmetric-index statically. Ensure that the symmetric-index in the same End.AS is unique and the symmetric-index configuration in the End.AS where forward and reverse traffic resides is the same. Layer 3 forwarding from SFF to SF supports load balancing. One End.AS supports a maximum of 64 load balancing modes.\nPrecautions\nTo ensure that the forwarding function is correct, the interface type is VBDIF interface. An interface must be exclusively used by a service chain. If a service chain is configured on an interface, the interface cannot be configured to other services. Otherwise, forwarding problems may occur."
+}

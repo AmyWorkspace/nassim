@@ -1,0 +1,68 @@
+{
+    "PageTitle": "netstream sampler to slot",
+    "FuncDef": "The ip netstream sampler to slot command specifies a NetStream IPv4 service processing board for a  board.\nThe undo ip netstream sampler to slot command deletes the NetStream IPv4 service processing board setting.\nThe ipv6 netstream sampler to slot command specifies a NetStream IPv6 service processing board for a board.\nThe undo ipv6 netstream sampler to slot command deletes the NetStream IPv6 service processing board setting.\nBy default, no NetStream service processing board is specified.",
+    "CLIs": [
+        "{ ip | ipv6 } netstream sampler to slot { self | <slot-id> [ backup ] }",
+        "{ ip | ipv6 } netstream sampler to slot self",
+        "undo { ip | ipv6 } netstream sampler to slot { self | <slot-id> [ backup ] }",
+        "undo { ip | ipv6 } netstream sampler to slot self"
+    ],
+    "ParentView": [
+        "Slot view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip",
+            "Info": "Displays the IPv4 netstream feature.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Displays the IPv6 netstream feature.\n-"
+        },
+        {
+            "Parameters": "self",
+            "Info": "Enables the distributed NetStream service processing mode. In this mode, a single board processes sampled packets for flow aggregation and flow output. A board can work in distributed mode only when it can perform NetStream functions independently, including packet sampling, flow aggregation, and flow output.\n-"
+        },
+        {
+            "Parameters": "slot-id",
+            "Info": "Indicates the integrated NetStream service processing mode. In integrated mode, an interface board only samples packets and sends sampled packets to the NetStream service processing board in slot specified by slot-id. Flow aggregation and flow output are performed on the NetStream service processing board.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "backup",
+            "Info": "Indicates that a backup NetStream service processing board is specified in integrated mode. If the traffic volume on an interface is large or the configured sampling ratio is small, the interface board will send a great number of sampled packets to the specified NetStream service processing board, which may exceed the processing capability of the NetStream service processing board. In this case, you can install additional NetStream service processing boards and run the ip netstream sampler to slot command or ipv6 netstream sampler to slot command to specify backup boards. For the purpose of load balancing and system reliability improvement,  boards that are dual-homed to different NetStream service processing boards can back up each other.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[*HUAWEI-slot1] ip netstream sampler to slot 3",
+            "[*HUAWEI-slot1] ip netstream sampler to slot 4 backup",
+            "[*HUAWEI-slot1] quit",
+            "[*HUAWEI] slot 2",
+            "[*HUAWEI-slot2] ip netstream sampler to slot 4",
+            "[*HUAWEI-slot2] ip netstream sampler to slot 3 backup"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[*HUAWEI-slot1] ipv6 netstream sampler to slot 3",
+            "[*HUAWEI-slot1] ipv6 netstream sampler to slot 4 backup",
+            "[*HUAWEI-slot1] quit",
+            "[*HUAWEI] slot 2",
+            "[*HUAWEI-slot2] ipv6 netstream sampler to slot 4",
+            "[*HUAWEI-slot2] ipv6 netstream sampler to slot 3 backup"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[*HUAWEI-slot1] ip netstream sampler to slot self"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[*HUAWEI-slot1] ipv6 netstream sampler to slot self"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a board is working in distributed NetStream service processing mode, the board can collect traffic statistics.\nIf a board cannot provide the statistics function but needs to be enabled with NetStream, it can work in integrated NetStream service processing mode to send sampled packets to a specified NetStream service processing board to collect traffic statistics.\nPrecautions\nThe LPUI51 supports only integrated sampling, not distributed sampling. However, other boards support only distributed sampling.\nLayer 2 interfaces, serial interfaces, L2VPN access L3VPN VE interfaces, and tunnel interfaces do not support sampling configuration.\nThe sampling modes configured using the ip netstream sampler and ipv6 netstream sampler commands must be the same. If the IPv4 sampling mode is different from the IPv6 sampling mode, the device displays the The sampling mode configuration of IPv4 flow and IPv6 flow should be same. message. The sampling ratios configured for IPv4 and IPv6 can be different.\nThe ip netstream sampler to slot and ipv6 netstream sampler to slot commands provide the same function. No matter which command is run, the command configuration takes effect for all packets. If both commands are run, the same slot ID must be configured. Otherwise, the device displays the The parameter of the board is invalid. error message.\nBefore changing the configured NetStream service processing mode, you must run the undo ip netstream sampler to slot command or undo ipv6 netstream sampler to slot to delete the existing configuration.\nThe ip netstream sampler to slot command has the same function as the ipv6 netstream sampler to slot command.\nThe execution of either command takes effect on all packets, and there is no need to configure both of them. If it is required to configure both of them, ensure that NetStream service processing modes are identical. A board inconsistency causes the device to report an error.If the interface board specified using one of the two commands serves as the master board working in integrated NetStream service processing mode, the interface board specified using the other command serves as the backup board working in integrated NetStream service processing mode. For example, if the interface board in slot 1 is specified as the master board using the ip netstream sampler to slot command, the interface board in slot 2 is specified as the slave board using ipv6 netstream sampler to slot command. Interface boards in slot 1 and slot 2 work together to process IPv4 and IPv6 packets.\nVSn has no slot view. Therefore, the output address configured in the slot view of Admin-VS takes effect in VSn.\nThe ip netstream sampler to slot command can be configured only on a physical system (PS)."
+}

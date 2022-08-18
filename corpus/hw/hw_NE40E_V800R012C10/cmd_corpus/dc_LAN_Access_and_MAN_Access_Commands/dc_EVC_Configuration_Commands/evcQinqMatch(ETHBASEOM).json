@@ -1,0 +1,43 @@
+{
+    "PageTitle": "encapsulation qinq",
+    "FuncDef": "The encapsulation qinq vid command is used to configure a Layer 2 sub-interface to access packets with a specified 802.1Q in 802.1Q Tag.\nThe undo encapsulation qinq command is used to cancel the access of a specified Layer 2 sub-interface to a specified 802.1Q in 802.1Q Tag.\nBy default, no encapsulation type is specified on an EVC Layer 2 sub-interface.",
+    "CLIs": [
+        "encapsulation qinq [ vid <pe-vid> ce-vid { <low-ce-vid> [ to <high-ce-vid> ] | default } ]",
+        "undo encapsulation qinq [ vid <pe-vid> ce-vid { <low-ce-vid> [ to <high-ce-vid> ] | default } ]"
+    ],
+    "ParentView": [
+        "Layer 2 sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "400GE Layer 2 sub-interface view",
+        "VE layer2 subinterface view",
+        "Global-VE layer2 subinterface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pe-vid",
+            "Info": "Specifies an outer VLAN ID for double-tagged packets to be received by an EVC Layer 2 sub-interface.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "low-ce-vid",
+            "Info": "Specifies a range of inner VLAN IDs for double-tagged packets to be received by an EVC Layer 2 sub-interface. The cevid1 specifies the start VLAN ID in an inner tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "high-ce-vid",
+            "Info": "Specifies a range of inner VLAN IDs for double-tagged packets to be received by an EVC Layer 2 sub-interface. The cevid2 specifies the end VLAN ID in an inner tag. cevid2 must be greater than or equal to cevid1. cevid2 and cevid1 define a range of VLAN IDs in an inner VLAN tag.\nIf you do not specify to cevid2, cevid1 specifies the single VLAN ID in the inner VLAN tag carried in packets.\nIf the cevid1 to cevid2 parameters are run more than once, all configurations take effect.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "default",
+            "Info": "Enables default encapsulation to allow an EVC Layer 2 sub-interface to receive untagged, single-tagged, and double-tagged packets and packets each with more than two tags.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.3 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] encapsulation qinq vid 10 ce-vid 100 to 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a Layer 2 Ethernet network, packets may not carry VLAN Tags or carry one or two VLAN Tags. To enable different packets to be forwarded through different EVC Layer 2 sub-interfaces, run this command to configure different encapsulation modes for Layer 2 sub-interfaces of the EVC Layer 2 sub-interface. When two VLAN TAGs are carried, the packets can enter this interface if the preceding configurations are met.\nPrecautions\nOnly a single encapsulation type can be specified on each EVC Layer 2 sub-interface. Before changing an encapsulation type, run the undo encapsulation command to delete the existing encapsulation type and run the encapsulation to specify an encapsulation type.\nIn a data transparent transmission scenario, dot1q or QinQ encapsulation is configured on an EVC Layer 2 sub-interface, and a range of VLAN IDs is specified for VLAN tags carried in packets. In this situation, traffic may be returned or dropped if the undo encapsulation dot1q vid low-pe-vid or undo encapsulation qinq vid pe-vid ce-vid low-ce-vid command is run to delete the existing encapsulation type with the smallest VLAN ID specified. To prevent problems, perform the following operations:\nRun the shutdown command on the EVC Layer 2 sub-interface.Run the commit command to commit configuration.Run the undo encapsulation qinq vid command to delete the minimum VLAN.Run the undo shutdown command on the EVC Layer 2 sub-interface.Run the commit command to commit configuration."
+}

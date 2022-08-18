@@ -1,0 +1,67 @@
+{
+    "PageTitle": "bfd bind one-arm-echo",
+    "FuncDef": "The bfd bind one-arm-echo command creates a one-arm BFD echo session.\nBy default, no one-arm BFD echo session is created.",
+    "CLIs": [
+        "bfd <sessname-value> bind peer-ip <ip-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } [ source-ip <ip-address> ] one-arm-echo",
+        "bfd <sessname-value> bind peer-ip <ip-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } [ source-ip <ip-address> ] one-arm-echo destination-ip <ip-address>",
+        "bfd <sessname-value> bind peer-ipv6 <ipv6-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } [ source-ipv6 <source-ipv6> ] one-arm-echo",
+        "bfd <sessname-value> bind peer-ipv6 <ipv6-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } [ source-ipv6 <source-ipv6> ] one-arm-echo destination-ipv6 <ipv6-address>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sessname-value",
+            "Info": "Specifies the name of a one-arm BFD echo session.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string.\nWhen the name of a BFD session is configured, the uppercase and lowercase letters in the name must be the same as what you enter.BFD session names are case-insensitive. For example, ABC and abc are regarded as the same BFD session. If you have configured ABC as the name of a BFD session, the ABC BFD session view is directly displayed when you configure abc."
+        },
+        {
+            "Parameters": "peer-ip ip-address",
+            "Info": "Specifies the peer IPv4 address bound to a one-arm BFD echo session.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-name",
+            "Info": "Specifies the name of the VPN instance bound to a one-arm BFD echo session.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of the local Layer 3 interface bound to a one-arm BFD echo session.\n-"
+        },
+        {
+            "Parameters": "source-ip ip-address",
+            "Info": "Specifies the source IPv4 address carried in BFD packets. If this parameter is not specified, the system searches the local routing table for the IP address of an outbound interface connected to the remote end and uses the IP address as the source IP address before sending BFD packets. This parameter usually does not need to be specified.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "one-arm-echo",
+            "Info": "Indicates a one-arm BFD echo session.\n-"
+        },
+        {
+            "Parameters": "destination-ip ip-address",
+            "Info": "Specifies the destination IPv4 address of BFD packets.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "peer-ipv6 ipv6-address",
+            "Info": "Specifies the peer IPv6 address bound to a BFD for IPv6 session.\nThe value is a 32-bit hexadecimal number in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "source-ipv6 source-ipv6",
+            "Info": "Specifies the source IPv6 address carried in a BFD packet. If you do not specify the source IP address, the system automatically sets the source IP address according to the following rules:\nDuring BFD for IPv6 session negotiation, if the source IPv6 address is not specified, the system searches the local routing table for an outbound interface from which the peer IP address is reachable. The IPv6 address of this outbound interface is used as the source IP address of the BFD packets sent by the local end.If this parameter is not specified when a BFD for IPv6 session is detecting links, the system uses a fixed source IPv6 address in BFD packets.\nGenerally, you do not need to set this parameter. When BFD is used with Unicast Reverse Path Forwarding (URPF), you must manually configure the source IPv6 address in BFD packets because URPF checks the source IPv6 address in received packets.\nThe value is a 32-bit hexadecimal number in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "destination-ipv6 ipv6-address",
+            "Info": "Specifies the destination IPv6 address of BFD packets.\nThe value is a 32-bit hexadecimal number in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ip address 10.1.10.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] bfd test bind peer-ip 10.1.1.1 interface GigabitEthernet1/0/0 one-arm-echo"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOne-arm BFD echo is used when two devices are directly connected and only one of them supports BFD. A one-arm BFD echo session can be established on the device that supports BFD. After receiving a one-arm BFD echo session packet, the device that does not support BFD immediately loops back the packet, implementing quick link failure detection.\nWhen a one-arm BFD echo session is created:\nIf the source IP address is specified and URPF is enabled, BFD packets can be correctly forwarded. The source IP address must be configured correctly because the system checks only the validity of the source IP address format. A multicast or broadcast address is invalid.If a VPN instance is specified, a single-hop link for VPN routes is monitored.If the source IP address is specified, the device searches the routing table for the outbound interface address based on the value of peer-ip, and uses the address as the destination address in BFD packets. The device uses the value of source-ip as the source address.If no source address is specified, the device searches the routing table for the outbound interface address based on the value of peer-ip, and uses the address as the source and destination addresses in BFD packets.In active-active networking, you need to set destination-ip as the destination address of outgoing BFD packets.\n\nPrerequisites\nBFD has been globally enabled using the bfd command in the system view.\nFollow-up Procedure\nAfter creating a one-arm BFD echo session, you can perform any of the following operations:\nRun the min-echo-rx-interval command to set a desired minimum interval at which BFD packets are received.Run the detect-multiplier command to set a local detection multiplier for the BFD session.Run the description command to configure a description for the BFD session.Run the process-pst command to enable a device to modify the PST if the BFD session detects a fault.Run the wtr command to set a WTR time for the BFD session.\n\nPrecautions\nThe differences between a one-arm BFD echo session and a common BFD session are as follows:\nWhen creating a one-arm BFD echo session, you need to specify only the local parameter in the discriminator command.You can run only the min-echo-rx-interval command to change the minimum interval at which one-arm BFD echo session packets are received.\nAfter a one-arm BFD echo session is created, changing the IP address of the outbound interface for BFD packets does not change the source IP address carried in the BFD packets.\nOne-arm BFD echo sessions can apply only to single-hop detection.\nIf the destination-ip parameter is specified, the incoming and outgoing paths of packets may be inconsistent. If the incoming path fails, the status of the one-arm-echo BFD session may be incorrectly set to down.\nYou can run the undo bfd session-name command to delete a specified BFD session and its binding information."
+}

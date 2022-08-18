@@ -1,0 +1,50 @@
+{
+    "PageTitle": "netstream timeout active",
+    "FuncDef": "The ip netstream timeout active command sets the active aging time for the NetStream IPv4 original  flows.\nThe undo ip netstream timeout active command restores the default active aging time for NetStream IPv4 original  flows.\nThe ipv6 netstream timeout active command sets the active aging time for the NetStream IPv6 original  flows.\nThe undo ipv6 netstream timeout active command restores the default active aging time for NetStream IPv6 original flows.\nBy default, the active aging time of NetStream original flows is 30 minutes.",
+    "CLIs": [
+        "ip netstream timeout active { <active-interval> | interval-second <active-interval-second> }",
+        "ip netstream aggregation timeout active { <active-interval> | interval-second <active-interval-second> }",
+        "ipv6 netstream timeout active { <active-interval> | interval-second <active-interval-second> }",
+        "ipv6 netstream aggregation timeout active { <active-interval> | interval-second <active-interval-second> }",
+        "undo ip netstream timeout active",
+        "undo ip netstream aggregation timeout active",
+        "undo ipv6 netstream timeout active",
+        "undo ipv6 netstream aggregation timeout active"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval-second active-interval-second",
+            "Info": "Specifies the active aging time for NetStream flows.\nThe value is an integer ranging from 15 to 59, in seconds. If both active and interval-second are specified, the later configured one takes effect."
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Displays the IPv4 netstream feature.\n-"
+        },
+        {
+            "Parameters": "aggregation",
+            "Info": "Indicates the Netstream aggregation feature.\n-"
+        },
+        {
+            "Parameters": "active active-interval",
+            "Info": "Specifies the active aging time for NetStream flows.\nThe value is an integer ranging from 1 to 60, in minutes."
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Displays the IPv6 netstream feature.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip netstream timeout active 40"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 netstream timeout active 40"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen network flows burst within a short period of time, tens of thousands of flows may be generated within several seconds, and these flows are saved in the buffer on the NDE. The memory capacity of the NDE, however, is limited. When subsequent flows need to be added to the buffer, flows that have been processed in the buffer need to be deleted. This process is called aging. Aged flows are sent to the specified NSC for further analysis.\nThe aging frequency is determined by the storage space of the device and flow size. The greater the flow size is, the smaller the aging time should be.\nWhen the active time (from flow creation time to the current time) of a flow exceeds the specified active aging time, the flow is exported to the destination end. The life cycle of an active flow depends on the active time. To detect the status of an active flow quickly, set a short active time. This increases the frequency at which NetStream packets are sent. To reduce the frequency at which NetStream packets are sent and improve statistics collecting efficiency, set a long active time.\nA flow is aged in any of the following situations:\nTime-based aging: A flow is aged after the configured active time elapses. If the active time of a flow in the buffer elapses, the system does not age the flow until a new flow needs to be cached in the buffer. You can set the active aging time or use the default values.TCP disconnection-based aging: After a packet carrying the FIN or RST flag is transmitted over a TCP connection, the TCP connection is torn down. Therefore, when a NetStream flow consisting of TCP packets receives a packet carrying the FIN or RST flag, the NetStream flow is immediately aged. If the first packet of a NetStream flow is a TCP packet carrying the FIN or RST flag, a new NetStream flow is created. In addition, the original NetStream flow is not aged.Byte counts-based aging: Bytes of flows cached in the buffer are counted. If the flow bytes in a buffer exceed the upper threshold, the buffer overflows. For example, if the number of bytes in a flow is greater than 3435973836 B, the system immediately ages the flow.\n\nPrecautions\nThe configured aging time takes effect only after NetStream is enabled on an interface using the netstream command."
+}

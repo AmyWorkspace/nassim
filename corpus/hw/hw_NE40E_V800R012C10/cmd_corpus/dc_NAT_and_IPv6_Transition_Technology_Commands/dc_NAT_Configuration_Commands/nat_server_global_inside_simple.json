@@ -1,0 +1,55 @@
+{
+    "PageTitle": "nat server global inside",
+    "FuncDef": "The nat server global inside command configures the internal server function in a simplified NAT instance.\nThe undo nat server global inside command deletes the internal server function in a simplified NAT instance.\nBy default, the internal server function is not configured in a simplified NAT instance.",
+    "CLIs": [
+        "nat server global <ip-addr> [ vpn-instance <vpn-instance-name> ] inside <ip-addr> [ vpn-instance <vpn-instance-name> ] [ redirect <ip-addr> { inbound | outbound } ]",
+        "undo nat server global <ip-addr> [ vpn-instance <vpn-instance-name> ] inside <ip-addr> [ vpn-instance <vpn-instance-name> ] [ redirect <ip-addr> { inbound | outbound } ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which an internal server belongs.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "inside ip-addr",
+            "Info": "Specifies the private IP address of an internal server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "redirect ip-addr",
+            "Info": "Specifies a redirected next-hop IP address.\nIf traffic passing through a server has a conflicting next-hop IP address, configure this parameter so that the traffic is redirected to a specified next-hop IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Redirects user-to-network packets to a next hop.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Redirects user-to-network packets to a next hop.\n-"
+        },
+        {
+            "Parameters": "global ip-addr",
+            "Info": "Specifies the public IP address of an internal server.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 200:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 101:101 export-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 101:101 import-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-vpn1] quit",
+            "[~HUAWEI] nat instance nat1 id 1 simple-configuration",
+            "[*HUAWEI-nat-instance-nat1] commit",
+            "[~HUAWEI-nat-instance-nat1] quit",
+            "[~HUAWEI] nat server global 10.12.12.12 inside 192.168.12.12 vpn-instance vpn1 redirect 192.168.1.1 outbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nNAT can be configured to allow users on a private network to access public network services, while hiding the structure of the private network and devices on the private network. In this case, a user on an external network cannot communicate with a private network user.\nTo address this problem, the internal server function can be configured on the private network. The internal server function enables a NAT device to translate a public IP address into a private IP address based on either of the following entries:\nA static mapping entry that contains a private IP address, a private port number, a public IP address, and a public port numberA static mapping entry that contains a private IP address and a public IP address\nIf each internal server is assigned a specific public IP address, run the nat server global command to configure the internal server function in a simplified NAT instance.\n\nPrerequisites\nA simplified NAT instance has been configured using the nat instance simple-configuration command in the system view.\nPrecautions\nThe global address must be different from an existing IP address assigned to a device or its interface, preventing IP address conflicts.\nIn VS mode, this command is supported only by the admin VS."
+}

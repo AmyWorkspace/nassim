@@ -1,0 +1,39 @@
+{
+    "PageTitle": "aps switch-command",
+    "FuncDef": "The aps switch-command command configures a traffic switching mode for an LMSP group.\nThe undo aps switch-command command restores the default traffic switching mode, which is automatic switching, for an LMSP group.\n\nBy default, automatic protection switching is enabled for an LMSP group. In automatic protection switching mode, an LMSP group performs the link switching as follows:\n\n\nTraffic is switched from the working link to the protection link only in either of the following situations:\n\n\nAn SF fault occurs on the working link, not on the protection link.\n\nAn SD fault occurs on the working link, not on the protection link.\n\n\nTraffic is switched from the protection link back to the working link only in either of the following situations:\n\n\nThe working link is restored and working in 1:1 mode. Traffic will be switched back to the working link after a specified period of time elapses.\n\nAn SF fault occurs on the protection link.",
+    "CLIs": [
+        "aps switch-command lockout",
+        "aps switch-command { force | manual } [ section <section-number> ]",
+        "undo aps switch-command { lockout | force | manual }"
+    ],
+    "ParentView": [
+        "CPOS interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "force",
+            "Info": "Enables the forcible switching function for an LMSP group.\n-"
+        },
+        {
+            "Parameters": "manual",
+            "Info": "Enables the manual switching function for an LMSP group.\n-"
+        },
+        {
+            "Parameters": "section section-number",
+            "Info": "Specifies a service section for forcible or manual switching.\nValue 0 indicates that services are switched to the working link. Value 1 indicates that services are switched to the protection link."
+        },
+        {
+            "Parameters": "lockout",
+            "Info": "Enables protection lockout for an LMSP group to lock traffic on the working link.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] controller cpos 1/0/0",
+            "[~HUAWEI-cpos1/0/0] aps switch-command force"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a traffic switching mode for an LMSP group, run the aps switch-command command. Command-triggered LMSP switching is used during a device upgrade, link troubleshooting, testing, and maintenance. For example, the device with automatic protection switching enabled is connected to an RNC with the LMSP non-retrieve mode enabled. Forcible or manual switching must be configured to switch traffic from a protection link back to the working link.\nThe switching modes are prioritized in descending order:\nProtection lockout > Forcible switching to the working link > Forcible switching to the protection link > Manual switching to the working link > Manual switching to the protection link\nConfiguration Impact\nIf the aps switch-command command is run more than once, the latest configuration overrides the previous one.\nOnly the aps switch-command lockout command can be automatically saved after being run.\nThe impact of the aps switch-command command instances is as follows:\nThe aps switch-command lockout command locks traffic on the working link. Traffic will not be switched to the protection link even though the working link becomes unavailable. If the aps switch-command lockout command has been run on a peer device directly connected to a local device, the aps switch-command lockout command run on the local device cannot take effect.The aps switch-command force or aps switch-command force section 1 command forcibly switches traffic to a protection link. The command can take effect only after the protection link is working properly, without an SF fault. After the command takes effect and the working link fails, services are forcibly switched to the protection link. If an SD fault occurs on the protection link, the services may be interrupted. If an SF fault occurs on the protection link, a device sends a request to its peer to switch the services back to the working link.The aps switch-command force section 0 command forcibly switches traffic back to the working link and takes effect only after a link switchover is performed in an APS group. After the command takes effect and services are forcibly switched from the protection link back to the working link, services will not be switched to the protection link even if an SD or SF fault occurs on the working link. As a result, services are interrupted.The aps switch-command manual or aps switch-command manual section 1 command manually switches traffic to a protection link. The command can take effect only after the working and protection links are working without an SF or SD fault. After the command takes effect and services are switched manually to the protection link, a device sends a request to its peer to switch the services back to the working link if an SF or SD fault occurs on the protection link.The aps switch-command manual section 0 command manually switches traffic back to the working link. The command can take effect only after a link switchover is performed in an LMSP group and the working link is working properly. After the command takes effect and services are switched manually to the working link, a device sends a request to its peer to switch services to the protection link if an SF or SD fault occurs on the working link.\n\nPrecautions\nA switching mode to be configured must have a higher priority than an existing switching mode. Otherwise, the configuration fails."
+}

@@ -1,0 +1,38 @@
+{
+    "PageTitle": "mpls l2vpn vccv bfd-cv-negotiation",
+    "FuncDef": "The mpls l2vpn vccv bfd-cv-negotiation command sets the BFD CV Type value in the VCCV field.\nThe undo mpls l2vpn vccv bfd-cv-negotiation command restores the BFD CV Type value in the VCCV field.\nBy default, the BFD CV Type value in the VCCV field is 0x08.",
+    "CLIs": [
+        "mpls l2vpn vccv bfd-cv-negotiation { fault-detection-only | ach-fault-detection-only }",
+        "undo mpls l2vpn vccv bfd-cv-negotiation [ fault-detection-only | ach-fault-detection-only ]"
+    ],
+    "ParentView": [
+        "MPLS-L2VPN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "fault-detection-only",
+            "Info": "Specifies the BFD CV Type as 0x04.\n-"
+        },
+        {
+            "Parameters": "ach-fault-detection-only",
+            "Info": "Specifies the BFD CV Type as 0x10.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] mpls l2vpn vccv bfd-cv-negotiation fault-detection-only"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] mpls l2vpn vccv bfd-cv-negotiation ach-fault-detection-only"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nVCCV is a mechanism to detect and diagnose end-to-end faults on PWs. VCCV is, in its simplest description, a control channel between a PW's ingress and egress over which connectivity verification messages can be sent. A Label Mapping packet uses the BFD CV Type field to indicate whether a PW supports BFD fault detection. The BFD CV Type can be 0x04, 0x08, or 0x10. By default, the BFD CV Type is 0x08.\n0x04: supports BFD IP/UDP encapsulation, used in PW fault detection only. The keyword is fault-detection-only.0x08: supports BFD IP/UDP encapsulation, used for PW fault detection and AC/PW status signaling. The keyword is detection-and-signaling.0x10: supports BFD PW-ACH encapsulation, used for PW fault detection only. The keyword is ach-fault-detection-only.\n\nConfiguration Impact\nIf the BFD CV Type used during the negotiation of a PW changes after the mpls l2vpn vccv bfd-cv-negotiation command is configured, the PW will be re-established, and services will be temporarily interrupted.\nPrecautions\nThe mpls l2vpn vccv bfd-cv-negotiation command applies to LDP VPLS PWs and LDP VPWS SS-PWs.If the global BFD CV Type is different from the BFD CV Type specified for a remote peer, the BFD CV Type specified for the remote peer prevails.When a Huawei device interconnects with a non-Huawei device, BFD CV must be set to 0x04 or 0x10."
+}

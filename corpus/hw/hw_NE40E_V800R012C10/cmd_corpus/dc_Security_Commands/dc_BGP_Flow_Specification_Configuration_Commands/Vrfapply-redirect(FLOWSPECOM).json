@@ -1,0 +1,33 @@
+{
+    "PageTitle": "apply redirect (Flow-Route VPN instance view)",
+    "FuncDef": "The apply redirect command enables a device to redirect the traffic matching a filtering rule.\nThe undo apply redirect command cancels the configuration.\nBy default, no traffic is redirected.",
+    "CLIs": [
+        "apply redirect { vpn-target <vpn-target-import> | ip <redirect-ip-rt> }",
+        "undo apply redirect",
+        "undo apply redirect ip [ <redirect-ip-rt> ]"
+    ],
+    "ParentView": [
+        "Flow-Route VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-target vpn-target-import",
+            "Info": "Specifies the name of a target VPN to which attack traffic is redirected.\nThe value is in the format of AS number (in the range from 0 to 65535):user-defined number (in the range from 0 to 4294967295), ipv4-address:AS number (in the range from 0 to 65535), AS number (in the range from 0 to 65535).AS number (in the range from 0 to 65535):AS number (in the range from 0 to 65535), or user-defined number (in the range from 65536 to 4294967295):AS number (in the range from 0 to 65535). The AS number and user-defined number cannot both be 0s. Specifically, a VPN target cannot be 0:0 or 0.0:0."
+        },
+        {
+            "Parameters": "ip redirect-ip-rt",
+            "Info": "Specifies a redirected IP address.\nIn the scenario where the controller delivers BGP Flow Specification rules, redirect-ip-rt can recurse to a tunnel or direct route based on the community 0x90000002 attribute carried in BGP Flow Specification packets.In the scenario where BGP Flow Specification routes are converted from the BGP Flow Specification rules delivered by the controller, redirect-ip-rt can recurse to a tunnel or direct route based on the community 0x90000001 attribute carried in BGP Flow Specification packets.\nThe value is in the format of ipv4-address:0 or ipv4-address:1. ipv4-address is in dotted decimal notation.\nIn the scenario where the controller delivers BGP Flow Specification rules, redirect-ip-rt can recurse to a tunnel or direct route based on the community 0x90000002 attribute carried in BGP Flow Specification packets.In the scenario where BGP Flow Specification routes are converted from the BGP Flow Specification rules delivered by the controller, redirect-ip-rt can recurse to a tunnel or direct route based on the community 0x90000001 attribute carried in BGP Flow Specification packets."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] flow-route Rule1 vpn-instance vpna",
+            "[*HUAWEI-flow-route-vpna] if-match port equal 24",
+            "[*HUAWEI-flow-route-vpna] apply redirect vpn-target 4:4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe apply redirect command is used to redirect the traffic matching a filtering rule to a specified VPN instance or next-hop IP address to protect the target device from attacks.\nTo accurately redirect matching traffic to a specified SR-MPLS TE Policy tunnel, specify redirect-ip-rt and colorvalue in the command. Traffic can be redirected to the SR-MPLS TE Policy tunnel only if the tunnel matches the configured traffic policy and redirect-ip-rt and colorvalue.\nPrerequisites\nA BGP Flow Specification route or BGP VPN Flow Specification route has been configured using the flow-route command in the system view.\nConfiguration Impact\nIf the apply redirect command is run multiple times for the same BGP Flow Specification route or BGP VPN Flow Specification route, only the latest configuration takes effect.\nPrecautions\nBGP IPv6 FLOW Specification does not support next hop IPv6 addresses for redirection.\nIf a BGP FlowSpec route received from a peer carries the redirection next-hop attribute specified using the apply redirect ip command, the device can process this attribute only after the peer redirect ip command is run on the device."
+}

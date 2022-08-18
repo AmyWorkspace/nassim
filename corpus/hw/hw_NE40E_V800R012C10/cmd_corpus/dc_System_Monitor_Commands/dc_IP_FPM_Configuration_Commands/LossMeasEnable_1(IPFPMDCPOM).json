@@ -1,0 +1,50 @@
+{
+    "PageTitle": "loss-measure enable mid-point",
+    "FuncDef": "The loss-measure enable mid-point command enables packet loss measurement on a mid-point.\nThe undo loss-measure enable mid-point command disables packet loss measurement on a mid-point.\nBy default, packet loss measurement is disabled on a mid-point from an IP Flow Performance Measurement (IP FPM) instance.",
+    "CLIs": [
+        "loss-measure enable mid-point [ time-range <time-range> | continual ]",
+        "loss-measure enable mid-point [ time-range <time-range> ]",
+        "undo loss-measure enable mid-point [ continual ]"
+    ],
+    "ParentView": [
+        "IPFPM-DCP instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time-range time-range",
+            "Info": "Specifies a time range from packet loss measurement on a mid-point.\nThe value is an integer that can be 5, 10, 15, or 30, in minutes.\nThe default value is 10 minutes."
+        },
+        {
+            "Parameters": "continual",
+            "Info": "Indicates proactive delay measurement.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipfpm tlp 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] nqa ipfpm mcp",
+            "[*HUAWEI-nqa-ipfpm-mcp] mcp id 1.1.1.1",
+            "[*HUAWEI-nqa-ipfpm-mcp] protocol udp port 2048",
+            "[*HUAWEI-nqa-ipfpm-mcp] instance 1",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1] dcp 1.1.1.1",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1] ach 1",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1-ach-1] flow forward",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1-ach-1] in-group dcp 1.1.1.1 tlp 100",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1-ach-1] quit",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1] quit",
+            "[*HUAWEI-nqa-ipfpm-mcp] quit",
+            "[*HUAWEI] nqa ipfpm dcp",
+            "[*HUAWEI-nqa-ipfpm-dcp] dcp id 1.1.1.1",
+            "[*HUAWEI-nqa-ipfpm-dcp] mcp 1.1.1.1 port 2048",
+            "[*HUAWEI-nqa-ipfpm-dcp] instance 1",
+            "[*HUAWEI-nqa-ipfpm-dcp-instance-1] tlp 100 in-point ingress",
+            "[*HUAWEI-nqa-ipfpm-dcp-instance-1] flow forward source 1.1.1.1",
+            "[*HUAWEI-nqa-ipfpm-dcp-instance-1] commit",
+            "[~HUAWEI-nqa-ipfpm-dcp-instance-1] loss-measure enable mid-point time-range 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe IP FPM performance statistics serve as a reliable reference for assessing IP network performance and therefore are useful for fault diagnosis and service statistics. To diagnose network faults and locate faulty nodes when network performance deteriorates, run the loss-measure enable mid-point command.\nPrerequisites\nAn IP FPM model has been established, including configuring a DCP and MCP, binding a TLP to a physical interface, and creating a target flow and IP FPM instance.\nPrecautions\nIf a master/slave switchover is performed, or the device is restarted, packet loss measurement on a mid-point will become invalid. You must reconfigure the function."
+}

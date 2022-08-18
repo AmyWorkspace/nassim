@@ -1,0 +1,57 @@
+{
+    "PageTitle": "ftp client-source",
+    "FuncDef": "The ftp client-source command sets the source interface and source addresses of the FTP client to establish the connection with FTP server.\nThe undo ftp client-source command cancels the source interface and source address of the FTP client.\nBy default, the source address contains all 0s.",
+    "CLIs": [
+        "ftp client-source { -a <ip-address> | -i { <interface-type> <interface-number> | <interface-name> } }",
+        "ftp ipv6 client-source -a <ipv6-address> [ -vpn-instance <ipv6-vpn-instance-name> ]",
+        "undo ftp client-source",
+        "undo ftp ipv6 client-source [ -a <ipv6-address> [ -vpn-instance <ipv6-vpn-instance-name> ] ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a ip-address",
+            "Info": "Specifies the IPv4 address of the local device.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-a ipv6-address",
+            "Info": "Specifies the IPv6 address of the local device.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-i interface-name",
+            "Info": "Specifies the source interface name.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the source interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the source interface number.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Specifies the IPv6 protocol.\n-"
+        },
+        {
+            "Parameters": "-vpn-instance ipv6-vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which the FTP server belongs.\nBefore specifying the parameter vpn-instance ipv6-vpn-instance-name, ensure that a VPN instance has been configured.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ftp client-source -a 10.1.1.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack 0",
+            "[*HUAWEI-LoopBack0] ip address 10.1.1.1 16",
+            "[*HUAWEI-LoopBack0] quit",
+            "[*HUAWEI] ftp client-source -i loopback 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf you run the ftp command to log in to an FTP server without specifying a source IP address or source interface, the source address or source interface that is specified through the ftp client-source command is adopted by default.If you run the ftp command and specify a source address or source interface at the same time, the specified source address or the specified source interface is adopted.\n\nPrecautions\nThis command can be run successfully when source address or source interface does not exist, but the function does not take effect.If the specified source interface has been bound to a VPN instance, the client is automatically bound to the same VPN instance.After a bound source interface is deleted, the interface configuration specified using the ftp client-source command will not be cleared but does not take effect. If you configure the source interface with the same name again, the interface configuration specified using the ftp client-source command is updated and the function restores."
+}

@@ -1,0 +1,34 @@
+{
+    "PageTitle": "pim timer dr-switch-delay (Mtunnel view)",
+    "FuncDef": "The pim timer dr-switch-delay command enables the PIM designated router (DR) switching delay function and configures a switching delay on an interface.\nThe undo pim timer dr-switch-delay command disables the PIM DR switching delay function on an interface.\nBy default, the PIM DR switching delay function is disabled on an interface.",
+    "CLIs": [
+        "pim timer dr-switch-delay <interval>",
+        "undo pim timer dr-switch-delay"
+    ],
+    "ParentView": [
+        "MTI interface view",
+        "Mtunnel view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies a DR switching delay.\nThe value is an integer ranging from 10 to 3600, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance mytest",
+            "[*HUAWEI-vpn-instance-mytest] ipv4-family",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain share-group 224.1.1.1 binding mtunnel 10",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-mytest-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-mytest] quit",
+            "[~HUAWEI] interface Mtunnel 10",
+            "[~HUAWEI-MTunnel10] pim timer dr-switch-delay 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWithout the PIM DR switching delay function, when the system triggers a PIM DR switchover, the switchover takes effect immediately, and therefore data forwarding will be interrupted during the switchover period. If the network is unstable, frequent switchovers occur, affecting the multicast forwarding performance. To address this issue, run the pim timer dr-switch-delay command to configure a PIM DR switching delay to implement non-stop service forwarding during the switchover.\nConfiguration Impact\nAfter an outbound interface changes from a DR to a non-DR, the PIM DR switching delay function enables the interface to continue to forward data before the delay expires.\nPrecautions\nThe configuration of deleting or changing a DR switching delay takes effect only after the current switching delay expires.\nThe pim timer dr-switch-delay command is mutually exclusive with the pim silent command."
+}

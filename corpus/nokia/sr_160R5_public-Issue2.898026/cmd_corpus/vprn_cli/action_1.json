@@ -1,0 +1,29 @@
+{
+    "PageTitle": "action",
+    "FuncDef": "This command configures the processing required when the router receives a DHCP request that already has a Relay Agent Information Option (Option 82) field in the packet.",
+    "CLIs": [
+        "action { replace | drop | keep }",
+        "no action"
+    ],
+    "ParentView": [
+        "config>service>vprn>if>dhcp>option",
+        "config>service>vprn>nw-if>dhcp>option",
+        "config>service>vprn>sub-if>grp-if>dhcp>option"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "replace",
+            "Info": "In the upstream direction (from the user), the existing Option 82 field is replaced with the Option 82 field from the router. In the downstream direction (towards the user) the Option 82 field is stripped (in accordance with RFC 3046)."
+        },
+        {
+            "Parameters": "drop",
+            "Info": "The packet is dropped, and an error is logged."
+        },
+        {
+            "Parameters": "keep",
+            "Info": "The existing information is kept in the packet and the router does not add any additional information. In the downstream direction the Option 82 field is not stripped and is sent on towards the client."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: Per RFC 3046, DHCP Relay Agent Information Option, section 2.1.1, Reforwarded DHCP requests, the default is to keep the existing information intact. The exception to this is if the giaddr of the received packet is the same as the ingress address on the router. In that case the packet is dropped and an error is logged."
+}

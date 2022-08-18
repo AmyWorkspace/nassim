@@ -1,0 +1,44 @@
+{
+    "PageTitle": "peer filter-policy import (BGP-VPNv4 address family view)",
+    "FuncDef": "The peer filter-policy import command configures an ACL-based policy for filtering BGP routes received from a specified peer.\nThe undo peer filter-policy import command cancels this configuration.\nBy default, no filtering policy is set for a peer.",
+    "CLIs": [
+        "peer <ipv4-address> filter-policy <acl-number> import",
+        "peer <ipv4-address> filter-policy acl-name <acl-name> import",
+        "undo peer <ipv4-address> filter-policy <acl-number> import",
+        "undo peer <ipv4-address> filter-policy acl-name <acl-name> import"
+    ],
+    "ParentView": [
+        "BGP-VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "import",
+            "Info": "Filters received routes.\n-"
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2000",
+            "[*HUAWEI-acl4-basic-2000] rule permit",
+            "[*HUAWEI-acl4-basic-2000] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.1.1.2 as-number 200",
+            "[*HUAWEI-bgp] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-af-vpnv4] peer 10.1.1.2 filter-policy 2000 import"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer filter-policy import command is used to configure an ACL-based policy for filtering routes to be received from peers.\nA proper basic ACL needs to be selected based on the address family of a peer.\nConfiguration Impact\nIf the peer filter-policy import command is run multiple times, the latest configuration overwrites the previous one. For example, if the peer 2001:DB8:2::2 filter-policy 2600 import command is run and then the peer 2001:DB8:2::2 filter-policy 2400 import command is run, the configuration of the peer 2001:DB8:2::2 filter-policy 2400 import command overwrites that of the peer 2001:DB8:2::2 filter-policy 2600 import command.\nPrecautions\nWhen the rule command is run to configure rules for a named ACL, only the source address range specified by source and the time period specified by time-range take effect.\nThe peer route-filter import command is mutually exclusive with the peer route-filter import commands."
+}

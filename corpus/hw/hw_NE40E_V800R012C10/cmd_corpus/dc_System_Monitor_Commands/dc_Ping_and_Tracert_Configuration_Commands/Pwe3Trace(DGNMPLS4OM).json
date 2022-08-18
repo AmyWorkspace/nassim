@@ -1,0 +1,124 @@
+{
+    "PageTitle": "tracert vc",
+    "FuncDef": "The tracert vc command checks the status of a PW or locates a faulty node on a PW in the Down state.",
+    "CLIs": [
+        "tracert vc <vc-type> <pw-id> [ <peer-address> ] [ -exp <exp-value> | -f <first-ttl> | -m <max-ttl> | -r <reply-mode> | -t <timeout-value> | -g ] * label-alert [ no-control-word ] [ full-lsp-path ] [ pipe | uniform ] [ detail ] [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]",
+        "tracert vc <vc-type> <pw-id> [ <peer-address> ] [ -exp <exp-value> | -f <first-ttl> | -m <max-ttl> | -r <reply-mode> | -t <timeout-value> | -g ] * control-word [ remote <remote-ip-address> ] [ full-lsp-path | ptn-mode ] [ pipe | uniform ] [ detail ] [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]",
+        "tracert vc <vc-type> <pw-id> [ <peer-address> ] [ -exp <exp-value> | -f <first-ttl> | -m <max-ttl> | -r <reply-mode> | -t <timeout-value> | -g ] * normal [ no-control-word ] [ remote <remote-ip-address> ] [ full-lsp-path ] [ pipe | uniform ] [ detail ] [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vc-type",
+            "Info": "Specifies the encapsulation type of a local PW.\nEncapsulation types supported:ATM PWE3atm-1to1-vcc: One PW carries the ATM cells of one PVC.atm-1to1-vpc: One PW carries the ATM cells of one PVP.atm-cell-transport: ATM cells are transmitted over PWE3 VCs.atm-nto1-vcc: One PW carries the ATM cells of multiple PVCs.atm-nto1-vpc: One PW carries the ATM cells of multiple PVPs.\nTDM PWE3cesopsn-basic: CES is sensitive to E1 and T1 frame structures. E1 or T1 signals can be encapsulated into packets based on timeslots.satop-e1: SAToP is insensitive to the E1 frame structure and encapsulates a whole E1 frame into a PW packet.\nOther encapsulation types:cep: This encapsulation type is used for CEP services.ethernet: This encapsulation type is used when Ethernet packets do not carry VLAN information.hdlc: HDLC is a bit-oriented link layer protocol.ip-interworking: This encapsulation type is used for interworking between Huawei devices.ip-layer2: This encapsulation type is used for interworking between Huawei devices and non-Huawei devices.ppp: PPP is a link layer protocol that specifies how to encapsulate and transmit network layer packets over P2P links.vlan: This encapsulation type is used when Ethernet packets carry VLAN information."
+        },
+        {
+            "Parameters": "pw-id",
+            "Info": "Specifies the ID of a local PW.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the peer LSR ID of the local PW.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies the EXP value in the outer label of an MPLS Echo Request packet.\nThe value is an integer ranging from 0 to 7. The default value is 0."
+        },
+        {
+            "Parameters": "-m max-ttl",
+            "Info": "Specifies the maximum TTL.\nThe value is an integer ranging from 1 to 255, and must be greater than the value of first-ttl. The default value is 30."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies the mode in which the peer returns MPLS Echo Reply packets.\nThe value is an integer ranging from 1 to 4. The default value is 2.\n1: no reply.2: reply with an IPv4 or IPv6 UDP packet carrying the router-alert option.3: reply with an IPv4 or IPv6 UDP packet carrying the router-alert option.4: reply through the control channel of the application plane."
+        },
+        {
+            "Parameters": "-t timeout-value",
+            "Info": "Specifies the period of the time to wait for an MPLS Echo Reply packet.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-g",
+            "Info": "Indicates MPLS packet fragmentation for an NQA test instance.\n-"
+        },
+        {
+            "Parameters": "detail",
+            "Info": "Displays details carried in MPLS Echo Reply packets.\n-"
+        },
+        {
+            "Parameters": "-f first-ttl",
+            "Info": "Specifies the first TTL value.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "label-alert",
+            "Info": "Indicates that the router alert label is encapsulated into the MPLS Echo Request packet.\n-"
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "Indicates that the control word is not encapsulated into the MPLS Echo Request packet.\n-"
+        },
+        {
+            "Parameters": "full-lsp-path",
+            "Info": "Displays the responses from all nodes along the LSP through which the MPLS Echo Request packets. If this parameter is not specified, only the responses from the PW nodes along the LSP are displayed.\n-"
+        },
+        {
+            "Parameters": "pipe",
+            "Info": "Specifies the pipe mode.\nWhen a probe packet passes through the MPLS domain, the ingress reduces the IP TTL value in packets by one and sets the MPLS TTL to a specific value. Transit nodes only process the MPLS TTL. When the egress receives the packets, it removes the MPLS label carrying the MPLS TTL from each packet and reduces the IP TTL value by one.\n-"
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Specifies the uniform mode.\nWhen IP TTL of the probe packet enter the MPLS network, the ingress reduces the IP TTL value by one and copies the IP TTL value to the MPLS TTL field. Each transit node only processes the MPLS TTL. The egress reduces the MPLS TTL by one, compares the MPLS TTL with the IP TTL, and obtains the smaller value to map it to the IP TTL.\n-"
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Forwards packets through a specified public bypass LSP of a PW.\nIf an inbound interface is specified in CLI mode to perform bypass LSP detection, the packets from the initiator are forwarded through a public bypass LSP.\nIn a hybrid load balancing scenario, if multiple bypass LSPs exist, packets are forwarded through a randomly selected LSP rather than any specified bypass LSP.\nFor the transmission of reply packets, the PEs at both ends of a PW must have protection paths configured. Otherwise, when the peer PE does not have any public bypass LSP, PW tracert reply packets cannot be returned.\n-"
+        },
+        {
+            "Parameters": "-si interface-name",
+            "Info": "Specifies the name of a simulated inbound interface.\nThe inbound interface of MPLS Echo Request packets is configured to simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of a simulated inbound interface.\nThe inbound interface of MPLS Echo Request packets is configured to simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of a simulated inbound interface.\nThe inbound interface of MPLS Echo Request packets is configured to simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Indicates that the control word is encapsulated into the MPLS Echo Request packet.\n-"
+        },
+        {
+            "Parameters": "remote remote-ip-address",
+            "Info": "Specifies the remote IP address. By default, the system searches for the IP address of the next hop based on the PW ID on the local PE. If label-alert is configured, you can specify the IP address or the destination for any switch node.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "ptn-mode",
+            "Info": "Specifies the PTN-Interworking mode.\n-"
+        },
+        {
+            "Parameters": "normal",
+            "Info": "Indicates the normal mode where the router alert label and control word are not encapsulated into the MPLS Echo Request packet.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> tracert vc ppp 100 control-word remote 4.1.1.2 full-lsp-path",
+            "  TTL   Replier            Time    Type      Downstream",
+            "  0                                Ingress   1.1.1.2/[1025 ]",
+            "  1     1.1.1.2           230 ms  Transit    2.1.1.2/[1301 ]",
+            "  2     2.1.1.2           230 ms  Transit    3.1.1.2/[1208 ]",
+            "  3     3.1.1.2           100 ms  Transit    4.1.1.2/[3 ]  4     4.1.1.2           150 ms  Egress"
+        ],
+        [
+            "<HUAWEI> tracert vc vlan 100 control-word bypass -si GigabitEthernet1/0/1.1",
+            "PW Trace Route : FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID = 100, press CTRL_C to break",
+            "TTL    Replier            Time    Type      Downstream",
+            "0                                 Ingress   10.1.1.1/[321542 321543 33106 33249 65557 ]",
+            "4      1.1.1.9            3ms     Egress"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a fault occurs on the PW, the ping vc command can be used to check the connectivity of the network, and the tracert vc command can be used to locate the fault and provide information for fault diagnosis. If a PW is Up, the ping vc command can be used to locate a fault on the PW, such as an incorrect or dropped forwarding entry. If a PW is down, the tracert vc command must be used to locate the faulty node on the PW.\nYou can run the tracert vc command to check the PW in the following scenarios:\nVLL networking\nIn the PWE3 VLL networking, a PW tracert is initiated to view information about SPEs and Ps along the path that the packet travels on, from source to destination. The PW tracert is used to check the connectivity of the PW and locate any faults on the network.\nThe PWE3 VLL PW tracert can be performed in control word, label alert, or TTL mode. The default mode is label alert.\nTo locate a fault on a VLL network by sending probe packets encapsulated with the control word, you can run the tracert vc pw-type pw-id control-word command.\nTo locate a fault on a VLL network by sending ordinary probe packets that are not encapsulated with the control word or router alert label, run the tracert vc pw-type pw-id command.\nThe TTL value of the PW Tracert Request packet is incremented by 1. Each time the switch node (P node) receives an Echo Request packet after the TTL value of the packet expires, it sends the Echo Request packet to the LSPV module.\nVPLS networking\nThe LDP VPLS PW tracert only supports the label alert mode. If an optional PW ID is configured and specified, the PW corresponding to the PW ID is monitored. If the PW ID is not specified, the PW corresponding to the VSI ID is monitored.\n\nPrerequisites\nEnsure that the UDP module of each node is working properly; otherwise, the tracert operation will fail.Ensure that the MPLS module of each node is enabled and is working properly.Ensure that the ICMP module of each node works properly; otherwise, \"timeout\" is displayed.\n\nImplementation Procedure\nThe execution process of the tracert vc command is as follows:\nThe source sends an MPLS Echo Request packet with TTL 1. After the TTL times out, the first hop sends an MPLS Echo Reply packet to the source.The source sends an MPLS Echo Request packet with TTL 2. After the TTL times out, the second hop sends an MPLS Echo Reply packet to the source.The source sends an MPLS Echo Request packet with TTL 3. After the TTL times out, the third hop sends an MPLS Echo Reply packet to the source.The preceding steps continue until the MPLS Echo Request packet reaches the destination.\nWhen the device on the destination hop receives the MPLS Echo Request packet, it will respond with an MPLS Echo Reply packet, indicating that the tracert test ends. The purpose behind this is to record the source of each ICMP timeout packet to provide a trace of the path the packet took to reach the destination.\n\nConfiguration Impact\nIn control word mode, if a switch node receives an MPLS Echo Request packet whose TTL does not time out, it does not send the packet to the CPU. In this mode, the source obtains only a little PW information and cannot obtain information about the downstream of the transit node.\nIn router alert mode, a transit node sends the received MPLS Echo Request packets to the CPU. In this mode, the source obtains a lot of PW information. This mode, however, affects the device performance when the traffic volume is heavy.\nPrecautions\nWhen the probe packet reaches the egress or the TTL reaches the upper threshold, the PW tracert is terminated.You can press Ctrl+C to terminate the execution of the tracert vc command.In the scenario where a PE is single-homed to an SPE and two multi-hop PWs are deployed for PW redundancy, end-to-end detection cannot be performed for the secondary PW if services are transmitted over the primary PW, or for the primary PW if services are transmitted over the secondary PW.\n."
+}

@@ -1,0 +1,33 @@
+{
+    "PageTitle": "mld-snooping query-interval (VSI view)",
+    "FuncDef": "The mld-snooping query-interval command sets an interval at which the querier sends general Query messages.\nThe undo mld-snooping query-interval command restores the interval.\nThe default interval is 125s.\nBy default, the interval is 125s.",
+    "CLIs": [
+        "mld-snooping query-interval <query-interval>",
+        "undo mld-snooping query-interval"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "query-interval",
+            "Info": "Sets an interval at which the querier sends general Query messages.\nThe value is an integer ranging from 1 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mld-snooping enable",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] mld-snooping query-interval 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe mld-snooping query-interval command provides the following functions:\nSets an interval at which the querier sends general Query messages.\nAfter the querier function is enabled and an interval is set using the mld-snooping query-interval command, the querier sends general Query messages at the configured interval to maintain group member information. The shorter the interval is, the more sensitive the device is and the more bandwidth and system resources are occupied.\nThe interval for the querier to send general Query messages must be greater than the maximum time for the querier to wait for responses from hosts. Otherwise, multicast group members may be deleted incorrectly.\nAdjusts the aging time of member interfaces.\nAfter receiving a Report message from a downstream host, the device sets the aging time of the member interface using the following formula: Member interface aging time = Number of group-specific Query messages to be sent x Interval at which general Query messages are sent + Maximum time for the querier to wait for responses from downstream hosts. By default, the device sets the aging time to 130s. Run the mld-snooping query-interval command to set an interval at which general Query messages are sent, run the mld-snooping robust-count command to set the number of group-specific Query messages to be sent, and run the mld-snooping max-response-time command to set the maximum time that the querier waits for responses from downstream hosts.\n\nPrerequisites\nMLD snooping has been enabled using the mld-snooping enable command.\nConfiguration Impact\nIf the mld-snooping query-interval command is run more than once in the same view, the latest configuration overwrites the previous one.\nPrecautions\nTo use the mld-snooping query-interval configuration as a factor of adjusting the member interface aging time, set the same interval as that specified on its upstream device. Otherwise, multicast data transmission will be interrupted between the Layer 2 and Layer 3 devices.\nThe mld-snooping query-interval command fails to be run in a VSI view in the following condition:\nThe VSI is bound to a BD."
+}

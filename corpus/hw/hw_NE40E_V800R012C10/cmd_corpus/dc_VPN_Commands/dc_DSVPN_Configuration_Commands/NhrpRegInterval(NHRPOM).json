@@ -1,0 +1,29 @@
+{
+    "PageTitle": "nhrp registration interval",
+    "FuncDef": "The nhrp registration interval command sets the interval at which a spoke registers with the hub.\nThe undo nhrp registration interval command restores the interval to the default value.\nBy default, a spoke registers with the hub at an interval of 2400 seconds.",
+    "CLIs": [
+        "nhrp registration interval <regInterval>",
+        "undo nhrp registration interval <regInterval>",
+        "undo nhrp registration interval"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "regInterval",
+            "Info": "Specifies the interval at which a spoke registers with the hub.\nThe value is an integer that ranges from 5 to 31845, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nhrp enable",
+            "[*HUAWEI] interface tunnel 0",
+            "[*HUAWEI-Tunnel0] tunnel-protocol gre p2mp",
+            "[*HUAWEI-Tunnel0] nhrp enable",
+            "[*HUAWEI-Tunnel0] nhrp registration interval 600"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the tunnel address and public network address of a spoke change or the NHRP peer entry of the hub ages, the hub may fail to update the NHRP peer entry in time. In this case, run the nhrp registration interval command on the spoke to set the interval at which a spoke registers with the hub to a value smaller than the aging time of NHRP peer entries.\nPrerequisites\nThe following operations have been performed:\nRun the interface tunnel command to create a tunnel interface and display the tunnel interface view.Run the tunnel-protocol gre p2mp command to set the tunnel encapsulation mode to mGRE.\n\nConfiguration Impact\nWhen you run this command to change the interval at which a spoke registers with the hub:\nIf the interval is too long, the spoke fails to immediately inform the hub of the latest branch information.If the interval is too short, the spoke frequently registers with the hub, wasting network resources.\n\nPrecautions\nThe value of the parameter seconds cannot be larger than the aging time of NHRP peer entries configured by using the nhrp entry holdtime command."
+}

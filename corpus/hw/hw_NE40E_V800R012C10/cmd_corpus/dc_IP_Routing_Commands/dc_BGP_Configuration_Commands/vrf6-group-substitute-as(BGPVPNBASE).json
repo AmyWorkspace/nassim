@@ -1,0 +1,33 @@
+{
+    "PageTitle": "peer substitute-as (BGP-VPN instance IPv6 address family view) (group)",
+    "FuncDef": "The peer substitute-as command enables a device to replace the AS number of the peer specified in the AS_Path attribute with the local AS number.\nThe undo peer substitute-as command disables AS number substitution.\nBy default, AS number substitution is disabled.",
+    "CLIs": [
+        "peer <group-name> substitute-as",
+        "undo peer <group-name> substitute-as"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-6-vpn1] group test external",
+            "[*HUAWEI-bgp-6-vpn1] peer test as-number 200",
+            "[*HUAWEI-bgp-6-vpn1] peer test substitute-as"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a L3VPN scenario, if the ASs to which two VPN sites belong use private AS numbers, the AS numbers of the two VPN sites may be the same. If a CE in a VPN site sends a VPN route to the connected PE using EBGP and the PE then sends the route to the remote PE, the remote CE will discard the route because the AS number carried by the route is the same as the local AS number. As a result, different sites of the same VPN cannot communicate. The peer substitute-as command can be used on the PE to enable AS number substitution to address this problem. After that, the PE replaces the AS number carried in the VPN route with the local AS number. As a result, the remote CE will not discard the route due to identical AS numbers.\nOn a BGP public network, two devices have the same AS number and the same EBGP peer. After one of the two devices learns a route of the other device from the EBGP peer, the route is discarded because it carries an AS number that is the same as the local one. To address this problem, run the peer substitute-as command on the EBGP peer.\nPrerequisites\nEnabling BGP AS number substitution may cause route loops in a CE multi-homing network. The peer soo command must be run to prevent a routing loop in a VPN site.\nOn BGP public networks, if three or more BGP peers form a ring network, the peer substitute-as command cannot be run; otherwise, a routing loop may occur."
+}

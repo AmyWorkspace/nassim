@@ -1,0 +1,37 @@
+{
+    "PageTitle": "mode (Eth-Trunk interface view)",
+    "FuncDef": "The mode command configures or changes the working mode of an Eth-Trunk interface.\nThe undo mode command restores the default working mode of an Eth-Trunk interface.\nBy default, an Eth-Trunk interface works in manual load balancing mode.",
+    "CLIs": [
+        "mode { lacp-static | manual { load-balance | backup } }",
+        "undo mode"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lacp-static",
+            "Info": "Indicates the static LACP mode.\n-"
+        },
+        {
+            "Parameters": "manual",
+            "Info": "Indicates the manual mode.\n-"
+        },
+        {
+            "Parameters": "load-balance",
+            "Info": "Indicates the manual load balancing mode.\n-"
+        },
+        {
+            "Parameters": "backup",
+            "Info": "Indicates the manual 1:1 master/backup mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] mode lacp-static"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCurrently, the device supports Eth-Trunk interfaces to work in the following modes:\nStatic LACP mode\nWhen the devices that are directly connected through an Eth-Trunk link support LACP, you can run the mode lacp-static command to configure the Eth-Trunk interface to work in static LACP mode. In this manner, both load balancing and redundancy backup can be implemented. In static LACP mode, you must manually create an Eth-Trunk interface and add interfaces to the Eth-Trunk interface. Different from link aggregation in manual load balancing mode, active member interfaces are selected by sending LACPDUs in static LACP mode. That is, when a group of interfaces are added to an Eth-Trunk interface, devices at the two ends determine active interfaces and inactive interfaces by sending LACPDUs to each other.\nManual load balancing mode\nWhen one of the devices at the two ends of an Eth-Trunk link does not support LACP, you can run the mode manual load-balance command to configure the Eth-Trunk interface to work in manual load balancing mode. In addition, you can add multiple member interfaces to increase the bandwidth between the two devices and improve reliability.The manual load balancing mode is a basic link aggregation mode. In this mode, you must manually create an Eth-Trunk interface, add interfaces to the Eth-Trunk interface, and specify active member interfaces. LACP is not involved.In manual load balancing mode, all active member interfaces forward data and perform load balancing.Traffic can be evenly balanced among all member interfaces. Alternatively, you can also set the weight for each member interface to implement uneven load balancing; in this manner, the interface that has a greater weight value transmits a larger volume of traffic.If an active link of the link aggregation group fails, traffic is balanced among the remaining active links.\nManual 1:1 master/backup mode\nWhen intermediate devices exist between the devices at both ends of an Eth-Trunk link, run the mode manual backup command on the devices at both ends to configure the Eth-Trunk interfaces to work in manual 1:1 master/backup mode and specify the master interface.In manual 1:1 master/backup mode, you must manually create an Eth-Trunk interface, add interfaces to the Eth-Trunk interface, and specify the master interface.An Eth-Trunk interface in manual 1:1 master/backup mode contains only two member interfaces, one master and the other backup. In normal situations, only the master interface forwards traffic.To allow the Eth-Trunk interfaces in manual 1:1 master/backup mode to work properly, run the smart-link flush send vlan vlan-id command in the view of the Eth-Trunk interfaces at both ends of the Eth-Trunk link to enable the Eth-Trunk interfaces to send SmartLink Flush packets, and run the smart-link flush enable control-vlan vlan-id command in the view of the intermediate devices' interfaces that connect to the Eth-Trunk interfaces at both ends of the Eth-Trunk link as well as the intermediate devices' interfaces that connect to each other to enable the interfaces to receive Smart Link Flush packets.\n\nPrerequisites\nAn Eth-Trunk interface has been correctly configured.\nTo configure an Eth-Trunk interface in manual 1:1 master/backup mode, ensure that the interface mode has been changed to Layer 2 using the portswitch command.\nPrecautions\nBefore changing the working mode of an Eth-Trunk interface that does not work in manual load balancing mode, ensure that the Eth-Trunk interface contains no member interface.\nIf an Eth-Trunk interface has been added to an E-Trunk, run the e-trunk command to delete the Eth-Trunk from the E-Trunk before running the mode command to change the working mode of the Eth-Trunk interface.\nTo configure an Eth-Trunk in static LACP mode, ensure that Eth-Trunk interfaces in static LACP mode have been created on both ends of an Eth-Trunk using the mode lacp-static command."
+}

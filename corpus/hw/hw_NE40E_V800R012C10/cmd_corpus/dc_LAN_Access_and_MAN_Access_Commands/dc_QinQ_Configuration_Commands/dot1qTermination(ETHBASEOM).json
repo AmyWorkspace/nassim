@@ -1,0 +1,54 @@
+{
+    "PageTitle": "dot1q termination vid",
+    "FuncDef": "The dot1q termination vid command enables VLAN tag termination for single-tagged packets.\nThe undo dot1q termination vid command disables VLAN tag termination for single-tagged packets.\nBy default, VLAN tag termination for single-tagged packets is disabled on a sub-interface.",
+    "CLIs": [
+        "dot1q termination vid <low-pe-vid> [ to <high-pe-vid> ] [ vlan-group <group-id> ]",
+        "undo dot1q termination vid <low-pe-vid> [ to <high-pe-vid> ] [ vlan-group <group-id> ]"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "PW-VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "to high-pe-vid",
+            "Info": "Specifies the end VLAN ID in user packets.\nThe high-pe-vid value must be greater than the low-pe-vid value.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vlan-group group-id",
+            "Info": "Specifies the ID of a VLAN group to which the sub-interface for Dot1q VLAN tag termination is bound.\nStatistics about Dot1q packets are collected based on VLAN groups. To collect statistics about Dot1q packets, specify vlan-group in the dot1q termination vid command.\nYou can apply QoS policies for user groups by specifying the VLAN group ID.\nThe value is an integer ranging from 1 to 16."
+        },
+        {
+            "Parameters": "vid low-pe-vid",
+            "Info": "Specifies the start VLAN ID in user packets.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] encapsulation dot1q-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vlan-group 1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1-vlangroup1] quit",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] dot1q termination vid 100 to 200 vlan-group 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] encapsulation dot1q-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vlan-group 1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1-vlangroup1] quit",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] dot1q termination vid 100 to 200 vlan-group 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nInter-VLAN communication\nVLAN technology is widely used because it helps Layer 2 packets of different users to be separately transmitted. Hosts in a VLAN can communicate with each other, but hosts in different VLANs cannot communicate at Layer 2. The Layer 3 routing technology is required for communication between hosts in different VLANs. The following interfaces can be used to implement inter-VLAN communication:\nVLANIF interfaces on Layer 3 switchesLayer 3 Ethernet sub-interfaces on routers\nConventional Layer 3 Ethernet interfaces do not identify VLAN packets. After receiving VLAN packets, they consider the packets invalid and discard them. To implement inter-VLAN communication, create Ethernet sub-interfaces on an Ethernet interface and configure the sub-interfaces to remove tags from VLAN packets.\nCommunication between devices in the LAN and WAN\nMost LAN packets carry VLAN tags. Certain WAN protocols such as Point-to-Point Protocol (PPP) cannot identify VLAN packets. To send VLAN packets from a LAN to a WAN, a device needs to record VLAN information carried in VLAN packets, remove VLAN tags, and then forward the packets.\nVLAN packets are classified into Dot1q packets, each of which carries only one VLAN tag, and QinQ packets, each of which carries two VLAN tags. Accordingly, there are two VLAN tag termination modes:\nDot1q termination, which terminates the single tag carried in a Dot1q packet.\nTo configure Dot1q termination, run the dot1q termination vid command in the sub-interface view.\nQinQ termination, which terminates the double tags carried in a QinQ packet. To configure QinQ termination, run the qinq termination pe-vid ce-vid command in the sub-interface view.\n\nPrerequisites\nThe encapsulation type of the sub-interface has been configured as Dot1q termination using the encapsulation dot1q-termination command in the sub-interface view.\nThe encapsulation dot1q-termination command is replaced by the control-vid dot1q-termination command.\nConfiguration Impact\nAfter the\nqinq termination pe-vid ce-vid command is used, the VLAN tag termination sub-interface processes packets in the following ways:\nAfter receiving a packet, the inbound interface removes the tag carried in the packet, and then forwards the packet. The outbound interface determines whether the sent packet carries tags.Before sending a packet, the outbound interface adds the VLAN information carried in the packet received from the peer end into the packet for forwarding.\nThe VLAN IDs in the tags of user packets received by the sub-interface must be in the range of low-pe-vid [ to high-pe-vid ] specified in the dot1q termination vid command. Otherwise, the packets are dropped.\nIf the dot1q termination vid command is run more than once, all configurations take effect.\n\nPrecautions\nEach time after you run the dot1q termination vid command, you are advised to run the commit command. If you do not run the commit command, traffic may be interrupted.\nThis command is exclusive with the mpls te command under sub-interface view.\nThis command is exclusive with the mpls ldp command under sub-interface view."
+}

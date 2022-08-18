@@ -1,0 +1,50 @@
+{
+    "PageTitle": "dhcp client-option",
+    "FuncDef": "The dhcp client-option command configures an option that will be sent as a reply to a client option.\nThe undo dhcp client-option command deletes the configuration.\nBy default, no options are specified as replies to client options.",
+    "CLIs": [
+        "dhcp client-option <client-code> <client-string> reply-option <reply-code> { suboption <reply-sub-code> { hex <hex-string> | ip <ip-address> | string <ascii-string> } } &<1-16>",
+        "undo dhcp client-option [ <client-code> [ <client-string> ] ] reply-option",
+        "undo dhcp client-option <client-code> <client-string> reply-option suboption { <reply-sub-code> } &<1-16>"
+    ],
+    "ParentView": [
+        "IP address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "reply-option reply-code",
+            "Info": "Specifies the code of a reply option.\nThe value ranges from 2 to 254 excluding 3, 6, 15, 44, 46, 50-55, 57-59, 61, 82, and 119."
+        },
+        {
+            "Parameters": "suboption reply-sub-code",
+            "Info": "Specifies the code of a reply sub-option.\nThe value ranges from 1 to 254."
+        },
+        {
+            "Parameters": "hex hex-string",
+            "Info": "Specifies a hexadecimal number as a sub-option.\nThe value is a string of 1 to 128 case-insensitive characters of 0-9 or a-f. The value length must be an even number."
+        },
+        {
+            "Parameters": "ip ip-address",
+            "Info": "Specifies an IP address as a sub-option.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "string ascii-string",
+            "Info": "Specifies a string as a sub-option.\nThe value is a string of 1 to 128 characters corresponding to the ASCII codes 32 to 38 and 38 to 126 but cannot be those corresponding to the ASCII code 39 (representing single quotation marks) or 9 (representing the Tab key). The sub-option value cannot be only \"-\" and \"--\"."
+        },
+        {
+            "Parameters": "client-option client-code",
+            "Info": "Specifies an option code in a client message.\nCurrently, only Option 60 is supported."
+        },
+        {
+            "Parameters": "client-option client-string",
+            "Info": "Specifies the option content in a client message.\nThe value is a string of 3 to 66 characters starting and ending with double quotation marks (\"\"). The string excluding double quotation marks contains 1 to 64 characters. The value can contain case-sensitive characters corresponding to the ASCII codes 32 to 38 and 38 to 126 but cannot contain those corresponding to the ASCII code 39 (representing single quotation marks) or 9 (representing the Tab key). The sub-option value cannot be only \"-\" and \"--\". \"Huawei AP\" is Option 60 content conserved for a specific scenario and cannot be used."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei server",
+            "[~HUAWEI-ip-pool-huawei] dhcp client-option 60 \"network1\" reply-option 43 suboption 6 ip 192.168.1.1 suboption 8 string VPN-T1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo specify options that will be sent as replies to client options, run the dhcp client-option command. For example, in a plug-and-play scenario, different options are sent to a DHCP client based on different Option 60 information in DHCP user requests.\nPrecautions\nAs defined in standard protocols, the maximum option length is 255 bytes. Therefore, specifying an option longer than 255 bytes is not allowed.A maximum of 16 DHCP client options can be configured in an address pool.Only one reply option can be specified for one client option.A maximum of 16 sub-options can be configured for one reply option. This means that the maximum number of sub-option reply codes is 16.The specified reply options must comply with standard protocols. Otherwise, users may fail to go online."
+}

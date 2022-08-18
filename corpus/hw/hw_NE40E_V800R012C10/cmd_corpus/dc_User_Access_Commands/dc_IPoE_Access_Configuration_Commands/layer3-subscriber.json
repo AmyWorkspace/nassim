@@ -1,0 +1,72 @@
+{
+    "PageTitle": "layer3-subscriber",
+    "FuncDef": "The layer3-subscriber command specifies an IP address segment for Layer 3 static users and the name of the authentication domain associated with the IP address segment.\nThe undo layer3-subscriber command deletes the configuration.\nThe layer3-subscriber ip-address any command configures Layer 3 users whose IPv4 packets fail to match any specified IPv4 address segment to go online through a specified authentication domain.\nThe undo layer3-subscriber ip-address any command deletes the configuration.\nBy default, there is no specified IP address segment and its associated authentication domain for Layer 3 static users.",
+    "CLIs": [
+        "layer3-subscriber { <start-ip-address> [ <end-ip-address> ] | <start-ipv6-address> [ <end-ipv6-address> ] | delegation-prefix <start-ipv6-prefix> [ <end-ipv6-prefix> ] <prefix-length> } * [ vpn-instance <instance-name> ] domain-name <domain-name>",
+        "layer3-subscriber ip-address any domain-name <domain-name>",
+        "undo layer3-subscriber { <start-ip-address> | <start-ipv6-address> | delegation-prefix <start-ipv6-prefix> <prefix-length> } [ vpn-instance <instance-name> ]",
+        "undo layer3-subscriber ip-address any"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "start-ip-address",
+            "Info": "Specifies the start IP address on the IP address segment where the Layer 3 static users reside.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "end-ip-address",
+            "Info": "Specifies the end IP address on the IP address segment where the Layer 3 static users reside.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "start-ipv6-address",
+            "Info": "Specifies the start IP address of the IPv6 network segment where the Layer 3 static users reside.\nThe value is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "end-ipv6-address",
+            "Info": "Specifies the end IP address of the IPv6 network segment where the Layer 3 static users reside.\nThe value is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "delegation-prefix start-ipv6-prefix",
+            "Info": "Specifies the start IPv6 delegation prefixes of Layer 3 static users.\nThe value is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "delegation-prefix end-ipv6-prefix",
+            "Info": "Specifies the end IPv6 delegation prefixes of Layer 3 static users.\nThe value is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the prefix length.\nThe value is an integer ranging from 1 to 128."
+        },
+        {
+            "Parameters": "vpn-instance instance-name",
+            "Info": "Specifies the VPN instance name of Layer 3 static users.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "domain-name domain-name",
+            "Info": "Specifies the name of the authentication domain associated with the IP address segment of Layer 3 static users.\nThe value is a string of 1 to 64 case-insensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[~HUAWEI-aaa-domain-huawei] commit",
+            "[~HUAWEI-aaa-domain-huawei] quit",
+            "[~HUAWEI-aaa] quit",
+            "[~HUAWEI] layer3-subscriber ip-address any domain-name huawei"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[~HUAWEI-aaa-domain-huawei] commit",
+            "[~HUAWEI-aaa-domain-huawei] quit",
+            "[~HUAWEI-aaa] quit",
+            "[~HUAWEI] layer3-subscriber 2.2.2.2 2.2.2.254 domain-name huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn scenarios in which Layer 3 users send IPv4 packets to go online, you can run the layer3-subscriber command to specify the IPv4 address segments and associated authentication domains for Layer 3 users. A maximum of 512 address segments can be configured for Layer 3 users. However, if there are more than 512 address segments on a live network, IPv4 packets of Layer 3 users that fail to match any specified address segment are discarded and therefore these users cannot go online. To prevent this problem, run the layer3-subscriber ip-address any command to allow users whose IPv4 packets fail to match any specified address segment to go online through a specified domain.\nPrerequisites\nIf a Layer 3 static user wants to obtain an IPv6 address or IPv6 delegation prefix from a local address pool, this IPv6 address or IPv6 delegation prefix must exist in the local address pool.\nConfiguration Impact\nAfter an IPv6 address or delegation prefix has been allocated to a Layer 3 static user, this IPv6 address or delegation prefix will not be allocated to other users.\nIf the layer3-subscriber ip-address any and layer3-subscriber commands are both configured, IPv4 packets of Layer 3 users are first matched against the specified address segments and associated authentication domains. If IPv4 packets of some Layer 3 users fail to match any specified address segment, these users will go online through the domain specified in the layer3-subscriber ip-address any command.\nIf only the layer3-subscriber ip-address any command is run, all Layer 3 users that send IPv4 packets go online through the specified domain.\nIf only the layer3-subscriber command is run, Layer 3 users whose IPv4 packets fail to match any specified address segment cannot be triggered to go online.\nPrecautions\nThis command is supported only on the admin VS.\nIf Layer 3 static users are IPv4 users, only an IPv4 address segment needs to be configured.If Layer 3 static users are dual-stack users in bridging mode, both an IPv4 address segment and an IPv6 address segment need to be configured, and the number of IPv4 addresses must be the same as that of IPv6 addresses.If Layer 3 static users are IPv6 users in unnumbered routing mode, only an IPv6 delegation prefix segment needs to be configured.If Layer 3 static users are dual-stack users in unnumbered routing mode, both an IPv4 address segment and an IPv6 delegation prefix segment need to be configured, and the number of IPv4 addresses must be the same as that of IPv6 delegation prefixes.If Layer 3 static users are dual-stack users in numbered routing mode, both an IPv6 address segment and an IPv6 delegation prefix segment need to be configured, and the number of IPv6 addresses must be the same as that of IPv6 delegation prefixes.If Layer 3 static users are dual-stack users in numbered routing mode, an IPv4 address segment, an IPv6 address segment, and an IPv6 delegation prefix segment need to be configured, and the numbers of IPv4 addresses, IPv6 addresses, and IPv6 delegation prefixes must be the same.Layer 3 static user access is not supported on QinQ and Dot1q VLAN tag termination sub-interfaces.When the layer3-subscriber command is run to configure an address segment for Layer 3 static users, if the address segment specified by and in the section command overlaps with that in the layer3-subscriber command, but the excluded-ip-address command is not run for the address segment configured using the section command, an error message is displayed.When running layer3-subscriber ip-address any command, ensure that the IP addresses of Layer 3 users that send IPv4 packets to go online are valid. To achieve this, it is recommended that you deploy DHCP snooping on downstream Layer 2 devices."
+}

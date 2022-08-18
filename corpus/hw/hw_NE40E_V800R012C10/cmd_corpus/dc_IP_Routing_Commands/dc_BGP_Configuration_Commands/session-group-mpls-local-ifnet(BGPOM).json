@@ -1,0 +1,46 @@
+{
+    "PageTitle": "peer mpls-local-ifnet disable (BGP-VPN instance view) (group)",
+    "FuncDef": "The peer mpls-local-ifnet disable command disables a peer group from creating MPLS local IFNET tunnels.\nThe undo peer mpls-local-ifnet disable command enables a peer group from creating MPLS local IFNET tunnels.\nBy default, MPLS Local Ifnet tunnels are automatically created between EBGP peers with label routing switching enabled. IBGP peers cannot automatically establish MPLS local IFNET tunnels.",
+    "CLIs": [
+        "peer <peerGroupName> mpls-local-ifnet disable",
+        "undo peer <peerGroupName> mpls-local-ifnet disable"
+    ],
+    "ParentView": [
+        "BGP-VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerGroupName",
+            "Info": "Specifies the name of a BGP peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-vpna] group test external",
+            "[*HUAWEI-bgp-instance-vpna] peer test as-number 200",
+            "[*HUAWEI-bgp-instance-vpna] peer test mpls-local-ifnet disable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-vpna] group test2 internal",
+            "[*HUAWEI-bgp-instance-vpna] peer test2 as-number 100",
+            "[*HUAWEI-bgp-instance-vpna] undo peer test2 mpls-local-ifnet disable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a CSC scenario,EBGP peer relationships are established between BGP peers. The BGP peers can be endpoint PEs. These EBGP peers automatically establish MPLS local IFNET tunnels between them. The E2E MPLS local IFNET tunnel fails to transmit traffic if the two peers are indirectly connected.\nIf a fault occurs on a tunnel between the two EBGP peers, traffic recurses to the MPLS local IFNET tunnel, not an FRR bypass tunnel. As the MPLS local IFNET tunnel cannot forward traffic, traffic is interrupted. To resolve this problem, run the peer mpls-local-ifnet disable command to prevent an MPLS local IFNET tunnel from being established between indirectly connected EBGP peers.\nMPLS local IFNET tunnel creation is disabled on an IBGP peer by default. In a CSC scenario, to create an MPLS local IFNET tunnel between IBGP peers to carry BGP LSPs, run the undo peer mpls-local-ifnet disable command. This command enables IBGP peers to create MPLS local IFNET tunnels.\nPrecautions\nTo enable the capability of establishing an MPLS local IFNET tunnel between BGP peers to take effect, run the peer label-route-capability command in the BGP-VPN instance IPv4 address family view to enable the function of exchanging labeled routes."
+}

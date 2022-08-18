@@ -1,0 +1,68 @@
+{
+    "PageTitle": "vrrp6 vrid track admin-vrrp6",
+    "FuncDef": "The vrrp6 vrid track admin-vrrp6 command binds a common Virtual Router Redundancy Protocol for IPv6 (VRRP6) backup group to a management Virtual Router Redundancy Protocol for IPv6 (mVRRP6) backup group. After the binding is complete, the common VRRP6 backup group becomes a service VRRP6 backup group.\nThe undo vrrp6 vrid track admin-vrrp vrrp6 command unbinds a service VRRP6 backup group from an mVRRP6 backup group. After the unbinding is complete, the service VRRP6 backup group restores to a common VRRP6 backup group.\n\nBy default, no common VRRP6 backup group is bound to an mVRRP6 backup group.",
+    "CLIs": [
+        "vrrp6 vrid <virtual-router-id1> track admin-vrrp6 interface { <interface-name> | <interface-type> <interface-number> } vrid <virtual-router-id2> [ unflowdown ]",
+        "undo vrrp6 vrid <virtual-router-id1> track admin-vrrp6"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-router-id1",
+            "Info": "Specifies the ID of a common VRRP6 backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of the interface on which an mVRRP6 backup group resides.\n-"
+        },
+        {
+            "Parameters": "virtual-router-id2",
+            "Info": "Specifies the ID of an mVRRP6 backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "unflowdown",
+            "Info": "Binds a common VRRP6 backup group to an mVRRP6 backup group in unflowdown mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/0",
+            "[~HUAWEI-GigabitEthernet2/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet2/0/0] ipv6 address 2001:db8:1:1::200 64",
+            "[*HUAWEI-GigabitEthernet2/0/0] vrrp6 vrid 1 virtual-ip FE80::1 link-local",
+            "[*HUAWEI-GigabitEthernet2/0/0] admin-vrrp6 vrid 1",
+            "[*HUAWEI-GigabitEthernet2/0/0] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 address 2001:db8:1:2::1 64",
+            "[*HUAWEI-GigabitEthernet1/0/0] vrrp6 vrid 1 virtual-ip FE80::7 link-local",
+            "[*HUAWEI-GigabitEthernet1/0/0] vrrp6 vrid 1 track admin-vrrp6 interface GigabitEthernet 2/0/0 vrid 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nWhen multiple VRRP6 backup groups are configured on a router to forward traffic, each VRRP6 backup group maintains its own state machine, which causes a large number of VRRP6 Advertisement packets to be transmitted. To reduce the impact of these packets on network bandwidths and CPU performance, run the vrrp6 vrid track admin-vrrp6 command to bind a common VRRP6 backup group to an mVRRP6 backup group.\nA common VRRP6 backup group can be bound to an mVRRP6 backup group in either of the following modes:\n\nFlowdown mode: When an mVRRP6 backup group is in the Backup or Initialize state, the interface on which a service VRRP6 backup group bound to the mVRRP6 backup group goes Down and the service VRRP6 backup group switches to the Initialize state. The flowdown mode applies to networks on which both user-to-network and network-to-user traffic is transmitted over the same path. When a firewall is deployed in VRRP6 networking scenarios, it checks the paths for transmitting user-to-network and network-to-user traffic. Network-to-user traffic cannot pass through the firewall if it travels over a path different from the one used by user-to-network traffic. As a result, a backup router discards network-to-user traffic. To ensure that traffic is forwarded properly, specify the flowdown mode to enable network-to-user traffic to be forwarded over the same path as user-to-network traffic.\nUnflowdown mode: When an mVRRP6 backup group is in the Backup or Initialize state, the interface on which a service VRRP6 backup group bound to the mVRRP6 backup group does not go Down and the service VRRP6 backup group remains in the same state as the mVRRP6 backup group. The unflowdown mode applies to networks on which user-to-network and network-to-user traffic can be transmitted over different paths. User-to-network traffic is forwarded only through the master router, whereas network-to-user traffic can be forwarded through the master or backup router.\n\n\nPrerequisites\n\nBefore binding a common VRRP6 backup group to an mVRRP6 backup group, perform the following operations to create them on different interfaces:\n\nRun the vrrp6 vrid admin command to create an mVRRP6 backup group.\nRun the vrrp6 vrid virtual-ip command to create a common VRRP6 backup group.\n\n\nConfiguration Impact\n\nAfter a common VRRP6 backup group is bound to an mVRRP6 backup group, the common VRRP6 backup group becomes a service VRRP6 backup group. The service VRRP6 backup group does not send VRRP6 Advertisement packets to negotiate the master/backup status, and its status is determined by the mVRRP6 backup group. The service VRRP6 backup group only forwards service traffic, which significantly reduces router loads and bandwidth consumption.\n\nPrecautions\n\n\nThe vrrp6 vrid track admin-vrrpvrrp6 vrid track admin-vrrp6 command can be run only on the interface on which a common VRRP6 backup group resides.\nOnly one common VRRP6 backup group can be bound to an mVRRP6 backup group on an interface or a sub-interface.\nDo not run the control-flap command on a network-side interface monitored by a VRRP6 backup group. If this command is run on a network-side interface monitored by a VRRP6 backup group, the interface waits a period when changing from Down to Up. During this period, network-side routing information has not recovered but the VRRP6 backup group directly switches from the Backup state to the Master state. As a result, the master router discards traffic from the user side."
+}

@@ -1,0 +1,74 @@
+{
+    "PageTitle": "loss-measure single-ended local-ratio-threshold",
+    "FuncDef": "The loss-measure single-ended local-ratio-threshold command sets alarm thresholds for the near-end frame loss rate in proactive single-ended frame loss measurement.\nThe undo loss-measure single-ended local-ratio-threshold command deletes alarm thresholds of the near-end frame loss rate in proactive single-ended frame loss measurement.\nBy default, no alarm threshold is set for the near-end frame loss rate in proactive single-ended frame loss measurement.",
+    "CLIs": [
+        "loss-measure single-ended local-ratio-threshold mep <mep-id> upper-limit <upper-limit> lower-limit <lower-limit> [ 8021p <8021p-value> ]",
+        "loss-measure single-ended local-ratio-threshold test-id <test-id-value> upper-limit <upper-limit> lower-limit <lower-limit>",
+        "undo loss-measure single-ended local-ratio-threshold mep <mep-id> [ upper-limit <upper-limit> lower-limit <lower-limit> ] [ 8021p <8021p-value> ]",
+        "undo loss-measure single-ended local-ratio-threshold test-id <test-id-value> [ upper-limit <upper-limit> lower-limit <lower-limit> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "upper-limit upper-limit",
+            "Info": "Specifies the upper threshold of the near-end frame loss rate.\nThe value is a string of 1 to 8 case-insensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "lower-limit lower-limit",
+            "Info": "Specifies the lower threshold of the near-end frame loss rate.\nThe value is a string of 1 to 8 case-insensitive characters, spaces not supported. The lower threshold must be less than or equal to the upper threshold."
+        },
+        {
+            "Parameters": "8021p 8021p-value",
+            "Info": "Specifies a priority of frames in proactive single-ended frame loss measurement. This parameter applies to VLL scenarios.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "test-id test-id-value",
+            "Info": "Specifies the ID of a test instance.\nThe value is a character string, ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "mep mep-id",
+            "Info": "Specifies the ID of a MEP.\nThe value is an integer ranging from 1 to 8191."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 mac 00e0-fc12-7890",
+            "[*HUAWEI-md-md1-ma-ma1] loss-measure single-ended local-ratio-threshold mep 1 upper-limit 72.4 lower-limit 60.1150"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 mac 00e0-fc12-7890",
+            "[*HUAWEI-md-md1-ma-ma1] loss-measure single-ended local-ratio-threshold test-id 1 upper-limit 80 lower-limit 65"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEthernet frame loss measurement (ETH-LM) enables a local MEP and its RMEP to exchange ETH-LM frames to collect frame loss statistics on E2E links. ETH-LM modes are classified into near-end ETH-LM and far-end ETH-LM. Near-end ETH-LM applies to an inbound interface, and far-end ETH-LM applies to an outbound interface on a MEP. ETH-LM counts errored frame seconds to determine the duration for which a link is unavailable.\nThe loss-measure single-ended local-ratio-threshold command sets upper and lower thresholds for the near-end frame loss rate in proactive single-ended frame loss measurement. If the near-end frame loss rate exceeds the set upper threshold, an alarm is generated and sent to the NMS. A network administrator uses the alarm information to rectify the fault and ensure service quality.\nTo set the upper and lower thresholds for the near-end packet loss rate in single-ended frame loss measurement, run the loss-measure single-ended local-ratio-threshold command. If thresholds are set on a specified MEP and the near-end packet loss rate exceeds the upper threshold, an alarm is generated to alert a network administrator to adjust links to ensure service quality. If thresholds are set in a specified instance, the near-end packet loss rate exceeds the upper threshold or is lower than the lower threshold, the number of threshold-crossing events is counted. The display y1731 period-data command displays the number of thresold-corssing times.\nPrerequisites\nThe cfm md command has been executed to configure an MD. The ma command has been executed to configure an MA. The mep mep-id command has been executed to configure MEPs."
+}

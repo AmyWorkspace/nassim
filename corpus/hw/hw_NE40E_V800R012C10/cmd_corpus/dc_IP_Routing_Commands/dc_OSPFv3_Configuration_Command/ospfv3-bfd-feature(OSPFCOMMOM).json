@@ -1,0 +1,40 @@
+{
+    "PageTitle": "bfd all-interfaces enable (OSPFv3 view)",
+    "FuncDef": "The bfd all-interfaces incr-cost command enables an OSPFv3 process to adjust the cost based on BFD.\nThe undo bfd all-interfaces incr-cost command disables an OSPFv3 process from adjusting the cost based on BFD.\nThe bfd all-interfaces enable command enables BFD for OSPFv3.\nThe undo bfd all-interfaces enable command disables BFD for OSPFv3.\n\nBy default, an OSPFv3 process does not adjust the cost based on BFD.\n\n\nBy default, BFD is not enabled for OSPFv3.",
+    "CLIs": [
+        "bfd all-interfaces enable",
+        "bfd all-interfaces incr-cost { <cost> | max-reachable }",
+        "undo bfd all-interfaces enable",
+        "undo bfd all-interfaces incr-cost [ <cost> | max-reachable ]"
+    ],
+    "ParentView": [
+        "OSPFv3 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "incr-cost cost",
+            "Info": "Specifies a cost adjustment value.\nThe value is an integer ranging from 1 to 65534."
+        },
+        {
+            "Parameters": "max-reachable",
+            "Info": "Adjusts the link cost of an OSPFv3 interface to the maximum link cost 65535.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables BFD for OSPFv3.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 100",
+            "[*HUAWEI-ospfv3-100] bfd all-interfaces incr-cost 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] bfd all-interfaces enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen BFD detects a fault and the system recovers quickly, the interface is disconnected due to BFD Down. As a result, the link is unstable and traffic is lost.To ensure network reliability and solve the preceding problem, you can run the bfd all-interfaces incr-cost command to adjust the link cost. When an OSPFv3 process detects BFD Down, it automatically increases the cost of the interface so that the link is no longer selected and traffic can be transmitted through other links. When BFD Up is detected, the cost of this process is automatically restored to the original cost.\nPrerequisites\nAn OSPFv3 process has been created using the ospfv3 command.\nBFD has been enabled for the OSPFv3 process using the bfd all-interfaces enable command.\nPrecautions\nThe interface-specific BFD-associated cost value has a higher priority than the process-specific BFD-associated cost value.\nAfter BFD is enabled, OSPFv3 establishes BFD sessions only with the neighbors in the Full state.\nThe preference of BFD configured on an interface is higher than that configured in the process.\nThe bfd all-interfaces (OSPFv3) command and the ospfv3 bfd block command are mutually exclusive."
+}

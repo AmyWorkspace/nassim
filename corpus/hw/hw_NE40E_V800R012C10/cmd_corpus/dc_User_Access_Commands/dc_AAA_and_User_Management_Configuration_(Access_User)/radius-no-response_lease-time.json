@@ -1,0 +1,27 @@
+{
+    "PageTitle": "radius-no-response lease-time",
+    "FuncDef": "The radius-no-response lease-time command configures the device to deliver a lease for DHCP users when the RADIUS server does not respond after the authentication mode is set to RADIUS+NONE.\nThe undo radius-no-response lease-time restores the default setting.\nBy default, the device does not deliver a lease to DHCP users when the RADIUS server does not respond.",
+    "CLIs": [
+        "radius-no-response lease-time <time>",
+        "undo radius-no-response lease-time"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time",
+            "Info": "Specifies the lease time of the users of an unresponsive RADIUS server.\nThe value is an integer ranging from 60 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain kouki",
+            "[*HUAWEI-aaa-domain-kouki] commit",
+            "[~HUAWEI-aaa-domain-kouki] radius-no-response lease-time 2046"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the authentication mode in an AAA domain is configured as RADIUS authentication + non-authentication, DHCP users can still go online when the RADIUS does not respond. However, when the RADIUS server is not responding, these users are not charged. To configure the device to deliver a lease for DHCP users, run the radius-no-response lease-time command. When the RADIUS server responds and a user attempts to update its lease, the device sends an NAK packet to the user. In this situation, the user is re-authenticated and charged.\nConfiguration Impact\nThe longer the lease configured using the radius-no-response lease-time command, the longer it takes for online DHCP users to be free of charge after the RADIUS server does not respond. DHCP users may log in and log out consecutively in a short period of time If the configured lease is too short.\nPrecautions\nThe radius-no-response lease-time command takes effect only for users who go online after the command is configured.\nIn VS mode, this command is supported only by the admin VS.\nThis command can not be used in RUI scenarios and disaster recovery scenarios."
+}

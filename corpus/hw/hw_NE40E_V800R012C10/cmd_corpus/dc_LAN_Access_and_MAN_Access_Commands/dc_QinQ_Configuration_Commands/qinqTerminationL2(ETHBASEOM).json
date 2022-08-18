@@ -1,0 +1,54 @@
+{
+    "PageTitle": "qinq termination l2",
+    "FuncDef": "The qinq termination l2 command configures the mode in which a sub-interface for QinQ VLAN tag termination connects to a virtual private wire service (VPWS) or virtual private LAN service (VPLS) network.\nThe undo qinq termination l2 command deletes the mode configured for a sub-interface for QinQ VLAN tag termination in which the sub-interface connects to a VPWS/VPLS network.\n\nBy default, a sub-interface for QinQ VLAN tag termination connects to a VPWS/VPLS network in asymmetrical mode.",
+    "CLIs": [
+        "qinq termination l2 { symmetry [ user-mode ] | asymmetry | transparent }",
+        "undo qinq termination l2 [ transparent ]"
+    ],
+    "ParentView": [
+        "GE sub-interface view",
+        "PW-VE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "Global VE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "100ge sub-interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "symmetry",
+            "Info": "Specifies that the sub-interface for QinQ VLAN tag termination connects to a VPWS/VPLS network in symmetrical mode.\n-"
+        },
+        {
+            "Parameters": "user-mode",
+            "Info": "Specifies that the sub-interface for QinQ VLAN tag termination connects to a VPWS/VPLS network in symmetry mode and supports QoS. In symmetry mode, a sub-interface sends inner tags as part of data to the peer. In this case, inner tags can be specified with a range of VLAN IDs.\n-"
+        },
+        {
+            "Parameters": "asymmetry",
+            "Info": "Specifies that the sub-interface for QinQ VLAN tag termination connects to a VPWS/VPLS network in asymmetrical mode. In asymmetry mode, a sub-interface does not send inner tags as part of data to the peer. Inner tags cannot be used to identify users, and therefore cannot be specified with a range of VLAN IDs.Generally, of the two tags carried by a packet sent by a Huawei device, the inner tag specifies the user, and the outer tag specifies the service.\n-"
+        },
+        {
+            "Parameters": "transparent",
+            "Info": "Specifies that the sub-interface for QinQ VLAN tag termination accesses VPWS and VPLS in transparent transmission mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] encapsulation qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq termination l2 symmetry user-mode"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.2",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] encapsulation qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] qinq termination l2 asymmetry"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nMore QinQ encapsulation and termination modes are provided to identify users and services and save VLAN ID resources. These modes are widely used for refined service operation.\nIf users communicate over an L2VPN (a VPWS or VPLS network), you can run the qinq termination l2 command on a sub-interface for QinQ VLAN tag termination of an L2VPN edge device to configure the mode in which the sub-interface connect to the L2VPN.\n\nPrerequisites\n\n\nQinQ termination has been configured on the sub-interface using the encapsulation qinq-termination command.\nThe encapsulation qinq-termination command is replaced by the control-vid vid qinq-termination command.\nAn L2VPN (a VPWS or VPLS) network has been deployed.\n\n\nConfiguration Impact\n\nIf the qinq termination l2 asymmetry command is used on a sub-interface for QinQ VLAN tag termination, the sub-interface connects to the L2VPN in asymmetrical mode. MAC address learning is performed on both inner and outer tags carried in packets. The sub-interface does not send inner tags as part of the data to the peer.\nIf the qinq termination l2 symmetry command is used on a sub-interface for QinQ VLAN tag termination, the sub-interface connects to the L2VPN in symmetrical mode. MAC address learning is performed only on the outer tags carried in packets. The sub-interface sends inner tags as part of data to the peer. To configure QoS for inner tags, run the qinq termination l2 symmetry user-mode command.\n\nPrecautions\n\nWhen you configure a sub-interface for QinQ VLAN tag termination to access an L2VPN, run the qinq termination l2 command to configure the mode in which a sub-interface for QinQ VLAN tag termination connects to the L2VPN and then run the qinq termination pe-vid ce-vid command to configure QinQ VLAN tag termination."
+}

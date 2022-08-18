@@ -1,0 +1,75 @@
+{
+    "PageTitle": "rip metricout",
+    "FuncDef": "The rip metricout command sets the metric that is added to the RIP routes sent by an interface.\nThe undo rip metricout command restores the default metric.\nBy default, the metric is 1.",
+    "CLIs": [
+        "rip metricout <value>",
+        "rip metricout { { <acl-number> | acl-name <acl-name> } <value1> }",
+        "rip metricout { ip-prefix <ip-prefix-name> <value1> }",
+        "undo rip metricout"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "VBDIF interface view",
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "GMPLS-UNI interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "value",
+            "Info": "Specifies the metric that is added to the routes to be advertised.\nThe value is an integer ranging from 1 to 15."
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "value1",
+            "Info": "Increases the metric of a route that matches the ACL or ip-prefix.\nThe value is an integer ranging from 2 to 15."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] rip metricout 12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2050",
+            "[*HUAWEI-acl4-basic-2050] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] rip metricout 2050 12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix p1 permit 10.10.10.1 24",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] rip metricout ip-prefix p1 12"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the metric that is added to the RIP routes sent by an interface, run the rip metricout command. You can specify an ACL or IP prefix list so that the metric is added to only the RIP routes that matches the ACL or IP prefix list.\nConfiguration Impact\nWhen a RIP route is advertised, the additional metric is added to the route. Therefore, increasing the metric of an interface also increases the metric of the RIP routes sent by the interface. However, the metrics of the routes in the routing table remain unchanged."
+}

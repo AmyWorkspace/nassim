@@ -1,0 +1,59 @@
+{
+    "PageTitle": "snmp-agent local-user",
+    "FuncDef": "The snmp-agent local-user command creates a local SNMP user.\nThe undo snmp-agent local-user command deletes local SNMP user configurations.\nBy default, no local SNMP user is created.",
+    "CLIs": [
+        "snmp-agent local-user v3 <local-user-name> authentication-mode <authen-protocol> { privacy-mode <privacy-protocol> }",
+        "snmp-agent local-user v3 <local-user-name> authentication-mode <authen-protocol> { cipher <authKey> privacy-mode <privacy-protocol> cipher <privKey> }",
+        "undo snmp-agent local-user v3 <local-user-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "local-user-name",
+            "Info": "Specifies the name of a local SNMP user.\nThe specified local SNMP user name must be the same as the local AAA user configured using the local-user password command.\nThe name is a string of 1 to 32 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "authentication-mode authen-protocol",
+            "Info": "Enables an authentication mode.\nAuthentication allows an agent (management station) to verify that information is sent by an authorized management station (agent) and is not modified during transmission after receiving the information.\nmd5: Enables the Hashed Message Authentication Code for Message Digest 5-96(HMAC-MD5-96).sha: Enables the Hashed Message Authentication Code for Secure Hash Algorithm 96(HMAC-SHA-96).sha2-224: Enables the HMAC-SHA2-224sha2-256: Enables the HMAC-SHA2-256sha2-384: Enables the HMAC-SHA2-384sha2-512: Enables the HMAC-SHA2-512sha2-256 and more complex algorithms are safer than sha2-224, sha and md5. It is recommended to use sha2-256 and a more complex algorithm."
+        },
+        {
+            "Parameters": "privacy-mode privacy-protocol",
+            "Info": "Enables an encryption mode.\n3des168: Enables the Triple Data Encryption Standard 168 (3DES168) algorithm.aes128: Enables the Advanced Encryption Standard 128 (AES128) algorithm.aes192: Enables the Advanced Encryption Standard 192 (AES192) algorithm.aes256: Enables the Advanced Encryption Standard 256 (AES256) algorithm.des56: Enables the Data Encryption Standard 56 (DES56) algorithm.AES128 and another algorithm with higher encryption security than AES128 are more secure than DES56 and 3DES1688. AES128 or another algorithm with higher encryption security than AES128 is recommended."
+        },
+        {
+            "Parameters": "v3",
+            "Info": "Enable SNMPv3 protocol for users.\n-"
+        },
+        {
+            "Parameters": "cipher authKey",
+            "Info": "Specifies a ciphertext password.\nIf the cipher parameter is configured, only enter a ciphertext password and view it in a configuration file.\nThe value is a string of 32 to 432 characters.If the\ncipher parameter is not configured, a simple text password can be entered. A simple text password is a case-sensitive string, spaces not supported. The length of a simple text password depends on the password complexity check:\nIf the snmp-agent local-user password complexity-check disable command is run to disable the password complexity check, a simple text password is a string of 1 to 255 characters.If the undo snmp-agent local-user password complexity-check disable command is run to enable the password complexity check, a simple text password is a string of 8 to 255 characters."
+        },
+        {
+            "Parameters": "cipher privKey",
+            "Info": "Specifies a ciphertext password.\nThe value is a string of 1 to 432 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[*HUAWEI-aaa] local-user snmpuser password",
+            "Please configure the password (8-128)",
+            "Enter Password:",
+            "Confirm Password:",
+            "Info: A new user is added. ",
+            "[*HUAWEI-aaa] local-user snmpuser service-type snmp",
+            "[*HUAWEI-aaa] quit",
+            "[*HUAWEI] snmp-agent local-user v3 snmpuser authentication-mode sha2-512 privacy-mode aes128",
+            "Please configure the authentication password (8-255)                            ",
+            "Enter Password:                                                                 ",
+            "Confirm Password:                                                               ",
+            "Please configure the privacy password (8-255)                                   ",
+            "Enter Password:                                                                 ",
+            "Confirm Password:"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAuthentication, authorization and accounting (AAA) enables a network administrator to configure local AAA users to log in to devices using FTP, Telnet, and SSH. SNMPv3 only supports SNMP users' logins, which causes difficulties in managing network devices.\nTo resolve this problem, SNMP is enabled to support AAA users so that AAA users can access an NMS and an administrator can manage all devices.\nAfter a local AAA is created and its service type is set to SNMP, run the snmp-agent local-user command to configure the local AAA user as a local SNMP user and specify the authentication and encryption modes. Then the AAA user can access the NMS.\nPrerequisites\nA local AAA user has been configured using the local-user password command.\nThe access type for the local AAA user has been set to SNMP using the local-user service-type snmp command.\nPrecautions\nThe AAA user's password can be different from the SNMP user's password.\nDeleting a local AAA user causes the local SNMP user to be also deleted. Deleting a local SNMP user, however, does not affect the local AAA user.\nThe priority of an SNMP user security mode (USM) user is higher than that of a local SNMP user. If an SNMP USM user name is the same as a local SNMP user name, the SNMP USM user configurations, including authentication and encryption passwords, are used during a login.\nTo improve system security, you are advised to configure different authentication and encryption passwords for an SNMP local user."
+}

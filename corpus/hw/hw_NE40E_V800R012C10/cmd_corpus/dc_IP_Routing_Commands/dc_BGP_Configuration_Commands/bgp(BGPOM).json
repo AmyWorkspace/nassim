@@ -1,0 +1,33 @@
+{
+    "PageTitle": "bgp",
+    "FuncDef": "The bgp command enables BGP and enter the BGP view or displays the BGP view directly.\nThe undo bgp command disables BGP.\nBy default, the BGP is disabled.",
+    "CLIs": [
+        "bgp <as-number>",
+        "undo bgp [ <as-number> ]"
+    ],
+    "ParentView": [
+        "Command template view",
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "as-number",
+            "Info": "Specifies a destination AS number.\nFor an integral AS number, the value is an integer ranging from 1 to 4294967295.\nFor an AS number in dotted notation, the value is in the format of x.y, where x and y are integers ranging from 1 to 65535 and from 0 to 65535, respectively."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] command group g1",
+            "[~HUAWEI-group-g1] bgp 100",
+            "[~HUAWEI-group-g1-bgp] peer 1.1.1.1 as-number 100",
+            "[~HUAWEI-group-g1-bgp] quit",
+            "[~HUAWEI-group-g1] end-group"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP is an inter-AS dynamic routing protocol. BGP running within an AS is called Internal BGP (IBGP), and BGP running between ASs is called External BGP (EBGP).\nWhether to apply BGP to inter-AS routing information transmission depends on the following conditions:\nIf at least one of the following conditions is met, BGP can be used:Data packets are allowed to be transmitted from one AS to another.Multiple connections to external ISPs and the Internet exist in ASs.Data flows entering or leaving ASs need to be controlled.If one of the following conditions is met, BGP does not need to be used:Users are connected to only one ISP network.The ISP does not need to provide Internet access services for users.ASs adopt default routes between each other.\nConfigurations in different views may be identical. To simplify the configurations, create a configuration template, define configurations that are duplicate in different views in it, and apply the configuration template to specified views.\nEach device can run only in one AS. Therefore, only one local AS number can be specified in the command, which cannot simplify configuration. For details about other usage of the command, see the bgp command in the system view.\n\nPrerequisites\nBefore running the bgp command in the configuration template view, ensure that a configuration template has been created and the configuration template view has been displayed using the command group command.\nConfiguration Impact\nAfter the bgp command is run, BGP is enabled.\nFollow-up Procedure\nRun the peer as-number command to establish BGP peer relationships between devices on a BGP network.\nRun the apply-command-group command in a desired view to apply the configurations in the configuration template.\nPrecautions\nEach device runs in only one AS; therefore, each device can be specified with only one local AS number.\nBy default, an AS number must be specified when you run the undo bgp command. If the re-confirmation function is disabled for undo commands using the configuration prevent-misoperation disable command, an AS number is optional when you run the undo bgp command.\nExercise caution when using the undo bgp command because it will delete all BGP configurations from a device.\nAfter performing the configurations to be delivered in the template, run the end-group command to end configuration, commit the configurations, and exit the configuration template view.\nTo prevent a configuration in the configuration template from being applied, you can run the undo command-string command in the configuration template view to delete the configuration from the template.\nIf the BGP AS number is changed, the route calculation result of the local or remote OSPF VPN process may be affected. Because the tag value of the LSAs of the OSPF VPN process is calculated based on the BGP AS number, the local tag value of the OSPF VPN process and the tag value carried in the LSA advertised by the OSPF VPN process change. After receiving an LSA, the local or remote OSPF process checks the tag of the LSA. If the local tag of the OSPF process is the same as the tag of the received LSA, the LSA is not used for OSPF route calculation."
+}

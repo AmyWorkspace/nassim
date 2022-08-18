@@ -1,0 +1,40 @@
+{
+    "PageTitle": "apply-command-group",
+    "FuncDef": "The apply-command-group command applies configurations in a specified configuration template in a specified view.\nThe undo apply-command-group command cancels the application of the configuration template.\nBy default, configurations in a configuration template are not applied.",
+    "CLIs": [
+        "apply-command-group { <group-name> } &<1-8>",
+        "undo apply-command-group [ <group-name> ] &<1-8>"
+    ],
+    "ParentView": [
+        "BGP view",
+        "all-interface view",
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a configuration template.\nThe value is a string of 1 to 32 case-insensitive characters. The name contains English letters, digits, hyphens (-), and underscores (_). The name must start with a letter and cannot contain special characters or blank space."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] command group g1",
+            "[~HUAWEI] end-group",
+            "Warning: The configuration in the view of the current group will be committed. Are you sure you want to continue? [Y/N]:y",
+            "[~HUAWEI] apply-command-group g1",
+            "Warning: The template configurations will be applied to the matched view. Are you sure you want to continue? [Y/N]:y"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] command group g1",
+            "[~HUAWEI] end-group",
+            "Warning: The configuration in the view of the current group will be committed. Are you sure you want to continue? [Y/N]:y",
+            "[~HUAWEI] interface LoopBack 2",
+            "[*HUAWEI-LoopBack2] commit",
+            "[~HUAWEI-LoopBack2] apply-command-group g1",
+            "Warning: The template configurations will be applied to the matched view. Are you sure you want to continue? [Y/N]:y"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a configuration template is created, to apply the configurations in the configuration template, run the apply-command-group command.\nIf this command is run in the system view, the device delivers the configurations in the configuration template to all matching service view instances.If this command is run in a specified service view instance, the device delivers the configurations in the configuration template to the specified service view instance.Multiple configuration templates can apply in a single service view instance.Multiple configuration templates can be configured simultaneously in a single apply-command-group command instance.\nThe apply-command-group command is not supported in the NULL interface view.\n\nPrerequisites\nConfiguration templates have been configured using the command group command.\nPrecautions\nThe configuration priorities are as follows:\nConfigurations performed by a user take precedence over those in a configuration template.A configuration template in an existing view takes precedence over that in a parent view.If multiple configuration templates apply to a single view using the running the apply-command-group command, configuration templates are prioritized in a descending order. A configuration template that is used earlier takes precedence over the one that is used later."
+}

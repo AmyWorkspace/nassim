@@ -1,0 +1,51 @@
+{
+    "PageTitle": "action",
+    "FuncDef": "This command defines the reclassification actions that are performed on any packet matching the defined IP flow criteria within the entry s matched node. When defined under theip-criteriacontext, the reclassification only applies to IPv4 packets. When defined under theipv6-criteriacontext, the reclassification only applies to IPv6 packets.",
+    "CLIs": [
+        "action [ fc <fc-name> profile { in | out | exceed | inplus } ] [ port-redirect-group { queue <queue-id> | policer <policer-id> [ queue <queue-id> ] } ]"
+    ],
+    "ParentView": [
+        "config>qos>network>egress>ip-criteria>entry",
+        "config>qos>network>egress>ipv6-criteria>entry"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "fc fc-name",
+            "Info": "The fc reclassification action is optional. When specified, packets matching the IP flow reclassification entry will be explicitly reclassified to the forwarding class specified as fc-name regardless of the ingress classification decision. The fc-name defined must be one of the eight forwarding classes supported by the system. The profile reclassification action is mandatory when an fc is specified. To remove the forwarding class reclassification action for the IP flow entry, the action command must be re-executed without the fc reclassification action defined. Values-be, l2, af, l1, h2, ef, h1, nc."
+        },
+        {
+            "Parameters": "profile {in | out | exceed | inplus}",
+            "Info": "The profile reclassification action is mandatory when an fc is specified, otherwise it is optional. When specified, packets matching the IP flow reclassification entry will be explicitly reclassified to the configured profile regardless of the ingress profiling decision. In, exceed, inplus, or out must be specified when the profile keyword is present. To remove the profile reclassification action for the IP flow reclassification entry, the action command must be re-executed without the profile reclassification action defined."
+        },
+        {
+            "Parameters": "in",
+            "Info": "When specified, any packets matching the reclassification rule will be treated as in-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "out",
+            "Info": "When specified, any packets matching the reclassification rule will be treated as out-of-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "exceed",
+            "Info": "When specified, any packets matching the reclassification rule will be treated as exceed-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "inplus",
+            "Info": "When specified, any packets matching the reclassification rule will be treated as inplus-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "queue queue-id",
+            "Info": "Used to override the forwarding class default egress queue destination to the specified network egress queue group instance queue. The specific egress queue group instance to use is specified at the time the QoS policy is applied to the network interface. Values-1 to 8."
+        },
+        {
+            "Parameters": "policer policer-id",
+            "Info": "When policer parameter is entered, a valid policer ID must be specified. The parameter policer ID references a policer ID that has already been created within the network egress queue group instance. Values-1 to 8."
+        },
+        {
+            "Parameters": "queue queue-id",
+            "Info": "The queue following the configured policer overrides the default policed traffic egress queue destination to a specified queue in the network egress queue group instance. Values-1 to 8."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: no action"
+}

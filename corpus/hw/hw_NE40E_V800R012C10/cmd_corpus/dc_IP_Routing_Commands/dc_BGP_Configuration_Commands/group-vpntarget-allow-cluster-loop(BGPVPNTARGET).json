@@ -1,0 +1,32 @@
+{
+    "PageTitle": "peer allow-cluster-loop (BGP-VPN-Target address family view) (group)",
+    "FuncDef": "The peer allow-cluster-loop command sets the maximum number of times the local cluster ID can be included in the Cluster_List of each received route.\nThe undo peer allow-cluster-loop command does not allow the local cluster ID to be included in the Cluster_List of each received route.\nBy default, the local cluster ID cannot be included in the Cluster_List of each received route.",
+    "CLIs": [
+        "peer <group-name> allow-cluster-loop [ <loop-number> ]",
+        "undo peer <group-name> allow-cluster-loop"
+    ],
+    "ParentView": [
+        "BGP-VPN-target address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "loop-number",
+            "Info": "Specifies the number of local AS number repetitions.\nThe value is an integer ranging from 1 to 10. The default value is 1."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group test internal",
+            "[*HUAWEI-bgp] ipv4-family vpn-target",
+            "[*HUAWEI-bgp-af-vpn-target] peer test enable",
+            "[*HUAWEI-bgp-af-vpn-target] peer test allow-cluster-loop 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAll PEs and RRs reside in the same AS, and a BGP peer relationship is established between each PE and its RR and between RRs in both the BGP VPNV4 and VPN-Target address families; PE1 is a client of the level-1 RR1, and PE2 is a client of the level-1 RR2; RRR is a level-2 RR, with RR1 and RR2 as its clients; RT 1:1 is configured on PE1 and PE2.\nWhen the peer allow-cluster-loop command is not run: after RR1 and RR2 advertise the RT routes learned from PEs to RRR, RRR implements route selection. If RRR selects the route learned from RR1, RRR advertises a VPN ORF route to RR1 and RR2; however, the Cluster_List of the route includes the local cluster ID. As a result, RR1 discards the VPN ORF route. Consequently, RR1 does not have the RT of RRR, causing VPNv4 peers to fail to advertise routes, and CE2 fails to learn routes from CE1. To address this problem, run the peer allow-cluster-loop command, in which ipv4-address is set to the IP address of RRR, in the BGP-VPN-Target address family view on RR1."
+}

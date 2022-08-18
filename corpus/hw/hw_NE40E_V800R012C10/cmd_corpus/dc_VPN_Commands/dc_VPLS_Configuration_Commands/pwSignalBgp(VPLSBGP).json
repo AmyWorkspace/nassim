@@ -1,0 +1,45 @@
+{
+    "PageTitle": "pwsignal bgp",
+    "FuncDef": "The pwsignal bgp multi-homing command enables VPLS multi-homing.\nThe undo pwsignal bgp multi-homing command disables VPLS multi-homing.\nThe pwsignal bgp command configures the signaling mode for a VSI or displays the corresponding view.\nThe undo pwsignal bgp command restores the default configuration.\n\nBy default, VPLS multi-homing is disabled.\n\n\nBy default, no signaling mode is configured for a VSI.",
+    "CLIs": [
+        "pwsignal bgp [ multi-homing ]",
+        "undo pwsignal bgp [ multi-homing ]"
+    ],
+    "ParentView": [
+        "VSI-AUTO view",
+        "VSI-BD view",
+        "VSI-DEFAULT view",
+        "VSI-STATIC view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "multi-homing",
+            "Info": "Indicates VPLS multi-homing.\n-"
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Indicates that the VSI uses the BGP signaling for negotiation and PW establishment. A VSI that uses the automatic member discovery mechanism must use the BGP signaling.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1 auto bd-mode",
+            "[*HUAWEI-vsi-vsi1] pwsignal bgp"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal bgp multi-homing"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo deliver high-reliability services over a VPLS network, carriers usually dual-home a CE to two PEs through redundant links. While providing link-level protection, the dual-homing mechanism also brings in the risk of routing loops. To prevent routing loops in multi-homing scenarios, you can deploy VPLS multi-homing on PEs.\nIn scenarios where Huawei and non-Huawei devices communicate with each other, configure VSIs and run the pwsignal bgp multi-homing command to enable VPLS multi-homing. Other VPLS multi-homing configurations can then be performed.\nPrerequisites\nA VSI has been created or the VSI view is displayed using the vsi vsi-name command.\nConfiguration Impact\nIn a VPLS multi-homing scenario where multiple CEs are single-homed to a PE, after you run the pwsignal bgp multi-homing command on the PE and specify the VSI RD, a multi-homing site is automatically generated on the PE. This site can be used by all the single-homing CEs. After the default multi-homing site is created, run the site default command to access the default VSI-BGP-SITE view.\nAfter LDP or BGP is specified as the signaling mode for a VSI, the VSI negotiates private network labels and sets up a PW based on the LDP or BGP signaling.\nFollow-up Procedure\nRun the route-distinguisher (VSI-BGP view) command to configure an RD for the VSI.Run the vpn-target (VSI-BGP view) command to configure VPN targets for the VSI.Run the site command to create a VPLS multi-homing site or run the site default command to enter the default VSI-BGP-SITE view.\n\nPrecautions\nThe pwsignal bgp multi-homing command applies only to scenarios where Huawei and non-Huawei devices communicate with each otherConfiguring both VPLS multi-homing and BGP VPLS is not recommended. If so, BGP may not select an optimal route, and subsequently the PW is not established as planned.VPLS multi-homing described in this document cannot work together with VPLS multi-homing defined in the draft-ietf-bess-vpls-multihoming-00 standard."
+}

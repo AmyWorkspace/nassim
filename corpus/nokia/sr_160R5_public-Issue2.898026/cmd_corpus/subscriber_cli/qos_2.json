@@ -1,0 +1,35 @@
+{
+    "PageTitle": "qos",
+    "FuncDef": "This command specifies the ingress QoS policy applicable to this SLA profile. The policy must already be defined in theconfig>qos>sap-ingresscontext.",
+    "CLIs": [
+        "qos <policy-id> [ shared-queuing | multipoint-shared | service-queuing ] [ force ]",
+        "no qos"
+    ],
+    "ParentView": [
+        "config>subscr-mgmt>sla-prof>ingress"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-id",
+            "Info": "Specifies the policy to be applied to the ingress SLA profile. Values-1 to 65535."
+        },
+        {
+            "Parameters": "shared-queuing",
+            "Info": "Specifies the policy used by this SAP. When the value of this object is null it means that the SAP will use individual ingress QoS queues, instead of the shared ones."
+        },
+        {
+            "Parameters": "multipoint-shared",
+            "Info": "This keyword is mutually exclusive with the shared-queuing and service-queuing keywords. When multipoint-shared is specified, the ingress forwarding plane will conserve hardware queues by performing two tier queuing on ingress unicast and multipoint packets through the SAP. Unicast service queues defined in the SAP ingress QoS policy are created for the SAP on the ingress forwarding plane without regard for the switch fabric destinations to which the SAP may need to forward (other destinations in the VPLS context). The multipoint queues defined in the SAP ingress QoS policy are not created for the SAP. Instead, all multipoint traffic is mapped to the unicast queues based on forwarding class in the first pass. In the second pass the unicast packets is mapped to the unicast shared queues while the multipoint traffic is mapped to the multipoint shared queues."
+        },
+        {
+            "Parameters": "service-queuing",
+            "Info": "This keyword is mutually exclusive with the multipoint-shared and shared-queuing keywords to state that service queuing is needed."
+        },
+        {
+            "Parameters": "force",
+            "Info": "Forces a policy change."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: qos 1"
+}

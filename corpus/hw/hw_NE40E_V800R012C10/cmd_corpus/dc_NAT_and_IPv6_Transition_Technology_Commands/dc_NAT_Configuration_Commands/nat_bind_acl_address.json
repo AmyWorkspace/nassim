@@ -1,0 +1,80 @@
+{
+    "PageTitle": "nat bind acl address-group",
+    "FuncDef": "The nat bind acl address-group command binds an address pool to an ACl on a specified interface in the simplified NAT scenario for NAT traffic distribution on an outbound interface.\nThe undo nat bind acl address-group command deletes the binding between an address pool and an ACl on a specified interface in the simplified NAT scenario.\nBy default, no ACL is bound to an address pool on an outbound interface for distributing NAT traffic in a simplified NAT instance.",
+    "CLIs": [
+        "nat bind acl { <acl-index> | name <acl-name> } [ mode deny-forward ] address-group <address-group-name> [ precedence <precedence-index> ]",
+        "undo nat bind acl { <acl-index> | name <acl-name> } [ mode deny-forward ] address-group <address-group-name> [ precedence <precedence-index> ]"
+    ],
+    "ParentView": [
+        "100GE-Trunk member interface view",
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "CPOS interface view",
+        "Eth-Trunk member Layer 3 interface view",
+        "Eth-Trunk member interface view",
+        "Eth-Trunk interface view",
+        "Eth-Trunk interface view",
+        "GE-Trunk member Layer 3 interface view",
+        "GE-Trunk member interface view",
+        "Layer 3 GE interface view",
+        "GE optical interface view",
+        "GE sub-interface view",
+        "GE interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "Serial-Trunk member interface view",
+        "Trunk serial interface view",
+        "VLANIF interface view",
+        "XGE interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-index",
+            "Info": "Specifies an ACL index.\nThe value is an integer. Basic ACLs are numbered from 2000 to 2999, and advanced ACLs are numbered from 3000 to 3999."
+        },
+        {
+            "Parameters": "name acl-name",
+            "Info": "Specifies the name of an ACL.\nThe value is a string of 1 to 64 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "mode",
+            "Info": "Specifies the NAT mode.\n-"
+        },
+        {
+            "Parameters": "deny-forward",
+            "Info": "Transparently transmits traffic matching an ACL deny rule. If this parameter is not configured, such traffic is dropped.\n-"
+        },
+        {
+            "Parameters": "address-group-name",
+            "Info": "Specifies an address pool name in a simplified NAT instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "precedence precedence-index",
+            "Info": "Specifies a precedence index.\nThe value is an integer that ranges from 0 to 8191."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ip address 10.1.1.0 255.255.255.0",
+            "[~HUAWEI-GigabitEthernet1/0/1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/1] quit",
+            "[~HUAWEI] acl number 3000",
+            "[*HUAWEI-acl-adv-3000] rule 1 permit source 10.1.1.0 0.0.0.255",
+            "[*HUAWEI-acl-adv-3000] commit",
+            "[~HUAWEI-acl-adv-3000] quit",
+            "[~HUAWEI] nat instance cpe1 id 1 simple-configuration",
+            "[~HUAWEI-nat-instance-cpe1] commit",
+            "[~HUAWEI-nat-instance-cpe1] quit",
+            "[~HUAWEI] nat address-group group1 group-id 1 unnumbered interface GigabitEthernet 1/0/1",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] nat bind acl 3000 address-group group"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA NAT-enabled device is deployed on the egress of an enterprise network, whereas NAT does not need to be performed for a great amount of traffic transmitted within the enterprise network. To prevent an inbound interface from enforcing a NAT traffic policy to direct intra-enterprise network traffic to a NAT board for NAT processing, a NAT traffic policy can be configured on an outbound interface connected to a public network. Therefore, the device matches traffic only destined for a public network against the NAT traffic policy.\nThe device processes traffic matching an ACL deny rule as follows:\nIf the mode deny-forward parameter is configured, traffic matching the ACL deny rule is transparently transmitted.If the mode deny-forward parameter is not configured, traffic matching the ACL deny rule is discarded.\n\nPrerequisites\nEnsure that the following operations have been performed:\nAn ACL rule has been defined.The address pool of a simplified NAT instance has been configured using the nat address-group or nat address-group unnumbered interface command.\n\nPrecautions\nThe nat bind acl address-group command is mutually exclusive with the nat bind acl instance command.\nIn VS mode, this command is supported only by the admin VS.\nThe nat bind acl address-group command is mutually exclusive with the nat bind acl instance command."
+}

@@ -1,0 +1,45 @@
+{
+    "PageTitle": "cost-style",
+    "FuncDef": "The cost-style command sets a cost type for the routes that can be received and those to be sent by an IS-IS device.\nThe undo cost-style command restores the default value.\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.\nBy default, the cost type of IS-IS routes is narrow.",
+    "CLIs": [
+        "cost-style { narrow | wide | wide-compatible | { compatible | narrow-compatible } [ relax-spf-limit ] }",
+        "undo cost-style"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "narrow",
+            "Info": "Indicates that the cost type for the routes that can be received and those to be sent by an IS-IS device is narrow.\n-"
+        },
+        {
+            "Parameters": "wide",
+            "Info": "Indicates that the cost type for the routes that can be received and those to be sent by an IS-IS device is wide.\n-"
+        },
+        {
+            "Parameters": "wide-compatible",
+            "Info": "Indicates that the route with the cost type of narrow or wide can be received, but only the route with the cost type of wide can be sent.\n-"
+        },
+        {
+            "Parameters": "compatible",
+            "Info": "Indicates the route with the cost type of narrow or wide can be received and sent.\n-"
+        },
+        {
+            "Parameters": "narrow-compatible",
+            "Info": "Indicates that the route with the cost type of wide or narrow can be received, but only the route with the cost type of narrow can be sent.\n-"
+        },
+        {
+            "Parameters": "relax-spf-limit",
+            "Info": "Enable the device to receive the route with a cost greater than 1023.\nWhen relax-spf-limit is not specified, the following situations occur:If the cost of a route is less than or equal to 1023 and the link costs of all interfaces through which the route passes are less than or equal to 63:The device is received, and the cost of the route equals the total link cost of all interfaces through which the route passes.\nIf the cost of a route is less than or equal to 1023 and the link costs of all interfaces through which the route passes are greater than 63:The device can learn only direct routes of its other interfaces and routes imported by the interface. The route is received, and the cost of the route equals the total link cost of all interfaces through which the route passes. The route will be discarded by the interfaces through which it is going to pass. Subsequent routes forwarded by the interface are discarded.\nIf the cost of a route is greater than 1023:The device can receive only the routes to the network segment where the interface with the link cost less than 1023 resides. The Router learns the route.\n\nWhen relax-spf-limit is specified, the following situation occurs:There is no limit on link costs of interfaces or the cost of a route. The route is received, and the cost of the route equals the total link cost of all interfaces through which the route passes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] cost-style narrow-compatible"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, the cost type of IS-IS routes is narrow, which means that only routes with the cost ranging from 1 to 63 can be received and sent. LSPs carrying TE information when IS-IS is applied to MPLS TE or LSPs carrying tag information to be filtered by a route-policy cannot be flooded when the cost type is narrow. The cost-style command can be used to change the cost type of IS-IS routes so that they can be transmitted successfully.\nTo implement extended IS-IS functions, setting the cost type of IS-IS routes to wide is recommended.\nThe relax-spf-limit parameter is only valid when the overhead type is set to compatible and narrow-compatible.\nPrerequisites\nAn IS-IS process has been created using the isis command.\nConfiguration Impact\nWhen the cost type of a route is changed from wide to narrow, transmission of the route may be interrupted.\nPrecautions\nIf you want to change the cost type of IS-IS routes, running the command and configuring basic IS-IS functions is recommended. If the cost type of IS-IS routes is changed during network operation, the IS-IS process is restarted and neighbors are disconnected.\nBefore you enable TE for an IS-IS process, use the cost-style command in IS-IS view to set the cost type of IS-IS packets to wide, compatible, or wide-compatible."
+}

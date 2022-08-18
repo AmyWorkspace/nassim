@@ -1,0 +1,37 @@
+{
+    "PageTitle": "timers ripng",
+    "FuncDef": "The timers ripng command sets the values of RIPng timers.\nThe undo timers ripng command restores the default setting.\nBy default, RIPng timers use default values after RIP processes are enabled.",
+    "CLIs": [
+        "timers ripng <update> <age> <suppress> <garbage-collect>",
+        "undo timers ripng"
+    ],
+    "ParentView": [
+        "RIPng view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "update",
+            "Info": "Specifies the interval at which Update packets are sent. It is the basic timing parameter of the routing protocol.\nThe value is an integer ranging from 1 to 86400, in seconds. The default value is 30 seconds."
+        },
+        {
+            "Parameters": "age",
+            "Info": "Specifies the period after which a RIPng route becomes invalid. The value must be at least three times the value of update. If no Update packet of a route is received within age, the route becomes invalid (unreachable).\nThe value is an integer ranging from 1 to 86400, in seconds. The default value is 180 seconds."
+        },
+        {
+            "Parameters": "suppress",
+            "Info": "Specifies the period during which the optimal route is suppressed from being advertised.\nThe value is an integer ranging from 0 to 86400, in seconds. In the current version, the value is 0 seconds."
+        },
+        {
+            "Parameters": "garbage-collect",
+            "Info": "Specifies the period from the time when the suppression timer times out and the time when the route is deleted from the routing table.\nThe value is an integer ranging from 1 to 86400, in seconds. The default value is 120 seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ripng 100",
+            "[*HUAWEI-ripng-100] timers ripng 5 15 0 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the values of RIPng timers, run the timers ripng command, which improves the routing protocol performance.\nThe relationship between the values of four timers is: update < age and suppress < garbage-collect. For example, if the value of the update timer is greater than the value of the age timer, a device cannot notify changes of RIPng routes to its neighbors in time within the update time.\nPrecautions\nIf the values of the four timers are set improperly, routes will become unstable, and route convergence will slow down. Generally, the four timers adopt the default values."
+}

@@ -1,0 +1,36 @@
+{
+    "PageTitle": "ethernet egress-strict-filter",
+    "FuncDef": "The ethernet egress-strict-filter command opens the strict filter switch for an EVC sub-interface.\nThe undo ethernet egress-strict-filter command closes the strict filter switch for an EVC sub-interface.\nBy default, the strict filter switch for an EVC sub-interface is closed.",
+    "CLIs": [
+        "ethernet egress-strict-filter { enable | disable }",
+        "undo ethernet egress-strict-filter { enable | disable }"
+    ],
+    "ParentView": [
+        "Global-VE layer2 subinterface view",
+        "VE layer2 subinterface view",
+        "EVC view of an Eth-Trunk interface",
+        "EVC view of an Ethernet interface"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "enable",
+            "Info": "Enable.\n-"
+        },
+        {
+            "Parameters": "disable",
+            "Info": "Disable.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet 1/0/0] portswtich",
+            "[*HUAWEI-GigabitEthernet 1/0/0] commit",
+            "[~HUAWEI-GigabitEthernet 1/0/0] quit",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.2 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] ethernet egress-strict-filter enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a BD scenario, the router has two sub-interfaces configured in a main interface, one with the Dot1q encapsulation type and the other with the default encapsulation type. Once the sub-interface encapsulated Dot1q receives traffic, the interface with the default encapsulation type also sends out the traffic. This may cause the illusion of return current. Besides, the router has two interfaces configured in a BD scenario. The first interface has a sub-interface that is configured with the Dot1q encapsulation type. The second interface has two sub-interfaces that are configured with the Dot1q and default encapsulation types respectively. Once traffic passes through the sub-interface on the first interface, the second interface also sends two copied traffic from each of its sub-interfaces. This causes traffic to be replicated, wasting resources and reducing the board's forwarding efficiency. To allow traffic to be sent through specific interfaces, enable strict filter.\nRun the command ethernet egress-strict-filter { enable | disable } to open the strict filter switch for an EVC sub-interface. The traffic that was previously forwarded through multiple interfaces is only forwarded through the EVC sub-interfaces which matches the exact filter rule.\nPrecautions\nThe ethernet egress-strict-filter { enable | disable } command run on an EVC sub-interface takes precedence over the ethernet egress-strict-filter command run in the system view. The strict filter configuration on an EVC sub-interface takes effect, irrespective of the global strict filter configuration.\nThe global strict filter configuration takes effect for an EVC sub-interface only after the undo ethernet egress-strict-filter { enable | disable } command is run on the EVC sub-interface to delete its strict filter configuration."
+}

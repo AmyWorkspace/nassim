@@ -1,0 +1,30 @@
+{
+    "PageTitle": "mpls te p2mp-te leaf switch-delay",
+    "FuncDef": "The mpls te p2mp-te leaf switch-delay command sets a leaf CR-LSP switchover hold-off time and deletion hold-off time for P2MP TE make-before-break (MBB) mechanism.\nThe undo mpls te p2mp-te leaf switch-delay command restores the default configuration.\nBy default, the leaf CR-LSP switchover hold-off time and deletion hold-off time are the same as those configured using the mpls te switch-delay command.",
+    "CLIs": [
+        "mpls te p2mp-te leaf switch-delay <switch-time> delete-delay <delete-time>",
+        "undo mpls te p2mp-te leaf switch-delay"
+    ],
+    "ParentView": [
+        "MPLS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "switch-time",
+            "Info": "Sets a hold-off time after which traffic is switched from the primary sub-LSP to the Modified sub-LSP.\nThe value is fixed at 0, in ms."
+        },
+        {
+            "Parameters": "delete-delay delete-time",
+            "Info": "Sets a hold-off time for deleting the primary sub-LSP after traffic has been switched to the Modified sub-LSP.\nThe value is fixed at 0, in ms."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls te p2mp-te leaf switch-delay 0 delete-delay 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMPLS P2MP TE uses an MBB mechanism by default. If MPLS P2MP TE tunnel attributes (such as the bandwidth or path) change, a new leaf CR-LSP (also called Modified sub-LSP) with new attributes must be established before the original leaf CR-LSP (also called primary sub-LSP) is torn down to prevent data loss and additional bandwidth consumption during traffic switching. By default, the primary sub-LSP is deleted only after a specified hold-off time elapses. Before the hold-off time elapses, both the primary sub-LSP and Modified sub-LSP carry traffic. If the egress cannot receive traffic only from one sub-LSP, two copies of traffic exist. To prevent two copies of traffic, run the mpls te p2mp-te leaf switch-delay command to set both the switchover hold-off time and deletion hold-off time to 0. Traffic is then immediately switched to the Modified sub-LSP, and the primary sub-LSP is immediately deleted.\nPrerequisites\nMPLS TE has been enabled globally using the mpls te command.\nPrecautions\nThe mpls te switch-delay command is a global configuration, but the mpls te p2mp-te leaf switch-delay command is not a global configuration. If the mpls te p2mp-te leaf switch-delay command is run, this command configuration takes effect, irrespective of whether the mpls te switch-delay command is run. If the mpls te p2mp-te leaf switch-delay command is not run, the mpls te switch-delay command configuration takes effect.\nAfter the\nmpls te p2mp-te leaf switch-delay command is run, traffic may be interrupted if an ingress is idle but the egress is busy. In this situation, either of the following may occur:\nThe Modified sub-LSP has been ready on the ingress and the primary sub-LSP has been deleted, but the Modified sub-LSP is not ready on the egress. If this occurs, when the ingress switches traffic to the Modified sub-LSP, traffic is temporarily interrupted.The primary sub-LSP has been deleted, but the Modified sub-LSP failure message cannot be immediately sent to the ingress. If this occurs, traffic is temporarily interrupted."
+}

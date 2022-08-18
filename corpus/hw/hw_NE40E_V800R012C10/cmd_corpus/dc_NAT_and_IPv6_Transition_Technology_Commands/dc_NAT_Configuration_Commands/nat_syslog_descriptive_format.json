@@ -1,0 +1,72 @@
+{
+    "PageTitle": "nat syslog descriptive format",
+    "FuncDef": "The nat syslog descriptive format command specifies an extended format for syslogs.\nThe undo nat syslog descriptive format command restores the default configuration.\nBy default, NAT syslogs are in type3 format.",
+    "CLIs": [
+        "nat syslog descriptive format { cn | type2 | type3 [ local-timezone ] | type6 [ dual-sequence ] | type4 | type5 }",
+        "undo nat syslog descriptive format { cn | type2 | type3 [ local-timezone ] | type6 [ dual-sequence ] | type4 | type5 }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cn",
+            "Info": "Sends syslog information in cn format to a syslog host.\nInformation in cn format contains the header and message.The header contains the PRI, VERSION, TIMESTAMP, HOSTNAME, APP-NAME, PROCID, and MSGID fields. The PRI, TIMESTAMP, HOSTNAME, and MSGID fields are mandatory, and the APP-NAME and PROCID fields are optional.\nPRI: log type.VERSION: source log version number.HOSTNAME: identity of the device that sends syslog messages.TIMESTAMP: date and time when a syslog message was generated. The CGN device that generates the timestamp must run NTP so that this device can synchronize clock information with other devices.APP-NAME: name of a device that sends syslog information.PROCID: ID of a log group to which an existing log entry belongs. A log group identifies a set of associated operations. For example, a log group contains a log that records the establishment of a session and another log that records the teardown of a session.MSGID: ID of a log message.The MSG is in ASCII format must contain the following contents:\nL4 application flag:1: ICMP.6: TCP.17: UDP.Original Source IP: original IPv4 address used before NAT processing is performed.Original Source IPv6: original IPv6 address used before NAT processing is performed.Translated Source IP: new IPv4 address used after NAT processing is performed.Original Port: original source port number used before NAT processing is performed.Translated First Source Port: initial new source port number used after NAT processing is performed or port number after session-based NAT processing is performed.Translated Last Source Port: last source port number used after NAT processing is performed.\nThe MSG is expressed in the following format: [ L4 Original Source IP Original Source IPv6 Translated Source IP Original Port Translated First Source Port Translated Last Source Port ]. If a parameter does not exist, a hyphen (-) is displayed.\n-"
+        },
+        {
+            "Parameters": "type2",
+            "Info": "Sends syslog information in type2 format to a syslog host.\nInformation in type2 format contains the header and message. The header contains the same parameters as that in the cn format.The MSG is in ASCII format must contain the following contents:\nStart Time: access date and time. The value starts at 1970-1-1 00:00:00.Original Source IP: original source IP address, which is a private IP address assigned to a user, before NAT processing is performed.Translated Source IP: new source IP address used after NAT processing is performed.Translated Source Port: new source port number used after NAT processing is performed.Destination IP: destination address to which packets are sent.Destination Port: destination port to which packets are sent.Protocol: transport layer protocol type:1: icmp.6: tcp.17: udp.URL: URL that users visit.\nIn the MSG, each log is recorded in a single row. Fields are separated using a pipe character (|). The MSG is in the following format: Start Time|Original Source IP|Translated Source IP|Translated Source Port|Destination IP|Destination Port|Protocol|URL.\n-"
+        },
+        {
+            "Parameters": "type3",
+            "Info": "Sends syslog information in type3 format to a syslog host. This is the default format.\nFor details about the type3 format, see User Syslog Format in HUAWEI NetEngine40E Router  Feature Description - NAT and IPv6 Transition.\n-"
+        },
+        {
+            "Parameters": "local-timezone",
+            "Info": "Specifies the local time.\n-"
+        },
+        {
+            "Parameters": "type6",
+            "Info": "Indicates the Fastweb log format for user syslog.\nThis log format supports the sequence numbers and is used only when NAT444 is configured.\n-"
+        },
+        {
+            "Parameters": "type6 dual-sequence",
+            "Info": "Indicates the Fastweb log format for user syslog.\nThis log format supports the sequence number-based dual-transmitting function. Each log with the same sequence number is sent to two log servers. This format is used only when NAT444 is used.\n-"
+        },
+        {
+            "Parameters": "type4",
+            "Info": "Enables the type4 format for syslog logs.\n-"
+        },
+        {
+            "Parameters": "type5",
+            "Info": "Enables the type5 format for syslog logs.\nThis parameter applies to NAT444 and DS-Lite.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat syslog descriptive format cn",
+            "[*HUAWEI] commit",
+            "<134> 1 2010 Nov 28 18:45:18 10.137.228.131 huawei - NAT444:UserbasedA [ - 172.31.1.94  172.30.1.4  33792 34047 ]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat syslog descriptive format type2",
+            "[*HUAWEI] commit",
+            "<142> 1 <2010> <Nov> <28> <18:52:27> 10.137.228.131 huawei - <NAT444>:<PortA> 1290970347|172.31.1.93|172.30.1.5|33792|134047"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat syslog descriptive format type6",
+            "[*HUAWEI] commit",
+            "<134> 1 2015-02-05T11:55:48Z 2.0.0.1 - - NAT444userbased - %%01SEC/6/BIND(L): An initial portrange is assigned, in nat444 scene. sequence='0x0000106f00000002' sessionid='0x00000005' privateip='172.16.1.2' srcvrfid='0' publicip='10.1.1.10' publicportrange='1024~65535' time='2015-02-05 11:55:48'"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat syslog descriptive format type3",
+            "[*HUAWEI] commit",
+            "<134> 1 2010-11-28T18:52:12.33Z 10.137.228.131 - - NAT444userbased - %%01SEC/6/BIND(l): A initial portrange is assigned, in nat444 scene. privateip='172.31.1.91' publicip='172.30.1.6' publicportrange='33792~34047' time='2010-11-28 18:52:12'"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo specify an extended format for syslogs to meet carrier requirements on NAT source tracing, run the nat syslog descriptive format command.\nTo make a flexible log template take effect, run the nat syslog descriptive format flexible template command to configure the template for logs.\nPrerequisites\nA flexible log template has been created.\nFollow-up Procedure\nRun the display syslog flexible template command to check the log format of the configured flexible log template.\nPrecautions\nThe syslog information displayed on a syslog server varies according to the syslog format specified based on carrier requirements.\nThis command is applicable only to the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S."
+}

@@ -1,0 +1,28 @@
+{
+    "PageTitle": "peer reflect-client (BGP-VPN-Target address family view)",
+    "FuncDef": "The peer reflect-client command configures the local router as the route reflector and the peer as the client of the route reflector.\nThe undo peer reflect-client command cancels the configuration.\nBy default, the route reflector and its client are not configured.",
+    "CLIs": [
+        "peer <ipv4-address> reflect-client",
+        "undo peer <ipv4-address> reflect-client"
+    ],
+    "ParentView": [
+        "BGP-VPN-target address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nIt is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.2.2.2 as-number 200",
+            "[*HUAWEI-bgp] ipv4-family vpn-target",
+            "[*HUAWEI-bgp-af-vpn-target] peer 10.2.2.2 enable",
+            "[*HUAWEI-bgp-af-vpn-target] peer 10.2.2.2 reflect-client"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFull-meshed connections need to be established between IBGP peers to ensure the connectivity between the IBGP peers. If there are n Devices in an AS, n (n-1)/2 IBGP connections need to be established. A large number of IBGP peers use a lot of network and CPU resources. An RR can be used to solve the problem.\nIn an AS, one Device functions as an RR and other Devices function as clients. The clients establish IBGP connections with the RR. The RR and its clients form a cluster. The RR reflects routes among the clients, and therefore the clients do not need to establish any BGP connection. Assume that an AS has n Devices. If one of the Devices functions as an RR, and other Devices function as clients, the number of IBGP connections to be established is n-1. This means that network and CPU resources are greatly reduced.\nAn RR is easy to configure, because it needs to be configured only on the device that functions as a reflector and clients do not need to know that they are clients.\nConfiguration Impact\nIf the peer reflect-client command is run multiple times in the same view, the latest configuration overwrites the previous one.\nThe device where the peer reflect-client command is run serves as the RR and a specified peer serves as the client of the RR.\nPrecautions\nThe peer reflect-client command can be only used between IBGP peers or IBGP peer groups.\nreflect-client configured in an address family is valid in this family address and cannot be inherited by other address families. Configuring reflect-client in a specified address family is recommended.\nIf a peer is specified when the peer reflect-client command is run, a peer group is specified when the peer advertise best-external command is run, and then the peer is added to the peer group, the peer cannot inherit the configuration of the peer advertise best-external command from the peer group."
+}

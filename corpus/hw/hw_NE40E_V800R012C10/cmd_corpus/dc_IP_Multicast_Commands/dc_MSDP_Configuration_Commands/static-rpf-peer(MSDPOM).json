@@ -1,0 +1,34 @@
+{
+    "PageTitle": "static-rpf-peer",
+    "FuncDef": "The static-rpf-peer command configures a Multicast Source Discovery Protocol (MSDP) peer as a static Reverse Path Forwarding (RPF) peer. The source active (SA) messages sent by the static RPF peer are free from the RPF check.\nThe undo static-rpf-peer command restores the default configuration.\nBy default, no MSDP peer is configured as a static RPF peer.",
+    "CLIs": [
+        "static-rpf-peer <peer-address> rp-policy <ip-prefix-name>",
+        "static-rpf-peer <peer-address>",
+        "undo static-rpf-peer <peer-address>"
+    ],
+    "ParentView": [
+        "VPN instance MSDP view",
+        "MSDP view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the address of a static RPF peer.\nThe address is in dotted decimal notation."
+        },
+        {
+            "Parameters": "rp-policy ip-prefix-name",
+            "Info": "Specifies the filtering policy based on Rendezvous Point (RP) addresses. The filtering policy is used to filter SA messages based on RP addresses. ip-prefix-name specifies the name of the filtering policy.\nThe name is a string of 1 to 169 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix list-df permit 192.168.0.0 16 greater-equal 16 less-equal 32",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] msdp",
+            "[*HUAWEI-msdp] peer 192.168.3.2 connect-interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-msdp] static-rpf-peer 192.168.3.2 rp-policy list-df"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo prevent SA messages from being circularly forwarded between MSDP peers, MSDP performs the RPF check on the received SA message. MSDP strictly controls the incoming SA messages. The SA message that does not comply with the RPF rules are discarded.\nTo protect the SA messages transmitted between MSDP peers from being discarded because of RPF rules and reduce redundant traffic, you can specify MSDP peers as static RPF peers. The SA messages received from a static RPF peer need not be checked according to RPF rules.\nPrerequisites\nThe multicast routing-enable command is run in the public network instance view or VPN instance view.\nMSDP peers have been configured.\nConfiguration Impact\nYou can specify multiple remote static RPF peers for the router by using the static-rpf-peer command repeatedly.\nPrecautions\nThe methods of configure multiple static RPF peers for a Router are as follows:\nAll the peers are configured with rp-policy: When SA messages sent by a static RPF peer in the active state reaches the local router, the local router filters the SA messages according to specified rp-policy specified on the peers, and receives only the SA messages passing the filtering.None of the peers is configured with rp-policy: The local router receives all the SA messages from the static RPF peers in the active state."
+}

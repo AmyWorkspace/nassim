@@ -1,0 +1,45 @@
+{
+    "PageTitle": "ipv6 pool(System view)",
+    "FuncDef": "The ipv6 pool command creates an IPv6 address pool and displays the view of the IPv6 address pool, or displays the view of an existing IPv6 address pool.\nThe undo ipv6 pool command deletes an IPv6 address pool.\nBy default, there is no IPv6 address pool on the device.",
+    "CLIs": [
+        "ipv6 pool <pool-name> [ bas { local | delegation | remote } [ rui-slave ] ]",
+        "ipv6 pool <pool-name> [ bas { local | delegation | remote | relay } ]",
+        "undo ipv6 pool <pool-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pool-name",
+            "Info": "Specifies the name of an IPv6 address pool.\nThe value is a string of 1 to 32 case-insensitive characters without spaces and can be any combination of letters, digits, dots (.), hyphens (-), and underscores (_). The value cannot be only one hyphen (-) or two consecutive hyphens (--)."
+        },
+        {
+            "Parameters": "local",
+            "Info": "Indicates a user-side IPv6 local address pool. The device functions as a local server assigning IPv6 addresses to IPoE+ND, IPoE+DHCPv6, PPPoE+ND users.\n-"
+        },
+        {
+            "Parameters": "delegation",
+            "Info": "Indicates a user-side IPv6 delegation address pool. The device functions as a user-side delegating router providing assignable IPv6 prefixes for requesting routers.\n-"
+        },
+        {
+            "Parameters": "remote",
+            "Info": "Indicates a user-side IPv6 remote address pool. The device functions as a relay agent on the user side assigning IPv6 addresses to users connected to remote DHCPv6 server.\n-"
+        },
+        {
+            "Parameters": "rui-slave",
+            "Info": "Indicates a hybrid IP address pool that can be used as both a local address pool and a remote address pool.\n-"
+        },
+        {
+            "Parameters": "relay",
+            "Info": "Indicates a user-side IPv6 relay address pool. The device that functions as the DHCPv6 server assigns IP addresses to Layer 3 DHCPv6 access users.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 pool pool1 bas local"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBefore the device assigns IPv6 addresses or IPv6 address prefixes for access users, run the ipv6 pool command to create an IPv6 address pool.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe address pool that is bound to a domain cannot be deleted and error messages are displayed when you delete such an address pool.remote is enabled by default.An address pool can be bound to only one address prefix pool, and an address prefix pool can be bound to only one address pool.If rui-slave is specified for an IPv6 address pool that is used as a user-side local address pool, the address pool functions as a backup address pool and has the following characteristics:The network segment route cost of the address pool is 20. If rui-slave is not specified, the network segment route cost of the address pool is 10 by default.The address pool can have both prefix and DHCP server information configured.The address pool can be bound to both the RBS and DHCP server enabled on the device. The address pool can also detect the master device status. If the master device is available, the address pool functions as a relay address pool; if the master device fails, the address pool automatically functions as a local address pool to allocate addresses to terminals.\nIf rui-slave is specified for an IPv6 address pool that is used as a user-side remote address pool or user-side delegation address pool, the address pool functions as a backup address pool and has the default network segment route cost of 20. If rui-slave is not specified, the network segment route cost of the address pool is 10 by default."
+}

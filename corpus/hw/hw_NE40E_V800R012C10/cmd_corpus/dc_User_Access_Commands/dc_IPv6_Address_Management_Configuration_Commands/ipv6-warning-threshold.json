@@ -1,0 +1,31 @@
+{
+    "PageTitle": "ipv6-warning-threshold",
+    "FuncDef": "The ipv6-warning-threshold command configures an upper alarm threshold for the usage of IPv6 addresses or prefixes. If the usage of IPv6 addresses or prefixes is greater than or equal to the configured threshold, a threshold-crossing alarm is sent to the NMS.\nThe undo ipv6-warning-threshold command restores the default IPv6 address or prefix usage threshold. If a threshold-crossing alarm has been sent to the NMS, a new alarm is sent to clear the alarm information. After that, no threshold-crossing alarm will be sent to the NMS, regardless of the IPv6 address or prefix usage in the domain.\nThe ipv6-warning-threshold lower-limit command sets an IPv6 address or prefix usage lower alarm threshold.\nThe undo ipv6-warning-threshold lower-limit command deletes the configured lower alarm threshold for the usage of IPv6 addresses or prefixes.\nBy default, no alarm is generated for the number of IPv6 addresses or prefixes.",
+    "CLIs": [
+        "ipv6-warning-threshold { <upper-limit-value> | lower-limit <lower-limit-value> }",
+        "undo ipv6-warning-threshold [ lower-limit ]"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "upper-limit-value",
+            "Info": "Specifies an upper alarm threshold for the usage of IPv6 addresses or prefixes, in percentages. If the value is set to 80, the will generate an alarm when the IPv6 address or prefix usage reaches 80%.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "lower-limit lower-limit-value",
+            "Info": "Specifies a lower alarm threshold for the usage of IPv6 addresses or prefixes, in percentages. If the value is set to 20, the will generate an alarm when the IPv6 address or prefix falls below 20%.\nThe value is an integer ranging from 0 to 99."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain d1",
+            "[*HUAWEI-domain-d1] commit",
+            "[~HUAWEI-domain-d1] ipv6-warning-threshold 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an IPv6 network, the device may use the IA_NA option of DHCPv6 to allocate an IPv6 address, or use NDRA to allocate a 64-bit exclusive IPv6 prefix, or use the IA_PD option of DHCPv6 to allocate an IPv6 prefix with a configurable length. Any failure to allocate an IPv6 address or prefix may cause users to fail to get online. To prevent allocation failures, you can run the ipv6-warning-threshold command to set an IPv6 address or prefix usage threshold.\nThe upper alarm threshold helps to identify excessive users on a network, and the lower alarm threshold helps to identify users' logout due to faults.\nConfiguration Impact\nWhen the IPv6 address or prefix usage in a specified domain exceeds the configured upper alarm threshold, the system displays an alarm, instructing the administrator to plan IPv6 addresses properly. This prevents failures of users to get online due to IPv6 address exhaustion.\nWhen the IPv6 address or prefix usage falls below the upper alarm threshold, the alarm is cleared.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

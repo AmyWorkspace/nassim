@@ -1,0 +1,39 @@
+{
+    "PageTitle": "qinq stacking pe-vid",
+    "FuncDef": "The qinq stacking pe-vid command enables a QinQ stacking sub-interface to add a specified outer VLAN tag to received packets.\nThe undo qinq stacking pe-vid command disables the function.\nBy default, a QinQ stacking sub-interface adds an automatically assigned outer VLAN tag to received packets.",
+    "CLIs": [
+        "qinq stacking pe-vid <pe-vid>",
+        "undo qinq stacking pe-vid"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pe-vid pe-vid",
+            "Info": "Specifies the VLAN ID in the outer tag to be added to a packet.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq stacking pe-vid 100 8021p 3"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq stacking pe-vid 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, after a QinQ stacking sub-interface receives a packet, it adds an automatically assigned outer VLAN tag to the packet, instead of differentiating outer VLAN tags based on users and service types. This mechanism limits flexible operation of multi-user and multi-service. To address this problem, run the qinq stacking pe-vid command to enable a QinQ stacking sub-interface to add a specified outer VLAN tag to its received packets.\nPrerequisites\nBefore running the qinq stacking vid command in the VE sub-interface view or global VE sub-interface view, the interface on which the sub-interface is to be created has been bound to a VE-Group.\nConfiguration Impact\nAfter the qinq stacking pe-vid command is run on a QinQ stacking sub-interface:\nWhen the QinQ stacking sub-interface receives a packet, the sub-interface checks whether the VLAN ID or VLAN range in the VLAN tag of the packet matches the VLAN ID or VLAN range specified using the qinq stacking vid command. If they are consistent, the sub-interface adds an outer VLAN tag to the packet.If the packet carries one VLAN tag and the VLAN ID in the tag is in the VLAN range specified by low-ce-vid [ to high-ce-vid ] in the qinq stacking vid command, the sub-interface adds an outer VLAN tag to the packet. If the VLAN ID in the VLAN tag is not in the specified VLAN range, the sub-interface discards the packet.If the packet carries two VLAN tags and the VLAN ID in the outer tag is in the VLAN range specified by low-ce-vid [ to high-ce-vid ] in the qinq stacking vid command, the sub-interface adds another outer VLAN tag to the packet and forwards the packet. In this case, the inner VLAN tag is transmitted transparently. If the VLAN ID in the outer tag is not in the specified VLAN range, the sub-interface discards the packet.If the packet does not carry any VLAN tag, the sub-interface directly discards the packet.When the QinQ stacking sub-interface sends a packet, the sub-interface strips the outer VLAN tag.\n\nPrecautions\nBefore you run the qinq stacking pe-vid command, you must run the qinq stacking vid command to specify an inner VLAN tag to be added. Otherwise, the qinq stacking pe-vid command does not take effect.\nIf you do not run the qinq stacking pe-vid command on a QinQ stacking sub-interface, the sub-interface adds a default outer VLAN tag to received packets.\nThe default outer VLAN tag is assigned automatically by the device and cannot be configured by users."
+}

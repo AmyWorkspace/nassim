@@ -1,0 +1,77 @@
+{
+    "PageTitle": "snmp-agent target-host(Virtual access port-extension view)",
+    "FuncDef": "The snmp-agent target-host trap command configures a target host for receiving trap messages.\nThe undo snmp-agent target-host command restores the default configuration.\nBy default, no target host is configured for receiving trap messages.",
+    "CLIs": [
+        "snmp-agent target-host host-name <host-name> trap address udp-domain <ip-address> params securityname { <cipher-name> v3 [ authentication | privacy ] | cipher <cipher-name> [ v1 | v2c ] } [ private-netmanager | ext-vb ] *",
+        "undo snmp-agent target-host host-name <host-name>"
+    ],
+    "ParentView": [
+        "Virtual access port-extension view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "host-name host-name",
+            "Info": "Specifies the name of a target host.\nThe value is a string of 1 to 32 characters, spaces not supported.\nThe string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "trap",
+            "Info": "Indicates that the target host is a trap host.\n-"
+        },
+        {
+            "Parameters": "address",
+            "Info": "Indicates the address of a target host for receiving SNMP messages.\nThe IP address specified by address and the user name specified by securityname together identifies a target host."
+        },
+        {
+            "Parameters": "udp-domain ip-address",
+            "Info": "Specifies the IP address of a target host and indicates UDP-based transmission.\nThe value is in the decimal format."
+        },
+        {
+            "Parameters": "securityname",
+            "Info": "Indicates the user name displayed on the NMS side.\nFor SNMPv1 and SNMPv2c, the NMS can receive trap messages from all target hosts without using securityname for a check. This parameter is used to distinguish multiple target hosts with the same IP address.\n-"
+        },
+        {
+            "Parameters": "cipher-name",
+            "Info": "Specify the character string of security name.\nThe value is a string of 1 to 32 characters, spaces not supported.\nThe string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "v3",
+            "Info": "Indicates that SNMPv3 is enabled.\n-"
+        },
+        {
+            "Parameters": "authentication",
+            "Info": "Specifies that messages are authenticated but not encrypted.\n-"
+        },
+        {
+            "Parameters": "privacy",
+            "Info": "Specifies authentication and encryption of messages.\n-"
+        },
+        {
+            "Parameters": "cipher cipher-name",
+            "Info": "Specifies an authentication password in ciphertext. The password is displayed in ciphertext in a configuration file.\nThe new password is at least eight characters long and contains at least two of the following types: upper-case letters, lower-case letters, digits, and special characters.\nThe value is a string of 1 to 32 case-sensitive characters in plaintext or a string of 24, 32, 48, 68 or 68 to 168 case-sensitive characters in ciphertext, spaces not supported.\nThe string can contain spaces if it is enclosed in double quotation marks (\").Ciphertext passwords with different lengths are automatically supported after an upgrade."
+        },
+        {
+            "Parameters": "v1",
+            "Info": "Indicates an SNMP version. v1 represents SNMPv1. By default, SNMPv1 is used.\n-"
+        },
+        {
+            "Parameters": "v2c",
+            "Info": "Indicates an SNMP version. v2c represents SNMPv2c.\n-"
+        },
+        {
+            "Parameters": "private-netmanager",
+            "Info": "Indicates that the target host for receiving trap messages is a Huawei NMS. When a Huawei NMS is used, a trap message sent to the Huawei NMS can contain more detailed information, such as the trap type, trap ID, and send time of the trap message.\n-"
+        },
+        {
+            "Parameters": "ext-vb",
+            "Info": "Indicates that a trap message sent to a target host carries extended bound variables.\nIf Huawei datacom devices extend the trap objects defined by the public MIB, you can use ext-vb to control whether a trap message sent to the NMS carries extended bound variables.\nIf ext-vb is not specified, trap messages sent by Huawei datacom devices do not carry extended bound variables.If the NMS is a third-party NMS, do not specify ext-vb, ensuring that the third-party NMS can receive trap messages from Huawei datacom devices.By default, trap messages sent by Huawei datacom devices do not carry extended bound variables.If ext-vb is specified, trap messages sent by Huawei datacom devices carry extended bound variables.If the NMS is a Huawei NMS, specify ext-vb to allow more detailed information to be carried in trap messages.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] virtual-access port-extend",
+            "[*HUAWEI-virtual-access-portextend] snmp-agent target-host host aaa trap address udp-domain 10.1.1.1 params securityname cipher comaccess v2c"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSNMP messages are classified as trap or inform messages. Trap messages have low reliability. No acknowledgements are sent for trap messages, and therefore senders cannot determine whether trap messages are received. Inform messages have high reliability because acknowledgements are sent for them.\nIf private-netmanager is specified, the NMS receives the following alarms:\nhwAlarmDateAndTimehwAlarmSeverityhwActiveAlarmIndex/hwEventIndex (based on alarms or events)hwAlarm or EventFlaghwAlarmSyncIndex\nIf ext-vb is specified, trap messages received by the NMS carry extended bound variables.\nA source interface for sending trap messages can be configured for an SNMP IPv4 target host. The source IP address in the IP header and the agent address in an SNMPv1 PDU are set in the source IP address.\n\nConfiguration Impact\nAfter the snmp-agent target-host trap command is run and a trap message is sent, an AP deletes this message from the trap queue regardless of whether the NMS receives this message. Therefore, the trap message mechanism is resource-saving.\nPrecautions\nThe snmp-agent target-host trap and snmp-agent trap enable commands must be used together.\nThis command is supported only on the admin VS."
+}

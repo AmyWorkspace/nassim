@@ -1,0 +1,42 @@
+{
+    "PageTitle": "peer sa-request-policy",
+    "FuncDef": "The peer sa-request-policy command configures a filtering policy to respond to the source active (SA) Request messages sent by a specified Multicast Source Discovery Protocol (MSDP) peer. Once the SA Request message passes the filtering, the Router responds to the SA message immediately.\nThe undo peer sa-request-policy command restores the default configuration.\nBy default, the Router responds to all SA request messages sent by all MSDP peers.",
+    "CLIs": [
+        "peer <peer-address> sa-request-policy acl { <basic-acl-number> | <acl-name> }",
+        "peer <peer-address> sa-request-policy",
+        "undo peer <peer-address> sa-request-policy"
+    ],
+    "ParentView": [
+        "VPN instance MSDP view",
+        "MSDP view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the address of an MSDP peer that sends SA Request messages.\nThe address is in dotted decimal notation."
+        },
+        {
+            "Parameters": "basic-acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe number is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 2001",
+            "[*HUAWEI-acl4-basic-2001] rule permit source 225.1.1.0 0.0.0.255",
+            "[*HUAWEI-acl4-basic-2001] quit",
+            "[~HUAWEI] interface loopback1",
+            "[*HUAWEI-LoopBack1] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] msdp",
+            "[*HUAWEI-msdp] peer 10.58.6.5 connect-interface LoopBack 1",
+            "[*HUAWEI-msdp] peer 10.58.6.5 sa-request-policy acl 2001"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf an ACL is not specified, all SA Requests of an MSDP peer are ignored. If an ACL is specified, only SA Request messages that contain group addresses permitted by the ACL are processed.\nRun the rule command in the ACL view and set the source parameter to specify the multicast group address range of SA messages to be permitted or denied.\nConfiguration Impact\nIf the peer sa-request-policy command is run more than once, the latest configuration overrides the previous one."
+}

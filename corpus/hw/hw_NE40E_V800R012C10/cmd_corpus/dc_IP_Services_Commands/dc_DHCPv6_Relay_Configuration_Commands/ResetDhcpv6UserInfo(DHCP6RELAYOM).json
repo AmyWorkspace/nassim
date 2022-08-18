@@ -1,0 +1,60 @@
+{
+    "PageTitle": "reset dhcpv6 relay userinfo table",
+    "FuncDef": "The reset dhcpv6 relay userinfo table command clears DHCPv6 client information on a DHCPv6 relay agent so that all resources allocated to clients are released.",
+    "CLIs": [
+        "reset dhcpv6 relay userinfo table interface { <interface-name> | <interface-type> <interface-number> } [ pevlan <pevlan-id> [ <end-pevlan-id> ] [ cevlan <cevlan-id> [ <end-cevlan-id> ] ] ]",
+        "reset dhcpv6 relay userinfo table mac-address <mac-address-data>",
+        "reset dhcpv6 relay userinfo table client-duid <client-duid-data>",
+        "reset dhcpv6 relay userinfo table server-duid <server-duid-data>",
+        "reset dhcpv6 relay userinfo table client-address <client-address-data> [ vpn-instance <vpn-instance-name> ]",
+        "reset dhcpv6 relay userinfo table server-address <server-address-data> [ vpn-instance <vpn-instance-name> ]",
+        "reset dhcpv6 relay userinfo table"
+    ],
+    "ParentView": [
+        "User view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pevlan pevlan-id end-pevlan-id",
+            "Info": "Clears login failure and logout records of DHCPv6 clients that send packets with a specified outer VLAN ID.\npevlan-id specifies the start outer VLAN ID.end-pevlan-id specifies the end outer VLAN ID. end-pevlan-id must be greater than or equal to pevlan-id. pevlan-id and pevlan-id specify a VLAN range.If end-pevlan-id is not specified, only login failure and logout records of DHCPv6 clients that send packets with the outer VLAN ID specified by pevlan-id are displayed.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "cevlan cevlan-id end-cevlan-id",
+            "Info": "Clears login failure and logout records of DHCPv6 clients that send packets with a specified inner VLAN ID.\ncevlan-id specifies the start inner VLAN ID.end-cevlan-id specifies the end inner VLAN ID. end-cevlan-id must be greater than or equal to cevlan-id. end-cevlan-id and cevlan-id specify a VLAN range.If end-cevlan-id is not specified, only login failure and logout records of DHCPv6 clients that send packets with the inner VLAN ID specified by cevlan-id are displayed.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "mac-address mac-address-data",
+            "Info": "Clears information about the DHCPv6 client with a specified MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0. The MAC address cannot be set to FFFF-FFFF-FFFF."
+        },
+        {
+            "Parameters": "client-duid client-duid-data",
+            "Info": "Clears information about the DHCPv6 client with a specified DUID.\nThe value is a hexadecimal number that ranges from 1 to 260, excluding 0x."
+        },
+        {
+            "Parameters": "server-duid server-duid-data",
+            "Info": "Clears DHCPv6 client information of the DHCPv6 server with a specified DUID.\nThe value is a hexadecimal number that ranges from 1 to 260, excluding 0x."
+        },
+        {
+            "Parameters": "client-address client-address-data",
+            "Info": "Clears information about the DHCPv6 client with a specified IPv6 address.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Clears information about DHCPv6 clients with a specified VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "server-address server-address-data",
+            "Info": "Clears DHCPv6 client information of the DHCPv6 server of a specified IPv6 address.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Clears DHCPv6 client information on a specified relay interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> reset dhcpv6 relay userinfo table interface GigabitEthernet1/0/0 pevlan 10 100 cevlan 1 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf some DHCPv6 client entries are not needed any longer, run the reset dhcpv6 relay userinfo table command to clear them. This command clears all DHCPv6 client information if no parameter is specified and clears specified DHCPv6 client information if a parameter is specified.\nFor example, after the IPv6 protocol on an interface goes Down, PD routes are deleted, but the client entries are not. After the IPv6 protocol goes Up again, PD routes are restored so that clients can access the network again. If the IPv6 protocol on an interface goes Down because a client has deleted the IPv6 configuration on the interface and will not restore the IPv6 configuration, run the reset dhcpv6 relay userinfo table command to clear the DHCPv6 client entries on the interface so that resources are released immediately and do not need to wait until the lease expires.\nConfiguration Impact\nRunning the reset dhcpv6 relay userinfo table command deletes DHCPv6 client entries stored on a DHCPv6 relay agent. Therefore, user terminals connected to CPEs may fail to access the network, and the DHCPv6 clients and server may encounter communication delays or even communication failures. Exercise caution when running this command."
+}

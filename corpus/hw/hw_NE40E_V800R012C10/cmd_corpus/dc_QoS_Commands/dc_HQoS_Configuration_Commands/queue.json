@@ -1,0 +1,110 @@
+{
+    "PageTitle": "queue",
+    "FuncDef": "The queue command sets the scheduling parameters such as scheduling mode, PIR, WRED and CIR of a flow queue.\nThe undo queue command removes the scheduling parameter of a flow queue.\nBy default, the BE, AF1, AF2, AF3, and AF4 queues are scheduled using the WFQ scheduling mode, with the scheduling weights being 10, 10, 10, 15, and 15, respectively, and the EF, CS6, and CS7 queues are scheduled using the PQ scheduling mode. The shaping percentage is set to 100 for all queues, and the tail drop mode is used.",
+    "CLIs": [
+        "queue <cos-value> { { pq | wfq weight <weight-value> | lpq } | { shaping { <shaping-value> | shaping-percentage <shaping-percentage-value> } [ pbs <pbs-value> ] | car { <car-value> | car-percentage <car-percentage-value> } [ pbs <pbs-value> ] } | { flow-wred <wred-name> } | low-latency | low-jitter } *",
+        "queue <cos-value> cir { { <cir-value> [ cbs <cbs-value> ] cir-schedule pq pir <pir-value> } | { cir-percentage <cir-percentage-value> [ cbs <cbs-value> ] cir-schedule pq pir pir-percentage <pir-percentage-value> } } [ pbs <pbs-value> ] pir-schedule { pq | wfq weight <weight-value> | lpq } [ flow-wred <wred-name> ]",
+        "undo queue <cos-value> [ pq | wfq | lpq | shaping | flow-wred | low-latency | car | low-jitter ]",
+        "undo queue <cos-value> [ cir { { <cir-value> [ cbs <cbs-value> ] cir-schedule pq pir <pir-value> } | { cir-percentage <cir-percentage-value> [ cbs <cbs-value> ] cir-schedule pq pir pir-percentage <pir-percentage-value> } } [ pbs <pbs-value> ] pir-schedule { pq | wfq weight <weight-value> | lpq } [ flow-wred <wred-name> ] ]"
+    ],
+    "ParentView": [
+        "Flow queue view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cos-value",
+            "Info": "Specifies the flow queue name.\nThe value can be BE, AF1 to AF4, EF, CS6, or CS7."
+        },
+        {
+            "Parameters": "pq",
+            "Info": "Specify priority queue scheduler.\n-"
+        },
+        {
+            "Parameters": "wfq",
+            "Info": "Specify weighted fair queue scheduler.\n-"
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Specifies the weight of the weighted fair queue.\nThe value is an integer in the range of 1 to 100."
+        },
+        {
+            "Parameters": "lpq",
+            "Info": "Specify low priority queue scheduler.\n-"
+        },
+        {
+            "Parameters": "shaping shaping-value",
+            "Info": "Specifies the shaping rate, which indicates the peer rate of each flow queue.\nThe value is an integer in the range of 8 to 4294967294 Kbit/s."
+        },
+        {
+            "Parameters": "shaping-percentage shaping-percentage-value",
+            "Info": "Specifies the percentage of the shaping rate over the total bandwidth of an interface.\nThe value is an integer ranging from 0 to 100."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies the value of the peak burst size (PBS), that is, the maximum volume of traffic that the interface can send after port shaping is configured.\nThe value is an integer ranging from 1 to 4194304, in bytes."
+        },
+        {
+            "Parameters": "car car-value",
+            "Info": "Specifies the CAR value. The CAR rate refers to the flow queue rate which has applied CAR policy.\nIf a board does not support the CAR function, this parameter takes effect as shaping-value.\nThe value is an integer ranging from 8 to 4294967294, in kbit/s."
+        },
+        {
+            "Parameters": "car-percentage car-percentage-value",
+            "Info": "Specifies the CAR percentage. The CAR percentage refers to the percentage of CAR in PIR.\nIf a board does not support the CAR function, this parameter takes effect as shaping-percentage-value.\nThe value is an integer ranging from 0 to 100."
+        },
+        {
+            "Parameters": "flow-wred wred-name",
+            "Info": "Specify flow-wred template name.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "low-latency",
+            "Info": "Indicates the low-delay mode.\nServices requiring low delays share bandwidths with other services. When other services are congested, services requiring low delays are affected. In low-delay mode, however, services requiring low delays are not affected by other services.\n-"
+        },
+        {
+            "Parameters": "low-jitter",
+            "Info": "Specifies the low-jitter working mode.\nIf the flow in the flow queue is small, configure the low-jitter parameter to lower the traffic jitter.\nWhen the eTM subcard deployed on an outbound interface, the low-jitter working mode is not supported in the flow queue.\n-"
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR.\nThe value is an integer ranging from 0 to 4294967294, in kbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the CBS.\nThe value is an integer ranging from 1 to 65535, in bytes."
+        },
+        {
+            "Parameters": "cir-schedule",
+            "Info": "Specifies the scheduling mode for CIR.\n-"
+        },
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the PIR.\nThe value is an integer ranging from 0 to 4294967294, in Mbit/s."
+        },
+        {
+            "Parameters": "cir-percentage cir-percentage-value",
+            "Info": "Specifies the CIR percentage.\nThe value is an integer ranging from 0 to 100."
+        },
+        {
+            "Parameters": "pir-percentage pir-percentage-value",
+            "Info": "Specifies the PIR percentage.\nThe value is an integer ranging from 0 to 100."
+        },
+        {
+            "Parameters": "pir-schedule",
+            "Info": "Specifies the scheduling mode for PIR.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] flow-wred test",
+            "[*HUAWEI-flow-wred-test] quit",
+            "[*HUAWEI] flow-queue test",
+            "[*HUAWEI-flow-queue-template-test] queue af1 wfq weight 50 shaping 6000 pbs 1000 flow-wred test"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] flow-queue test",
+            "[*HUAWEI-flow-queue-template-test] queue af1 cir 1000 cir-schedule pq pir 2000 pir-schedule pq"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe queue command configures scheduling parameters for eight priority queues, including the scheduling mode (PQ, WFQ, or LPQ), traffic shaping value, commit information rate (CIR), drop policy (WRED) and low latency queue (LLQ), to control scheduling priorities, committed bandwidth, and scheduling delays for services of different priorities. For example, voice packets require preferential scheduling and short delays. You can run this command to set the priority queue of voice services to PQ and use a proper flow-WRED profile.\nConfiguration Impact\nModifying the user queue parameters will affect queue scheduling of services.\nPrecautions\nOnly PQ queues can be configured to work in low-latency mode. A queue that is configured to work in low-latency mode is scheduled preferentially if congestion occurs.\nThe priorities of CS7, CS6, EF, AF4, AF3, AF2, AF1, and BE queues are placed in descending order. The low-latency function is preferentially guaranteed for the three high-priority (CS7, CS6, and EF) queues. Therefore, configure the low-latency function for the three high-priority (CS7, CS6, and EF) queues. If you configure the low-latency function for the five low-priority queues, ensure that the three high-priority queues are not congested. Otherwise, the low-latency function cannot be guaranteed for the five low-priority queues.\nDo not configure both the shaping rate and CIR for one queue.\nYou can configure the CIR for a maximum of two queues on one interface.\nThe share-shaping and queue cir commands are mutually exclusive."
+}

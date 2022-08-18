@@ -1,0 +1,48 @@
+{
+    "PageTitle": "delay-measure two-way send",
+    "FuncDef": "The delay-measure two-way send command configures on-demand two-way frame delay measurement.\nBy default, on-demand two-way frame delay measurement is not configured in an MA.",
+    "CLIs": [
+        "delay-measure two-way send test-id <test-id-value> interval { <1000> | <10000> } count <count-value>"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the interval at which DMMs are sent.\nEither 1000 or 10000 milliseconds"
+        },
+        {
+            "Parameters": "count count-value",
+            "Info": "Specifies the number of sent DMMs.\nThe value is an integer ranging from 1 to 60"
+        },
+        {
+            "Parameters": "test-id test-id-value",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/0 inward",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send mep-id 1 enable",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 2",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep ccm-receive mep-id 2 enable",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1",
+            "[*HUAWEI-md-md1-ma-ma1] delay-measure two-way send test-id 1 interval 10000 count 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the clocks of the MEPs at both ends of a link cannot be synchronized, you can run this command to implement singular or periodic on-demand two-way frame delay measurement.\nPrerequisites\nThe delay-measure two-way command takes effect only after the following configurations are complete:\nRun the cfm version standard command in the system view to specify IEEE Standard 802.1ag-2007 for CFM.The CFM function is enabled globally by using the cfm enable command in the system view.An MD is created by using the cfm md command in the system view.An MA is created by using the ma command in the MD view.Configure inward parameter in the mep mep-id command to create an inward-facing MEP in an MA.A remote MEP in the MA is created by using the remote-mep command in the MA view.The local MEP in the MA is enabled to send CCMs by using the mep ccm-send enable command in the MA view.The local MEP is enabled to receive CCMs from the remote MEP in the same MA by using the remote-mep ccm-receive enable command in the MA view.A test instance is created by using the test-id command in the MA view.\n\nConfiguration Impact\nAfter the configuration is complete, on-demand two-way frame delay measurement is implemented for links.\nPrecautions\nTo implement on-demand two-way frame delay measurement, you need to specify the RMEP ID or the destination MAC address, the interval at which DMMs are sent, and the measurement period.\nIf the local MEP has not learned the MAC address of the remote MEP, you must specify the destination MAC address for two-way frame delay measurement.If the local MEP has learned the MAC address of the remote MEP, you can specify the remote MEP ID for two-way frame delay measurement."
+}

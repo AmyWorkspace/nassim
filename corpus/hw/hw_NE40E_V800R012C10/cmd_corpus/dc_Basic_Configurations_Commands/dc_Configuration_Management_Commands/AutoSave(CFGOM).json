@@ -1,0 +1,37 @@
+{
+    "PageTitle": "set save-configuration",
+    "FuncDef": "The set save-configuration command configures the function of saving system configurations periodically.\nThe undo set save-configuration command cancels the function of saving system configurations periodically.\nBy default, the system does not enable the function.",
+    "CLIs": [
+        "set save-configuration [ interval <interval> | delay <delay-interval> | cpu-limit <cpu-usage> ] *",
+        "undo set save-configuration",
+        "undo set save-configuration { interval | delay | cpu-limit } *"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval interval",
+            "Info": "Specifies the interval at which configurations are saved automatically.\nThe value is an integer ranging from 30 to 43200, in minutes. The default value is 30."
+        },
+        {
+            "Parameters": "delay delay-interval",
+            "Info": "Specifies the delay time for backing up a configuration automatically after the configuration is changed.\nThe value is an integer ranging from 1 to 60, in minutes. The default value is 5."
+        },
+        {
+            "Parameters": "cpu-limit cpu-usage",
+            "Info": "Specifies the maximum CPU usage.\nThe value is an integer ranging from 1 to 100. The default value is 50."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] set save-configuration interval 60"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] set save-configuration interval 600 delay 3 cpu-limit 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBefore the set save-configuration command is run, the system does not enable the autosave function. After you run the command, the system periodically checks the configuration file. If a configuration or configuration file is changed, the system performs the save operation. If no configuration or configuration file change occurs, the system does not perform the save operation.\nTo specify an interval at which configurations are saved, set a specified value for the interval parameter.To prevent the antosave function from affecting system performance, set an upper limit value for the cpu-limit parameter in the configuration of the autosave function. When the autosave timer is triggered and the CPU usage of the system is detected to be higher than the set upper limit, the system will stop the current autosave operation. By default, the upper limit value is 50%.To specify the delay time for backing up configurations automatically, set a value for the delay parameter. If configurations are changed, the system will save configurations automatically when the delay time ends.If the interval and delay parameters are both set, the parameter in which the configured interval first expires triggers the configuration save operation. When the interval configured in the other parameter expires, the system checks configurations again. It performs a save operation only when detecting a configuration change.\nTo disable the autosave function, run the undo set save-configuration command. If some parameters are specified in the undo set save-configuration command, the default values of the parameters will be restored after the command is run. The saved configurations, however, still take effect.\n\nConfiguration Impact\nAfter the autosave function is configured, the system automatically saves configurations to the configuration file used for the next startup when the current running configuration is different from the next startup configuration file and the interval configured in the interval parameter expires, no matter whether the save operation has been manually saved.\nFollow-up Procedure\nRun the display saved-configuration configuration command, and view configuration information about the function of saving configurations periodically.\nPrecautions\nIn the following situations, the system cancels the current autosave operation:\nThe configuration file is being written.The configurations of an interface board is being restored.The CPU usage exceeds the configured threshold value.\nWhen the system is saving configurations automatically to an interface board that is not properly installed, the offline configuration can also be saved.\nWhen setting the next startup file, it will be forbidden to save automatically, forbidden to save for 30 minutes.\nWhen configuration changes or setting the next startup file, the configuration flow id will be changed, and saving configurations automatically to the next startup file."
+}

@@ -1,0 +1,39 @@
+{
+    "PageTitle": "ptp tcoc-clock-id",
+    "FuncDef": "The ptp tcoc-clock-id command specifies the ID of a clock source that an OC interface on a TCOC tracks.\nThe undo ptp tcoc-clock-id command cancels the configured ID of a clock source that an OC interface on a TCOC tracks.\nBy default, the clock source ID is not configured.",
+    "CLIs": [
+        "ptp tcoc-clock-id <clock-source-id> port-num <port-num>",
+        "undo ptp tcoc-clock-id"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "GE optical interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "clock-source-id",
+            "Info": "Specifies a clock source ID.\nThe value is in the format of HHHHHHHH. Each H is a 2-bit hexadecimal number, such as E0 and FC. All 0s are not supported."
+        },
+        {
+            "Parameters": "port-num port-num",
+            "Info": "Specifies the number of the master interface.\nThe value is an integer ranging from 0 to 65535.\nTo view the port number of the peer master clock, run the display ptp interface interface-type interface-number command. The port number is displayed in the Parent portnumber field."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp enable",
+            "[~HUAWEI] ptp device-type e2etcoc",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ptp tcoc-clock-id 122323FFFE122110 port-num 7937"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nUnlike a TC, a TCOC has an OC interface to implement frequency synchronization. The TCOC also has TC interfaces to transparently transmit 1588v2 packets. To specify a clock source that the OC interface on the TCOC tracks, run the ptp tcoc-clock-id command. The OC interface can then receive 1588v2 packets to synchronize frequencies with the master clock interface.\nThis command applies only to 1588v2 and SMPTE-2059-2.\nPrerequisites\nThe TCOC clock type has been configured using the ptp device-type { e2etcoc | p2ptcoc } command.\n1588v2 has been enabled on an interface using the ptp enable command.\nPrecautions\nThe default ID of the peer clock source is a hexadecimal MAC address with \"fffe\" padded between the sixth and seventh bits. The ptp virtual-clock-id clock-id-value command can be run to set a virtual clock ID to replace the default clock ID on the peer device. To view the clock ID, run the display ptp all command.\nIf the ptp tcoc-clock-id command is not run on the OC interface of the TCOC, each TCOC interface functions as a TC interface, which only transparently transmits 1588v2 packets.\nThis command cannot be run on an OTN subcard."
+}

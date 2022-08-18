@@ -1,0 +1,37 @@
+{
+    "PageTitle": "dhcp server database",
+    "FuncDef": "The dhcp server database command enables the function of storing and restoring DHCP data.\nThe undo dhcp server database command disables the function of storing and restoring DHCP data.\nBy default, the function of storing and restoring DHCP data is disabled.",
+    "CLIs": [
+        "dhcp server database { enable | recover | write-delay <interval> }",
+        "undo dhcp server database { enable | recover | write-delay }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "enable",
+            "Info": "Enables the function of storing DHCP data.\n-"
+        },
+        {
+            "Parameters": "recover",
+            "Info": "Restores DHCP data from a storage device.\n-"
+        },
+        {
+            "Parameters": "write-delay interval",
+            "Info": "Specifies the interval for storing DHCP data.\nThe value is an integer ranging from 300 to 86400, in seconds. The default value is 300."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp server database enable",
+            "[*HUAWEI] dhcp server database write-delay 36000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp server database recover"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo prevent against unexpected data loss, run the dhcp server database enable command to enable the DHCP data storage function. The system saves the lease.txt and conflict.txt files to a DHCP folder on the CF card. After one-to-many mapping between one MAC address and multiple sessions is enabled, the system will generate an option82_index.data file to save the Option 82 information of users. The system automatically saves DHCP data at an interval and the previous data files are overwritten. To configure such interval, run the dhcp server database write-delay interval command.\nTo restore DHCP data from a storage file when a device becomes faulty, run the dhcp server database recover command after the system is restarted.\nConfiguration Impact\nAfter the dhcp server database enable command is executed, if a large number of clients go online concurrently, the online rate will be decreased greatly. Only a minority of clients can rapidly go online.\nPrecautions\nDo not manually delete the lease.txt, option82_index.data, or conflict.txt file. Otherwise, DHCP data cannot be restored after the system is restarted. The files are overwritten at a specified interval; therefore, you are advised to back up the files in a different location.\nThe data storage function is independent of the data restoration function."
+}

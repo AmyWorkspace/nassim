@@ -1,0 +1,26 @@
+{
+    "PageTitle": "domain (AAA view)",
+    "FuncDef": "The domain command creates a domain and enters the domain view; alternatively, you can enter the view of an existing domain.\nThe undo domain command deletes a domain from the device.\n\nBy default, there are three default domains on the device. The default domain cannot be deleted but modified.\n\n\ndefault0: It is a domain to which a user belongs before authentication. When a user access the device and is not authenticated, the device does not know the domain of the user, and therefore by default considers that the user belongs to default0.\n\ndefault1: It is a domain to which a user belongs during authentication. During authentication, if a user inputs a user account that does not contain a domain name, the device by default considers that the user belongs to default1.\n\ndefault_admin: It is a domain to which an administrator user belongs.",
+    "CLIs": [
+        "domain <domain-name>",
+        "undo domain <domain-name>"
+    ],
+    "ParentView": [
+        "AAA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "domain-name",
+            "Info": "Specifies the name of a domain.\nThe value is a string of 1 to 64 case-insensitive characters,.The domain name does not support *, ?, ',or \" characters and cannot be set to - or --. An AAA scheme is selected based on the domain field in the user name username@domain input by a user. When the user name input by a user does not contain @domain, if the user is a management user (user using Telnet, FTP, SSH, or terminal access), the system considers that the user goes online through the domain named default_admin by default; if the user is not a management user, the system considers that the user goes online through the domain named default1 by default."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe device can manage users through domains. A domain is the minimum user management unit. A domain name can be an ISP name or the name of a service provided by an ISP. A domain can use the default authorization attribute, and be configured with a RADIUS template and authentication and accounting schemes.\nPrerequisites\nTo perform AAA for access users, you need to apply the authentication schemes, authorization schemes, and accounting schemes in the domain view. Therefore, authentication, authorization, and accounting schemes must be configured in the AAA view in advance.\nPrecautions\nThe default_admin domain is used for administrators such as the administrators who log in using SSH, Telnet, FTP, and terminals. By default, local authentication is performed for users in the default_admin domain.\nWhen the user name of an administrator does not carry the domain name or carries a nonexistent domain name, the device adds the administrator to the default domain.\nThe priority of the default authorization information configured in the domain is lower than that of the authorization information on the AAA server (remote RADIUS server or local authentication and accounting server). That is, when authorization information is configured both in the domain and on the AAA server, the user uses only the authorization information on the AAA server. When the AAA server does not have or support the default authorization information configured in the domain, the authorization configured in a domain takes effect.\nWhen a domain and its users are configured with the same attribute but different attribute values, the user-based configuration is preferred over the domain-based configuration."
+}

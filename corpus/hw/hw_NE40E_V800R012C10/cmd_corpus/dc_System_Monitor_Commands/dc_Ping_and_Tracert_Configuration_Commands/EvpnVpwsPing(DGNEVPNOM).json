@@ -1,0 +1,74 @@
+{
+    "PageTitle": "ping evpn vpws",
+    "FuncDef": "The ping evpn vpws command checks the EVPN VPWS tunnel status and locates an abnormality on the EVPN VPWS tunnel in the Up state.",
+    "CLIs": [
+        "ping evpn vpws <local-ce-id> <remote-ce-id> [ end-op <endOp> ] [ -a <source-ip> | -c <count> | -exp <exp-value> | -m <interval> | -s <packet-size> | -t <timeout> | -r <reply-mode> | -tc <tc> ] *"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "local-ce-id",
+            "Info": "Specifies a local EVPN VPWS ID.\nThe value is an integer ranging from 1 to 16777215."
+        },
+        {
+            "Parameters": "remote-ce-id",
+            "Info": "Specifies a remote EVPN VPWS ID.\nThe value is an integer ranging from 1 to 16777215."
+        },
+        {
+            "Parameters": "end-op endOp",
+            "Info": "Specifies the ID of an End.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-a source-ip",
+            "Info": "Specifies a source IP address for EVPN VPWS echo request packets. If the source address is not specified, the encapsulation source-address address is preferentially used in the SRv6 BE scenario. In other scenarios, the address of the outbound interface is used as the source address of EVPN VPWS ECHO-REQUEST packets.\nThe value is in dotted decimal notation or a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-c count",
+            "Info": "Specifies the number of EVPN VPWS echo request packets to be sent.\nIf the network quality is low, you can increase the parameter value to determine the network quality based on the packet loss rate.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies the EXP value of EVPN VPWS echo request packets to be sent.\nThe value is an integer ranging from 0 to 7. The default value is 0."
+        },
+        {
+            "Parameters": "-m interval",
+            "Info": "Specifies the waiting period for sending the next EVPN VPWS echo request packet. By default, if a device does not receive an EVPN VPWS echo reply packet within 2000 ms after it sends an EVPN echo request packet, the device sends another EVPN VPWS echo request packet. This parameter specifies an EVPN echo request packet sending interval. If the network quality is low, setting this parameter greater than or equal to 2000 ms is recommended.\nThe value is an integer ranging from 1 to 10000, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-s packet-size",
+            "Info": "Specifies the size of a payload packet to be sent without the IP header or UDP head.\nThe value is an integer ranging from 80 to 9600, in bytes. The default value is 100."
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies a timeout period for waiting an EVPN VPWS echo reply packet after an EVPN VPWS echo request packet is sent.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies the mode in which the peer responds with EVPN VPWS echo reply messages.\nThe value is 2 or 4.\n2: reply with an IPv4 or IPv6 UDP packet4: reply through the control channel of the application plane\nThe default value is 2."
+        },
+        {
+            "Parameters": "-tc tc",
+            "Info": "Specifies a traffic class for ICMP Echo Request messages.\nThe value is an integer ranging from 0 to 255. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping evpn vpws 2 1",
+            "  EVPN VPWS PING FEC: Local Evpn Vpws Id = 2, Remote Evpn Vpws Id = 1 : 100  data bytes, press CTRL_C to break",
+            "    Reply from 111::100: bytes=100 Sequence=1 time=2 ms",
+            "    Reply from 111::100: bytes=100 Sequence=2 time=2 ms",
+            "    Reply from 111::100: bytes=100 Sequence=3 time=1 ms",
+            "    Reply from 111::100: bytes=100 Sequence=4 time=1 ms",
+            "    Reply from 111::100: bytes=100 Sequence=5 time=2 ms",
+            "",
+            "  --- FEC: Local CeId = 2, Remote CeId = 1 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 1/1/2 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf an EVPN VPWS LSP fails, you can run the ping evpn vpws command to check link connectivity and use the tracert evpn vpws command to locate the specific failure point.\nEVPN VPWS ping checks EVPN VPWS connectivity by sending EVPN VPWS echo request and EVPN VPWS echo reply messages. Both types of packets are UDP packets transmitted using port 3503. The receive end uses the UDP port number to identify EVPN VPWS echo request and reply packets. An EVPN VPWS echo request message carries information about the forwarding equivalence class (FEC) for an EVPN VPWS tunnel to be monitored. The EVPN VPWS echo request message is forwarded with other service packets of the same FEC along the EVPN VPWS tunnel. This procedure enables EVPN VPWS connectivity check. EVPN VPWS echo request packets are transmitted to the destination along EVPN VPWS tunnels, whereas EVPN VPWS echo reply packets are transmitted to the source through IP.\nPrecautions\nCurrently, EVPN VPWS ping supports only the MPLS public network. MPLS public networks supported include the LDP, TE, BGP LSP, SR-MPLS TE, SR-MPLS BE, SRv6 Be, and SRv6 TE Policy.\nThe EVPN VPWS ping test is terminated when:\nThe packet arrives at the egress.The TTL value of the message reaches the upper threshold."
+}

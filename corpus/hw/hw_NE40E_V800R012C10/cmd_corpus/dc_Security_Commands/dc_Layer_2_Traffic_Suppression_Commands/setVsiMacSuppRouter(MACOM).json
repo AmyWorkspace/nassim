@@ -1,0 +1,64 @@
+{
+    "PageTitle": "{ unknown-unicast-suppression | broadcast-suppression | multicast-suppression } cir (VSI view)",
+    "FuncDef": "The broadcast-suppression cir command configures the maximum volume of broadcast traffic that all sub-interfaces in a VSI can forward.\nThe undo broadcast-suppression command restores the default configuration.\nThe multicast-suppression cir command configures the maximum volume of multicast traffic that all sub-interfaces in a VSI can forward.\nThe undo multicast-suppression command restores the default configuration.\nThe unknown-unicast-suppression cir command configures the maximum volume of unknown unicast traffic that all sub-interfaces in a VSI can forward.\nThe undo unknown-unicast-suppression command restores the default configuration.\nBy default, unknown unicast, broadcast, and multicast traffic are not suppressed on sub-interfaces in a VSI.",
+    "CLIs": [
+        "{ unknown-unicast-suppression | broadcast-suppression | multicast-suppression } cir <cir-value> [ cbs <cbs-value> ] { uni-inbound | uni-outbound }",
+        "undo { unknown-unicast-suppression | broadcast-suppression | multicast-suppression } [ cir <cir-value> [ cbs <cbs-value> ] ] { uni-inbound | uni-outbound }"
+    ],
+    "ParentView": [
+        "VSI-AUTO view",
+        "VSI-DEFAULT view",
+        "VSI-STATIC view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the committed information rate (CIR), namely, maximum rate at which multicast traffic is forwarded.\nThe value is an integer ranging from 0 to 4294967295, in kbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the Committed Burst Size (CBS), which is the depth of the first token bucket.\nThe value is an integer ranging from 0 to 4294967295, in bytes.\nThe default value is determined by cir-value:\nIf cir-value is less than 100000 kbit/s, the default value of cbs-value equals cir-value x (1500/8), in bytes.If cir-value is greater than or equal to 100000 kbit/s, the default value of cbs-value equals 100000 x (1500/8), in bytes."
+        },
+        {
+            "Parameters": "uni-inbound",
+            "Info": "Indicates that the upstream traffic is suppressed.\n-"
+        },
+        {
+            "Parameters": "uni-outbound",
+            "Info": "Indicates that the downstream traffic is suppressed.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi123",
+            "[*HUAWEI-vsi-vsi123] unknown-unicast-suppression cir 100 cbs 18800 uni-inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi123",
+            "[*HUAWEI-vsi-vsi123] broadcast-suppression cir 100 cbs 18800 uni-inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi123",
+            "[*HUAWEI-vsi-vsi123] multicast-suppression cir 100 cbs 18800 uni-inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf unknown unicast, broadcast, or multicast traffic mounts on a network, the traffic consumes a great amount of network bandwidth, deteriorating network performance.\nTo prevent an unknown unicast, broadcast, or multicast traffic storm, run the { unknown-unicast-suppression | broadcast-suppression | multicast-suppression } cir command to suppress unknown unicast, broadcast, or multicast traffic on a sub-interface. If the unknown unicast, broadcast, or multicast traffic volume exceeds the cirVal, the system discards the excessive unknown unicast, broadcast, or multicast traffic.\nConfiguration Impact\nAfter unknown unicast, broadcast, or multicast traffic suppression is configured in a VSI, it takes effect on all sub-interfaces in the VSI."
+}

@@ -1,0 +1,36 @@
+{
+    "PageTitle": "l2-multicast limit dynamic-trunk-bandwidth lose-mode",
+    "FuncDef": "The l2-multicast limit dynamic-trunk-bandwidth lose-mode command enables the device to delete some Layer 2 multicast information of Down Eth-Trunk member interfaces when the required bandwidth on Up Eth-Trunk member interfaces exceeds the upper limit.\nThe undo l2-multicast limit dynamic-trunk-bandwidth lose-mode command restores the default configuration.\nBy default, the device does not delete Layer 2 multicast information of Down Eth-Trunk member interfaces even when the required bandwidth on Up Eth-Trunk member interfaces exceeds the upper limit.",
+    "CLIs": [
+        "l2-multicast limit dynamic-trunk-bandwidth lose-mode",
+        "undo l2-multicast limit dynamic-trunk-bandwidth lose-mode"
+    ],
+    "ParentView": [
+        "Eth-Trunk sub-interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 20",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[*HUAWEI-vsi-vsi0] quit",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] interface Eth-Trunk 1.2",
+            "[~HUAWEI-Eth-Trunk1.2] encapsulation dot1q-termination",
+            "[*HUAWEI-Eth-Trunk1.2] dot1q termination vid 2",
+            "[*HUAWEI-Eth-Trunk1.2] l2 binding vsi vsi0",
+            "[*HUAWEI-Eth-Trunk1.2] commit",
+            "[~HUAWEI-Eth-Trunk1.2] l2-multicast limit dynamic-trunk-bandwidth lose-mode",
+            "[*HUAWEI-Eth-Trunk1.2] commit",
+            "[~HUAWEI-Eth-Trunk1.2]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a bandwidth limit is configured for each member interface of an Eth-Trunk interface using the l2-multicast limit per-trunk-member bandwidth command in the Eth-Trunk interface view, the total bandwidth limit increases each time a new interface is added to the Eth-Trunk interface. If a member interface fails, multicast traffic on this member interface will be balanced by other Up member interfaces. Such a traffic transfer may cause the required bandwidth to exceed the upper limit on some member interfaces. If such a problem occurs on an Up member interface, original multicast traffic on this member interface may be interrupted. To prevent this problem, run the l2-multicast limit dynamic-trunk-bandwidth lose-mode command to enable the device to delete some Layer 2 multicast information of Down Eth-Trunk member interfaces when the required bandwidth on Up Eth-Trunk member interfaces exceeds the upper limit.\nConfiguration Impact\nAfter the l2-multicast limit dynamic-trunk-bandwidth lose-mode command is run, the device deletes some Layer 2 multicast information of Down Eth-Trunk member interfaces when the required bandwidth on Up Eth-Trunk member interfaces exceeds the upper limit.\nIf the l2-multicast limit dynamic-trunk-bandwidth lose-mode command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nThe l2-multicast limit dynamic-trunk-bandwidth lose-mode command configuration takes effect only if the l2-multicast limit per-trunk-member bandwidth command is configured."
+}

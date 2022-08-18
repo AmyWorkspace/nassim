@@ -1,0 +1,82 @@
+{
+    "PageTitle": "redirect ip-nexthop (NAT instance view)",
+    "FuncDef": "The redirect ip-nexthop command sets the IP address of a next hop to which packets are redirected.\nThe undo redirect command deletes the IP address of a next hop to which packets are redirected.\nBy default, no IP address of a next hop to which packets are redirected is set.",
+    "CLIs": [
+        "redirect ip-nexthop <ip-address> { inbound | outbound } <redirect-id> [ tcp | udp | <protocol-id> ] [ [ source-ip <ip-address> { <ip-mask> | <mask-length> } [ vpn-instance <vpn-name> ] ] [ source-port <port-number> ] | [ destination-ip <ip-address> { <ip-mask> | <mask-length> } [ vpn-instance <vpn-name> ] ] [ destination-port <port-number> ] ] *",
+        "undo redirect ip-nexthop <ip-address> { inbound | outbound } <redirect-id> [ tcp | udp | <protocol-id> ] [ [ source-ip <ip-address> { <ip-mask> | <mask-length> } [ vpn-instance <vpn-name> ] ] [ source-port <port-number> ] | [ destination-ip <ip-address> { <ip-mask> | <mask-length> } [ vpn-instance <vpn-name> ] ] [ destination-port <port-number> ] ] *"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates redirection to a next hop for public network-to-private network traffic.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates redirection to a next hop for private network-to-public network traffic.\n-"
+        },
+        {
+            "Parameters": "redirect-id",
+            "Info": "Specifies a redirection ID.\nThe value is an integer ranging from 1 to 16.A smaller redirect-id value indicates a higher priority."
+        },
+        {
+            "Parameters": "tcp",
+            "Info": "Indicates the TCP protocol.\n-"
+        },
+        {
+            "Parameters": "udp",
+            "Info": "Indicates the UDP protocol.\n-"
+        },
+        {
+            "Parameters": "protocol-id",
+            "Info": "Specifies a protocol number.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "source-ip ip-address",
+            "Info": "Specifies a source IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "ip-mask",
+            "Info": "Specifies the mask of a specified IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length of a specified IP address.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "vpn-instance vpn-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "source-port port-number",
+            "Info": "Specifies a source port number.\nThe value is an integer ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "destination-ip ip-address",
+            "Info": "Specifies a destination IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "destination-port port-number",
+            "Info": "Specifies a destination port number.\nThe value is an integer ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "ip-nexthop ip-address",
+            "Info": "Specifies the IPv4 address of a next hop to which packets are re-directed.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe2 id 2",
+            "[*HUAWEI-nat-instance-cpe2] redirect ip-nexthop 192.168.1.1 outbound 1 tcp source-ip 10.1.1.1 24 source-port 1001 destination-ip 2.1.1.1 24 destination-port 1002"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] redirect ip-nexthop 192.168.1.1 outbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo change the IP address of a next hop to which packets are redirected, run the redirect ip-nexthop command. This command is used when the next-hop IP address NAT traffic is the same as that used in PBR redirection.\nPrecautions\nPerform either of the following operations to configure NAT redirection:\nTo redirect all user traffic, run the redirect ip-nexthop command to specify a next-hop IP address to which user traffic is redirected. A singe redirect ip-nexthop command instance can be run for either public network-to-private network (inbound) or private network-to-public network (outbound) packets in each NAT instance.To redirect traffic of a specified user, run the redirect ip-nexthop command to specify a next hop to which packets are redirected.\nIn this situation, a maximum of 16 redirect ip-nexthop command instances can be run for public network-to-private network (inbound) packets, private network-to-public network (outbound) packets, or packets in both directions in each NAT instance. The parameter is set to identify each command instance.\nWhen the outbound parameter is specified to redirect the private network-to-public network traffic, the destination VPN name configured in this command must be the same as the VPN name of the public address pool in the NAT instance. When the inbound parameter is specified to redirect public network-to-private network traffic, the source VPN name configured in this command must be the same as the VPN name of the public address pool in the NAT instance.If the VPN names are different, the redirection rule does not take effect, and packets are forwarded based on the destination address in the packets."
+}

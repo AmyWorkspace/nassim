@@ -1,0 +1,35 @@
+{
+    "PageTitle": "exclude-port (NAT instance view)",
+    "FuncDef": "The exclude-port command enables a device to filter out packets with a specified port number or a specified range of port numbers.\nThe undo exclude-port command disables a device from filtering out packets with a specified port number or a specified range of port numbers.\nBy default, no any port or port range is filtered.",
+    "CLIs": [
+        "exclude-port { <port> [ to <port> ] } &<1-10>",
+        "undo exclude-port { <port> [ to <port> ] } &<1-10>",
+        "undo exclude-port all"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "port",
+            "Info": "Specifies the number of a single port, a start port. The start port number must be less than the end port number.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "to port",
+            "Info": "Specifies the number of an end port. The start port number must be less than the end port number.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Deletes all filtered port numbers.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] exclude-port 1 2 3 4 to 10",
+            "Warning: Excluded ports cannot be used by sessions, and the total number of available ports in a NAT pool will decrease. Continue? [Y/N]: Y"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo maintain network security and prevent virus invasion, deploy the port filtering function for NAT (CGN) services. The function prevents a port from being converted into a filtered port after NAT.\nFigure 1 shows distributed CGN deployment. The port filtering function is deployed on two network interfaces of the CR to filter packets with a destination port number of 1434 (Worm.NetKiller2003). When a packet from the public network side reaches the private network side, the CR checks the packet's destination port. If the port is within the filtered port range, the CR discards the packet. After CGN services are deployed on the private network side, a filtered port on the CR may be allocated to perform port NAT for the source port of a packet from the private network side to the public network side. After receiving a return packet, the CR finds that the packet's destination port is within the filtered port range and discards the packet. This affects user services. To resolve this issue, deploy the port filtering function for CGN services to filter out the filtered ports on the CR.\nFigure 1 Distributed CGN deployment\nConfiguration Impact\nIf the exclude-port command is run more than once, all configurations take effect. After the exclude-port command is run, the filtered ports in the NAT instance view are displayed in ascending order, and consecutive ports are displayed after combination. For example, the exclude-port 1 2 3 4 5 command is combined into exclude-port 1 to 5.\nPrecautions\nThe exclude-port command can be run to configure a maximum of 10 parameters.\nBefore running the exclude-port command, note the following points:\nPorts used by a port-level NAT server cannot be filtered. If a public network port has been filtered, the filtered port cannot be used as a port-level NAT server.When configuring or deleting filtered ports, you cannot run the exclude-port command if two filtered port lists overlap.\n\nNote the following issues after the exclude-port command is run:\nAfter the exclude-port command is run in a NAT instance, flow tables using the specified filtered ports rapidly age. After the flow tables age, new traffic cannot be assigned these ports.If a port range allocated to a user contains filtered ports, users cannot get online through these ports. If most ports in the port range allocated to a user are filtered out, the user's most traffic fails to be forwarded. If a user has gone online and traffic already exists, this issue also occurs when the exclude-port command is run."
+}

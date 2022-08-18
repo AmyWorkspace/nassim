@@ -1,0 +1,34 @@
+{
+    "PageTitle": "receive-tolerance",
+    "FuncDef": "Using the receive-tolerance command, you can set receive tolerance for all the receive keys under the keychain.\nUsing the undo receive-tolerance command, you can delete the receive-tolerance configuration.\nBy default, the receive tolerance value is 0.",
+    "CLIs": [
+        "receive-tolerance { <value> | infinite }",
+        "undo receive-tolerance"
+    ],
+    "ParentView": [
+        "Keychain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "value",
+            "Info": "Specifies the receive tolerance value in minutes for a keychain.\nThe integer value ranges from 1 to 14400."
+        },
+        {
+            "Parameters": "infinite",
+            "Info": "Specifies that the receive tolerance is infinite, so the receive key will always be valid.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] keychain huawei mode absolute",
+            "[*HUAWEI-keychain-huawei] receive-tolerance 570"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] keychain huawei mode absolute",
+            "[*HUAWEI-keychain-huawei] receive-tolerance infinite"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn keychain authentication mode, secure protocol packet transmission is provided by changing the authentication algorithm and key dynamically. Each key ID is configured with an authentication algorithm. When a key ID becomes valid, the corresponding authentication algorithm is used, ensuring the dynamic change of authentication algorithms.\nDue to the networking environment or clock asynchronization on the packet sender and receiver, packet transmission may be delayed. The receiver may receive a packet sent from the sender after its key ID for packet receiving becomes invalid. As a result, the receiver discards the packet and packet transmission is interrupted. To address such a problem, set a tolerance time to ensure that the validity period of the key ID for packet receiving on the receiver expires after all packets sent from the sender reach the receiver.\nImplementation Procedure\nAfter a tolerance time is set, the tolerance time is added to the start time and end time when the key ID for packet receiving becomes valid.\nPrecautions\nA tolerance time is required for each keychain. The set tolerance time takes effect for all key IDs in the keychain."
+}

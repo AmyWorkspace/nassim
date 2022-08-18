@@ -1,0 +1,28 @@
+{
+    "PageTitle": "access delay load-balance",
+    "FuncDef": "The access delay load-balance command configures a load balancing group for BAS interfaces.\nThe undo access delay load-balance command deletes a load balancing group for BAS interfaces.\nBy default, no load balancing group is configured for BAS interfaces.",
+    "CLIs": [
+        "access delay load-balance group <group-name> [ <delay-time> ]",
+        "undo access delay load-balance group <group-name> [ <delay-time> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay-time",
+            "Info": "Specifies a delay time for a load balancing group.\nThe value is an integer ranging from 1 to 255, in 10 ms. By default, the delay time for a load balancing group is 0 ms."
+        },
+        {
+            "Parameters": "group group-name",
+            "Info": "Specifies a name for a load balancing group.\nThe value is a string of 1 to 31 case-insensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] access delay load-balance group huawei 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf multiple physical interfaces residing on the same or different boards of a device belong to the same VLAN or user group, after a user terminal broadcasts a PPPoE Active Discovery Initiation (PADI) packet, all these interfaces reply with a PPPoE Active Discovery Offer (PADO) packet. Due to different intermediate paths or response delays, some boards may be overloaded whereas others may have low resource usages. To resolve this problem, run the access delay load-balance command to configure a load balancing group for BAS interfaces.\nIf two devices with the same configuration are deployed, users can go online from any of the two devices that work in master/backup mode. If load balancing groups are configured on both the master and backup devices, run the access delay load-balance group <group-name> <delay-time> command to configure a response delay policy for the load balancing group on the backup device. In this way, even if an interface on the backup device is selected in a Hash operation, the interface will not respond to user login requests until the time specified by delay-time elapses. This ensures that users go online preferentially through an interface on the master device. Users will go online through an interface on the backup device only when the master device is faulty.\nFollow-up Procedure\nRun the access-delay <delay-time> load-balance-group <group-name> command in the BAS interface view to add BAS interfaces to the load balancing group. BAS interfaces in the same load balancing group either immediately respond to or delay responding to the received login requests for a configured period of time in accordance with MAC-address-based Hash results to implement load balancing.\nIf the interface through which users go online is selected in a Hash operation, the interface responds to the received login requests after the delay time configured for the load balancing group elapses.If the interface through which users go online is not selected in a Hash operation, the interface responds to the received login requests after the delay time configured for the load balancing group plus the delay time configured for the BAS interface elapses.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

@@ -1,0 +1,76 @@
+{
+    "PageTitle": "pim ipv6 bfd",
+    "FuncDef": "The pim ipv6 bfd command enables BFD on an interface and configures BFD parameters.\nThe undo pim ipv6 bfd command disables BFD on an interface.\n\nBy default, BFD for IPv6 PIM is disabled on an interface.",
+    "CLIs": [
+        "pim ipv6 bfd enable",
+        "pim ipv6 bfd { min-tx-interval <min-tx-interval-val> | min-rx-interval <min-rx-interval-val> | detect-multiplier <detect-multiplier-val> } *",
+        "undo pim ipv6 bfd enable",
+        "undo pim ipv6 bfd { min-tx-interval <min-tx-interval-val> | min-rx-interval <min-rx-interval-val> | detect-multiplier <detect-multiplier-val> } *",
+        "undo pim ipv6 bfd { min-tx-interval | min-rx-interval | detect-multiplier } *"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-tx-interval min-tx-interval-val",
+            "Info": "Specifies the minimum interval for sending PIM IPv6 BFD packets.\nThe value is an integer ranging from 3 to 20000, in milliseconds."
+        },
+        {
+            "Parameters": "min-rx-interval min-rx-interval-val",
+            "Info": "Specifies the minimum interval for receiving PIM IPv6 BFD packets.\nThe value is an integer ranging from 3 to 20000, in milliseconds."
+        },
+        {
+            "Parameters": "detect-multiplier detect-multiplier-val",
+            "Info": "Specifies the local detection multiplier of PIM IPv6 BFD packets.\n\nFor a stable link, you can set the detection multiplier to a large value to avoid frequent link detection.\nFor an unstable link, a small detection multiplier may cause BFD session flapping. Therefore, it is recommended that you set the detection multiplier to a large value.\nThe value is an integer ranging from 3 to 50. The default value is 3."
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Specifies that enables BFD for IPv6 PIM on an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] pim ipv6 sm",
+            "[*HUAWEI-GigabitEthernet1/0/0] pim ipv6 bfd enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] pim ipv6 bfd min-tx-interval 200 min-rx-interval 200 detect-multiplier 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nTo minimize the impact of a fault on services and improve network availability, a network device is required to fast detect a communication fault between adjacent devices so that the upper layer protocol can rectify the fault to ensure normal services.\nIn multicast applications, if the current Designated router (DR) or Assert winner at the shared network segment is faulty, other PIM neighbors start a new DR election or Assert election after the neighbor relationship or the Assert timer times out. Consequently, multicast data transmission is discontinued. The discontinue period, usually in seconds, is longer than the timeout period of the neighbor relationship or the Assert timer.\nBFD can detect the status of the link at the shared network segment within milliseconds and fast respond to the fault on the PIM neighbor. If the interface configured with BFD for IPv6 PIM does not receive any BFD packets from the current DR or Assert winner within a detection period, it considers that a fault occurs on the current DR or Assert winner. BFD fast notifies the Routing Management (RM) of the session status and the RM then notifies PIM of the session status. PIM triggers a new DR election or Assert election immediately rather than waits until the neighbor relationship or the Assert timer times out. This reduces the discontinue period of multicast data transmission and thus improves the reliability of multicast data transmission.\nIf you need to control detection parameters of PIM IPv6 BFD packets, run the pim ipv6 bfd command to configure the sending interval, receiving interval, and local detection multiplier for PIM IPv6 BFD packets.min-tx-interval, min-rx-interval, and detect-multiplier parameters can be configured separately on two ends, that is, the two link ends can send or receive BFD packets at different rates. If there is no special requirement for the detection period and the link is stable, you are recommended to configure the same parameter values for the routing devices of the same performance at the shared network segment.\n\nPrerequisites\n\nThe multicast ipv6 routing-enable command is run in the public network instance view.\nBFD for IPv6 PIM depends on the BFD protocol. Therefore, you need first to enable BFD globally to validate the BFD for IPv6 PIM function.\nBefore configuring BFD for IPv6 PIM, enable IPv6 PIM-SM in the interface view. If the undo pim ipv6 sm command is run, IPv6 PIM-SM is disabled and the BFD for IPv6 PIM function is removed from the interface at the same time.\nThe pim ipv6 bfd command and the pim ipv6 bfd enable command need to be used together. To validate PIM IPv6 BFD, ensure that a BFD session has been set up and the session is in the Up state.\n\nConfiguration Impact\n\nThe PIM IPv6 BFD parameters setting by using the pim ipv6 bfd command take effect only after the pim ipv6 bfd enable command is run.\nAfter BFD parameters are configured, PIM provides the address to be detected, minimum sending interval and receiving interval of PIM IPv6 BFD packets, and local detection multiplier for BFD. The two ends enabled with BFD then negotiate the actual sending interval and receiving interval, and the detection period based on these configured parameters. During the detection phase, BFD notifies the RM of the BFD session status and the RM then notifies PIM of the session status.If a link fault occurs, BFD fast notifies the RM of the session status and the RM then notifies PIM of the session status. The PIM protocol deletes the status of the faulty interface, triggers a new DR or Assert election, and restores the forwarding of multicast data to the downstream interface. This shortens the period of multicast traffic interruption caused by the interface fault.\n\nPrecautions\n\nThe two ends negotiate the actual sending interval and receiving interval, and detection period of PIM IPv6 BFD packets based on the following negotiation mechanism:\n\nActual sending interval and receiving interval of PIM IPv6 BFD packets:\nActual sending interval = max (local min-tx-interval, remote min-rx-interval)\nActual receiving interval = max (remote min-tx-interval, local min-rx-interval)\nActual detection period = remote detect-multiplier x max (remote min-tx-interval, local min-rx-interval)\n\nBFD parameters can be configured on both the receive and transmit ends, and the configurations on the two ends are both effective.\nIf a large parameter is set, BFD will take a long time to detect a fault on a link. During this period, packets may be discarded. Therefore, adjust PIM IPv6 BFD parameters according to actual network requirements.\nThis command is applicable to only non-broadcast multiple access (NBMA) and broadcast interfaces rather than Point-to-point (P2P) interfaces.\nBFD for IPv6 PIM is applicable to IPv6 PIM-SM/SSM networks of the public network instance."
+}

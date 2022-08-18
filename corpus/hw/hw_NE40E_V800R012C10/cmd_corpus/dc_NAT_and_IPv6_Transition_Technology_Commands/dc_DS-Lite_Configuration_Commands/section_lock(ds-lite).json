@@ -1,0 +1,28 @@
+{
+    "PageTitle": "section lock (DS-Lite instance address pool view)",
+    "FuncDef": "The section lock command locks a specified address range in a DS-Lite instance address pool.\nThe undo section lock command unlocks a specified address range in a DS-Lite instance address pool.\nBy default, no address range is locked in a DS-Lite instance address pool.",
+    "CLIs": [
+        "section <section-id> lock",
+        "undo section <section-id> lock"
+    ],
+    "ParentView": [
+        "DS-Lite instance address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "section-id",
+            "Info": "Specifies an address range number.\nThe value is an integer ranging from 0 to 15."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ds-lite instance cpe1 id 1",
+            "[*HUAWEI-ds-lite-instance-cpe1] ds-lite address-group cpe1 group-id 1",
+            "[*HUAWEI-ds-lite-instance-cpe1] section 0 1.1.1.1 mask 24",
+            "[*HUAWEI-ds-lite-instance-cpe1] section 1 1.1.2.1 mask 24",
+            "[*HUAWEI-ds-lite-instance-cpe1-ds-lite-address-group-cpe1] section 1 lock"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the ds-lite outbound command is run in the DS-Lite instance view to configure a DS-Lite conversion policy, you can run the section command to add an address segment to the address pool. However, using the undo section command to delete an address segment is not allowed.\nDue to reasons such as service planning, an address segment sometimes needs to be deleted from a DS-Lite address pool. In this case, run the section lock command to lock the address segment first. Then, run the reset nat user dslite-instance address-group command to forcibly make all the DS-Lite users whose IP addresses are in the address segment to go offline. After all the users using the public IP address in the address segment go offline, that is, the public IP address is not allocated to any user, run the undo section command to delete the address segment.\nConfiguration Impact\nAfter an address segment is locked, all the IP addresses in the address segment cannot be allocated to users.\nPrecautions\nThis command is applicable only to the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S.\nAfter the section lock command is run in a DS-Lite instance address pool, the public network resources allocated from this address segment will not be automatically reclaimed, and the available public network resources will not be allocated to new online users. During calculation of the address pool usage, the public network resources that have not been allocated are also counted in the total public network resources but will not be allocated to new online users. The calculation formula of the address pool usage is as follows: Number of allocated public network resources / Total number of public network resources (the public network resources here indicate the public IP addresses or ports). The obtained address pool usage may not reflect the real address allocation status and may affect the address pool usage query result and the corresponding threshold-crossing alarm. After the section lock command is run, you are advised to run the reset nat user dslite-instance address-group command to forcibly make all DS-Lite users with the public IP address in the address segment to go offline as soon as possible. After ensuring that public IP address in the address segment is not allocated to any user, run the undo section command to delete the address segment.\nIn the inter-chassis backup scenario, the section lock command can be run after both the master and slave chassis are configured with the section lock command. After the operation is performed, run the undo section lock command on both the master and slave chassis to ensure configuration consistency."
+}

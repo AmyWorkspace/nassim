@@ -1,0 +1,58 @@
+{
+    "PageTitle": "mpls l2vpn oam-mapping 1ag md ma",
+    "FuncDef": "The mpls l2vpn oam-mapping 1ag md ma command enables the mapping between the AC status and the PSN status.\nThe undo mpls l2vpn oam-mapping command disables the mapping between the AC status and the PSN status.\nBy default, the mapping between the AC status and the PSN status is disabled.",
+    "CLIs": [
+        "mpls l2vpn oam-mapping 1ag md <md-name> ma <ma-name>",
+        "undo mpls l2vpn oam-mapping [ 1ag md <md-name> ma <ma-name> ]"
+    ],
+    "ParentView": [
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ma ma-name",
+            "Info": "Specifies the name of a maintenance association.\nThe value is a string of 1 to 43 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "1ag",
+            "Info": "Enables IEEE802.1ag-based fault detection and notification. 1ag can be configured only in the GE sub-interface, or Eth-Trunk sub-interface view.\nIf 1ag is not configured, this command applies only to low-speed interfaces.\n-"
+        },
+        {
+            "Parameters": "md md-name",
+            "Info": "Specifies the name of a maintenance domain.\nThe value is a string of 1 to 43 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 20",
+            "[*HUAWEI-vsi-vsi1-ldp] peer 2.2.2.2",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 10",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] l2 binding vsi vsi1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map vsi vsi1",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 2 interface GigabitEthernet 1/0/0.1 outward",
+            "[*HUAWEI-md-md1-ma-ma1] quit",
+            "[*HUAWEI-md-md1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls l2vpn oam-mapping 1ag md md1 ma ma1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn MPLS L2VPN scenarios, PEs and CEs do not advertise their active/standby status and link status to each other. PW OAM and AC OAM need to be configured to monitor PW and AC status respectively. OAM mapping is enabled on the PEs to associate PW OAM with AC OAM.\nThe mpls l2vpn oam-mapping command can be used on a low-speed interface only when VLL or PWE3 has been configured on the interface.\nThe mpls l2vpn oam-mapping1ag md md-name ma ma-name command can be run on an Ethernet interface only after VLL or PWE3 is configured and Ethernet OAM is enabled or VPLS and CFM services are configured on the interface.\nAfter the mpls l2vpn oam-mapping command is configured on a PE, AC status will be associated with PW status. If a fault occurs on an AC, the local PE will notify the remote PE of the AC fault. If a fault occurs on a PW, the local PE will notify the local CE of the fault. Timely fault notification allows PEs and CEs to coordinate with each other in end-to-end FRR."
+}

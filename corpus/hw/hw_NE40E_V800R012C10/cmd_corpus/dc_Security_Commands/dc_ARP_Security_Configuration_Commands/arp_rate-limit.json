@@ -1,0 +1,39 @@
+{
+    "PageTitle": "arp rate-limit",
+    "FuncDef": "The arp rate-limit command configures the rate limit of ARP VLAN CAR for ARP packets on an interface.\nThe undo arp rate-limit command restores the default configuration.\nBy default, the rate limit of ARP VLAN CAR for ARP packets configured on an interface is 20pps.",
+    "CLIs": [
+        "arp rate-limit <rate>",
+        "undo arp rate-limit"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "40GE interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "VLANIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "rate",
+            "Info": "Specifies the rate limit of ARP VLAN CAR for ARP packets configured on an interface. When the threshold is reached, perform the CAR operation for the packets.\nThe value is an integer, in pps.\nThe value is 0 or an integer ranging from 21 to 1024. If the value is 0, ARP VLAN CAR is not performed for ARP packets to be sent to the CPU."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] arp rate-limit 50"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] arp rate-limit 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the rate limit of ARP VLAN CAR for ARP packets on an interface, run the arp rate-limit command.\nIf the rate of ARP packets on an interface does not exceed the rate limit of CP-CAR, ARP VLAN CAR is not performed on the interface.If the rate of ARP packets on an interface exceeds the rate limit of CP-CAR, ARP VLAN CAR is triggered on the interface, and two-level rate limiting is performed for ARP packets to be sent to the CPU.\n After ARP VLAN CAR is triggered on an interface, if the rate at which ARP packets are sent to the CPU does not exceed the rate limit of ARP VLAN CAR, CP-CAR is performed for all the ARP packets that are allowed to pass through. If the rate of ARP packets to be sent to the CPU exceeds the rate limit of ARP VLAN CAR, the excess packets are discarded, and CP-CAR is performed for the ARP packets that are allowed to pass through. CP-CAR is then performed for ARP packets that have experienced ARP VLAN CAR. If the rate of ARP packets to be sent to the CPU does not exceed the rate limit of CP-CAR, all ARP packets are sent to the CPU. If the rate of ARP packets to be sent to the CPU exceeds the rate limit of CP-CAR, the excess ARP packets are discarded, and the ARP packets that are allowed to pass through are sent to the CPU.\nIf arp rate-limit 0 is specified in the command, ARP VLAN CAR is not performed for ARP packets, and ARP packets are simply restricted using CP-CAR.\n\nConfiguration Impact\nIf you configure a rate limit (1024 pps, for example) which is larger than the default rate limit of CP-CAR, the configured ARP VLAN CAR cannot take effect. CP-CAR can be configured by running the car arp cir cir-value command. For details, see Configuring the CAR. The configuration of CP-CAR can be checked by running the display cpu-defend car arp statistics command.\nYou can run the display arp rate-limit interface command to check the rate limit of ARP VLAN CAR configured on an interface.\nPrecautions\nARP VLAN CAR (arp rate-limit) and BAS are mutually exclusive."
+}

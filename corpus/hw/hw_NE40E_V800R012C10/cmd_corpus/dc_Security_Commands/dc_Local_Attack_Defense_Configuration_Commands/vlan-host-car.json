@@ -1,0 +1,37 @@
+{
+    "PageTitle": "vlan-host-car",
+    "FuncDef": "The vlan-host-car command sets the CAR for CPU-destined packets that carry the same VLAN ID on the user side.\nThe undo vlan-host-car command restores the default settings.\nBy default, the CIR of the CPU-destined packets with VLAN tags of the same VLAN ID on the user side is 5120 kbit/s, the PIR is 5120 kbit/s, the CBS is 2560000 bytes, and the PBS is 2560000 bytes.",
+    "CLIs": [
+        "vlan-host-car cir <cir-value> [ pir <pir-value> ] [ cbs <cbs-value> pbs <pbs-value> ]",
+        "undo vlan-host-car"
+    ],
+    "ParentView": [
+        "Slot view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the PIR.\nThe value is an integer ranging from 8 to 4294967295, in kbit/s.Setting the PBS to be greater than or equal to the CBS."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the CBS.\nThe value is an integer ranging from 10000 to 4294967295, in bytes."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies the PBS.\nThe value is an integer ranging from 0 to 4294967295, in bytes. Setting the PBS to a value smaller than the CBS is recommended so that traffic conforming to the CBS can be sent to the CPU."
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR.\nThe value is an integer ranging from 8 to 4294967295, in kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[~HUAWEI-slot-1] vlan-host-car cir 5000 pir 7000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen any of the following problems occurs, you can set the CAR for CPU-destined packets that carry the same VLAN ID on the user side through this command.\nTraffic congestion occurs on a link due to excessive CPU-destined packets that carry the same VLAN ID, which affects the processing efficiency of the CPU.\nCertain packets are lost when the CAR is improperly set for CPU-destined packets that carry the same VLAN ID.\nConfiguration Impact\nWhen this command is configured and multiple packets are sent to the CPU:\nIf these packets are single-tagged VLAN packets, packets with the same VLAN ID share the VLAN-Host-CAR.\nIf these packets are double-tagged VLAN packets, packets with the outer and inner VLAN IDs being respectively the same share the VLAN-Host-CAR.\nPrecautions\nIf the effective CIR is not the same as the configured CIR, run the display cpu-defend vlan-host-car auto-adjust statistics slot slot-id command to check whether automatic bandwidth adjustment is implemented."
+}

@@ -1,0 +1,40 @@
+{
+    "PageTitle": "mpls l2vpn multi-homing trigger efm",
+    "FuncDef": "The mpls l2vpn multi-homing trigger efm command associates EFM with an AC interface's blocked state.\nThe undo mpls l2vpn multi-homing trigger efm command restores the default configuration.\nBy default, EFM is not associated with an AC interface's blocked state.",
+    "CLIs": [
+        "mpls l2vpn multi-homing trigger efm",
+        "undo mpls l2vpn multi-homing trigger efm"
+    ],
+    "ParentView": [
+        "50GE interface view",
+        "40GE interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100GE interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal bgp multi-homing",
+            "[*HUAWEI-vsi-vsi1-bgp] route-distinguisher 192.168.1.1:1",
+            "[*HUAWEI-vsi-vsi1-bgp] site name company1",
+            "[*HUAWEI-vsi-vsi1-bgp-site-company1] site-id 20",
+            "[*HUAWEI-vsi-vsi1-bgp-site-company1] quit",
+            "[*HUAWEI-vsi-vsi1-bgp] quit",
+            "[*HUAWEI-vsi-vsi1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] l2 binding vsi multi-homing-site company1",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vpn multi-homing trigger efm"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn VPLS multi-homing scenarios, EFM is generally deployed between a CE and a PE. If the PE's AC interface is blocked, the CE cannot detect the blocked state and continues sending traffic to the PE, causing a waste of forwarding resources. To associate EFM with the AC interface's blocked state, run the mpls l2vpn multi-homing trigger efm command on the PE. If the PE's AC interface is blocked, it sends EFM OAM packets carrying the blocked state to the CE. Upon receipt, the CE sets the protocol status of the EFM interface Down so that it will no longer send traffic to the blocked AC interface, saving forwarding resources.\nPrerequisites\nA multi-homing site has been bound to an AC interface using the l2 binding vsi multi-homing-site command.EFM has been enabled using the efm enable (interface view) command.\n\nPrecautions\nIn VPLS multi-homing scenarios, EFM applies only to main interfaces. Therefore, you must run the mpls l2vpn multi-homing trigger efm command on main interfaces."
+}

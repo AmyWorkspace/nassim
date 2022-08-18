@@ -1,0 +1,28 @@
+{
+    "PageTitle": "loop-free-alternate",
+    "FuncDef": "The loop-free-alternate command enables OSPF/OSPFv3 IP FRR and generates a loop-free backup route. This command takes effect whether or not the same route is advertised by multiple nodes.\nThe undo loop-free-alternate command disables OSPF/OSPFv3 IP FRR.\nBy default, FRR is disabled.",
+    "CLIs": [
+        "loop-free-alternate",
+        "undo loop-free-alternate"
+    ],
+    "ParentView": [
+        "OSPF FRR view",
+        "OSPFv3 FRR view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3",
+            "[*HUAWEI-ospfv3-1] frr",
+            "[*HUAWEI-ospfv3-1-frr] loop-free-alternate"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf",
+            "[*HUAWEI-ospf-1] frr",
+            "[*HUAWEI-ospf-1-frr] loop-free-alternate"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLoop Free Alternate (LFA) is a method of implementing FRR. With LFA, a device can generate a loop-free backup link for FRR. OSPF IP FRR takes effect only after the loop-free-alternate command is run.\nOSPF LFA FRR uses the SPF algorithm to calculate the shortest path to the destination node, with each neighbor that provides a backup link as the root node. The backup next hop is node-based, which applies to single-node routing scenarios. As networks are increasingly diversified, two ABRs or ASBRs are deployed to improve network reliability. In this case, OSPF FRR in a scenario where multiple nodes advertise the same route is needed. For example, in the feature description \"OSPF IP FRR\", figure 4 shows OSPF FRR in the scenario where multiple nodes advertise the same route, Device B and Device C function as ABRs to forward area 0 and area 1 routes. Device E advertises an intra-area route. Upon receipt of the route, Device B and Device C translate it to a Type 3 LSA and flood the LSA to area 0. After OSPF FRR is enabled on Device A, Device A considers Device B and Device C as its neighbors. Without a fixed neighbor as the root node, Device A fails to calculate an FRR backup next hop. To address this problem, a virtual node is simulated between Device B and Device C and used as the root node of Device A, and Device A uses the LFA algorithm to calculate the backup next hop. This solution converts multi-node routing into single-node routing.\nTo implement OSPF IP FRR over specified routes, run the frr-policy route route-policy route-policy-name command to configure an OSPF IP FRR filtering policy so that only the OSPF backup routes that match the filtering conditions of the policy can be added to the forwarding table. If the primary link fails, OSPF can switch traffic to the backup link immediately.\nThe OSPFv3 FRR view is the same as that described in.\nPrerequisites\nAn OSPF FRR view has been created and the system has entered the OSPF FRR view using the frr command.\nAn OSPFv3 FRR view has been created and the system has entered the OSPFv3 FRR view using the frr command.\nPrecautions\nTo prevent a link over which important services are transmitted from being calculated for the backup link during route selection, run the ospf frr block command on the interface connecting to the link before configuring OSPF IP FRR.\nTo prevent a link over which important services are transmitted from being calculated for the backup link during route selection, run the ospfv3 frr block command on the interface connecting to the link before configuring the OSPFv3 IP FRR function."
+}

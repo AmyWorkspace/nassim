@@ -1,0 +1,35 @@
+{
+    "PageTitle": "ti-lfa (IS-IS FRR view)",
+    "FuncDef": "The ti-lfa command enables IS-IS topology independent-loop free alternate (TI-LFA).\nThe undo ti-lfa command disables IS-IS TI-LFA.\nBy default, IS-IS TI-LFA is disabled.",
+    "CLIs": [
+        "ti-lfa [ level-1 | level-2 | level-1-2 ]",
+        "undo ti-lfa [ level-1 | level-2 | level-1-2 ]"
+    ],
+    "ParentView": [
+        "IS-IS FRR view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "level-1",
+            "Info": "Enables or disables IS-IS Level-1 TI-LFA.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Enables or disables IS-IS Level-2 TI-LFA.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Enables or disables IS-IS Level-1-2 TI-LFA.\nIf no level is specified, IS-IS Level-1-2 TI-LFA is enabled by default.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] frr",
+            "[*HUAWEI-isis-1-frr] loop-free-alternate level-2",
+            "[*HUAWEI-isis-1-frr] ti-lfa level-2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn some LFA or RLFA scenarios, the P space and Q space do not share nodes or have direct neighbors. If a link or node fails, no backup path can be calculated, causing traffic loss and a failure to meet reliability requirements.\nTo satisfy network reliability requirements, TI-LFA is configured to pre-calculate backup links. If a fault occurs, traffic rapidly switches to a backup link before convergence on the control plane is complete. The TI-LFA algorithm is used to calculate the backup links. This algorithm excludes the next hop on the primary LSP or the primary link, re-calculates a shortest path tree (also called a post-convergence tree), and selects a P node and a Q node along the tree. Based on the P and Q node information (see TI-LFA FRR), a label stack for a backup tunnel is generated, directing traffic to be forwarded to the Q node through the tunnel. Upon receipt of a packet, the Q node searches the SR label forwarding table for traffic forwarding based on labels in the packet header.\nPrerequisites\nGlobal Segment Routing has been enabled using the segment-routing command.\nFRR has been enabled and the FRR view has been displayed using the frr command, and IS-IS LFA has been enabled using the loop-free-alternate command.\nPrecautions\nThe level specified in the ti-lfa command depends on the level configured in the loop-free-alternate command. TI-LFA can take effect in a level-specific IS-IS area only after the level-specific LFA is enabled.\nTo allow the TI-LFA function to take effect, ensure that TI-LFA is enabled on an IS-IS interface. By default, TI-LFA is enabled on an IS-IS interface automatically."
+}

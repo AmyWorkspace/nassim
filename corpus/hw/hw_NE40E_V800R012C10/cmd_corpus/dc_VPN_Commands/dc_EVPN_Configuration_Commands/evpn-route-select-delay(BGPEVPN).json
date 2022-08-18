@@ -1,0 +1,31 @@
+{
+    "PageTitle": "route-select delay (BGP-EVPN address family view)",
+    "FuncDef": "The route-select delay command configures a route selection delay.\nThe undo route-select delay command deletes the configured route selection delay.\nBy default, the delay-value value is 0, indicating that route selection is not delayed.",
+    "CLIs": [
+        "route-select delay <delay-value> [ exclusive-eviad ]",
+        "undo route-select delay",
+        "undo route-select delay <delay-value> [ exclusive-eviad ]"
+    ],
+    "ParentView": [
+        "BGP-EVPN address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay-value",
+            "Info": "Specifies a route selection delay.\nThe value is an integer ranging from 0 to 3600, in seconds."
+        },
+        {
+            "Parameters": "exclusive-eviad",
+            "Info": "Indicates the route selection delay function for non-EVI AD routes. If exclusive-eviad is not configured and the route-select delay command is run, a device delays route selection for both Layer 3 and EVI AD routes. After exclusive-eviad is configured, route selection is delayed only for Layer 3 routes. This parameter can be specified if users want EVPN VPWS not to be affected after the route selection delay function is enabled.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 65001",
+            "[*HUAWEI-bgp] l2vpn-family evpn",
+            "[*HUAWEI-bgp-af-evpn] route-select delay 300"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen primary and backup paths exist, packets may get lost after traffic switches back to the primary path from the backup path. To address this problem, run the route-select delay command on device running FRR to configure a route selection delay. An appropriate delay ensures that traffic switches back to the primary path after refreshing forwarding entries.\nPrecautions\nIf the route-select delay command is run more than once, the later configuration overrides the previous one. If the route selection delay is reconfigured and the delay timer has started, the newly configured route selection delay will instantly take effect.\nA route selection delay takes effect only on routes received from peers, not on the routes that are imported locally.\nundo route-select delay command is valid only in the BGP-EVPN address family view.After the route-select delay command is run in the BGP-EVPN address family view, the route selection delay function applies only to IP prefix and EVI AD routes"
+}

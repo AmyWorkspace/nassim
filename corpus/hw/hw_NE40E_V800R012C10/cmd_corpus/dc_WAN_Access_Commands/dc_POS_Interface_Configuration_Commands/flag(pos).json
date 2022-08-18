@@ -1,0 +1,70 @@
+{
+    "PageTitle": "flag (POS interface view)",
+    "FuncDef": "The flag command configures overhead bytes to be added to the packet on a POS interface.\nThe undo flag command restores the default setting.\nBy default, values of j1 and j0 on a POS interface are NetEngine, the value of c2 on a POS interface is 0x16, in hexadecimal notation.",
+    "CLIs": [
+        "flag c2 <c2-value>",
+        "flag j1 { 1byte-mode <1byte-value> | 16byte-mode <16byte-value> | 64byte-or-null-mode [ <64byte-value> ] | peer }",
+        "flag j0 { 1byte-mode <1byte-value> | 16byte-mode <16byte-value> | 64byte-or-null-mode [ <64byte-value> ] | peer }",
+        "undo flag c2",
+        "undo flag j0",
+        "undo flag j1",
+        "undo flag"
+    ],
+    "ParentView": [
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "j1",
+            "Info": "Indicates the higher-order VC-N path trace byte. It is a higher-order path overhead byte for identifying a higher-order path access point. Like sending the J0 byte, a sender sends this byte periodically to keep the connection with a receiver.\n-"
+        },
+        {
+            "Parameters": "1byte-mode",
+            "Info": "Indicates that the frame format is 1-byte.\n-"
+        },
+        {
+            "Parameters": "1byte-value",
+            "Info": "Specifies the value of the j0 or j1 byte when the 1byte-mode mode is used.\nThe value is an integer that ranges from 0 to 127."
+        },
+        {
+            "Parameters": "16byte-mode",
+            "Info": "Indicates that the frame format is 16-byte.\n-"
+        },
+        {
+            "Parameters": "16byte-value",
+            "Info": "Specifies the value of the j0 or j1 byte when the 16byte-mode mode is used.\nThe value is a string of 1 to 15 characters."
+        },
+        {
+            "Parameters": "64byte-or-null-mode",
+            "Info": "Indicates the frame format, which can be 64-byte or null.\n-"
+        },
+        {
+            "Parameters": "64byte-value",
+            "Info": "Specifies the value of the j0 or j1 byte when the 64byte-or-null-mode mode is used.\nThe value is a string of 1 to 62 characters or null."
+        },
+        {
+            "Parameters": "peer",
+            "Info": "Indicates that the value on the local end is the same as that on the peer end.\n-"
+        },
+        {
+            "Parameters": "j0",
+            "Info": "Indicates the regenerator section trace byte. It is a section overhead byte for identifying a section access point. A sender sends this byte periodically to keep the connection with a receiver.\n-"
+        },
+        {
+            "Parameters": "c2 c2-value",
+            "Info": "Specifies the path signal label byte. It is a higher-order path overhead byte for identifying the multiplexing structure and payload attribute in a VC frame.\nThe value of c2 is configured as an integer, and displayed in both decimal and hexadecimal formats in a configuration file.\nThe value is an integer ranging from 0 to 255."
+        },
+        {
+            "Parameters": "upgrade",
+            "Info": "Update flag j0 or j1.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface pos 1/0/0",
+            "[~HUAWEI-Pos1/0/0] flag j0 peer"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSDH frames contain various overhead bytes that are used to implement operation and maintenance functions such as hierarchical management of SDH transport networks. J0 and J1 are used for interoperability between devices of different countries, regions, or manufacturers.\nConfiguration Impact\nOn a carrier's network, the J0 byte can be any character; at the border between networks managed by different carriers, the J0 bytes on the sender and receiver must be identical. J0 helps locate and rectify faults in advance and reduces the network recovery time.\nPrecautions\nC2 and J1 bytes on the sender and receiver must be identical."
+}

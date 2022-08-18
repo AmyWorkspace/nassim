@@ -1,0 +1,70 @@
+{
+    "PageTitle": "import-route (OSPFv3 view)",
+    "FuncDef": "The import-route command imports external routes. Before the routes are imported, the OSPFv3 process of the route must be active.\nThe undo import-route command cancels the configuration.\nBy default, no route of other protocols is imported.",
+    "CLIs": [
+        "import-route { direct | static | bgp [ permit-ibgp ] | unr } [ { cost <cost> | inherit-cost } | type <type> | tag <tag> | { route-policy <route-policy-name> | route-filter <route-filter-name> } ] *",
+        "undo import-route { direct | static | bgp | unr }"
+    ],
+    "ParentView": [
+        "OSPFv3 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "direct",
+            "Info": "Imports direct routes.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Imports static routes.\n-"
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Imports BGP routes.\nFor an OSPF process that is not bound to a VPN instance or is bound to a VPN instance but the vpn-instance-capability simple command is run, the parameter imports only EBGP routes.\n-"
+        },
+        {
+            "Parameters": "permit-ibgp",
+            "Info": "Imports IBGP routes.\nFor an OSPF process that is not bound to a VPN instance or is bound to a VPN instance but the vpn-instance-capability simple command is run, importing IBGP routes may cause routing loops. Therefore, exercise caution when using this parameter.\n-"
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Imports user network routes.\n-"
+        },
+        {
+            "Parameters": "cost cost",
+            "Info": "Specifies the cost of the imported route.\nThe value is an integer ranging from 1 to 16777214."
+        },
+        {
+            "Parameters": "inherit-cost",
+            "Info": "Indicates that the imported route inherits the original cost.\n-"
+        },
+        {
+            "Parameters": "type type",
+            "Info": "Indicates the type of the imported route.\nThe value can be 1 or 2.\n1: Type 1 external route2: Type 2 external route\nThe default value is 2."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies the tag value of the imported VPN routes.\nThe value is an integer ranging from 0 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Imports only the route that matches the specified route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter. Only the routes that match the route-filter can be imported.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] import-route isis 1 type 2 cost 50"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 100",
+            "[*HUAWEI-ospfv3-100] import-route ospfv3 160"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA route-policy must have been created using the route-policy command when you run the import-route command to import external routes based on the route-policy.\nAfter a route-policy is configured, the OSPFv3 process imports only the routes that match the policy. This prevents devices from receiving unneeded routes.\nFor an OSPF process that is not bound to a VPN instance or is bound to a VPN instance but the vpn-instance-capability simple command is run, only EBGP routes are imported after the import-route bgp command is configured. IBGP routes are also imported after the import-route bgp permit-ibgp command is configured. If IBGP routes are imported, routing loops may occur. In this case, run the preference (OSPFv3) and preference (BGP) commands to prevent loops by specifying priorities of OSPFv3 and BGP routes. If IBGP routes need to be imported, configure the import-route bgp permit-ibgp command, and run the preference (OSPFv3) and preference (BGP) commands to set the priority of OSPFv3 ASE routes lower than that of IBGP routes (priority value of OSPFv3 ASE routes larger than that of IBGP routes).\nFor an OSPF process that is bound to a VPN instance and the vpn-instance-capability simple command is not run, configuring the import-route bgp command imports both EBGP routes and IBGP routes, no matter whether the import-route bgp permit-ibgp command is configured. If the import-route bgp permit-ibgp and default-route-advertise (OSPFv3) commands are both configured, the active IBGP default routes can be imported into OSPFv3.\nFollow-up Procedure\nAfter the import-route command is used, you can run the display ospfv3 routing command to view the OSPFv3 routing table where external routes are imported."
+}

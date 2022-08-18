@@ -1,0 +1,61 @@
+{
+    "PageTitle": "ntp-service broadcast-server",
+    "FuncDef": "The ntp-service broadcast-client command configures a device to work in NTP broadcast client mode.\nThe undo ntp-service broadcast-client command removes a device from NTP broadcast client mode.\nThe ntp-service broadcast-server command configures a local device to work in NTP broadcast server mode.\nThe undo ntp-service broadcast-server command removes a device from NTP broadcast server mode.\nBy default, the broadcast service is not configured.",
+    "CLIs": [
+        "ntp-service broadcast-server [ authentication-keyid <key-id> | version <version-number> | port <port-number> ] *",
+        "ntp-service broadcast-client",
+        "undo ntp-service broadcast-server",
+        "undo ntp-service broadcast-client"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "Loopback interface view",
+        "POS interface view",
+        "Remote-AP interface view",
+        "Tunnel interface view",
+        "VLANIF interface view",
+        "Virtual template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "authentication-keyid key-id",
+            "Info": "Specifies an authentication key number used to transmit message to broadcast clients.\nThe value is an integer ranging from 1 to 4294967295 (version 1 to 3), 1 to 65535 (version 4). By default, no authentication key is configured."
+        },
+        {
+            "Parameters": "version version-number",
+            "Info": "Sets an NTP version number.\nThe value is an integer ranging from 1 to 4. The default value is 3."
+        },
+        {
+            "Parameters": "port port-number",
+            "Info": "Specifies the port number to be used as the destination port in the NTP broadcast packet.\nThe number is an integer that can be 123, or ranges from 1025 to 65535. The default value is 123."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ntp-service authentication-keyid 4 authentication-mode hmac-sha256 123456",
+            "[*HUAWEI] interface 10GE 1/0/0",
+            "[*HUAWEI-10GE1/0/0] ip address 10.1.1.1 24",
+            "[*HUAWEI-10GE1/0/0] ntp-service broadcast-server authentication-keyid 4 version 3"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface 10GE 1/0/0",
+            "[~HUAWEI-10GE1/0/0] ntp-service broadcast-server port 5000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ip address 10.1.1.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/0] ntp-service broadcast-client"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA local device automatically runs as a broadcast client once it is configured to receive NTP broadcast messages on a current interface.\nIf a device is configured to send NTP broadcast packets through an existing interface, the local device automatically runs a broadcast server to transmit broadcast messages periodically to broadcast clients.\nIn VS mode, this command is supported only by the admin VS.\nPrecautions\nIf this command is the first NTP configuration command, the system automatically adds the ntp-service [ ipv6 ] server disable command in the configuration file to disable the NTP service. To enable the NTP service, run the undo ntp-service [ ipv6 ] server disable command. If this command is the last NTP configuration command to be deleted, the system automatically deletes the ntp-service [ ipv6 ] server disable command from the configuration file."
+}

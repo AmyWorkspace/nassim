@@ -1,0 +1,64 @@
+{
+    "PageTitle": "ospfv3 bfd enable",
+    "FuncDef": "The ospfv3 bfd enable command enables BFD on an OSPFv3 interface.\nThe undo ospfv3 bfd enable command disables BFD from an interface.\nThe ospfv3 bfd incr-cost command enables an OSPFv3 interface to adjust the cost based on BFD.\nThe undo ospfv3 bfd incr-cost command disables an OSPFv3 interface from adjusting the cost based on BFD.\nThe ospfv3 bfd incr-cost block command blocks an OSPFv3 interface from adjusting the cost based on BFD.\nThe undo ospfv3 bfd incr-cost block command unblocks an OSPFv3 interface from adjusting the cost based on BFD.\n\nBy default, BFD is not enabled on an OSPFv3 interface.\n\n\nBy default, an OSPFv3 interface does not adjust the cost based on BFD.\n\n\nBy default, an OSPFv3 interface is not blocked from adjusting the cost based on BFD.",
+    "CLIs": [
+        "ospfv3 bfd enable [ instance <instance-id> ]",
+        "ospfv3 bfd incr-cost { <cost> | max-reachable }",
+        "ospfv3 bfd incr-cost block",
+        "undo ospfv3 bfd enable [ instance <instance-id> ]",
+        "undo ospfv3 bfd incr-cost [ <cost> | max-reachable ]",
+        "undo ospfv3 bfd incr-cost block"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "VBDIF interface view",
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "instance instance-id",
+            "Info": "Indicates the ID of the instance to which the interface belongs.\nThe value is an integer ranges from 0 to 255."
+        },
+        {
+            "Parameters": "incr-cost cost",
+            "Info": "Specifies a cost adjustment value.\nThe value is an integer ranging from 1 to 65534."
+        },
+        {
+            "Parameters": "max-reachable",
+            "Info": "Adjusts the link cost of an OSPFv3 interface to the maximum link cost 65535.\n-"
+        },
+        {
+            "Parameters": "block",
+            "Info": "Disables BFD from an OSPFv3 interface.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables BFD.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ospfv3 1 area 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] ospfv3 bfd incr-cost 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEither a link fault or topology change on a network will cause routes to be re-calculated within an area. As such, speeding up the convergence of a routing protocol is critical to improving the network performance.\nAs link faults are inevitable, rapidly detecting these faults and notifying routing protocols is an effective way to quickly mitigate them. This includes associating BFD with a routing protocol to speed up convergence of the routing protocol once a link fault occurs.\nOn a network where BFD detects a link fault, even if the fault is rectified quickly, the involved interface is disconnected due to the fact that the associated BFD session is down. As a result, the link is unstable and traffic is lost. To prevent this issue and ensure high network reliability, run the ospfv3 bfd incr-cost command on an OSPFv3 interface to configure the interface to adjust its cost based on the status of an associated BFD session. If the interface detects a BFD session down event, the interface automatically increases its cost. If an increment value has been specified using cost-value in the command, the interface cost is raised by the specified value. If the max-reachable parameter has been specified in the command, the interface cost is changed to the maximum cost value. In this manner, the problem link associated with the BFD session is not preferentially selected, and traffic is transmitted through other links. When the interface detects that the BFD session goes up, the interface automatically restores its cost to the original value.\nPrerequisites\nBFD has been enabled on the interface.\nConfiguration Impact\nIf global BFD is not enabled, BFD can be enabled on an interface. The BFD session, however, cannot be set up after BFD is enabled on the interface. If the parameters of a BFD session are set but the ospfv3 bfd enable command is not run, the BFD session cannot be set up.\nThe BFD configuration on an interface takes precedence over that in a process. If BFD is enabled on an interface, a BFD session is established according to the BFD parameters set on the interface.\nFollow-up Procedure\nRun the display ospfv3 bfd session command to view the information about neighbors enabled with BFD.\nPrecautions\nAfter BFD is enabled, a device sets up BFD sessions with only adjacencies.\nThe ospfv3 bfd enable command and ospfv3 bfd block command are mutually exclusive in function, and the later configuration overwrites the previous one.\nAfter BFD is disabled from an interface using the undo ospfv3 bfd enable command, the parameters for setting up BFD sessions remain on this interface but no longer take effect.\nThe interface-specific BFD-associated cost value has a higher priority than the process-specific BFD-associated cost value.\nThe ospfv3 bfd incr-cost block and ospfv3 bfd incr-cost { cost | max-reachable } commands are mutually exclusive. The latter command overwrites the previously configured command."
+}

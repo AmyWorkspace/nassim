@@ -1,0 +1,54 @@
+{
+    "PageTitle": "web-server",
+    "FuncDef": "The web-server url command configures a redirection URL for mandatory web authentication in a domain.\nThe web-server bind web-auth-server command configures the web authentication server bound to the mandatory web authentication server.\nThe web-server bind web-auth-server ip-address slave command configures the web authentication server bound to the standby mandatory web authentication server.\nBy default, the mandatory web server is not configured.",
+    "CLIs": [
+        "web-server { <ip-address> | <ipv6-address> } * [ bind web-auth-server { <auth-server-ip> | <auth-server-ipv6> } [ vpn-instance <vpn-instance> ] ] [ slave ]",
+        "web-server url <url> [ bind web-auth-server { <auth-server-ip> | <auth-server-ipv6> } [ vpn-instance <vpn-instance> ] ] [ slave ]",
+        "undo web-server [ slave ]",
+        "undo web-server url [ url ] [ slave ]"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of the web server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of the web server.\nThe value is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "auth-server-ip",
+            "Info": "Specifies the IP address of the web authentication server to which the mandatory web server is bound.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "auth-server-ipv6",
+            "Info": "Specifies the IPv6 address of the web authentication server to which the mandatory web server is bound, in dotted decimal notation.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance",
+            "Info": "Specifies the name of the VPN instance to which the bound web authentication server belongs.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "slave",
+            "Info": "Specifies the standby status for the mandatory web server.\n-"
+        },
+        {
+            "Parameters": "url url",
+            "Info": "Specifies the redirection URL for mandatory web authentication. For example, http://www.isp1.com.\nThe value is a string of 1 to 200  case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[*HUAWEI-aaa-domain-huawei] web-server 1.1.1.1",
+            "[*HUAWEI-aaa-domain-huawei] web-server url http://www.huawei.com"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMandatory web authentication is a function that enables the to redirect the access request of a user to the web server when a user accesses an unauthorized address before being authenticated, facilitating user authentication.If homepage popup is configured and the web server support this function, when the user passes the web authentication, the web server refreshes the web page being browsing by the user to the homepage requested by the user before authentication. The user does not need to type this homepage again. If homepage popup is configured, when the user passes the web authentication, the user is forcibly redirected to the Portal page. To access the requested homepage, the user needs to type this homepage again.If the mandatory web server is different from the web authentication server, the cannot identify whether the mandatory web server is Up or Down, but can identify whether the web authentication server is Up or Down. To enable the to identify whether the mandatory Web server is Up or Down based on the status of the web authentication server, you can run the web-server { <ip-address> | url <url> } [ bind web-auth-server <ip-address> [ vpn-instance <vpn-instance> ] ] command to bind the mandatory web server to the web authentication server.If there are two web authentication servers in active/standby mode, after the mandatory web server is bound to the web authentication server, you can run the web-server { <ip-address> | url <url> } [ bind web-auth-server <ip-address> [vpn-instance <vpn-instance> ] ] slave command to configure the standby mandatory web server.\nPrecautions\nThis command is supported only on the admin VS.- When you run the web-server command in the AAA domain view, check whether the web authentication server to which the active/standby server in IP mode is the same as that in URL mode. If they are different, you cannot run the web-server command.- The active web server must be different from the standby Web server.- To delete the web authentication server, you must remove the binding of the web authentication server.- You must bind the web authentication server in the system view; otherwise, the binding fails.- If the web-auth-server source interface interface-type interface-number command is not run in the system view, run the web-server redirect-key mscg-ip mscg-ip-key command and the web-server ip-address command in the AAA domain view. In this way, a source interface's route can be used as a customized parameter of this source interface when an IPv6 user switches between the authentication domain and pre-authentication domain."
+}

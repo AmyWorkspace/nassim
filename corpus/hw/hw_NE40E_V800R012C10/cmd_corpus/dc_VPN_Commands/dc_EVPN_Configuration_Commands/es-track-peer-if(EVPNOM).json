@@ -1,0 +1,33 @@
+{
+    "PageTitle": "es track evpn-peer (Interface view)",
+    "FuncDef": "The es track evpn-peer command enables BGP EVPN peer status tracking.\nThe undo es track evpn-peer command disables BGP EVPN peer status tracking.\nBy default, BGP EVPN peer status tracking is not enabled.",
+    "CLIs": [
+        "es track evpn-peer <peer-address>",
+        "undo es track evpn-peer <peer-address>"
+    ],
+    "ParentView": [
+        "PW-VE interface view",
+        "Eth-Trunk interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 1.1.1.1 as-number 100",
+            "[*HUAWEI-bgp] l2vpn-family evpn",
+            "[*HUAWEI-bgp-af-evpn] peer 1.1.1.1 enable",
+            "[*HUAWEI-bgp-af-evpn] quit",
+            "[*HUAWEI-bgp] quit",
+            "[*HUAWEI] interface Eth-Trunk 1",
+            "[*HUAWEI-Eth-Trunk1] es track evpn-peer 1.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an EVPN where a CE is multi-homed to PEs, after a PE restarts due to a fault or other reasons, traffic may be lost. To resolve this issue, run the es track evpn-peer command on PE's interface connecting to CE. This configuration allows PE to trigger a delay timer for ES route advertisement after PE recovers and PE's interface connecting to CE goes Up. After the delay timer is triggered, PE tracks the status of its BGP peers. If the BGP peer relationships both go Up within the timer-specified delay, PE sends ES routes to the peers. If the timer-specified delay elapses, PE sends ES routes only to the peer with which the BGP peer relationship is Up. After PE generates and sends ES routes, PE performs DF election based on all the received ES routes.\nConfiguration Impact\nIf the es track evpn-peer command is run, the delay timer for DF election loses effect."
+}

@@ -1,0 +1,51 @@
+{
+    "PageTitle": "spt-switch-threshold group-policy",
+    "FuncDef": "The spt-switch-threshold group-policy command sets a multicast data forwarding rate threshold at which a receiver's designated router (DR) performs a switchover from the rendezvous point tree (RPT) to the shortest path tree (SPT).\nThe undo spt-switch-threshold group-policy command restores the default value.\nBy default, a receiver's DR performs a switchover from the RPT to the SPT immediately after receiving the first multicast data packet.",
+    "CLIs": [
+        "spt-switch-threshold <traffic-rate> group-policy { <basic-acl-number> | acl-name <acl-name> } [ order <order-value> ]",
+        "undo spt-switch-threshold [ <traffic-rate> ] group-policy { <basic-acl-number> | acl-name <acl-name> }"
+    ],
+    "ParentView": [
+        "PIM view of a public network instance",
+        "VPN instance PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "traffic-rate",
+            "Info": "Specifies a multicast data forwarding rate threshold at which a receiver's DR performs a switchover between the RPT and the SPT.\nMulticast data forwarding rate = Number of multicast data bytes received in a period/Duration of the period (the duration can be specified using the timer spt-switch command).\nWhen the multicast data forwarding rate exceeds traffic-rate, the system performs a switchover from the RPT to the SPT. After the switchover is complete, the system does not switch traffic back to the RPT any more.\nThe value is an integer ranging from 1 to 4194304, in kbit/s."
+        },
+        {
+            "Parameters": "basic-acl-number",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "order order-value",
+            "Info": "Specifies the order of an ACL in the group policy.\nIf a multicast group matches more than one ACL, the system determines the threshold to be used based on order-value of the ACLs.\nThe value is any integer that is not specified for other ACLs. If this parameter is not specified, the original ACL order is used."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 2010",
+            "[*HUAWEI-acl4-basic-2010] rule permit source 10.1.1.1 0.0.0.0",
+            "[*HUAWEI-acl4-basic-2010] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] spt-switch-threshold 100 group-policy 2010 order 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl name myacl basic",
+            "[*HUAWEI-acl4-basic-myacl] rule permit source 10.1.1.1 0.0.0.0",
+            "[*HUAWEI-acl4-basic-myacl] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] spt-switch-threshold 100 group-policy acl-name myacl order 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn PIM-SM, a source's DR encapsulates multicast data packets in a Register message and sends the Register message to the rendezvous point (RP). The RP then transmits the multicast data along the RPT to receivers. The RP and the receiver's DR are responsible for checking the forwarding rate of multicast data packets.\nIf a rate threshold is configured on the receiver's DR, the receiver's DR sends a Join message to the source only it finds that the forwarding rate of multicast data packets exceeds the threshold and then triggers the switchover from the RPT to the SPT. To set such a rate threshold, run the spt-switch-threshold command.\nThis command takes effect on the Router that functions as the receiver's DR, but does not take effect on the RP.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nPrecautions\nIf the spt-switch-threshold command is run more than once for one multicast group, the first command that the multicast group matches takes effect."
+}

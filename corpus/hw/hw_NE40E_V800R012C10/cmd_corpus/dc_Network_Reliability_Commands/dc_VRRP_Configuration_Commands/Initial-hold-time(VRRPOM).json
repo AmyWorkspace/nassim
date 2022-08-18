@@ -1,0 +1,55 @@
+{
+    "PageTitle": "vrrp vrid initialize state-hold-time",
+    "FuncDef": "The vrrp vrid initialize state-hold-time command configures an Initialize state hold time for a management VRRP (mVRRP) backup group.\nThe undo vrrp vrid initialize state-hold-time command deletes the Initialize state hold time configured for an mVRRP group.\n\nBy default, no Initialize state hold time is configured for an mVRRP group.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id> initialize state-hold-time <timer-value>",
+        "undo vrrp vrid <virtual-router-id> initialize state-hold-time [ <timer-value> ]"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-router-id",
+            "Info": "Specifies the ID of an mVRRP group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "timer-value",
+            "Info": "Specifies an Initialize state hold time.\nThe value is an integer ranging from 0 to 3600, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] ip address 10.1.1.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vrrp vrid 1 virtual-ip 10.1.1.111",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] admin-vrrp vrid 1 ignore-if-down",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vrrp vrid 1 initialize state-hold-time 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nWhen an mVRRP group is configured to ignore an interface Down event, the mVRRP group directly enters the Backup state. After the device restarts, the device switches to the Master state because it does not receive VRRP Advertisement packets before the interface goes Up. In this case, delayed switchback becomes invalid, and related service entries fail to be backed up. As a result, services are interrupted. For the preceding scenario, the mVRRP group remains the Initialize state before the interface goes Up for the first time by default.\nIf the interface always remains Down, the mVRRP group remains the Initialize state all the time. You can run the vrrp vrid initialize state-hold-time command to configure an Initialize state hold time for the mVRRP group. After the Initialize state hold time expires, the mVRRP group enters the Backup state.\n\nPrerequisites\n\nAn mVRRP group has been configured to ignore an interface Down event using the admin-vrrp vrid command."
+}

@@ -1,0 +1,30 @@
+{
+    "PageTitle": "multicast-domain holddown-time",
+    "FuncDef": "The multicast-domain holddown-time command sets the delay for the switchover from the Switch-multicast distribution tree (MDT) to the Share-MDT.\nThe undo multicast-domain holddown-time command restores the default delay for the switchover from the Switch-MDT to the Share-MDT.\nBy default, the delay for the switchover from the Switch-MDT to the Share-MDT is 60 seconds.",
+    "CLIs": [
+        "multicast-domain holddown-time <interval>",
+        "undo multicast-domain holddown-time"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the delay for the switchover from the Switch-MDT to the Share-MDT.\nThe value is an integer ranging from 0 to 512 , in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance mytest",
+            "[*HUAWEI-vpn-instance-mytest] ipv4-family",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain share-group 224.1.1.1 binding mtunnel 10",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain holddown-time 80"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the scenario where the Switch-MDT is configured, the forwarding rate of VPN multicast data may fluctuate around the switchover threshold due to network instability. To prevent the multicast data flow from being frequently switched between the Switch-MDT and the Share-MDT, the system does not perform the switchover immediately when it finds that the forwarding rate is lower than the switchover threshold. Instead, the system starts the holddown timer. The timeout period of the timer is the value configured using this command. Before the holddown timer expires, the system continues to detect the data forwarding rate. If the rate remains lower than the switchover threshold after the holddown timer expires, the multicast data flow is switched back to the Share-MDT. Otherwise, the multicast data flow is transmitted using the switch-MDT.\nPrerequisites\nThe multicast-domain share-group command has been run in the VPN.\nPrecautions\nIn the actual switchover process, there is a delay of 1 to 30 seconds before the device finds changes in the data forwarding rate. That is, the system delays starting the holddown timer for about 1 to 30 seconds after the data forwarding rate changes. The delay is not included in the holddown-time. Therefore, the total delay from the time when the data forwarding rate changes to the time when the system completes the switchover is longer than the holddown period by 1 to 30 seconds.\nWhen interval is set to 0, the system switches the multicast data from the Switch-MDT to the Share-MDT immediately when it finds that the data forwarding rate is lower than the threshold.\nThe interval for sampling the multicast data forwarding rate may be prolonged when a large number of multicast entries exist. As a result, MVPN traffic may be switched back from the Switch-MDT to the Share-MDT earlier than expected, causing the loss of a small number of data packets. To prevent this problem, you are advised to increase the holddown-time based on the device performance and the number of existing multicast entries."
+}

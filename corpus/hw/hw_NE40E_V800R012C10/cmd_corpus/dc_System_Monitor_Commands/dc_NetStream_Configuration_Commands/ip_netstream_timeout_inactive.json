@@ -1,0 +1,46 @@
+{
+    "PageTitle": "netstream timeout inactive",
+    "FuncDef": "The ip netstream timeout inactive command sets the inactive aging time for the NetStream IPv4 original flows.\nThe undo ip netstream timeout inactive command restores the default inactive aging time for NetStream IPv4 original flows.\nThe ipv6 netstream timeout inactive command sets the inactive aging time for the NetStream IPv6 original flows.\nThe undo ipv6 netstream timeout inactive command restores the default inactive aging time for NetStream IPv6 original flows.\nBy default, the inactive aging time of NetStream original flows is 30 seconds.",
+    "CLIs": [
+        "ip netstream timeout inactive <inactive-interval>",
+        "ipv6 netstream timeout inactive <inactive-interval>",
+        "ip netstream [ aggregation ] timeout inactive <inactive-interval>",
+        "ipv6 netstream [ aggregation ] timeout inactive <inactive-interval>",
+        "undo ip netstream timeout inactive",
+        "undo ipv6 netstream timeout inactive",
+        "undo ip netstream [ aggregation ] timeout inactive",
+        "undo ipv6 netstream [ aggregation ] timeout inactive"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6",
+            "Info": "Displays the IPv6 netstream feature.\n-"
+        },
+        {
+            "Parameters": "inactive inactive-interval",
+            "Info": "Specifies the inactive aging time for NetStream flows.\nThe value is an integer ranging from 5 to 600, in seconds."
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Displays the IPv4 netstream feature.\n-"
+        },
+        {
+            "Parameters": "aggregation",
+            "Info": "Indicates the Netstream aggregation feature.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip netstream timeout inactive 40"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 netstream timeout inactive 40"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen network flows burst within a short period of time, tens of thousands of flows may be generated within several seconds, and these flows are saved in the buffer on the NDE. The memory capacity of the NDE, however, is limited. When subsequent flows need to be added to the buffer, flows that have been processed in the buffer need to be deleted. This process is called aging. Aged flows are sent to the specified NSC for further analysis.\nThe aging frequency is determined by the storage space of the device and flow size. The greater the flow size is, the smaller the aging time should be.\nWhen the inactive time (from the last packet receiving time to the current time) of a flow exceeds the specified inactive aging time, the flow is exported to the destination end. The inactive aging time determines when an inactive flow will be aged to release occupied resources. When the traffic rate is high, shorten the inactive time to accelerate traffic aging and improve statistics collecting efficiency.\nA flow is aged in any of the following situations:\nTime-based aging: A flow is aged after the configured inactive time elapses. if the inactive time of a flow in the buffer elapses, the system ages the flow immediately, regardless of whether the active aging time of the flow elapses. You can set the inactive aging time or use the default values.TCP disconnection-based aging: After a packet carrying the FIN or RST flag is transmitted over a TCP connection, the TCP connection is torn down. Therefore, when a NetStream flow consisting of TCP packets receives a packet carrying the FIN or RST flag, the NetStream flow is immediately aged. If the first packet of a NetStream flow is a TCP packet carrying the FIN or RST flag, a new NetStream flow is created. In addition, the original NetStream flow is not aged.Byte counts-based aging: Bytes of flows cached in the buffer are counted. If the flow bytes in a buffer exceed the upper threshold, the buffer overflows. For example, if the number of bytes in a flow is greater than 3435973836 B, the system immediately ages the flow.\n\nPrecautions\nThe configured aging time takes effect only after NetStream is enabled on an interface using the netstream command."
+}

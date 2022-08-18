@@ -1,0 +1,164 @@
+{
+    "PageTitle": "ping vc",
+    "FuncDef": "The ping vc command checks PW connectivity on a VPWS network and locates faults, such as forwarding entry loss or errors when the PW is Up.",
+    "CLIs": [
+        "ping vc <vc-type> <pw-id> [ <peer-address> ] [ -c <echo-number> | -m <time-value> | -s <data-bytes> | -t <timeout-value> | -exp <exp-value> | -r <reply-mode> | -v | -g ] * control-word [ remote <remote-ip-address> <peer-pw-id> [ sender <sender-address> ] ] [ ttl <ttl-value> ] [ pipe | uniform ] [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]",
+        "ping vc <vc-type> <pw-id> [ <peer-address> ] [ -c <echo-number> | -m <time-value> | -s <data-bytes> | -t <timeout-value> | -exp <exp-value> | -r <reply-mode> | -v | -g ] * label-alert [ no-control-word ] [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]",
+        "ping vc <vc-type> <pw-id> [ <peer-address> ] [ -c <echo-number> | -m <time-value> | -s <data-bytes> | -t <timeout-value> | -exp <exp-value> | -r <reply-mode> | -v | -g ] * normal [ no-control-word ] [ remote <remote-ip-address> <peer-pw-id> ] [ ttl <ttl-value> ] [ pipe | uniform ] [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vc-type",
+            "Info": "Specifies the encapsulation type of a local PW.\nEncapsulation types supported:ATM PWE3atm-1to1-vcc: One PW carries the ATM cells of one PVC.atm-1to1-vpc: One PW carries the ATM cells of one PVP.atm-cell-transport: ATM cells are transmitted over PWE3 VCs.atm-nto1-vcc: One PW carries the ATM cells of multiple PVCs.atm-nto1-vpc: One PW carries the ATM cells of multiple PVPs.\nTDM PWE3cesopsn-basic: CES is sensitive to E1 and T1 frame structures. E1 or T1 signals can be encapsulated into packets based on timeslots.satop-e1: SAToP is insensitive to the E1 frame structure and encapsulates a whole E1 frame into a PW packet.\nOther encapsulation types:cep: This encapsulation type is used for CEP services.ethernet: This encapsulation type is used when Ethernet packets do not carry VLAN information.hdlc: HDLC is a bit-oriented link layer protocol.ip-interworking: This encapsulation type is used for interworking between Huawei devices.ip-layer2: This encapsulation type is used for interworking between Huawei devices and non-Huawei devices.ppp: PPP is a link layer protocol that specifies how to encapsulate and transmit network layer packets over P2P links.vlan: This encapsulation type is used when Ethernet packets carry VLAN information."
+        },
+        {
+            "Parameters": "pw-id",
+            "Info": "Specifies the ID of a local PW.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the peer LSR ID of the local PW.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-c echo-number",
+            "Info": "Specifies the number of MPLS Echo Request packets to be sent.\nWhen network quality is not high, more packets can be sent to check network quality based on a packet loss ratio.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-m time-value",
+            "Info": "Specifies the time to wait before the next MPLS Echo Request packet is sent.When network quality is not high, set the value greater than or equal to 2000 milliseconds.\nThe value is an integer ranging from 1 to 10000 in milliseconds. The default value is 2000.\nm time-value must be greater than or equal to -t timeout-value."
+        },
+        {
+            "Parameters": "-s data-bytes",
+            "Info": "Specifies the number of bytes in MPLS Echo Request packets to be sent.\nThe value is an integer ranging from 65 to 9600 in bytes. The default value is 100."
+        },
+        {
+            "Parameters": "-t timeout-value",
+            "Info": "Specifies the timeout of MPLS Echo Request packets to be sent.\nThe value is an integer ranging from 0 to 65535 in milliseconds. The default value is 2000. - t timeout-value must be less than or equal to -m time-value."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies the EXP value in MPLS Echo Request packets to be sent.\nThe value is an integer ranging from 0 to 7. The default value is 0."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies the mode by which the peer returns an MPLS Echo Reply packet.\nThe value is an integer ranging from 1 to 4.\n1: no reply.\n2: reply with an IPv4 UDP packet.\n3: reply with an IPv4 or IPv6 UDP packet carrying the router-alert option. The value 3 is not supported currently.\n4: reply through the control channel of the application plane.\nThe default value is 2."
+        },
+        {
+            "Parameters": "-v",
+            "Info": "Displays detailed information.\n-"
+        },
+        {
+            "Parameters": "-g",
+            "Info": "Performs the test using MPLS fragments.\n-"
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Specifies the control-word mode.\nIn this mode, if the TTL does not expire when multiple hops exist, the switch node does not send MPLS Echo Request packets to the CPU. Therefore, you can only ping the egress node of the PW in control word mode.\nIn this mode, the source end obtains little information about the PW but the ping test has little impact on device performance. Furthermore, the source end cannot obtain information about the downstream of the switch node. This mode is recommended when a great number of MPLS Echo Request packets are transmitted.Enable the control word mode for the PW before you ping a VC in control word mode.\n-"
+        },
+        {
+            "Parameters": "remote remote-ip-address",
+            "Info": "Specifies the remote PW address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "peer-pw-id",
+            "Info": "Specifies the remote PW ID.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "sender sender-address",
+            "Info": "Specifies a source IP address. For MS-PW E2E detection, specify a source IP address for the public network device that communicates with the remote PE. The source IP address is usually the IP address of an adjacent superstratum provider edge (SPE) or user-end provider edge (UPE).\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "ttl ttl-value",
+            "Info": "Specifies a TTL value.\nThe value is an integer ranging from 1 to 255. The default value is 255."
+        },
+        {
+            "Parameters": "pipe",
+            "Info": "Specifies the pipe mode. In this mode, when a probe packet passes through an MPLS domain, the IP TTL value is decreased by 1 only on the ingress and egress nodes. The MPLS domain is used as a next hop.\n-"
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Specifies the uniform mode. The IP TTL value is decreased by 1 each time a probe packet passes through each hop in the MPLS domain.\n-"
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Forwards packets through a specified public bypass LSP of a PW. The packets from the initiator and response end are forwarded through this LSP.\nIf bypass LSP detection on the specified inbound interface is configured in CLI mode, the packets from the initiator are forwarded through a public bypass LSP. If the response end supports bypass LSP detection and LSP-based response is configured, the packets are forwarded through a public bypass LSP.\n-"
+        },
+        {
+            "Parameters": "-si interface-name",
+            "Info": "Specifies the name of an inbound interface.\nSets the inbound interface of MPLS ECHO-REQUEST packets to simulate a remote device to send packets. It can be used to detect the fault of the packet forwarding path that enters through a specific interface.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an inbound interface.\nSets the inbound interface of MPLS ECHO-REQUEST packets to simulate a remote device to send packets. It can be used to detect the fault of the packet forwarding path that enters through a specific interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an inbound interface.\nSets the inbound interface of MPLS ECHO-REQUEST packets to simulate a remote device to send packets. It can be used to detect the fault of the packet forwarding path that enters through a specific interface.\n-"
+        },
+        {
+            "Parameters": "label-alert",
+            "Info": "Specifies the label alert mode.\nIn this mode, the switch node sends MPLS Echo Request packets to the CPU when multiple hops exist. Therefore, you can ping any switch node of the PW in label alert mode.\nIn this mode, the source end obtains much information about the PW but device performance deteriorates if a great number of packets are transmitted. This mode is recommended when a small number of MPLS Echo Request packets are transmitted to obtain details about the switch node.\n-"
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "The control word option is disabled.\n-"
+        },
+        {
+            "Parameters": "normal",
+            "Info": "Specifies the TTL mode. No control-word or router-alert option is encapsulated into an MPLS Echo Request packet. TTL values are used to monitor PW connectivity.\nThe default is uniform. If normal is specified, a correct TTL value must be set using the ttl ttl-value parameter. If the default TTL value 255 is used, the device will fail to be pinged."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping vc ethernet 100 control-word",
+            "   PW PING : FEC 128 PSEUDOWIRE (NEW). Type = ethernet, ID = 100 : 100 data bytes, press CTRL_C to break",
+            "    Reply from 10.10.10.10: bytes=100 Sequence=1 time = 140 ms    ",
+            "    Reply from 10.10.10.10: bytes=100 Sequence=2 time = 40 ms    ",
+            "    Reply from 10.10.10.10: bytes=100 Sequence=3 time = 30 ms    ",
+            "    Reply from 10.10.10.10: bytes=100 Sequence=4 time = 50 ms    ",
+            "    Reply from 10.10.10.10: bytes=100 Sequence=5 time = 50 ms ",
+            "- -- FEC: FEC 128 PSEUDOWIRE (NEW). Type = ethernet, ID = 100 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 30/62/140 ms"
+        ],
+        [
+            "<HUAWEI> ping vc ppp 100 -c 10 -m 10 -s 65 -t 100 label-alert",
+            "   PW PING : FEC 128 PSEUDOWIRE (NEW). Type = ppp, ID = 100 : 65 data bytes, press CTRL_C to break",
+            "    Reply from 2.2.2.2: bytes=65 Sequence=1 time = 31 ms ",
+            "    Reply from 2.2.2.2: bytes=65 Sequence=2 time = 70 ms ",
+            "    Reply from 2.2.2.2: bytes=65 Sequence=3 time = 90 ms ",
+            "    Reply from 2.2.2.2: bytes=65 Sequence=4 time = 90 ms ",
+            "    Reply from 2.2.2.2: bytes=65 Sequence=5 time = 80 ms ",
+            "    Reply from 2.2.2.2: bytes=65 Sequence=6 time = 90 ms ",
+            "    Reply from 2.2.2.2: bytes=65 Sequence=7 time = 90 ms ",
+            "    Reply from 2.2.2.2: bytes=65 Sequence=8 time = 80 ms ",
+            "    Reply from 2.2.2.2: bytes=65 Sequence=9 time = 90 ms ",
+            "    Reply from 2.2.2.2: bytes=65 Sequence=10 time = 80 ms ",
+            "- -- FEC: FEC 128 PSEUDOWIRE (NEW). Type = ppp, ID = 100 ping statistics",
+            "    10 packet(s) transmitted",
+            "    10 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 31/79/90 ms"
+        ],
+        [
+            "<HUAWEI> ping vc vlan 53 normal  ttl 1",
+            "   PW PING : FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID = 53 : 100 data bytes, press CTRL_C to break",
+            "    Reply from 2.2.2.2: bytes=100 Sequence=1 time = 8 ms",
+            "    Reply from 2.2.2.2: bytes=100 Sequence=2 time = 1 ms",
+            "    Reply from 2.2.2.2: bytes=100 Sequence=3 time = 1 ms",
+            "    Reply from 2.2.2.2: bytes=100 Sequence=4 time = 1 ms",
+            "    Reply from 2.2.2.2: bytes=100 Sequence=5 time = 1 ms",
+            "- -- FEC : FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID = 53 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 1/2/8 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe ping vc command is used to detect PW connectivity on a VPWS network. If a PW is Up, the ping vc command can be used to locate the fault on the PW. For example, a forwarding entry is abnormally lost or incorrect.\nThe ping vc command can be used to check a PW in the following scenarios:\nPWE3 VLL PW ping: In the PWE3 VLL networking, a PW ping is initiated to check the connectivity of the PW. A PWE3 VLL PW ping can be performed in control word mode, ttl mode or label alert mode. In a ping test, an Echo Request message is first sent to the peer PE. After receiving the message, the peer PE abstracts and sends FEC information to the L2VPN module to determine whether the message has reached the egress. If so, an Echo Reply message is returned.LDP VPLS PW ping: The LDP VPLS PW ping supports only the label alert mode. On a hierarchical virtual private LAN service (HVPLS) network, the LDP VPLS PW ping can only detect SH-PWs. If an optional PW ID is configured and specified, the PW corresponding to the PW ID is detected. If the PW ID is not specified, the PW corresponding to the VSI ID is detected.\nIf a PW fault is detected by using the ping vc command, the tracert vc command can be used to locate the fault. Both the ping vc command and the tracert vc command can properly check the connectivity of PWs and locate faults.\n\nPrerequisites\nBasic VPWS network configurations are complete.\nConfiguration Impact\nIt is recommended that you use the control-word option to monitor the connectivity of an entire PW. Although you can use the label-alert option to monitor an entire circuit, the control-word option must be used to simulate live network forwarding.\nPrecautions\nA ping vc operation terminates when either of the following situations occurs:\nA message reaches the egress.The TTL in a message expires."
+}

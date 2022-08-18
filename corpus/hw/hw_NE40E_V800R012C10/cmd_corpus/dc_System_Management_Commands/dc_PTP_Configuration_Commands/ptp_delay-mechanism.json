@@ -1,0 +1,40 @@
+{
+    "PageTitle": "ptp delay-mechanism",
+    "FuncDef": "The ptp delay-mechanism command configures the delay measurement mechanism on an ordinary clock (OC) interface, a boundary clock (BC) interface, or a transparent and boundary clock (TCandBC) interface.\nThe undo ptp delay-mechanism command restores the default delay measurement mechanism on an OC interface, a BC interface, or a TCandBC interface.\nBy default, an OC interface, a BC interface, or a TCandBC interface uses the Delay mechanism.",
+    "CLIs": [
+        "ptp delay-mechanism { delay | pdelay }",
+        "undo ptp delay-mechanism"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "GE optical interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay",
+            "Info": "Enables the delay request-response mechanism, in which information about the clock and time is calculated based on the delay time of an entire link between a PTP device and a clock source.\n-"
+        },
+        {
+            "Parameters": "pdelay",
+            "Info": "Enables the peer delay mechanism, in which information about the clock and time is calculated based on the delay time of each segment of the path between a PTP device and a clock source.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp enable",
+            "[*HUAWEI] ptp device-type bc",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ptp delay-mechanism delay"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTwo devices exchange Announce packets to determine the master/slave relationship. The master device sends Sync packets to notify the slave device of time signal parameters and uses a delay measurement mechanism to achieve time signals accuracy.\nDifferent delays on links deteriorate the accuracy of PTP time synchronization. PTP uses the delay measurement mechanism to correct time signals. A delay measurement process is implemented by sending delay measurement request packets and delay response packets. Either of the following parameters can be configured in the\nptp delay-mechanism command to enable a specific delay measurement mechanism:\ndelay: enables the delay request-response mechanism, in which information about the clock and time is calculated based on the delay of an entire link between the master and slave clocks. Only the slave clock sends Delay_Req packets to the master clock, and the master clock replies with Delay_Resp packets. Upon receipt, the slave clock uses information carried in Delay_Resp packets to correct time signals.pdelay: enables the peer delay mechanism, in which information about the clock and time is calculated based on the delay time of each link along the path between the master and slave clocks. In this mode, the master and slave clocks can send Pdelay_Rep packets to each other and then correct time signals based on the Pdelay_Resp packets. Upon receipt of the responses, the slave or master clock uses information carried in Delay_Resp packets to correct time signals.\nThe PDelay mechanism helps rapidly correct the difference between the delay time in opposite directions on the network, on which the master and slave clocks obtain the delay time in opposite directions.\nThis command applies only to 1588v2 and SMPTE-2059-2.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nBoth ends of a link must use the same delay measurement mechanism. If an E2ETC, an E2ETCOC, a P2PTC, and a P2PTCOC use the default delay measurement mechanism, their interfaces can directly be enabled with 1588v2. In G.8275.1, the default delay restoration mechanism is delay, which cannot be modified or deleted.\nThis command cannot be run on an OTN subcard."
+}

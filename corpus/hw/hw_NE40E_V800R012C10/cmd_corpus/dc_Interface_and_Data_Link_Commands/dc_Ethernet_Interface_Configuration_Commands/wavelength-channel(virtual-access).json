@@ -1,0 +1,38 @@
+{
+    "PageTitle": "wavelength-channel (Port extension interface view)",
+    "FuncDef": "The wavelength-channel command sets a wavelength number for an optical module.\nThe undo wavelength-channel command restores the default wavelength number for an optical module.\nThe wavelength-channel frequency frequency-number command sets a frequency for an optical module.\nThe undo wavelength-channel frequency frequency-number command deletes the frequency set for an optical module.\nThe wavelength-channel wavelength wave-number command sets a wavelength for an optical module.\nThe undo wavelength-channel wavelength wave-number command deletes the wavelength set for an optical module.\nBy default, the wavelength-channel number is set to 80.",
+    "CLIs": [
+        "wavelength-channel <channel-num>",
+        "wavelength-channel frequency <frequency-number>",
+        "wavelength-channel wavelength <wave-number>",
+        "undo wavelength-channel",
+        "undo wavelength-channel frequency [ <frequency-number> ]",
+        "undo wavelength-channel wavelength [ <wave-number> ]"
+    ],
+    "ParentView": [
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "wavelength-channel channel-num",
+            "Info": "The channel number.\nThe value is an integer that ranges from 0 to 99 .\nThe default value is 80."
+        },
+        {
+            "Parameters": "frequency frequency-number",
+            "Info": "Set a frequency value. The input value is 100000 times the expected value (in THz). For example, If you want 196.05000 THz, input 19605000.\nThe value is an integer that ranges from 0 to 4294967294 ."
+        },
+        {
+            "Parameters": "wavelength wave-number",
+            "Info": "Set a wavelength value. The input value is 100000 times the expected value (in nm). For example, if you want 1529.16300 nm, input 152916300.\nThe value is an integer that ranges from 0 to 4294967294 ."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1025/1/0/0",
+            "[~HUAWEI-GigabitEthernet1025/1/0/0] wavelength-channel 10",
+            "Warning: The command can be run only on optical modules whose C-band is 50 GHz. The wavelength configuration takes a maximum of 90 seconds to take effect. To check whether the configuration takes effect, run the display optical-module brief or display wavelength-map command. Continue?[Y/N]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA wavelength determines transmission quality and efficiency of an optical fiber, which can be set for optical transmission to enable fibers to work in different transmission modes based on actual situations.\nBefore setting a center wavelength for a tunable optical module whose channel spacing is 50 GHz, run the display wavelength-map command to check the channel corresponding to the wavelength to be set, and then specify the channel in the wavelength-channel channel-num command. After the channel is specified, the wavelength corresponding to the channel automatically takes effect.\nBefore setting a center wavelength for a tunable optical module whose channel spacing is not 50 GHz, run the display wavelength-capability command to check the frequency and wavelength supported by the optical module on a specified interface and then run the wavelength-channel frequency frequency-number and wavelength-channel wavelength wave-number commands respectively to configure a frequency and a wavelength for the optical module.\nConfiguration Impact\nAfter the wavelength-channel command is run, the system automatically switches off and then switches on the local optical module. This affects all the services on the interface. Therefore, you are prompted to confirm whether to run this command.\nPrecautions\nThe wavelengths must be the same for optical modules inserted into two connected interfaces.\nThe interval at which the wavelength of an interface's optical module is changed must be no less than 10s.\nA center wavelength cannot be configured for a non-configurable optical module inserted into an interface.\nA center wavelength cannot be configured for an optical module being upgraded.\nIf the wavelength-channel command is configured on an interface with a 100 Gbit/s CFP2 DWDM optical module inserted, the wavelength configuration takes a maximum of 90s to take effect. To check whether the configuration takes effect, run the display optical-module brief or display wavelength-map command. (The model of the optical module is OSNB00C02, 118Gbps(4*25.78/4*27.95)-CFP2-SMF-192.1-196.05THz-1200km-commercial.)."
+}

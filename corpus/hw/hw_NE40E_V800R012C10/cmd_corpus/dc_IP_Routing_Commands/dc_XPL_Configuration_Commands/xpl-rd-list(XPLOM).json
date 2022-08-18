@@ -1,0 +1,29 @@
+{
+    "PageTitle": "xpl rd-list",
+    "FuncDef": "The xpl rd-list command creates an RD set and displays the RD set view.\nThe undo xpl rd-list command deletes a specified RD set.\nBy default, no RD sets are configured.",
+    "CLIs": [
+        "xpl rd-list <rd-list-name>",
+        "undo xpl rd-list <rd-list-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "rd-list-name",
+            "Info": "Specifies the name of an RD set.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. The string can contain letters, digits, underscores (_), hyphens (-), and dots (.). It must start with a letter or digit."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system",
+            "[~HUAWEI] xpl rd-list rd1",
+            "[~HUAWEI-xpl-rd] 2:1,",
+            "[~HUAWEI-xpl-rd] 2:12,",
+            "[~HUAWEI-xpl-rd] 0.1:0,",
+            "[~HUAWEI-xpl-rd] regular 100.100:*",
+            "[~HUAWEI-xpl-rd] end-list"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn RD set is a group of data related to the RD attribute and can be used by route-filters to filter VPN routes. To create an RD set and enter the RD set view, run the xpl rd-list command.\nFollow-up Procedure\n Configure elements for the RD set in the RD set view and separate every two neighboring elements with a comma (,). The elements can be configured in any of the following formats:16-bit AS number:32-bit user-defined number. For example, 101:3. The AS number ranges from 0 to 65535, and the user-defined number ranges from 0 to 4294967295.Integral 4-byte AS number:2-byte user-defined number, for example, 0:3 or 65537:3. An AS number ranges from 0 to 4294967295. A user-defined number ranges from 0 to 65535.4-byte AS number in dotted notation:2-byte user-defined number, for example, 0.0:3 or 0.1:0. A 4-byte AS number in dotted notation is in the format of x.y, where x and y are integers that range from 1 to 65535 and from 0 to 65535, respectively. A user-defined number ranges from 0 to 65535.32-bit IP address:16-bit user-defined number. For example, 192.168.122.15:1. The IP address ranges from 0.0.0.0 to 255.255.255.255, and the user-defined number ranges from 0 to 65535.In the preceding elements, either value around a colon (:) can be replaced by an asterisk (*) to match any value.\nregular regular-expression: matches VPN routes with RDs in the specified regular expression. For detailed description about regular expressions, see Configuration Guide - Basic Configuration.Regular expression processing is computing-intensive. When a large number of regular expressions are configured in an XPL policy to match a BGP route attribute and the length of the route attribute is long, the processing performance of the XPL policy deteriorates. To improve the processing performance of the routing policy, decrease the number of regular expressions or use a non-regular expression matching command.\nIt is recommended that a maximum of 100 regular expressions be configured for each policy.\n\n Run the end-list command in the RD set view to conclude the configuration of the RD set.\n\nPrecautions\nAn RD set is only a group of data used as matching rules and does not have the permit or deny function. Therefore, an RD set can be used to filter routes only after it is referenced by a route-filter.\nTo exit from the RD set view, run the abort command in the RD set view.\nAn RD set-based matching rule is affected by the as-notation plain command:\nIf the as-notation plain command is run, route matching can succeed only after the RD is set to an integral 4-byte AS number using the rdStr parameter.If the as-notation plain command is not run, route matching can succeed only after the RD is set to a 4-byte AS number in dotted notation using the rdStr parameter.If the as-notation plain command is run after an RD filter is configured, you need to reconfigure the RD value using the rdStr parameter; otherwise, route matching may fail against an import or export route-policy, causing a network fault."
+}

@@ -1,0 +1,48 @@
+{
+    "PageTitle": "local-source-address",
+    "FuncDef": "The local-source-address ipv4 command sets a source IPv4 address and a source port number when UDP or gRPC is used for data sending.\nThe undo local-source-address ipv4 command deletes the source IPv4 address and source port number configured when UDP or gRPC is used for data sending.\nThe local-source-address ipv6 command sets a source IPv6 address and a source port number when UDP or gRPC is used for data sending.\nThe undo local-source-address ipv6 command deletes the source IPv6 address and source port number configured when UDP or gRPC is used for data sending.\nBy default, the source IP address is the IP address of route's outbound interface selected by the socket and the source port number is randomly selected.",
+    "CLIs": [
+        "local-source-address ipv4 <ip-address> [ port <port> ]",
+        "local-source-address ipv6 <ipv6-address> [ port <port-value6> ]",
+        "undo local-source-address ipv4",
+        "undo local-source-address ipv4 <ip-address> [ port <port> ]",
+        "undo local-source-address ipv6",
+        "undo local-source-address ipv6 <ipv6-address> [ port <port-value6> ]"
+    ],
+    "ParentView": [
+        "Subscription view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies a source IPv4 address for data sending.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "port port",
+            "Info": "Specifies a IPv4 source port number when UDP is used for data sending.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "port port-value6",
+            "Info": "Specifies a IPv6 source port number when UDP is used for data sending.\nThe value is an integer ranging from 1025 to 65535."
+        },
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies a source IPv6 address for data sending.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] telemetry",
+            "[~HUAWEI-telemetry] subscription test",
+            "[*HUAWEI-telemetry-subscription-test] local-source-address ipv4 10.10.1.1 port 11111"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] telemetry",
+            "[~HUAWEI-telemetry] subscription test",
+            "[*HUAWEI-telemetry-subscription-test] local-source-address ipv6 2001:db8:4::1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo statically subscribe to the data sampled, you need to run the local-source-address ipv4 command or local-source-address ipv6 command to configure a source IP address and a source port number in the subscription view for data sending. This ensures that devices can communicate with the collector.\nOnly one combination that consists of a source IP address and a source port number can be configured for a subscription. After the configuration is complete:\nThe UDP message header sent along the UDP channel contains the configured source IP address and source port number.The gRPC message header sent along the gRPC channel contains the configured source IP address.\n\nPrecautions\nThe configured source IP address must be an existing service interface IP address and must be reachable to the collector. Otherwise, services may be interrupted.\nIf a source IPv6 address has been configured, the address cannot be directly changed to a source IPv4 address. To change the address to a source IPv4 address, you must delete the source IPv6 address first.\nAfter a source IPv6 address is configured for a subscription, this address takes effect only for the IPv6 collector in the subscription. The IPv4 collector in the subscription uses an outbound interface's IPv4 address as the source address.\nAfter a source IPv4 address is configured for a subscription, this address takes effect only for the IPv4 collector in the subscription. The IPv6 collector in the subscription uses an outbound interface's IPv6 address as the source address.\nA maximum of two pairs of source IP addresses and source ports can be configured for all subscriptions in each VS. If more than two pairs of source IP addresses and source ports are configured, an error message is displayed."
+}

@@ -1,0 +1,32 @@
+{
+    "PageTitle": "esi (Bridge domain view)",
+    "FuncDef": "The esi command configures an ESI for a bridge domain (BD).\nThe undo esi command deletes an ESI of a BD.\nBy default, no ESI is configured for BDs.",
+    "CLIs": [
+        "esi <esi>",
+        "undo esi <esi>",
+        "undo esi"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "esi",
+            "Info": "Specifies an ESI.\nThe value is in the format of xxxx.xxxx.xxxx.xxxx.xxxx, where x is a hexadecimal integer ranging from 0 to F. The value must start with 00 and cannot be all 0s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn vpn-instance evrf1 bd-mode",
+            "[*HUAWEI-evpn-instance-evrf1] route-distinguisher 100:1",
+            "[*HUAWEI-evpn-instance-evrf1] vpn-target 1:1",
+            "[*HUAWEI-evpn-instance-evrf1] quit",
+            "[*HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] vxlan vni 100 split-horizon-mode",
+            "[*HUAWEI-bd10] evpn binding vpn-instance evrf1",
+            "[*HUAWEI-bd10] esi 0022.1002.1002.1002.1001"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a DCI scenario, when EVPN is used to transmit ARP or MAC routes, run the esi command to configure an ESI for the BD of a PE connecting to a DC gateway. The routes then carry the ESI to allow the PE to detect the other PEs connecting to the same DC gateway. The ESIs are the same for the BDs of the PEs connecting to the same DC gateway and are different for the BDs of the PEs connecting to different DC gateways.\nPrerequisites\nRun the esi command successfully, the following conditions are needed:\nThe BD is in the Up state.The BD has been bound to an EVPN instance using evpn binding vpn-instance command.The BD has been associated with a VNI using vxlan vni command.\n\nPrecautions\nAn ESI identifies a CE to which a PE connects. Using different ESIs on the same PE is recommended."
+}

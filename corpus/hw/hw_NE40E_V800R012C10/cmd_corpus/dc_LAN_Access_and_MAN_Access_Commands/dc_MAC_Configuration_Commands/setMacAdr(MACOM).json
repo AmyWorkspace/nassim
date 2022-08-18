@@ -1,0 +1,78 @@
+{
+    "PageTitle": "mac-address vlan (System view)",
+    "FuncDef": "The mac-address blackhole command configures a static blackhole MAC address entry.\nThe undo mac-address blackhole command deletes a static blackhole MAC address entry.\nThe mac-address static vlan command configures static MAC address entries for a VLAN to direct data forwarding.\nThe undo mac-address command deletes static MAC address entries for a VLAN.\nBy default, no static blackhole MAC address entry is configured for the system, no static MAC address entry for a VLAN is configured for the system.",
+    "CLIs": [
+        "mac-address blackhole mac-address vlan <vlan-id>",
+        "mac-address static mac-address { <interface-type> <interface-number> | <interface-name> } { vlan <vlan-id> } [ ce-vlan <ce-vlan-id> | ce-default ]",
+        "undo mac-address <mac-address> vlan <vlan-id>",
+        "undo mac-address { { <interface-type> <interface-number> | <interface-name> } vlan <vlan-id> | vlan <vlan-id> [ <interface-type> <interface-number> | <interface-name> ] }",
+        "undo mac-address blackhole [ mac-address ] vlan <vlan-id>",
+        "undo mac-address static { { mac-address { <interface-type> <interface-number> | <interface-name> } vlan <vlan-id> } | { { <interface-type> <interface-number> | <interface-name> } vlan <vlan-id> | vlan <vlan-id> [ <interface-type> <interface-number> | <interface-name> ] } }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies a destination MAC address.\nThe value is in the format of H-H-H. Each H is a 4-digit hexadecimal number, such as 00e0 or fc01. If an H contains less than four bits, 0s are padded ahead. For example, if an H is e0, it is equal to 00e0. A MAC address cannot be FFFF-FFFF-FFFF."
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies a VLAN to which the outbound interface belongs.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "static",
+            "Info": "Specifies the static MAC address entries.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the interface name.\n-"
+        },
+        {
+            "Parameters": "ce-vlan ce-vlan-id",
+            "Info": "Specifies the VLAN ID received during the configuration of VLAN mapping.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-default",
+            "Info": "Specifies that the static MAC address entry is created based on ce-default-vlan.\n-"
+        },
+        {
+            "Parameters": "blackhole",
+            "Info": "Black hole item.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 40",
+            "[*HUAWEI-vlan40] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] port link-type trunk",
+            "[*HUAWEI-GigabitEthernet1/0/1] port trunk allow-pass vlan 40",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] mac-address static 1-1-1 GigabitEthernet 1/0/1 vlan 40"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 40",
+            "[*HUAWEI-vlan40] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] port link-type trunk",
+            "[*HUAWEI-GigabitEthernet1/0/1] port trunk allow-pass vlan 40",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] mac-address static 1-1-1 GigabitEthernet 1/0/1 vlan 40"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMAC address table capacity attack\nThe attack source sends packets with different source MAC addresses to a network device. After receiving these packets, the network device learns the source MAC addresses. Since the capacity of a MAC address table is limited, when the number of the MAC addresses in the MAC address table reaches the limit, the source MAC addresses of valid packets cannot be learned. These packets sent from the attack source are also broadcast in the VLAN, consuming lots of bandwidth on the network. This may also affect the hosts attached to the network device.\nMAC address entry attack\nWhen a device learns source MAC addresses and creates a MAC address table, the system cannot identify whether the packets are from authorized users or hackers. This brings security threats. If hackers send attack packets with forged source MAC addresses and access a device through other interfaces, the device will learn incorrect MAC address entries. As a result, the packets that should be forwarded to authorized users are forwarded to hackers.\nTo improve interface security, a network administrator can run the mac-address static command to add specific MAC address entries to the MAC address table. User devices are bound to interfaces to prevent unauthorized users from obtaining data.\n\nConfiguration Impact\nAfter static MAC address entries are configured, when receiving a frame with a specific MAC address, a device directly forwards the frame through the corresponding outbound interface. Static MAC address entries will not be aged and they will not be lost after the system resets or the interface board is hot-swapped.\nPrecautions\nManually configured MAC address entries take precedence over automatically generated entries. Static and static blackhole MAC address entries that are configured by users will not be overwritten by dynamic MAC address entries. Dynamic MAC address entries, however, can be overwritten by static and blackhole MAC address entries.\nThe network administrator is familiar with the MAC addresses of the network devices that need to use static MAC address entries for communication; otherwise, the configuration will interrupt authorized users' communication."
+}

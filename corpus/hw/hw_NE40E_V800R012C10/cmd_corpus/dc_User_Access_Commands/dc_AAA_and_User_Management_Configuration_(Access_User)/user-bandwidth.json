@@ -1,0 +1,41 @@
+{
+    "PageTitle": "user-bandwidth",
+    "FuncDef": "The user-bandwidth auto-adapt command enables the automatic peak information rate (PIR) bandwidth adjustment function for DHCPv4, DHCPv6 and PPPoE users.\nThe undo user-bandwidth auto-adapt command restores the default setting.\nBy default, the automatic PIR bandwidth adjustment function is disabled.",
+    "CLIs": [
+        "user-bandwidth auto-adapt enable",
+        "user-bandwidth auto-adapt type1",
+        "undo user-bandwidth auto-adapt enable",
+        "undo user-bandwidth auto-adapt type1"
+    ],
+    "ParentView": [
+        "BAS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "type1",
+            "Info": "Enables the function of automatically selecting the smaller value of the downstream bandwidth reported by the DSLAM and the downstream bandwidth in the QoS profile delivered by the RADIUS server as the user downstream PIR bandwidth.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables the function of automatically adjusting the user downstream PIR bandwidth to the downstream bandwidth reported by the DSLAM.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] bas",
+            "[~HUAWEI-GigabitEthernet1/0/0-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet1/0/0-bas] user-bandwidth auto-adapt enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] bas",
+            "[~HUAWEI-GigabitEthernet1/0/0-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet1/0/0-bas] user-bandwidth auto-adapt enable",
+            "[~HUAWEI-GigabitEthernet1/0/0-bas] user-bandwidth auto-adapt type1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a user gets online and sends a DHCP Discovery/DHCPv6 Solicit/PPPoE PADR packet to the DSLAM, the DSLAM adds the downstream PIR bandwidth information to Option 82/Option 18/Option 105 sub-option 130 (Actual-Data-Rate-Downstream information). After the user-bandwidth auto-adapt command is run, the device adjusts the user downstream PIR bandwidth based on the bandwidth value in the Actual-Data-Rate-Downstream information. This prevents packet loss caused by insufficient downstream DSLAM bandwidth when the downstream traffic is too heavy. For a home user, the home downstream PIR bandwidth is adjusted. For a common user, the user downstream PIR bandwidth is adjusted.\nBefore using the user-bandwidth auto-adapt enable command, configure the client-option82 command on the BAS interface to trust DHCP Option 82 information reported by the client for DHCPv4 users.\nFor DHCPv6 users, before using the user-bandwidth auto-adapt enable command, configure the client-option82 or client-option18 command on the BAS interface to trust DHCP Option 18 information reported by the client.\nFor PPPoE users, before using the user-bandwidth auto-adapt enable command, configure the client-option82 command on the BAS interface or the access-line-id attach command in the system view to trust Option 105 information reported by the client.\nIf the command is configured and Option 82/Option18/Option105 is not carried by the DHCPv4/DHCPv6/PPPoE user information or the Actual-Data-Rate-Downstream information carried in Option 82/Option 18/Option 105 is invalid, the automatic bandwidth adjustment function does not take effect.\nWhen the updated downstream PIR is smaller than the downstream committed information rate (CIR) delivered by the RADIUS server, the device adjusts the CIR to a value that is the same as the PIR.\nPrerequisites\nBefore configuring the user-bandwidth auto-adapt enable command, run the access-type command to set types of BAS interfaces. The type of BAS interface can be set to be Layer 2 common user interface, Layer 2 leased line user interface, Layer 3 common user interface, or Layer 3 leased line user interface.\nPrecautions\nBefore a mode for adjusting the user downstream PIR bandwidth is set using the user-bandwidth auto-adapt type1 command, the user-bandwidth auto-adapt enable command must be run to enable the function of automatically adjusting the user bandwidth based on the downstream bandwidth of the DSLAM.If the undo user-bandwidth auto-adapt type1 command is run, the function of automatically adjusting the user downstream PIR bandwidth to the downstream bandwidth reported by the DSLAM is enabled."
+}

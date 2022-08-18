@@ -1,0 +1,34 @@
+{
+    "PageTitle": "peer sa-cache-maximum",
+    "FuncDef": "The peer sa-cache-maximum command sets a maximum cache number for (S, G) entries learned from a specified Multicast Source Discovery Protocol (MSDP) peer.\nThe undo peer sa-cache-maximum command restores the default configuration.\nBy default, a maximum of 8192 (S, G) entries can be cached for a specified MSDP peer.",
+    "CLIs": [
+        "peer <peer-address> sa-cache-maximum <sa-limit>",
+        "undo peer <peer-address> sa-cache-maximum"
+    ],
+    "ParentView": [
+        "VPN instance MSDP view",
+        "MSDP view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the address of an MSDP peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "sa-limit",
+            "Info": "Specifies the maximum number of (S, G) entries that can be cached.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback1",
+            "[*HUAWEI-LoopBack1] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] msdp",
+            "[*HUAWEI-msdp] peer 10.10.7.6 connect-interface LoopBack 1",
+            "[*HUAWEI-msdp] peer 10.10.7.6 sa-cache-maximum 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo protect a network against deny of service (DoS) attacks, run the peer sa-cache-maximum command to set a maximum cache number for (S, G) entries learned from an MSDP peer. Running this command for all MSDP peers is recommended.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nMSDP peers have been configured, and the SA cache function has been enabled.\nConfiguration Impact\nThe total number of (S, G) entries that can be cached in the SA cache is limited by the specifications of the SA cache.\nFor (S, G) entries learned from a specific MSDP peer:\n-If a maximum cache number is not set or is set to a value larger than the default value, a maximum number of the default value (S, G) entries can be cached for this peer.\nIf the specified maximum cache number is smaller than the default value, the specified value takes effect. Excess (S, G) entries are not cached or advertised to PIM-SM but can be forwarded through SA messages."
+}

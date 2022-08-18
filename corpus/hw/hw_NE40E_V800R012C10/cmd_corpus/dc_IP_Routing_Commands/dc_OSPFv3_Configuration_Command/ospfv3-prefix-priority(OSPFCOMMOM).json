@@ -1,0 +1,42 @@
+{
+    "PageTitle": "prefix-priority(OSPFv3 view)",
+    "FuncDef": "The prefix-priority command sets a convergence priority for OSPFv3 routes.\nThe undo prefix-priority command restores the default value.\nBy default, in an OSPFv3 routing table, the convergence priority of public network 32-bit host routes and default routes is medium, and the convergence priority of other OSPFv3 routes is low; in an IP routing table, the convergence priority of public network 32-bit host routes and default routes is high, and the convergence priority of other OSPFv3 routes is medium.",
+    "CLIs": [
+        "prefix-priority { critical | high | medium | very-low } ipv6-prefix <ipv6-prefix-name>",
+        "undo prefix-priority { critical | high | medium | very-low }"
+    ],
+    "ParentView": [
+        "OSPFv3 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "critical",
+            "Info": "Sets the convergence priority of OSPFv3 routes to critical.\n-"
+        },
+        {
+            "Parameters": "high",
+            "Info": "Sets the convergence priority of OSPFv3 routes to high.\n-"
+        },
+        {
+            "Parameters": "medium",
+            "Info": "Sets the convergence priority of OSPFv3 routes to medium.\n-"
+        },
+        {
+            "Parameters": "very-low",
+            "Info": "Sets the convergence priority of OSPFv3 routes to very-low.\n-"
+        },
+        {
+            "Parameters": "ipv6-prefix ipv6-prefix-name",
+            "Info": "Specifies the name of an IPv6 prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ipv6-prefix critical-prefix index 10 permit 2001:DB8:1::1 64",
+            "[*HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] prefix-priority critical ipv6-prefix critical-prefix"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set a convergence priority of OSPFv3 routes based on a specified IPv6 prefix list, run the prefix-priority command. The command takes effect on the public network only.\nAfter the prefix-priority command is used in the OSPFv3 view, OSPFv3 route calculation, link-state advertisement (LSA) flooding, and LSDB synchronization can be implemented according to the configured priority, which accelerates route convergence.\nConfiguration Impact\nThe convergence priorities of OSPFv3 routes can be critical, high, medium, low, and very-low. The priorities in the corresponding IP routing table are critical, high, high, medium, and low. The priorities are listed in descending order.When an LSA meets multiple priorities, the highest priority takes effect.\nOSPFv3 calculates LSAs in the sequence of intra-area routes, inter-area routes, and AS external routes. This command enables OSPFv3 to calculate the three types of routes separately according to the specified route calculation priorities. Convergence priorities are critical, high, medium, low and very-low. Tvery-o speed up the processing of LSAs with the higher priority, during LSA flooding, the LSAs need to be placed into the corresponding critical, high, medium, low and very-low queues according to priorities.\nPrecautions\nBy default, the convergence priorities of public OSPFv3 host routes, direct routes, static routes, and other protocol (such as BGP and RIP) routes are medium, high, medium, and low respectively. On the public network, OSPFv3 32-bit host routes are uniformly identified as medium."
+}

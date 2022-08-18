@@ -1,0 +1,91 @@
+{
+    "PageTitle": "{ unknown-unicast-suppression | broadcast-suppression | multicast-suppression | unicast-suppression } cir (interface view)",
+    "FuncDef": "The broadcast-suppression command configures the maximum volume of broadcast traffic that an interface forwards.\nThe undo broadcast-suppression command restores the default configuration.\nThe multicast-suppression command configures the maximum volume of multicast traffic that an interface forwards.\nThe undo multicast-suppression command restores the default configuration.\nThe unknown-unicast-suppression command configures the maximum volume of unknown unicast traffic that an interface forwards.\nThe undo unknown-unicast-suppression command restores the default configuration.\nThe unicast-suppression command configures the maximum volume of unicast traffic that an interface forwards.\nBy default, unknown unicast, broadcast, unicast, and multicast traffic are not suppressed on interfaces.",
+    "CLIs": [
+        "{ unknown-unicast-suppression | broadcast-suppression | multicast-suppression } cir <cir-value> [ cbs <cbs-value> ] { inbound | outbound } { vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> }",
+        "{ unknown-unicast-suppression | broadcast-suppression | multicast-suppression } { <percent-value> | value <bw-value> } { inbound | outbound }",
+        "unicast-suppression cir <cir-value> [ cbs <cbs-value> ] { inbound | outbound } { vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> }",
+        "unicast-suppression { <percent-value> | value <bw-value> } { inbound | outbound }",
+        "undo { unknown-unicast-suppression | broadcast-suppression | multicast-suppression } { inbound | outbound } [ vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> ]",
+        "undo { unknown-unicast-suppression | broadcast-suppression | multicast-suppression } { <percent-value> | value <bw-value> } { inbound | outbound }"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Eth-Trunk interface view",
+        "Layer 2 50GE interface view",
+        "Port extension Layer 2 interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the committed information rate (CIR), namely, maximum rate at which multicast traffic is forwarded.\nThe value is an integer ranging from 0 to 4294967295, in kbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the Committed Burst Size (CBS), which is the depth of the first token bucket.\nThe value is an integer ranging from 0 to 4294967295, in bytes.\nThe default value is determined by cir-value:\nIf cir-value is less than 100000 kbit/s, the default value of cbs-value equals cir-value x (1500/8), in bytes.If cir-value is greater than or equal to 100000 kbit/s, the default value of cbs-value equals 100000 x (1500/8), in bytes."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Inbound.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Outbound.\n-"
+        },
+        {
+            "Parameters": "vlan vlan-id1",
+            "Info": "Specifies the ID of the start VLAN.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vlan vlan-id2",
+            "Info": "Specifies the ID of the end VLAN.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "percent-value",
+            "Info": "Specifies the percentage of the set rate of the broadcast traffic to the total interface bandwidth.\nThe value ranges from 0 to 100."
+        },
+        {
+            "Parameters": "value bw-value",
+            "Info": "Specifies the rate limit on broadcast traffic on the interface.\nThe value is an integer ranging from 0 to 1000 in Mbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] vlan 1",
+            "[*HUAWEI-vlan1] port GigabitEthernet 1/0/0",
+            "[*HUAWEI-vlan1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] unknown-unicast-suppression cir 100 cbs 18800 inbound vlan 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] vlan 1",
+            "[*HUAWEI-vlan1] port GigabitEthernet 1/0/0",
+            "[*HUAWEI-vlan1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] broadcast-suppression cir 100 cbs 18800 inbound vlan 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] vlan 1",
+            "[*HUAWEI-vlan1] port GigabitEthernet 1/0/0",
+            "[*HUAWEI-vlan1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] multicast-suppression cir 100 cbs 18800 inbound vlan 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf unknown unicast, broadcast, unicast, or multicast traffic mounts on a network, the traffic consumes a great amount of network bandwidth, deteriorating network performance.\nTo prevent an unknown unicast, broadcast, unicast, or multicast traffic storm, run the { unknown-unicast-suppression | broadcast-suppression | unicast-suppression | multicast-suppression } cir command to suppress unknown unicast, broadcast, unicast, or multicast traffic on an interface. If the unknown unicast, broadcast, unicast, or multicast traffic volume exceeds the cirVal, the system discards the excessive unknown unicast, broadcast, unicast, or multicast traffic.\nPrecautions\nThe command can be run only on Ethernet interfaces, GE interfaces, and Eth-Trunk interfaces that work in Layer 2 mode. If these interfaces work in Layer 3 mode, run the portswitch command to switch the working mode to Layer 2.\nThe { unknown-unicast-suppression | broadcast-suppression | unicast-suppression | multicast-suppression } value command configures unknown unicast, broadcast, unicast, or multicast traffic suppression based on the interface bandwidth.\nThe { unknown-unicast-suppression | broadcast-suppression | unicast-suppression | multicast-suppression } cir command configures unknown unicast, broadcast, unicast, or multicast traffic suppression on an interface that is added to a VLAN.\nIf you configure unknown unicast, broadcast, unicast, or multicast traffic suppression on an interface for several times, the last configuration overrides the previous ones. Before you reconfigure unknown unicast, broadcast, unicast, or multicast traffic suppression on an interface that is added to a VLAN, delete the first configuration."
+}

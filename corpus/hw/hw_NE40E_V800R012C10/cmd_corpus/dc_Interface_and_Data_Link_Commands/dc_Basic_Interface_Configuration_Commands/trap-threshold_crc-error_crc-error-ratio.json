@@ -1,0 +1,59 @@
+{
+    "PageTitle": "trap-threshold crc-error alarm-threshold",
+    "FuncDef": "The trap-threshold crc-error bit-error-ratio command configures a BER alarm generation threshold.\nThe undo trap-threshold crc-error command restores the default configuration.\nThe trap-threshold crc-error packet-error-ratio command enables CRC error threshold crossing detection and sets an alarm generation threshold and alarm clearance threshold for the CRC error frame ratio.\nThe undo trap-threshold crc-error command disables CRC error threshold crossing detection.\nBy default, no BER is calculated. An alarm is generated on an interface when three CRC errors are produced within 10 seconds. CRC error threshold crossing detection is disabled, and no threshold is set for the CRC error frame ratio.",
+    "CLIs": [
+        "trap-threshold crc-error bit-error-ratio alarm-threshold <coefficient-value> <power-value> [ resume-threshold <coefficient-value> <power-value> ]",
+        "trap-threshold crc-error packet-error-ratio alarm-threshold <coef-value> <pow-value> [ resume-threshold <rsm-coef-value> <rsm-pow-value> ]"
+    ],
+    "ParentView": [
+        "Trunk serial interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "coefficient-value",
+            "Info": "Specifies a BER coefficient (x in xE-y).\nThe value is 1."
+        },
+        {
+            "Parameters": "power-value",
+            "Info": "Specifies a BER power (y in xE-y).\nThe value is an integer that ranges from 3 to 6 ."
+        },
+        {
+            "Parameters": "resume-threshold",
+            "Info": "Specifies the threshold for a BER clear alarm.\n-"
+        },
+        {
+            "Parameters": "alarm-threshold",
+            "Info": "Specifies a BER alarm generation threshold.\n-"
+        },
+        {
+            "Parameters": "coef-value",
+            "Info": "Specifies a coefficient (x in xE-y) of the alarm generation threshold for the CRC error frame ratio.\nThe value is an integer that ranges from 1 to 9 ."
+        },
+        {
+            "Parameters": "pow-value",
+            "Info": "Specifies a power (y in xE-y) of the alarm generation threshold for the CRC error frame ratio.\nThe value is an integer that ranges from 1 to 5 ."
+        },
+        {
+            "Parameters": "rsm-coef-value",
+            "Info": "Specifies a coefficient (x in xE-y) of the alarm clearance threshold for the CRC error frame ratio.\nThe value is an integer that ranges from 1 to 9 ."
+        },
+        {
+            "Parameters": "rsm-pow-value",
+            "Info": "Specifies a power (y in xE-y) of the alarm clearance threshold for the CRC error frame ratio.\nThe value is an integer that ranges from 1 to 6 ."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface serial1/0/0:0",
+            "[*HUAWEI-serial1/0/0:0] trap-threshold crc-error bit-error-ratio alarm-threshold 1 4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] trap-threshold crc-error packet-error-ratio alarm-threshold 3 2 resume-threshold 3 3 trigger-lsp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\ntrap-threshold crc-error bit-error-ratio:\nA BER is a key counter for measuring communication quality. To configure a BER alarm generation threshold, run the trap-threshold crc-error bit-error-ratio command.\nSerial interfaces and trunk-serial interfaces serve as member interfaces of MP-group and global-MP interfaces, respectively, respectively. If you run both the trap-threshold crc-error bit-error-ratio and port-alarm down command and a specified BER alarm generation threshold is reached on the serial or trunk-serial interface, the interface becomes Down. Packets are load-balanced on other member interfaces of the MP-group or global-MP interface. This process prevents packet loss.\ntrap-threshold crc-error packet-error-ratio:\nTo set an alarm generation threshold and an alarm clearance threshold for the CRC error frame ratio, run the trap-threshold crc-error packet-error-ratio command. The system reports an alarm to the NMS.\nIf the trigger-lsp or trigger-section parameter is specified, an alarm triggers LSP or section switching.\n\nConfiguration Impact\nAfter you configure a BER alarm generation threshold, a device generates an alarm when the BER exceeds the configured threshold and clears the alarm when the BER reaches the corresponding alarm clearing threshold.\nDifferent devices and services have different requirements for BERs. Configure a BER alarm generation threshold according to a network plan and device requirements.\nIf the trigger-lsp or trigger-section parameter is specified, traffic is switched to the standby link after an alarm is reported. If the trigger-lsp and trigger-section parameters are both configured on a physical interface, the later configuration takes effect. If the trigger-section parameter is configured and the CRC error frame ratio reaches the alarm threshold on a physical interface, section switching is triggered to set the link layer status for the interface to the bit error status. If an IGP and LDP use the interface as an outbound interface, LSP recalculation and convergence are triggered."
+}

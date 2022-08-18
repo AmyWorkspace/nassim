@@ -1,0 +1,157 @@
+{
+    "PageTitle": "display ospf routing",
+    "FuncDef": "The display ospf migp-routing command displays information about the OSPF Multicast IGP (MIGP) table information.\nThe display ospf routing command displays the OSPF routing table.",
+    "CLIs": [
+        "display ospf [ <process-id> ] routing router-id [ router-id ] [ age { min-value <min-age-value> | max-value <max-age-value> } * ]",
+        "display ospf [ <process-id> ] routing [ <ip-address> [ <mask> | <mask-length> ] ] [ [ interface { <interface-name> | <interface-type> <interface-number> } ] [ nexthop <nexthop-address> ] ] * [ age { min-value <min-age-value> | max-value <max-age-value> } * ]",
+        "display ospf [ <process-id> ] migp-routing [ <ip-address> [ <mask> | <mask-length> ] ] [ [ interface { <interface-name> | <interface-type> <interface-number> } ] [ nexthop <nexthop-address> ] ] * [ age { min-value <min-age-value> | max-value <max-age-value> } * ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "process-id",
+            "Info": "Specifies the ID of an OSPF process.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "router-id router-id",
+            "Info": "Specifies the router ID of a destination router.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "age",
+            "Info": "Displays the LSAs that meet the age filtering rule.\n-"
+        },
+        {
+            "Parameters": "min-value min-age-value",
+            "Info": "Displays information about only LSAs with the age value greater than or equal to the min-age-value value.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "max-value max-age-value",
+            "Info": "Displays information only about LSAs with the age value less than or equal to the max-age-value value.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies a destination IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies a subnet mask.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type or the number of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        },
+        {
+            "Parameters": "nexthop nexthop-address",
+            "Info": "Specifies the next hop address.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display ospf routing",
+            "OSPF Process 1 with Router ID 4.4.4.4",
+            "",
+            "                   Routing Tables",
+            "",
+            " Routing for Network",
+            " Destination        Cost      Type           NextHop         AdvRouter       Area",
+            " 172.16.1.0/24      4         Inter-area     192.168.2.1     2.2.2.2         0.0.0.2",
+            "                    4         Inter-area     192.168.2.3     2.2.2.2         0.0.0.2",
+            " 192.168.0.0/24     2         Inter-area     192.168.2.1     2.2.2.2         0.0.0.2",
+            " ",
+            " Routing for ASEs",
+            " Destination        Cost      Type       Tag      NextHop         AdvRouter",
+            " 10.0.0.0/8        1         Type2      1        192.168.2.1     1.1.1.1",
+            " ",
+            " Total Nets: 4",
+            " Intra Area: 1  Inter Area: 2  ASE: 1  NSSA: 0"
+        ],
+        [
+            "<HUAWEI> display ospf routing 10.1.1.1",
+            "OSPF Process 1 with Router ID 1.1.1.1",
+            "",
+            " Destination    : 10.1.1.0/24",
+            " AdverRouter    : 10.1.1.1             Tag                 : 1",
+            " Cost           : 1                    Type                : Type2",
+            " NextHop        : 10.1.2.2             Interface           : GE1/0/0",
+            " Priority       : High                 Age                 : 00h00m00s",
+            " Backup NextHop : 10.1.3.3             Backup Interface    : GE1/0/1",
+            " Backup Type    : LFA LINK             Tunnel Destination  : 3.3.3.3           ",
+            " Tunnel Type    : LDP"
+        ],
+        [
+            "<HUAWEI> display ospf routing router-id 10.1.1.1",
+            "OSPF Process 1 with Router ID 10.1.1.1",
+            "",
+            " Destination    : 10.1.1.2             Route Type          : Intra-area",
+            " Area           : 0.0.0.1              AdvRouter           : 10.1.1.2",
+            " Type           : ASBR                 Age                 : 00:00:33",
+            " URT Cost       : 1",
+            " NextHop        : 10.1.2.2             Interface           : GE1/0/0",
+            " Backup NextHop : 10.1.3.3             Backup Interface    : GE3/0/0",
+            " Backup Type    : LFA LINK             Tunnel Destination  : 3.3.3.3           ",
+            " Tunnel Type    : LDP"
+        ],
+        [
+            "<HUAWEI> display ospf routing router-id 4.4.4.4",
+            "          OSPF Process 1 with Router ID 2.2.2.2",
+            " Destination     : 4.4.4.4         Route Type          : Intra-area",
+            " Area            : 0.0.0.0         AdvRouter           : 4.4.4.4",
+            " Type            : Normal          Age                 : 00:00:12",
+            " URT Cost        : 13",
+            " NextHop         : 10.1.1.1        Interface           : GE1/0/0",
+            " SRULoopNexthop  : 10.1.1.1        Interface           : GE1/0/0",
+            " SRULoopLsIndex  : 2000000001",
+            " SRULoopStack    : {32789, 32789}"
+        ],
+        [
+            "<HUAWEI> display ospf migp-routing",
+            "OSPF Process 1 with Router ID 2.2.2.2",
+            "                   MIGP Routing Tables",
+            "",
+            " Routing for Network",
+            " Destination        Cost  Type       NextHop         AdvRouter       Area",
+            " 192.168.3.0/24     4     Stub       10.0.1.1        5.5.5.5         0.0.0.0",
+            " 4.4.4.4/32         3     Stub       10.0.1.1        4.4.4.4         0.0.0.0",
+            " 5.5.5.5/32         4     Stub       10.0.1.1        5.5.5.5         0.0.0.0",
+            " 10.0.3.0/24        3     Transit    10.0.1.1        5.5.5.5         0.0.0.0",
+            "",
+            " Total Nets: 4",
+            " Intra Area: 4  Inter Area: 0  ASE: 0  NSSA: 0"
+        ],
+        [
+            "<HUAWEI> display ospf migp-routing nexthop 10.0.1.1",
+            "Flags: A - Added to URT, S - Secondary route",
+            "",
+            "          OSPF Process 1 with Router ID 2.2.2.2, ",
+            "",
+            "Destination    : 1.1.1.1/32",
+            "AdverRouter    : 1.1.1.1                  Area       : 0.0.0.1",
+            "Cost           : 10                       Type       : Stub",
+            "NextHop        : 10.0.1.1                 Interface  : GE3/0/0.1",
+            "Priority       : Medium",
+            "Flags          : A/-",
+            "",
+            "Destination    : 10.0.0.1/32",
+            "AdverRouter    : 1.1.1.1                  Tag        : 1",
+            "Cost           : 11                       Type       : Type1",
+            "NextHop        : 10.0.1.1                 Interface  : GE3/0/0.1",
+            "Priority       : Medium",
+            "Flags          : A/-"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen multicast and an IGP Shortcut-enabled MPLS TE tunnel are configured on a network, the outbound interface of the route calculated by an IGP may not be a physical interface but a TE tunnel interface. The TE tunnel interface on the Device sends multicast Join packets over a unicast route to the multicast source address. The multicast Join packets are transparent to the Device from which the TE tunnel passes. As a result, the Device cannot generate multicast forwarding entries.\nTo resolve the problem, run the local-mt enable command to enable OSPF local MT so that a multicast routing table can be generated for multicast packet forwarding.\nAfter local MT is enabled, if the outbound interface of a calculated route is an IGP Shortcut-enabled TE tunnel interface, the RM module creates an MIGP routing table for the multicast protocol,calculates a physical outbound interface for the route, and adds the route to the MIGP routing table.\nThe display ospf migp-routing command displays information about the MIGP routing table.\nTo view the OSPF routing table, run the display ospf routing command.\nThe command output can help you troubleshoot OSPF faults.\nTo query the next hop of a device, run the display ospf routing router-id command. If a segment routing next hop exists, it is displayed. If the device is in the segment routing anti-micro loop state, the anti-micro loop next hop and anti-micro loop label stack are displayed. In the anti-micro loop state, the segment routing next hop is not displayed. The segment routing next hop is displayed only after the device exits the anti-micro loop state.\nPrecautions\nLocal MT takes effect only on the OSPF process of a public network instance.Local MT does not support Forwarding Adjacency (FA)."
+}

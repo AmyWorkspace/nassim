@@ -1,0 +1,47 @@
+{
+    "PageTitle": "igmp-snooping lastmember-queryinterval (VSI E-Tree view)",
+    "FuncDef": "The igmp-snooping lastmember-queryinterval command sets the interval at which a querier sends group-specific query messages or source/group-specific query messages.\nThe undo igmp-snooping lastmember-queryinterval command restores the default setting.\nBy default, a querier sends group-specific query messages or source/group-specific query messages at an interval of 1s.",
+    "CLIs": [
+        "igmp-snooping lastmember-queryinterval <lastmember-queryinterval>",
+        "undo igmp-snooping lastmember-queryinterval"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lastmember-queryinterval",
+            "Info": "Specifies the interval at which a querier sends group-specific query messages or source/group-specific query messages.\nThe value ranges from 1 to 5, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan 2",
+            "[*HUAWEI-vlan2] igmp-snooping lastmember-queryinterval 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi aa",
+            "[*HUAWEI-vsi-aa] pwsignal ldp",
+            "[*HUAWEI-vsi-aa-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-aa-ldp] quit",
+            "[*HUAWEI-vsi-aa] igmp-snooping lastmember-queryinterval 4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] igmp-snooping lastmember-queryinterval 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe igmp-snooping lastmember-queryinterval command has the following functions:\nSets the interval at which a querier sends group-specific query messages or source/group-specific query messages.\nIf the querier function is enabled, this command is used to set the interval at which the querier sends group-specific messages or source/group-specific query messages. When memberships change frequently on the network, this command can be used to reduce the interval at which the querier sends group-specific query messages or source/group-specific query messages. This ensures that IGMP group-specific query messages or source/group-specific query messages can be rapidly responded to.\nChanges the aging time of member ports.\nAfter receiving an IGMP Leave message from a host, a device sets the aging time of the corresponding member port based on the following formula: Aging time of a member port = Interval at which group-specific query messages or source/group-specific query messages are sent x Number of times group-specific query messages or source/group-specific query messages are sent. By default, the aging time is re-set to 2s. The interval at which group-specific query messages or source/group-specific query messages are sent in the formula is set using the igmp-snooping lastmember-queryinterval command. The number of times group-specific group query messages or source/group-specific query messages are sent is set using the igmp-snooping robust-count command.\nIf the querier receives a Report message for the multicast group from another host within the robust-value x lastmember-queryinterval period, it continues to maintain the memberships for the group. Otherwise, the querier considers that there is no member of the group on the network segment, and does not maintain the memberships for the group.\n\nPrerequisites\nIGMP snooping has been configured globally and in a VSI.\nConfiguration Impact\nIf the igmp-snooping lastmember-queryinterval command is run in the same VSI view several times, the latest configuration overrides the previous one.\nPrecautions\nWhen the igmp-snooping lastmember-queryinterval command is used to set the aging time of member ports, the settings of parameters in this command must be consistent on a Layer 2 device and its upstream Layer 3 device; otherwise, multicast data transmission between Layer 2 and Layer 3 networks will be interrupted."
+}

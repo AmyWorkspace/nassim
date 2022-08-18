@@ -1,0 +1,40 @@
+{
+    "PageTitle": "stp permit packet source-mac (VSI-LDP-PW view)",
+    "FuncDef": "The stp permit packet source-mac command enables the function to process STP, RSTP, and MSTP BPDUs that carry a specified source MAC address.\nThe undo stp permit packet source-mac command disables the function to process STP, RSTP, and MSTP BPDUs that carry a specified source MAC address.\nBy default, the function to process STP, RSTP, and MSTP BPDUs that carry a specified source MAC address is not enabled.",
+    "CLIs": [
+        "stp permit packet source-mac <source-mac> <source-mac-mask>",
+        "undo stp permit packet source-mac <source-mac> <source-mac-mask>"
+    ],
+    "ParentView": [
+        "VSI-LDP-PW view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "source-mac source-mac",
+            "Info": "Specifies the source MAC address based on which STP, RSTP, and MSTP BPDUs are processed.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        },
+        {
+            "Parameters": "source-mac-mask",
+            "Info": "Specifies a mask of the source MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi 1",
+            "[*HUAWEI-vsi-1] pwsignal ldp",
+            "[*HUAWEI-vsi-1-ldp] vsi-id 33",
+            "[*HUAWEI-vsi-1-ldp] peer 1.1.1.1",
+            "[*HUAWEI-vsi-1-ldp] peer 1.1.1.1 pw pw1",
+            "[*HUAWEI-vsi-1-ldp-pw-pw1] quit",
+            "[*HUAWEI-vsi-1-ldp] pw pw1",
+            "[*HUAWEI-vsi-1-ldp-pw-pw1] stp enable",
+            "[*HUAWEI-vsi-1-ldp-pw-pw1] stp permit packet source-mac 2-2-0 ffff-ffff-0000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a network running STP, RSTP, or MSTP, if a device transparently transmits unexpected STP, RSTP, or MSTP BPDUs, network flapping may occur. To address this problem, run the stp permit packet command to enable the device to process only the STP, RSTP, and MSTP BPDUs carrying a specified source MAC address.\nPrerequisites\nTo set the stp deny packet command, run the stp enable command on the interface to enable STP/RSTP/MSTP.\nPrecautions\nA maximum of 16 source MAC addresses can be configured in the same interface view or VSI-LDP-PW view.If both the stp deny packet and stp permit packet commands are configured in the same interface view or VSI-LDP-PW view, the device preferentially executes the stp deny packet command.If the function to process STP, RSTP, and MSTP BPDUs that carry a specified source MAC address is incorrectly enabled, a broadcast storm may occur. Therefore, ensure that the source MAC address and source MAC address mask are correct before executing the stp permit packet command."
+}

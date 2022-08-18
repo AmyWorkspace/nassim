@@ -1,0 +1,26 @@
+{
+    "PageTitle": "protect lsp-tunnel for-all-instance peer-ip",
+    "FuncDef": "The protect lsp-tunnel for-all-instance peer-ip command configures a public and VPN protection tunnel template in hot backup scenarios.\nThe undo protect lsp-tunnel peer-ip command deletes a specified public and VPN protection tunnel template.\nBy default, no public and VPN protection tunnel template is created.",
+    "CLIs": [
+        "protect lsp-tunnel for-all-instance peer-ip <ip-address>",
+        "undo protect lsp-tunnel peer-ip <ip-address>"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the peer IP address of a tunnel.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service rui",
+            "[*HUAWEI-rm-backup-srv-rui] commit",
+            "[~HUAWEI-rm-backup-srv-rui] protect lsp-tunnel for-all-instance peer-ip 1.1.1.34"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn RUI scenarios, previously, the protection tunnels must be configured for the public network and each VPN separately, and MBGP must run between devices when VPN protection tunnels are configured. To simplify tunnel configuration in RUI scenarios, run the protect lsp-tunnel for-all-instance peer-ip command to configure a public and VPN protection tunnel template. Then a public protection tunnel is automatically created, and a VPN protection tunnel is triggered by user login, without needing to configure MBGP.\nPrerequisites\nMPLS LSPs have been configured between the master and slave devices for public protection tunnels, and VPNs have been configured between master and slave devices for VPN protection tunnels.\nConfiguration Impact\nNetwork-to-user traffic forwarding is affected. Run the display remote-backup-service command to check the tunnel status. If the Tunnel-state field displays Up, the tunnel is working properly.\nPrecautions\nThis command is supported only on the admin VS.\nThe protect tnl-policy policy-name peer-ip ip-address and protect ip-vpn-instance vpn-instance-name peer-ip ip-address command are used to specify a tunnel for a private network and a tunnel for a VPN, respectively. These two commands can be used together with the protect lsp-tunnel for-all-instance peer-ip command. The protect lsp-tunnel for-all-instance peer-ip command has a higher priority. Specifically, when these commands are configured at the same time, the configuration of the protect lsp-tunnel for-all-instance peer-ip command takes effect in priority."
+}

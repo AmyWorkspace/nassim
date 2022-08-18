@@ -1,0 +1,32 @@
+{
+    "PageTitle": "mld-snooping ssm-policy",
+    "FuncDef": "The mld-snooping ssm-policy command sets the source-specific multicast (SSM) group address range.\nThe undo mld-snooping ssm-policy command restores the default configuration.\nBy default, the SSM group address range is FF3x::/32, where x cannot be 1 or 2.",
+    "CLIs": [
+        "mld-snooping ssm-policy { <basic-acl6-number> | acl6-name <acl6-name> }",
+        "undo mld-snooping ssm-policy"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basic-acl6-number",
+            "Info": "Specifies the number of a basic IPv6 ACL. This ACL defines the range of IPv6 SSM group addresses.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named basic IPv6 ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 2008",
+            "[~HUAWEI-acl6-basic-2008] rule permit source ff15::1 64",
+            "[*HUAWEI-acl6-basic-2008] quit",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] mld-snooping ssm-policy 2008"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a user joins a multicast group in the any-source multicast (ASM) range but wants to enjoy the SSM service of the multicast group, run the mld-snooping ssm-policy command to add the multicast group address to an SSM policy.\nPrerequisites\nA basic ACL6 or named ACL6 has been configured.\nConfiguration Impact\nAfter the command is run, the group addresses defined in or acl6-name are added to the SSM group address range. The specified group addresses can be beyond the default SSM group address range of FF3x::/32. Users with group addresses out of the SSM group address range can only enjoy ASM services if the group addresses are not added to the SSM range policy.\nPrecautions\nIf a multicast group address is added to the SSM group address range and MLDv1 users use this multicast address to receive SSM multicast services, the device does not delete the mapping (S, G) entry when it receives an MLDv1 Done message for this group. The (S, G) entry can be deleted through the multicast entry aging mechanism or can be deleted when the multicast device receives an MLDv2 Done message for this group.\nThe\nmld-snooping ssm-policy command fails to be run in a VSI view in the following condition:\nThe VSI is bound to a BD."
+}

@@ -1,0 +1,49 @@
+{
+    "PageTitle": "bfd track interface",
+    "FuncDef": "The bfd track interface command configures BFD to monitor an upstream AC interface.\nThe undo bfd track interface command disables BFD from monitoring an upstream AC interface.\nBy default, BFD does not monitor upstream AC interfaces.",
+    "CLIs": [
+        "bfd track interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo bfd track interface { <interface-name> | <interface-type> <interface-number> }"
+    ],
+    "ParentView": [
+        "VSI-inclusive-root view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] bgp-ad",
+            "[*HUAWEI-vsi-vsi1-bgpad] vpls-id 1:1",
+            "[*HUAWEI-vsi-vsi1-bgpad] vpn-target 1:1 import-extcommunity",
+            "[*HUAWEI-vsi-vsi1-bgpad] vpn-target 1:1 export-extcommunity",
+            "[*HUAWEI-vsi-vsi1-bgpad] quit",
+            "[*HUAWEI-vsi-vsi1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] l2 binding vsi vsi1",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] inclusive-provider-tunnel",
+            "[*HUAWEI-vvsi1-inclusive] root",
+            "[*HUAWEI-vvsi1-inclusive-root] bfd track interface GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn dual-root protection scenarios in which P2MP TE tunnels are used to carry services, the root nodes send two copies of traffic over the primary and backup P2MP TE tunnels. If an upstream AC interface fails, the P2MP TE tunnels cannot detect the fault in time, causing packet loss. To prevent this problem, run the bfd track interface command on each root node to configure BFD to monitor the upstream AC interface. If an AC interface fails, BFD quickly detects the fault to trigger a traffic switching between the P2MP TE tunnels.\nPrerequisites\nA root node has been configured, and the VSI-Inclusive-Root view is displayed using the root command.P2MP TE tunnels have been established.\n\nConfiguration Impact\nAfter the undo bfd track interface command is run, BFD does not monitor upstream AC interfaces. If an upstream AC interface fails, user traffic is discarded. Exercise caution when running the undo bfd track interface command."
+}

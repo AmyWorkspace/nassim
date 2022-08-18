@@ -1,0 +1,53 @@
+{
+    "PageTitle": "prefix-priority(IS-IS view)",
+    "FuncDef": "The prefix-priority command sets a convergence priority for IS-IS routes.\nThe undo prefix-priority command restores the default value.\nBy default, in IP routing table, the priority of IS-IS host routes and default routes is high; the convergence priority of the other IS-IS routes is medium.",
+    "CLIs": [
+        "prefix-priority [ level-1 | level-2 ] { critical | high | medium | very-low } { ip-prefix <prefix-name> | tag <tag-value> }",
+        "undo prefix-priority [ level-1 | level-2 ] { critical | high | medium | very-low }"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "level-1",
+            "Info": "Sets a convergence priority for Level-1 IS-IS routes.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Sets a convergence priority for Level-2 IS-IS routes.\n-"
+        },
+        {
+            "Parameters": "critical",
+            "Info": "Sets the convergence priority of IS-IS routes to critical.\n-"
+        },
+        {
+            "Parameters": "high",
+            "Info": "Sets the convergence priority of IS-IS routes to high.\n-"
+        },
+        {
+            "Parameters": "medium",
+            "Info": "Sets the convergence priority of IS-IS routes to medium.\n-"
+        },
+        {
+            "Parameters": "very-low",
+            "Info": "Sets the convergence priority of IS-IS routes to very-low.\n-"
+        },
+        {
+            "Parameters": "ip-prefix prefix-name",
+            "Info": "Specifies an IP prefix list name to filter routes. After the parameter is configured, the convergence priority is set for the IS-IS routes that match the IP prefix list.\nThe value is a string of 1 to 169 case-sensitive characters."
+        },
+        {
+            "Parameters": "tag tag-value",
+            "Info": "Specifies the tag value to filter routes. After the parameter is configured, the convergence priority is set for the IS-IS routes with the specified tag value.\nThe value is an integer ranging from 1 to 4294967295. There is no default value."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] prefix-priority level-1 critical tag 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a routing table has a large number of routing entries on an IS-IS device, it takes a long time to implement the SPF calculation on the device. The prefix-priority command can be used to allow some key routes to be preferentially calculated.\nPrerequisites\nIf tag values are used to filter IS-IS routes, it is required that the cost type of IS-IS not be narrow and IS-IS routes carry tag values.\nConfiguration Impact\nThe convergence priorities of IS-IS routes can be critical, high, medium, low, and very-low. The priorities in the corresponding IP routing table are critical, high, high, medium, and low. The priorities are listed in descending order.\nThe convergence priority of IS-IS routes is used as follows:\nFor the existing IS-IS routes, IS-IS resets the convergence priority for the routes based on the prefix-priority command.For the newly added IS-IS routes, IS-IS sets the convergence priority for the routes based on the filtering result of the prefix-priority command.If an IS-IS route matches the matching rules of multiple convergence priorities, the highest convergence priority is used.If an IS-IS route matches tags of multiple convergence priorities, the highest convergence priority is used.If the route level is not specified, IS-IS configures convergence priorities for both Level-1 routes and Level-2 routes.\n\nPrecautions\nThe convergence priority of IS-IS routes (including the IS-IS host routes and default routes) can be specified or changed using the prefix-priority command. After the prefix-priority command is run, the convergence priority of the routes (including the IS-IS host routes and default routes) unspecified by the command is changed to low."
+}

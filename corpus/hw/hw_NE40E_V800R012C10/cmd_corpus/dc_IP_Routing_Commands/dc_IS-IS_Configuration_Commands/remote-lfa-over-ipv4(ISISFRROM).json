@@ -1,0 +1,51 @@
+{
+    "PageTitle": "remote-lfa",
+    "FuncDef": "The remote-lfa command enables IPv6 IS-IS remote loop-free alternate (LFA).\nThe undo remote-lfa command disables IPv6 IS-IS remote LFA.\nBy default, IPv6 IS-IS remote LFA is disabled.",
+    "CLIs": [
+        "remote-lfa tunnel ldp over-ipv4 [ level-1 | level-2 | level-1-2 ]",
+        "undo remote-lfa tunnel ldp over-ipv4 [ level-1 | level-2 | level-1-2 ]"
+    ],
+    "ParentView": [
+        "IS-IS IPv6 FRR view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "level-1",
+            "Info": "Enables IS-IS Level-1 remote LFA.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Enables IS-IS Level-2 remote LFA.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Enables IS-IS Level-1-2 remote LFA.\nIf no level is specified in the command, Level-1-2 remote LFA is used.\n-"
+        },
+        {
+            "Parameters": "tunnel",
+            "Info": "Enables the device to establish tunnels for remote LFA.\n-"
+        },
+        {
+            "Parameters": "ldp",
+            "Info": "Enables the device to establish Label Distribution Protocol (LDP) LSPs for remote LFA.\n-"
+        },
+        {
+            "Parameters": "over-ipv4",
+            "Info": "Enables the device to use IPv4 LDP LSPs for remote LFA.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] frr",
+            "[*HUAWEI-isis-1-frr] loop-free-alternate level-2",
+            "[*HUAWEI-isis-1-frr] remote-lfa tunnel ldp level-2",
+            "[*HUAWEI-isis-1-frr] quit",
+            "[*HUAWEI-isis-1] ipv6 enable",
+            "[*HUAWEI-isis-1] ipv6 frr",
+            "[*HUAWEI-isis-1-ipv6-frr] remote-lfa tunnel ldp over-ipv4 level-2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLFA FRR cannot calculate backup paths on some large IPv6 networks, especially on ring networks, which fails to meet reliability requirements. IPv6 IS-IS remote LFA FRR can address this problem. To enable IPv6 IS-IS remote LFA, run the remote-lfa command. The remote LFA algorithm calculates the PQ node based on the protection path and establishes a tunnel between the source node and the PQ node for backup next hop protection. If a fault occurs on the protection path, traffic is automatically switched to the backup tunnel, improving network reliability.\nPrerequisites\nIPv6 FRR has been enabled and the IS-IS IPv6 FRR view has been displayed using the ipv6 frr command.\nPrecautions\nIPv4 IS-IS remote LFA must have been enabled using the remote-lfa command.\nIf LDP is used to establish tunnels, LDP must be deployed on the entire network. A tunnel can be established and a remote loop-free backup route is generated only if a PQ node exists and the PQ node supports the remote LFA function.\nIPv6 IS-IS remote LFA FRR protects IPv6 traffic and uses IPv4 LDP LSPs.\nThe IPv6 IS-IS remote LFA must be applied to the same topology as that of IPv4 IS-IS remote LFA. Otherwise, the backup calculation may be incorrect, or a loop may occur."
+}

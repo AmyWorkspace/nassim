@@ -1,0 +1,43 @@
+{
+    "PageTitle": "loss-measure dual-ended continual",
+    "FuncDef": "The loss-measure dual-ended continual command enables dual-ended frame loss measurement of Y.1731.\nThe undo loss-measure dual-ended continual command disables dual-ended frame loss measurement of Y.1731.\nBy default, dual-ended frame loss measurement of Y.1731 is not enabled.",
+    "CLIs": [
+        "loss-measure dual-ended continual test-id <test-id-value>",
+        "undo loss-measure dual-ended continual [ test-id <test-id-value> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "test-id test-id-value",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer of 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 mac 00e0-fc12-7890",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send mep-id 1 enable",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 2",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep ccm-receive mep-id 2 enable",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 2 mep 1 remote-mep 2",
+            "[*HUAWEI-md-md1-ma-ma1] commit",
+            "[~HUAWEI-md-md1-ma-ma1] loss-measure dual-ended continual test-id 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe dual-ended frame loss measurement function of Y.1731 is service-oriented. Then, you can estimate quality of services (QoSs) based on the calculated packet loss ratio.\nPrerequisites\nBefore you run the flow-name loss-measure dual-ended continual command, ensure that the following configurations are complete:\nIEEE Standard 802.1ag-2007 of CFM has been specified using the cfm version standard command in the system view.The CFM function has been enabled globally using the cfm enable (system view) command in the system view.An MD has been created using the cfm md command in the system view.An MA has been created using the ma command in the MD view.An inward-facing MEP has been created using the mep mep-id command in the MA view.A remote MEP in the MA has been created using the remote-mep command in the MA view.The local MEP in the MA has been enabled to send CCMs using the mep ccm-send enable command in the MA view.The local MEP has been enabled to receive CCMs from the remote MEP in the same MA using the remote-mep ccm-receive enable command in the MA view.The test instance has been created using the test-id command in the MA view."
+}

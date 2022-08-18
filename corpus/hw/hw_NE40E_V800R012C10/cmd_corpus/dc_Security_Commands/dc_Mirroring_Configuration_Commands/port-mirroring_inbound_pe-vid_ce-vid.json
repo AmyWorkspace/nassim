@@ -1,0 +1,51 @@
+{
+    "PageTitle": "port-mirroring pe-vid",
+    "FuncDef": "The port-mirroring pe-vid command configures mirroring based on VLAN segments for inner and outer VLAN tags on a user-VLAN sub-interface.\nThe undo port-mirroring pe-vid command deletes the configuration.\nBy default, no mirrored port is configure on the Device.",
+    "CLIs": [
+        "port-mirroring { inbound | outbound } pe-vid <low-vid> [ to <high-vid> ] ce-vid <ce-vlan-id-begin> [ to <ce-vlan-id-end> ]",
+        "undo port-mirroring { inbound | outbound } pe-vid <low-vid> [ to <high-vid> ] ce-vid <ce-vlan-id-begin> [ to <ce-vlan-id-end> ]"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates incoming packets, to be specific, the packets received by the mirrored port.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates outgoing packets, to be specific, the packets sent by the mirrored port.\n-"
+        },
+        {
+            "Parameters": "pe-vid low-vid",
+            "Info": "Specifies the outer start VLAN ID of a double-tagged VLAN packet.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "high-vid",
+            "Info": "Specifies the outer end VLAN ID of a double-tagged VLAN packet.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid ce-vlan-id-begin",
+            "Info": "Specifies the inner start VLAN ID of a double-tagged VLAN packet.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vlan-id-end",
+            "Info": "Specifies the inner end VLAN ID of a double-tagged VLAN packet.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] user-vlan any-other",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] port-mirroring inbound pe-vid 10 ce-vid 20 to 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf traffic on the BRAS's user-VLAN or anyother sub-interface, through which VLAN users access the IP core network, needs to be monitored and analyzed, mirroring can be configured for user traffic on the user-VLAN or anyother sub-interface based on the inner and outer VLAN ID.\nPrerequisites\nNo other configuration is required before you run the port-mirroring command. To implement the mirroring function, you must configure an observing port and specify an observing port on an interface board.\nPrecautions\nThe POS interface on which APS is enabled does not support port mirroring. The POS interface on which port mirroring is configured does not support APS.\nMirroring and local packet header obtaining are mutually exclusive.\nThe same interface can serve as either the mirrored port or the observing port.\nThe observing port and mirrored port cannot be configured on the main interface or sub-interfaces of the same Eth-Trunk interface.\nYou can specify the vlan parameter on a Layer 2 interface so that only packets with a specified VLAN ID are mirrored. When a Layer 2 interface is configured with the access type and is added to a VLAN using the port default vlan command, if only packets with a specified VLAN ID need to be mirrored, the original packets on the mirrored port do not carry any VLAN ID, but the mirrored packets sent by the observing carry one VLAN ID."
+}

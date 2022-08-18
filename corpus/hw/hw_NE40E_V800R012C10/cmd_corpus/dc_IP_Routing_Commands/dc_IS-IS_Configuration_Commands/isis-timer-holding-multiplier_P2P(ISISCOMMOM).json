@@ -1,0 +1,45 @@
+{
+    "PageTitle": "isis timer holding-multiplier",
+    "FuncDef": "The isis timer holding-multiplier command sets the IS-IS holdtime to be a multiple of the interval at which Hello packets are sent.\nThe undo isis timer holding-multiplier command restores the default value.\nBy default, the holdtime is three times the interval at which Hello packets are sent.",
+    "CLIs": [
+        "isis timer holding-multiplier <number>",
+        "undo isis timer holding-multiplier [ <number> ]"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "VBDIF interface view",
+        "Cellular channel interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE electrical interface view",
+        "Loopback interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "number",
+            "Info": "Sets the holdtime of a neighbor to a multiple of the interval at which Hello packets are sent.\nThe value is an integer ranging from 3 to 1000. The default value is 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] quit",
+            "[*HUAWEI] interface vbdif 10",
+            "[*HUAWEI-Vbdif10] isis enable 1",
+            "[*HUAWEI-Vbdif10] isis timer holding-multiplier 6 level-2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDevices at both ends of a link establish a neighbor relationship by sending Hello packets to each other. After the neighbor relationship is established, both devices need to send Hello packets at a specified interval to maintain the neighbor relationship. If a device does not receive any Hello packet from its neighbor within a specified period of time, the device considers the neighbor Down. The specified time period is known as the neighbor holdtime.\nFor example, the isis timer hello 20 command is run on a local device to set the interval at which Hello packets are sent to 20s. Then, the isis timer holding-multiplier 4 command is run. The holdtime is 80s (four times the interval at which Hello packets are sent). If the interval at which Hello packets are sent is changed using the isis timer hello command, the holdtime will be changed accordingly.\nOn broadcast networks, the DIS neighbor holdtime equals the interval at which Hello packets are sent multiplied by number, and non-DIS neighbor holdtime is one third of the DIS neighbor holdtime.\nConfiguration Impact\nIf the value of number is set too large, the local device needs to wait a long time before detecting its neighbor Down, which slows down IS-IS route convergence. If the value of number is set too small, the neighbor relationship will alternate between Up and Down when some Hello packets are lost due to transmission delays and errors on the network. This causes route flapping on the IS-IS network. Setting the same interval at which Hello packets are sent and the same neighbor holdtime for all devices on the IS-IS network is recommended so that all devices detect link failures at the same time.\nPrecautions\nIf a broadcast interface is emulated as a P2P interface using the isis circuit-type command or a P2P interface is restored to a broadcast interface using the undo isis circuit-type command, the number of Hello packets that IS-IS does not receive from a neighbor before the neighbor is declared Down is restored to the default value.\nIf conservative is specified in the isis timer hello command and the holdtime of the IS-IS neighbor relationship is less than 20s, the IS-IS neighbor relationship is disconnected when the hold time elapses. If conservative is not specified in the isis timer hello command and the holdtime of the IS-IS neighbor relationship is less than 20s, the IS-IS neighbor relationship is disconnected when the period of the hold time and a delay elapses."
+}

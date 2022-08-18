@@ -1,0 +1,42 @@
+{
+    "PageTitle": "nat outbound",
+    "FuncDef": "The nat outbound command configures the conversion policy of a NAT address pool.\nThe undo nat outbound command cancels the NAT conversion policy currently configured.\nBy default, the conversion policy of a NAT address pool is not configured.",
+    "CLIs": [
+        "nat outbound { <acl-number> | acl-name <acl-name> | any } address-group <address-group-name>",
+        "undo nat outbound { <acl-number> | acl-name <acl-name> | any } [ address-group <address-group-name> ]"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic or advanced ACL.\nThe value is an integer. Basic ACLs are numbered from 2000 to 2999, and advanced ACLs are numbered from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of an ACL.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "any",
+            "Info": "Indicates that user traffic distributed to a service board does not need to match any ACL rule. NAT is performed for user traffic using addresses from a NAT address pool.\n-"
+        },
+        {
+            "Parameters": "address-group address-group-name",
+            "Info": "Specifies the name of a public IP address pool.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 3000",
+            "[*HUAWEI-acl-adv-3000] rule 1 permit source 10.10.13.0 0.0.0.255",
+            "[*HUAWEI-acl-adv-3000] commit",
+            "[~HUAWEI-acl-adv-3000] quit",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat address group1 group-id 1 10.10.13.13 10.10.13.20",
+            "[*HUAWEI-nat-instance-cpe1] nat outbound 3000 address-group group1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTraffic or packets that match a configured ACL rule can use the IP addresses in the corresponding NAT address pool to implement NAT. To configure the conversion policy of a NAT address pool, run the nat outbound command.\nYou can select NAT in either ACL matching mode or ACL unmatching mode:\nACL matching mode: You can use an IP address in the Internet IP address group to convert the address of a packet only when the packet matches the ACL rule and the traffic behavior defined by the ACL rule is permit.ACL unmatching mode: When the NAT conversion policy does not match an ACL, all the packets that match the traffic policy directly use the IP addresses in the NAT address pool to implement NAT.\n\nPrerequisites\nA NAT instance has been configured. A NAT address pool and an ACL have been configured in the NAT instance view.\nImplementation Procedure\nRun the nat outbound command in the NAT instance view to configure a behavior.\nPrecautions\nThe NAT outbound function does not support the ACL rule options:vpn-instance-any, TTL, TCP-FLAG, destination-pool, packet-length, source-pool, destination-port-pool, source-port-pool, VXLAN, ICMP-Type, and fragment.The ACL rules in the same NAT instance can be bound only to one NAT address pool. This command is applicable only to the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S.In a distributed NAT scenario, NAT is not performed for user packets that match a deny ACL rule or do not match a permit ACL rule. In this case, the user cannot go online.In a centralized NAT scenario, NAT is not performed for user packets that match a deny ACL rule or do not match a permit ACL rule. In this case, packets are discarded, causing services to be affected."
+}

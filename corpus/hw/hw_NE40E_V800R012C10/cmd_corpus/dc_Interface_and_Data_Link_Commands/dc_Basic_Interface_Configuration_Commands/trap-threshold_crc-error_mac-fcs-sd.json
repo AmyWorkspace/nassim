@@ -1,0 +1,65 @@
+{
+    "PageTitle": "trap-threshold crc-error mac-fcs-sd",
+    "FuncDef": "The trap-threshold crc-error mac-fcs-sd command enables a device to report MAC-layer signal degradation (SD) rate threshold-crossing alarms and configures alarm generation and clearing thresholds.\nThe undo trap-threshold crc-error command disables a device from reporting MAC-layer SD rate threshold-crossing alarms.\nBy default, a device is disabled from reporting MAC-layer SD alarms.",
+    "CLIs": [
+        "trap-threshold crc-error mac-fcs-sd alarm-threshold <alarm-coefficient-value> <sd-alarm-power> [ resume-threshold <resume-coefficient-value> <sd-resume-power> ] [ trigger-lsp ]",
+        "undo trap-threshold crc-error"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "FlexE interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sd-alarm-power",
+            "Info": "Specifies the power of the formula used to calculate the generation threshold for MAC-layer SD rate threshold-crossing alarms. The power is the y in the xE-y .\nThe value is an integer ranging from 5 to 9."
+        },
+        {
+            "Parameters": "resume-threshold resume-coefficient-value",
+            "Info": "Packet error ratio coefficient (x of xE-y).\nThe value is an integer that ranges from 1 to 9."
+        },
+        {
+            "Parameters": "sd-resume-power",
+            "Info": "Specifies the power of the formula used to calculate the clearance threshold for MAC-layer SD rate threshold-crossing alarms. The power is the y in the xE-y .\nThe value is an integer ranging from 5 to 10."
+        },
+        {
+            "Parameters": "trigger-lsp",
+            "Info": "Associates MAC-layer SD detection with LSP switching. This parameter is optional. If you do not specify this parameter and the MAC-layer SD rate exceeds a specified alarm generation threshold, an alarm is sent to the NMS but LSP switching is not triggered.\n-"
+        },
+        {
+            "Parameters": "crc-error",
+            "Info": "This object indicates that an alarm is generated when the number of CRC error packets exceeds the threshold.\n-"
+        },
+        {
+            "Parameters": "alarm-threshold alarm-coefficient-value",
+            "Info": "Specifies the coefficient of the formula used to calculate the generation threshold for MAC-layer SD rate threshold-crossing alarms. The coefficient is the x in the xE-y .\nThe value is an integer that ranges from 1 to 9."
+        },
+        {
+            "Parameters": "mac-fcs-sd",
+            "Info": "Indicates that the signal degrade at the MAC layer crosses the threshold.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] trap-threshold crc-error mac-fcs-sd alarm-threshold 1 5 resume-threshold 1 6"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] trap-threshold crc-error mac-fcs-sd alarm-threshold 1 5 resume-threshold 1 6 trigger-lsp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the MAC-layer SD rate reaches a specified alarm generation threshold, the system sends an alarm to the NMS. If the MAC-layer SD rate falls below a specified alarm clearing threshold, the system sends a clear alarm to the NMS.To meet users' requirements on link quality, run the trap-threshold crc-error mac-fcs-sd command to enable a device to report MAC-layer SD rate threshold-crossing alarms and configure alarm generation and clearing thresholds.\n\nConfiguration Impact\nIf the MAC-layer bit error rate reaches a specified alarm generation threshold, the system sends an alarm to the NMS. If trigger-lsp is configured, LSP switching is triggered.\nThe following commands cannot coexist. The most recently run command overwrites the previous one.\ntrap-threshold crc-errortrap-threshold crc-error bit-error-ratiotrap-threshold crc-error high-thresholdtrap-threshold crc-error { mac-fcs-exc | mac-fcs-sd }trap-threshold crc-error percenttrap-threshold crc-error packet-error-ratio"
+}

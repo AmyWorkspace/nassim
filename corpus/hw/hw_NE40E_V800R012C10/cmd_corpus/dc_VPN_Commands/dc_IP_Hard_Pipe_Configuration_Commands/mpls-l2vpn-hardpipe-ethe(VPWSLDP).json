@@ -1,0 +1,66 @@
+{
+    "PageTitle": "mpls l2vpn hard-pipe bandwidth",
+    "FuncDef": "The mpls l2vpn hard-pipe bandwidth command enables the hard pipe function for static PWs on an interface.\nThe undo mpls l2vpn hard-pipe command disables the hard pipe function of static PWs on an interface.\n\nBy default, the hard pipe function is not enabled for static PWs.",
+    "CLIs": [
+        "mpls l2vpn hard-pipe bandwidth <bandwidth> [ burst-time <burst-time> ] [ expand-ratio <expand-ratio> ]",
+        "undo mpls l2vpn hard-pipe [ { bandwidth <bandwidth> } [ burst-time <burst-time> ] [ expand-ratio <expand-ratio> ] ]"
+    ],
+    "ParentView": [
+        "40GE interface view",
+        "GE electrical interface view",
+        "XGE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50|100GE sub-interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "bandwidth bandwidth",
+            "Info": "Specifies the AC interface bandwidth. The bandwidth of non-Ethernet interface is fixed. The bandwidth bandwidth parameter must be specified if an Ethernet interface functions as the AC interface and cannot be specified if a non-Ethernet interface functions as the AC interface.\nThe value is an integer ranging from 16 to 4294967294, in kbit/s. The bandwidth range is consistent with that for the user-queue command."
+        },
+        {
+            "Parameters": "burst-time burst-time",
+            "Info": "Specifies the burst time for a hard pipe. A device is configured with strong anti-burst capability because of CAR limit. In the hard pipe scenarios, the use of CAR limit on an AC interface requires the restriction on the anti-burst capability. Otherwise, the delay in forwarding the burst traffic on the PW-side interface cannot be ensured. To reduce the delay in traffic forwarding, you can configure the burst-time burst-time parameter to adjust the traffic burst time on the AC interface. This configuration helps control the committed burst size (CBS) and flexibly adjust the delay on the hard pipe and anti-burst performance. Because the bandwidth delay on a non-Ethernet interface is fixed, non-Ethernet interfaces do not support the configuration of the burst-time burst-time parameter. However, if an AC interface is an Ethernet interface, you can configure this parameter.\nThe value is an integer ranging from 100 to 5000, in microseconds. The default value is 100 microseconds."
+        },
+        {
+            "Parameters": "expand-ratio expand-ratio",
+            "Info": "Specifies the bandwidth expansion ratio for an AC interface.\nThe value is an integer ranging from 0 to 100. The default value is 10. The value is an integer for CES services, it ranges from 0 to 10000; for other types of services, it is in the range of 0 to 100, in kbit/s. The default value is 10 kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Tunnel 10",
+            "[~HUAWEI-Tunnel10] quit",
+            "[~HUAWEI] tunnel-policy policy1",
+            "[*HUAWEI-tunnel-policy-policy1] tunnel binding destination 3.3.3.3 te Tunnel 10",
+            "[*HUAWEI-tunnel-policy-policy1] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls static-l2vc destination 1.1.1.1 1 transmit-vpn-label 100 receive-vpn-label 100 tunnel-policy policy1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls l2vpn hard-pipe bandwidth 50 expand-ratio 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nIP hard pipe is a pipe technology that establishes a static PW over a static bidirectional co-routed LSP to simulate an SDH leased line.\nIn an IP hard pipe scenario, bandwidth must be reserved for PWs on the public network side. To configure the hard pipe function for static PWs on an interface, run the mpls l2vpn hard-pipe command. After the bandwidth expansion ratio of an AC interface is specified, the device automatically calculates the bandwidth reserved for the static PW on the public network side using either of the following formulas:\n\nEthernet AC interface: Reserved static PW bandwidth = bandwidth/(1 - expand-ratio/100)\nNon-Ethernet AC interface: Reserved static PW bandwidth = AC interface bandwidth/(1 - expand-ratio/10000)\n\n\nPrerequisites\n\nA static PW has been created using the mpls static-l2vc command.\n\nConfiguration Impact\n\nAfter the mpls l2vpn hard-pipe command is configured on an interface, all static PWs on the interface, including the primary, secondary, and bypass PWs, have the hard pipe capability.\n\nPrecautions\n\nThe mpls l2vpn hard-pipe command can be configured only on the AC interfaces for static PWs, including SS-PWs and MS-PWs.\nOn the same interface, the mpls l2vpn hard-pipe command is mutually exclusive with the following commands:\n\nqos-profile (interface view)\nuser-queue (interface view)"
+}

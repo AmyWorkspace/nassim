@@ -1,0 +1,68 @@
+{
+    "PageTitle": "mpls te auto-bandwidth",
+    "FuncDef": "The mpls te auto-bandwidth command enables the automatic bandwidth adjustment function for a specified MPLS TE tunnel.\nThe undo mpls te auto-bandwidth command disables the automatic bandwidth adjustment function for a specified MPLS TE tunnel.\nBy default, the automatic bandwidth adjustment function is not configured for any MPLS TE tunnel.",
+    "CLIs": [
+        "mpls te auto-bandwidth collect-bw { [ frequency <interval> ] | [ max-bw <max-bandwidth> | min-bw <min-bandwidth> ] * } *",
+        "mpls te auto-bandwidth adjustment { [ threshold <percent> [ [ or ] absolute-bw <absolute-bw> ] ] | [ frequency <interval> ] | [ max-bw <max-bandwidth> | min-bw <min-bandwidth> ] * | [ overflow-limit <overflow-limit-value> ] | [ underflow-limit <underflow-limit-value> ] } *",
+        "undo mpls te auto-bandwidth"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "frequency interval",
+            "Info": "Specifies the interval for automatically adjusting bandwidth of a specified tunnel.\nThe value is an integer ranging from 300 to 604800, in seconds. The value is no less than the interval for sampling the packet rate on the outbound interface set using the mpls te timer auto-bandwidth. The default value is 86400."
+        },
+        {
+            "Parameters": "max-bw max-bandwidth",
+            "Info": "Specifies the maximum bandwidth to which the bandwidth of an MPLS TE tunnel is allowed to adjust.\nThe value is an integer ranging from 0 to 4000000000, in kbit/s. The default value is 4000000000."
+        },
+        {
+            "Parameters": "min-bw min-bandwidth",
+            "Info": "Specifies the minimum bandwidth to which the bandwidth of an MPLS TE tunnel is allowed to adjust.\nThe value is an integer ranging from 0 to 4000000000, in kbit/s. The default value is 0."
+        },
+        {
+            "Parameters": "adjustment",
+            "Info": "Configures automatic bandwidth adjustment for tunnels.\n-"
+        },
+        {
+            "Parameters": "threshold percent",
+            "Info": "Specifies the threshold percentage of the bandwidth to be adjusted.\nThreshold percentage = (Average bandwidth - Actual bandwidth)/Actual bandwidth.\nThe value is an integer ranging from 0 to 100. The default value is 0."
+        },
+        {
+            "Parameters": "or",
+            "Info": "Performs an OR operation between the absolute bandwidth threshold and the threshold percentage for bandwidth adjustment. Automatic bandwidth adjustment is triggered once either the absolute bandwidth threshold or the threshold percentage is reached. If or is not configured, the AND operation is performed by default, so that automatic bandwidth adjustment can only be triggered after both the absolute bandwidth threshold and threshold percentage are reached.\n-"
+        },
+        {
+            "Parameters": "absolute-bw absolute-bw",
+            "Info": "Sets an absolute threshold value for bandwidth adjustment.\nAbsolute threshold = Average bandwidth - Actual bandwidth.\nThe value is an integer ranging from 0 to 4000000000, in kbit/s. The default value is 0."
+        },
+        {
+            "Parameters": "overflow-limit overflow-limit-value",
+            "Info": "Specifies the maximum number of allowed times when the average bandwidth calculated in a specified sampling interval exceeds the upper threshold. If the upper threshold is reached, automatic bandwidth adjustment is triggered.\nThe value is an integer ranging from 2 to 65535."
+        },
+        {
+            "Parameters": "underflow-limit underflow-limit-value",
+            "Info": "Specifies the maximum number of allowed times when the average bandwidth in a specified sampling interval fells below the lower threshold. If the lower threshold is reached, automatic bandwidth adjustment is triggered.\nThe value is an integer ranging from 2 to 65535."
+        },
+        {
+            "Parameters": "collect-bw",
+            "Info": "Collects the outbound rate of tunnels without adjusting the bandwidth.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls rsvp-te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] destination 2.2.2.2",
+            "[*HUAWEI-Tunnel10] mpls te auto-bandwidth adjustment frequency 3600"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBandwidth resources are valuable on communication networks. To save bandwidth, run the mpls te auto-bandwidth command to configure the automatic bandwidth adjustment function.\nAfter the automatic bandwidth adjustment function is configured, you can obtain the average bandwidth in a traffic sampling interval configured using the mpls te timer auto-bandwidth command. After sampling for multiple times within a period of time, recalculate the bandwidth based on the average value and establish a new tunnel based on the new bandwidth.\nThe following policies can be configured to control automatic bandwidth adjustment:\nYou can set the interval for the bandwidth adjustment using the frequency interval parameter.You can use the threshold percent [[ or ] absolute-bw absolute-bw ] parameter to determine whether or not to adjust bandwidth.\nThe system compares the average bandwidth within a sampling period with the actual bandwidth, and the bandwidth will be automatically adjusted if the ratio of bandwidth change to the actual bandwidth is greater than the threshold value.\nTherefore, if the network traffic changes frequently but frequent bandwidth adjustment is not needed, increase threshold and absolute-bw values.\nThe or parameter is configured to perform an OR operation between the absolute bandwidth threshold and the threshold percentage for bandwidth adjustment. Automatic bandwidth adjustment is triggered once either the absolute bandwidth threshold or the threshold percentage is reached. If or is not configured, the AND operation is performed by default, so that automatic bandwidth adjustment can only be triggered after both the absolute bandwidth threshold and threshold percentage are reached.\n3.Automatic bandwidth adjustment is performed if conditions are met in either of the following situations depending on whether overflow-limit overflow-limit-value and underflow-limit underflow-limit-value parameters are configured:\nThe two parameters are not configured, and the configured interval time expires. The average bandwidth exceeds the upper bandwidth adjustment threshold or falls below the lower bandwidth adjustment threshold.The two parameters are configured. The average bandwidth exceeds the upper bandwidth adjustment threshold or falls below the lower bandwidth adjustment threshold for a number of timers more than overflow-limit overflow-limit-value or less than underflow-limit underflow-limit-value.\nThe default overflow-limit overflow-limit-value and underflow-limit underflow-limit-value parameters do not take effect. By default, after the configured interval time expired, a device automatically adjusts bandwidth values if the average bandwidth exceeds the upper bandwidth adjustment threshold or falls below the lower bandwidth adjustment threshold.\n\nPrerequisites\nCreate an MPLS TE tunnel or enter the interface view of the existing MPLS TE tunnel.\nFollow-up Procedure\nRun the mpls te timer auto-bandwidth command to set the interval at which the rate of a tunnel interface with automatic bandwidth adjustment enabled is sampled.\nPrecautions\nAutomatic bandwidth adjustment fails to take effect because the mpls te timer auto-bandwidth command is not run in the MPLS view.\nAfter the mpls te auto-bandwidth command is run, a device must accumulatively sample bandwidth values for at least two times within a configured interval time. If the device samples bandwidth values for less than two times within the specified interval, automatic bandwidth adjustment is not performed. The existing sampling times are counted in the next bandwidth adjustment interval."
+}

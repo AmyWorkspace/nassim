@@ -1,0 +1,37 @@
+{
+    "PageTitle": "rrpp snooping enable",
+    "FuncDef": "The rrpp snooping enable command enables the RRPP snooping on the interface.\nThe undo rrpp snooping enable command disables the RRPP snooping on the interface.\nBy default, RRPP snooping is disabled from interfaces.",
+    "CLIs": [
+        "rrpp snooping enable",
+        "undo rrpp snooping enable"
+    ],
+    "ParentView": [
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "VLANIF interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 10",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vlan-type dot1q 10",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] l2 binding vsi vsi1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] rrpp snooping enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen an RRPP ring accesses the virtual private LAN service (VPLS) network in which devices are connected using PWs, the device cannot respond to RRPP protocol packets directly. Therefore, the VPLS network cannot sense the status change of the RRPP ring. When the RRPP ring topology changes, each node in the VPLS network forwards downstream data according to the MAC address table generated before the RRPP ring topology changes. As a result, the downstream traffic cannot be forwarded. When RRPP snooping is configured on sub-interfaces or VLANIF interfaces, the VPLS network can transparently transmit RRPP protocol packets, detect the changes on the RRPP rings, and upgrade the forwarding entries to ensure that traffic is switched in time to a congestion-free path.\nWhen an RRPP network and a VPLS network are connected to form a network, you can run the rrpp snooping enable command to enable RRPP snooping on interfaces of the devices deployed on the network.\nPrerequisites\nBefore running this command, the l2 binding vsi command has been run to associate sub-interfaces or VLANIF interfaces with Virtual Switch Instances (VSIs).\nPrecautions\nIf the sub-interface or VLANIF interface is removed from the bound VSI, the RRPP snooping is automatically disabled on the interface.After being enabled with the RRPP snooping, the sub-interface or VLANIF interface is automatically associated with the VSI.The sub-interface or VLANIF interface allows only packet in a single VLAN to pass."
+}

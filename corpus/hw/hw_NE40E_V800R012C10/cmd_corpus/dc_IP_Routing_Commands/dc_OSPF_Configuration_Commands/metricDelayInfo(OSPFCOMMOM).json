@@ -1,0 +1,35 @@
+{
+    "PageTitle": "metric-delay suppress",
+    "FuncDef": "The metric-delay suppress command configures suppression parameters for delay information advertisement.\nThe undo metric-delay suppress command restores the default configuration.\nBy default, the timeout period for the delay suppression timer and the threshold and absolute value threshold for suppressing delay information advertisement are 120, 10, and 1000, respectively.",
+    "CLIs": [
+        "metric-delay suppress timer <time-value> percent-threshold <percent-value> absolute-threshold <absolute-value>",
+        "undo metric-delay suppress"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "percent-threshold percent-value",
+            "Info": "Specifies a threshold over which delay information advertisement is suppressed.\nThe value is an integer ranging from 0 to 100, in percentage. The default value is 10.The value 0 indicates that delay information advertisement is not suppressed based on this parameter."
+        },
+        {
+            "Parameters": "absolute-threshold absolute-value",
+            "Info": "Specifies an absolute value threshold over which delay information advertisement is suppressed.\nThe value is an integer ranging from 0 to 10000, in microseconds. The default value is 1000.The value 0 indicates that delay information advertisement is not suppressed based on this parameter."
+        },
+        {
+            "Parameters": "timer time-value",
+            "Info": "Specifies a timeout period for the delay suppression timer.\nThe value is an integer ranging from 0 to 600, in seconds. The default value is 120.\nThe value 0 indicates that the delay suppression timer is not started."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "Enter system view, return user view with return command.",
+            "[~HUAWEI] ospf",
+            "[*HUAWEI-ospf-1] opaque-capability enable",
+            "[*HUAWEI-ospf-1] metric-delay suppress timer 100 percent-threshold 20 absolute-threshold 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the delay jitter is large, routes change frequently during delay-based path computation. As a result, route information is repeatedly flooded and reported. To solve the preceding problem, run the metric-delay suppress timer command to suppress the advertisement of delay information. Suppression is performed in accordance with the following rules:\nIf the difference between two consecutively received delay values is within the ranges specified by percent-value and absolute-value, the system considers that no delay change occurs and will not suppress the advertisement of delay information.The system advertises and reports a delay value only when the timeout period for the delay suppression timer specified by timer-value expires and uses the delay values reported in two consecutive periods for delay suppression calculation.\n\nPrecautions\nDelay information advertisement takes effect only if the metric-delay advertisement enable command is run in an IS-IS process and an interface in the IS-IS process is bound to a TWAMP Light test session."
+}

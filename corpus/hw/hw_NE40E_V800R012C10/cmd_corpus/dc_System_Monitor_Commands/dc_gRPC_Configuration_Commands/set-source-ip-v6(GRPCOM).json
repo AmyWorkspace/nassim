@@ -1,0 +1,42 @@
+{
+    "PageTitle": "source-ip (GRPC IPv6 server view)",
+    "FuncDef": "The source-ip command configures a source IPv6 address listened during Telemetry dynamic subscription.\nThe undo source-ip command deletes a source IPv6 address listened during Telemetry dynamic subscription.\nBy default, no source IPv6 address is configured for Telemetry dynamic subscription.",
+    "CLIs": [
+        "source-ip <sourceIp> [ vpn-instance <vpnName> ]",
+        "undo source-ip [ <sourceIp> [ vpn-instance <vpnName> ] ]"
+    ],
+    "ParentView": [
+        "GRPC IPv6 server view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sourceIp",
+            "Info": "Specifies a source IPv6 address to be listened.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "vpn-instance vpnName",
+            "Info": "Specifies the name of a VPN instance to be bound to the source IPv6 address to be listened.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string.\nThe value must be the name of an existing VPN instance."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] grpc",
+            "[~HUAWEI-grpc] grpc server ipv6",
+            "[~HUAWEI-grpc-server-ipv6] source-ip 2001:DB8:2::1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] vpn-target 2:2 export-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] grpc",
+            "[*HUAWEI-grpc] grpc server ipv6",
+            "[*HUAWEI-grpc-server-ipv6] source-ip 2001:DB8:2::1 vpn-instance vpn1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a collector functioning as a client initiates a connection to a device functioning as a server, the data sampled is dynamically subscribed to. In this case, on the server, configure a source IPv6 address to be listened. A connection can then be established between the server and client.\nPrecautions\nTo delete a configured source IPv6 address in the gRPC IPv6 server view, ensure that the gRPC IPv6 service is disabled."
+}

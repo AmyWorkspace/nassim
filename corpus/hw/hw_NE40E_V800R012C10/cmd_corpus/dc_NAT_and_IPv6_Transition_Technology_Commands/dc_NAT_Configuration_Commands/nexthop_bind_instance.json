@@ -1,0 +1,50 @@
+{
+    "PageTitle": "nexthop bind instance",
+    "FuncDef": "The nexthop bind instance command sets the next-hop service of a service chain instance.\nThe undonext bind instance command deletes the next-hop service of a service chain instance.\nBy default, a service chain instance has no next-hop service.",
+    "CLIs": [
+        "nexthop <nexthop-id> bind sa instance <instance-name> [ forward ]",
+        "nexthop <nexthop-id> bind { nat | nat64 } instance <instance-name>",
+        "undo nexthop <nexthop-id> [ bind { nat | nat64 } instance <instance-name> ]",
+        "undo nexthop <nexthop-id> [ bind sa instance <instance-name> [ forward ] ]"
+    ],
+    "ParentView": [
+        "Service chain instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sa",
+            "Info": "Specify SA configuration information.\n-"
+        },
+        {
+            "Parameters": "instance instance-name",
+            "Info": "Specifies the name of a service chain instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "forward",
+            "Info": "Configure the forward nexthop of the service-chain flow.\n-"
+        },
+        {
+            "Parameters": "nexthop nexthop-id",
+            "Info": "Specifies the next hop of the service chain traffic.\nThe value is an integer ranging from 1 to 16."
+        },
+        {
+            "Parameters": "nat",
+            "Info": "Indicates the NAT instance.\n-"
+        },
+        {
+            "Parameters": "nat64",
+            "Info": "Indicates the NAT64 instance.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[~HUAWEI-nat-instance-cpe1] commit",
+            "[~HUAWEI-nat-instance-cpe1] quit",
+            "[~HUAWEI] service-chain instance test id 1",
+            "[*HUAWEI-service-chain-instance-test] nexthop 2 bind nat instance cpe1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen multiple services are deployed, to ensure correct service sequence, run this command to set the next-hop service of the service chain instance, so that the traffic can be led to the specified service.\nPrecautions\nNote the following when you run the\nnexthop bind instance command.\nIf a next hop ID is already in use, it cannot be used to configure the next-hop service.A next-hop service instance can be bound only when it exists.If a service instance is bound to another service chain instance, this service instance cannot be bound to the current service chain.If another traffic diversion mode is configured for a NAT instance, the NAT instance cannot be bound to the service chain instance.If the service of a type is bound, the service of the same type cannot be bound to the service chain.If outbound NAT traffic distribution is configured, such NAT instance cannot be configured as the next hop of the service chain.In distributed mode, if the service type configured is NAT, the service chain does not support the distributed NAT mode.In centralized mode, if NAT is bound to the service chain, the distributed mode cannot be switched to.The instance that is bound to the service chain cannot be deleted.If an instance is bound to the service chain, traffic diversion cannot be configured on an inbound interface.If an instance is bound to the service chain, traffic diversion cannot be configured on an outbound interface."
+}

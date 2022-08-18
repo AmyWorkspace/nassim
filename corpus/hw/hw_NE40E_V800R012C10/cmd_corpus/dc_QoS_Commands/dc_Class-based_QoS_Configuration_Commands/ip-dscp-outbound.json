@@ -1,0 +1,33 @@
+{
+    "PageTitle": "ip-dscp-outbound",
+    "FuncDef": "The ip-dscp-outbound command converts the CoSs and colors of downstream IP packets in the current domain into corresponding DSCP values.\nThe undo ip-dscp-outbound command restores the default settings.\nBy default, the mappings from CoSs and colors to DSCP values of downstream IP packets in the DS domain are shown in Table 1 in Usage Scenario.",
+    "CLIs": [
+        "ip-dscp-outbound <service-class> <color> map <dscp-value>",
+        "undo ip-dscp-outbound [ <service-class> <color> ]"
+    ],
+    "ParentView": [
+        "DiffServ domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "service-class",
+            "Info": "Specifies the CoS of downstream packets.\nThe value is an enumerated type and can be case-insensitive EF, AF1, AF2, AF3, AF4, BE, CS6, or CS7."
+        },
+        {
+            "Parameters": "color",
+            "Info": "Specifies the color of packets.\nThe value is an enumerated type and can be case-insensitive green, yellow, or red."
+        },
+        {
+            "Parameters": "map dscp-value",
+            "Info": "Specifies the DSCP value.\nThe value is an integer ranging from 0 to 63."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] diffserv domain d1",
+            "[*HUAWEI-dsdomain-d1] ip-dscp-outbound af1 green map 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a device functions as the gateway of different networks, the precedence, such as the 802.1p, DSCP, and EXP values, in the packets that access the device are all mapped to the internal precedence of the device that is presented through the CoSs and colors. When the device sends out the packet, the internal precedence is mapped back to the external precedence.\nSimple traffic classification is usually implemented on the core devices of the network.\nYou can run this command to set the mappings from CoSs and colors to DSCP values on the outbound interface.\nTable 1 Mappings from CoSs and colors to DSCP values of downstream IP packets in the DS domainService\n\nColor\n\nDSCP\n\n\n\nBE\n\ngreen\n\n0\n\n\nAF1\n\ngreen\n\n10\n\n\nAF1\n\nyellow\n\n12\n\n\nAF1\n\nred\n\n14\n\n\nAF2\n\ngreen\n\n18\n\n\nAF2\n\nyellow\n\n20\n\n\nAF2\n\nred\n\n22\n\n\nAF3\n\ngreen\n\n26\n\n\nAF3\n\nyellow\n\n28\n\n\nAF3\n\nred\n\n30\n\n\nAF4\n\ngreen\n\n34\n\n\nAF4\n\nyellow\n\n36\n\n\nAF4\n\nred\n\n38\n\n\nEF\n\ngreen\n\n46\n\n\nCS6\n\ngreen\n\n48\n\n\nCS7\n\ngreen\n\n56\n\n\n\n\n\nPrerequisites\nThe DS domain is created in the system view.\nImplementation Procedure\nAfter this command is configured in the DS domain and the DS domain is bound to the outbound interface, packets are marked with different IP precedence that is mapped to the CoSs and colors in the mappings in the DS domain. Then, packets with different IP precedence enter different queues for scheduling.\nConfiguration Impact\nPackets are marked with different IP precedence values on the outbound interface according to the mappings in the DS domain.\nThe downstream IP packets are mapped to DSCP values based on the green color uniformly.\nFollow-up Procedure\nThe DS domain configured with mappings is applied to interfaces.\nPrecautions\nIf you do not specify service-class color, the undo ip-dscp-outbound command restores all the mappings to the default.\nIn VS mode, this command is supported only by the admin VS."
+}

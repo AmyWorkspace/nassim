@@ -1,0 +1,56 @@
+{
+    "PageTitle": "trusted-ca load",
+    "FuncDef": "The trusted-ca load command loads a trusted-CA file to a Secure Sockets Layer (SSL) policy.\nThe undo trusted-ca load command unloads a trusted-CA file from an SSL policy.\nBy default, no trusted-CA files are loaded to an SSL policy.",
+    "CLIs": [
+        "trusted-ca load { asn1-ca | pem-ca } <caFile>",
+        "trusted-ca load pfx-ca <caFile> auth-code [ cipher <authCode> ]",
+        "undo trusted-ca load { asn1-ca | pem-ca | pfx-ca } <caFile>"
+    ],
+    "ParentView": [
+        "SSL policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "asn1-ca",
+            "Info": "Specifies to load an ASN1 trusted-CA file to an SSL policy.\n-"
+        },
+        {
+            "Parameters": "pem-ca",
+            "Info": "Specifies to load a PEM trusted-CA file to an SSL policy.\n-"
+        },
+        {
+            "Parameters": "caFile",
+            "Info": "Specifies the name of a trusted-CA file.\nThis file must be saved in the security sub-directory of the system directory.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "pfx-ca",
+            "Info": "Specifies to load a PFX trusted-CA file to an SSL policy.\n-"
+        },
+        {
+            "Parameters": "auth-code",
+            "Info": "Specifies the authentication code of a PFX trusted-CA file.\n-"
+        },
+        {
+            "Parameters": "cipher authCode",
+            "Info": "Specifies the authentication code of a PFX trusted-CA file.\nThe authentication code is used for identity authentication, ensuring that only authorized users can log in to the server.\nThe value is a string of case-sensitive characters that can be letters or digits. The password can be a string of 1 to 31 characters in simple text or a string of 32 to 168 characters in encrypted text.\nExcept the question mark (?) and space. However, when quotation marks (\") are used around the password, spaces are allowed in the password."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssl policy policy1",
+            "[*HUAWEI-ssl-policy-policy1] trusted-ca load asn1-ca servercert.der"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssl policy policy1",
+            "[*HUAWEI-ssl-policy-policy1] trusted-ca load pem-ca servercert.pem"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssl policy policy1",
+            "[*HUAWEI-ssl-policy-policy1] trusted-ca load pfx-ca servercert.pfx auth-code cipher huawei-123456"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCAs are responsible for issuing digital certificates. The world-wide trusted CA is called a root CA. The root CA can authorize other CAs as subordinate CAs. The CA identity is described in a trusted-CA file. To ensure communications security, run the trusted-ca load command to load a trusted-CA file.\nPrerequisites\nThe ssl policy command has been used in the system view to create an SSL policy.\nConfiguration Impact\nIf a user suffers a loss after the trusted-CA file is loaded, the user can use the file as an evidence to seek legal actions against CA.\nPrecautions\nA maximum of four trusted-CA files can be loaded to an SSL policy.\nIf the PEM trusted-CA file loaded to an SSL policy is not in X.509v3 format, the system displays a message indicating risks and recommending X.509v3 trusted-CA files. You can also run the display security risk feature ssl command to view the risk message."
+}

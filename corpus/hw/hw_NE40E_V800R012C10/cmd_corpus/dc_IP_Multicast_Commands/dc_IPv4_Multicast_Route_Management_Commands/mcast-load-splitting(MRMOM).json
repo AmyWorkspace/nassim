@@ -1,0 +1,41 @@
+{
+    "PageTitle": "multicast load-splitting",
+    "FuncDef": "The multicast load-splitting command configures a multicast load splitting policy.\nThe undo multicast load-splitting command restores the default configuration.\nBy default, the load splitting among multicast routes is disabled",
+    "CLIs": [
+        "multicast load-splitting { group | source | source-group | stable-preferred | balance-ucmp }",
+        "undo multicast load-splitting"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group",
+            "Info": "Indicates group address-based load splitting. This policy is applicable to the scenario of one source to multiple groups.\n-"
+        },
+        {
+            "Parameters": "source",
+            "Info": "Indicates source address-based load splitting. This policy is applicable to the scenario of multiple sources to one group.\n-"
+        },
+        {
+            "Parameters": "source-group",
+            "Info": "Indicates source and group addresses-based load splitting. This policy is applicable to the scenario of multiple sources to multiple groups.\n-"
+        },
+        {
+            "Parameters": "stable-preferred",
+            "Info": "Indicates stable-preferred load splitting. This policy is applicable to the stable multicast networking.\n-"
+        },
+        {
+            "Parameters": "balance-ucmp",
+            "Info": "Indicates link bandwidth-based load splitting. This policy is applicable to the scenario in which links have different bandwidth.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] multicast load-splitting stable-preferred"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf multiple equal-cost routes exist over the network, you can run the multicast load-splitting command to realize load splitting among the equal-cost routes. The router selects equal-cost routes from unicast and multicast static routing tables, and determines the routing table for creating multicast routing entries based on the mask lengths and preferences of routes. All equal cost routes in the determined routing table can then take part in load splitting. The router supports load splitting among the routes in only one routing table.\nIf multicast load balancing is not configured, traffic is transmitted through only one path. The route corresponding to the path is selected by the router from the intra-AS unicast routing table, inter-AS unicast routing table, and multicast static routing table according to multicast routing rules.\nIn a Rosen MVPN scenario, if the multicast load-splitting balance-ucmp command is run for the public network, PIM must be enabled on the Rosen MVPN interfaces that borrow IP addresses.\nPrerequisites\nThe multicast routing-enable command is run in the public network instance view.\nConfiguration Impact\nThe four load splitting policies are mutually exclusive. You are advised to adopt a fixed multicast load splitting policy based on the actual networking.\nIf stable-preferred is specified, the router automatically adjusts and balances the entries when equal-cost routes are added or deleted; however, when multicast routing entries are deleted, the router does not automatically adjust the entries on the equal-cost routes.If group, source, or source-group is specified, fixed algorithms are used for load splitting. In case that multicast routing entries and network configurations are stable, Reverse Path Forwarding (RPF) interfaces and RPF neighbors keep unchanged.If balance-ucmp is specified, the router automatically adjusts and balances traffic based on link bandwidth, implementing unequal load splitting."
+}

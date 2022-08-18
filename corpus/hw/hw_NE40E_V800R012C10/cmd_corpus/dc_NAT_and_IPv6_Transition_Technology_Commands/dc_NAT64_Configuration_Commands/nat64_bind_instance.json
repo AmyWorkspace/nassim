@@ -1,0 +1,28 @@
+{
+    "PageTitle": "nat64 bind instance",
+    "FuncDef": "The nat64 bind instance command binds a traffic behavior to a NAT64 instance.\nThe undo nat64 bind instance command deletes the binding between a traffic behavior and a NAT64 instance.\nBy default, no traffic behavior is bound to a NAT64 instance.",
+    "CLIs": [
+        "nat64 bind instance <instance-name>",
+        "undo nat64 [ bind instance [ <instance-name> ] ]"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "instance-name",
+            "Info": "Specifies the name of a NAT64 instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat64 instance nat1 id 1",
+            "[*HUAWEI-nat64-instance-nat1] commit",
+            "[~HUAWEI-nat64-instance-nat1] quit",
+            "[~HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] nat64 bind instance nat1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo bind a traffic behavior to a NAT instance, run the nat64 bind instance command. On a carrier network, NAT64 must be performed for all user traffic. To meet this requirement, configure a traffic profile and apply it to an inbound interface. Traffic distribution policies must be defined to direct traffic to a service board for NAT64 processing. The configuration involves defining ACL rules, traffic classifiers, traffic behaviors, and traffic distribution policies and applying the traffic distribution policies.\nPrerequisites\nAn ACL, an ACL rule, and a traffic classifier have been configured.A NAT64 instance has been configured.\n\nFollow-up Procedure\nConfigure a traffic distribution policy, bind the traffic classifier to the traffic behavior, and apply the policy in the interface or system view.\nPrecautions\nNAT64 does not support dynamic load balancing or a global address pool.\nIn the traffic behavior view, the DS-Lite redirection is mutually exclusive with redirection actions (including the deny action, NAT44 traffic distribution, NAT64 traffic distribution, DNS redirection action, HTTP redirection action, and redirect action, and redirect-CPU action).\nIf the destination address of a packet matches both an ACL rule and a FIB entry, the ACL rule takes precedence over the FIB entry for traffic diversion. For example, a NAT64 IPv6 prefix 2001:db8::1/96 is defined for NAT64 instance A, and the prefix matches ACL1 which is bound to NAT64 instance B. Packets destined for 2001:db8::1/96 are preferentially matched against ACL1 and assigned to NAT64 instance B instead of NAT64 instance A. As a result, NAT64 processing fails to be performed for the packets."
+}

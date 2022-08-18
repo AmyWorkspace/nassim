@@ -1,0 +1,84 @@
+{
+    "PageTitle": "mpls l2vpn redundancy",
+    "FuncDef": "The mpls l2vpn redundancy command specifies the PW redundancy mode.\nThe undo mpls l2vpn redundancy command restores the default PW redundancy mode.\n\nBy default, a device determines the primary and secondary PWs locally using FRR, without negotiating with other nodes.",
+    "CLIs": [
+        "mpls l2vpn redundancy { independent | master }",
+        "undo mpls l2vpn redundancy { independent | master }"
+    ],
+    "ParentView": [
+        "Global IMA-group sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "Global MP-group interface view",
+        "XGE sub-interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "MP-group interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "Trunk serial interface view",
+        "50|100GE sub-interface view",
+        "IMA-group sub-interface view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "POS-Trunk interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "IMA group interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "400GE Layer 2 sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "independent",
+            "Info": "Indicates the independent PW redundancy mode.\n-"
+        },
+        {
+            "Parameters": "master",
+            "Info": "Indicates the master/slave PW redundancy mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 1.1.1.1 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 2 secondary",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vpn redundancy independent"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 1.1.1.1 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 2 secondary",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vpn redundancy master"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nAfter configuring the primary and secondary PWs on a PE, you can specify the PW redundancy mode. The following PW redundancy modes are supported:\nFRR mode: The FRR mode is the default PW redundancy mode and does not need to be configured.\nMaster/slave or independent mode: is configured using the mpls l2vpn redundancy command.\n\nMaster/slave mode: The primary and secondary PWs are manually specified on the master device, and then the local device notifies the remote device of information about the primary and secondary PWs. The master/slave PW redundancy mode works with the bypass PW to isolate network-side link faults and AC-side link faults. In other words, the fault on the AC side will trigger only an AC switchover, and the fault on the public network will trigger only a PW switchover.\nIndependent mode: The primary and secondary PWs are determined by means of negotiation. Two PWs are configured on one PE to connect to two peer PEs, with both PWs being in the master state on the local device. The peer PEs determine the primary and secondary PWs by means of E-Trunk or mVRRP. The PEs on both ends then negotiate and finally determine the primary PW.The independent mode applies to scenarios where PW redundancy is associated with E-Trunk. The independent PW redundancy mode, together with the bypass PW, can prevent links on the AC side from sensing faults on the network side but cannot prevent links on the network side from sensing faults on the AC side. In other words, the fault on the public network will trigger only a PW switchover but not an AC link switchover, whereas the fault on the AC side will trigger both an AC switchover and a PW switchover.\n\n\nPrecautions\n\nThe independent or master/slave PW redundancy mode is used in PWE3 only.\nIf the mpls l2vpn redundancy command is run multiple times, the latest configuration overrides previous ones. The undo mpls l2vpn redundancy command restores the FRR mode. When using the undo mpls l2vpn redundancy command, ensure that the parameter in this command is the same as that in the corresponding mpls l2vpn redundancy command.\nYou can run the mpls l2vpn reroute command to configure a switchback policy for the VLL FRR or master/slave PW redundancy mode. By default, the delayed switchback mode is used. The independent PW redundancy mode uses only the immediate switchback mode."
+}

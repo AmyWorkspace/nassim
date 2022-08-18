@@ -1,0 +1,29 @@
+{
+    "PageTitle": "ingress-lsp trigger route-filter",
+    "FuncDef": "The ingress-lsp trigger route-filter command specifies a route filter to control the creation of ingress LSPs based on labeled BGP IPv4 routes.\nThe undo ingress-lsp trigger command restores the default configuration.\nBy default, ingress LSPs are created based on all received BGP labeled routes.",
+    "CLIs": [
+        "ingress-lsp trigger route-filter <route-filter-name>",
+        "undo ingress-lsp trigger route-filter <route-filter-name>"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view",
+        "BGP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route filter to be used to create ingress LSPs based on BGP labeled routes.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy test-policy permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] ingress-lsp trigger route-filter test-policy"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a MAN where the hybrid access mode is used, a large number of labeled BGP routes are used to establish end-to-end LSPs. On certain intermediate nodes where VPN services do not need to be supported, excessive ingress LSPs are created, causing the waste of network resources. In this case, you can run the ingress-lsp trigger command to create ingress LSPs based on a routing policy or route filter to save network resources.\nPrerequisites\nIf the routing policy specified in the ingress-lsp trigger command does not exist, you need to configure the routing policy using the route-policy command first.\nConfiguration Impact\nIf the ingress-lsp trigger command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nWhen a large number of routes flap on a device and the ingress-lsp trigger command is run, a delay occurs when labeled routes recurse to BGP LSPs, but service traffic is not affected.\nWhen a large number of routes flap on a device and the undo ingress-lsp trigger command is run, a delay occurs in the switchback of labeled routes to the original tunnels, but service traffic is not affected."
+}

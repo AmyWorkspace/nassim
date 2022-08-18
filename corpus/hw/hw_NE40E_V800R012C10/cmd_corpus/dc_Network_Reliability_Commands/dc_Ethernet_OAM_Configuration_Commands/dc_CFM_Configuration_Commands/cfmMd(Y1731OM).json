@@ -1,0 +1,50 @@
+{
+    "PageTitle": "cfm md",
+    "FuncDef": "The cfm md command creates an MD and displays the MD view. If an MD already exists, the command directly displays the MD view.\nThe undo cfm md command deletes an MD.\nBy default, no MD is created.",
+    "CLIs": [
+        "cfm md <md-name> format { no-md-name | dns <string-md-format-name> | mac-address <string-md-format-name> | string <string-md-format-name> } [ level <level> ]",
+        "cfm md <md-name> [ level <level> ]",
+        "undo cfm md [ <md-name> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "md-name",
+            "Info": "Specifies the name of an MD.\nThe value is a string of 1 to 43 case-sensitive characters. Question marks (?) are not supported. The name of an MD is used to identify an MD. Names of different MDs on a device must be different."
+        },
+        {
+            "Parameters": "format",
+            "Info": "Specifies the format of a sent packet.\n-"
+        },
+        {
+            "Parameters": "no-md-name",
+            "Info": "Indicates that the MA ID field of a sent packet does not contain an MD name.\n-"
+        },
+        {
+            "Parameters": "dns string-md-format-name",
+            "Info": "Specifies a DNS MD name to be carried in packets.\nThe value is a string of 1 to 43 case-sensitive characters. Question marks (?) are not supported."
+        },
+        {
+            "Parameters": "mac-address string-md-format-name",
+            "Info": "Specifies an MD name carried in packets, in the format of H-H-H:U<0-65535>, for example, 00e0-fc12-7890:1.\nThe value is a string of 1 to 43 case-sensitive characters. Question marks (?) are not supported."
+        },
+        {
+            "Parameters": "string string-md-format-name",
+            "Info": "Specifies an ASCII MD name.\nThe value is a string of 1 to 43 case-sensitive characters. Question marks (?) are not supported."
+        },
+        {
+            "Parameters": "level level",
+            "Info": "Specifies the level of an MD.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md mdcustomer level 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCFM is used for link connectivity monitoring, fault diagnosis, and fault locating. A properly planned MD helps a network administrator rapidly locate a fault. All devices managed by an Internet service provider (ISP) are deployed in the same MD.\nAn MD is an area in which connectivity fault detection is enabled. The boundary of the MD is determined by MEPs configured on interfaces. An MD is identified by an MD name. To help locate faults, MDs are separated into different levels. You can specify the level parameter to set a level for an MD. MDs are divided into levels 0 through 7. The larger the value, the higher the level and the larger an area the MD covers. An MD can be tangential to or nest another MD, but these MDs cannot cross each other. An MD can only nest another MD with a lower level.\nAfter 802.1ag packets in a lower-level MD enter a higher-level MD, the 802.1ag packets will be discarded. 802.1ag packets in a higher-level MD can travel to a lower-level MD. 802.1ag packets in an MD of a specified level cannot travel the MD with the same level.\nPrerequisites\nCFM has been enabled globally using the cfm enable (system view) command.\nConfiguration Impact\nIf an MD is deleted using the undo cfm md command on a device, the device automatically deletes all configurations about the MD.\nPrecautions\nOnly IEEE Standard 802.1ag-2007 supports the format, no-md-name, dns-md-format-name, mac-md-format-name, string-md-format-name parameters.According to IEEE Standard 802.1ag-2007, the MD name format can be specified during the configuration of the MD. Each MD can be configured with only one name format and one level. You can use the cfm md command to enter the view of an existing MD but cannot change the name format or level of the existing MD. To change the name format and level of the MD that already exists, delete the MD and then run the cfm md command to create an MD."
+}

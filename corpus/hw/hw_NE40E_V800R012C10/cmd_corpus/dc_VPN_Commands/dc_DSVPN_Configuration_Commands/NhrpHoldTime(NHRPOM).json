@@ -1,0 +1,29 @@
+{
+    "PageTitle": "nhrp entry holdtime",
+    "FuncDef": "The nhrp entry holdtime command sets the aging time of NHRP peer entries.\nThe undo nhrp entry holdtime command restores the aging time of NHRP peer entries to the default value.\nBy default, the aging time of NHRP peer entries is 7200 seconds.",
+    "CLIs": [
+        "nhrp entry holdtime <holdtime>",
+        "undo nhrp entry holdtime",
+        "undo nhrp entry holdtime <holdtime>"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "holdtime",
+            "Info": "Specifies the aging time of NHRP peer entries.\nThe value is an integer that ranges from 300 to 31845, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nhrp enable",
+            "[*HUAWEI] interface tunnel 0",
+            "[*HUAWEI-Tunnel0] tunnel-protocol gre p2mp",
+            "[*HUAWEI-Tunnel0] nhrp enable",
+            "[*HUAWEI-Tunnel0] nhrp entry holdtime 3200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThis command sets the aging time. The aging time is notified by the local device to the remote end so that the remote end can learn how long local NHRP peer entries can be retained. When a network exception occurs, the remote end deletes local NHRP peer entries based on the configured aging time. After the network recovers, a spoke registers with the hub to generate new NHRP peer entries.\nPrerequisites\nThe following operations have been performed:\nRun the interface tunnel command to create a tunnel interface and display the tunnel interface view.Run the tunnel-protocol gre p2mp command to set the tunnel encapsulation mode to mGRE.\n\nConfiguration Impact\nWhen you run this command to change the aging time of NHRP peer entries:\nIf the value is too large, the device cannot delete NHRP peer entries in time.If the value is too small, a smaller interval for sending Registration packets must be configured on the peer device. This results in frequent sending of Registration packets, wasting network resources.\n\nPrecautions\nThe value of the parameter holdtime configured by this command must be equal to or larger than the interval configured by the nhrp registration interval command."
+}

@@ -1,0 +1,91 @@
+{
+    "PageTitle": "ip route-static topology",
+    "FuncDef": "The ip route-static topology command configures an IPv4 unicast static route for a topology.\nThe undo ip route-static topology command deletes an IPv4 unicast static route configured for a topology.\nBy default, the system does not configure IPv4 unicast static routes in a topology instance.",
+    "CLIs": [
+        "ip route-static topology <topology-name> <ip-address> { <mask> | <mask-length> } <nexthop-address> [ recursive-lookup host-route ] [ preference <preference> | tag <tag> ] * [ no-advertise | no-install ] [ description <text> ]",
+        "ip route-static topology <topology-name> <ip-address> { <mask> | <mask-length> } { <interface-name> | <interface-type> <interface-number> } [ <nexthop-address> | dhcp ] [ preference <preference> | tag <tag> | cost <cost-value> ] * [ no-advertise | no-install ] [ description <text> ]",
+        "undo ip route-static [ topology <topology-name> ] <ip-address> { <mask> | <mask-length> } [ { <interface-name> | <interface-type> <interface-number> } [ { <nexthop-address> | dhcp } ] | { <nexthop-address> | dhcp } ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "topology-name",
+            "Info": "Specifies the name of the topology to which a static route belongs.\nThe value is a string of 1 to 31 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive) and can contain numbers, hyphens (-), or underlines (_). When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies a destination IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies a mask for an IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length. A 32-bit mask is represented by consecutive 1s, and the mask in dotted decimal notation can be replaced by the mask length.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "nexthop-address",
+            "Info": "Specifies the next hop IP address of a route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "recursive-lookup",
+            "Info": "Recursive route lookup policy.\n-"
+        },
+        {
+            "Parameters": "host-route",
+            "Info": "Recurses the static route to a 32-bit host route.\n-"
+        },
+        {
+            "Parameters": "preference preference",
+            "Info": "Specifies a priority for static routes.\nThe value is an integer ranging from 1 to 255. The default value is 60. The smaller the value, the higher the priority."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies a tag value for a static route. By configuring different tag values, you can classify static routes to implement different routing policies. For example, other protocols can import static routes with specified tag values based on routing policies.\nThe value is an integer ranging from 1 to 4294967295. The default value is 0."
+        },
+        {
+            "Parameters": "no-advertise",
+            "Info": "Prevents static routes from being advertised.\nAfter this function is enabled, the static route can be imported to the BGP routing table but is not advertised to BGP peers.\n-"
+        },
+        {
+            "Parameters": "no-install",
+            "Info": "Prevents the static route from being delivered to the FIB.\n-"
+        },
+        {
+            "Parameters": "description text",
+            "Info": "Specifies a description for a static route.\nThe description parameter cannot be followed by other parameters, such as bfd and preference. Otherwise, the configuration will be used only as the description. For example, if ip route-static 1.1.1.1 255.255.255.255 NULL0 description aa preference 10 is run, aa preference 10 is used as the description.\nThe value is a string of 1 to 150 characters, spaces supported."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of the outbound interface of the static route.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of the outbound interface of the static route.\n-"
+        },
+        {
+            "Parameters": "dhcp",
+            "Info": "Sets the IP address of a DHCP gateway as the next hop of the static route.\n-"
+        },
+        {
+            "Parameters": "cost cost-value",
+            "Info": "Specifies a cost value for a static route.\nThe value is an integer ranging from 1 to 4294967295. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip topology red",
+            "[*HUAWEI] ip route-static topology red 1.2.3.4 32 11.11.11.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip route-static 1.1.1.1 32 10.11.0.1",
+            "[~HUAWEI] undo ip route-static 1.1.1.1 32"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a simple network, static routes alone can ensure that the network runs properly. If the Router cannot run dynamic routing protocols to generate routes to the destination, configure static routes on the Router.\nAfter recursive-lookup host-route is configured, static routes can recurse only to 32-bit host routes.\nIn network maintenance scenarios, static routes are required to verify services. If you do not want these static routes to be imported by other protocols, specify no-advertise to prevent these static routes from being advertised.\nno-advertise takes effect only when it is configured for all the active static routes with the same destination address and mask. After this function is enabled, the static route can be imported to the BGP routing table but is not advertised to BGP peers.\nYou can configure description description-text to configure a description for static routes so that the administrator can check and maintain static routes easily. To check the configured description, run the display this or display current-configuration command in the system view.\nPrecautions\nWhen configuring unicast static routes in a topology instance, note the following points:\nThe default priority of a static route is 60.When deleting a route, you can specify preference, tag, or description. The parameters, however, are not displayed in the command line help.When both the destination IP address and the mask are 0.0.0.0, the configured route is a default route. If no matching route is available in the routing table, the default route is used for packet forwarding.Setting different priorities can implement different RM policies. For example, if the same priority is configured for multiple routes to the same destination, load balancing can be implemented. If different priorities are configured for multiple routes to the same destination, route backup can be implemented.When configuring static routes, you can specify outbound interfaces or next hop addresses as required. You can specify outbound interfaces or next hop addresses for the interfaces that support resolution from network addresses to link layer addresses or P2P interfaces, excluding NBMA interfaces that support P2MP, such as the interfaces that use X.25 for encapsulation and dialling interfaces. At the link layer, both IP addresses and slave routes must be configured. Specifically, IP addresses must be mapped to link layer addresses using the dialer map ip, x.25 map ip, or frame-relay map ip command. In this case, when configuring static routes, you can specify only next hop addresses rather than outbound interfaces.If the outbound interface is a non-P2P interface, a next hop address is required.In some cases, for example, the link layer is encapsulated with PPP, you can also specify outbound interfaces even if the remote address is unknown. In this manner, you do not need to modify the router configuration if the remote address changes."
+}

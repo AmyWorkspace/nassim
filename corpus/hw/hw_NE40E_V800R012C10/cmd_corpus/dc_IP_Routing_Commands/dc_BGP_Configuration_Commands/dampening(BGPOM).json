@@ -1,0 +1,49 @@
+{
+    "PageTitle": "dampening (BGP view)",
+    "FuncDef": "The dampening command enables BGP route flapping suppression and modifies BGP route flapping suppression parameters.\nThe undo dampening command restores the default configuration.\nBy default, BGP route flapping suppression is disabled.",
+    "CLIs": [
+        "dampening [ <half-life-reach> <reuse> <suppress> <ceiling> | [ route-policy <route-policy-name> | route-filter <route-filter-name> ] ] * [ update-standard ]",
+        "undo dampening"
+    ],
+    "ParentView": [
+        "BGP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "half-life-reach",
+            "Info": "Specifies the half life of a reachable route.\nThe value is an integer ranging from 1 to 45, in minutes. The default value is 15."
+        },
+        {
+            "Parameters": "reuse",
+            "Info": "Specifies a Reuse value. If the penalty value of a route falls below the Reuse value, the route is reused.\nThe value is an integer ranging from 1 to 20000. The default value is 750."
+        },
+        {
+            "Parameters": "suppress",
+            "Info": "Specifies a Suppress value. If the penalty value of a route exceeds the Suppress value, the route is dampened.\nThe value is an integer ranging from 1 to 20000 and must be greater than the value of reuse. The default value is 2000."
+        },
+        {
+            "Parameters": "ceiling",
+            "Info": "Specifies a penalty ceiling.\nThe value is an integer ranging from 1001 to 20000. The configured value must be greater than that of suppress. The default value is 16000."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "update-standard",
+            "Info": "Enables BGP to add a penalty value (500) to the route carried in each received Update message (excluding Withdraw message).\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] dampening 10 1000 2000 5000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a policy is configured for route dampening, routes are preferentially matched against the dampening parameters defined by route-policy in the command.\nThe four parameters of the command are mutually dependent. If you configure one of the parameters, the other parameters also need to be configured in the command.\nBGP dampening measures route stability using a penalty value. The greater the penalty value, the less stable a route. Each time route flapping occurs (the Router receives a Withdraw), BGP adds a penalty value to the route carried in the message. If a route changes from active to inactive, the penalty value increases by 1000.\nIf the penalty value of a route exceeds the Suppress value, the route is dampened. The Router does not add the route to the IP routing table or advertise any Update message to other BGP peers. BGP removes the best flag of the route. If the route is carried in an Update message, BGP adds a d flag to the route; if the route is carried in a Withdraw message, BGP adds an h flag to the route. If a route carries both a d flag and an h flag, the route is considered a deleted one. After the penalty value reaches the penalty ceiling, it does not increase any more.\nThe penalty value of a dampened route reduces by half after a half-life period. If the route is carried in an Update message and its penalty value decreases to the Reuse value, the route becomes reusable, and BGP removes the d flag from it, adds it to the IP routing table if it is an optimal route, and advertises an Update message carrying the route to BGP peers. If the route is carried in a Withdraw message and its penalty value decreases to 0, BGP deletes this route from the BGP routing table.\nAfter BGP route dampening is configured, any parameter in the command can be used to dampen flapping routes. You can adjust the parameters as required. To increase the dampening time of flapping routes, perform any of the following operations (to reduce the dampening time, perform otherwise):\nIncrease ceiling.Increase half-life-reach.Reduce reuse.\n\nConfiguration Impact\nIf the dampening command is run more than once, the latest configuration overrides the previous one.\nAfter the dampening command is run, the system dampens unstable routes. Specifically, the system does not add unstable routes to the BGP routing table or advertise them to other BGP peers.\nPrecautions\nNote the following items when configuring BGP route dampening:\nThe value of suppress must be greater than that of reuse and less than that of ceiling.If MaxSuppressTime obtained using the formula of MaxSuppressTime = half-life-reach x 60 x (ln(ceiling/reuse)/ln(2)) is less than 1, suppression cannot be performed. Therefore, ensure that the value of MaxSuppressTime is greater than or equal to 1. This means that the value of ceiling/reuse must be great enough.\nThe dampening command is valid only for EBGP routes.\nThe dampening ibgp command is valid only for BGP VPNv4 routes."
+}

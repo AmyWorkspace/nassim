@@ -1,0 +1,68 @@
+{
+    "PageTitle": "garp timer (Layer 2 Ethernet interface view)",
+    "FuncDef": "The garp timer command sets values for GARP timers on an interface.\nThe undo garp timer command restores the default values of GARP timers on an interface.\nBy default, the values of the Hold timer, Join timer, and Leave timer are 10 centiseconds, 20 centiseconds, and 60 centiseconds, respectively.",
+    "CLIs": [
+        "garp timer hold <timer-value>",
+        "garp timer join <timer-value>",
+        "garp timer leave <timer-value>",
+        "undo garp timer hold [ <timer-value> ]",
+        "undo garp timer join [ <timer-value> ]",
+        "undo garp timer leave [ <timer-value> ]"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Layer 2 50GE interface view",
+        "Eth-Trunk interface view",
+        "25GE-L2 view",
+        "Port extension Layer 2 interface view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "join timer-value",
+            "Info": "Sets a value for a GARP Join timer.\nLower limit: greater than or equal to twice the Hold timer value. The lower limit can be changed by changing the value of the Hold timer.Upper limit: less than half the Leave timer value. The upper limit can be changed by changing the value of the Leave timer.The value must be an integral multiple of 5 centiseconds."
+        },
+        {
+            "Parameters": "leave timer-value",
+            "Info": "Sets a value for a GARP Leave timer.\nLower limit: greater than twice the Join timer value. The lower limit can be changed by changing the value of the Join timer.Upper limit: less than the LeaveAll timer value. The upper limit can be changed by changing the value of the LeaveAll timer.The value must be an integral multiple of 5 centiseconds."
+        },
+        {
+            "Parameters": "hold timer-value",
+            "Info": "Sets a value for a GARP Hold timer.\nLower limit: 10 centisecondsUpper limit: less than or equal to half the Join timer value. The upper limit can be changed by changing the value of the Join timer.The value must be an integral multiple of 5 centiseconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] gvrp",
+            "[*HUAWEI] interface GigabitEthernet3/0/1",
+            "[*HUAWEI-GigabitEthernet3/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet3/0/1] port link-type trunk",
+            "[*HUAWEI-GigabitEthernet3/0/1] gvrp",
+            "[*HUAWEI-GigabitEthernet3/0/1] garp timer leave 800"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] gvrp",
+            "[*HUAWEI] interface GigabitEthernet3/0/1",
+            "[*HUAWEI-GigabitEthernet3/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet3/0/1] port link-type trunk",
+            "[*HUAWEI-GigabitEthernet3/0/1] gvrp",
+            "[*HUAWEI-GigabitEthernet3/0/1] garp timer join 300"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] gvrp",
+            "[*HUAWEI] interface GigabitEthernet3/0/1",
+            "[*HUAWEI-GigabitEthernet3/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet3/0/1] port link-type trunk",
+            "[*HUAWEI-GigabitEthernet3/0/1] gvrp",
+            "[*HUAWEI-GigabitEthernet3/0/1] garp timer hold 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGARP defines three interface timers:\nJoin timer: controls the sending of Join messages, including JoinIn and JoinEmpty messages.Hold timer: controls the sending of Join messages (JoinIn and JoinEmpty messages) and Leave messages (LeaveIn and LeaveEmpty messages).Leave timer: controls attribute deregistration.\nTo control the time when GARP sends messages, run the garp timer command to set values for GARP interface timers.\n\nPrerequisites\nBefore running the garp timer command, the port group must contain physical interfaces.\nGVRP has been enabled globally and on each interface.\nPrecautions\nWhen you run the garp timer command to set GARP timers for an interface, note the following:\nThe garp timer command can be run only on trunk interfaces.The undo garp timer command restores the default values of GARP timers on an interface. If the default value of a timer is out of the valid range, the undo garp timer command does not take effect.The value range of each timer changes with the values of the other timers. If a value you want to set for a timer is beyond the allowed range, you can change the value of another timer that relates to the value range of this timer.To restore the default values of all the GARP timers, restore the Hold timer, Join timer, Leave timer, and LeaveAll timer to default values in sequence.When many dynamic VLANs need to be registered or the network radius is large, using the default values of GARP timers may cause VLAN flapping and high CPU usage. To prevent such problems, increase timer values."
+}

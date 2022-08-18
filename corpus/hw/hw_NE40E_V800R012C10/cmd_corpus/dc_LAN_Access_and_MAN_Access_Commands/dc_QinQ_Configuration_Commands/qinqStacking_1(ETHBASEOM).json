@@ -1,0 +1,85 @@
+{
+    "PageTitle": "qinq stacking vid (sub-interface view)",
+    "FuncDef": "The qinq stacking vid command configures a sub-interface to add an outer VLAN tag to received packets based on a matching policy. Specifically, the sub-interface can add different outer VLAN tags to packets based on the VLAN ID+802.1p value/DSCP value/EthType.\nThe undo qinq stacking vid command restores the default configuration.\nBy default, QinQ stacking is not configured on an Ethernet interface.",
+    "CLIs": [
+        "qinq stacking vid <low-ce-vid> [ to <high-ce-vid> ] { 8021p { <val8021p1> [ to <val8021p2> ] } &<1-8> | dscp { <valdscp1> [ to <valdscp2> ] } &<1-10> | eth-type PPPoE | default } [ vlan-group <group-id> ]",
+        "undo qinq stacking vid <low-ce-vid> [ to <high-ce-vid> ] { 8021p { <val8021p1> [ to <val8021p2> ] } &<1-8> | dscp { <valdscp1> [ to <valdscp2> ] } &<1-10> | eth-type PPPoE | default } [ vlan-group <group-id> ]"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "low-ce-vid",
+            "Info": "Specifies the VLAN ID carried in packets.low-ce-vid: specifies the start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "high-ce-vid",
+            "Info": "Specifies the VLAN ID carried in packets.\nhigh-ce-vid: specifies the end VLAN ID. high-ce-vid must be greater than or equal to low-ce-vid. low-ce-vid and high-ce-vid specify a VLAN range.If you do not specify to high-ce-vid, low-ce-vid specifies the VLAN ID carried in packets.If the low-ce-vid to high-ce-vid parameters are run more than once, all configurations take effect.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "val8021p1",
+            "Info": "Specifies the priority of a VLAN frame. The val8021p1 indicates the minimum priority value.\nThe value is an integer ranging from 0 to 7. The larger the value, the higher the priority."
+        },
+        {
+            "Parameters": "val8021p2",
+            "Info": "Specifies the 802.1p priority in packets.\nval8021p2: specifies the highest priority. val8021p2 must be greater than or equal to val8021p1. val8021p1 and val8021p2 specify a priority range.If you do not specify to val8021p2, val8021p1 specifies the 802.1p priority in packets.If the val8021p1 to val8021p2 parameters are run more than once, all configurations take effect.\nIn one qinq stacking vid 8021p command, a maximum of eight 802.1p priority ranges can be specified using to.802.1p is represented by a 3-bit PRI (priority) field in an 802.1Q frame. If traffic is congested on a device, the device forwards high-priority frames first.\nThe value is an integer ranging from 0 to 7. The larger the value, the higher the priority."
+        },
+        {
+            "Parameters": "dscp",
+            "Info": "Matches packets based on a DSCP value.\n-"
+        },
+        {
+            "Parameters": "valdscp1",
+            "Info": "Specifies the DSCP value in packets.valdscp1: specifies the minimum DSCP value.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "valdscp2",
+            "Info": "Specifies the DSCP value in packets.\nvaldscp2: specifies the maximum DSCP value. valdscp2 must be greater than or equal to valdscp1. valdscp1 and valdscp2 specify a DSCP value range.If you do not specify to valdscp2, valdscp1 specifies the DSCP value in packets.If the valdscp1 to valdscp2 parameters are run more than once, all configurations take effect.\nIn one qinq stacking vid 8021p command, a maximum of 10 DSCP value ranges can be specified using to.According to relevant standards, six bits of the Type of Service (ToS) field in an IPv4 packet header serve as the DSCP, which provides reference for differentiated services (DiffServ) and is used to implement QoS guarantee on an IP network. The operation of the traffic controller on the gateway depends on the DSCP field.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "eth-type",
+            "Info": "Specifies the EthType in packets.\nThe value can only be PPPoE."
+        },
+        {
+            "Parameters": "default",
+            "Info": "Specifies a sub-interface to match VLAN services that are not matched by other sub-interfaces.\n-"
+        },
+        {
+            "Parameters": "vlan-group group-id",
+            "Info": "Specifies the number of a VLAN group.\nThe value is an integer ranging from 1 to 16."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq stacking vid 1 to 10 8021p 1 3 to 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1.2",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] qinq stacking vid 1 to 10 default"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.3",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] qinq stacking vid 11 to 20 dscp 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.4",
+            "[*HUAWEI-GigabitEthernet1/0/1.4] qinq stacking vid 21 to 30 eth-type pppoe"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOne physical interface cannot provide L2VPN access to multiple users. To address this problem, you can run the qinq stacking vid 8021p command to configure a QinQ stacking sub-interface and bind it to a VSI or L2VC to provide L2VPN access to multiple users. You need to specify only the inner VLAN ID+802.1p value/DSCP value/EthType in the command. The system automatically adds an outer VLAN tag to a packet based on its inner VLAN ID+802.1p value/DSCP value/EthType.\nPrerequisites\nBefore running the qinq stacking vid command in the VE sub-interface view or global VE sub-interface view, the interface on which the sub-interface is to be created has been bound to a VE-Group.\nPrecautions\nIf the same VLAN ID is encapsulated on different sub-interfaces of an interface, the sub-interfaces must use matching policies of the same type (802.1p value/DSCP value/EthType).\nOne VLAN ID can be encapsulated on a maximum of eight sub-interfaces.\nIf you specify default in the command, all services of any VLAN within the VLAN range, except that those matching the matching policy are processed by the corresponding sub-interface, are processed by the default sub-interface.\nIf you specify the VLAN ID+802.1p value/DSCP value/EthType in the undo qinq stacking vid command, the command deletes only the specified matching policy. The undo qinq stacking vid low-ce-vid [ to high-ce-vid ] command deletes all matching policies within the VLAN range on the sub-interface."
+}

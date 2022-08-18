@@ -1,0 +1,48 @@
+{
+    "PageTitle": "diffserv-mode(l3vpn)",
+    "FuncDef": "The diffserv-mode command configures an MPLS DiffServ mode to ensure end-to-end QoS.\nThe undo diffserv-mode command restores an MPLS DiffServ mode to the default configuration.\nBy default, the MPLS DiffServ mode is Uniform.",
+    "CLIs": [
+        "diffserv-mode { pipe <service-class> <color> | short-pipe <service-class> <color> [ domain <ds-name> ] | uniform }",
+        "undo diffserv-mode"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance IPv6 address family view",
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pipe",
+            "Info": "Specifies that the MPLS DiffServ mode is Pipe.\n-"
+        },
+        {
+            "Parameters": "service-class",
+            "Info": "Specifies the Class of Service (CoS) for the packets that enter the public network from a private network.\nThe value can be cs7, cs6, ef, af4, af3, af2, af1, or be. The default value is be."
+        },
+        {
+            "Parameters": "color",
+            "Info": "Specifies the color of a packet that enters the public network from a private network. The color marks the discard priority of the packet.\nThe value can be green, yellow, or red. The default value is green."
+        },
+        {
+            "Parameters": "short-pipe",
+            "Info": "Specifies that the MPLS DiffServ mode is Short-pipe.\n-"
+        },
+        {
+            "Parameters": "domain ds-name",
+            "Info": "Specifies the name of a Diff-Serv domain that uses a specified PHB on an egress node in Short-pipe mode.\nThe value is a string of 1 to 48 characters."
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Specifies that the MPLS DiffServ mode is Uniform.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[~HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] diffserv-mode pipe af1 green"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a Diff-Serv mode:\nIf service priorities on an MPLS network need to be distinguished, configure the Uniform mode.If service priorities do not need to be distinguished, configure the Pipe or Short-pipe mode.\nWhen service class is configured for the packets that enter the public network from a private network:\nTo transmit signaling protocol, set service class to cs7 and cs6.To ensure the QoS for low-delay services, set the service class to ef.To ensure the bandwidth for key services, set service class to af4, af3, af2, or af1.Set the service class to be (a service class) for the services that do not need strict QoS assurance.\nThe packets with the preceding service classes are arranged in descending order of sending priorities.\nThe colors of packets that enter the public network from a private network are in ascending order of discard priorities. That is green, yellow, and red.\n\nPrecautions\nBefore configuring the MPLS Diff-Serv mode for IPv4 services, ensure that an IPv4 address family is configured in the VPN instance view using the ipv4-family (VPN instance view)command.\nBefore configuring the MPLS Diff-Serv mode for IPv6 services, ensure that an IPv6 address family is configured in the VPN instance view using the ipv6-family (VPN instance view) command .\nIn SRv6 over VPN scenarios, the diffserv-mode command can be run to configure a DiffServ mode."
+}

@@ -1,0 +1,33 @@
+{
+    "PageTitle": "nexthop recursive-lookup restrain (BGP view)",
+    "FuncDef": "The nexthop recursive-lookup restrain command configures the intervals for increasing, retaining, and clearing the penalty value for BGP recursion suppression in case of next hop flapping.\nThe undo nexthop recursive-lookup restrain command restores the default configuration.\nBy default, the intervals for increasing, retaining, and clearing the penalty value for BGP recursion suppression in case of next hop flapping are 60s, 120s, and 600s, respectively.",
+    "CLIs": [
+        "nexthop recursive-lookup restrain suppress-interval <add-count-time> hold-interval <hold-count-time> clear-interval <clear-count-time>",
+        "undo nexthop recursive-lookup restrain suppress-interval hold-interval clear-interval"
+    ],
+    "ParentView": [
+        "BGP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "hold-interval hold-count-time",
+            "Info": "Specifies the interval for retaining the penalty value for recursion suppression.\nThe value is an integer ranging from 1 to 65535, in seconds. The default values is recommended."
+        },
+        {
+            "Parameters": "clear-interval clear-count-time",
+            "Info": "Specifies the interval for clearing the penalty value for recursion suppression.\nThe value is an integer ranging from 1 to 65535, in seconds. The default values is recommended."
+        },
+        {
+            "Parameters": "suppress-interval add-count-time",
+            "Info": "Specifies the interval for increasing the penalty value for recursion suppression.\nThe value is an integer ranging from 1 to 65535, in seconds. The default value is recommended."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] nexthop recursive-lookup restrain suppress-interval 30 hold-interval 60 clear-interval 120"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a large number of routes recurse to the same next hop that flaps frequently, the system will be busy processing changes of these routes, which consumes excessive system resources and leads to high CPU usage. To address this problem, configure BGP recursion suppression in case of next hop flapping.\nAfter this function is enabled, BGP calculates the penalty value that starts from 0 by comparing the flapping interval with configured intervals if next hop flapping occurs. When the penalty value exceeds 10, BGP suppresses route recursion to the corresponding next hop. For example, if the intervals for increasing, retaining, and clearing the penalty value are T1, T2, and T3, respectively, BGP calculates the penalty value as follows:\nIncreases the penalty value by 1 if the flapping interval is less than T1.Retains the penalty value if the flapping interval is greater than or equal to T1, but less than T2.Reduces the penalty value by 1 if the flapping interval is greater than or equal to T2, but less than T3.Clears the penalty value if the flapping interval is greater than or equal to T3.\nTo configure the intervals for increasing, retaining, and clearing the penalty value for BGP recursion suppression in case of next hop flapping, run the nexthop recursive-lookup restrain command."
+}

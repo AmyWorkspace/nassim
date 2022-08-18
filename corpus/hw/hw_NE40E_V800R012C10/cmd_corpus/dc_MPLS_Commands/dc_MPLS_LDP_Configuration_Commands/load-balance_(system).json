@@ -1,0 +1,36 @@
+{
+    "PageTitle": "load-balance (System view)",
+    "FuncDef": "The load-balance command configures a load balancing mode for packet forwarding.\nThe undo load-balance command restores the default mode.\nThe default load balancing mode for packet forwarding is per-flow.\nThe default load balancing mode for packet forwarding is per-flow.",
+    "CLIs": [
+        "load-balance { packet | flow } { slot <slot-id> | all }",
+        "undo load-balance { flow | packet } { slot <slot-id> | all }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "packet",
+            "Info": "Configures the per-packet load balancing mode for packet forwarding.\n-"
+        },
+        {
+            "Parameters": "flow",
+            "Info": "Configures the per-flow load balancing mode for packet forwarding.\n-"
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Specifies the slot ID of a board for which a load balancing mode is to be configured.\nThe value is a string of 1 to 256 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates that a load balancing mode is to be configured for all boards.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] load-balance packet slot 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe device supports per-packet and per-flow load balancing modes.\nPer-packet load balancing: In this mode, the device checks the load of each link to implement even load balancing. This mode does not prevent packet disorder.Per-flow load balancing: In this mode, the device uses the hash algorithm to calculate a value based on packet quintet information (protocol type, source IP address, destination IP address, source port number, and destination port number), and then selects a link for packet forwarding based on the calculated value. This mode prevents packet disorder.\nAfter this command is run, the per-packet or per-flow load balancing mode is set for all function (including Eth-Trunk) scenarios by default. If a load balancing mode is configured for a function module, for example, load-balance (Eth-Trunk interface view), the load balancing mode configured for the function module takes precedence over that configured globally.\n\nPrecautions\nOn the forwarding plane, this command takes effect on MPLS packets only on the P node.\nOn the control plane, this command takes effect on both IP and MPLS packets delivered by the CPU.\nIn IPsec scenarios, the packets encrypted using IPsec support only per-flow load balancing. Even if the configured load balancing mode is per-packet, per-flow load balancing takes effect."
+}

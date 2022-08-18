@@ -1,0 +1,107 @@
+{
+    "PageTitle": "alarm drop-rate",
+    "FuncDef": "The alarm drop-rate command sets alarm parameters for the dropped packets before they are sent to the CPU, including an upper threshold of the packets dropped within a specified time period and an interval for counting the number of dropped packets.\nThe undo alarm drop-rate command restores the alarm parameters to default values.\nThe default parameters for generating alarms for various packets to be sent to the CPU are described in the parameter description.",
+    "CLIs": [
+        "alarm drop-rate { application-apperceive | tcpip-defend | urpf | whitelist } { interval <interval-value> | threshold <threshold-value> | speed-threshold <speed-value> } *",
+        "alarm drop-rate { application-apperceive | blacklist | ma-defend | tcpip-defend | total-packet | urpf | whitelist } { interval <interval-value> | threshold <threshold-value> } *",
+        "alarm drop-rate whitelist-v6 { interval <interval-value> | threshold <threshold-value> | speed-threshold <speed-value> } *",
+        "alarm drop-rate { index <index> | user-defined-flow <flow-id> } { interval <interval-value> | threshold <threshold-value> | speed-threshold <speed-value> } *",
+        "alarm drop-rate ttl-expired-loop { interval <ttl-expired-loop-interval-value> | threshold <ttl-expired-loop-threshold-value> | no-drop-resume [ resume-cycles <resume-val> ] } *",
+        "alarm drop-rate tcpip-defend-v6 { interval <interval-value> | threshold <threshold-value> | speed-threshold <speed-value> }",
+        "undo alarm drop-rate { index <index> | user-defined-flow <flow-id> } { speed-threshold | threshold | interval }",
+        "undo alarm drop-rate { application-apperceive | tcpip-defend | urpf | whitelist } { speed-threshold | threshold | interval }",
+        "undo alarm drop-rate { blacklist | ma-defend | total-packet } { threshold | interval }",
+        "undo alarm drop-rate whitelist-v6 { speed-threshold | threshold | interval }",
+        "undo alarm drop-rate ttl-expired-loop { interval | threshold | no-drop-resume [ resume-cycles <resume-val> ] }",
+        "undo alarm drop-rate tcpip-defend-v6 { interval | threshold | speed-threshold }"
+    ],
+    "ParentView": [
+        "Attack defense policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "application-apperceive",
+            "Info": "Sets alarm parameters for the packets dropped by the application layer association function.\n-"
+        },
+        {
+            "Parameters": "tcpip-defend",
+            "Info": "Sets alarm parameters for the packets dropped by the TCP/IP attack defense function module.\n-"
+        },
+        {
+            "Parameters": "urpf",
+            "Info": "Sets alarm parameters for the packets dropped by the URPF function.\n-"
+        },
+        {
+            "Parameters": "whitelist",
+            "Info": "Sets alarm parameters for the packets dropped by the whitelist function.\n-"
+        },
+        {
+            "Parameters": "interval interval-value",
+            "Info": "Specifies the interval for counting the number of dropped packets.\nThe value is an integer ranging from 60 to 3600, in seconds. The default interval is 300 for blacklist, total-car, ma-defend or ipv4-ttl-expire protocol and is 600 for other protocols."
+        },
+        {
+            "Parameters": "interval ttl-expired-loop-interval-value",
+            "Info": "Specifies the interval at which the TTL timeout loop detection is implemented.\nThe value is an integer ranging from 5 to 3600, in seconds. The default value is 60."
+        },
+        {
+            "Parameters": "threshold threshold-value",
+            "Info": "Specifies an upper threshold of the packets dropped within a specified time period.\nThe value is an integer ranging from 1 to 1000000, in packets. If blacklist, total-car, ma-defend, or ipv4-ttl-expire protocol is specified in the command, the value is an integer ranging from 1 to 1000000, and the default value is 1000000. If another keyword is specified in the command, the value ranges from 1 to 30000. The default value is 30000."
+        },
+        {
+            "Parameters": "threshold ttl-expired-loop-threshold-value",
+            "Info": "Specifies a TTL timeout loop detection alarm threshold.\nThe value is an integer ranging from 1 to 100, in percentage. The default value is 10."
+        },
+        {
+            "Parameters": "speed-threshold speed-value",
+            "Info": "Specifies the alarm threshold for the rate at which packets are dropped.\nThe value is an integer ranging from 0 to 1000000, in packets per minute. The default value is 300."
+        },
+        {
+            "Parameters": "blacklist",
+            "Info": "Sets alarm parameters for the packets dropped by the blacklist function.\n-"
+        },
+        {
+            "Parameters": "ma-defend",
+            "Info": "Sets alarm parameters for the packets dropped by the management/control plane protection function.\n-"
+        },
+        {
+            "Parameters": "total-packet",
+            "Info": "Sets alarm parameters for total dropped packets.\n-"
+        },
+        {
+            "Parameters": "whitelist-v6",
+            "Info": "Sets alarm parameters for the packets dropped by the ipv6 whitelist function.\n-"
+        },
+        {
+            "Parameters": "index index",
+            "Info": "Sets alarm parameters for the dropped packets with a specified index.\nThe value is an integer ranging from 35 to 1658."
+        },
+        {
+            "Parameters": "user-defined-flow flow-id",
+            "Info": "Sets alarm parameters for the packets dropped by the user-defined flow function.\nThe number of a user-defined flow is an integer ranging from 1 to 64."
+        },
+        {
+            "Parameters": "ttl-expired-loop",
+            "Info": "Specifies the TTL expired loop.\n-"
+        },
+        {
+            "Parameters": "no-drop-resume",
+            "Info": "If no-drop-resume is specified in the command, the alarm is cleared when no TTL timeout packets are dropped.\n-"
+        },
+        {
+            "Parameters": "resume-cycles resume-val",
+            "Info": "Specifies the number of cycles.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "tcpip-defend-v6",
+            "Info": "Sets alarm parameters for the packets dropped by the TCP/IPv6 attack defense function module.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cpu-defend policy 8",
+            "[*HUAWEI-cpu-defend-policy-8] alarm drop-rate tcpip-defend threshold 10000 interval 1800"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the alarm function is enabled, the device checks the number of the dropped packets at specified intervals. If the number reaches or exceeds the set threshold, the device sends an alarm to the information center.\nIf the alarm function is enabled and no alarm parameter is set, the device checks the number of dropped packets based on the default alarm parameters.\nAfter the TTL-timeout-based loop detection alarm function is enabled on a board, the board periodically checks statistics about the TTL timeout packets dropped using CAR. When the number of the dropped TTL timeout bytes exceeds 1000 and the percentage of the dropped TTL timeout bytes during this period in that during the previous period is lower than the configured threshold, a routing loop occurs on the board, and the device generates an alarm.\nPrerequisites\nBefore running the alarm drop-rate command, you must run the alarm drop-rate enable command to enable the alarm function; otherwise, the configured alarm threshold, check interval and the threshold for the rate at which packets are dropped do not take effect.\nConfiguration Impact\nIf you configure an alarm threshold and a check interval, and then run the undo alarm drop-rate enable and alarm drop-rate enable commands in sequence, the configured alarm threshold, check interval and the threshold for the rate at which packets are dropped can still take effect.\nFollow-up Procedure\nThe alarm messages sent to the information center carry information about the bandwidth usage of the dropped packets, based on which you can view the status of the device and take proper actions.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

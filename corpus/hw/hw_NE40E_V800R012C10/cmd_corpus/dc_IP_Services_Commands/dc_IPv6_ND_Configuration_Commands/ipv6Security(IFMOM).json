@@ -1,0 +1,76 @@
+{
+    "PageTitle": "ipv6 security modifier sec-level",
+    "FuncDef": "The ipv6 security rsakey-pair command binds an RSA key pair to an interface.\nThe undo ipv6 security rsakey-pair command unbinds an RSA key pair from an interface.\nThe ipv6 security modifier command sets a modifier value and a security level for a CGA address.\nThe undo ipv6 security modifier command deletes the modifier value and security level of a CGA address.\nBy default no modifier is configured, Security level is set to 0, an RSA key pair is not bound to any interface.",
+    "CLIs": [
+        "ipv6 security rsakey-pair <key-label>",
+        "ipv6 security modifier sec-level <sec-value> [ <modifier-value> ]",
+        "undo ipv6 security rsakey-pair <key-label>",
+        "undo ipv6 security modifier"
+    ],
+    "ParentView": [
+        "PW-VE interface view",
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "50GE sub-interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sec-value",
+            "Info": "Specifies the security level of the CGA address.\nThe value is an integer that can be 0 or 1.\n1 indicates the highest security level. If the security level is 1, the modifier value will be automatically generated. The modifier value can be manually configured only when the security level of the CGA address is 0."
+        },
+        {
+            "Parameters": "modifier-value",
+            "Info": "Specifies the modifier value of the CGA address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "rsakey-pair key-label",
+            "Info": "Specifies the name of an RSA key pair.\nThe value is a string of 1 to 35 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] rsa key-pair label huawei modulus 2048",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 security rsakey-pair huawei",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 security modifier sec-level 1",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 address 2001:db8:1::1/64 cga"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] rsa key-pair label huawei modulus 2048",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 security rsakey-pair huawei",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 security modifier sec-level 1",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 address 2001:db8:1::1/64 cga"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn RSA key pair can be used to generate a modifier value and a CGA address on an interface only after the ipv6 security rsakey-pair command is run to bind the RSA key pair to the interface.\nAfter a CGA address is configured for an interface, the ND messages sent by the interface are protected against attacks.\nBefore configuring a CGA address, you need to run the ipv6 security modifier command to set a modifier value and a security level for the CGA address. A CGA address is calculated by using a specific algorithm based on the public key, modifier value, and security level. The higher the security level, the more secure the generated CGA address.\nAfter a CGA address is configured for an interface, the ND messages sent by the interface are protected against attacks.\nPrerequisites\nBefore running the ipv6 security modifier command, you must complete the following configurations:\nRun the rsa key-pair label command in the system view to create an RSA key pair.Run the ipv6 enable command in the interface view to enable IPv6 on the interface.Run the ipv6 security rsakey-pair command in the interface view to bind the created RSA key pair to the interface.\nBefore running the ipv6 security rsakey-pair command, you must complete the following configurations:\nAn RSA key pair has been created using the rsa key-pair label command in the system view.IPv6 has been enabled on an interface using the ipv6 enable command in the interface view\n\nConfiguration Impact\nIf a modifier value and a security level have already been configured on an interface, the binding between the RSA key pair and the interface cannot be deleted.\nFollow-up Procedure\nRun the ipv6 address { ipv6-address prefix-length | ipv6-address/prefix-length } cga command or the ipv6 address ipv6-address link-local [ cga ] command to configure a CGA address.\nPrecautions\nIf a CGA address has been configured on an interface, the modifier value and security level of the CGA address cannot be deleted.\nThe binding between an RSA key pair and an interface cannot be deleted in the following cases:\nA modifier value and a security level are configured on the interface.A CGA address is configured on the interface.\nAfter the undo rsa key-pair label label-name command is run in the system view, the ipv6 security rsakey-pair configuration of the RSA key corresponding to each interface will be deleted."
+}

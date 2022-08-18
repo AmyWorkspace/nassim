@@ -1,0 +1,99 @@
+{
+    "PageTitle": "radius-attribute disable(RADIUS server group view)",
+    "FuncDef": "The radius-attribute disable command disables a RADIUS attribute.\nThe undo radius-attribute disable command enables a RADIUS attribute.\nBy default, RADIUS attributes are enabled.",
+    "CLIs": [
+        "radius-attribute disable { <attribute-name> | hw-acct-update-address } { receive | send } *",
+        "radius-attribute disable extend <attribute-name> { access-request | access-accept | account } *",
+        "radius-attribute disable { <attr-description> | hw-acct-update-address } { access-request | access-accept | account [ start ] } *",
+        "radius-attribute disable { <attribute-name> | hw-acct-update-address } { ip <ip-address> | string <string> | bin string | integer <vendor-id> } receive",
+        "radius-attribute disable { hw-acct-update-address | flow-attributes } integer <integer> account",
+        "radius-attribute disable extend vendor-specific <src-vendor-id> <src-sub-attr-id> access-accept",
+        "radius-attribute disable <attr-description> { coa-request | dm-request }",
+        "undo radius-attribute disable [ <attribute-name> | hw-acct-update-address ]",
+        "undo radius-attribute disable extend [ <attribute-name> | vendor-specific <src-vendor-id> <src-sub-attr-id> ]",
+        "undo radius-attribute disable [ hw-acct-update-address | flow-attributes ] integer <integer> account",
+        "undo radius-attribute disable { <attribute-name> | hw-acct-update-address } { ip <ip-address> | string <string> | bin string | integer <integer> } receive"
+    ],
+    "ParentView": [
+        "RADIUS server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "attribute-name",
+            "Info": "Specifies the attribute description and can automatically match the attribute names in the attribute dictionary.\nThe value is a string of 1 to 64 characters."
+        },
+        {
+            "Parameters": "hw-acct-update-address",
+            "Info": "Disables the HW-Acct-Update-Address attribute when the attribute value is equal to a certain integer.\nCurrently, the integer parameter can be set to 0 only."
+        },
+        {
+            "Parameters": "receive",
+            "Info": "Disables the attribute on the receiver (response packet).\n-"
+        },
+        {
+            "Parameters": "send",
+            "Info": "Disables the attribute on the sender (request packet).\n-"
+        },
+        {
+            "Parameters": "extend",
+            "Info": "Specifies the extended attribute description.\n-"
+        },
+        {
+            "Parameters": "access-request",
+            "Info": "Indicates an access-request packet.\n-"
+        },
+        {
+            "Parameters": "access-accept",
+            "Info": "Indicates an access-accept packet.\n-"
+        },
+        {
+            "Parameters": "account",
+            "Info": "Indicates an accounting packet.\n-"
+        },
+        {
+            "Parameters": "start",
+            "Info": "Disables the Acct-Delay-Time attribute in accounting-start packets.\n-"
+        },
+        {
+            "Parameters": "flow-attributes",
+            "Info": "If you specify the flow-attributes parameter, the following RADIUS attributes are all disabled:\nAcct-Input-Octets.Acct-Output-Octets.Acct-Input-Packets.Acct-Output-Packets.Acct-Input-Gigawords.Acct-Output-Gigawords.HW-Acct-IPV6-Input-Octets.HW-Acct-IPV6-Output-Octets.HW-Acct-IPV6-Input-Packets.HW-Acct-IPV6-Output-Packet.HW-Acct-IPV6-Input-Gigawords.HW-Acct-IPV6-Output-Gigawords.\nCurrently, the integer parameter can be set to 0 only."
+        },
+        {
+            "Parameters": "vendor-specific src-vendor-id",
+            "Info": "Specifies the vendor-specific attribute ID.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "src-sub-attr-id",
+            "Info": "Specifies the vendor-specific sub-attribute ID.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "coa-request",
+            "Info": "Specifies a CoA-Request packet.\n-"
+        },
+        {
+            "Parameters": "dm-request",
+            "Info": "Specifies a DM request packet.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group shiva",
+            "[*HUAWEI-radius-shiva] radius-server attribute translate",
+            "[*HUAWEI-radius-shiva] radius-attribute disable frame-route send"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group shiva",
+            "[*HUAWEI-radius-shiva] radius-server attribute translate",
+            "[*HUAWEI-radius-shiva] radius-attribute disable framed-route send"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group shiva",
+            "[*HUAWEI-radius-shiva] radius-server attribute translate",
+            "[*HUAWEI-radius-shiva] radius-attribute disable account send"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe radius-attribute disable command is used in the following scenarios:\nWhen the server cannot identify or does not expect some of the attributes carried in the packets sent by the device, run the radius-attribute disable command to disable the device from encapsulating the attributes into the packets.When the device is not expected to receive and apply some of the attributes delivered by the server, run the radius-attribute disable command to disable the device from processing the attributes.\n\nPrerequisites\nThe radius-server attribute translate command has been run to enable RADIUS attribute translation.\nConfiguration Impact\nAfter a specified RADIUS attribute is disabled, the attribute is neither encapsulated into packets sent to the server nor processed after it is received by the device.\nPrecautions\nIf attribute conversion has been configured to attributes carried in a specified type of packets sent or received, you must delete the configuration before you disable the attributes.The radius-attribute disable command applies only to attributes that are sent to the server by default.If a parameter is specified, the attribute matching this parameter is disabled.Attributes carried in sent and received packets can be both disabled.The radius-attribute disable extend command is exclusive with the radius-attribute disable command in the same RADIUS server group.After the function to disable attributes is enabled, the disabled attributes cannot be modified through flexible interoperation of RADIUS attributes.\nIn VS mode, this command is supported only by the admin VS."
+}

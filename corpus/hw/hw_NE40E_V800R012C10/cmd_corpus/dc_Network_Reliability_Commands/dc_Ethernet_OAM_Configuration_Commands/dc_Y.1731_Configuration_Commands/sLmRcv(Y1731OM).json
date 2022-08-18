@@ -1,0 +1,38 @@
+{
+    "PageTitle": "loss-measure single-ended receive",
+    "FuncDef": "The loss-measure single-ended receive command enables a remote MEP to receive LMMs to implement single-ended frame loss measurement.\nThe undo loss-measure single-ended receive command cancels the configuration.\nBy default, the remote MEP in the MA is not configured to receive LMMs.",
+    "CLIs": [
+        "loss-measure single-ended receive test-id <test-id-value>",
+        "undo loss-measure single-ended receive [ test-id <test-id-value> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "test-id test-id-value",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 mac 00e0-fc12-7890",
+            "[*HUAWEI-md-md1-ma-ma1] loss-measure single-ended receive test-id 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo implement packet loss measurement to determine the link performance, you need to run the loss-measure single-ended receive command to configure the remote MEP to receive LMMs.\nPrerequisites\nThe loss-measure single-ended receive command takes effect only after the following configurations are complete:\nRun the cfm version standard command in the system view to specify IEEE Standard 802.1ag-2007 for CFM.The CFM function is enabled globally by using the cfm enable command in the system view.An MD is created by using the cfm md command in the system view.An MA is created by using the ma command in the MD view.A test instance is created by using the test-id command in the MD view.\n\nPrecautions\nThe loss-measure single-ended receive command applies only to VLL, VPLS, VLAN, and L2VPN accessing L3VPN scenarios."
+}

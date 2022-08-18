@@ -1,0 +1,57 @@
+{
+    "PageTitle": "lost-measure single-ended",
+    "FuncDef": "The lost-measure single-ended command enables single-ended frame loss measurement (LM) and displays statistics in real time.\nBy default, the single-ended frame loss measurement (LM) is disabled.",
+    "CLIs": [
+        "lost-measure single-ended [ exp <exp-value> | interval { 1000 | 10000 } | count <count-value> ] *"
+    ],
+    "ParentView": [
+        "Maintenance entity group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "exp exp-value",
+            "Info": "Specifies the priority of LMMs for single-ended frame LM.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7."
+        },
+        {
+            "Parameters": "interval",
+            "Info": "Sets the interval at which LMMs are sent.\nThe value is either 1000 or 10000, in milliseconds. The default value is 1000."
+        },
+        {
+            "Parameters": "count count-value",
+            "Info": "Specifies the number of LMMs for single-ended frame LM.\nThe value is an integer ranging from 1 to 60. The default value is 5."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls static-l2vc destination 4.4.4.4 400 transmit-vpn-label 100 receive-vpn-label 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] mpls-tp meg test",
+            "[*HUAWEI-mpls-tp-meg-test] me l2vc peer-ip 4.4.4.4 vc-id 400 vc-type vlan mep-id 1 remote-mep-id 2",
+            "[*HUAWEI-mpls-tp-meg-test] commit",
+            "[*HUAWEI-mpls-tp-meg-test] lost-measure single-ended count 5 interval 1000",
+            "Single-end loss measurement statistics:",
+            "Near-end lost frames Loss ratio(%) Far-end lost frames Loss ratio(%)",
+            "10                   12.50         10                  12.50",
+            "10                   12.50         10                  12.50",
+            "10                   12.50         10                  12.50",
+            "10                   12.50         10                  12.50",
+            "10                   12.50         10                  12.50",
+            "Packets sent:5,packets received:5",
+            "Max near-end lost frames:10,frame loss ratio:12.50",
+            "Min near-end lost frames:10,frame loss ratio:12.50",
+            "Average near-end lost frames:10,frame loss ratio:12.50",
+            "Max far-end lost frames:10,frame loss ratio:12.50",
+            "Min far-end lost frames:10,frame loss ratio:12.50",
+            "Average far-end lost frames:10,frame loss ratio:12.50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFrame loss measurement is a performance monitoring function provided by MPLS-TP OAM. Single-ended frame LM is implemented on two MEPs of an LSP. Measurement results include the following data:\nNear-end frame loss data: indicates the number and percentage of dropped frames that are sent from an RMEP to a MEP.Far-end frame loss data: indicates the number and percentage of dropped frames that are sent from a MEP to an RMEP.\nPercentage of dropped frames = Number of dropped frames/Number of sent frames during the time specified by interval-value\nThe number of lost frames is the difference between the number of frames sent by the ingress and the number of frames received by the egress on a point-to-point LSP. For example, the lost-measure single-ended interval 1000 count 10 command is run to enable a MEP to send an LMM every 1000 ms for 10 times. Statistics about dropped frames will be displayed.\n\nPrerequisites\nThe ME of the MEG has been bound to a tunnel.\nPrecautions\nSingle-ended frame loss measurement and dual-ended frame loss measurement cannot be enabled together on a MEG."
+}

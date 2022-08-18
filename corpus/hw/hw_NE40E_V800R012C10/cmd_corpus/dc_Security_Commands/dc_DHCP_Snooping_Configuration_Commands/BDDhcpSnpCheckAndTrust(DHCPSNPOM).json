@@ -1,0 +1,67 @@
+{
+    "PageTitle": "dhcp snooping check enable (Bridge domain view)",
+    "FuncDef": "The dhcp snooping check enable command enables DHCP check for a BD.\nThe undo dhcp snooping check enable command disables DHCP check for a BD.\nThe dhcp snooping trusted command configures an interface as a trusted interface in a BD.\nThe undo dhcp snooping trusted command restores the default settings.\nBy default, DHCP check is disabled in a BD, after DHCP snooping is enabled in a BD, all interfaces in the BD are untrusted interfaces.",
+    "CLIs": [
+        "dhcp { snooping { check { dhcp-request | ip | arp } enable | trusted } | check chaddr enable }",
+        "undo dhcp { snooping { check { dhcp-request | ip | arp } enable | trusted } | check chaddr enable }"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dhcp-request",
+            "Info": "Checks whether DHCP request packets match the binding entries.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Checks whether IP packets match the binding entries.\n-"
+        },
+        {
+            "Parameters": "arp",
+            "Info": "Checks whether ARP packets match the binding entries.\n-"
+        },
+        {
+            "Parameters": "chaddr",
+            "Info": "Checks whether the client hardware address (CHADDR) field value in DHCP packets matches the MAC address in the Ethernet frame header.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] dhcp snooping enable",
+            "[*HUAWEI-bd10] dhcp snooping trusted"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] dhcp snooping enable",
+            "[*HUAWEI-bd10] dhcp snooping check arp enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] bridge-domain 20",
+            "[*HUAWEI-bd20] dhcp snooping enable",
+            "[*HUAWEI-bd20] dhcp snooping check dhcp-request enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] bridge-domain 30",
+            "[*HUAWEI-bd30] dhcp snooping enable",
+            "[*HUAWEI-bd30] dhcp snooping check ip enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] bridge-domain 40",
+            "[*HUAWEI-bd40] dhcp snooping enable",
+            "[*HUAWEI-bd40] dhcp check chaddr enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can configure the following DHCP packet check modes as required.\nWhen the man-in-the-middle attack or IP/MAC address spoofing occurs, you can configure ARP or IP check to determine whether the source IP and MAC addresses in the ARP or IP packets match those in the DHCP snooping binding table.To enable the device to protect against DHCP exhaustion attacks, configure the device to check whether a received DHCP request packet or DHCP release packet matches an entry in the DHCP snooping binding table.After receiving a DHCP request packet:The device checks whether the destination MAC address of the packet is all Fs. If the destination MAC address is all Fs, the device checks whether the packet is a rebind packet. If the packet is a rebind packet, the device checks the packet against the binding table. If the packet is not a rebind packet, the device considers it a DHCP request packet of a user that logs in for the first time and allows it to pass. If the destination MAC address of the packet is not all Fs, the device considers it a packet requesting a lease extension and checks the packet against the binding table.The device checks whether the CHADDR field in the packet matches an entry in the DHCP snooping binding table. If no matching entry exists, the device allows the packet to pass. If a matching entry exists, the device checks whether the VLAN ID, IP address, and interface information in the packet match an entry in the DHCP snooping binding table. If a matching entry exists, the device allows the packet pass. If no matching entry exists, the device discards the packet.\nAfter receiving a DHCP release packet, the device checks whether VLAN ID, IP address, MAC address, and interface information in the packet match an entry in the DHCP snooping binding table. If a matching entry exists, the device allows the packet to pass. If no matching entry exists, the device discards the packet.\n\n\nPrerequisites\nDHCP snooping has been enabled globally using the dhcp snooping enable command.\nPrecautions\nAfter DHCP snooping is enabled, all interfaces in a BD are untrusted by default.When DHCP snooping is disabled, all interfaces in a BD are trusted by default.When an interface is changed from untrusted to trusted, dynamic DHCP snooping binding entries are deleted from the interface."
+}

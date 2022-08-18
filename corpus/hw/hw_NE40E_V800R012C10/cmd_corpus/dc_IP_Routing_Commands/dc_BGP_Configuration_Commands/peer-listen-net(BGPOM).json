@@ -1,0 +1,45 @@
+{
+    "PageTitle": "peer listen-net",
+    "FuncDef": "The peer listen-net command specifies a network segment from which a dynamic BGP peer group listens for BGP connection requests.\nThe undo peer listen-net command deletes the specified network segment from which a dynamic BGP peer group listens for BGP connection requests.\nBy default, no network segment from which a dynamic BGP peer group listens for BGP connection requests is specified.",
+    "CLIs": [
+        "peer <group-name> listen-net <ipv4-address> [ <mask-length> | <mask> ]",
+        "undo peer <group-name> listen-net <ipv4-address> [ <mask-length> | <mask> ]"
+    ],
+    "ParentView": [
+        "BGP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a dynamic BGP peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies a network segment from which the dynamic BGP peer group listens for BGP connection requests.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies a mask length. The 1s in each 32-bit mask must be consecutive. Therefore, a mask in dotted decimal notation can be presented by a mask length.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the mask of the preceding IP address.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group in listen internal",
+            "[*HUAWEI-bgp] peer in listen-net 10.10.10.0 24"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group ex listen external",
+            "[*HUAWEI-bgp] peer ex listen-as 200",
+            "[*HUAWEI-bgp] peer ex listen-net 10.10.10.0 24"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf static BGP peers change frequently on a BGP network, you need to add or delete BGP peer configurations in response to each change, which requires a heavy maintenance workload. To address this problem, configure the dynamic BGP peer function to enable BGP to listen for BGP connection requests from a specified network segment, dynamically establish BGP peer relationships, and add these peers to the same dynamic peer group. This spares you from adding or deleting BGP peer configurations in response to each change in dynamic peers. To specify a network segment from which a dynamic BGP peer group listens for BGP connection requests, run the peer listen-net command.\nPrerequisites\nA dynamic BGP peer group has been configured using the group listen [ internal | external ] command. In the case of a dynamic EBGP peer group, a peer AS from which the peer group listens for BGP connection requests must also have been specified using the peer listen-as command.\nPrecautions\nIf the undo peer listen-net command is run, connections with the corresponding dynamic peers are not deleted. However, if the peers are disconnected, their connections are not reestablished.\nIf both the dynamic BGP peer function and a static BGP peer are configured on the local end, a static BGP peer relationship is preferentially established when the peer end attempts to establish a connection with the local end.\nIf the peer listen-net command is run more than once, all configurations take effect."
+}

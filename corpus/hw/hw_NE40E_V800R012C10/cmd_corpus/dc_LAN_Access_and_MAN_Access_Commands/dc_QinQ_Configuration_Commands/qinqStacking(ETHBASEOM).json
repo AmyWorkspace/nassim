@@ -1,0 +1,45 @@
+{
+    "PageTitle": "qinq stacking vid",
+    "FuncDef": "The qinq stacking vid command enables QinQ stacking on an Ethernet sub-interface. The interface enabled with QinQ stacking adds a VLAN tag to the outer VLAN tag of a received packet.\nThe undo qinq stacking vid command disables QinQ stacking on an Ethernet sub-interface.\nBy default, QinQ stacking is not enabled on an Ethernet sub-interface.",
+    "CLIs": [
+        "qinq stacking vid <low-ce-vid> [ to <high-ce-vid> ] [ vlan-group <group-id> ]",
+        "undo qinq stacking vid <low-ce-vid> [ to <high-ce-vid> ] [ vlan-group <group-id> ]"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "low-ce-vid",
+            "Info": "Specifies a start VLAN ID in an inner tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "high-ce-vid",
+            "Info": "Specifies an end VLAN ID in an inner tag.\nThe high-ce-vid value must be greater than the low-ce-vid value.If the low-ce-vid [ to high-ce-vid ] parameters are run more than once, all configurations take effect.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vlan-group group-id",
+            "Info": "Specifies ID of the VLAN group to which users belong.Statistics about QinQ packets are collected based on VLAN groups. To collect QinQ packet statistics, specify vlan-group in the qinq stacking vid command.\nThe value is an integer ranging from 1 to 16."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vlan-group 1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1-vlan-group 1] commit",
+            "[*HUAWEI-GigabitEthernet1/0/1.1-vlan-group 1] quit",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq stacking vid 100 to 200 vlan-group 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOne physical interface cannot provide L2VPN access to multiple users. To address this problem, you can run the qinq stacking vid command to configure a QinQ stacking sub-interface and bind it to a VSI or L2VC to provide L2VPN access to multiple users.\nPrerequisites\nBefore running the qinq stacking vid command in the VE sub-interface view or global VE sub-interface view, the interface on which the sub-interface is to be created has been bound to a VE-Group.\nConfiguration Impact\nAfter you enable QinQ stacking on an Ethernet sub-interface:\nWhen a QinQ stacking sub-interface receives a packet, the interface checks whether the VLAN ID or VLAN range in the VLAN tag of the packet matches the VLAN ID or VLAN range specified using the command. - If the VLAN ID matches the specified value, the interface adds a default VLAN tag to the packet.If the packet carries one VLAN tag and the VLAN ID in the tag matches the VLAN range specified by low-ce-vid [ to high-ce-vid ] in the qinq stacking vid command, the interface adds an outer VLAN tag to the packet.If the VLAN ID in the outer VLAN tag carried by the packet does not match the specified VLAN range, the packet is dropped.If the packet carries two VLAN tags and the VLAN ID in the outer tag matches the VLAN range specified by low-ce-vid [ to high-ce-vid ] in the qinq stacking vid command, the interface adds another outer VLAN tag to the packet and forwards the packet. In this case, the inner VLAN tag is transmitted transparently.If the VLAN ID in the outer VLAN tag carried by the packet does not match the specified VLAN range, the packet is dropped.If the packet does not carry any VLAN tag, the packet is directly dropped.When a QinQ stacking sub-interface sends packets to users, the sub-interface strips the default outer VLAN tag.\nThe default outer VLAN tag is assigned automatically by the device and invisible to users.\n\nPrecautions\nIf you run the qinq stacking vid command on Ethernet sub-interfaces on an interface, specify different ce-vid values on the sub-interfaces.\nIf you have run the vlan-group command to configure a VLAN group on a sub-interface, you must specify vlan-group in the qinq stacking vid command.If you did not run the vlan-group command, do not specify vlan-group in the qinq stacking vid command.\nAfter you run the qinq stacking vid command on an Ethernet sub-interface:\nIf you do not run the qinq stacking pe-vid command to specify an outer VLAN tag to be added, the Ethernet sub-interface will add a default outer VLAN tag to received packets.If you run the qinq stacking pe-vid command to specify an outer VLAN tag to be added, the Ethernet sub-interface will add the specified outer VLAN tag to received packets.\nEach time after you run the qinq stacking vid command, you are advised to run the commit command. If you do not run the commit command, traffic may be interrupted."
+}

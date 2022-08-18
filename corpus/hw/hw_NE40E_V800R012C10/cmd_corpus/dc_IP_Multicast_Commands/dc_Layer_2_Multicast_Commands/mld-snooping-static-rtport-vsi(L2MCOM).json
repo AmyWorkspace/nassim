@@ -1,0 +1,60 @@
+{
+    "PageTitle": "mld-snooping static-router-port (VSI)",
+    "FuncDef": "The mld-snooping static-router-port command configures an interface as a static router interface.\nThe undo mld-snooping static-router-port command cancels the configuration.\nBy default, an interface is a dynamic router interface.",
+    "CLIs": [
+        "mld-snooping static-router-port remote-peer <ip-address> [ negotiation-vc-id <vc-id> ]",
+        "undo mld-snooping static-router-port remote-peer <ip-address> [ negotiation-vc-id <vc-id> ]"
+    ],
+    "ParentView": [
+        "VSI-AUTO view",
+        "VSI-BD view",
+        "VSI-DEFAULT view",
+        "VSI-STATIC view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "negotiation-vc-id vc-id",
+            "Info": "negotiation-vc-id vc-id and remote-peer ip-address work together to identify a PW. By default, vc-id is the VSI ID.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "remote-peer ip-address",
+            "Info": "Specifies the IP address of a remote peer.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mld-snooping enable",
+            "[*HUAWEI] interface GigabitEthernet1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] mld-snooping static-router-port vlan 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[*HUAWEI-vsi-vsi0] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] mld-snooping static-router-port vsi vsi0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[*HUAWEI-vsi-vsi0] mld-snooping static-router-port remote-peer 3.3.3.3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf user hosts need to receive multicast data packets from an interface for a long period of time, run the mld-snooping static-router-port command to configure the interface as a static router interface.\nStatic router interfaces can be configured on different positions of a network to enable user hosts to regularly receive data.\nPrerequisites\nMLD snooping has been enabled globally and in the VSI view.\nConfiguration Impact\nA static router interface never ages. A static router interface configuration can be canceled only by running the undo mld-snooping static-router-port command.\nIf the mld-snooping static-router-port command is run more than once, all configurations take effect."
+}

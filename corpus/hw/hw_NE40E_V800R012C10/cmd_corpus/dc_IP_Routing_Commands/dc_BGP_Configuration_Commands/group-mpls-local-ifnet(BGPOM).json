@@ -1,0 +1,34 @@
+{
+    "PageTitle": "peer mpls-local-ifnet disable (BGP view) (group)",
+    "FuncDef": "The peer mpls-local-ifnet disable command disables a peer group from creating MPLS local IFNET tunnels.\nThe undo peer mpls-local-ifnet disable command enables a peer group from creating MPLS local IFNET tunnels.\n\nBy default, EBGP peers can automatically establish MPLS local IFNET tunnels between them if one of the following conditions is met:\n\nEBGP peers are enabled to exchange labeled routes.\n\nEBGP peers are configured in the BGP-VPLS address families.\n\nEBGP peers are configured in the BGP-VPNv4 or VPNv6 address family.\n\n\n\nBy default, IBGP peers cannot automatically establish MPLS local IFNET tunnels.",
+    "CLIs": [
+        "peer <peerGroupName> mpls-local-ifnet disable",
+        "undo peer <peerGroupName> mpls-local-ifnet disable"
+    ],
+    "ParentView": [
+        "BGP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerGroupName",
+            "Info": "Specifies the name of a BGP peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group test external",
+            "[*HUAWEI-bgp] peer test as-number 200",
+            "[*HUAWEI-bgp] peer test mpls-local-ifnet disable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group test2 internal",
+            "[*HUAWEI-bgp] peer test2 as-number 100",
+            "[*HUAWEI-bgp] undo peer test2 mpls-local-ifnet disable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the IPv4/IPv6 VPN Option C, or VPLS scenario,EBGP peer relationships are established between BGP peers. The BGP peers can be endpoint PEs in the VPLS or VPN Option C scenario or the CSG and MASG in the inter-AS seamless MPLS scenario. These EBGP peers automatically establish MPLS local IFNET tunnels between them. The E2E MPLS local IFNET tunnel fails to transmit traffic if the two peers are indirectly connected.\nIf a fault occurs on a tunnel between the two EBGP peers, traffic recurses to the MPLS local IFNET tunnel, not an FRR bypass tunnel. As the MPLS local IFNET tunnel cannot forward traffic, traffic is interrupted. To resolve this problem, run the peer mpls-local-ifnet disable command to prevent an MPLS local IFNET tunnel from being established between indirectly connected EBGP peers.\nMPLS local IFNET tunnel creation is disabled on an IBGP peer by default. In an intra-AS seamless networking, to create an MPLS local IFNET tunnel between IBGP peers to carry BGP LSPs, run the undo peer mpls-local-ifnet disable command. This command enables IBGP peers to create MPLS local IFNET tunnels.\nPrecautions\nIBGP peers can establish MPLS local IFNET tunnels only if the peers are configured in the BGP-IPv4 unicast address family or BGP unicast labeled address family. In the BGP-IPv4 unicast address family view, you need to run the peer label-route-capability command to enable the function of sending or receiving labeled routes so that the MPLS local IFNET tunnel can be created."
+}

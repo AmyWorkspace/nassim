@@ -1,0 +1,41 @@
+{
+    "PageTitle": "peer (VPN instance anycast-RP view/Public network instance Anycast-RP view)",
+    "FuncDef": "The peer command configures an anycast-rendezvous point (Anycast-RP) peer address.\nThe undo peer command deletes an Anycast-RP peer address.\nBy default, no Anycast-RP peer address is configured.",
+    "CLIs": [
+        "peer <peer-address> fwd-msdp-sa [ <acl-number> | acl-name <acl-name> ]",
+        "peer <peer-address>",
+        "undo peer <peer-address>"
+    ],
+    "ParentView": [
+        "VPN instance anycast-RP view",
+        "Public network instance Anycast-RP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies an Anycast-RP peer address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "fwd-msdp-sa",
+            "Info": "Enables a local RP to send to Anycast-RP peers the Register messages that are encapsulated using source/group information extracted from received Multicast Source Discovery Protocol (MSDP) source active (SA) messages.\n-"
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the range of multicast groups to which an MSDP SA message can be forwarded. AclNum specifies an ACL number.\nThe value is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the range of multicast groups to which an MSDP SA message can be forwarded. AclName specifies an ACL name.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] anycast-rp 3.3.3.3",
+            "[*HUAWEI-pim-anycast-rp-3.3.3.3] peer 2.2.2.2 fwd-msdp-sa"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf PIM Anycast-RP is configured, after an RP receives a Register message, it checks the source address in the Register message. If the Register message is sent by the source's Designated router (DR), the RP forwards the Register message to Anycast-RP peers. If the Register message is sent by an Anycast-RP peer, it does not forward the Register message.\nWhen forwarding a PIM Register message to other Anycast-RP peers, the local RP needs to use its own IP address (called the local address) as the source address of the Register message and use the addresses of the Anycast-RP peers as the destination addresses of the Register message. In such a manner, Anycast-RP peers can learn source/group information from each other. To configure an Anycast-RP peer address, run the peer command.\nTo enable an RP to obtain information about the multicast source in another PIM-SM domain, you can adopt either of the following schemes:\nSet up MSDP peer relationships between every Anycast-RP member in a PIM-SM domain and the RP in another PIM-SM domain.Set up MSDP peer relationships between some Anycast-RP members with the RP in another PIM-SM domain. After the members who have set up MSDP peer relationships receive SA messages, they extract source/group information from SA messages, encapsulate the information into Register messages, and forward the Register messages to the members that do not set up MSDP peer relationships with the RP.\n\nPrecautions\nYou can specify a maximum of 16 Anycast-RP peers for each Anycast-RP.\nIn a PIM-SM domain, an Anycast-RP peer relationship must be established between every two devices deployed with Anycast-RP to implement full connections."
+}

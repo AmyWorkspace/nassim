@@ -1,0 +1,47 @@
+{
+    "PageTitle": "peer bfd enable (BGP-VPN instance IPv4 address family view)",
+    "FuncDef": "The peer bfd enable command enables a device to establish a BFD session with its peer using default detection parameter values.\nThe undo peer bfd enable command cancels this function.\nBy default, a BGP device does not establish any BFD session with its peer.",
+    "CLIs": [
+        "peer <ipv4-address> bfd enable [ [ single-hop-prefer ] [ compatible ] | per-link one-arm-echo ]",
+        "undo peer <ipv4-address> bfd enable"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "single-hop-prefer",
+            "Info": "Preferentially creates a single-hop BFD session for BGP peers.\n-"
+        },
+        {
+            "Parameters": "compatible",
+            "Info": "Indicates the compatibility mode. If this keyword is specified, the TTL in packets sent by BFD is set to 255.\n-"
+        },
+        {
+            "Parameters": "per-link",
+            "Info": "Establishes a BFD session to monitor the link between member interfaces.\n-"
+        },
+        {
+            "Parameters": "one-arm-echo",
+            "Info": "Indicates a one-arm BFD echo session.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-vpn1] peer 192.168.1.1 bfd enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP uses BFD to quickly detect faults in links between BGP peers. This accelerates network convergence. The peer bfd enable command is used to configure a device to establish a BFD session with its peer using default detection parameter values.\nIf single-hop-prefer is specified in the command, BGP peers preferentially use the single-hop detection mode when establishing BFD sessions with each other to implement link connectivity detection. Specifically, only one BFD session is created on a specified BGP interface. The single-hop-prefer parameter ensures detection mode consistency between a Huawei device and a non-Huawei device.\nThe per-link one-arm-echo parameter configures a one-arm BFD echo session for one link and ensures that the local and peer devices use the same detection mode when a Huawei device is connected to a non-Huawei device.\nIf a peer is added to a peer group, the peer inherits the BFD configuration of the group, regardless of whether BFD is enabled for the peer. To prevent this peer from inheriting the BFD configuration of the group, run the peer bfd block command for the peer.\nPrerequisites\nA BFD session can be established only when the corresponding BGP peer relationship is in the Established state.\nConfiguration Impact\nAfter the peer bfd enable command is enabled, peers or peer groups can establish IPv6 BFD sessions using default parameter values. This allows fast link fault detection.\nThe BFD configuration of a peer takes precedence over that of the peer group to which the peer belongs. If BFD is not configured on a peer and the peer group to which the peer belongs is enabled with BFD, the peer inherits the BFD configurations from the peer group.\nPrecautions\nBefore enabling BFD on a BGP peer, enable BFD in the system view. If no BFD detection parameter is specified, a BFD session is established using default parameter values.\nIf the command is run more than once, the latest configuration overrides the previous one.\nThe peer bfd block command and the peer bfd enable command are mutually exclusive. After the peer bfd block command is run, the BFD session is deleted automatically.\nThe per-link one-arm-echo parameter only takes effect in the scenario where there is only one Eth-Trunk interface under the VLANIF interface."
+}

@@ -1,0 +1,29 @@
+{
+    "PageTitle": "backup up-link track monitor-group",
+    "FuncDef": "The backup up-link track monitor-group command configures a vBRAS-UP to track an interface monitoring group, detecting network-side link faults.\nThe undo backup up-link track monitor-group command restores the default configuration.\nBy default, a vBRAS-UP is not configured to track an interface monitoring group.",
+    "CLIs": [
+        "backup up-link track monitor-group <group-name> trigger-down-weight <down-weight-value>",
+        "undo backup up-link track monitor-group <group-name> [ trigger-down-weight <down-weight-value> ]"
+    ],
+    "ParentView": [
+        "CU-agent view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "trigger-down-weight down-weight-value",
+            "Info": "Specifies an interface weight for reporting a network-side fault.\nThe value is an integer ranging from 1 to 32000.\nThe value cannot be greater than the weight sum of all Down interfaces in an interface monitoring group."
+        },
+        {
+            "Parameters": "monitor-group group-name",
+            "Info": "Specifies the name of an interface monitoring group.\nThe value is a string of 1 to 31 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cu-agent",
+            "[~HUAWEI-cu-agent] backup up-link track monitor-group test trigger-down-weight 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a CU separation UP dual-device hot backup scenario, if a network-side interface goes Down, the vBRAS-CP cannot detect the Down event and therefore do not switch traffic to the secondary link. As a result, traffic is overloaded or lost. To enable the vBRAS-CP to detect network-side faults, configure an interface monitoring group, add network-side interfaces to the interface monitoring group, and run the backup up-link track monitor-group command to configure a vBRAS-UP to track the interface monitoring group. When detecting an interface fault, the vBRAS-UP reports the fault to the vBRAS-CP, triggering a master/backup switchover.\nPrerequisites\nAn interface monitoring group has been created using the monitor-group command in the system view.\nConfiguration Impact\nAfter the backup up-link track monitor-group command is run, user-side services are switched to the secondary link if the weight sum of all Down interfaces in a specified interface monitoring group reaches the value specified by.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

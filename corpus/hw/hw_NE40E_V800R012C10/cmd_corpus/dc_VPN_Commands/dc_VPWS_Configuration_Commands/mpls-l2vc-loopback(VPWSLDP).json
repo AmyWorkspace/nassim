@@ -1,0 +1,66 @@
+{
+    "PageTitle": "mpls l2vc (Loopback interface view)",
+    "FuncDef": "The mpls l2vc admin command creates an mPW.\nThe undo mpls l2vc admin command deletes an mPW.\nBy default, no mPW is created.",
+    "CLIs": [
+        "mpls l2vc { <ip-address> | pw-template <pw-template-name> } * <vc-id> { [ control-word | tunnel-policy <policy-name> ] * admin | admin [ control-word | tunnel-policy <policy-name> ] * | tunnel-policy <policy-name> admin control-word | control-word admin tunnel-policy <policy-name> }",
+        "mpls l2vc instance-name <instance-name> { <ip-address> | pw-template <pw-template-name> } * <vc-id> { [ control-word | tunnel-policy <policy-name> ] * admin | admin [ control-word | tunnel-policy <policy-name> ] * | tunnel-policy <policy-name> admin control-word | control-word admin tunnel-policy <policy-name> }",
+        "undo mpls l2vc [ { <ip-address> | pw-template <pw-template-name> } * <vc-id> [ tunnel-policy <policy-name> | control-word ] * [ admin ] ]",
+        "undo mpls l2vc instance-name <instance-name> [ { <ip-address> | pw-template <pw-template-name> } * <vc-id> [ tunnel-policy <policy-name> | control-word ] * [ admin ] ]"
+    ],
+    "ParentView": [
+        "Loopback interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the peer IP address of an mPW. The peer IP address is generally the LSR ID of the peer device.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "pw-template pw-template-name",
+            "Info": "Specifies the name of a PW template.\nThe value is a string of 1 to 19 case-sensitive characters, spaces not supported. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "vc-id",
+            "Info": "Specifies a VC ID.\nA combination of the VC ID and VC type uniquely identifies a VC.\nVC IDs cannot be changed after being configured. You can only delete the VC and reconfigure one with a different VC ID.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Enables the control word function.\nThe control word carries the sequence number for forwarding packets, pads the packets to prevent the packets from being too short, and carries Layer 2 header control information.\n-"
+        },
+        {
+            "Parameters": "tunnel-policy policy-name",
+            "Info": "Specifies the name of a tunnel policy.\nIf a tunnel policy name is specified but the tunnel policy has not been configured, the default tunnel policy is used.If no tunnel policy name is specified, the default tunnel policy is used. The default tunnel policy prefers LSPs and only one LSP is used for load balancing.\nBefore applying a tunnel policy, set the tunnel policy name and attributes in the system view.\nThe value is a string of 1 to 39 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "admin",
+            "Info": "Indicates the mPW.\n-"
+        },
+        {
+            "Parameters": "instance-name instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface loopback 0",
+            "[*HUAWEI-Loopback0] mpls l2vc 1.1.1.1 1 admin"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] pw-template pw1",
+            "[*HUAWEI-pw-template-pw1] quit",
+            "[*HUAWEI] interface loopback 1",
+            "[*HUAWEI-Loopback1] mpls l2vc 2.2.2.2 pw-template pw1 2 admin"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo accelerate PW fault detection, BFD is generally used. When a large number of service PWs originated from the same source and destined for the same device are available, a large number of BFD sessions are required, which consumes lots of resources. To reduce the consumption of public network link bandwidths and system resources, configure an mPW that has the same source and destination as the service PWs and bind the service PWs to the mPW. This configuration allows the service PWs to track the mPW status. Therefore, a BFD session can be configured only for the mPW to detect faults. The mPW then notifies all service PWs bound to it of the status. This allows the BFD session to also monitor the service PWs.\nTo create an mPW, run the mpls l2vc admin command.\nPrerequisites\nMPLS L2VPN has been enabled using the mpls l2vpn command.\nA PW template has been created using the pw-template command if pw-template is specified in the mpls l2vc admin command.\nFollow-up Procedure\nRun the mpls l2vc track admin-vc command to bind service PWs to a created mPW.\nPrecautions\nGenerally, an mPW is configured for the primary PW, but not for secondary PWs."
+}

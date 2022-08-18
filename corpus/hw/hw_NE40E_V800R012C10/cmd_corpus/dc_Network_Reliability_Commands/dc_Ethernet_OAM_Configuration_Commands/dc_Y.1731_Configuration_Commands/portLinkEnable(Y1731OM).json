@@ -1,0 +1,56 @@
+{
+    "PageTitle": "port-link enable mep",
+    "FuncDef": "The port-link enable mep command enables the port association function on a specified MEP.\nThe undo port-link enable mep command disables the port association function on a specified MEP.\nBy default, the port association function is disabled on a MEP.",
+    "CLIs": [
+        "port-link enable mep mep-id <mep-id> [ holdoff <holdoff-time> ] [ wtr <wtr-time> ] [ link-type { loc | interface-status-tlv } * ]",
+        "undo port-link enable mep mep-id <mep-id>"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mep-id mep-id",
+            "Info": "Specifies a MEP ID.\nThe value is an integer ranging from 1 to 8191. A MEP ID identifies a MEP. The MEP ID must be unique in an MA."
+        },
+        {
+            "Parameters": "holdoff holdoff-time",
+            "Info": "Sets the delay time, after which a detected fault triggers the port association.\nThe value is an integer ranging from 0 to 100, in 100 milliseconds. The default value is 0."
+        },
+        {
+            "Parameters": "wtr wtr-time",
+            "Info": "Sets the time elapses between when a fault is rectified and when an associated port is restored.\nSpecifies the duration after which the local MEP interface changes from Up to Down again due to a peer MEP interface Down event.\nA local MEP interface fault causes the peer MEP interface to go Down. If the associated peer MEP interface goes Down and the local MEP interface recovers, the local MEP interface goes Down again after the specified WTR time elapses.\nThe value is an integer ranging from 0 to 600, in milliseconds. The default value is 60."
+        },
+        {
+            "Parameters": "link-type",
+            "Info": "Specifies an association type for a MEP interface.\n-"
+        },
+        {
+            "Parameters": "loc",
+            "Info": "Indicates an association that enables the MEP interface to notify the main interface of a LOC defect.\n-"
+        },
+        {
+            "Parameters": "interface-status-tlv",
+            "Info": "Indicates an association that enables the MEP interface to notify the main interface of the interface status TLV.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet 1/0/0 inward",
+            "[*HUAWEI-md-md1-ma-ma1] port-link enable mep mep-id 1 holdoff 10 wtr 10 link-type loc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nConnectivity Fault Management (CFM) detects link connectivity. A MEP is used to define the scope of CFM detection. After a MEP is created, run the port-link enable command to enable the port association function on a specified MEP. The associated interface has the MEP configured. For example, a MEP is configured on a sub-interface. The associated interface is the physical interface on which the sub-interface resides.\nPrerequisites\nA MEP has been created using the mep_mep-id. command in the MA view.\nPrecautions\nThis function can be enabled only if an inward-facing MEP and a single RMEP are configured.\nWhen you configure the interface-status-tlv parameter in the port-link enable command, the interface association function on the MEP can take effect only after the AC interface receives CFM protocol packets."
+}

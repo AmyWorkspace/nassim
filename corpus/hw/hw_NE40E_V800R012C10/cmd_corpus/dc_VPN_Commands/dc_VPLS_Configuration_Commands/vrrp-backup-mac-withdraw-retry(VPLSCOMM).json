@@ -1,0 +1,35 @@
+{
+    "PageTitle": "vrrp-backup mac-withdraw retry-interval",
+    "FuncDef": "The vrrp-backup mac-withdraw retry-interval command enables a device to resend a MAC-Withdraw message after a specified delay in case that the VRRP status changes to backup.\nThe undo vrrp-backup mac-withdraw retry-interval command disables a device from resending a MAC-Withdraw message after a specified delay in case that the VRRP status changes to backup.\nBy default, a device does not resend a MAC-Withdraw message in case that the VRRP status changes to backup.",
+    "CLIs": [
+        "vrrp-backup mac-withdraw retry-interval <retry-interval-time>",
+        "undo vrrp-backup mac-withdraw retry-interval <retry-interval-time>"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-BVSI view",
+        "VSI-IVSI-P2P view",
+        "VSI-IVSI-BEVPNINTERWORK view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "retry-interval retry-interval-time",
+            "Info": "Specifies a delay after which a device resends a MAC-Withdraw message.\nThe value is an integer ranging from 0 to 60, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi abc",
+            "[*HUAWEI-abc] vrrp-backup mac-withdraw retry-interval 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFigure 1 shows configuring delayed resending of a MAC-Withdraw message in the configuration guide, the CE is dual-homed to PE1 and PE2. VRRP runs on the PEs, with PE1 functioning as the master device and PE2 the backup device. If the link between the CE and PE1 fails, a master/backup VRRP switchover is performed. PE1 becomes the backup device, and PE2 becomes the master device. After the link between the CE and PE1 recovers, a master/backup VRRP switchback is performed if the VRRP backup group works in preemption mode. PE1 returns to the master state, and PE2 to the backup state.\nTake a master/backup VRRP switchback as an example. When PE2 changes from the master state to the backup state, the PE2 interface connecting to PE3 goes Down and sends a MAC-Withdraw message to PE3 to clear the MAC address entry for PE3. Normally, PE3 no longer receives packets forwarded by PE2. Instead, PE3 receives only upstream packets forwarded by the master device PE1, and records the mapping between the CE's MAC address and PW1. However, during the switchback, the interface's forwarding status table on PE2 is updated slowly. As a result, PE2 still sends a few packets to PE3 after the switchback. Upon receipt, PE3 records the mapping between the CE's MAC address and PW2 again. In this case, PE3 incorrectly sends the downstream packets destined for the CE to PE2 through PW2. As a result, packets are lost, and packet forwarding can recover only after the local MAC address entry ages.\nTo resolve this issue, run the vrrp-backup mac-withdraw retry-interval command on PE1 and PE2. When either PE changes to the backup state, in addition to a MAC-Withdraw message sent to PE3 by default, the PE interface sends a FlowDown message and then another MAC-Withdraw message to PE3 to clear the MAC address entry for PE3. After the specified resending delay elapses, the PE sends another MAC-Withdraw message to PE3 to ensure that PE3 learns the mapping between the CE's MAC address and the primary PW. In this way, PE3 sends downstream packets to the master device to prevent packet loss. After this command is run, a PE sends three MAC-Withdraw messages in total to PE3 after the PE switches to the backup state.\nPrerequisites\nA VSI has been created using the vsi command."
+}

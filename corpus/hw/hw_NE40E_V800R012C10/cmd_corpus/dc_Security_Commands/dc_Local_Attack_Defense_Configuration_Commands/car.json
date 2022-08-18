@@ -1,0 +1,53 @@
+{
+    "PageTitle": "car(Attack defense policy view)",
+    "FuncDef": "The car command configures the Committed Access Rate (CAR) function for packets.\nThe undo car command deletes the configuration.\nBy default, you can run the display cpu-defend car information default command to view the default CAR parameters of various packets.",
+    "CLIs": [
+        "car { 802.1ag | arp | bfd | bgp | bpdu | dhcp | dns-client | ftp-client | ftp-server | hwtacacs | icmp | igmp | isis | lacp | ldp | lspping | msdp | ntp | ospf | pim | portal | radius | rip | rsvp | snmp | ssh-client | ssh-server | telnet-client | telnet-server | tftp | vrrp | web | ipv4-fib-miss | ipv4-multicast-fib-miss | ipv4-ttl-expire | ipv6-ttl-expire | ipv6-fib-miss | ipv6-nd-miss | mpls-arp-miss | mpls-ttl-expire | arp-miss | lldp | syslog | bgpv6 | ospfv3 | ftpv6-server | ftpv6-client | tftpv6-client | icmpv6 | dnsv6 | pimv6 | sshv6-server | telnetv6-client | telnetv6-server | eapol | netstream | snmpv6 | dhcpv6 | ra | mld | rs | ns | na | web-auth-server | diameter | openflow | http-redirect-chasten | unicast-vrrp | soft-gre | traffic-behavior-log | icmp-broadcast-address-echo | pcep | vrrpv6 | radiusv6 | hwtacacsv6 | lsppingv6 | syslogv6 | web-auth-serverv6 } { cir <cir-value> | cbs <cbs-value> | min-packet-length <min-packet-value> } *",
+        "car { tcpsyn | fragment } { cbs <cbs-value> | cir <cir-value> | min-packet-length <min-packet-value> } *",
+        "car { user-defined-flow <flow-id> | index <index> } { cbs <cbs-value> | cir <cir-value> | min-packet-length <min-packet-value> } *",
+        "car whitelist-v6 [ bgpv6 | ospfv3 ] { cbs <cbs-value> | cir <cir-value> | min-packet-length <min-packet-value> } *",
+        "car { blacklist | whitelist [ bgp | ldp | ospf | radius | rsvp | isis ] } { cbs <cbs-value> | cir <cir-value> | min-packet-length <min-packet-value> } *",
+        "undo car { 802.1ag | arp | bfd | bgp | bpdu | dhcp | dns-client | ftp-client | ftp-server | hwtacacs | icmp | igmp | isis | lacp | ldp | lspping | msdp | ntp | ospf | pim | portal | radius | rip | rsvp | snmp | ssh-client | ssh-server | telnet-client | telnet-server | tftp | vrrp | web | ipv4-fib-miss | ipv4-multicast-fib-miss | ipv4-ttl-expire | ipv6-ttl-expire | ipv6-fib-miss | ipv6-nd-miss | mpls-arp-miss | mpls-ttl-expire | arp-miss | lldp | syslog | bgpv6 | ospfv3 | ftpv6-server | ftpv6-client | tftpv6-client | icmpv6 | dnsv6 | pimv6 | sshv6-server | telnetv6-client | telnetv6-server | eapol | netstream | snmpv6 | dhcpv6 | ra | mld | rs | ns | na | web-auth-server | diameter | openflow | http-redirect-chasten | unicast-vrrp | soft-gre | traffic-behavior-log | icmp-broadcast-address-echo | pcep | vrrpv6 | radiusv6 | hwtacacsv6 | lsppingv6 | syslogv6 | web-auth-serverv6 }",
+        "undo car { blacklist | whitelist [ bgp | ldp | ospf | radius | rsvp | isis ] }",
+        "undo car whitelist-v6 [ bgpv6 | ospfv3 ]",
+        "undo car { tcpsyn | fragment }",
+        "undo car { user-defined-flow <flow-id> | index <index> }"
+    ],
+    "ParentView": [
+        "Attack defense policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the committed information rate (CIR).\nThe value is an integer that ranges from 0 to 1000000, in kbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the committed burst size (CBS).\nThe value is an integer that ranges from 0 to 9000000, in bytes."
+        },
+        {
+            "Parameters": "min-packet-length min-packet-value",
+            "Info": "Specifies the minimum packet length for compensation.\nThe value is an integer that ranges from 64 to 9600, in bytes. The default value is 128."
+        },
+        {
+            "Parameters": "user-defined-flow flow-id",
+            "Info": "Specifies the number of a user-defined flow.\nThe value is an integer that ranges from 1 to 64."
+        },
+        {
+            "Parameters": "index index",
+            "Info": "Specifies the packet index.\nThe value is an integer that ranges from 35 to 1658."
+        },
+        {
+            "Parameters": "blacklist",
+            "Info": "Specifies a blacklist.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cpu-defend policy 8",
+            "[*HUAWEI-cpu-defend-policy-8] car index 36 cir 100 cbs 3300"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a large number of users access a router and the CPU of the router is vulnerable to packet attacks or needs to process a lot of packets, you need to configure the CAR function. The CAR function is used to filter out illegal packets and limit the rate and bandwidth for sending packets to the CPU, ensuring that the CPU processes services normally.\nIf a large number of ping packets need to be sent or received, the bandwidth for protocol packets may not meet the requirement. As a result, packets are discarded. In this situation, the CIR and CBS must be re-configured for protocol packets. The following formulas are recommended:\nCIR = Packet length (bytes)/Interval at which packets are sent (ms)CBS = 10 x CIR\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe car { whitelist [ bgp | ldp | ospf | radius | rsvp | isis ] | whitelist-v6 [ bgpv6 | ospfv3 ] } { cir cir-value | cbs cbs-value | min-packet-length min-packet-length-value } * command applies to BGP, LDP, OSPF, RADIUS, RSVP, BGPv6, OSPFv3 or ISIS packets based on the configuration and takes precedence over the car { whitelist | whitelist-v6 } { cir cir-value | cbs cbs-value | min-packet-length min-packet-length-value } * command. To be specific, if the car { whitelist [ bgp | ldp | ospf | radius | rsvp | isis ] | whitelist-v6 [ bgpv6 | ospfv3 ] } { cir cir-value | cbs cbs-value | min-packet-length min-packet-length-value } * command is configured, the value specified in this command takes effect for BGP, LDP, OSPF, RADIUS, RSVP, BGPv6, OSPFv3 or ISIS packets. If the car { whitelist [ bgp | ldp | ospf | radius | rsvp | isis ] | whitelist-v6 [ bgpv6 | ospfv3 ] } { cir cir-value | cbs cbs-value | min-packet-length min-packet-length-value } * command is not configured, the value specified in the car { whitelist | whitelist-v6 } { cir cir-value | cbs cbs-value | min-packet-length min-packet-length-value } * command takes effect for BGP, LDP, OSPF, RADIUS, RSVP, BGPv6, OSPFv3 or ISIS packets."
+}

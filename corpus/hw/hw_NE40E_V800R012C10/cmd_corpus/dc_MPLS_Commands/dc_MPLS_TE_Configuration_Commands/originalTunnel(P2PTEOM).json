@@ -1,0 +1,41 @@
+{
+    "PageTitle": "mpls te original-tunnel",
+    "FuncDef": "The mpls te original-tunnel command specifies an original tunnel in an existing associated tunnel group.\nThe undo mpls te original-tunnel command deletes an original tunnel of an associated tunnel group.\nBy default, no original tunnel is specified in an existing associated tunnel group.",
+    "CLIs": [
+        "mpls te original-tunnel { <interface-type> <interface-number> | <tunnel-name> }",
+        "undo mpls te original-tunnel [ { <interface-type> <interface-number> | <tunnel-name> } ]"
+    ],
+    "ParentView": [
+        "TE tunnel association group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Interface number.\n-"
+        },
+        {
+            "Parameters": "tunnel-name",
+            "Info": "Specifies the name of a tunnel interface.\nThe name is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] destination 4.4.4.4",
+            "[*HUAWEI-Tunnel1] mpls te tunnel-id 100",
+            "[*HUAWEI-Tunnel1] quit",
+            "[*HUAWEI] mpls te associate-tunnel-group 1",
+            "[*HUAWEI-te-associate-group-1] mpls te original-tunnel Tunnel1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a device computes an optimal path for a tunnel and fails to establish the tunnel due to insufficient bandwidth resources, a tunnel can be split into two to balance traffic. Before creating a split tunnel, create an original tunnel in an associated tunnel group. To do so, run the mpls te original-tunnel command.\nPrecautions\nIf the mpls te original-tunnel command is run more than once, the latest configuration overrides the previous one.Original tunnels can only be set to RSVP-TE and SR-MPLS TE tunnels.Original tunnels must have destination addresses and tunnel IDs.Original tunnels do not support FRR, ordinary backup, a tunnel protection group, or the detour function and cannot be configured as bypass tunnels. No reverse LSPs can be configured for the original tunnels. The original tunnels cannot be switched to the P2MP mode.No protection interfaces can be configured on original tunnels.BFD for tunnel cannot be configured for BFD for original tunnels.If a tunnel has the split tunnel attribute, this tunnel cannot function as an original tunnel to be added to an associated tunnel group.The original tunnel and its split tunnel in an associated tunnel group must have the same destination IP address and bandwidth type.The tunnel ID of an original tunnel in an associated tunnel group cannot be deleted. If an associated tunnel group has a split tunnel, the destination IP address, protocol type, or bandwidth type of the original tunnel cannot be modified, and the original tunnel cannot be deleted.An associated tunnel group contains only a single original tunnel.If an SR-MPLS TE tunnel is configured as an original tunnel, node labels cannot be configured."
+}

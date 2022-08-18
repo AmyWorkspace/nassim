@@ -1,0 +1,39 @@
+{
+    "PageTitle": "site",
+    "FuncDef": "The site command configures a site ID for a VSI.\nThe undo site command deletes the site ID of a VSI.\nBy default, no site ID is configured for a VSI.",
+    "CLIs": [
+        "site <siteId> [ range <site-range> ] [ default-offset <offsetValue> ]",
+        "undo site <siteId>"
+    ],
+    "ParentView": [
+        "VSI-BGP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "siteId",
+            "Info": "Specifies a site ID.\nThe value is an integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "range site-range",
+            "Info": "Specifies the number of sites in a VSI.\nThe value is an integer ranging from 1 to 65535. The default value is 10."
+        },
+        {
+            "Parameters": "default-offset offsetValue",
+            "Info": "Specifies the base label block offset.\nThe value is 0 or 1. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1 auto",
+            "[*HUAWEI-vsi-vsi1] pwsignal bgp",
+            "[*HUAWEI-vsi-vsi1-bgp] route-distinguisher 192.168.1.1:1",
+            "[*HUAWEI-vsi-vsi1-bgp] site 1 range 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a BGP VPLS network, you must configure a site ID for a VSI after creating the VSI. The site ID is used in VC label calculation.\nPrerequisites\nAn RD has been configured using the route-distinguisher (VSI-BGP view) command.\nConfiguration Impact\nWhen a VSI is established between PE1 and PE2, the following information is displayed after the site command is run:\nPE1 automatically establishes a BGP session with PE2 and sends an MP-BGP Update message that carries the MP-REACH attribute to PE2. The MP-REACH attribute contains the site ID and label block information of PE1.Upon receipt of the MP-BGP Update message, PE2 calculates a unique label as its local VC label based on its own site ID and the label block carried in the message. Then, PE2 establishes a unidirectional VC named VC1 to PE1. Meanwhile, PE2 calculates the VC label of PE1 based on the site ID and label block carried in the MP-BGP Update message and sends an MP-BGP Update message to PE1. Upon receipt of the message, PE1 takes similar actions as PE2 and establishes a unidirectional VC named VC2 to PE2.\n\nPrecautions\nThe site IDs on both ends of a VPLS PW must be different. The local site ID must be smaller than the peer's plus default-offset, but greater than or equal to the peer's default-offset."
+}

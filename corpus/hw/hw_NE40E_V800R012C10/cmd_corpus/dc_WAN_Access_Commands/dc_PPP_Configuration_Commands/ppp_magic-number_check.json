@@ -1,0 +1,36 @@
+{
+    "PageTitle": "ppp magic-number check",
+    "FuncDef": "The ppp magic-number check command enables the PPP magic number check function.\nThe undo ppp magic-number check command disables the PPP magic number check function.\nBy default, the PPP magic number check function is disabled.",
+    "CLIs": [
+        "ppp magic-number check",
+        "undo ppp magic-number check"
+    ],
+    "ParentView": [
+        "LMP configuration view",
+        "POS interface view",
+        "POS-Trunk interface view",
+        "Trunk serial interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface pos 1/0/0",
+            "[~HUAWEI-Pos1/0/0] link-protocol ppp",
+            "[*HUAWEI-Pos1/0/0] ppp magic-number check"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] lmp",
+            "[*HUAWEI-lmp] commit",
+            "[~HUAWEI] quit",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI] lmp interface enable",
+            "[*HUAWEI] quit",
+            "[*HUAWEI] interface Lmpif1/0/0",
+            "[*HUAWEI-Lmpif1/0/0] ppp magic-number check"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a network where two devices are connected over intermediate transmission devices, if the two devices are incorrectly connected, the transmission devices will adjust the incorrect connections. However, the two devices are not aware of this adjustment because their interfaces do not become Down or Up, and consequently, LCP renegotiation between the two devices is not triggered. PPP-enabled interfaces learn host routes only during the LCP negotiation, the adjusted two interfaces, therefore, still learn the original host routes, causing a packet transmission error.\nTo allow a device to promptly be aware of the link status change, run the ppp magic-number check command to enable the PPP magic number check function. When the local device finds that the magic number carried in the Echo Reply packet from the remote device is inconsistent with that learned before, the local device will count the errors. After error statistics on an interface reach a specific threshold, the interface becomes Down, triggering an LCP renegotiation, during which, the interface re-learns the peer's host route.\nPrerequisites\nPPP has been configured as the link layer encapsulation protocol on interfaces.\nPrecautions\nAfter running the ppp magic-number check command, to make the configuration take effect, you must run the shutdown, commit, undo shutdown, and commit commands in sequence, or run the restart and commit commands."
+}

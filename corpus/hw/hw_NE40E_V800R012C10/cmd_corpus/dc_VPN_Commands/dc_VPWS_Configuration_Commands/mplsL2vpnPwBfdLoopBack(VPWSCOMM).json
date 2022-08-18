@@ -1,0 +1,47 @@
+{
+    "PageTitle": "mpls l2vpn pw bfd (Loopback interface view)",
+    "FuncDef": "The mpls l2vpn pw bfd command enables dynamic BFD for VPWS PW and sets BFD detection parameters on an AC interface.\nThe undo mpls l2vpn pw bfd command deletes dynamic BFD for VPWS PW from an AC interface.\nBy default, dynamic BFD for VPWS PW is not configured on AC interfaces.",
+    "CLIs": [
+        "mpls l2vpn pw bfd [ detect-multiplier <multiplier> | min-rx-interval <rx-interval> | min-tx-interval <tx-interval> ] * [ remote-vcid <vc-id> ]",
+        "undo mpls l2vpn pw bfd { [ remote-vcid <vc-id> ] | [ detect-multiplier | min-rx-interval | min-tx-interval ] * | [ detect-multiplier <multiplier> | min-rx-interval <rx-interval> | min-tx-interval <tx-interval> ] * }"
+    ],
+    "ParentView": [
+        "Loopback interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "detect-multiplier multiplier",
+            "Info": "Specifies a local dynamic BFD detection multiplier.\nThe value is an integer ranging from 3 to 50. The default value is 3."
+        },
+        {
+            "Parameters": "min-rx-interval rx-interval",
+            "Info": "Specifies the minimum interval at which dynamic BFD packets are received.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-tx-interval tx-interval",
+            "Info": "Specifies the minimum interval at which dynamic BFD packets are sent.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "remote-vcid vc-id",
+            "Info": "Specifies the remote VC ID of a VPWS PW.\nThis parameter must be specified if the VPWS PW to be detected is a multi-segment PW.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] pw-template pw1",
+            "[*HUAWEI-pw-template-pw1] control-word",
+            "[*HUAWEI-pw-template-pw1] quit",
+            "[*HUAWEI] interface loopback1",
+            "[*HUAWEI-loopback1] mpls l2vc 1.1.1.1 4",
+            "[*HUAWEI-loopback1] mpls l2vpn pw bfd min-rx-interval 100 min-tx-interval 100 detect-multiplier 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA large number of BFD sessions consume lots of system resources. To reduce the number of BFD sessions, run the mpls l2vpn pw bfd command to configure dynamic BFD for VPWS PW on an AC interface. If the VPWS PW to be detected goes Up, the system informs the BFD module of neighbor information and detection parameters so that the BFD module can establish a BFD session. After the BFD session is established, BFD starts VPWS PW detection. After the BFD session goes Down, the system automatically sets the local send and receive intervals to a random value greater than 1000 ms. If the BFD session goes Up again, the system restores the configured send and receive intervals.\nPrerequisites\nBFD has been globally enabled using the bfd command.\nBFD sessions depend on the control word function. The control word function has been enabled using the mpls l2vc or control-word command.\nPrecautions\nStatic BFD for VPWS PW and dynamic BFD for VPWS PW are mutually exclusive. A VPWS PW can have either a static or dynamic BFD session configured."
+}

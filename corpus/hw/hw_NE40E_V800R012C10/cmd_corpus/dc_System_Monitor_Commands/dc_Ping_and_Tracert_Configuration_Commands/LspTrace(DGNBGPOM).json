@@ -1,0 +1,124 @@
+{
+    "PageTitle": "tracert lsp",
+    "FuncDef": "The tracert lsp command enables the system to trace the gateways along the BGP LSP from the source to the destination.",
+    "CLIs": [
+        "tracert lsp [ -a <source-ip> | -exp <exp-value> | -h <ttl-value> | -r <reply-mode> | -t <time-out> | -s <size> | -g ] * bgp <destination-iphost> <mask-length> [ <ip-address> ] [ detail ] [ nexthop <next-address> ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ip",
+            "Info": "Specifies a source IP address of the MPLS Echo Request packet to be sent.\nIf no source IP address is specified, the LSR-ID functions as the source address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies an EXP value of the MPLS Echo Request packet to be sent.\nThe value is an integer ranging from 0 to 7. The default value is 0."
+        },
+        {
+            "Parameters": "-h ttl-value",
+            "Info": "Specifies a TTL value of the MPLS Echo Request packet to be sent.\nCarried in the IP header, the TTL field indicates the lifetime of the IP packet and specifies the maximum number of routers that the packet can pass through. The TTL value is set on the source and reduced by 1 each time the packet passes through one router. When the TTL value is reduced to 0, the packet is discarded. At the same time, a timeout packet is sent to notify the source.\nThe value is an integer ranging from 1 to 255. The default value is 30."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies a mode in which the peer sends MPLS Echo Reply packets in response.\nThe value is an integer ranging from 1 to 4. The default value is 2.\n1: no reply2: reply with an IPv4 or IPv6 UDP packet3: reply with an IPv4 or IPv6 UDP packet that carries the Router Alert option4: reply through the control channel of the application plane"
+        },
+        {
+            "Parameters": "-t time-out",
+            "Info": "Specifies a period of time for waiting for an MPLS Echo Reply packet.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-s size",
+            "Info": "Specifies a packet size.\nThe value is an integer ranging from 100 to 9600."
+        },
+        {
+            "Parameters": "-g",
+            "Info": "Indicates MPLS packet fragmentation for an NQA test instance.\n-"
+        },
+        {
+            "Parameters": "bgp destination-iphost",
+            "Info": "Specifies the destination IPv4 address or host name of a BGP LSP.\nIf the value is an IP address, it is in dotted decimal notation. If the value is a host name, it is a string of 1 to 255 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length of the destination address.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the destination address in the IP header of an MPLS ping packet with the prefix of 127.0.0.0/8.\nThe value is in dotted decimal notation. The default value is 127.0.0.1."
+        },
+        {
+            "Parameters": "detail",
+            "Info": "Displays details carried in MPLS Echo Reply packets.\n-"
+        },
+        {
+            "Parameters": "nexthop next-address",
+            "Info": "Specifies a next hop address.\nIn LSP load balancing scenarios, you can use this parameter to specify the next hop address to implement traffic forwarding.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> tracert lsp ip 1.1.1.1 32",
+            "  LSP Trace Route FEC: IPV4 PREFIX 1.1.1.1/32 , press CTRL_C to break.",
+            "  TTL    Replier            Time    Type      Downstream",
+            "  0                                 Ingress   10.1.1.1/[3 ]",
+            "  1      1.1.1.1            5       Egress"
+        ],
+        [
+            "<HUAWEI> tracert lsp te Tunnel 1",
+            "  LSP Trace Route FEC: TE TUNNEL IPV4 SESSION QUERY Tunnel1 , press CTRL_C to break.",
+            "  TTL    Replier            Time    Type      Downstream",
+            "  0                                 Ingress   10.1.1.1/[3 ]",
+            "  1      1.1.1.1            4       Egress"
+        ],
+        [
+            "<HUAWEI> tracert lsp segment-routing te Tunnel10",
+            "  LSP  Trace  Route  FEC: AUTO TE TUNNEL IPV4 SESSION QUERY Tunnel10 , press CTRL_C to break.",
+            "  TTL     Replier              Time    Type      Downstream",
+            "  0                                    Ingress   10.1.1.2/[284688 ]",
+            "  1       10.1.1.2             7 ms    Egress"
+        ],
+        [
+            "<HUAWEI> tracert lsp segment-routing auto-tunnel Tunnel10 version draft4",
+            "  LSP  Trace  Route  FEC: AUTO TE TUNNEL IPV4 SESSION QUERY Tunnel10 , press CTRL_C to break.",
+            "  TTL     Replier                   Time    Type      Downstream",
+            "  0                                         Ingress   10.1.1.2/[284688 ]",
+            "  1       10.1.1.2                  7 ms    Egress"
+        ],
+        [
+            "<HUAWEI> tracert lsp segment-routing te ipv6 Tunnel 1 nli-fec",
+            "  LSP Trace Route FEC: SEGMENT ROUTING TE IPV6 SESSION QUERY Tunnel1 , press CTRL_C to break.",
+            "  TTL   Replier            Time    Type      Downstream",
+            "  0                                Ingress   2001:DB8::4:101:0:2",
+            "  1     2001:DB8:1::1            94 ms   Transit   2001:DB9::4:101:0:1",
+            "  2     2001:DB8:2::2            94 ms   Egress"
+        ],
+        [
+            "<HUAWEI> tracert lsp general labels 20 40 -i Ethernet 1/0/1 nexthop 10.1.1.2",
+            "  LSP Trace Route FEC: Nil FEC , press CTRL_C to break.  ",
+            "  TTL   Replier     Time    Type      Downstream  ",
+            "  0                         Ingress   10.1.1.1/[20 40 ]  ",
+            "  1     10.1.1.2    4 ms    Transit   10.1.1.2/[40 ]",
+            "  2     3.3.3.3     3 ms    Egress"
+        ],
+        [
+            "<HUAWEI> tracert lsp sr-te policy policy-name test",
+            "LSP Trace Route FEC: Nil FEC, press CTRL_C to break.  ",
+            "sr-te policy segment list:",
+            "Preference : 300; Path Type: main; Protocol-Origin : local; Originator: 0, 0.0.0.0; Discriminator: 300; Segment-List ID : 1;  Xcindex : 1",
+            "TTL   Replier            Time     Type       Downstream  ",
+            "0                                Ingress    10.1.2.1/[13312 12]  ",
+            "1     10.1.2.2           63 ms   Transit    10.1.2.2/[12 ]  ",
+            "2     6.6.6.6            93 ms   Egress",
+            "",
+            "sr-te policy segment list:",
+            "Preference : 400; Path Type: backup; Protocol-Origin : local; Originator: 0, 0.0.0.0; Discriminator: 400; Segment-List ID : 1;  Xcindex : 1",
+            "TTL   Replier            Time      Type       Downstream  ",
+            "0                                Ingress    10.1.2.1/[13312 12]  ",
+            "1     10.1.2.2           63 ms   Transit    10.1.2.2/[12 ]  ",
+            "2     6.6.6.6            93 ms   Egress"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe ping lsp command can be used to check the connectivity of LSPs on an MPLS network, and the tracert lsp command can be used to locate the faulty node.\nThe tracert lsp command uses MPLS Echo Request packets and MPLS Echo Reply packets to detect the connectivity of LSPs. Both Echo Request and Echo Reply packets are transmitted in the format of UDP packets through port 3503. The receiver distinguishes these two types of packets based on the port number. An MPLS Echo Request packet carries FEC information to be detected, and is sent along the same LSP as other packets carrying the same FEC information. In this manner, the connectivity of the LSP is checked. Echo Request packets are transmitted to the destination using MPLS, whereas MPLS Echo Reply packets are transmitted to the source using IP.\nBGP LSP: You can run the tracert lsp bgp destination-iphost mask-length [ ip-address ] [ detail ] [ nexthop nexthop-address ] command on the ingress to initiate a tracert test to the egress to check the connectivity of a BGP LSP carrying IPv4 packets and locate the faulty node.\nPrerequisites\nBefore initiating a trace test, ensure that the UDP module of each node works properly.Ensure that the MPLS module of each node is enabled and works properly.Ensure that the ICMP module of each node works properly. Otherwise, a message is returned, indicating the trace test times out.\n\nImplementation Procedure\nThe process of the tracert lsp command is as follows:\nThe source sends an MPLS Echo Request packet with the TTL being 1. After the TTL times out, the first hop sends an MPLS Echo Reply packet to the source.The source sends an MPLS Echo Request packet with the TTL being 2. After the TTL times out, the second hop sends an MPLS Echo Reply packet to the source.The source sends an MPLS Echo Request packet with the TTL being 3. After the TTL times out, the third hop sends an MPLS Echo Reply packet to the source.The preceding process proceeds until an MPLS Echo Request packet reaches the destination.\nIn each probe, when receiving an MPLS Echo Request packet, the device on the last hop replies with an MPLS Echo Reply packet, indicating that the trace test ends. In this manner, the result of each probe is displayed on the source, based on which you can find the path from the source to the destination.\n\nConfiguration Impact\nTo prevent the egress from forwarding a received MPLS Echo Request packet to another node, you can set the destination address in the IP header of the packet to a loopback address with the prefix being 127.0.0.0/8."
+}

@@ -1,0 +1,47 @@
+{
+    "PageTitle": "mpls te split-tunnel (TE tunnel association group view)",
+    "FuncDef": "The mpls te split-tunnel command adds a split tunnel to an existing associated tunnel group.\nThe undo mpls te split-tunnel command deletes a split tunnel.\nBy default, no split tunnel is added to an existing associated tunnel group.",
+    "CLIs": [
+        "mpls te split-tunnel { <interface-type> <interface-number> | <tunnel-name> }",
+        "undo mpls te split-tunnel { <interface-type> <interface-number> | <tunnel-name> }"
+    ],
+    "ParentView": [
+        "TE tunnel association group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Interface number.\n-"
+        },
+        {
+            "Parameters": "tunnel-name",
+            "Info": "Specifies the name of a split tunnel.\nThe name is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] destination 4.4.4.4",
+            "[*HUAWEI-Tunnel1] mpls te tunnel-id 100",
+            "[*HUAWEI-Tunnel1] quit",
+            "[*HUAWEI] interface Tunnel2",
+            "[*HUAWEI-Tunnel2] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel2] destination 6.6.6.6",
+            "[*HUAWEI-Tunnel2] mpls te tunnel-id 200",
+            "[*HUAWEI-Tunnel2] quit",
+            "[*HUAWEI] mpls te associate-tunnel-group 1",
+            "[*HUAWEI-te-associate-group-1] mpls te original-tunnel Tunnel1",
+            "[*HUAWEI-te-associate-group-1] mpls te split-tunnel Tunnel2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a device computes an optimal path for a tunnel and fails to establish the tunnel due to insufficient bandwidth resources, a tunnel can be split into two to balance traffic to increase the bandwidth and bandwidth use efficiency.\nIf a controller finds that an original tunnel in an associated tunnel group needs bandwidth resources more than the available bandwidth of the original tunnel to an extent, the controller creates a split tunnel for the original tunnel and adds the split tunnel to the associated tunnel group. The original and split tunnels in the associated tunnel group balance traffic. After the controller finds that the traffic transmitted through the associated tunnel group falls below a specified threshold, the controller automatically removes a split tunnel from the associated tunnel group and deletes the tunnel interface after a specified period of time.\nPrerequisites\nMPLS TE has been configured using the tunnel-protocol mpls te command on the tunnel interface of the split tunnel.\nPrecautions\nA tunnel can function as a split tunnel and be added to an associated tunnel only after the split tunnel attribute is configured on the tunnel interface.A tunnel can be added to a single associated tunnel group.The original and split tunnels in an associated tunnel group must have the same destination IP address, protocol type, and bandwidth type.The destination IP address, protocol type, and bandwidth type of the original and split tunnels in an associated tunnel group cannot be modified after the split tunnel is added.The tunnel ID and tunnel interface of a split tunnel added to an associated tunnel group cannot be deleted.If an SR-MPLS TE tunnel is configured as a split tunnel, node labels cannot be configured."
+}

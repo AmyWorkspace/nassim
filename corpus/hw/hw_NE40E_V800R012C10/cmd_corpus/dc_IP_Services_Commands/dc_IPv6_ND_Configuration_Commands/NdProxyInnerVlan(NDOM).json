@@ -1,0 +1,40 @@
+{
+    "PageTitle": "ipv6 nd proxy inner-access-vlan enable",
+    "FuncDef": "The ipv6 nd proxy inner-access-vlan enable command enables the intra-VLAN proxy ND function.\nThe undo ipv6 nd proxy inner-access-vlan enable command disables the intra-VLAN proxy ND function.\nBy default, the intra-VLAN proxy ND function is not enabled.",
+    "CLIs": [
+        "ipv6 nd proxy inner-access-vlan enable",
+        "undo ipv6 nd proxy inner-access-vlan enable"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "PW-VE sub-interface view",
+        "VE sub-interface view",
+        "VLANIF interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 20",
+            "[*HUAWEI-vlan20] quit",
+            "[*HUAWEI] interface vlanif 20",
+            "[*HUAWEI-Vlanif20] ipv6 enable",
+            "[*HUAWEI-Vlanif20] ipv6 nd proxy inner-access-vlan enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[~HUAWEI-GigabitEthernet1/0/1.1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] ipv6 nd proxy inner-access-vlan enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf two hosts are on the same network segment and belong to the same VLAN but user isolation has been configured on interfaces in the VLAN, the hosts cannot communicate with each other. To address this problem, run the ipv6 nd proxy inner-access-vlan enable command to enable the intra-VLAN proxy ND function on the gateway connecting the two hosts. After the command is run, the gateway uses its own MAC address and the IPv6 address of the destination host to send the source host an NA packet as a reply. Specifically, the gateway takes the place of the destination host to reply with an NA packet. In this manner, the hosts in a VLAN where user isolation has been configured can properly communicate with each other.\nPrerequisites\nThe IPv6 function has been enabled using the ipv6 enable command.\nPrecautions\nThe IPv6 address of the interface enabled with proxy ND must be on the same network segment as the IPv6 address of the host connected to the interface.Proxy ND cannot be enabled on an interface configured with a CGA address. Otherwise, the replied NA packets that carry the CGA/RSA option may be discarded.Multiple types of proxy ND can be configured in the interface view. The priorities of these proxy ND types are as follows in descending order: any proxy ND > intra-VLAN proxy ND/inter-VLAN proxy ND/local proxy ND> routed proxy ND.Proxy ND is not supported for the following types of packets:NS packets with a link-local address as the target addressDAD NS packets with the source address of all 0sNS packets with the target address and interface address on different network segmentsNS packets with the IP address of the local host as the target address."
+}

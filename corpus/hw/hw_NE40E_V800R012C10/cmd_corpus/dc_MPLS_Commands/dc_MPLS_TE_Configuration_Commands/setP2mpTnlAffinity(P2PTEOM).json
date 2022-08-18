@@ -1,0 +1,35 @@
+{
+    "PageTitle": "mpls te affinity property (P2MP Tunnel interface view)",
+    "FuncDef": "The mpls te affinity property command configures the affinity for an MPLS TE tunnel.\nThe undo mpls te affinity property command restores default affinity.\nBy default, there is no the affinity for an MPLS TE tunnel.",
+    "CLIs": [
+        "mpls te affinity property <properties> [ mask <mask-value> ]",
+        "undo mpls te affinity property"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "properties",
+            "Info": "Specifies the affinity value of a bypass tunnel.\nThe value ranges from 0x0 to 0xffffffff, in hexadecimal notation. The default value is 0x0."
+        },
+        {
+            "Parameters": "mask mask-value",
+            "Info": "Specifies the mask for an affinity, which is used to determine which link attributes to be checked during path selection for a tunnel.\nThe 32-bit value ranges from 0x0 to 0xFFFFFFFF, each bit in which represents a property. The default value is 0x0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls rsvp-te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] destination 2.2.2.2",
+            "[*HUAWEI-Tunnel1] mpls te affinity property a04 mask e0c"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn affinity is a 32-bit vector representing a tunnel link color. After a tunnel is configured with an affinity, a device compares the affinity with the administrative group attribute during link selection to determine whether a link with specified attributes is selected or not. An MPLS TE tunnel adopts a 32-bit mask to represent the affinity bits to be compared. The comparison rules are as follows:\nIf some bits in the mask are 1, at least one bit in an administrative group is 1, and the corresponding bit in the affinity must be 1. If the bits in the affinity are 0s, the corresponding bits in the administrative group cannot be 1.\nFor example, an affinity is 0x0000FFFF and its mask is 0xFFFFFFFF. The higher-order 16 bits in an administrative group of available links are 0, and at least one of the lower-order 16 bits is 1. This means the administrative group attribute ranges from 0x00000001 to 0x0000FFFF.\nIf some bits in a mask are 0, the corresponding bits in an administrative group are not compared with the affinity bits.\nFor example, an affinity is 0xFFFFFFFF, and its mask is 0xFFFF0000. At least one of higher-order 16 bits in an administrative group attribute is 1, and the lower-order 16 bits can be 0 and 1. This means the administrative group attribute ranges from 0x00010000 to 0xFFFFFFFF.\n\nPrerequisites\nThe MPLS TE tunneling protocol has been specified using the tunnel-protocol mpls te command.\nConfiguration Impact\nChanging an affinity leads to recalculation of paths for an existing TE tunnel."
+}

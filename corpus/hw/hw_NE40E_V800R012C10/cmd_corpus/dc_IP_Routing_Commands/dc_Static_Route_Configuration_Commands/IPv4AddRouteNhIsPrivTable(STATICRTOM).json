@@ -1,0 +1,55 @@
+{
+    "PageTitle": "ip route-static (System view)",
+    "FuncDef": "The ip route-static command configures an IPv4 unicast static route.\nBy default, no IPv4 unicast static routes are configured in the system.",
+    "CLIs": [
+        "ip route-static <ip-address> { <mask> | <mask-length> } vpn-instance <vpn-instance-name> [ preference <preference> | tag <tag> ] * [ no-advertise | no-install ] [ description <text> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies a destination IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies a mask for an IP address.\nThe value is in dotted decimal notation and is 192.168.1.254 by default."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length. A 32-bit mask is represented by consecutive 1s, and the mask in dotted decimal notation can be replaced by the mask length.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of the destination VPN instance. If the destination VPN instance is specified and no next hop address is specified, the Next-Table function is configured. In this case, after receiving packets, the device searches the public network forwarding table for a forwarding entry with the destination VPN instance. Then, the device searches the forwarding table of the destination VPN instance for the corresponding forwarding entry.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "preference preference",
+            "Info": "Specifies a priority for the static route.\nThe value is an integer ranging from 1 to 255. The default value is 60. The smaller the value, the higher the priority."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies a tag value for the static route. The tag can be used by a routing policy. For example, the tag can be used during route import.\nThe value is an integer ranging from 1 to 4294967295. The default value is 0."
+        },
+        {
+            "Parameters": "no-advertise",
+            "Info": "Prevents the static route from being advertised.\nIn network maintenance scenarios, static routes are required to verify services. If you do not want these static routes to be imported by other protocols, specify no-advertise to prevent these static routes from being advertised.\nno-advertise takes effect only when it is configured for all the active static routes with the same destination address and mask.\nAfter this function is enabled, the static route can be imported to the BGP routing table but is not advertised to BGP peers.\n-"
+        },
+        {
+            "Parameters": "no-install",
+            "Info": "Prevents the static route from being delivered to the FIB. If multiple static routes with the same prefix and mask length are configured using the command repeatedly, all the static routes can be delivered to the FIB as long as no-install is not specified in the command when configuring one of the static routes.\nThe no-install and no-advertise parameters are mutually exclusive.\n-"
+        },
+        {
+            "Parameters": "description text",
+            "Info": "Specifies the description of the static route.\nTo check the configured description, run the display this or display current-configuration command in the system view.\nThe description parameter cannot be followed by other parameters, such as bfd and preference. Otherwise, the configuration will be used only as the description. For example, if ip route-static 1.1.1.1 255.255.255.255 NULL0 description aa preference 10 is run, aa preference 10 is used as the description.\nThe value is a string of 1 to 150 characters, spaces supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip route-static 1.2.3.4 32 vpn-instance vpn1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a simple network, static routes alone can ensure that the network runs properly. If the Router cannot run dynamic routing protocols to generate routes to the destination, configure static routes on the Router.\nPrecautions\nTo delete the configuration IPv4 unicast routes, run the undo ip route-static command."
+}

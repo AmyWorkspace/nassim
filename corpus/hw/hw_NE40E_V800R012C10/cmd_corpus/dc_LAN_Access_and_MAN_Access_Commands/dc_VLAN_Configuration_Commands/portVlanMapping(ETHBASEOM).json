@@ -1,0 +1,46 @@
+{
+    "PageTitle": "port vlan-mapping",
+    "FuncDef": "The port vlan-mapping command configures an interface to map a single VLAN tag to a specified tag.\nThe undo port vlan-mapping command restores the default configuration.\nBy default, VLAN mapping is disabled on interfaces.",
+    "CLIs": [
+        "port vlan-mapping vlan <vlan-id1> [ to <vlan-id2> ] map-vlan <vlan-id3>",
+        "undo port vlan-mapping { vlan <vlan-id1> [ to <vlan-id2> ] [ map-vlan <vlan-id3> ] }"
+    ],
+    "ParentView": [
+        "Layer 2 100GE interface view",
+        "Layer 2 10GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Layer 2 Eth-Trunk interface view",
+        "Layer 2 GE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id2",
+            "Info": "Specifies a VLAN range carried in received frames.\nhighVid specifies the end VLAN ID in received frames.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "map-vlan vlan-id3",
+            "Info": "Specifies the VLAN ID to be mapped to.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vlan vlan-id1",
+            "Info": "Specifies a VLAN range carried in received frames.\nlowVid specifies the start VLAN ID in received frames.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] quit",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] port vlan-mapping vlan 100 map-vlan 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA network needs to be expanded with the growth of access users and data services, which poses the following challenges to the administrator:\nExisting and new sites assigned different VLAN IDs need to communicate.Inconsistent VLAN plans among sites access the public network causes VLAN ID conflicts. Therefore, VLANs at a site need to be isolated with those at another site.Sites that access to the public network have asymmetrical VLAN planning.\nTo prevent these problems, you can run the port vlan-mapping command to configure VLAN mapping on edge devices of the public network to map the user VLAN tag to the public VLAN tag to implement inter-VLAN communication.\n\nPrerequisites\nA Layer 3 interface has been switched to a Layer 2 interface using the portswitch command.\nConfiguration Impact\nVLAN mapping is implemented after packets are received on an inbound interface and before packets are sent out from an outbound interface. After VLAN mapping is enabled:\nService VLAN IDs and user VLAN IDs change.Private network VLAN IDs and public VLAN IDs change.\nVLAN mapping implements the communication between VLANs without any Layer 3 route. VLAN mapping is also called VLAN translation. The port vlan-mapping command maps a single tag carried in frames to a specified tag, which is called VLAN mapping 1 to 1 function.\n\nPrecautions\nWhen using VLAN mapping to implement inter-VLAN communication, the IP addresses of the devices in both VLANs must be in the same network segment. Otherwise, Layer 3 routes are required, and VLAN Mapping does not take effect.\nConfiguring the port vlan-mapping command on an interface is similar to configuring the qinq mapping vid map-vlan vid command on a sub-interface. The differences are as follows:\nVLAN mapping configured on interfaces is used to enable users from different VLANs to communicate over a Layer 2 metropolitan area network (MAN).\nQinQ mapping configured on sub-interfaces is used to access L2VPNs.\nConfiguring QinQ mapping reduces the consumption of physical interfaces.\nIf the port vlan-mapping command is run more than once, all configurations take effect.\nAfter VLAN mapping is configured on an interface using the port vlan-mapping vlan lowVid [ to highVid ] map-vlan mapVid command and a VLANIF interface is created on the mapped VLAN, L3 traffic cannot be forwarded on the interface with VLAN mapping configured."
+}

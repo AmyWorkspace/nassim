@@ -1,0 +1,47 @@
+{
+    "PageTitle": "dn-bit-set disable",
+    "FuncDef": "The dn-bit-set disable command disables OSPF from setting the DN bit in LSAs.\nThe undo dn-bit-set disable command enables OSPF to set the DN bit in LSAs.\nThe dn-bit-set disable command disables OSPFv3 from setting the DN bit in LSAs.\nThe undo dn-bit-set disable command enables OSPFv3 to set the DN bit in LSAs.\n\nBy default, OSPF is enabled to set the DN bit in LSAs.\n\n\nBy default, OSPFv3 is enabled to set the DN bit in LSAs.",
+    "CLIs": [
+        "dn-bit-set disable { summary | ase | nssa }",
+        "undo dn-bit-set disable { summary | ase | nssa }"
+    ],
+    "ParentView": [
+        "OSPFv3 view",
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "summary",
+            "Info": "Sets the DN bit in Type 3 LSAs.\n-"
+        },
+        {
+            "Parameters": "ase",
+            "Info": "Sets the DN bit in AS-external-LSAs.\n-"
+        },
+        {
+            "Parameters": "nssa",
+            "Info": "Sets the DN bit in NSSA LSAs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance huawei",
+            "[*HUAWEI-vpn-instance-huawei] ipv6-family",
+            "[*HUAWEI-vpn-instance-huawei-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-huawei] quit",
+            "[*HUAWEI] ospfv3 100 vpn-instance huawei",
+            "[*HUAWEI-ospfv3-100] dn-bit-set disable ase"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance huawei",
+            "[*HUAWEI-vpn-instance-huawei] ipv4-family",
+            "[*HUAWEI-vpn-instance-huawei-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-huawei] quit",
+            "[*HUAWEI] ospf 100 vpn-instance huawei",
+            "[*HUAWEI-ospf-100] dn-bit-set disable ase"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe dn-bit-set disable command can be used in the following scenarios:\nIn the VPN option A scenario, the local PE imports BGP routes to generate LASs and advertise the generated LASs to the peer PE. According to standard protocols, setting of the DN bit is restricted. The peer PE may fail to calculate a route. In this situation, you can run the dn-bit-set disable command to disable OSPF from setting the DN bit in LSAs or run the undo dn-bit-set disable command to enable OSPF to set the DN bit in LSAs.When a PE is connected to an MCE, the MCE needs to calculate routes advertised by the PE. By default, the MCE does not check the DN bit. In this situation, you can run the undo dn-bit-set disable command on the local PE to enable OSPF to set the DN bit in LSAs.\nTo prevent routing loops, the OSPF multi-instance process uses a bit as a flag. The bit is called DN bit.\nYou are advised to run the dn-bit-set disable command only in the following scenario:\nIn a VPN Option A scenario, the local ASBR (ASBR1) imports BGP routes to generate LSAs, advertises the LSAs to the peer ASBR (ASBR2), and exchange OSPFv3 routes with ASBR2. According to the standard protocol, ASBR2 cannot calculate the BGP routes imported by ASBR1 due to the DN bit check mechanism, causing traffic loss. To disable ASBR1 from setting the DN bit, run the dn-bit-set disable command.When a PE is connected to an MCE, the MCE needs to calculate routes advertised by the PE. By default, the MCE does not check the DN bit. You can run the dn-bit-set disable command on the local PE to disable OSPFv3 from setting the DN bit in LSAs.\nOSPFv3 multi-instance processes use a bit flag called the DN bit to prevent routing loops.\n\nPrerequisites\nA VPN instance has been created using the ip vpn-instance vpn-instance-name command and the VPN instance view is displayed.The BGP-VPN instance IPv6 address family view has been enabled using the ipv6-family vpn-instance-name command in the VPN instance view.The ospfv3[ process-id ] [ vpn-instance vpn-instance-name ] command has been run to enable an OSPFv3 multi-instance process and enter its view.\n\nConfiguration Impact\nWhen the dn-bit-set disable command is used to disable OSPF from setting the DN bit in LSAs, routing loops may occur. If the parameter ase or nssa is specified, the DN bit in ASE LSAs or NSSA LSAs is not set. You can use the route-tag command to set the same tag value to prevent routing loops. Therefore, it is recommended that the dn-bit-set disable command be used in only the scenarios specified in Usage Scenario.\nIf the dn-bit-set disable ase command is configured, the DN bit is not set in type 5 LSAs that are translated from type 7 LSAs even if the DN bit is set in type 7 LSAs.\nAfter the dn-bit-check disable command is run to disable OSPFv3 from checking the DN bit in LSAs, routing loops may occur. If ase or nssa is configured, you can set the same VPN route tag for imported VPN routes using the route-tag command in the OSPFv3 view to prevent routing loops. You are advised to run the dn-bit-set disable command only in VPN Option A scenarios.\nPrecautions\nThe dn-bit-set disable command can be configured for only private OSPF processes. The configuration of this command takes effect only on PEs.\nThe dn-bit-check disable command can be used to prevent OSPF running on the peer PE from checking the DN bit when calculating routes.\nThe dn-bit-set disable command can be run only in OSPFv3 VPN processes and takes effect only on PEs."
+}

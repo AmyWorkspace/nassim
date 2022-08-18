@@ -1,0 +1,40 @@
+{
+    "PageTitle": "group listen (BGP-VPN instance view)",
+    "FuncDef": "The group listen command creates a dynamic BGP peer group.\nThe undo group listen command deletes a dynamic BGP peer group.\nBy default, no dynamic BGP peer groups are created.",
+    "CLIs": [
+        "group <group-name> listen { internal | external }",
+        "group <group-name> listen",
+        "undo group <group-name> listen [ internal | external ]"
+    ],
+    "ParentView": [
+        "BGP-VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a dynamic BGP peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "internal",
+            "Info": "Creates a dynamic IBGP peer group.\n-"
+        },
+        {
+            "Parameters": "external",
+            "Info": "Creates a dynamic EBGP peer group.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpn1",
+            "[*HUAWEI-bgp-instance-vpn1] group in listen internal"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf static BGP peers change frequently on a BGP network, you need to add or delete BGP peer configurations in response to each change, which requires a heavy maintenance workload. To address this problem, configure the dynamic BGP peer function to enable BGP to listen for BGP connection requests from a specified network segment, dynamically establish BGP peer relationships, and add these peers to the same dynamic peer group. This spares you from adding or deleting BGP peer configurations in response to each change in dynamic peers. To create a dynamic BGP peer group, run the group listen command.\nAfter a peer is added to a dynamic peer group, the peer inherits the configurations of this peer group. If the configurations of the peer group change, the configurations of all the peers in the group change accordingly. Such implementation is the same as that of static BGP peer groups.\nPrecautions\nIf the group listen command is run more than once, all configurations take effect.\nIf a dynamic BGP peer group is deleted, connections with all peers in the peer group are deleted.\nNames of BGP peer groups must be unique, regardless of whether they are of dynamic or static peer groups.\nIf the type (IBGP or EBGP) of a dynamic BGP peer group is not specified, a dynamic IBGP peer group is created by default.\nPeers in a dynamic BGP peer group share the same attribute. Peer-based attribute configuration is not allowed in a dynamic BGP peer group.\nThe undo group command applies to both dynamic and static BGP peer groups. If the command is run, the corresponding peer group and all its configurations are deleted. Therefore, exercise caution when running this command."
+}

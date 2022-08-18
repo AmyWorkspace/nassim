@@ -1,0 +1,37 @@
+{
+    "PageTitle": "mld-snooping ip-policy (VSI view)",
+    "FuncDef": "The mld-snooping ip-policy command configures a filtering policy to permit or deny MLD Report messages of hosts in a VLAN/VSI, controlling the multicast groups that the hosts can join.\nThe undo mld-snooping ip-policy command restores the default configuration.\nBy default, no filtering policy is configured, so that all hosts in a VLAN can join multicast groups.",
+    "CLIs": [
+        "mld-snooping ip-policy { <acl6-number> | acl6-name <acl6-name> }",
+        "undo mld-snooping ip-policy"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl6-number",
+            "Info": "Specifies an ACL6 number.\nThe value is an integer ranging from 2000 to 3999. The ACL6 is used to permit or deny services requests of hosts in a VLAN/VSI based on source or destination addresses carried in MLD Report messages."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named ACL6.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 2000",
+            "[*HUAWEI-acl6-basic-2000] rule deny source 1::1 128",
+            "[*HUAWEI-acl6-basic-2000] rule permit source any",
+            "[*HUAWEI-acl6-basic-2000] quit",
+            "[*HUAWEI] mld-snooping enable",
+            "[*HUAWEI] vlan 11",
+            "[*HUAWEI-vlan11] mld-snooping ip-policy 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo improve multicast service deployment security, run the mld-snooping ip-policy command to configure a filtering policy to permit or deny MLD Report messages of hosts in a VLAN/VSI.\nIf you specify a basic ACL6, the device filters the MLD Report messages based on the carried source IP addresses. If an advanced ACL6 is specified, the device filters MLD Report messages based on the carried source and destination addresses.\nConfiguration Impact\nAfter the command is run, MLD Report messages are discarded if the carried source or destination IP addresses match the deny clause in the specified ACL6.\nPrecautions\nThis command takes effect only for MLD Report messages.\nThe\nmld-snooping ip-policy command fails to be run in a VSI view in the following condition:\nThe VSI is bound to a BD."
+}

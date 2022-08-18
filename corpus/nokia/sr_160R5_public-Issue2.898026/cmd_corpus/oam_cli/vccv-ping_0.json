@@ -1,0 +1,134 @@
+{
+    "PageTitle": "vccv-ping",
+    "FuncDef": "This command configures a Virtual Circuit Connectivity Verification (VCCV) ping test. A vccv-ping test checks connectivity of a VLL inband. It checks to verify that the destination (target) PE is the egress for the Layer 2 FEC. It provides for a cross-check between the dataplane and the control plane. It is inband which means that the vccv-ping message is sent using the same encapsulation and along the same path as user packets in that VLL. The vccv-ping test is the equivalent of the lsp-ping test for a VLL service. The vccv-ping reuses an lsp-ping message format and can be used to test a VLL configured over both an MPLS and a GRE SDP.",
+    "CLIs": [
+        "vccv-ping <sdp-id:vc-id> [ target-fec-type static-pw-fec agi <agi-value> pw-path-id-saii <src-global-id:src-node-id:src-ac-id> pw-path-id-taii <dest-global-id:dest-node-id:dest-ac-id> ] [ src-ip-address <ip-addr> dst-ip-address <ip-addr> pw-id <pw-id> ] [ reply-mode { ip-routed | control-channel } ] [ fc <fc-name> [ profile { in | out } ] ] [ size <octets> ] [ count <send-count> ] [ timeout <timeout> ] [ interval <interval> ] [ ttl <vc-label-ttl> ]",
+        "vccv-ping spoke-sdp-fec <spoke-sdp-fec-id> [ saii-type2 <global-id:prefix:ac-id> taii-type2 <global-id:prefix:ac-id> ] [ src-ip-address <ip-addr> dst-ip-address <ip-addr> ] [ reply-mode { ip-routed | control-channel } ] [ fc <fc-name> [ profile { in | out } ] ] [ size <octets> ] [ count <send-count> ] [ timeout <timeout> ] [ interval <interval> ] [ ttl <vc-label-ttl> ]",
+        "vccv-ping saii-type2 <global-id:prefix:ac-id> taii-type2 <global-id:prefix:ac-id> [ src-ip-address <ip-addr> dst-ip-address <ip-addr> ] [ reply-mode { ip-routed | control-channel } ] [ fc <fc-name> [ profile { in | out } ] ] [ size <octets> ] [ count <send-count> ] [ timeout <timeout> ] [ interval <interval> ] [ ttl <vc-label-ttl> ]",
+        "vccv-ping static <sdp-id:vc-id> [ target-fec-type pw-id-fec sender-src-address <ip-address> remote-dst-address <ip-address> pw-id <value> pw-type <value> ] [ dest-global-id <global-id> dest-node-id <node-id> ] [ assoc-channel { ipv4 | non-ip } ] [ src-ip-address <ip-addr> ] [ count <send-count> ] [ fc <fc-name> ] [ profile { in | out } ] [ interval <interval> ] [ size <octets> ] [ timeout <timeout> ] [ ttl <vc-label-ttl> ] [ detail ]"
+    ],
+    "ParentView": [
+        "oam",
+        "config>saa>test"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sdp-id:vc-id",
+            "Info": "If a FEC 128 PW is being tested, then its VC ID must be indicated with this parameter. The VC ID needs to exist on the local router and the far-end peer needs to indicate that it supports VCCV to allow the user to send vccv-ping message. Values-1 to 17407:1 to 4294967295."
+        },
+        {
+            "Parameters": "spoke-sdp-fec-id",
+            "Info": "If a FEC 129 PW is being tested, then its spoke-sdp-fec-id must be indicated with this parameter. The spoke-sdp-fec-id needs to exist on the local router and the far-end peer needs to indicate that it supports VCCV to allow the user to send vccv-ping message. Values-1 to 4294967295."
+        },
+        {
+            "Parameters": "saii-type2 global-id:prefix:ac-id",
+            "Info": "If a FEC129 AII Type 2 pseudowire is being tested, then the source attachment individual identifier (SAII) must be indicated. The saii-type2 parameter is mutually exclusive with sdp-id:vc-id."
+        },
+        {
+            "Parameters": "global-id",
+            "Info": "The Global ID of the router T-PE. Values-1 to 4,294,967,295."
+        },
+        {
+            "Parameters": "prefix",
+            "Info": "The prefix on the router T-PE that the spoke-SDP is associated with."
+        },
+        {
+            "Parameters": "ac-id",
+            "Info": "An unsigned integer representing a locally unique identifier for the spoke-SDP. Values-1 to 4,294,967,295."
+        },
+        {
+            "Parameters": "taii-type2 global-id:prefix:ac-id",
+            "Info": "If a FEC129 AII Type 2 pseudowire is being tested, then the target attachment individual identifier (TAII) mus be indicated. The taii-type2 parameter is mutually exclusive with sdp-id:vc-id. Values-1 to 4,294,967,295."
+        },
+        {
+            "Parameters": "src-ip-address ip-addr",
+            "Info": "Specifies the source IP address. Values-ipv4-address: a.b.c.d."
+        },
+        {
+            "Parameters": "dst-ip-address ip-addr",
+            "Info": "Specifies the destination IP address."
+        },
+        {
+            "Parameters": "pw-id",
+            "Info": "Specifies the pseudowire ID to be used for performing a vccv-ping operation. The pseudowire ID is a non-zero 32-bit connection ID required by the FEC 128, as defined in RFC 4379, Detecting Multi-Protocol Label Switched (MPLS) Data Plane Failures."
+        },
+        {
+            "Parameters": "reply-mode {ip-routed | control-channel}",
+            "Info": "The reply-mode parameter indicates to the far-end how to send the reply message. The option control-channel indicates a reply mode in-band using the vccv control channel. ParamDefault: Default- control-channel"
+        },
+        {
+            "Parameters": "fc-name",
+            "Info": "The fc parameter is used to indicate the forwarding class of the MPLS echo request packets. The actual forwarding class encoding is controlled by the network egress LSP-EXP mappings. Values-be, l2, af, l1, h2, ef, h1, nc. ParamDefault: Default- be"
+        },
+        {
+            "Parameters": "profile {in | out}",
+            "Info": "The profile state of the MPLS echo request encapsulation. ParamDefault: Default- out"
+        },
+        {
+            "Parameters": "seconds",
+            "Info": "The timeout parameter, in seconds, expressed as a decimal integer. This value is used to override the default timeout value and is the amount of time that the router will wait for a message reply after sending the message request. Upon the expiration of message timeout, the requesting router assumes that the message response will not be received. A  request timeout  message is displayed by the CLI for each message request sent that expires. Any response received after the request times out will be silently discarded. Values-1 to 10. ParamDefault: Default- 5"
+        },
+        {
+            "Parameters": "interval",
+            "Info": "The interval parameter in seconds, expressed as a decimal integer. This parameter is used to override the default request message send interval and defines the minimum amount of time that must expire before the next message request is sent. Values-1 to 10. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "octets",
+            "Info": "The size in octets, expressed as a decimal integer, of the MPLS echo request packet, including the IP header but not the label stack. The request pay-load is padded with zeros to the specified size. Note that an OAM command is not failed if the user entered a size lower than the minimum required to build the packet for the echo request message. The payload is automatically padded to meet the minimum size. Values-1 to 9198. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "send-count",
+            "Info": "The number of messages to send, expressed as a decimal integer. The count parameter is used to override the default number of message requests sent. Each message request must either timeout or receive a reply before the next message request is sent. The message interval value must be expired before the next message request is sent. Values-1 to 1000. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "vc-label-ttl",
+            "Info": "Specifies the time-to-live value for the vc-label of the echo request message. The outer label TTL is still set to the default of 255 regardless of this value."
+        },
+        {
+            "Parameters": "dest-global-id global-id",
+            "Info": "The MPLS-TP global ID for the far end node of the pseudowire under test. If this is not entered, then the dest-global-id is taken from the pseudowire context."
+        },
+        {
+            "Parameters": "dest-node-id node-id",
+            "Info": "The MPLS-TP node ID of the far-end node for the pseudowire under test. If this is not entered, then the dest-global-id is taken from the pseudowire context."
+        },
+        {
+            "Parameters": "assoc-channel {ipv4 | non-ip}",
+            "Info": "The associated channel encapsulation format to use for the VCCV ping echo request and echo reply packet for a PW that uses the static PW FEC. An associated channel type of ipv4 must be used if a vccv-ping is performed to a remote segment of a different FEC type. Values-ipv4 - IPv4 encapsulation in an IPv4 pseudowire associated channel (channel type 0x0021). ParamDefault: Default- non-ip"
+        },
+        {
+            "Parameters": "target-fec-type {pw-id-fec | static-pw-fec}",
+            "Info": "The FEC type for a remote PW segment targeted by a VCCV Ping echo request. This parameter is used if VCCV Ping is used along a MS-PW where a static MPLS-TP PW segment using the static PW FEC is switched to a T-LDP signaled segment using the PW ID FEC (FEC128), or vice versa, thus requiring the user to explicitly specify a target FEC that is different from the local segment FEC. Values-pw-id-fec - Indicates that FEC element for the remote target PW."
+        },
+        {
+            "Parameters": "agi-value",
+            "Info": "The attachment group identifier for the target FEC. This parameter is only valid in combination with the target-fec-type static-pw-fec. Values-0 to 4,294,967,295."
+        },
+        {
+            "Parameters": "pw-path-id-saii src-global-id:src-node-id:src-ac-id",
+            "Info": "The SAII of the target FEC. This parameter is only valid in combination with the target-fec-type static-pw-fec."
+        },
+        {
+            "Parameters": "pw-path-id-taii dst-global-id:dst-node-id:dst-ac-id",
+            "Info": "The SAII of the target FEC. This parameter is only valid in combination with the target-fec-type static-pw-fec."
+        },
+        {
+            "Parameters": "remote-dst-address ipv4-address",
+            "Info": "The 4-octet IPv4 address of the far end node that is a target of the VCCV Ping echo request. This parameter is only valid in combination with the target-fec-type static-pw-fec. Values-ipv4-formatted address: a.b.c.d."
+        },
+        {
+            "Parameters": "sender-src-address ipv4-address",
+            "Info": "The 4-octet IPv4 address of the node originating the VCCV Ping echo request. This parameter is only valid in combination with the target-fec-type pw-id. Values-ipv4-formatted address: a.b.c.d."
+        },
+        {
+            "Parameters": "remote-dst-address ipv4-address",
+            "Info": "The 4-octet IPv4 address of the far end node that is a target of the VCCV Ping echo request. This parameter is only valid in combination with the target-fec-type pw-id. Values-ipv4-formatted address: a.b.c.d."
+        },
+        {
+            "Parameters": "value",
+            "Info": "The PW Type value of the PW segment targeted on the far end node. This field must be included to populate the PW type field of the PW ID FEC in the FEC static TLV, when the far end FEC type is different form the local FEC type and the target-fec-type is pw-id-fec. Values-atm-cell, atm-sdu, atm-vcc, atm-vpc, cesopsn, cesopsn-cas|ether, satop-e1, satop-t1, [1 to 65535]."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

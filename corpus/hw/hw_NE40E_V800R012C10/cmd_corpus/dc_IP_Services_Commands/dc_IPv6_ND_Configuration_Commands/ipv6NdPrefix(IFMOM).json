@@ -1,0 +1,79 @@
+{
+    "PageTitle": "ipv6 nd ra prefix",
+    "FuncDef": "The ipv6 nd ra prefix command configures the prefix carried in RA messages sent by the router.\nThe undo ipv6 nd ra prefix command configures RA messages not to carry the specified prefix.\nBy default, RA messages contain only the prefix specified through the ipv6 address command.",
+    "CLIs": [
+        "ipv6 nd ra prefix { <ipv6-address> <prefix-length> | <ipv6-prefix/ipv6-prefix-length> } <valid-lifetime> <preferred-lifetime> [ no-autoconfig ] [ off-link ]",
+        "undo ipv6 nd ra prefix { <ipv6-address> <prefix-length> | <ipv6-prefix/ipv6-prefix-length> }"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address carried in the RA message.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the prefix length of the IPv6 address.\nThe value is an integer that ranges from 0 to 128. Based on the IPv6 address and prefix length, a host can calculate the IPv6 prefix carried in the RA message. When allocating the IPv6 address by means of stateless auto-configuration, specify the length of address prefixes as 64 bites. Otherwise, the address will be invalid and RA messages will be discarded."
+        },
+        {
+            "Parameters": "ipv6-prefix/ipv6-prefix-length",
+            "Info": "Specifies the IPv6 address prefix.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "valid-lifetime",
+            "Info": "Specifies the valid lifetime of the prefix.\nThe value is an integer that ranges from 0 to 4294967295, in seconds."
+        },
+        {
+            "Parameters": "preferred-lifetime",
+            "Info": "Specifies the preferred lifetime of the prefix.\nThe value is an integer that ranges from 0 to 4294967295, in seconds. The preferred lifetime cannot be bigger than the valid lifetime."
+        },
+        {
+            "Parameters": "no-autoconfig",
+            "Info": "Deletes the A-Flag. If this parameter is configured, a configured prefix cannot be used in stateless address allocation.\n-"
+        },
+        {
+            "Parameters": "off-link",
+            "Info": "Indicates the O-Flag. If the ipv6 nd ra prefix command contains off-link, it indicates that the prefix carried in the RA message received by the host on the local link cannot be allocated to the local link. When the host sends packets to the address with this prefix, the packet needs to be forwarded through a default router.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 nd ra prefix 2001:db8:1::100 64 100 10",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 nd ra prefix 2001:db8:2::100 128 1000 400 no-autoconfig",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 nd ra prefix 2001:db8:1::100 64 1000 400 off-link"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the ipv6 nd ra prefix command is run to configure a prefix, the device advertises both the address prefix configured using the ipv6 nd ra prefix command and that using the ipv6 address command.\nBy default, RA messages do not carry the default prefix generated based on the interface IPv6 address. If a user does not want the RA message to carry the default address prefix, run the ipv6 nd ra prefix default no-advertise command.\nPrerequisites\nIPv6 has been enabled on the involved interface using the ipv6 enable command.\nConfiguration Impact\nAfter a host receives the RA message with the prefix configured through the ipv6 nd ra prefix command, the host updates the local prefix information.\nPrecautions\nThe prefix configured through the ipv6 nd ra prefix command cannot be fe80:: (prefix of a link-local address), ff00:: (prefix of a multicast address), or prefix of an unspecified address. It neither can be the prefix that has been used by another interface (including the interface address prefix and prefix carried in RA messages)."
+}

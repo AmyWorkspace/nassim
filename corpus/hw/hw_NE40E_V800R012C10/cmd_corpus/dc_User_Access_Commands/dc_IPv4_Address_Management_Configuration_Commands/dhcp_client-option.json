@@ -1,0 +1,50 @@
+{
+    "PageTitle": "dhcp client-option",
+    "FuncDef": "The dhcp client-option command specifies the options and sub-options that will be sent as replies to the user requests.\nThe undo dhcp client-option command cancels the configuration.\nBy default, no options or sub-options are specified as replies to user requests.",
+    "CLIs": [
+        "dhcp client-option <option-code> <dhcp-option-code> reply-option <reply-code> { suboption <sub-option-id> { ip <ip-addr> | string <string-value> | hex <string-value> } } &<1-16>",
+        "undo dhcp client-option <option-code> [ <dhcp-option-code> ] reply-option",
+        "undo dhcp client-option reply-option"
+    ],
+    "ParentView": [
+        "Bas IP address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "option-code",
+            "Info": "Specifies the option code in user requests.\nCurrently only the Option 60 is supported."
+        },
+        {
+            "Parameters": "dhcp-option-code",
+            "Info": "Specifies the option content in user requests.\nThe value must start and end with double quotation marks (\"\") and ranges from 3 to 66. The value excluding double quotation marks ranges from 1 to 64. Case-sensitive characters with the ASCII code ranging from 32 to 126 are supported, single quotation marks and TAB excluded. The sub-option value cannot be only \"-\" and \"--\". \"Huawei AP\" is preserved for a specific scenario and cannot be used."
+        },
+        {
+            "Parameters": "reply-option reply-code",
+            "Info": "Specifies an option that will be sent as a reply to user requests.\nThe value ranges from 2 to 254 excluding 3, 6, 15, 44, 46, 50-54, 57-60, and 82."
+        },
+        {
+            "Parameters": "suboption sub-option-id",
+            "Info": "Specifies a sub-option to be sent as a reply.\nThe value ranges from 1 to 254."
+        },
+        {
+            "Parameters": "ip ip-addr",
+            "Info": "Specifies an IP address as a sub-option.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "string string-value",
+            "Info": "Specifies a string as a sub-option.\nThe value is a string of 1 to 128 characters. Characters with the ASCII code ranging from 32 to 126 are supported, single quotation marks excluded. The sub-option value cannot be only \"-\" and \"--\"."
+        },
+        {
+            "Parameters": "hex string-value",
+            "Info": "Specifies a hexadecimal number as a sub-option.\nThe value is a string of 1 to 128 case-insensitive characters of 0-9, a-f, and A-F>, and length should be even."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei bas local",
+            "[*HUAWEI-ip-pool-huawei] dhcp client-option 60 \"Huawei\" reply-option 43 suboption 6 ip 192.168.1.1 suboption 8 string VPN-T1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThis command is used to specify options that will be sent as replies to user requests.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nAs defined in the standard protocols, the maximum option length is 255 bytes. Therefore, specifying an option longer than 255 bytes is not allowed.A maximum of 16 options can be configured in an address pool.A maximum of 16 sub-options can be configured for an option.An option can be sent as a reply to only one option.The specified options must comply with the standard protocols. Otherwise, users may fail to go online.This command cannot be configured in a remote address pool."
+}

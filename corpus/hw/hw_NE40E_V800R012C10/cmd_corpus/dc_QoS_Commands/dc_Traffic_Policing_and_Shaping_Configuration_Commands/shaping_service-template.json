@@ -1,0 +1,47 @@
+{
+    "PageTitle": "shaping service-template",
+    "FuncDef": "The shaping service-template command applies a user-defined service profile to an interface.\nThe undo shaping service-template command cancels the configuration.\nBy default, no service profile is applied to an interface, and the default compensation value of the interface takes effect. The default compensation values of an interface on a board equipped with an eTM module and an interface on a board equipped with a TM module are 0 and 18 bytes, respectively.",
+    "CLIs": [
+        "shaping [ <cos-value> ] service-template <service-template-name>",
+        "shaping service-template <service-template-name>",
+        "undo shaping [ <cos-value> ] service-template",
+        "undo shaping service-template"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "40GE interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cos-value",
+            "Info": "Specifies the Flow Queue (FQ) priority.\nThis parameter is not supported in the tunnel interface view.This parameter is only supported on board.\nThe value can be af1, af2, af3, af4, be, cs6, cs7, or ef."
+        },
+        {
+            "Parameters": "service-template service-template-name",
+            "Info": "Specifies the name of a user-defined service profile.\nThe value is a string of 1 to 31 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] service-template template1",
+            "[*HUAWEI-service-template-template1-slot-all] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] shaping service-template template1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] service-template template1",
+            "[*HUAWEI-service-template-template1-slot-all] quit",
+            "[*HUAWEI] interface Tunnel10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol gre",
+            "[*HUAWEI-Tunnel10] shaping service-template template1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen queue scheduling is implemented for downstream traffic on a PIC that is equipped with no eTM subcards, the calculated packet length is different from the actual length of the packets transmitted on links. To provide accurate traffic shaping, configure packet length compensation. When a PIC is equipped with an eTM subcard, no packet length compensation is required.\nPacket length compensation needs to be configured in a service profile. After configuring packet length compensation in a service profile, run the shaping service-template command to apply the service profile to an interface. Only one service profile takes effect on an interface. If this command is run more than once, the latest configuration overrides the previous one.\nThe system preserves several default service profiles.\ntemplate-default0: This profile is preserved for flow queues and has a default adjustment length 0.template-default1: This profile is preserved for ATM interfaces and has a default adjustment length -16.template-default2: This profile is preserved for multicast traffic and has a default adjustment length 4.template-default3: This profile is preserved for boards housing POS interfaces and has a default adjustment length 8.template-default4: This profile is preserved for boards housing Ethernet interfaces and has a default adjustment length 18.\nIn complex scenarios, if the default service profile is used and traffic shaping does not make an accurate result, use the following service profiles that are defined by the system:\nbridge-outbound: Service profile of Bridge switching outbound of the tunnel.ip-outbound: Service profile of IP switching or IP switching with 802.1Q in the outbound direction of an interface.ip-outbound1: Service profile of IP switching to QinQ in the outbound direction of an interface.ip-outbound2: Service profile of IP switching in the outbound direction of a POS interface.ip-outbound3: Service profile of IP switching in the outbound direction of an FR interface.l3vpn-outbound: Service profile of L3VPN switching or L3VPN switching with 802.1Q in the outbound direction of an FR interface.l3vpn-outbound1: Service profile of L3VPN switching to QinQ in the outbound direction of an interface.l3vpn-outbound2: Service profile of L3VPN switching in the outbound direction of a POS or an FR interface.pbt-outbound: Service profile of PBT switching in the outbound direction of an interface.vlan-mapping-outbound: Service profile of VLAN Mapping switching in the outbound direction of an interface.vll-outbound: Service profile of VLL switching with hetero-medium in the outbound direction of a POS interface or VLL switching to QinQ in the outbound direction of a tunnel.vll-outbound1: Service profile of VLL switching with homo-medium in the outbound direction of a POS interface or VLL switching to QinQ in the outbound direction of a tunnel.vpls-outbound: Service profile of VPLS switching to 802.1Q in the outbound direction of a tunnel.vpls-outbound1: Service profile of VPLS switching to QinQ in the outbound direction of a tunnel.\nIf a service profile that is defined by the system is used and traffic shaping still cannot make an accurate result, create a service profile, set a packet length compensation value using the network-header-length command in the service profile view, and apply the service profile using the shaping service-template command.\n\nPrecautions\nConfiguration for the adjustment length of a system-default profile does not take effect, and only the default parameters take effect.The adjustment length of a system-defined profile cannot be modified.The system-defined profiles and default profiles share the resources. If a system-defined profile has been applied to an interface, the parameters in the default profile that shares the resources with the system-defined profile cannot be modified. If the parameters in the default profile have been modified, the system-defined profile that shares the resources with the default profile cannot be applied to an interface.If the profile named template-default3 is modified, the adjustment length on the POS interface changes.If the profile named template-default4 is modified, the adjustment length on the Ethernet interface changes.This command is supported on a tunnel interface only when the protocol of the tunnel interface is set to GRE or GRE IPv6."
+}

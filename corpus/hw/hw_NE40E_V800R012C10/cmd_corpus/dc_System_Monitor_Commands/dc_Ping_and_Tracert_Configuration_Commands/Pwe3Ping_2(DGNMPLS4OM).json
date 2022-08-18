@@ -1,0 +1,102 @@
+{
+    "PageTitle": "ping vc vpn-instance",
+    "FuncDef": "The ping vc vpn-instance command detects the connectivity of the LSP between PEs in the BGP networking.",
+    "CLIs": [
+        "ping vc vpn-instance <vpn-instance-name> <local-ce-id> <remote-ce-id> [ -c <echo-number> | -m <time-value> | -s <data-bytes> | -t <timeout-value> | -exp <exp-value> | -r <reply-mode> | -v | -g ] * { label-alert [ no-control-word ] | control-word } [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "local-ce-id",
+            "Info": "Specifies the ID of the local CE.\nThe value is a decimal integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "remote-ce-id",
+            "Info": "Specifies the ID of the remote CE.\nThe value is a decimal integer ranging from 0 to 65534"
+        },
+        {
+            "Parameters": "-c echo-number",
+            "Info": "Specifies the number of the sent Echo Request packets.\nThe value is a decimal integer that ranges from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-m time-value",
+            "Info": "Indicates the interval for sending Echo Request packets.\nThe value is a decimal integer that ranges from 1 to 10000, in milliseconds. By default, the value is 2000."
+        },
+        {
+            "Parameters": "-s data-bytes",
+            "Info": "Specifies the number of bytes of an Echo Request packet.\nThe value is a decimal integer ranging from 65 to 9600. By default, the value is 100."
+        },
+        {
+            "Parameters": "-t timeout-value",
+            "Info": "Specifies the timeout period for sending Echo Request packets.\nThe value is a decimal integer ranging from 0 to 65535. By default, the value is 2000."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies the EXP value in an Echo Request packet.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies the mode of sending Echo Reply packets.\nThe value is a decimal integer ranging from 1 to 4. By default, the value is 2.\n1: indicates no reply.2: indicates a reply with an IPv4 or IPv6 UDP datagram.3: indicates a reply with an IPv4 or IPv6 datagram carrying an MPLS router alert label.4: indicates a reply through the control channel of the application plane."
+        },
+        {
+            "Parameters": "-v",
+            "Info": "Displays detailed information.\n-"
+        },
+        {
+            "Parameters": "-g",
+            "Info": "Performs the test using MPLS fragments.\n-"
+        },
+        {
+            "Parameters": "label-alert",
+            "Info": "Indicates that in the case of a multi-segment PW, ping packets are forcibly sent on the transit node. In Label Alert mode, you can ping all transit nodes of a PW.\n-"
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "Disables the control word mode.\n-"
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Indicates that in the case of a multi-segment PW, ping packets are forwarded without being resolved. In the control word mode, you can ping only the egress of the PW. The ping in control word mode can be performed only after the control word of a PW is enabled.\n-"
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Forwards packets through a specified public bypass LSP of a PW. The packets from the initiator and response end are forwarded through this LSP.\nIf bypass LSP detection on the specified inbound interface is configured in CLI mode, the packets from the initiator are forwarded through a public bypass LSP. If the response end supports bypass LSP detection and LSP-based response is configured, the packets are forwarded through a public bypass LSP.\n-"
+        },
+        {
+            "Parameters": "-si interface-name",
+            "Info": "Specifies the name of a simulated inbound interface.\nConfigure an inbound interface for MPLS Echo Request packets, so that you can simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of a simulated inbound interface.\nConfigure an inbound interface for MPLS Echo Request packets, so that you can simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of a simulated inbound interface.\nConfigure an inbound interface for MPLS Echo Request packets, so that you can simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the VPN name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping vc vpn-instance vpn1 1 2 -v label-alert",
+            "PW PING : FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID = 100 : 100 data bytes, press CTRL_C to break   ",
+            "    Reply from 4.4.4.4: bytes=100 Sequence=1 time = 110 ms Return Code 3, Subcode 1",
+            "    Reply from 4.4.4.4: bytes=100 Sequence=2 time = 90 ms Return Code 3, Subcode 1",
+            "    Reply from 4.4.4.4: bytes=100 Sequence=3 time = 60 ms Return Code 3, Subcode 1",
+            "    Reply from 4.4.4.4: bytes=100 Sequence=4 time = 60 ms Return Code 3, Subcode 1",
+            "    Reply from 4.4.4.4: bytes=100 Sequence=5 time = 90 ms Return Code 3, Subcode 1",
+            "",
+            "  --- FEC: L2 VPN ENDPOINT. Sender VEID = 1, Remote VEID = 2 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 60/82/110 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the control-word is enabled for a PW, it is recommended that you specify the control-word parameter to detect the connectivity of the PW. This ensures that ping packets are transmitted in the same manner as data packets on the PW."
+}

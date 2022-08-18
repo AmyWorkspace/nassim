@@ -1,0 +1,43 @@
+{
+    "PageTitle": "c-bsr(VPN instance PIM view/PIM view of a public network instance)",
+    "FuncDef": "The c-bsr command configures a candidate-bootstrap router (C-BSR).\nThe undo c-bsr command deletes C-BSRs.\nBy default, no C-BSR is configured.",
+    "CLIs": [
+        "c-bsr { <interface-type> <interface-number> | <port-name> } [ <hash-length> [ <priority> ] ]",
+        "undo c-bsr"
+    ],
+    "ParentView": [
+        "VPN instance PIM view",
+        "PIM view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\n-"
+        },
+        {
+            "Parameters": "port-name",
+            "Info": "Specifies the name of an interface.\n-"
+        },
+        {
+            "Parameters": "hash-length",
+            "Info": "Specifies the hash mask length for a C-BSR. The mask is used in a hash function to calculate the RP.\nThe value is an integer ranging from 0 to 32. The default value is 30."
+        },
+        {
+            "Parameters": "priority",
+            "Info": "Specifies a priority for a C-BSR. A larger value indicates a higher C-BSR priority.\nThe value is an integer ranging from 0 to 255. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] c-bsr GigabitEthernet1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA BSR collects candidate-rendezvous point (C-RP) information as an RP-set and advertises the RP-set to the entire network to implement dynamic RP election on a PIM-SM network. A BSR is dynamically elected among C-BSRs. To enable a router to participate in BSR election, run the c-bsr command to configure a C-BSR on the router. Because a BSR needs to exchange a great deal of information with other devices in a PIM-SM domain, reserve sufficient bandwidth for a C-BSR.\nA router can act as a C-RP and a C-BSR at the same time. Multiple instances can exist on a router. Only one C-BSR can be configured in each instance. If the c-bsr command is run more than once in an instance, the latest configuration overrides the previous one.\nIn a PIM-SM domain, configure one or more C-BSRs to implement dynamic BSR election.\nA C-BSR should be a router on the backbone network and must be configured on an PIM-SM-capable interface. The dynamic BSR election process is as follows:\nEach C-BSR regards itself as the BSR and uses the IP address of the interface specified in the c-bsr command as the BSR address to send bootstrap messages.\nWhen a C-BSR receives a bootstrap message from other routers, it compares the BSR priority and IP address in the received bootstrap message with those of the acknowledged BSR. If the two BSRs have the same priority, the BSR with a larger IP address wins. If the BSR indicated in the bootstrap message has a higher priority, the C-BSR replaces its BSR address with the newly received BSR address. Otherwise, the C-BSR keeps its BSR address and continues to consider itself as the BSR.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nPIM-SM has been enabled on an interface on which a C-BSR is to configured.\nConfigure static routes if BSR messages need to be learned through tunnels to ensure that the next hop to the BSR is a tunnel interface. Prevent routing loops when configuring multicast static routes"
+}

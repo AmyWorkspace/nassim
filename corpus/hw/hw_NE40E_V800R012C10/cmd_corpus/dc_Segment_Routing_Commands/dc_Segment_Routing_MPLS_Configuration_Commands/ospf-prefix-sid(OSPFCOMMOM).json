@@ -1,0 +1,40 @@
+{
+    "PageTitle": "ospf prefix-sid",
+    "FuncDef": "The ospf prefix-sid command configures a prefix segment ID (SID) for the IP address of a loopback interface.\nThe undo ospf prefix-sid command deletes the prefix SID configured for the IP address of a loopback interface.\nBy default, no prefix SID is configured for the IP address of a loopback interface.",
+    "CLIs": [
+        "ospf prefix-sid { absolute <sid-value> | index <index-value> } [ node-disable ]",
+        "undo ospf prefix-sid [ { absolute <sid-value> | index <index-value> } [ node-disable ] ]"
+    ],
+    "ParentView": [
+        "Loopback interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "absolute sid-value",
+            "Info": "Specifies an absolute label value, which is effective SID value.\nThe value changes dynamically, depending on the actual situation of the equipment."
+        },
+        {
+            "Parameters": "index index-value",
+            "Info": "Specifies a relative label value, also called an offset value. A relative label value plus the smallest value in an SRGB is equal to an absolute value. Effective SID value = index-value + Start SRGB value.\nThe relative label value cannot be out of the SRGB configured locally.\nA relative label value must be unique in an OSPF process.\nIf index-value is specified, a local node advertises index-value as a prefix SID. If sid-value is specified, a local node advertises the prefix SID equal to sid-value minus the start SRGB value.\nThe value is an integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "node-disable",
+            "Info": "Specifies to disable the N flag.\nThis parameter disables the TI-LFA algorithm from preferentially selecting nodes with the N flag being disabled.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing",
+            "[*HUAWEI-segment-routing] quit",
+            "[*HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] opaque-capability enable",
+            "[*HUAWEI-ospf-1] segment-routing mpls",
+            "[*HUAWEI-ospf-1] quit",
+            "[*HUAWEI] interface loopback0",
+            "[*HUAWEI-LoopBack0] ospf enable 1 area 1",
+            "[*HUAWEI-LoopBack0] ospf prefix-sid index 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe IP address of a loopback interface can identify a node. If a prefix SID is configured for the IP address, the prefix SID can also identify the node in the SR domain and guide packets to be forwarded to the local node along the shortest path.\nPrerequisites\nOSPF has been enabled on a loopback interface using the ospf enable command.\nSegment Routing has been enabled for a specific OSPF topology using the segment-routing mpls command in an OSPF process.\nPrecautions\nA loopback interface can be assigned an IP address. The prefix SIDs take effect only if an IP address with a 32-bit mask is assigned to the loopback interface.\nThis command takes effect only on the primary IP address of a loopback interface.\nIf the prefix SID value is beyond the SRGB range, the prefix SID will not be advertised."
+}

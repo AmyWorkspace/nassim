@@ -1,0 +1,34 @@
+{
+    "PageTitle": "peer update-group-independent (BGP multi-instance VPN instance IPv4 address family view) (group)",
+    "FuncDef": "The peer update-group-independent command sets a specified peer or each peer in a peer group as an independent update peer-group.\nThe undo peer update-group-independent command removes the setting of a specified peer or each peer in a peer group as an independent update peer-group.\nBy default, no peer is set as an independent update peer-group.",
+    "CLIs": [
+        "peer <group-name> update-group-independent",
+        "undo peer <group-name> update-group-independent"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-instance-vpn1] quit",
+            "[~HUAWEI] bgp 100 instance aa",
+            "[~HUAWEI-bgp-instance-aa] ipv4-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-instance-aa-vpn1] group group1 external",
+            "[*HUAWEI-bgp-instance-aa-vpn1] peer group1 as-number 200",
+            "[~HUAWEI-bgp-instance-aa-vpn1] peer group1 update-group-independent enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo improve the efficiency of route advertisement, BGP uses the dynamic update peer-group mechanism. The BGP peers with the same configurations are placed in an update peer-group. These routes are grouped once and then sent to all peers in the update peer-group. However, the routes learned from a peer may be sent back to the peer, for example, the preferred route learned from an EBGP peer is sent back to the EBGP peer, or the preferred route that an RR learns from a client is reflected back to the client. In this case, messages are discarded, wasting network resources.\nTo address this problem, you can run the peer update-group-independent command to set a specified peer or each peer in a peer group as an independent update peer-group so that the routes learned from the peer are not sent back to the peer. However, if a specified peer or each peer in a peer group is set as an independent update peer-group, the advantages of the dynamic update peer-group mechanism cannot be brought into full play. Therefore, this command is used only when users have such a requirement.\nPrerequisites\nA peer group has been added to an update peer-group using the peer group command.\nPrecautions\nThe configuration of a peer takes precedence over that of the peer group to which the peer belongs. For example, if the peer update-group-independent disable command is run for a peer and the peer update-group-independent command is run for the peer group to which the peer belongs, the configuration of the peer prevails. That is, the peer is not set as an independent update peer-group."
+}

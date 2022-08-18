@@ -1,0 +1,47 @@
+{
+    "PageTitle": "vendor-class partial-info",
+    "FuncDef": "The vendor-class partial-info command configures part of the vendor-class (DHCPv4 option60/DHCPv6 option16) attribute to identify services.\nThe undo vendor-class partial-info command restores the default setting.\nBy default, the whole vendor-class (DHCPv4 option60/DHCPv6 option16) attribute is used to identify services.",
+    "CLIs": [
+        "vendor-class partial-info { cn | [ offset <offset> ] { length <length> | sub-option <option> [ sub-offset <sub-offset> ] [ sub-length <sub-length> ] } }",
+        "undo vendor-class partial-info"
+    ],
+    "ParentView": [
+        "Service policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cn",
+            "Info": "Indicates that the system uses the China Telecom format to identify services.\n-"
+        },
+        {
+            "Parameters": "offset offset",
+            "Info": "Configures the offset value of a vendor-class option to identify services.\nThe value is an integer ranging from 1 to 254."
+        },
+        {
+            "Parameters": "length length",
+            "Info": "Configures the field length of the vendor-class attribute to identify services.\nThe value is an integer ranging from 1 to 254."
+        },
+        {
+            "Parameters": "sub-option option",
+            "Info": "Configures the sub-option code of the vendor-class attribute to identify services.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "sub-offset sub-offset",
+            "Info": "Configures the offset value of a vendor-class sub-option to identify services.\nThe value is an integer ranging from 1 to 254."
+        },
+        {
+            "Parameters": "sub-length sub-length",
+            "Info": "Configures the field length of a vendor-class sub-option to identify services.\nThe value is an integer ranging from 1 to 254."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] service-identify-policy test",
+            "[~HUAWEI-service-identify-policy-test] undo service-identify",
+            "[~HUAWEI-service-identify-policy-test] service-identify vendor-class",
+            "[~HUAWEI-service-identify-policy-test] vendor-class partial-info cn"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen service identification mode vendor-class command is configured in the service identification policy view and the system needs to use part of the vendor-class attribute to identify services, you can run the vendor-class partial-info command to obtain required information.\nPrerequisites\nBefore configuring the command, run the service-identify-policy command in the system view to create a service identification policy and configure the keyword vendor-class using the service-identify.\nConfiguration Impact\nIf this command is configured for multiple times, only the last configuration takes effect. Users that have been online are not affected. Users that get online after the command is configured will be affected.\nAfter running the command, you can obtain the vendor-class attribute information from the command output and then identify services based on other configuration principles in the service identification policy view.\nIf the cn parameter is specified, the Login information in the sub-option code 31 of the vendor-class (DHCPv4 option 60/DHCPv6 option 16) is obtained based on the CN packet format. The domain name matching information is parsed in the Login information based on the mode configured in the AAA view for parsing a domain name from a user name. The service type name configured on the BRAS is then matched based on other parameters.\nBy configuring parameters offset, length, sub-option, sub-offset, and sub-length, you can obtain information used to match services. Use the preceding CN format as an example, you can configure only the parameter offset 2 sub-option 31 sub-offset 44 sub-length 4. Specific procedures are as follows: after 2 bytes offset for enterprise codes, you can obtain sub-option 31, and then follows an offset of 44 bytes. The service name length is 4 bytes.\nThe parameter offset is used to configure the offset value of the vendor-class attribute. For example, when both an offset value and a sub-option need to be configured, the sub-option is obtained after the offset value is configured. If other information such as enterprise codes are before the sub-option of the vendor-class attribute, you must configure the offset value before obtaining the sub-option code.\nIf the configured offset value is greater than or equal to the actual attribute length, process it with packets that do not carry the vendor-class attribute.\nThe parameter length is used to configure packet length that needs to be reduced to. When configuring offset, perform offset operation on the vendor-class attribute. If offset does not need to be configured, skip this operation. Then abstract the vendor-class attribute based on the smaller value of the configured length and vendor-class attribute to match service names.The parameter sub-option is used to configure the sub-option of the vendor-class attribute and the sub-offset and sub-length can be configured simultaneously. When configuring the offset value, perform the offset operation and then obtain the sub-option information. If the offset operation is not needed, traverse the vendor-class information to obtain the specified sub-option. If the specified sub-option is not found, process it with packets that do not carry the vendor-class attribute.\nIf the specified sub-option is found, obtain the vendor-class information used to match service names based on the configured sub-offset and sub-length. If the configured sub-offset is greater than or equal to the actual attribute length, process it with packets that do not carry the vendor-class attribute. When configuring the sub-length, abstract the sub-option based on the smaller value of the configured sub-length and sub-option to match service names.\n\nPrecautions\nThis command is supported only on the admin VS.\nThe function of the vendor-vlass partial-info command is the same to option60 partial-info. When the service identification keyword specified by the service-identify command is dhcp-option60, only the option60 partial-info command matching rules can be used. When the service identification keyword specified by the service-identify command is vendor-class, only the vendor-vlass partial-info command matching rules can be used."
+}

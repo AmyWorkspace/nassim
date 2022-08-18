@@ -1,0 +1,49 @@
+{
+    "PageTitle": "ip as-path-filter",
+    "FuncDef": "The ip as-path-filter command adds an AS_Path filter.\nThe undo ip as-path-filter command deletes a specified AS_Path filter.\nBy default, no AS_Path filter exists.",
+    "CLIs": [
+        "ip as-path-filter { <as-path-filter-number> | <as-path-filter-name> } [ index <index-number> ] <matchMode> <regular-expression>",
+        "undo ip as-path-filter { <as-path-filter-number> | <as-path-filter-name> } [ index <index-number> ] [ <matchMode> <regular-expression> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "as-path-filter-number",
+            "Info": "Specifies the number of an AS_Path filter.\nThe value is an integer ranging from 1 to 256."
+        },
+        {
+            "Parameters": "as-path-filter-name",
+            "Info": "Specifies the name of an AS_Path filter.\nThe value is a string of 1 to 51 case-sensitive characters, spaces not supported. The character string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "index index-number",
+            "Info": "Specifies the sequence number of an AS_Path filter.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "matchMode",
+            "Info": "Sets the matching mode of the AS_Path filter.\nThe value is an enumerated type:\ndeny: Sets the matching mode of the AS_Path filter to deny.permit: Sets the matching mode of the AS_Path filter to permit."
+        },
+        {
+            "Parameters": "regular-expression",
+            "Info": "Specifies the AS_Path regular expression.\nThe value is a string of 1 to 1024 characters, spaces supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip as-path-filter 1 permit ^10_"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip as-path-filter 2 permit _20_"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip as-path-filter 3 deny _30_",
+            "[*HUAWEI] ip as-path-filter 3 permit .*"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn AS_Path filter uses the regular expression to define matching rules. After an AS_Path filter is set, the RM module immediately instructs each protocol to apply the filter by default.\nThe AS_Path attribute is a private attribute of BGP and is mainly used to filter BGP routes.\nThe AS_Path attribute can be directly applied using a command, such as the peer as-path-filter command.The AS_Path attribute can be configured as a matching condition for a route-policy using a command, such as the if-match as-path-filter zz command.\n\nConfiguration Impact\nMultiple rules (in permit or deny mode) can be specified for a filter.\nFollow-up Procedure\nTo view detailed configurations of an AS_Path filter, run the display ip as-path-filter command.\nPrecautions\nBy default, AS_Path filters work in deny mode. If all matching rules in a filter are configured to work in deny mode, all routes are denied by the filter; to prevent this problem, configure one matching rule in permit mode after one or multiple matching rules in deny mode so that the routes except for those denied by preceding matching rules are permitted by the filter."
+}

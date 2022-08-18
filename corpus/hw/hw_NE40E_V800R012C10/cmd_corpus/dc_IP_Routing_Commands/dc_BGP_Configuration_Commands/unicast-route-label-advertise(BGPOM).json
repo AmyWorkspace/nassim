@@ -1,0 +1,36 @@
+{
+    "PageTitle": "unicast-route label advertise",
+    "FuncDef": "The unicast-route label advertise command enables a device to convert received IPv4 public network unicast routes to labeled routes by allocating one BGP label to each route and advertise the labeled routes to peers with the labeled route exchange capability.\nThe undo unicast-route label advertise command restores the default configuration.\nThe unicast-route label advertise pop-go command enables a device to convert received IPv4 public network unicast routes to labeled routes by adding a BGP label to each route and advertise the labeled routes to peers with the labeled route exchange capability. If the IP address of an outbound interface is reachable but no LSP is reachable, traffic is forwarded through the outbound interface and a specific next hop, during which the label POPGO action is performed.\nThe undo unicast-route label advertise pop-go command restores the default configuration.\nBy default, a device does not convert received IPv4 public network unicast routes to labeled routes.",
+    "CLIs": [
+        "unicast-route label advertise",
+        "unicast-route label advertise pop-go",
+        "undo unicast-route label advertise",
+        "undo unicast-route label advertise pop-go"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view",
+        "BGP view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] unicast-route label advertise pop-go",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] unicast-route label advertise pop-go"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy1 permit node 10",
+            "[*HUAWEI-route-policy] apply mpls-label",
+            "[*HUAWEI-route-policy] quit",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.1.1.1 as-number 200",
+            "[*HUAWEI-bgp] peer 10.1.1.1 label-route-capability check-tunnel-reachable",
+            "[*HUAWEI-bgp] peer 10.1.1.1 route-policy policy1 export",
+            "[*HUAWEI-bgp] unicast-route label advertise"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nReceived IPv4 public network unicast routes are advertised as labeled routes only when the following conditions are met:\nBoth the labeled route sender and receiver are enabled to send or receive labeled routes using the peer { group-name | ipv4-address } label-route-capability [ check-tunnel-reachable ] command.A route-policy is used on the labeled route sender to allocate MPLS labels to received IPv4 public network unicast routes and applied to labeled route advertisement.The labeled route sender is enabled to convert received IPv4 public network unicast routes to labeled routes and advertise the labeled routes to peers with the labeled route exchange capability using the unicast-route label advertise command or the unicast-route label advertise pop-go command. After configured the unicast-route label advertise pop-go command, if the destination of received packets is reachable through an IP route, but not through an MPLS LSP, the labeled route sender pops out the BGP label in the packets and searches the local incoming label map (ILM) for an outbound interface based on the label to send the packets to the corresponding next hop.\n\nPrecautions\nTo prevent routing loops, specify check-tunnel-reachable in the peer label-route-capability [ check-tunnel-reachable ] command when you run the command on the labeled route sender (Device A in this example). After the command with check-tunnel-reachable specified is run, the labeled route sender advertises the labeled route to Device B only when the MPLS LSP is reachable.\nIf check-tunnel-reachable is not specified, the labeled route sender advertises the labeled route to Device B, regardless of whether the MPLS LSP is reachable. After receiving the labeled route, Device B forwards traffic based on the BGP label. After receiving the traffic from Device B, Device A removes the BGP label. If the MPLS LSP is unreachable, route recursion is triggered on Device A to search for the outbound interface and next hop IP address. If Device A finds a route received from another device on the network side and the route is more specific than the routes to the user side, Device A forwards the traffic back to the network side. If the traffic flows through Device B, a routing loop occurs. Figure 2 shows the networking where a routing loop occurs.\nTo prevent routing loops, specify check-tunnel-reachable in the peer label-route-capability [ check-tunnel-reachable ] command when you run the command on the labeled route sender (Device A in this example). After the command with check-tunnel-reachable specified is run, the labeled route sender advertises the labeled route to Device B only when the MPLS LSP is reachable."
+}

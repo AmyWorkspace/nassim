@@ -1,0 +1,87 @@
+{
+    "PageTitle": "user-queue qos-profile time-range",
+    "FuncDef": "The user-queue qos-profile time-range command configures scheduling parameters for user queues in the QoS profile time-range view.\nThe undo user-queue qos-profile time-range command cancels the configuration.\nBy default, no scheduling parameters are configured for user queues in the QoS profile time-range view.",
+    "CLIs": [
+        "user-queue cir <cir-value> [ cbs <cbs-value> ] [ [ pir <pir-value> [ pbs <pbs-value> ] [ pir-priority high ] ] | [ flow-queue <flow-queue-name> ] | [ flow-mapping <mapping-name> ] | [ user-group-queue <user-group-name> ] ] [ inbound | outbound ] [ service-template <template-name> [ adjust-on-card ] ] [ time-range <time-range-name> ]",
+        "undo user-queue [ outbound ]",
+        "undo user-queue [ time-range <time-range-name> ] [ inbound | outbound ]"
+    ],
+    "ParentView": [
+        "QoS profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Indicates the CBS.\nThe value is an integer ranging from 1 to 4194304, in bytes. By default, the value complies with the following formula: cbs-value (byte) = cir-value (kbit/s) x 10 (ms)/8."
+        },
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Indicates the PIR. It must be smaller than or equal to the bandwidth of the interface.\nThe value can be 0 or an integer ranging from 16 to 4294967294, in kbit/s. The value of pir-value must be smaller than or equal to the interface bandwidth. The minimum value of the PIR can be set to the specified value of the CIR.\nWhen pir pir-value is not configured, the default value of pir-value is equal to cir-value."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Indicates the PBS.\nThe value is an integer ranging from 1 to 4194304, in bytes. By default, the value complies with the following formula: pbs-value (byte) = pir-value (kbit/s)*10 (ms) / 8."
+        },
+        {
+            "Parameters": "pir-priority",
+            "Info": "Specify the user-queue's pir priority-level.\n-"
+        },
+        {
+            "Parameters": "high",
+            "Info": "Specifies the high prriority level.\n-"
+        },
+        {
+            "Parameters": "flow-queue flow-queue-name",
+            "Info": "Indicates the flow queue profile.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "flow-mapping mapping-name",
+            "Info": "Indicates the flow queue mapping object.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "user-group-queue user-group-name",
+            "Info": "Indicates the name of the user group queue.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies the inbound direction.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the outbound direction.\n-"
+        },
+        {
+            "Parameters": "service-template template-name",
+            "Info": "Indicates the service profile name.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "adjust-on-card",
+            "Info": "Enable the packet length adjust on card.\n-"
+        },
+        {
+            "Parameters": "time-range time-range-name",
+            "Info": "Indicates the time-range profile name.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Indicates the CIR. It must be smaller than or equal to the bandwidth of the interface.\nThe value can be 0 or an integer ranging from 16 to 4294967294, in kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] flow-queue test",
+            "[*HUAWEI-flow-queue-template-test] quit",
+            "[*HUAWEI] flow-mapping test",
+            "[*HUAWEI-flow-mapping-test] quit",
+            "[*HUAWEI] user-group-queue test",
+            "[*HUAWEI-user-group-queue-test] quit",
+            "[*HUAWEI] service-template test1",
+            "[*HUAWEI-service-template-test1-slot-all] quit",
+            "[*HUAWEI] time-range a",
+            "[*HUAWEI] qos-profile p1 time-range",
+            "[*HUAWEI-qos-profile-p1-time-range] user-queue cir 200 pir 600 flow-queue test flow-mapping test user-group-queue test service-template test1 time-range a"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThis command is used to configure HQoS user queue scheduling parameters in a QoS profile time range. After the qos-profile time-range configuration is applied to an interface, HQoS configurations take effect on the interface.\nPrerequisites\nA qos profile time range is created.\nThe flow queue mapping object, flow queue profile, and GQ used in the command must have been created before application and properly configured.\nFollow-up Procedure\nApply the qos-profile time-range to an interface.\nPrecautions\nIn this command, the user group queue must be of the global type rather than slot-based.\nThis command and the car command in the interface view are mutually exclusive. That is, the two commands cannot be both configured.\nIf uni-directional user queue scheduling (on either incoming traffic or outgoing traffic) is already configured, you cannot configure user queue scheduling without specifying the traffic direction. Conversely, if directionless user queue scheduling is already configured, you cannot configure uni-directional user queue scheduling.\nThis command can be configured only in the qos-profile time-range view.\nOne in the QoS profile time-range view has 2 user-queue configurations with time-range and one user-queue configuration without time-range. These user-queue configurations take effect based on the specific time-range value. After all the time-range values carried in the user-queue configurations expire, the user-queue configuration without time-range starts to take effect. Within the same time range, the user queue configuration with time-range takes precedence over the user-queue configuration without time-range."
+}

@@ -1,0 +1,28 @@
+{
+    "PageTitle": "peer upe (BGP multi-instance VPNv4 address family view) (group)",
+    "FuncDef": "The peer upe command specifies a BGP peer group as UPE of HoVPN.\nThe undo peer upe command cancels the configuration.\nBy default, no BGP peer or peer group is specified as UPE of HoVPN.",
+    "CLIs": [
+        "peer <group-name> upe",
+        "undo peer <group-name> upe"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] group test",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-instance-a-af-vpnv4] peer test enable",
+            "[*HUAWEI-bgp-instance-a-af-vpnv4] peer test upe"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an HoVPN scenario, run the peer upe command to specify a device as a UPE. After a UPE is specified on the SPE using the peer upe command, the SPE does not send a specific route to the UPE. If the peer route-policy export command is run on the SPE to configure routing policies for the UPE and certain specific routes can pass the filtration of routing policies, these specific routes can be sent to the UPE.\nAfter you run the peer upe command on an SPE to specify a device as a UPE, the SPE can change the next hops of routes received from the UPE to itself and reflect these routes to the NPE.\nPrerequisites\nBefore you run the peer upe command, the peer as-number command should be used to create a peer group.\nPrecautions\nAfter you run the peer upe command on an SPE to specify a device as a UPE, run the ip route-static vpn-instance command to configure a default route on the SPE and run the network or import-route static command in the BGP VPN instance IPv4 address family view to import the default route to the IPv4 VPN instance routing table, so that the SPE can advertise the default route 0.0.0.0 to the UPE.\nAfter the peer upe command is configured, to send the default route 0.0.0.0 to the UPE, you need to run the peer default-originate vpn-instance command on the SPE."
+}

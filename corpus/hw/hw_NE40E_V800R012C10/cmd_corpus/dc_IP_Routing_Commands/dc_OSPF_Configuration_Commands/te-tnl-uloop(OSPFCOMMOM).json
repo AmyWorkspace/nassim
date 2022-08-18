@@ -1,0 +1,20 @@
+{
+    "PageTitle": "avoid-microloop te-tunnel (OSPF view)",
+    "FuncDef": "The avoid-microloop te-tunnel command enables the OSPF TE tunnel anti-microloop function.\nThe undo avoid-microloop te-tunnel command disables the OSPF TE tunnel anti-microloop function.\nBy default, the OSPF TE tunnel anti-microloop function is not enabled.",
+    "CLIs": [
+        "avoid-microloop te-tunnel",
+        "undo avoid-microloop te-tunnel"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] avoid-microloop te-tunnel"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a network fault occurs, IGP convergence is triggered. In this case, a transient forwarding status inconsistency may occur among nodes because of their different convergence rates, which poses the risk of microloops. If the outbound interface of a route before IGP convergence is a shortcut TE tunnel interface and the OSPF TE tunnel anti-microloop function is enabled, the outbound interface of the route remains unchanged during the IGP convergence. In this case, traffic is forwarded through a hot standby TE tunnel, and the forwarding process does not depend on IGP convergence on each device, preventing microloops.\nFollow-up Procedure\nRun the avoid-microloop te-tunnel rib-update-delay command to configure a switchback delay.\nPrecautions\nAdvertisement of load balancing routes is not delayed.If a route does not have an available next hop after convergence, the route is deleted immediately.If a neighbor's interface detects a link fault through BFD, route delivery is delayed only if the local device detects the BFD Down status earlier than the time when an LSA is received from the neighbor instructing the local device to delete the link to the neighbor.If two or more faults occur within 20s, the system automatically exits the delayed delivery and updates routes immediately.If the device detects that the TE tunnel goes Down during the period of delayed route delivery, the system automatically exits the delayed delivery and updates routes immediately.If a master/slave main control board switchover occurs during the period of delayed route delivery, the system updates routes upon the completion of the master/slave main control board switchover.To ensure normal traffic forwarding during the period of delayed convergence, each TE tunnel must have a hot standby path; otherwise, if the physical link on the primary path fails, the TE tunnel goes Down, and OSPF route convergence is not delayed."
+}

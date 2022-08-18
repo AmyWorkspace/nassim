@@ -1,0 +1,83 @@
+{
+    "PageTitle": "domain-authentication-mode",
+    "FuncDef": "The domain-authentication-mode command enables an IS-IS router in a domain to authenticate received Level-2 LSPs and SNPs using the specified authentication mode and password.\nThe undo domain-authentication-mode command disables an IS-IS router from authenticating received Level-2 LSPs and SNPs.\nIt is recommended that you enable authentication and use the HMAC-SHA256 algorithm to improve security, preventing route information from being modified by unauthorized users.\nBy default, the system neither encapsulates the originated Level-2 LSPs and SNPs with authentication information nor authenticates received Level-2 LSPs and SNPs. Configuring authentication is recommended to ensure system security.",
+    "CLIs": [
+        "domain-authentication-mode { simple { plain <simple-plain> | [ cipher ] <simple-cipher> } | md5 { plain <plain-text> | [ cipher ] <plain-text> } } [ ip | osi ] [ [ snp-packet { send-only | authentication-avoid } ] | all-send-only ]",
+        "domain-authentication-mode keychain <keychain-name> [ [ snp-packet { send-only | authentication-avoid } ] | all-send-only ]",
+        "domain-authentication-mode hmac-sha256 key-id <key-id> { plain <plain-text> | [ cipher ] <plain-text> } [ [ snp-packet { send-only | authentication-avoid } ] | all-send-only ]",
+        "undo domain-authentication-mode"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "simple",
+            "Info": "Indicates simple authentication.\n-"
+        },
+        {
+            "Parameters": "plain",
+            "Info": "Indicates the simple text mode. Only the simple text can be entered. The password in the configuration file is displayed as a simple text. Simple authentication is in simple text by default.NOTICE:\nWhen configuring an authentication password, select the ciphertext mode because the password is saved in the configuration file as a simple text if you select the simple text mode, which has a high risk. To ensure device security, change the password periodically.\n-"
+        },
+        {
+            "Parameters": "simple-plain",
+            "Info": "Specifies a simple-text password.\nThe value is a string of case-sensitive characters that can be letters or digits. When quotation marks are used around the string, spaces are allowed in the string.\nIn simple authentication, the value is a string of 1 to 16 characters. In MD5 authentication, the value is a string of 1 to 255 characters.\nA password cannot contain a question mark (?), but can contain spaces if surrounded by double quotation marks (\"\"). In this case, the double quotation marks are part of the password."
+        },
+        {
+            "Parameters": "cipher",
+            "Info": "Indicates the ciphertext mode. The simple text or ciphertext can be entered. The password in the configuration file is displayed as a ciphertext. MD5 authentication is in ciphertext by default.\n-"
+        },
+        {
+            "Parameters": "simple-cipher",
+            "Info": "Specifies a simple text or ciphertext.\nA ciphertext password is a character string that is encrypted using a special algorithm. A ciphertext is used for configuration restoration. The parameter value must be the same as the ciphertext in the configuration file.\nThe value is a string of case-sensitive characters that can be letters or digits.\nIn simple authentication, the value is a string of 1 to 16 characters in a simple text, or a string of 24 to 128 characters in a ciphertext.In md5 or hmac-sha256 authentication, the value is a string of 1 to 255 characters in a simple text, or a string of 20 to 432 characters in a ciphertext.A 24-character ciphertext password configured in an earlier version is also supported in this version.A password cannot contain a question mark (?), but can contain spaces if surrounded by double quotation marks (\"\"). In this case, the double quotation marks are part of the password."
+        },
+        {
+            "Parameters": "md5",
+            "Info": "Indicates that the password is transmitted after being encrypted using HMAC-MD5.For the sake of security, using the HMAC-SHA256 algorithm rather than the MD5 algorithm is recommended.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Indicates the IP authentication password. This parameter cannot be configured when keychain authentication is used.\n-"
+        },
+        {
+            "Parameters": "osi",
+            "Info": "Indicates the OSI authentication password. This parameter cannot be configured when keychain authentication is used.\n-"
+        },
+        {
+            "Parameters": "snp-packet",
+            "Info": "Authenticates SNPs.\n-"
+        },
+        {
+            "Parameters": "send-only",
+            "Info": "Encapsulates generated LSPs and SNPs with authentication information and authenticates received LSPs instead of the SNPs.\n-"
+        },
+        {
+            "Parameters": "authentication-avoid",
+            "Info": "Neither encapsulates generated SNPs with authentication information nor authenticates received SNPs. It encapsulates only the generated LSPs with authentication information and authenticates received LSPs.\n-"
+        },
+        {
+            "Parameters": "all-send-only",
+            "Info": "Encapsulates authentication information in generated LSPs and SNPs but does not check authentication information in the received LSPs or SNPs.\n-"
+        },
+        {
+            "Parameters": "keychain keychain-name",
+            "Info": "Specifies the keychain that changes with time.\nBefore configuring this parameter, run the keychain command to create a keychain. Then, run the key-id, key-string, and algorithm commands to configure a key ID, a password, and an authentication algorithm for this keychain. Otherwise, the authentication will fail.\nKeychain authentication supports only HMAC-MD5 and HMAC-SHA256 algorithms. Using any other algorithm may lead to an authentication failure.\nIf the dependent keychain is deleted, the neighbor relationship may be interrupted. Therefore, exercise caution when deleting the keychain.\nThe value is a string of 1 to 47 case-sensitive characters.\nA password cannot contain a question mark (?), but can contain spaces if surrounded by double quotation marks (\"\"). In this case, the double quotation marks are part of the password."
+        },
+        {
+            "Parameters": "hmac-sha256",
+            "Info": "Encapsulates generated packets with the HMAC-SHA256 authentication and a password encrypted using the HMAC-SHA256 algorithm and authenticates received packets.\n-"
+        },
+        {
+            "Parameters": "key-id key-id",
+            "Info": "Specifies a key ID for authentication, which must be the same as the one configured at the other end.\nThe value is an integer ranging from 0 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] domain-authentication-mode hmac-sha256 key-id 2 Huawei-123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo ensure network security, you can enable a router to authenticate received packets based on the pre-defined authentication mode or add authentication information to the packets to be sent. Only the packets that are authenticated can be forwarded on the network.\nThe domain-authentication-mode command enables the local node to discard all the Level-2 LSPs and SNPs with area authentication passwords that are different from the one set using this command. You can also add area authentication passwords to all the Level-2 LSPs and SNPs sent by this node.\nThe domain-authentication-mode command is valid for all topologies in an IS-IS process but only on Level-2 or Level-1-2 routers.\nConfiguration Impact\nAfter the area-authentication-mode command is run on the local device, the device discards newly received Level-2 LSP and SNP packets if these packets fail to be authenticated. However, the device does not discard the Level-2 LSP packets in the local LSDB immediately if they fail to be authenticated. Instead, the device waits for the LSP packets to be aged out. To prevent packet loss before the area-authentication-mode command is run on the IS-IS neighbor, specify the send-only parameter in the command on all the IS-IS devices.\nPrecautions\nIf the password is set, but neither ip nor osi is specified, the system defaults it as osi.\nWhen a keychain password is used, the parameter ip or osi cannot be configured.\nThe authentication takes effect only on the interface where the command is run, but other interfaces can still receive the LSPs carrying the password."
+}

@@ -1,0 +1,69 @@
+{
+    "PageTitle": "aggregate (BGP view)",
+    "FuncDef": "The aggregate command adds a summarized route to the BGP routing table. The outbound interface of the summarized route on the local Router is NULL 0. When receiving the summarized route, each of the other Routers automatically adds its local outbound interface to the summarized route.\nThe undo aggregate command disables the function.\nBy default, no routes are summarized.",
+    "CLIs": [
+        "aggregate <ipv4-address> { <mask-length> | <mask> } [ as-set | detail-suppressed | attribute-policy <route-policy-name1> | origin-policy <route-policy-name2> | suppress-policy <route-policy-name3> ] *",
+        "aggregate <ipv4-address> { <mask-length> | <mask> } [ as-set | detail-suppressed ] { attribute-filter <attr-filter-name> | origin-filter <orig-filter-name> | suppress-filter <supp-filter-name> } *",
+        "aggregate <ipv4-address> { <mask-length> | <mask> } as-set detail-suppressed { attribute-filter <attr-filter-name> | origin-filter <orig-filter-name> | suppress-filter <supp-filter-name> } *",
+        "undo aggregate <ipv4-address> { <mask-length> | <mask> } [ as-set | detail-suppressed | attribute-policy <route-policy-name1> | origin-policy <route-policy-name2> | suppress-policy <route-policy-name3> ] *",
+        "undo aggregate <ipv4-address> { <mask-length> | <mask> } [ as-set | detail-suppressed ] { attribute-filter <attr-filter-name> | origin-filter <orig-filter-name> | suppress-filter <supp-filter-name> } *",
+        "undo aggregate <ipv4-address> { <mask-length> | <mask> } as-set detail-suppressed { attribute-filter <attr-filter-name> | origin-filter <orig-filter-name> | suppress-filter <supp-filter-name> } *"
+    ],
+    "ParentView": [
+        "BGP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies an IPv4 address of the summarized route. The address is in dotted decimal notation.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the network mask length of the summarized route.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the network mask of the summarized route.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "as-set",
+            "Info": "Generates a route carrying AS-SET.\n-"
+        },
+        {
+            "Parameters": "detail-suppressed",
+            "Info": "Advertises only the summarized route.\n-"
+        },
+        {
+            "Parameters": "attribute-policy route-policy-name1",
+            "Info": "Specifies the name of an attribute route-policy for the summarized route.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "origin-policy route-policy-name2",
+            "Info": "Specifies the name of a route-policy that allows route summarization.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "suppress-policy route-policy-name3",
+            "Info": "Specifies the name of a route-policy for suppressing the advertisement of specified routes.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "attribute-filter attr-filter-name",
+            "Info": "Specifies the name of an attribute route-filter for the summarized route.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "origin-filter orig-filter-name",
+            "Info": "Specifies the name of a route-filter that allows route summarization.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "suppress-filter supp-filter-name",
+            "Info": "Specifies the name of a route-filter for suppressing the advertisement of specified routes.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] aggregate 10.32.0.0 255.255.0.0 as-set"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP route summarization is classified as manual route summarization or automatic route summarization. The aggregate command is used to implement manual route summarization, which takes precedence over automatic route summarization. The aggregate ipv4-address { mask | mask-length } command configures BGP to summarize specific routes in the local BGP routing table and then advertise all specific routes as well as the summary route. The generated summary route inherits the Origin attribute from the specific routes if they have the same Origin attribute. If the specific routes have different Origin attributes, the summary route selects one as its own from these Origin attributes in descending order of preference: igp > egp > incomplete. In addition, the summary route carries the atomic-aggregate attribute. Except the Origin and atomic-aggregate attributes, the summary route does not carry any other attributes of the specific routes.\nTo generate a summary route that can be used to detect a routing loop, you can specify the as-set parameter when running the aggregate command. The summary route inherits the attributes such as Origin, AS_Path (used for loop prevention), community, and large-community from the specific routes. The summary route also carries the community attributes of all its original specific routes. If the number of community attributes carried in the specific routes being summarized exceeds 255, route summarization stops, and the routes that fail to participate in summarization are still advertised as specific routes. Exercise caution to use this parameter if a large number of AS_Path lists are involved in route summarization. This is because frequent changes in the specific routes may cause route flapping.\nIf detail-suppressed is specified in the command, the summarized route is advertised, but specific routes are not. The summarized route carries the atomic-aggregate attribute, not the community attributes of specific routes.\nIf suppress-policy is specified in the command, specified routes are not advertised. The if-match clause of route-policy can be used to filter the routes, and only the routes matching the policy will be suppressed. The peer route-policy command can also be used to filter routes and prevent unwanted routes from being advertised to peers.\nIf origin-policy is specified in the command, only the routes matching route-policy are summarized.\nIf attribute-policy is specified in the command, attributes can be set for the summarized route. If the AS_Path attribute is set in the policy using the apply as-path command and as-set is set in the aggregate command, the AS_Path attribute in the policy does not take effect. The peer route-policy command can also be used to set attributes for a summarized route.\nConfiguration Impact\nIf detail-suppressed is configured in the command, the advertisement of specific routes will be suppressed. If suppress-policy is configured in the command, the advertisement of the specific routes that match the policy will be suppressed.\nPrecautions\nIf the undo aggregate command is run, the system will match routes against the configured attribute-policy, origin-policy, suppress-policy, as-set, or detail-suppressed. If no parameter is configured, the system will fail to execute the undo aggregate command.\nAfter a summary route is configured using the aggregate command and the summary route is leaked from the local VPN instance to another VPN instance, the summary route may be selected to guide traffic forwarding due to its high priority. As a result, traffic is dropped. To prevent this issue, plan a proper mask length for the summary route."
+}

@@ -1,0 +1,34 @@
+{
+    "PageTitle": "bfd bind peer-ip default-ip",
+    "FuncDef": "The bfd bind peer-ip default-ip command creates a BFD session with a multicast address configured as a peer address and displays the BFD session view.\nBy default, no BFD session with a multicast address configured as a peer address is created.",
+    "CLIs": [
+        "bfd <sessname-value> bind peer-ip default-ip interface { <interface-name> | <interface-type> <interface-number> } [ source-ip <source-ip> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sessname-value",
+            "Info": "Specifies the BFD session name.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string.\nWhen the name of a BFD session is configured, the uppercase and lowercase letters in the name must be the same as what you enter.BFD session names are case-insensitive. For example, ABC and abc are regarded as the same BFD session. If you have configured ABC as the name of a BFD session, the ABC BFD session view is directly displayed when you configure abc."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the local interface to which a BFD session is bound.\n-"
+        },
+        {
+            "Parameters": "source-ip source-ip",
+            "Info": "Specifies the source IP address carried in a BFD packet. If no source IP address is specified, a device uses a source IP address in either of the following modes before sending BFD packets:\nDuring negotiation on BFD session parameters, the device searches for the IP address of an outbound interface connected to the remote end in the local routing table as the source IP address before sending BFD packets.During BFD detection, the device sets the source IP address to a fixed value.\nThis parameter is manually configured only when BFD works with Unicast Reverse Path Forwarding (URPF). This is because URPF checks the source IP address in received packets.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd atob bind peer-ip default-ip interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-bfd-session-atob]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA BFD session is established to rapidly detect link faults. If the physical status of a link is to be monitored and the peer IP address is unavailable (for example, when no peer IP address exists on an Eth-Trunk member link), the bfd bind peer-ip default-ip command can be used to create a BFD session to monitor the physical status.\nIf the source IP address is configured for the interface whose physical status is to be monitored by BFD, BFD packets are correctly forwarded after URPF has been enabled. The source-ip parameter must be configured correctly because the system checks only the validity of the source IP address. A multicast or broadcast address is an invalid source IP address.\nPrerequisites\nBFD has been globally enabled using the bfd command in the system view.\nConfiguration Impact\nRun the bfd bind peer-ip default-ip command to create a BFD session to monitor the physical status.\nFollow-up Procedure\nAfter the binding is created, you must perform the following operations to create the BFD session:\nRun the discriminator command to set the local and remote discriminators for the BFD session.\nAfter the binding is created, the following optional configurations can be performed in the BFD session view:\nRun the description command to configure a description for the BFD session.Run the min-tx-interval command to set a desired minimum interval at which BFD packets are sent.Run the min-rx-interval command to set a desired minimum interval at which BFD packets are received.Run the detect-multiplier command to set a local detection multiplier for the BFD session.Run the process-interface-status command to associate the BFD session and an interface.Run the process-pst command to enable BFD to modify the PST if BFD detects a fault.Run the wtr command to set a WTR time for the BFD session.\n\nPrecautions\nThe bfd bind peer-ip default-ip command must be run on both ends of a link because BFD detects faults in a bidirectional link.If the IP address of the outbound interface is changed after a BFD session has been created, either of the following situations occurs:During negotiation, the source IP address to be carried in BFD packets is updated.During detection, the source IP address carried in BFD packets is not updated.Local and remote discriminators must be different on a device for multicast BFD sessions.\nIf multicast BFD for 1:1 Eth-Trunk members has been configured and the process-pst command has been run, you must run the process-interface-status command to ensure that the interface states detected on the forwarding and control planes are the same. You may or may not run the process-interface-status command in other cases.\nYou can run the undo bfd session-name command to delete a specified BFD session and its binding information."
+}

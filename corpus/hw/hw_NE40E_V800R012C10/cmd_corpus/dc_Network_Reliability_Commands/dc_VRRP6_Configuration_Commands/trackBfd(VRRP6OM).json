@@ -1,0 +1,105 @@
+{
+    "PageTitle": "vrrp6 vrid track bfd-session",
+    "FuncDef": "The vrrp6 vrid track bfd-session command enables a Virtual Router Redundancy Protocol for IPv6 (VRRP6) backup group to monitor a BFD session.\nThe undo vrrp6 vrid track bfd-session command disables a VRRP6 backup group from monitoring a BFD session.\n\nBy default, a VRRP6 backup group does not monitor a BFD session.",
+    "CLIs": [
+        "vrrp6 vrid <virtual-router-id> track bfd-session <bfd-session-id> [ increased <value-increased> | reduced <value-reduced> ]",
+        "vrrp6 vrid <virtual-router-id> track bfd-session session-name <bfd-configure-name> [ increased <value-increased> | reduced <value-reduced> ]",
+        "vrrp6 vrid <virtual-router-id> track bfd-session <bfd-session-id> { peer | link }",
+        "vrrp6 vrid <virtual-router-id> track bfd-session session-name <bfd-configure-name> { peer | link }",
+        "undo vrrp6 vrid <virtual-router-id> track bfd-session [ <bfd-session-id> | session-name <bfd-configure-name> ]"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-router-id",
+            "Info": "Specifies the ID of a VRRP6 backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "bfd-session-id",
+            "Info": "Specifies the local discriminator of a monitored BFD session.\nThe value is an integer ranging from 1 to 16384."
+        },
+        {
+            "Parameters": "increased value-increased",
+            "Info": "Specifies a value by which the priority of a router in a VRRP6 backup group increases when a monitored BFD session goes Down.\nThe value is an integer ranging from 1 to 255. The value 255 is reserved for an IP address owner, and therefore the largest value can be set to 254."
+        },
+        {
+            "Parameters": "reduced value-reduced",
+            "Info": "Specifies a value by which the priority of a router in a VRRP6 backup group decreases when a monitored BFD session goes Down.\nThe value is an integer ranging from 1 to 255. The smallest value can be set to 1. By default, the priority decreases by 10 when a monitored BFD session goes Down."
+        },
+        {
+            "Parameters": "session-name bfd-configure-name",
+            "Info": "Specifies the name of a monitored BFD session.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string.\n\nWhen the name of a BFD session is configured, the uppercase and lowercase letters in the name must be the same as what you enter.\nBFD session names are case-insensitive. For example, ABC and abc are regarded as the same BFD session. If you have configured ABC as the name of a BFD session, the ABC BFD session view is directly displayed when you configure abc."
+        },
+        {
+            "Parameters": "peer",
+            "Info": "Indicates that a monitored BFD session is a peer BFD session.\n-"
+        },
+        {
+            "Parameters": "link",
+            "Info": "Indicates that a monitored BFD session is a link BFD session.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd 1 bind peer-ipv6 2001:db8::1 source-ipv6 2001:db8::2 auto",
+            "[*HUAWEI-bfd-session-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 address 2001:db8::2 64",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp6 vrid 1 virtual-ip FE80::7 link-local",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp6 vrid 1 track bfd-session 1 reduced 20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd atob bind peer-ipv6 2001:db8::1 source-ipv6 2001:db8::2 auto",
+            "[*HUAWEI-bfd-session-atob] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/2",
+            "[*HUAWEI-GigabitEthernet1/0/2] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/2] ipv6 address 2001:db8::2 64",
+            "[*HUAWEI-GigabitEthernet1/0/2] vrrp6 vrid 2 virtual-ip FE80::7 link-local",
+            "[*HUAWEI-GigabitEthernet1/0/2] vrrp6 vrid 2 track bfd-session session-name atob reduced 20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd peer1 bind peer-ipv6 2001:db8::1 source-ipv6 2001:db8::2 auto",
+            "[*HUAWEI-bfd-session-peer1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/3",
+            "[*HUAWEI-GigabitEthernet1/0/3] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/3] ipv6 address 2001:db8::2 64",
+            "[*HUAWEI-GigabitEthernet1/0/3] vrrp6 vrid 3 virtual-ip FE80::7 link-local",
+            "[*HUAWEI-GigabitEthernet1/0/3] vrrp6 vrid 3 track bfd-session session-name peer1 peer"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nIf the link between routers in a VRRP6 backup group fails, the VRRP6 backup group performs a master/backup VRRP switchover only after a period of three times the interval at which VRRP6 Advertisement packets are sent. During this period, service data may be lost. BFD can rapidly detect link faults. You can run the vrrp6 vrid track bfd-session command to enable a VRRP6 backup group to monitor a BFD session. When the status of the monitored BFD session changes, the BFD module notifies the VRRP6 module of the change. The VRRP6 module changes the priority or status based on configurations to implement a rapid master/backup VRRP switchover.\n\nTo enable a VRRP6 backup group to monitor a common BFD session, run the vrrp6 vrid track bfd-session command. When the BFD module notifies the VRRP6 module of a BFD session status change, the VRRP6 module increases or decreases the priority to implement a master/backup VRRP switchover. Usually, backup routers use BFD sessions to monitor the master router.\nTo enable a VRRP6 backup group to monitor a peer or link BFD session, run the vrrp6 vrid track bfd-session command. If peer or link BFD detects a fault and the peer or link BFD session goes Down, the BFD module notifies the VRRP6 module of the status change. After receiving the notification, the VRRP6 module directly performs a master/backup VRRP switchover without changing the priority. A VRRP6 router can determine a local or remote link fault based on the status of the peer or link BFD session.\n\n\nPrerequisites\n\n\nA VRRP6 backup group has been created using the vrrp6 vrid virtual-ip command.\nBFD has been enabled using the bfd command.\nA static BFD session has been created using the bfd bind peer-ip command, and a local discriminator has been configured for the static BFD session using the discriminator command. Or a static BFD session with automatically negotiated discriminators has been created using the bfd bind peer-ip source-ip auto command.\n\n\nConfiguration Impact\n\nWhen you run the vrrp6 vrid virtual-router-id track bfd-session { bfd-session-id | session-name bfd-configure-name } [ increased value-increased | reduced value-reduced ] command to enable a VRRP6 backup group to monitor a BFD session, the specified increased value-increased or reduced value-reduced parameter value affects the status of the VRRP6 backup group. The specified parameter value only needs to ensure that a master/backup VRRP switchover can be performed. For example, if the master router's priority is 120 (which can be viewed using the display vrrp6 brief command) and a backup router's priority is 110, you need to set the increased value-increased parameter to 20 only on the backup router.\nAfter you enable a VRRP6 backup group to monitor a link BFD session, you cannot change the BFD session type. To change the BFD session type, you must first disable the VRRP6 backup group from monitoring the link BFD session.\n\nPrecautions\n\nAfter you enable a VRRP6 backup group to monitor a BFD session, an IP address owner's priority does not change because it is fixed at 255.\nThe VRRP6 considers that the BFD session detects a Down event in the following situations:\n\nNo BFD session is configured on a peer device.\nThe peer BFD session is shut down.\nThe peer BFD session is deleted.\nBFD session negotiation fails.\nThe BFD session is Down.\n\nThe VRRP6 considers that the BFD session detects an Up event in the following situations:\n\nBFD session negotiation is successful.\nThe BFD session changes from Down to Up."
+}

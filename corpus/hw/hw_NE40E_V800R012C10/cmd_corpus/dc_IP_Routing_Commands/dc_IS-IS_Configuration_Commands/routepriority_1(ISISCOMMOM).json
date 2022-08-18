@@ -1,0 +1,54 @@
+{
+    "PageTitle": "ipv6 prefix-priority(IS-IS view)",
+    "FuncDef": "The ipv6 prefix-priority command sets a convergence priority for IPv6 IS-IS routes.\nThe undo ipv6 prefix-priority command restores the default value.\nBy default, in IP routing table, the priority of IS-IS host routes and default routes is high; the convergence priority of the other IS-IS routes is medium.",
+    "CLIs": [
+        "ipv6 prefix-priority [ level-1 | level-2 ] { critical | high | medium | very-low } { ipv6-prefix <prefix-name> | tag <tag-value> }",
+        "undo ipv6 prefix-priority [ level-1 | level-2 ] { critical | high | medium | very-low }"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "level-1",
+            "Info": "Sets a convergence priority for Level-1 IS-IS routes.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Sets a convergence priority for Level-2 IS-IS routes.\n-"
+        },
+        {
+            "Parameters": "critical",
+            "Info": "Sets the convergence priority of IS-IS routes to critical.\n-"
+        },
+        {
+            "Parameters": "high",
+            "Info": "Sets the convergence priority of IS-IS routes to high.\n-"
+        },
+        {
+            "Parameters": "medium",
+            "Info": "Sets the convergence priority of IS-IS routes to medium.\n-"
+        },
+        {
+            "Parameters": "very-low",
+            "Info": "Sets the convergence priority of IS-IS routes to very-low.\n-"
+        },
+        {
+            "Parameters": "ipv6-prefix prefix-name",
+            "Info": "Specifies the name of an IPv6 prefix list to filter routes. You can set a convergence priority for the IS-IS routes that match the specified IPv6 prefix list.\nThe value is a string of 1 to 169 case-sensitive characters."
+        },
+        {
+            "Parameters": "tag tag-value",
+            "Info": "Specifies the tag value to filter routes. You can set a convergence priority for the IS-IS routes with the specified tag value.\nThe value is an integer ranging from 1 to 4294967295. There is no default value."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] ipv6 enable",
+            "[*HUAWEI-isis-1] ipv6 prefix-priority level-1 critical tag 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a routing table has a large number of routing entries on an IS-IS device, it takes a long time to implement the SPF calculation on the device. The ipv6 prefix-priority command can be used to allow some key routes to be preferentially calculated.\nThe command takes effect only on the basic IPv6 topology on the public network.\nPrerequisites\nIf a tag value is used to filter IS-IS routes, it is required that IS-IS routes carry tag values.\nConfiguration Impact\nThe convergence priorities of IS-IS routes can be critical, high, medium, low, and very-low. The priorities in the corresponding IP routing table are critical, high, high, medium, and low. The priorities are listed in descending order.\nThe convergence priority of IS-IS routes is used as follows:\nFor the existing IS-IS routes, IS-IS sets their convergence priority based on the configuration of the ipv6 prefix-priority command.For the newly added IS-IS routes, IS-IS sets the convergence priority for the routes based on the filtering result of the ipv6 prefix-priority command.If an IS-IS route matches the matching rules of multiple convergence priorities, the highest convergence priority is used.If an IS-IS route matches tags of multiple convergence priorities, the highest convergence priority is used.If the route level is not specified, IS-IS sets a convergence priority for both Level-1 and Level-2 routes.\n\nPrecautions\nThe convergence priority of IS-IS routes (including the IS-IS host routes and default routes) can be specified or changed using the ipv6 prefix-priority command. After the ipv6 prefix-priority command is run, the convergence priority of the routes (including the IS-IS host routes and default routes) unspecified by the command is changed to low."
+}

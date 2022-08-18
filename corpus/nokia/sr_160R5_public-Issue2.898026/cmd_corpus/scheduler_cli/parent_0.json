@@ -1,0 +1,35 @@
+{
+    "PageTitle": "parent",
+    "FuncDef": "This command defines an optional parent scheduler that is higher up the policy hierarchy. Only schedulers in tier levels 2 and 3 can have a parental association. When multiple schedulers, policers (at egress only), and/or queues share a child status with the scheduler on the parent, the weight or strict parameters define how this scheduler contends with the other children for the parent s bandwidth. The parent scheduler can be removed or changed at any time and is immediately reflected on the schedulers created by association of this scheduler policy.",
+    "CLIs": [
+        "parent <scheduler-name> [ weight <weight> ] [ level <level> ] [ cir-weight <cir-weight> ] [ cir-level <cir-level> ]",
+        "no parent"
+    ],
+    "ParentView": [
+        "config>qos>scheduler-policy>tier>scheduler"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "scheduler-name",
+            "Info": "The scheduler-name must already exist within the context of the scheduler policy in a tier that is higher (numerically lower). Values-Any valid scheduler-name existing on a higher tier within the scheduler policy.."
+        },
+        {
+            "Parameters": "weight weight",
+            "Info": "Weight defines the relative weight of this scheduler in comparison to other child schedulers and queues at the same strict level defined by the level parameter. Within the level, all weight values from active children at that level are summed and the ratio of each active child s weight to the total is used to distribute the available bandwidth at that level. A weight is considered to be active when the queue or scheduler the weight pertains to has not reached its maximum rate and still has packets to transmit. Values-0 to 100. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "level level",
+            "Info": "The level keyword defines the strict priority level of this scheduler in comparison to other child schedulers and queues vying for bandwidth on the parent scheduler-name during the above-CIR distribution phase of bandwidth allocation. During the above-CIR distribution phase, any queues or schedulers defined at a lower strict level receive no parental bandwidth until all queues and schedulers defined with a higher (numerically larger) strict level on the parent have reached their maximum bandwidth or have satisfied their offered load requirements. Values-1 to 8. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "cir-weight cir-weight",
+            "Info": "The cir-weight keyword defines the relative weight of this scheduler in comparison to other child schedulers and queues at the same cir-level defined by the cir-level parameter. Within the strict cir-level, all cir-weight values from active children at that level are summed and the ratio of each active child s cir-weight to the total is used to distribute the available bandwidth at that level. A cir-weight is considered to be active when the queue or scheduler that the cir-weight pertains to has not reached the CIR and still has packets to transmit. Values-0 to 100. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "cir-level cir-level",
+            "Info": "The cir-level keyword defines the strict priority CIR level of this scheduler in comparison to other child schedulers and queues vying for bandwidth on the parent scheduler-name during the within-CIR distribution phase of bandwidth allocation. During the within-CIR distribution phase, any queues or schedulers defined at a lower strict CIR level receive no parental bandwidth until all queues and schedulers defined with a higher (numerically larger) strict CIR level on the parent have reached their CIR bandwidth or have satisfied their offered load requirements. Values-0 to 8. ParamDefault: Default- 0"
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

@@ -1,0 +1,31 @@
+{
+    "PageTitle": "originating-rp",
+    "FuncDef": "The originating-rp command specifies an interface whose address is used to replace the actual source RP address in a source active (SA) message. Such an interface is called a logical RP.\nThe undo originating-rp command restores the default configuration.\nBy default, an SA message carries the actual source RP address.",
+    "CLIs": [
+        "originating-rp { <interface-type> <interface-number> | <interface-name> }",
+        "undo originating-rp"
+    ],
+    "ParentView": [
+        "VPN instance MSDP view",
+        "MSDP view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] msdp",
+            "[*HUAWEI-msdp] originating-rp GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo implement Anycast-RP in a PIM-SM domain, you must run the originating-rp command. This is because when a Multicast Source Discovery Protocol (MSDP) peer performs the reverse path forwarding (RPF) check on a received SA message, it discards the message if the RP address in the SA message is the same as the local RP address. To prevent this problem, you need to specify a logical RP address for SA messages on each Router where Anycast-RP is to be deployed.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nConfiguration Impact\nAfter the originating-rp command is run, the Router replaces the source RP address in an SA message header with a logical RP address before sending the SA message. The SA message can then pass the RPF check after reaching the MSDP peer.\nPrecautions\nThe interface functioning as a logical RP cannot be an actual RP interface. Generally, specify interfaces that set up MSDP peer relationships as logical RPs."
+}

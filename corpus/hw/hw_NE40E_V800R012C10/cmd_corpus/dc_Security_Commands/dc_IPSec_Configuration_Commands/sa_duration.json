@@ -1,0 +1,40 @@
+{
+    "PageTitle": "sa duration",
+    "FuncDef": "The sa duration command sets an SA duration.\nThe undo sa duration command restores the default setting.\nBy default, the traffic-based SA duration is 1843200 KB and the time-based one is 3600 seconds.",
+    "CLIs": [
+        "sa duration { { time-based <salifetimesec> } | { traffic-based <salifetimekb> } | { traffic-based disable } }",
+        "undo sa duration { time-based | traffic-based disable | traffic-based }"
+    ],
+    "ParentView": [
+        "IPsec profile view",
+        "ISAKMP IPsec policy view",
+        "IPsec policy template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "traffic-based salifetimesec",
+            "Info": "Indicates the time-based SA duration.\nThe value is an integer ranging from 480 to 604800, in seconds."
+        },
+        {
+            "Parameters": "traffic-based salifetimekb",
+            "Info": "Indicates the traffic-based SA duration.\nThe value is an integer ranging from 8000 to 200000000, in kilobytes."
+        },
+        {
+            "Parameters": "disable",
+            "Info": "Disables the traffic-based SA duration. After the traffic-based SA duration is disabled, only the time-based SA duration takes effect.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipsec policy policy1 1 isakmp",
+            "[*HUAWEI-ipsec-policy-isakmp-policy1-1] sa duration time-based 7200"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipsec policy-template policy2 1",
+            "[*HUAWEI-ipsec-policy-templet-policy2-1] sa duration traffic-based 20000"
+        ]
+    ],
+    "ExtraInfo": "If the adopted ipsec security policy has been configured, the system uses the duration of security policy to negotiate with the remote else it define a global duration using this command it negotiate with the remote.\nThere are two methods to measure the duration:\nTime-based duration: Indicates the period that starts from setup of the SA to expiration of the SA.Traffic-based duration: Indicates the maximum of traffic volume that this SA is permitted to process.\nIf the duration reaches the specified time or traffic volume, the SA loses effect. Before expiration of SA, IKE negotiates to establish a new SA for IPsec. Before the new SA is established, the old one continues functioning. After the new SA is well prepared, it is used immediately."
+}

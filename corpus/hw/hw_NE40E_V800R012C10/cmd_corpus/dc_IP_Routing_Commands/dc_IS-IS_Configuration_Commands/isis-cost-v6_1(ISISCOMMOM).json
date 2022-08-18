@@ -1,0 +1,62 @@
+{
+    "PageTitle": "isis process-id ipv6 cost",
+    "FuncDef": "The isis process-id ipv6 cost command configures a link cost in an IPv6 topology.\nThe undo isis process-id ipv6 cost command restores the default value.\nBy default, the link cost value in an IPv6 topology is 10.",
+    "CLIs": [
+        "isis process-id <process-id-value> ipv6 cost <cost-value> [ level-1 | level-2 ]",
+        "undo isis process-id <process-id-value> ipv6 cost [ <cost-value> ] [ level-1 | level-2 ]"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Loopback interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cost-value",
+            "Info": "Specifies IPv6 link cost.\nThe value is an integer and varies with the cost type.\nWhen the cost type is wide or wide-compatible, the value ranges from 1 to 16777214.For other cost types, the value ranges from 1 to 63.\nThe default value is 10.\nThe cost type can be configured using the cost-style command."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Configures a link cost for Level-1 links.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Configures a link cost for Level-2 links.\nIf no IPv6 link level is specified, an IPv6 link cost is set for both Level-1 and Level-2 interfaces.\n-"
+        },
+        {
+            "Parameters": "process-id process-id-value",
+            "Info": "Specifies the IID of an IS-IS multi-instance process.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] ipv6 enable",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis ipv6 enable 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis process-id 1 ipv6 cost 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a large-scale network, there are multiple valid routes destined for the same destination in most cases. IS-IS calculates an optimal route based on the SPF algorithm and transmits traffic over it. This feature may cause the following problems:\nAll traffic is transmitted over the optimal route, causing load imbalance.If the optimal route fails, traffic transmitted over it will be discarded.\nTo address this problem, run the isis ipv6 cost command to configure different link costs for different interfaces so that traffic can be transmitted over different physical links.\n\nPrerequisites\nIS-IS has been enabled on the interface using the isis enable command in the interface view.\nIPv6 has been enabled for the IS-IS process, and an IPv6 topology has been enabled. To enable IPv6 in an IS-IS process, run the isis ipv6 enable command.\nConfiguration Impact\nIf the link cost is changed, routes of the entire network are recalculated, and the traffic forwarding path changes accordingly.\nPrecautions\nThe isis ipv6 cost command takes effect only when links are active and an IPv6 topology is enabled.\nIf the IPv6 topology type is compatible or standard, the IPv6 link cost is the same as the IPv4 link cost. When an IPv6 topology type is compatible enable-mt-spf or ipv6, IPv6 and IPv4 link costs need to be configured separately.\nIf the isis ipv6 cost and ipv6 circuit-cost commands are both run, the value set using the isis ipv6 cost takes effect."
+}

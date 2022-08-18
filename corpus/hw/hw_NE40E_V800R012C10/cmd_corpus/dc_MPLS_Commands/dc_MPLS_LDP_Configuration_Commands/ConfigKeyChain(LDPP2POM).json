@@ -1,0 +1,33 @@
+{
+    "PageTitle": "authentication key-chain",
+    "FuncDef": "The authentication key-chain command enables Label Distribution Protocol (LDP) keychain authentication.\nThe undo authentication key-chain command disables LDP keychain authentication.\nBy default, LDP keychain authentication is not enabled. Configuring LDP keychain authentication is recommended to improve device security.",
+    "CLIs": [
+        "authentication key-chain peer <peer-id> name <keychain-name>",
+        "undo authentication key-chain peer <peer-id>"
+    ],
+    "ParentView": [
+        "MPLS-LDP-VPN instance view",
+        "MPLS-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "name keychain-name",
+            "Info": "Specifies the referenced keychain name. The keychain name is specified using the keychain command.\nThe value is a string of 1 to 47 case-insensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "peer peer-id",
+            "Info": "Specifies the ID of a peer that uses LDP keychain authentication. The LDP peer ID is specified using the mpls lsr-id command.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] commit",
+            "[~HUAWEI-mpls] quit",
+            "[~HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] authentication key-chain peer 2.2.2.2 name kc1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn keychain authentication mode, you can define a group of passwords to form a password string and then specify the encryption and decryption algorithms, including SHA-1 algorithm and the lifetime for each password. The system selects a valid password based on the user's configuration and encrypts the packet before sending a packet out or decrypts the packet before accepting it using the encryption and decryption algorithms. The encryption and decryption algorithms match the password and the lifetime of the password. In addition, the system can automatically use a new password when the old password expires. This prevents the password used a long period of time from being decrypted.\nThe password used in keychain authentication, encryption and decryption algorithms, and the lifetime of the password can be configured separately. They form a keychain configuration node. Each keychain configuration node requires at least one password and the specified encryption and decryption algorithms.\nTo reference a keychain configuration node, specify the peer that needs to reference the node and the name of the node in the MPLS-LDP view. Different peers can reference the same keychain configuration node.\nKeychain authentication has a group of passwords. The system can automatically switch the passwords. The configuration, however, is complex. Keychain authentication applies to the network that has higher security requirements.\nBefore configuring LDP keychain authentication, configure keychain authentication globally.\nPrerequisites\nMPLS and MPLS LDP have been enabled globally.\nKeychain authentication has been configured globally.\nConfiguration Impact\nAfter the authentication key-chain command is run, the referenced keychain applies to a specified peer.\nPrecautions\nMD5 authentication and keychain authentication are mutually exclusive with each other on a peer.Configuring LDP keychain authentication causes LDP session reestablishment.When you run the authentication key-chain command, the specified keychain must exist. If the keychain to be specified is deleted, the established session may be interrupted. Therefore, exercise caution when running this command."
+}

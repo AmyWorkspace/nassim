@@ -1,0 +1,30 @@
+{
+    "PageTitle": "backoff timer",
+    "FuncDef": "The backoff timer command sets the initial and maximum values for an Exponential backoff timer.\nThe undo backoff timer command restores the default initial and maximum values.\nBy default, the initial value is 15s, and the maximum value is 120s.",
+    "CLIs": [
+        "backoff timer <init> <max>",
+        "undo backoff timer"
+    ],
+    "ParentView": [
+        "MPLS-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "init",
+            "Info": "Specifies the initial value of an Exponential backoff timer.\nAn integer ranging from 5 to 2147483, in seconds."
+        },
+        {
+            "Parameters": "max",
+            "Info": "Specifies the maximum value of an Exponential backoff timer.\nAn integer ranging from 5 to 2147483, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls ldp",
+            "[*HUAWEI-mpls-ldp] backoff timer 20 160"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter an LSR fails to process an LDP Initialization message or is informed that the peer LSR rejects the received LDP Initialization message, the LSR starts the Exponential backoff timer and periodically resends an LDP Initialization message to initiate an LDP session before the Exponential backoff timer expires.\nWhen the Exponential backoff timer starts, the active LSR waits a period of time equal to the initial value of the Exponential backoff timer to attempt to set up an LDP session for the first time. Subsequently, the active LSR waits a period of time twice as long as the previous one to attempt to set up an LDP session. When the waiting period reaches the maximum value of the Exponential backoff timer, the active LSR waits a period of time equal to the maximum value of the Exponential backoff timer to attempt to establish an LDP session.\nRun the backoff timer command to change the interval at which the active LSR attempts to establish a session.\nSetting the initial value and maximum value for the Exponential backoff timer allows you to flexibly control the reestablishment of sessions in various network environments.\nWhen a device is being upgraded, increase the initial and maximum values to set a large interval at which the active role attempts to establish a session.When a device that is transmitting services is prone to intermittent disconnections, reduce the initial and maximum values to set a small interval at which the active LSR attempts to set up a session.\n\nConfiguration Impact\nIf a session is disconnected after the backoff timer command is run, the device attempts to establish a session based on the set initial and maximum values of the Exponential backoff timer."
+}

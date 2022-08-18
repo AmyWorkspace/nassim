@@ -1,0 +1,40 @@
+{
+    "PageTitle": "lacp priority (Interface view)",
+    "FuncDef": "The lacp priority command sets a Link Aggregation Control Protocol (LACP) interface priority.\nThe undo lacp priority command restores the default LACP interface priority.\nThe default LACP priority is 32768.",
+    "CLIs": [
+        "lacp priority <priority>",
+        "undo lacp priority"
+    ],
+    "ParentView": [
+        "40GE interface view",
+        "GE interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Port extension Layer 2 interface view",
+        "50GE interface view",
+        "Layer 2 GE interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "priority priority",
+            "Info": "Specifies an LACP  priority.\nThe value is an integer ranging from 0 to 65535. The smaller the priority value, the higher the priority."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 10",
+            "[*HUAWEI-Eth-Trunk10] mode lacp-static",
+            "[*HUAWEI-Eth-Trunk10] trunkport GigabitEthernet 1/0/1",
+            "[*HUAWEI-Eth-Trunk10] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] lacp priority 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLACP interface priorities are set to prioritize interfaces of the same device. Interfaces with higher priorities are selected as active interfaces.\nTwo devices are connected through three GE interfaces on each side. After the three GE interfaces are bundled into an Eth-Trunk interface, the mode lacp-static command is used to configure the Eth-Trunk interface to work in static LACP mode. Two Eth-Trunk member interfaces are active. If you want to use an inactive interface to replace one of the active interfaces, you can take either of the following actions:\nRun the lacp priority command in the interface view to set the LACP interface priority of an inactive interface to 10 or another value as long as the LACP priority of the inactive interface is lower than that of an active interface.Run the lacp priority command in the interface view to set the LACP interface priority of an active interface to 180 or another value as long as the LACP priority of the active interface is higher than that of any inactive interface.\n\nPrerequisites\nThe mode lacp-static command has been run in the Eth-Trunk interface view to configure the Eth-Trunk interface to work in static LACP mode.\nConfiguration Impact\nIn static LACP mode, active interfaces selected by devices at both ends of an Eth-Trunk link must be the same; otherwise, the link aggregation group cannot be set up.\nIf the max active-linknumber (Eth-Trunk interface view) command is run on an Eth-Trunk interface in static LACP mode to set the maximum number of active member links, when the number of Up Ethernet interfaces that are manually added to the Eth-Trunk interface exceeds the maximum value, you need to select active interfaces from the Up member interfaces. Running the lacp priority command to set LACP interface priorities ensures that interfaces with high priorities become active in static LACP mode.\nIf the max active-linknumber (Eth-Trunk interface view) command is not used, if the number of manually added member interfaces is smaller than the default value, you do not need to select active interfaces and all member interfaces are active."
+}

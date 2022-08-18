@@ -1,0 +1,47 @@
+{
+    "PageTitle": "multicast-vlan user-vlan",
+    "FuncDef": "The multicast-vlan user-vlan command associates a multicast VLAN with user VLANs.\nThe undo multicast-vlan user-vlan command cancels the configuration.\nBy default, a multicast VLAN is not associated with user VLANs.",
+    "CLIs": [
+        "multicast-vlan user-vlan { { <vlan-id1> [ to <vlan-id2> ] } &<1-10> }",
+        "undo multicast-vlan user-vlan { all | { <vlan-id1> [ to <vlan-id2> ] } &<1-10> }"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies the ID of the first user VLAN.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to vlan-id2",
+            "Info": "Specifies the ID of the last user VLAN.\nThe vlan-id2 value must be greater than the vlan-id1 value. vlan-id2 and vlan-id1 define a range together. If vlan-id2 is not specified, only the VLAN specified by vlan-id1 serves as the user VLAN.\nThe value is an integer ranging from 1 to 4094. The vlan-id2 value must be greater than the vlan-id1 value."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates all user VLANs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan 20",
+            "[*HUAWEI-vlan20] quit",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] igmp-snooping enable",
+            "[*HUAWEI-vlan10] multicast-vlan enable",
+            "[*HUAWEI-vlan10] multicast-vlan user-vlan 20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan batch 2 to 10",
+            "[*HUAWEI] vlan 11",
+            "[*HUAWEI-vlan11] igmp-snooping enable",
+            "[*HUAWEI-vlan11] multicast-vlan enable",
+            "[*HUAWEI-vlan11] multicast-vlan user-vlan 2 to 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a multicast VLAN is configured, the multicast-vlan user-vlan command can be used to configure a mapping between the multicast VLAN and user VLANs. Then, a Layer 3 device sends only one copy of multicast data to the multicast VLAN, and does not need to replicate multicast data for each VLAN. This reduces the network resource consumption and reduces the burden of the Layer 3 device.\nPrerequisites\nThe multicast-vlan enable command has been run to configure a multicast VLAN.\nConfiguration Impact\nAfter a VLAN is configured as a user VLAN, the VLAN cannot be configured as a multicast VLAN.\nAfter users VLANs are bound to a multicast VLAN, unbind the user VLANs from the multicast VLAN before deleting the user VLANs or the multicast VLAN.\nIf the multicast-vlan user-vlan command is run more than once, all configurations take effect.\nPrecautions\nThe multicast VLAN ID is mutually exclusive with other access VLAN IDs on the same physical interface.\nThe following conditions must be met to configure user VLANs for a multicast VLAN:\nA user VLAN is bound to only one multicast VLAN.The multicast VLAN has one or more user VLANs."
+}

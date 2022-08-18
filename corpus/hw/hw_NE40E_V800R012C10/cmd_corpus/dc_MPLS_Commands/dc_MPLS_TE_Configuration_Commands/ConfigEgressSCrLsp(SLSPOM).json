@@ -1,0 +1,51 @@
+{
+    "PageTitle": "static-cr-lsp egress",
+    "FuncDef": "The static-cr-lsp egress command configures a static CR-LSP on the egress LSR.\nThe undo static-cr-lsp egress command deletes a static CR-LSP from the egress LSR.\nBy default, no static CR-LSP on the egress LSR is configured.",
+    "CLIs": [
+        "static-cr-lsp egress <lsp-name-val> incoming-interface { <interface-name> | <interface-type> <interface-number> } in-label <in-label> [ lsrid <ingress-lsr-id> tunnel-id <tunnel-id> ]",
+        "undo static-cr-lsp egress <lsp-name-val>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lsp-name-val",
+            "Info": "Specifies the name of LSP (Label Switched Path).\nThe value is a string of 1 to 19 characters."
+        },
+        {
+            "Parameters": "incoming-interface",
+            "Info": "Specifies an inbound interface.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of an inbound interface.\n-"
+        },
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the type and number of an inbound interface.\n-"
+        },
+        {
+            "Parameters": "in-label in-label",
+            "Info": "Specifies the value of an incoming label.\nThe value is an integer and the value ranges from 16 to 32783."
+        },
+        {
+            "Parameters": "lsrid ingress-lsr-id",
+            "Info": "Specifies the LSR ID of the ingress.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "tunnel-id tunnel-id",
+            "Info": "Specifies the tunnel ID that is set on the tunnel interface of the ingress.\nThe value is an integer and the value ranges from 1 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] static-cr-lsp egress tunnel34 incoming-interface GigabitEthernet 1/0/0 in-label 233"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn devices with low routing and processing performance, a static CR-LSP can be established to implement MPLS TE functions. Labels for a static CR-LSP are assigned manually. Static CR-LSP configuration involves the operations on the following types of nodes:\nIngress: configured using the static-cr-lsp ingress command.Transit node: configured using the static-cr-lsp transit command.Egress: configured using the static-cr-lsp egress command.\nTo modify the value of incoming-interface interface-type interface-number and in-label in-label-value, run the static-cr-lsp egress command to set a new value. There is no need to run the undo static-cr-lsp egress command before changing a configured value.\n\nPrerequisites\nMPLS TE has been enabled globally using the mpls te command.\nPrecautions\nTo enable MPLS OAM to monitor the Trail Termination Source Identifier (TTSI) of a static CR-LSP, in addition to the static CR-LSP, configure lsrid ingress-lsr-id and tunnel-id tunnel-id in the static-cr-lsp egress command. The LSR ID and tunnel ID uniquely specify a static CR-LSP. If either the specified LSR ID or tunnel ID is different from the actual static CR-LSR parameter on the ingress, MPLS OAM considers that a TTSI error occurs and prompts a user with a configuration error message."
+}

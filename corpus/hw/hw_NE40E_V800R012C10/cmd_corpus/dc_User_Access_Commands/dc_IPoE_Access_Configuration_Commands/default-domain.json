@@ -1,0 +1,50 @@
+{
+    "PageTitle": "default-domain",
+    "FuncDef": "The default-domain command configures a default domain.\nThe default-domain pre-authentication command configures a default pre-authentication domain, to which an IP address pool is bound. The NE40E assigns IP addresses in this IP address pool to users through DHCP.\nThe default-domain authentication command configures a default authentication domain.\nThe undo default-domain command restores the default domain name pre-configured on the device.\nBy default, the pre-authentication domain is default0;the authentication domain is default1.",
+    "CLIs": [
+        "default-domain { pre-authentication <domain-name> | authentication [ force | replace ] <domain-name> } *",
+        "undo default-domain [ pre-authentication | authentication ]"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pre-authentication",
+            "Info": "Configures a pre-authentication domain, which is used when the device assigns IP addresses to users.\n-"
+        },
+        {
+            "Parameters": "domain-name",
+            "Info": "Specifies a domain name.\nThe value is a string of 1 to 64 characters."
+        },
+        {
+            "Parameters": "authentication",
+            "Info": "Configures a default authentication domain.\n-"
+        },
+        {
+            "Parameters": "force",
+            "Info": "Indicates the default-domain authentication force.\nA user adopts the authentication scheme that is configured in this domain, regardless of whether a domain name is contained in the input user account or what the domain name is. If a domain name is contained in the user account, the domain name remains unchanged during authentication; if no domain name is contained, the default-domain authentication force is added to the user account.\n-"
+        },
+        {
+            "Parameters": "replace",
+            "Info": "Indicates default-domain authentication replace.\nA user adopts the authentication scheme that is configured in this domain, regardless of whether a domain name is contained in the input user account or what the domain name is. If a domain name is contained in the user account, the domain name is replaced with the default-domain authentication replace during authentication; if no domain name is contained, the default-domain authentication replace is added to the user account.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[~HUAWEI-aaa-domain-huawei] commit",
+            "[~HUAWEI-aaa-domain-huawei] quit",
+            "[~HUAWEI-aaa] quit",
+            "[~HUAWEI] interface GigabitEthernet 2/0/1",
+            "[*HUAWEI-GigabitEthernet2/0/1] bas",
+            "[*HUAWEI-GigabitEthernet2/0/1-bas] commit",
+            "[*HUAWEI-GigabitEthernet2/0/1-bas] default-domain pre-authentication huawei authentication force huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen binding authentication or Web authentication is adopted for VLAN users on a BAS interface, the default domain on the BAS interface can be used as the user domain.\nIn binding authentication, the default domain name is used to generate a user name.\nIn Web authentication, if no domain name is entered, the policy configured in the default domain is used for authentication, authorization, and accounting.If force is configured for the default authentication domain, the policy in the default authentication domain is forcibly used for a VLAN user, irrespective of whether the user is configured with a domain name. If replace is configured, the original domain name of a user is forcibly replaced by the default authentication domain name.\nAssume that a user getting online with a domain name and the user inputs a user account, namely, user@A.\nThe BAS interface that accesses the user is configured with domain B as the default-domain authentication. If domain A is configured on the , the user adopts the authentication scheme that is configured in domain A, and the user account for authentication is user@A. If domain A is not configured on the device, and the roam-domain is disabled, the user authentication fails. If the roam-domain is enabled, the user adopts the authentication scheme that is configured in the roam-domain.The BAS interface that accesses the user is configured with domain E as the roam-domain configured through the roam-domain command. If domain A is not configured on the device, the user adopts the authentication scheme that is configured in domain E. If domain A is configured on the device, the user adopts the authentication scheme that is configured in domain A, and the user account for authentication is user@A.The BAS interface that accesses the user is configured with domain F as the default-domain authentication force. In this case, the user adopts the authentication scheme that is configured in domain F (regardless of whether domain A is configured on the device or whether a roam-domain is configured), and the user account for authentication is still user@A.The BAS interface that accesses the user is configured with domain G as the default-domain authentication replace. In this case, the user adopts the authentication scheme that is configured in domain G (regardless of whether domain A is configured on the device or whether a roam-domain is configured), and the user account for authentication is changed into user@G.\nAssume that a user getting online without a domain name and the user inputs a user account, namely, user.\nIf the BAS interface that accesses the user is not configured with the default-domain authentication, the user adopts the authentication scheme that is configured in default1, and the user account for authentication is user@default1.If the BAS interface that accesses the user is configured with domain B as the default-domain authentication, the user adopts the authentication scheme that is configured in domain B (domain B here is a default domain), and the user account for authentication is user@B.If the BAS interface that accesses the user is configured with domain H as the default-domain authentication force, the user adopts the authentication scheme that is configured in domain H, and the user account for authentication is user@H.If the BAS interface that accesses the user is configured with domain J as the default-domain authentication replace, the user adopts the authentication scheme that is configured in domain J, and the user account for authentication is user@J.\nThe user account mentioned above may not the one that is sent to an AAA server. Instead, whether the user account sent to the AAA server contains a domain name depends on the device is configured the radius-server user-name command to send a domain name to the AAA server or not.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

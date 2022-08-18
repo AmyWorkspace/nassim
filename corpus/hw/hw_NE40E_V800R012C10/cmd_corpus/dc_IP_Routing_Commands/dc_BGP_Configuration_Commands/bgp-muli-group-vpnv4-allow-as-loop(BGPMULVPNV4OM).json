@@ -1,0 +1,32 @@
+{
+    "PageTitle": "peer allow-as-loop (BGP multi-instance VPNv4 address family view) (group)",
+    "FuncDef": "The peer allow-as-loop command sets the number of local AS number repetitions.\nThe undo peer allow-as-loop command cancels the configuration.\nBy default, the local AS number cannot be repeated.",
+    "CLIs": [
+        "peer <group-name> allow-as-loop [ <number> ]",
+        "undo peer <group-name> allow-as-loop"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "number",
+            "Info": "Specifies the number of local AS number repetitions.\nThe value is an integer ranging from 1 to 10. The default value is 1."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100 instance aa",
+            "[~HUAWEI-bgp-instance-aa] group a internal",
+            "[~HUAWEI-bgp-instance-aa] ipv4-family vpnv4",
+            "[~HUAWEI-bgp-instance-aa-af-vpnv4] peer a enable",
+            "[~HUAWEI-bgp-instance-aa-af-vpnv4] peer a allow-as-loop 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP uses AS numbers to detect routing loops. The AS numbers in the AS_Path of each received route are matched against the local AS number configured using the bgp command and the fake AS number configured using the peer fake-as command. The largest number of times any of the configured AS numbers is repeated is considered as the maximum number. In the Hub and Spoke networking, if EBGP runs between a Hub-PE and a Hub-CE on a Hub site, the route sent from the Hub-PE to the Hub-CE carries the AS number of the Hub-PE. If the Hub-CE sends a routing update to the Hub-PE, the Hub-PE will deny it because the routing update contains the AS number of the Hub-PE.\nTo ensure proper route transmission in the Hub and Spoke networking, configure all the BGP peers on the path, along which the Hub-CE advertises private network routes to the Spoke-CE, to accept the routes in which the AS number repeats once.\nPrerequisites\nPeer relationships have been established using the peer as-number command.\nConfiguration Impact\nIf the peer allow-as-loop command is run for a peer group multiple times, the latest configuration overrides the previous one.\nPrecautions\nThe peer allow-as-loop command enables BGP to check the count of the local AS number in the routes received from EBGP peers or confederation EBGP peers. The command does not apply to IBGP peers or confederation IBGP peers. If the command is not run, the implementation is equivalent to the peer allow-as-loop 0 configuration."
+}

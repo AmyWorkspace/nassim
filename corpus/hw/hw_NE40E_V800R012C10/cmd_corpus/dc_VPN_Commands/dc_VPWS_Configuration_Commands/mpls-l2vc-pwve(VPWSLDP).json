@@ -1,0 +1,71 @@
+{
+    "PageTitle": "mpls l2vc (PW-VE interface view)",
+    "FuncDef": "The mpls l2vc command creates an LDP VPWS connection.\nThe undo mpls l2vc command deletes an LDP VPWS connection.\nBy default, no VPWS connection is created.",
+    "CLIs": [
+        "mpls l2vc { <ip-address> | pw-template <pw-template-name> } * <vc-id> [ [ control-word | no-control-word ] | [ raw | tagged ] | tunnel-policy <policy-name> | ignore-standby-state ] *",
+        "mpls l2vc instance-name <instance-name> { <ip-address> | pw-template <pw-template-name> } * <vc-id> [ [ control-word | no-control-word ] | [ raw | tagged ] | tunnel-policy <policy-name> | ignore-standby-state ] *",
+        "undo mpls l2vc [ { <ip-address> | pw-template <pw-template-name> } * <vc-id> [ [ control-word | no-control-word ] | [ raw | tagged ] | tunnel-policy <policy-name> | ignore-standby-state ] * ]",
+        "undo mpls l2vc instance-name <instance-name> { <ip-address> | pw-template <pw-template-name> } * <vc-id> [ [ control-word | no-control-word ] | [ raw | tagged ] | tunnel-policy <policy-name> | ignore-standby-state ] *"
+    ],
+    "ParentView": [
+        "PW-VE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of the remote peer on a PW.\nThe value is usually the LSR ID of the remote peer."
+        },
+        {
+            "Parameters": "pw-template pw-template-name",
+            "Info": "Specifies the name of a PW template.\nYou can set attributes for a PW template, including the remote peer, control word, MTU, VCCV capability, and tunnel policy. When configuring an LDP VPWS connection, you can directly apply the PW template rather than specify attributes for the PW in explicit mode. After setting attributes for a PW template, you can make desired changes whenever needed and run the reset pw command for the modified PW template to take effect. You need to define the name and attributes of the PW template in the system view before applying a PW template.\nIf a PW attribute, such as the remote peer, tunnel policy, or control word, is specified in the mpls l2vc command, the same PW attribute configured in the PW template does not take effect.\nThe value is a string of 1 to 19 case-sensitive characters, spaces not supported.The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "vc-id",
+            "Info": "Specifies a 32-bit VC ID that is locally unique.\nA combination of the VC ID and VC type uniquely identifies a VC.\nThis parameter cannot be modified. To change the VC ID, you need to delete the configured one and reconfigure it.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Enables the control word function.\nThe control word carries the sequence number and Layer 2 header control information. The control word can be filled in a packet to prevent the packet from being too short.\n-"
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "Disables the control word function.\n-"
+        },
+        {
+            "Parameters": "raw",
+            "Info": "Specifies that user packets do not carry P-Tags when being transmitted over a PW. This parameter applies only to Ethernet links.\n-"
+        },
+        {
+            "Parameters": "tagged",
+            "Info": "Specifies that user packets carry P-Tags when being transmitted over a PW. This parameter applies only to Ethernet links.\n-"
+        },
+        {
+            "Parameters": "tunnel-policy policy-name",
+            "Info": "Specifies the name of a tunnel policy.\nIf no tunnel policy is specified, the default tunnel policy is adopted. The default tunnel policy for the VPWS connection uses LSPs and only one LSP is used for load balancing. If a tunnel policy name is specified but the tunnel policy is not configured, the default tunnel policy is adopted. You need to define the name and attributes of the tunnel policy in the system view before applying a tunnel policy.\nThe value is a string of 1 to 39 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ignore-standby-state",
+            "Info": "Configures the created PW to ignore the secondary state sent from the peer device.\n-"
+        },
+        {
+            "Parameters": "instance-name instance-name",
+            "Info": "Specifies the name of an L2VPN service. This parameter uniquely identifies an L2VPN service on a PE.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.The string can contain spaces if it is enclosed in double quotation marks (\")."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback 1",
+            "[*HUAWEI-Loopback1] ip address 1.1.1.1 32",
+            "[*HUAWEI-Loopback1] quit",
+            "[*HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe VPWS network provides Layer 2 VPN services based on an MPLS network, enabling carriers to provide L2VPN services over different media, such as VLAN, Ethernet, Point-to-Point Protocol (PPP) on a unified MPLS network. The MPLS network can still provide traditional IP services, MPLS L3VPN, traffic engineering, and QoS services.\nThe VPWS network transparently transmits Layer 2 user data over the MPLS network. For users, the MPLS network is a Layer 2 switched network on which Layer 2 connections can be set up between nodes.\nLDP VPWS uses two layers of labels. The inner label uses extended LDP as the signaling protocol to transmit Layer 2 information and VC label information.\nTo configure a VPWS connection that uses LDP as the signaling protocol on interfaces, run the mpls l2vc command.\nThe primary PW needs to be created before dynamic VPWS is created.The secondary PW can be created to protect the primary PW. When the primary PW fails, traffic can be immediately switched to the secondary PW, preventing traffic interruption.\nThe secondary PWs are used to protect the primary PW. Therefore, configure the primary PW first. Otherwise, the secondary PWs cannot be configured. PWs are deleted in reverse order. Delete the secondary PWs before deleting the primary PW.\nOn the network where PW redundancy is configured, if the primary PW fails, traffic is switched to the secondary PW. If the secondary PW is in the standby state, traffic cannot be forwarded, resulting in packet loss. If ignore-standby-state is configured for the secondary PW, the secondary PW will ignore the secondary state indicated by the peer device and be always in the forwarding state, preventing packet loss during a primary/secondary PW switchover.\n\nPrerequisites\nMPLS has been enabled in the system view.MPLS L2VPN has been enabled in the system view.\n\nConfiguration Impact\nAn interface cannot serve as a VPWS AC interface and an L3VPN AC interface at the same time. If an interface is bound to a VPWS, its Layer 3 features such as the IP address and routing protocol will not take effect. If an interface is bound to both a VPWS and an L3VPN, only the VPWS connection is available. After the VPWS connection is deleted, the L3VPN service becomes available.\nPrecautions\nA sub-interface that is bound to a VPWS can be deleted only after it is unbound from the VPWS.In a PW redundancy scenario, configure the same parameters for the primary, secondary, and bypass PWs. A parameter inconsistency causes the secondary or bypass PW to fail to take over traffic if the primary PW fails.Dynamic VCs must be configured on the PEs at both ends of a PW. When configuring a VPWS connection, note the following:The peer address, destination address of the tunnel, and MPLS LSR ID of the peer PE must be the same. Otherwise, the VPWS connection cannot be set up.The VC IDs of the PEs at both ends must be the same. Otherwise, the VPWS connection cannot be set up.If a certain PW attribute is specified in the mpls l2vc command, the corresponding PW attribute in the PW template is invalid.Control word auto-negotiation is supported only if PEs at both ends of a PW support the control word function. If either of the PEs does not support the control word function, control word auto-negotiation fails.The PW dynamic BFD detect configuration in the interface view depends on Control Word configuration."
+}

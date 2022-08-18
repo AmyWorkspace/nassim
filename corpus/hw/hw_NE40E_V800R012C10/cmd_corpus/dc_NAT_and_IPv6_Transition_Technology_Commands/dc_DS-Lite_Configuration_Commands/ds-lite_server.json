@@ -1,0 +1,64 @@
+{
+    "PageTitle": "ds-lite server",
+    "FuncDef": "The ds-lite server command configures an internal server on a DS-Lite network.\nThe undo ds-lite server command deletes internal server configurations.\nBy default, no internal server is configured.",
+    "CLIs": [
+        "ds-lite server protocol { tcp | udp } global <global-address> [ <global-port> ] [ vpn-instance <vpn-instance-name> ] inside <host-address> [ <host-port> ] cpe <cpe-address> [ outbound ]",
+        "ds-lite server global <global-address> [ vpn-instance <vpn-instance-name> ] inside <host-address> cpe <cpe-address> [ outbound ]",
+        "undo ds-lite server protocol { tcp | udp } global <global-address> [ <global-port> ] [ vpn-instance <vpn-instance-name> ] inside <host-address> [ <host-port> ] cpe <cpe-address> [ outbound ]",
+        "undo ds-lite server global <global-address> [ vpn-instance <vpn-instance-name> ] inside <host-address> cpe <cpe-address> [ outbound ]"
+    ],
+    "ParentView": [
+        "DS-Lite instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tcp",
+            "Info": "Indicates that an internal server runs TCP.\n-"
+        },
+        {
+            "Parameters": "udp",
+            "Info": "Indicates that an internal server runs UDP.\n-"
+        },
+        {
+            "Parameters": "global global-address",
+            "Info": "Specifies the public IP address of an internal server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "global-port",
+            "Info": "Specifies the protocol that an internal server runs to communicate with an external device. The value can be pop2, pop3, or smtp.\nThe value is a string of 1 to 15 characters."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "inside host-address",
+            "Info": "Specifies the private IP address of an internal server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "host-port",
+            "Info": "Specifies the public network TCP or UDP port number of an internal server. Users packets only with a destination port number the same as the specified port number can access the internal server.\nThe value is an integer ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "cpe cpe-address",
+            "Info": "Specifies the IPv6 address of a CPE that a private network user accesses.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates that public network users can access an internal server only after private network users get online.\n-"
+        },
+        {
+            "Parameters": "protocol",
+            "Info": "Specify the server protocol.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ds-lite instance cpe1 id 1",
+            "[*HUAWEI-ds-lite-instance-cpe1] remote-ipv6 1::1 prefix-length 64",
+            "[*HUAWEI-ds-lite-instance-cpe1] ds-lite server protocol tcp global 10.1.1.1 ftp inside 192.168.12.12 ftp cpe 1::1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDS-Lite hides the structure of an internal network, including devices on the internal network. A device on an external network may need to access an internal host, such as a web or FTP server.\nConfiguration Impact\nThe internal server function enables a DS-Lite device to translate the public IP address to the private IP address based on a static mapping entry that contains a private IP address, a private port number, a public IP address, and a public port number or a static mapping entry that contains a private IP address and a public IP address.\nPrecautions\nIn a DS-Lite scenario, it is recommended that the public IP address of a DS-Lite server be different from that in an address pool. Otherwise, user traffic is incorrectly forwarded."
+}

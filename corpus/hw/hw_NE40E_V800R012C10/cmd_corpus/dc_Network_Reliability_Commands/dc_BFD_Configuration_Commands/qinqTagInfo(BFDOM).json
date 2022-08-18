@@ -1,0 +1,37 @@
+{
+    "PageTitle": "qinq",
+    "FuncDef": "The qinq command specifies inner and outer tags for packets on a sub-interface for QinQ VLAN tag termination, to which a BFD session is bound.\nThe undo qinq command deletes inner and outer tags specified for packets on a sub-interface for QinQ VLAN tag termination, to which a BFD session is bound.\nBy default, inner and outer tags are not specified for packets on a sub-interface for QinQ VLAN tag termination, to which a BFD session is bound.",
+    "CLIs": [
+        "qinq pe-vid <pe-vid> ce-vid <ce-vid>",
+        "undo qinq"
+    ],
+    "ParentView": [
+        "BFD session view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pe-vid pe-vid",
+            "Info": "Specifies the value of the outer tag in a BFD packet.\nAn integer ranging from 1 to 4094"
+        },
+        {
+            "Parameters": "ce-vid ce-vid",
+            "Info": "Specifies the value of the inner tag in a BFD packet.\nAn integer ranging from 1 to 4094"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] encapsulation qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] qinq termination pe-vid 1 ce-vid 2",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd test bind peer-ip default-ip interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-bfd-session-test] discriminator local 1",
+            "[*HUAWEI-bfd-session-test] discriminator remote 2",
+            "[*HUAWEI-bfd-session-test] qinq pe-vid 1 ce-vid 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDuring the configuration of a BFD session, after the BFD session is bound to a sub-interface for QinQ VLAN tag termination, the qinq pe-vid ce-vid command can be run to specify the outer and inner tags for packets to be sent over VLANs."
+}

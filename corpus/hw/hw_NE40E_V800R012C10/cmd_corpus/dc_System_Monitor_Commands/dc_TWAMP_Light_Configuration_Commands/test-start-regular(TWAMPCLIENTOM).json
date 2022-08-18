@@ -1,0 +1,41 @@
+{
+    "PageTitle": "test start-regular",
+    "FuncDef": "The test start-regular command starts periodic proactive measurement for a TWAMP Light session.\nThe undo test start-regular command stops periodic proactive measurement for a TWAMP Light session.\nBy default, no measurement is started for a TWAMP Light session.",
+    "CLIs": [
+        "test start-regular test-session <session-id> [ regular-time <timevalue> ] [ packet-count <packet-count> ] [ time-out <time-out> ]",
+        "undo test start-regular test-session <session-id> [ regular-time <timevalue> ] [ packet-count <packet-count> ] [ time-out <time-out> ]"
+    ],
+    "ParentView": [
+        "TWAMP-light-sender view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "regular-time timevalue",
+            "Info": "Specifies the interval at which packets are sent over a test session.\nThe value is an integer ranging from 10 to 60, in minutes. The default value is 30."
+        },
+        {
+            "Parameters": "packet-count packet-count",
+            "Info": "Specifies the number of sent packets.\nThe value is an integer ranging from 10 to 1000. The default value is 100."
+        },
+        {
+            "Parameters": "time-out time-out",
+            "Info": "Specifies the timeout period for response packets within the sampling period.\nThe value is an integer ranging from 1 to 10, in seconds. The default value is 5."
+        },
+        {
+            "Parameters": "test-session session-id",
+            "Info": "Specifies the ID of a TWAMP Light session.\nFor the X3 device, the value is an integer ranging from 1 to 3072.For the X8/X16 device, the value is an integer ranging from 1 to 8192."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa twamp-light",
+            "[~HUAWEI-twamp-light] client",
+            "[~HUAWEI-twamp-light-client] test-session 1 sender-ip 1.1.1.1 reflector-ip 2.2.2.2 sender-port 3000 reflector-port 3000",
+            "[~HUAWEI-twamp-light-client] quit",
+            "[~HUAWEI-twamp-light] sender",
+            "[~HUAWEI-twamp-light-sender] test start-regular test-session 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo reduce high bandwidth consumption caused by proactive measurement, run the test start-regular command to start periodic proactive measurement and calculate the two-way packet loss rate, delay, and jitter based on the sequence number and timestamp information in the packets.\nPrerequisites\nA TWAMP Light session has been created using the test-session command.\nPrecautions\nWhen a TWAMP Light session is deleted, its periodic proactive measurement is also deleted.After a Session-Sender is deleted, all periodic proactive measurement configurations will be deleted.If a TWAMP Light session works in proactive measurement mode, no periodic proactive measurement can be started for it.If a TWAMP Light session works in on-demand measurement mode and periodic proactive measurement is started, on-demand measurement stops immediately, and the system starts periodic proactive measurement.The command may be successfully executed but fail to be implemented due to insufficient board resources. If so, the State field of the TWAMP Light session is displayed as inactive in the display twamp-light test-session command output."
+}

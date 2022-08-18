@@ -1,0 +1,76 @@
+{
+    "PageTitle": "pim bfd",
+    "FuncDef": "The pim bfd command enables BFD for IPv4 PIM on an interface and adjusts PIM BFD parameters on the interface.\nThe undo pim bfd command disables BFD for IPv4 PIM on an interface and restores the default PIM BFD parameter settings on the interface.\n\nBy default, BFD for IPv4 PIM is not enabled on an interface.",
+    "CLIs": [
+        "pim bfd enable",
+        "pim bfd { min-tx-interval <tx-value> | min-rx-interval <rx-value> | detect-multiplier <multiplier-value> } *",
+        "undo pim bfd enable",
+        "undo pim bfd { min-tx-interval <tx-value> | min-rx-interval <rx-value> | detect-multiplier <multiplier-value> } *",
+        "undo pim bfd { min-tx-interval | min-rx-interval | detect-multiplier } *"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "POS sub-interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-tx-interval tx-value",
+            "Info": "Specifies the minimum interval for transmitting BFD packets.\nThe value is an integer that ranges from 3 to 20000 ."
+        },
+        {
+            "Parameters": "min-rx-interval rx-value",
+            "Info": "Specifies the minimum interval for receiving BFD packets.\nThe value is an integer that ranges from 3 to 20000 ."
+        },
+        {
+            "Parameters": "detect-multiplier multiplier-value",
+            "Info": "Specifies the local multiplier of BFD packets.\nThe value is an integer ranging from 3 to 50. The default value is 3."
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables BFD for IPv4 PIM.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] pim sm",
+            "[*HUAWEI-GigabitEthernet1/0/0] pim bfd enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] pim bfd min-tx-interval 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nWhen using the pim bfd enable command, note the following:\n\nThis command applies to non-broadcast multiple access (NBMA) interfaces and broadcast interfaces, not point-to-point (P2P) interfaces.\nBefore configuring this command on an interface, you must run the pim sm command on the interface to enable PIM-SM. Running the undo pim sm command also disables BFD for IPv4 PIM on an interface.\nBFD for IPv4 PIM depends on the BFD protocol. If the bfd command is not run to enable global BFD, the session status is BFD global disable though PIM BFD sessions can be set up.\n\nThe pim bfd enable command is mutually exclusive with the pim silent command.\n\nConfiguration Impact\n\nYou can configure one or more parameters. Parameters that are not configured use their original values.\n\nPrecautions\n\nTwo PIM BFD ends negotiate the sending interval, receiving interval, and detection period for BFD packets based on the following mechanism:\n\nActual sending interval and receiving interval for PIM BFD packets:\nActual sending interval = max (local min-tx-interval, remote min-rx-interval)\nActual receiving interval = max (remote min-tx-interval, local min-rx-interval)Actual detection period = remote detect-multiplier x max (remote min-tx-interval, local min-rx-interval)\nPIM BFD parameters can be configured on both the receive and transmit ends, and the configurations on the two ends are both effective."
+}

@@ -1,0 +1,70 @@
+{
+    "PageTitle": "radius-server shared-key(RADIUS server group view)",
+    "FuncDef": "The radius-server shared-key command configures the shared key for RADIUS server.\nThe undo radius-server shared-key command removes the configured shared key of the RADIUS server. Configuring a private key improves the security of intercommunication between the Router and RADIUS server.\nBy default, the shared key for the radius server is not configured.",
+    "CLIs": [
+        "radius-server { shared-key <key-string> | shared-key-cipher <key-cipher-string> } [ { accounting | authentication } <ipv4-address> [ vpn-instance <instance-name> ] [ source { { <interface-name> | <interface-type> <interface-number> } | ip-address <source-ip-address> } ] <port-number> [ weight <weight> ] ]",
+        "radius-server { shared-key <key-string> | shared-key-cipher <key-cipher-string> } [ { accounting | authentication } <ipv6-address> [ source { { <interface-name> | <interface-type> <interface-number> } | ip-address <ip-address> } ] <port> [ weight <weight> ] ]",
+        "undo radius-server { shared-key | shared-key-cipher }"
+    ],
+    "ParentView": [
+        "RADIUS server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "shared-key key-string",
+            "Info": "Specifies the shared key in simple text.\nThe shared key configured in simple text is displayed in ciphertext.\nThe value is a string of 1 to 128 case-sensitive characters, without spaces or single quotation marks."
+        },
+        {
+            "Parameters": "shared-key-cipher key-cipher-string",
+            "Info": "Specifies the shared key in ciphertext.\nIn the case of a simple text password, the value is a string of 1 to 128 case-sensitive characters, without spaces. In the case of a cipher text password, the value is a string of 1 to 268 case-sensitive characters, without spaces."
+        },
+        {
+            "Parameters": "accounting",
+            "Info": "Indicates the RADIUS accounting server.\n-"
+        },
+        {
+            "Parameters": "authentication",
+            "Info": "Indicates the RADIUS authentication server.\n-"
+        },
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of the RADIUS server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance",
+            "Info": "Indicates the VPN instance to which the RADIUS server belongs.\n-"
+        },
+        {
+            "Parameters": "instance-name",
+            "Info": "Specifies the name of a VPN instance. The value must be the name of a configured VPN instance.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "ip-address ipv4-address",
+            "Info": "Specifies the source IP address of a server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "port-number",
+            "Info": "Specifies the interface number of the RADIUS server.\nThe value ranges from 1 to 65535."
+        },
+        {
+            "Parameters": "weight",
+            "Info": "Specifies the weight of the authentication server.\nThe value ranges from 0 to 100. The default value is 0 and applicable only to the load-sharing mode."
+        },
+        {
+            "Parameters": "weight",
+            "Info": "Indicates the weight of the authentication server and is used for load sharing. The weight-value parameter is valid only when the load sharing mode is adopted through the radius-server algorithm command.\n-"
+        },
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of the RADIUS server.\nThe value is a 32-digit hexadecimal number."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group rd1",
+            "[*HUAWEI-radius-rd1] radius-server shared-key-cipher Hello-01357924678 authentication 192.168.65.20 1615"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run this command to modify the shared key for a RADIUS server in a RADIUS server group.\nConfiguration Impact\nThe shared key for the device must be the same as that for the RADIUS server; otherwise, they cannot communicate with each other.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe configurations, however, can be modified only when the RADIUS server group is not in use.\nThe shared key used for authentication and accounting between the device and RADIUS server can be simple text or ciphertext.\nThe undo radius-server { shared-key | shared-key-cipher } command only deletes the shared key of a RADIUS server group. To delete the shared key of a specific authentication or accounting server, run the undo radius-server authentication or undo radius-server accounting command.\nYou are advised to configure a shared-key that has no less than 16 bytes and consists of at least two types of the following characters: lowercase letters, uppercase letters, numerals, and special characters."
+}

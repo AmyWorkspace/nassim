@@ -1,0 +1,72 @@
+{
+    "PageTitle": "mld query ip-source-policy",
+    "FuncDef": "The mld query ip-source-policy command configures source address-based Multicast Listener Discovery (MLD) Query message filtering.\nThe undo mld query ip-source-policy command restores the default configuration.\n\nBy default, no source address-based MLD Query message filtering is configured.",
+    "CLIs": [
+        "mld query ip-source-policy { <basic-acl6-number> | acl6-name <acl6-name> }",
+        "undo mld query ip-source-policy"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basic-acl6-number",
+            "Info": "Specifies the number of a basic IPv6 ACL, which defines the range of source addresses.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] acl ipv6 number 2001",
+            "[*HUAWEI-acl6-basic-2001] rule permit source 2001:DB8:FE80::1 128",
+            "[*HUAWEI-acl6-basic-2001] rule deny source 2001:DB8:FE70::1 128",
+            "[*HUAWEI-acl6-basic-2001] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld query ip-source-policy 2001"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] acl ipv6 name myacl basic",
+            "[*HUAWEI-acl6-basic-myacl] rule permit source 2001:DB8:FE80::1 128",
+            "[*HUAWEI-acl6-basic-myacl] rule deny source 2001:DB8:FE70::1 128",
+            "[*HUAWEI-acl6-basic-myacl] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld query ip-source-policy acl6-name myacl"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nSource address-based MLD Query message filtering prevents a device from forging MLD Query messages with small IP addresses to cause the actual querier to become invalid. As a result, group members cannot promptly leave and traffic waste occurs. After you run the mld query ip-source-policy command to configure source address-based MLD Query message filtering, the device filters out the MLD Query messages whose source addresses do not match the permit action in a specified ACL rule. In this way, querier election is controlled.\n\nPrerequisites\n\nThe multicast routing function has been enabled using the multicast ipv6 routing-enable command.\n\nConfiguration Impact\n\nIf the mld query ip-source-policy command is run more than once, the latest configuration overrides the previous one.\n\nPrecautions\n\nTo use a numbered ACL, the mld query ip-source-policy command requires an ACL configured using the acl ipv6 command. Run the rule command in the basic ACL view and set the source parameter to specify source addresses of MLD Query messages."
+}

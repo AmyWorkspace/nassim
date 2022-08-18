@@ -1,0 +1,49 @@
+{
+    "PageTitle": "trap-threshold crc-error packet-error-ratio alarm-threshold",
+    "FuncDef": "The trap-threshold crc-error packet-error-ratio alarm-threshold command sets an alarm threshold and an alarm recovery threshold for the CRC error packet ratio.\nThe undo trap-threshold crc-error packet-error-ratio alarm-threshold command restores the default alarm threshold for CRC errors and default period.\nBy default, the threshold for generating a CRC alarm is 3 and the alarm interval is 10 seconds.",
+    "CLIs": [
+        "trap-threshold crc-error packet-error-ratio alarm-threshold <alarm-coe> <alarm-pow> [ resume-threshold <resume-coe> <resume-pow> ] [ trigger-lsp | trigger-section ]",
+        "undo trap-threshold crc-error"
+    ],
+    "ParentView": [
+        "MP-group interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "alarm-coe",
+            "Info": "Specifies the coefficient of the alarm threshold for the CRC error packet ratio (x in xE-y).\nThe value is an integer that ranges from 1 to 9 ."
+        },
+        {
+            "Parameters": "alarm-pow",
+            "Info": "Specifies the power of the alarm threshold for the CRC error packet ratio (y in xE-y).\nThe value is an integer that ranges from 1 to 5 ."
+        },
+        {
+            "Parameters": "resume-threshold resume-coe",
+            "Info": "Specifies the coefficient of the alarm recovery threshold for the CRC error packet ratio (x in xE-y).\nThe value is an integer that ranges from 1 to 9 ."
+        },
+        {
+            "Parameters": "resume-pow",
+            "Info": "Specifies the power of the alarm recovery threshold for the CRC error packet ratio (y in xE-y).\nThe value is an integer that ranges from 1 to 6 ."
+        },
+        {
+            "Parameters": "trigger-lsp",
+            "Info": "Associates MAC-layer SD detection with LSP switching. This parameter is optional. If you do not specify this parameter and the MAC-layer SD rate reaches a specified alarm generation threshold, an alarm is sent to the NMS but LSP switching is not triggered.\n-"
+        },
+        {
+            "Parameters": "trigger-section",
+            "Info": "Specifies whether to trigger section-layer service switching based on the CRC error packet rate.\n-"
+        },
+        {
+            "Parameters": "alarm-threshold",
+            "Info": "Indicates a generation threshold for MAC-layer SD rate threshold-crossing alarms.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system view",
+            "[~HUAWEI] interface mp-Group 1/0/0",
+            "[*HUAWEI-Mp-Group 1/0/0] trap-threshold crc-error packet-error-ratio alarm-threshold 4 5 trigger-section"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set an alarm generation threshold and an alarm clearance threshold for the CRC error frame ratio, run the trap-threshold crc-error packet-error-ratio command. The system reports an alarm to the NMS. If the trigger-lsp or trigger-section parameter is specified, an alarm triggers LSP or section switching.\nConfiguration Impact\nIf the trigger-lsp or trigger-section parameter is specified, traffic is switched to the standby link after an alarm is reported. If the trigger-lsp and trigger-section parameters are both configured on a physical interface, the later configuration takes effect. If the trigger-section parameter is configured and the CRC error frame ratio reaches the alarm threshold on a physical interface, section switching is triggered to set the link layer status for the interface to the bit error status. If an IGP and LDP use the interface as an outbound interface, LSP recalculation and convergence are triggered."
+}

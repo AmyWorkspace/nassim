@@ -1,0 +1,34 @@
+{
+    "PageTitle": "trap-threshold bad-bytes (Port extension interface view)",
+    "FuncDef": "The trap-threshold bad-bytes command configures an alarm threshold for the number of bytes in corrupted packets that an interface receives and an interval for the system to monitor corrupted packets.\nThe undo trap-threshold bad-bytes command restores the default configurations.\nBy default, the alarm threshold is 1000 bytes, and the detection interval is 10s.",
+    "CLIs": [
+        "trap-threshold bad-bytes trap-threshold interval-second <interval>",
+        "undo trap-threshold bad-bytes"
+    ],
+    "ParentView": [
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "trap-threshold",
+            "Info": "Specifies an alarm threshold.\nThe value is an integer ranging from 1 to 65535. The default value is 1000."
+        },
+        {
+            "Parameters": "interval-second interval",
+            "Info": "Specifies an interval for the system to detect error packets.\nThe value is an integer ranging from 1 to 65535, in seconds. The default value is 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1025/1/0/0",
+            "[~HUAWEI-GigabitEthernet1025/1/0/0] trap-threshold bad-bytes 900 interval-second 9"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1025/1/0/0",
+            "[~HUAWEI-GigabitEthernet1025/1/0/0] undo trap-threshold bad-bytes"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen an interface receives a large number of corrupted packets frequently, the link quality is poor and cannot ensure reliable transmission for normal services. To monitor the link quality, run the snmp-agent trap enable port bad-bytes command to enable the alarm function for byte threshold crossing in corrupted packets, and then run the trap-threshold bad-bytes command to set an alarm threshold and detection interval. After this configuration is performed, the device monitors the number of bytes in corrupted packets on the interface at the specified detection interval. When the number of bytes in corrupted packets received by the interface reaches the specified threshold for three consecutive detection intervals, the link quality is poor. Only in this case, the device generates an alarm and sends it to an NMS so that the administrator can be instructed to maintain the interface and troubleshoot the fault. The device sends a clear alarm to the NMS to inform the administrator that the fault is rectified only when the number of bytes in corrupted packets received by the interface falls below the specified threshold for three consecutive detection intervals.\nPrerequisites\nThe alarm function has been enabled using the snmp-agent trap enable port bad-bytes command in case that the number of bytes in corrupted packets reaches an alarm threshold."
+}

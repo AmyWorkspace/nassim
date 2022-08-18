@@ -1,0 +1,61 @@
+{
+    "PageTitle": "upgrade all-slot",
+    "FuncDef": "The upgrade all-slot command upgrades all the slots of the device.",
+    "CLIs": [
+        "upgrade all-slot { <file-name> | startup } { monitorbus | firmware } [ force ]"
+    ],
+    "ParentView": [
+        "User view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "file-name",
+            "Info": "Specifies the name of the system software stored in the Cfcard.\nThe value is a string of 4 to 127 characters, spaces not supported."
+        },
+        {
+            "Parameters": "startup",
+            "Info": "Indicates using the current startup system software to upgrade the device.\n-"
+        },
+        {
+            "Parameters": "firmware",
+            "Info": "Indicates the firmware of the slots.\n-"
+        },
+        {
+            "Parameters": "force",
+            "Info": "Forces the upgrade, regardless of the version consistency.\n-"
+        },
+        {
+            "Parameters": "monitorbus",
+            "Info": "Indicates the MonitorBus of the slots.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> upgrade all-slot startup monitorbus",
+            "*********************************************************",
+            "*                     W A R N I N G                     *",
+            "* Please ensure that the configuration has been saved.  *",
+            "* And please ensure that the board does not be powered  *",
+            "* off or be reseted during the upgrade operation.       *",
+            "* Also ensure that any board of this device is not      *",
+            "* removed (pull out or plug in) during this process.    *",
+            "*********************************************************",
+            "Confirm to upgrade.continue? [Y/N]:y",
+            "",
+            "Loading slot:<1,2,17 ,18 ...,**>.",
+            "Please wait....",
+            "Load monitorbus Finish!",
+            "Upgrade result information:",
+            "------------------------------------------------------------------",
+            "Slot #         Type     Item         LoadMode     Result          ",
+            "------------------------------------------------------------------",
+            "17             MPU      monitorbus   mbus         match           ",
+            "18             MPU      monitorbus   mbus         match           ",
+            "1              LPU      monitorbus   mbus         match           ",
+            "2              LPU      monitorbus   mbus         match        ",
+            "...              ...      ...   ...         ...   ",
+            "**             FAN      monitorbus   mbus         match"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThis command is used to upgrade all the registered components such as boards or nodes. The items such as , MonitorBus, and firmware of all the entities are upgraded.\nConfiguration Impact\nThere are two modes for upgrading the items:\nUpgrade the items without using the parameter force.\nThe system checks whether the items of all the entities match the system software. Then, the system upgrades the unmatched items, the Firmware of the master main control board is not included.\nUpgrade the items using the parameter force.\nThe system directly upgrades all the items of entities without checking whether these items match the system software. The Firmware of the master master control is not upgraded.\nDuring the upgrade, the master main control board resets all switch fabric units, causing all interface boards to report \"TM link down\" as the reset reason. This is a normal reset caused by the upgrade and can be ignored.\n\nPrecautions\nWhen the upgrade all-slot command is run to upgrade all board firmware, such as the EPLD, the firmware of the main control board is not upgraded.\nIn VS mode, this command is supported only by the admin VS."
+}

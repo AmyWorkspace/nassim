@@ -1,0 +1,318 @@
+{
+    "PageTitle": "ping",
+    "FuncDef": "The ping command checks the connectivity of an IP network and reachability of a host.",
+    "CLIs": [
+        "ping [ ip ] { [ -c <count> | { { -i { <interface-name> | <interface-type> <interface-number> } | -nexthop <nexthop-address> } * | -si { <sourceIfName> | <source-interface-type> <source-interface-number> } } | { -s <packetsize> | -range [ [ min <min-value> | max <max-value> | step <step-value> ] * ] } | -t <timeout> | -m <time> | -a <source-ip-address> | -h <ttl-value> | -p <pattern> | { -tos <tos-value> | -dscp <dscp-value> } | { -f | ignore-mtu } | -q | -r | -vpn-instance <vpn-instance-name> | -v | -name | -system-time | -ri | -8021p <8021p-value> | -detail ] * <host> [ ip-forwarding ] }",
+        "ping [ ip ] { [ -c <count> | { -s <packetsize> | -range [ [ min <min-value> | max <max-value> | step <step-value> ] * ] } | -t <timeout> | -m <time> | -a <source-ip-address> | -h <ttl-value> | -p <pattern> | { -tos <tos-value> | -dscp <dscp-value> } | { -f | ignore-mtu } | -q | -vpn-instance <vpn-instance-name> | -v | -system-time | -ri | -name ] * <host> bypass -si { <frrSrcIfName> | <frrSrcIfType> <frrSrcIfNum> } }",
+        "ping [ ip ] { [ -c <count> | { { -i { <interface-name> | <interface-type> <interface-number> } | -nexthop <nexthop-address> } * | -si { <sourceIfName> | <source-interface-type> <source-interface-number> } } | { -s <packetsize> | -range [ [ min <min-value> | max <max-value> | step <step-value> ] * ] } | -t <timeout> | -m <time> | -a <source-ip-address> | -h <ttl-value> | -p <pattern> | { -tos <tos-value> | -dscp <dscp-value> } | { -f | ignore-mtu } | -vpn-instance <vpn-instance-name> | -name | -8021p <8021p-value> | -brief ] * <host> [ ip-forwarding ] }",
+        "ping [ ip ] { [ -c <count> | { { -i { <interface-name> | <interface-type> <interface-number> } | -nexthop <nexthop-address> } * | -si { <sourceIfName> | <source-interface-type> <source-interface-number> } } | { -s <packetsize> | -range [ [ min <min-value> | max <max-value> | step <step-value> ] * ] } | -t <timeout> | -m <time> | -a <source-ip-address> | -h <ttl-value> | -p <pattern> | { -tos <tos-value> | -dscp <dscp-value> } | { -f | ignore-mtu } | { -vpn-instance <vpn-instance-name> [ peer <peerIpv6> ] } | -8021p <8021p-value> | -name | -brief ] * <host> [ ip-forwarding ] }",
+        "ping [ ip ] { [ -c <count> | { { -i { <interface-name> | <interface-type> <interface-number> } | -nexthop <nexthop-address> } * | -si { <sourceIfName> | <source-interface-type> <source-interface-number> } } | { -s <packetsize> | -range [ [ min <min-value> | max <max-value> | step <step-value> ] * ] } | -t <timeout> | -m <time> | -a <source-ip-address> | -h <ttl-value> | -p <pattern> | { -tos <tos-value> | -dscp <dscp-value> } | { -f | ignore-mtu } | -q | -r | { -vpn-instance <vpn-instance-name> [ peer <peerIpv6> ] } | -v | -d | -system-time | -ri | -8021p <8021p-value> | -name | -detail ] * <host> [ ip-forwarding ] }"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip",
+            "Info": "Specifies the IPv4 protocol.\nBy default, IPv4 is used."
+        },
+        {
+            "Parameters": "-c count",
+            "Info": "Specifies the maximum number of times for sending ICMP Echo Request packets.\nAfter you run the ping command, the sequence number of an ICMP Echo Request packet starts from 1 and is incremented by 1 each time an ICMP Echo Request packet is sent. By default, five ICMP Echo Request packets are sent. You can use count to specify the number of ICMP Echo Request packets to be sent. If the peer is reachable, it sends five ICMP Echo Response packets with the same sequence numbers as those of the ICMP Echo Request packets.\nIn the case of a poor network quality, increase the count value and monitor network quality based on the packet loss ratio.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-i interface-name",
+            "Info": "Specifies the interface through which ICMP Echo Request packets are sent.\nFor broadcast links (on the Ethernet), the specified destination address functions as the next hop address.\nThe value is a string ranging from 1 to 63."
+        },
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the interface through which ICMP Echo Request packets are sent.\nFor broadcast links (on the Ethernet), the specified destination address functions as the next hop address.\n-"
+        },
+        {
+            "Parameters": "-nexthop nexthop-address",
+            "Info": "Specifies an IP address for the next hop.\nIf you have specified this parameter, the device no longer searches the routing table before sending ICMP Echo Response packets. This process prevents ping failures caused by incorrect routing entries.\nThe value is in dotted decimal notation.\nThe specified next hop address must be the next hop address of a directly connected physical interface.When you specify a next hop address, you can configure -i interface-type interface-number to specify an outbound interface. The following conditions must be met to ensure a test success: The specified next hop address must match the outbound interface. The specified outbound interface cannot be a logical interface's member interface.\nIf you have specified a next hop address, you cannot specify a VPN."
+        },
+        {
+            "Parameters": "-si sourceIfName",
+            "Info": "Specifies the inbound interface name of ICMP Echo Request packets to simulate the sending of packets by a remote device. This parameter is set to check faults in the path for forwarding packets received from a specified interface.\n-"
+        },
+        {
+            "Parameters": "source-interface-type source-interface-number",
+            "Info": "Specifies the inbound interface type and number of ICMP Echo Request packets to simulate the sending of packets by a remote device. This parameter is set to check faults in the path for forwarding packets received from a specified interface.\n-"
+        },
+        {
+            "Parameters": "-s packetsize",
+            "Info": "Specifies the length of an ICMP Echo Request packet (excluding the IP header and ICMP header).\nThe value is an integer ranging from 20 to 9600, in bytes. The default value is 56."
+        },
+        {
+            "Parameters": "-range",
+            "Info": "Enables the device to send ICMP Echo Request messages with variable payload lengths.\nIf the -range parameter is not specified, the payload length of an ICMP Echo Request message is equal to the length specified by the -s packetsize parameter. The default value is 56, in bytes.AL21If AM10the -range parameter is specified, the payload length of the first ICMP Echo Request message is min min-value, and that of the second ICMP Echo Request message is min min-value plus step step-value. The payload length increases incrementally by step step-value for subsequent ICMP Echo Request messages until max max-value is reached. After that, the device will not send ICMP Echo Request messages any more.\nBy default, the payload length of an ICMP Echo Request message ranges from 56 to 9600 bytes, and the step length is 1 byte.\nThe command execution takes a long period if a large number of ICMP Echo Request messages need to be sent. If you want to terminate the command execution, press Ctrl+C.To change the number of ICMP Echo Request messages to be sent, change the values of min min-value and max max-value. The value of min min-value must be smaller than that of max max-value.If both the -range and -c count parameters are specified, the device sends ICMP Echo Request messages of the same payload length for the number of times specified by the -c count parameter."
+        },
+        {
+            "Parameters": "min min-value",
+            "Info": "Specifies the minimum payload length of an ICMP Echo Request message.\nThe value is an integer ranging from 20 to 9600, in bytes. The default value is 56."
+        },
+        {
+            "Parameters": "max max-value",
+            "Info": "Specifies the maximum payload length of an ICMP Echo Request message.\nThe value is an integer ranging from 20 to 9600, in bytes. The default value is 9600."
+        },
+        {
+            "Parameters": "step step-value",
+            "Info": "Specifies the step length of an ICMP Echo Request message.\nThe value is an integer ranging from 1 to 1000, in bytes. The default value is 1."
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies the timeout period for waiting for an ICMP Echo Response packet in response to an ICMP Echo Request packet.\nAfter the ping command is run, the source sends an ICMP Echo Request packet to a specific address and waits for a reply. If the destination sends an ICMP Echo Response packet to the source within the time specified by timeout, the destination is reachable. If the source does not receive an ICMP Echo Response packet within the timeout period, the Request packet times out.\nNormally, the source will receive an ICMP Echo Response packet within 1 to 10 seconds after an ICMP Echo Request packet is sent. In the case of a low network transmission rate, increase the timeout period.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-m time",
+            "Info": "Specifies the interval at which ICMP Echo Request packets are sent.\nAfter you run the ping command, the device sends an ICMP Echo Request packet. If the device fails to receive a reply within 500 ms, it sends the next ICMP Echo Request packet. You can use the time parameter to set the interval at which ICMP Echo Request packets are sent. Do not set this parameter to less than 2000 ms on an unstable network.\nThe value is an integer ranging from 1 to 10000, in milliseconds. The default value is 500."
+        },
+        {
+            "Parameters": "-a source-ip-address",
+            "Info": "Specifies the source IP address for ICMP Echo Request packets.\nIf no source IP address is specified, the IP address of the outbound interface is used.\nDotted decimal notation."
+        },
+        {
+            "Parameters": "-h ttl-value",
+            "Info": "Specifies the TTL value.\nIf the TTL value in a packet is reduced to 0 during forwarding, the Router that receives the packet sends an ICMP timeout packet to the source, indicating that the destination is unreachable.\nThe value is an integer ranging from 1 to 255. The default value is 255."
+        },
+        {
+            "Parameters": "-p pattern",
+            "Info": "Specifies the padding byte of ICMP Echo Request packets.\nThe padding byte allows the system to identify a specific packet among a great number of received ICMP Echo Response packets.\nThe value is a hexadecimal number ranging from 0 to FFFFFFFF. By default, the padding starts from 0x00."
+        },
+        {
+            "Parameters": "-tos tos-value",
+            "Info": "Specifies the ToS value of an ICMP Echo Request packet.\nThe priority of an ICMP packet is determined by the ToS value.\nThe value is an integer ranging from 0 to 255. The default value is 0."
+        },
+        {
+            "Parameters": "-dscp dscp-value",
+            "Info": "Specifies the DSCP value of an Echo Request packet to be sent.\nThe value is an integer ranging from 0 to 63. The default value is 0."
+        },
+        {
+            "Parameters": "-f",
+            "Info": "Indicates that packets are not fragmented during transmission.\nBy default, packets will be fragmented during transmission."
+        },
+        {
+            "Parameters": "ignore-mtu",
+            "Info": "Indicates that the system does not check the interface MTU when a packet is sent.\n-"
+        },
+        {
+            "Parameters": "-q",
+            "Info": "Indicates that only statistics are displayed. By default, all information is displayed.\nIf -q is specified in the ping command, the system displays only statistics about sent and received packets, packet loss ratio, and minimum, average, and maximum RTTs.\nBy default, all information is displayed."
+        },
+        {
+            "Parameters": "-r",
+            "Info": "Records routes.\nIf -r is configured, the IP address of each Router that the IP packet passes along the packet transmission path is recorded in the Options field. When the IP packet reaches the destination, all IP addresses recorded in the Options field are copied to an ICMP Echo Response packet. In addition, the IP address of each Router that the ICMP Echo Response packet passes through is recorded. When the ping program receives the reply, IP addresses of the passed Routers are displayed.\nBy default, no route is recorded."
+        },
+        {
+            "Parameters": "-vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "-v",
+            "Info": "Enables the device to display ICMP Echo Reply packets that are received by but not for this device. For example, a packet times out, or the sequence number of a packet is incorrect.\nIf -v is not configured, the system displays only the ICMP Echo Response packets received by the local user.If -v is configured, the system displays all received ICMP Echo Response packets.If the sequence number of a received ICMP Echo Response packet is incorrect or the packet delay is longer than the timeout period, the system displays a detailed message.\nBy default, ICMP Echo Response packets not for the local device are not displayed."
+        },
+        {
+            "Parameters": "-d",
+            "Info": "Specifies the SO_DEBUG option on the socket being used.\n-"
+        },
+        {
+            "Parameters": "-system-time",
+            "Info": "Specifies the system time when an ICMP Echo Request packet is sent.\n-"
+        },
+        {
+            "Parameters": "-ri",
+            "Info": "Indicates that the source interface of echo response packet is displayed.\n-"
+        },
+        {
+            "Parameters": "-8021p 8021p-value",
+            "Info": "Specifies the 802.1p value of an Echo Request packet to be sent.\nThe value is an integer ranging from 0 to 7. The default value is 0."
+        },
+        {
+            "Parameters": "-name",
+            "Info": "Displays the host name of the destination address.\n-"
+        },
+        {
+            "Parameters": "-detail",
+            "Info": "Displays detailed information about packet loss.\n-"
+        },
+        {
+            "Parameters": "host",
+            "Info": "Specifies the IP address or hostname of a remote system.\nThe value is a string case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "ip-forwarding",
+            "Info": "Indicates that the ping packets are forcibly forwarded through IP on the first node.\n-"
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Indicates that packets are sent through the bypass IP path.\n-"
+        },
+        {
+            "Parameters": "frrSrcIfName",
+            "Info": "Specifies the inbound interface name of ICMP Echo Request packets to simulate the sending of packets by a remote device. This parameter is set to check faults in the path for forwarding packets received from a specified interface.\n-"
+        },
+        {
+            "Parameters": "frrSrcIfType frrSrcIfNum",
+            "Info": "Specifies the inbound interface type and number of ICMP Echo Request packets to simulate the sending of packets by a remote device. This parameter is set to check faults in the path for forwarding packets received from a specified interface.\n-"
+        },
+        {
+            "Parameters": "-brief",
+            "Info": "Displays brief information about packet loss.\n-"
+        },
+        {
+            "Parameters": "peer peerIpv6",
+            "Info": "Specifies a peer SID, that is, the address of the last hop in the SRv6 domain, in EVPN L3VPN over SRv6 BE scenarios.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping 10.1.1.2",
+            "  PING 10.1.1.2 : 56 data bytes , press CTRL_C to break ",
+            "    Reply from 10.1.1.2 : bytes=56 sequence=1 ttl=255 time = 1ms ",
+            "    Reply from 10.1.1.2 : bytes=56 sequence=2 ttl=255 time = 2ms ",
+            "    Reply from 10.1.1.2 : bytes=56 sequence=3 ttl=255 time = 1ms ",
+            "    Reply from 10.1.1.2 : bytes=56 sequence=4 ttl=255 time = 3ms ",
+            "    Reply from 10.1.1.2 : bytes=56 sequence=5 ttl=255 time = 2ms ",
+            "",
+            "  --10.1.1.2 ping statistics-- ",
+            "    5 packet(s) transmitted ",
+            "    5 packet(s) received ",
+            "    0.00% packet loss ",
+            "    round-trip min/avg/max = 1/2/3 ms"
+        ],
+        [
+            "<HUAWEI> ping -detail 10.1.1.3",
+            "  PING 10.1.1.3: 56 data bytes, press CTRL_C to break",
+            "    Request time out (unroutable)",
+            "    Request time out (unroutable)",
+            "    Request time out (unroutable)",
+            "    Request time out (unroutable)",
+            "    Request time out (unroutable)",
+            "",
+            "  --- 10.1.1.3 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    0 packet(s) received",
+            "    100.00% packet loss"
+        ],
+        [
+            "<HUAWEI> ping -a 1.1.1.1 -c 8 10.1.1.2",
+            "  PING 10.1.1.2: 56 data bytes, press CTRL_C to break ",
+            "    Reply from 10.1.1.2: bytes=56 Sequence=1 ttl=255 time=32 ms ",
+            "    Reply from 10.1.1.2: bytes=56 Sequence=2 ttl=255 time=32 ms ",
+            "    Reply from 10.1.1.2: bytes=56 Sequence=3 ttl=255 time=32 ms ",
+            "    Reply from 10.1.1.2: bytes=56 Sequence=4 ttl=255 time=32 ms ",
+            "    Reply from 10.1.1.2: bytes=56 Sequence=5 ttl=255 time=32 ms ",
+            "    Reply from 10.1.1.2: bytes=56 Sequence=6 ttl=255 time=32 ms ",
+            "    Reply from 10.1.1.2: bytes=56 Sequence=7 ttl=255 time=32 ms ",
+            "    Reply from 10.1.1.2: bytes=56 Sequence=8 ttl=255 time=32 ms ",
+            "",
+            "  --- 10.1.1.2 ping statistics --- ",
+            "    8 packet(s) transmitted ",
+            "    8 packet(s) received ",
+            "    0.00% packet loss ",
+            "    round-trip min/avg/max = 32/32/32 ms"
+        ],
+        [
+            "<HUAWEI> ping -m 3000 -s 300 -vpn-instance vpna 10.1.1.2",
+            "  PING 10.1.1.2: 300 data bytes, press CTRL_C to break ",
+            "    Reply from 10.1.1.2: bytes=300 Sequence=1 ttl=255 time=31 ms ",
+            "    Reply from 10.1.1.2: bytes=300 Sequence=2 ttl=255 time=31 ms ",
+            "    Reply from 10.1.1.2: bytes=300 Sequence=3 ttl=255 time=31 ms ",
+            "    Reply from 10.1.1.2: bytes=300 Sequence=4 ttl=255 time=31 ms ",
+            "    Reply from 10.1.1.2: bytes=300 Sequence=5 ttl=255 time=31 ms ",
+            "",
+            "  --- 10.1.1.2 ping statistics --- ",
+            "    5 packet(s) transmitted ",
+            "    5 packet(s) received ",
+            "    0.00% packet loss ",
+            "    round-trip min/avg/max = 31/31/31 ms"
+        ],
+        [
+            "<HUAWEI> ping -range min 56 max 60 192.168.1.9",
+            "  PING 192.168.1.9: 56-60  data bytes, press CTRL_C to break",
+            "    Reply from 192.168.1.9: bytes=56 Sequence=1 ttl=255 time=80 ms",
+            "    Reply from 192.168.1.9: bytes=57 Sequence=2 ttl=255 time=60 ms",
+            "    Reply from 192.168.1.9: bytes=58 Sequence=3 ttl=255 time=80 ms",
+            "    Reply from 192.168.1.9: bytes=59 Sequence=4 ttl=255 time=80 ms",
+            "    Reply from 192.168.1.9: bytes=60 Sequence=5 ttl=255 time=50 ms",
+            "",
+            "  --- 192.168.1.9 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 50/70/80 ms"
+        ],
+        [
+            "<HUAWEI> ping -brief 10.1.1.2",
+            "  PING 10.1.1.2: 56  data bytes, press CTRL_C to break",
+            "    !!!!!",
+            "",
+            "  --- 10.1.1.2 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 1/1/1 ms"
+        ],
+        [
+            "<HUAWEI> ping 192.168.12.2 bypass -si GigabitEthernet 4/0/0",
+            "  PING 192.168.12.2: 56 data bytes, press CTRL_C to break ",
+            "    Reply from 192.168.12.2: bytes=56 Sequence=1 ttl=254 time=1 ms ",
+            "    Reply from 192.168.12.2: bytes=56 Sequence=2 ttl=254 time=1 ms ",
+            "    Reply from 192.168.12.2: bytes=56 Sequence=3 ttl=254 time=1 ms ",
+            "    Reply from 192.168.12.2: bytes=56 Sequence=4 ttl=254 time=1 ms ",
+            "    Reply from 192.168.12.2: bytes=356 Sequence=5 ttl=254 time=1 ms ",
+            "",
+            "  --- 192.168.12.2 ping statistics --- ",
+            "    5 packet(s) transmitted ",
+            "    5 packet(s) received ",
+            "    0.00% packet loss ",
+            "    round-trip min/avg/max = 1/1/1 ms"
+        ],
+        [
+            "<HUAWEI> ping www.huawei.com",
+            "  PING www.huawei.com (192.168.10.2): 56  data bytes, press CTRL_C to break",
+            "    Reply from 192.168.10.2: bytes=56 Sequence=1 ttl=255 time=7 ms",
+            "    Reply from 192.168.10.2: bytes=56 Sequence=2 ttl=255 time=10 ms",
+            "    Reply from 192.168.10.2: bytes=56 Sequence=3 ttl=255 time=7 ms",
+            "    Reply from 192.168.10.2: bytes=56 Sequence=4 ttl=255 time=11 ms",
+            "    Reply from 192.168.10.2: bytes=56 Sequence=5 ttl=255 time=11 ms",
+            "",
+            "  --- www.huawei.com ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 7/9/11 ms"
+        ],
+        [
+            "<HUAWEI> ping -c 2 -a 192.168.10.2 -name 192.168.10.2",
+            "  PING 192.168.10.2 (www.huawei.com): 56  data bytes, press CTRL_C to break",
+            "    Reply from 192.168.10.2: bytes=56 Sequence=1 ttl=255 time=18 ms",
+            "    Reply from 192.168.10.2: bytes=56 Sequence=2 ttl=255 time=8 ms",
+            "",
+            "  --- 192.168.10.2 ping statistics ---",
+            "    2 packet(s) transmitted",
+            "    2 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 8/13/18 ms"
+        ],
+        [
+            "<HUAWEI> ping -v -m 300 -t 300 10.0.0.1",
+            "  PING 10.0.0.1: 56  data bytes, press CTRL_C to break",
+            "    Request time out",
+            "    Reply from 10.0.0.1: bytes=56 Sequence=2 ttl=255 time=259 ms",
+            "    Error: Sequence number = 1 is less than the correct = 3!",
+            "    Request time out",
+            "    Error: Trip time = 320 ms is longer than wait time = 300 ms!",
+            "    Reply from 10.0.0.1: bytes=56 Sequence=4 ttl=255 time=280ms",
+            "    Reply from 10.0.0.1: bytes=56 Sequence=5 ttl=255 time=256 ms",
+            "",
+            "  --- 10.0.0.1 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    3 packet(s) received",
+            "    40.00% packet loss",
+            "    round-trip min/avg/max = 256/265/280 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPing is a common debugging tool used to test the network connectivity. It uses ICMP packets to check the following items:\nWhether the remote device is available.Round-trip delay of packets transmitted between the local and remote devices.Whether packet loss occurs and what is the packet loss ratio.\nYou can use the ping command to check network connectivity or line quality in the following scenarios:\nCheck the protocol stack on the local device. The ping loopback-address command checks whether the TCP/IP protocol suite works properly on the local device.Check whether the destination host is reachable on an IP network. You can run the ping host command to send an ICMP Echo Request packet to the destination host. If a reply is received, it means that the destination host is reachable.Check whether the peer is reachable on an L3VPN. On an L3VPN, devices may lack routing information about each other, and run the ping -vpn-instance vpn-instance-name host command, not the ping host command, to check whether the peer is reachable. If the VPN instance name is specified, an ICMP Echo Request packet can reach the peer. If a reply is received, the peer is reachable.On an unstable network, run the ping -c count-t timeout host command to roughly determine the network quality between the local device and the peer host. The command output contains the packet loss rate and average delay for you to evaluate the network quality. If the network quality is poor, setting greater values for the count and timeout parameters is recommended to obtain more accurate testing results.Check the path. You can run the ping -r host command to obtain information about nodes along the path from the local device to the peer.Check the path MTU. You can run the ping { -f | ignore-mtu } -s packetsize host command to prevent ICMP packet fragmentation, or the system does not check the interface MTU when a packet is sent, and set the length of an ICMP packet so as to obtain the path MTU after multiple probes.Check whether the ping operation failed due to a failure in an MPLS or IP network. You can run the ping -si command to specify forcible IP forwarding of ping packets on the first node to check whether the IP network fails. Currently, only ICMP Echo Request packets can be forcibly forwarded over an IP network, although ICMP echo reply packets cannot be forcibly forwarded over an IP network. The ip-forwarding command can be used only with the parameter -c, -m, -p, -q, -s, -t, or -tos. This scenario supports only basic networking directly connected to an LDP LSP, but does not support networking connected to non-LDP LSP tunnels or load balancing on the ingress.If system resources are insufficient, error information is displayed.To display brief information about packet loss, set the -brief parameter.\n\nPrerequisites\nBefore running the ping command, the ICMP module is working properly.If -vpn-instance is configured, the VPN module is working properly.\n\nConfiguration Impact\nIf the destination host is unreachable, you cannot run the ping command to check network connectivity or locate a line fault. In this case, the system displays \"Request time out\", indicating that the ICMP Echo Request packet times out.If an intermediate device is disabled from responding to ICMP packets, detection on this node fails.\n\nPrecautions\nIf an abnormality occurs in the ping process, you can press Ctrl+C to terminate the ping operation.\nYou cannot run the ping command to send ping packets to a broadcast address such as XX.XX.XX.255/24.\nIf both the -c and -range parameters are configured, the -c parameter indicates the number of packets to be sent at each interval."
+}

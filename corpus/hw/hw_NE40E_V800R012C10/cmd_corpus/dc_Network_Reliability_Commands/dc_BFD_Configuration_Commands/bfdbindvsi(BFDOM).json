@@ -1,0 +1,78 @@
+{
+    "PageTitle": "bfd bind pw vsi peer",
+    "FuncDef": "The bfd bind pw vsi peer command binds a BFD session to a PW, so that BFD can detect the connectivity of the PW.\nThe bfd bind pw vsi peer group command creates a BFD session group to detect PW links.\nBy default, BFD is not configured to detect PW connectivity.",
+    "CLIs": [
+        "bfd <session-name> bind pw vsi <vsi-name> peer <peer-address> [ vc-id <vc-id> ] [ remote-peer <remote-peer-address> pw-ttl { auto-calculate | <ttl-number> } ]",
+        "bfd <session-name> bind pw vsi <vsi-name> peer <peer-address> [ vc-id <vc-id> ] [ remote-peer <remote-peer-address> pw-ttl { auto-calculate | <ttl-number> } ] group"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "session-name",
+            "Info": "Specifies the name of a BFD session.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string.\nWhen the name of a BFD session is configured, the uppercase and lowercase letters in the name must be the same as what you enter.BFD session names are case-insensitive. For example, ABC and abc are regarded as the same BFD session. If you have configured ABC as the name of a BFD session, the ABC BFD session view is directly displayed when you configure abc."
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies the name of a virtual switching instance (VSI).\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "peer peer-address",
+            "Info": "Specifies the destination IP address of the virtual private LAN service (VPLS) PW, which is usually the LSR ID.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id vc-id",
+            "Info": "Specifies the ID of a Layer 2 VC.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "remote-peer remote-peer-address",
+            "Info": "Specifies the IP address used as the destination address of the PW to be detected by the BFD session, which is usually an LSR ID.\nThe value is in dotted decimal notation. It cannot be in the format of 127.X.X.X."
+        },
+        {
+            "Parameters": "pw-ttl",
+            "Info": "Indicates that the BFD session detects a PW in TTL mode. In this mode, the TTL value can be manually set or automatically calculated.\n-"
+        },
+        {
+            "Parameters": "auto-calculate",
+            "Info": "Indicates that the number of hops along a PW is counted automatically.\n-"
+        },
+        {
+            "Parameters": "ttl-number",
+            "Info": "Specifies the number of hops along the PW to be detected.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "group",
+            "Info": "BFD session group.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] bfd b bind pw vsi vsi1 remote-peer 1.1.1.1 pw-ttl auto-calculate"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd b bind pw interface GigabitEthernet 1/0/0.1 remote-peer 1.1.1.1 pw-ttl auto-calculate group",
+            "[*HUAWEI-bfd-lsp-session-b] sub-session discriminator local 11 remote 10 select-board 3",
+            "[*HUAWEI-bfd-lsp-session-b] sub-session discriminator local 13 remote 12 select-board 4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd b bind pw vsi vsi1 remote-peer 1.1.1.1 pw-ttl auto-calculate group",
+            "[*HUAWEI-bfd-lsp-session-b] sub-session discriminator local 11 remote 10 select-board 3",
+            "[*HUAWEI-bfd-lsp-session-b] sub-session discriminator local 13 remote 12 select-board 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf PEs on a Multiprotocol Label Switching (MPLS) Layer 2 virtual private network (L2VPN) communicate over PWs, you can enhance service protection by configuring BFD to speed up link fault detection and rapidly trigger upper-layer application switching.\nThe bfd bind pw command is used to detect the connectivity of SS-PWs and MS-PWs.\nIf you do not specify remote-peer remoteip-value pw-ttl in the bfd bind pw command, you must run the control-word command to enable the control word for the detected PW.If you specify remote-peer remoteip-value pw-ttl:If you choose to specify auto-calculate, the system automatically calculates the number of segments of the detected PW based on remote-peer remoteip-value.If you choose to specify ttl-value, the number of segments in the detected PW is configured.If BFD detects changes in the VC encapsulation type of a VPWS PW, indicating the deletion of the Virtual Leased Line (VLL) PW, BFD module deletes the session detecting the VLL PW.When a large number of service PWs originated from the same source and destined for the same device are available, a large number of BFD sessions are required, which consumes lots of resources. To reduce the consumption of public network link bandwidths and system resources, configure an mPW that has the same source and destination as the service PWs and bind the service PWs to the mPW. This configuration allows the service PWs to track the mPW status. Therefore, a BFD session can be configured only for the mPW to detect faults. The mPW then notifies all service PWs bound to it of the status. This allows the BFD session to also monitor the service PWs.\nIf a PW is a VPLS SS-PW, you can run the bfd bind pw vsi command to detect PW connectivity. In the bfd bind pw vsi command, the peer peerip-value parameter specifies a PW on a VPLS network. The\nbfd bind pw vsi command applies only to BFD for PW in TTL mode:\nIf BFD detects an E2E VPLS SS-PW, the values of peer peerip-value and remote-peer remoteip-value are the same. In this case, you only need to use the bfd sessname-value bind pw vsi vsi-name peer peerip-value command. The TTL is fixed at 255.If BFD detects an MS-PW in a VPWS accessing VPLS scenario, you must specify both peer peerip-value and remote-peer remoteip-value in the bfd bind pw command.If you choose to specify auto-calculate, the system automatically calculates the number of segments of the detected PW based on remote-peer remoteip-value.If you choose to specify ttl, the number of segments in the detected PW is configured.\nbfd bind pw group Create a BFD session group for an inter-board Eth-Trunk link.\nThe two devices are connected through an Eth-Trunk link, and the two member interfaces of the Eth-Trunk interface are located on two different interface boards. Normally, after a BFD session is bound to an Eth-Trunk interface, only one BFD session is created. BFD selects the interface board on which a member interface resides as the board of the state machine and monitors the member link. When the interface board where the BFD session resides is different from the interface board selected for the current service traffic, if the member interface of the BFD session, the member link, or the board of the state machine is faulty, the BFD module considers that the Eth-Trunk interface is faulty. Actually, the path used for transmitting service traffic is still functioning properly. Then, a BFD detection error occurs.\nThis problem can be solved by creating a BFD session group. Create a BFD session group for an inter-board Eth-Trunk link. The BFD session group contains two BFD sub-sessions. The service components detect only the status of the BFD session group. The status of a BFD session group depends on the status of the two BFD sub-sessions. As long as one BFD sub-session is Up, the status of the BFD session group is Up. When both sub-sessions are Down, the BFD session group is Down.\n\nPrerequisites\nThe bfd command has been run to enable BFD globally.The mpls l2vc command has been run to configure a PW between AC interfaces.\n\nConfiguration Impact\nAfter you configure BFD for PW, PW connectivity faults can be quickly detected. If primary and secondary PWs exist, frequent PW flapping may cause frequent traffic switchovers between the primary and secondary PWs.\nPrecautions\nTo run the bfd bind pw command to detect the connectivity of a VPWS MS-PW, ensure that the first segment of the PW is a VPWS PW with one end on a non-SPE device.To run the bfd bind pw command to detect the connectivity of a VPWS SS-PW, ensure that the end nodes of the PW are not SPEs.If you specify remote-peer incorrectly after choosing auto-calculate, the calculated TTL is 0 and the BFD session cannot go Up.To run the bfd bind pw vsi command to detect the connectivity of a VPLS SS-PW, ensure that the end nodes of the PW are not SPEs.In BGP VPWS scenarios, when BFD has been bound to a PW and the remote-peer parameter is configured, the system displays an error message, indicating that the PW's remote address cannot be specified. In LDP VPWS and LDP VPLS scenarios, the remote-peer parameter can be configured.Static BFD for VLL PW does not support a CV type of 0x10 or 0x20 in control word mode. If the CV type in the PW negotiation result is 0x10 or 0x20, the BFD session cannot go Up."
+}

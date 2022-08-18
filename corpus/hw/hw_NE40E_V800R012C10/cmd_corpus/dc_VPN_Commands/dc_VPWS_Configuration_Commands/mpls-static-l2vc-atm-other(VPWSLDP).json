@@ -1,0 +1,101 @@
+{
+    "PageTitle": "mpls static-l2vc transmit-vpn-label receive-vpn-label (interface view)",
+    "FuncDef": "The mpls static-l2vc transmit-vpn-label receive-vpn-label command creates a static primary PW.\nThe undo mpls static-l2vc command deletes a static primary PW.\nBy default, no static PW is created.",
+    "CLIs": [
+        "mpls static-l2vc { { destination <ip-address> | pw-template <template-name> <vc-id> } * | destination <ip-address> <vc-id> } transmit-vpn-label <transmit-label-value> receive-vpn-label <receive-label-value> [ tunnel-policy <tnl-policy-name> | [ control-word [ seq-number ] | no-control-word ] | [ ip-interworking ] | [ secondary | bypass ] | max-atm-cells <max-atm-cell-value> | atm-pack-overtime <atm-pack-overtime> ] *",
+        "undo mpls static-l2vc { { destination <ip-address> | pw-template <template-name> <vc-id> } * | destination <ip-address> <vc-id> } transmit-vpn-label <transmit-label-value> receive-vpn-label <receive-label-value> [ tunnel-policy <tnl-policy-name> | [ control-word [ seq-number ] | no-control-word ] | [ ip-interworking ] | [ secondary | bypass ] | max-atm-cells <max-atm-cell-value> | atm-pack-overtime <atm-pack-overtime> ] *",
+        "undo mpls static-l2vc [ secondary | bypass ]"
+    ],
+    "ParentView": [
+        "IMA-group sub-interface view",
+        "IMA group interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "destination ip-address",
+            "Info": "Specifies the LSR-ID of a peer device.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "pw-template template-name",
+            "Info": "Specifies the name of a static PW template.\nThe name is a string of 1 to 19 case-sensitive characters, spaces not supported. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "vc-id",
+            "Info": "Specifies a 32-bit VC ID that is locally unique.\nA combination of the VC ID and VC type uniquely identifies a VC.\nThis parameter cannot be modified. To change the VC ID, you need to delete the configured one and reconfigure it.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "transmit-vpn-label transmit-label-value",
+            "Info": "Indicates the label value of sent packets.\nThe value is an integer that ranges from 0 to 1048575."
+        },
+        {
+            "Parameters": "receive-vpn-label receive-label-value",
+            "Info": "Indicates the label value of received packets.\nThe value is an integer that ranges from 16 to 32783."
+        },
+        {
+            "Parameters": "tunnel-policy tnl-policy-name",
+            "Info": "Specifies the name of a tunnel policy.\nThe value is a string of 1 to 39 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Enables the control word.\nBy default:\nFor PWs with the TDM or FR encapsulation type: If no PW template is used, the control word function is enabled by default. If a PW template is used, the control word function can be enabled only after a control word is explicitly specified.For PWs with the other encapsulation types: the control word function can be enabled only after a control word is explicitly specified."
+        },
+        {
+            "Parameters": "seq-number",
+            "Info": "Enables the sequence number function of the control word.\n-"
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "Disables the control word.\n-"
+        },
+        {
+            "Parameters": "ip-interworking",
+            "Info": "Enables static PW interworking when devices in the interworking are all provided by Huawei.\n-"
+        },
+        {
+            "Parameters": "secondary",
+            "Info": "Configures the PW as a secondary PW.\n-"
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Configures the PW as a bypass PW.\n-"
+        },
+        {
+            "Parameters": "max-atm-cells max-atm-cell-value",
+            "Info": "Specifies the maximum number of ATM cells that can be transmitted.\nThe value is an integer ranging from 1 to 28. The default value is 28."
+        },
+        {
+            "Parameters": "atm-pack-overtime atm-pack-overtime",
+            "Info": "Specifies an ATM cell encapsulation period.\nThe value is an integer ranging from 100 to 10000, in microseconds. The default value is 1000."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] pw-template pwt",
+            "[*HUAWEI-pw-template-pwt] peer-address 1.1.1.1",
+            "[*HUAWEI-pw-template-pwt] quit",
+            "[*HUAWEI] tunnel-policy policy1",
+            "[*HUAWEI-tunnel-policy-policy1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls static-l2vc destination 1.1.1.1 transmit-vpn-label 100 receive-vpn-label 100 tunnel-policy policy1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] pw-template pwt",
+            "[*HUAWEI-pw-template-pwt] peer-address 1.1.1.1",
+            "[*HUAWEI-pw-template-pwt] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls static-l2vc pw-template pwt 100 transmit-vpn-label 100 receive-vpn-label 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a device is unable to support a large number of LDP sessions, or if you want to manually manage and allocate VC labels, use the undo mpls static-l2vc command to create static PWs. When you configure VC labels to create PWs, Layer 2 VC or link information does not need to be transmitted using LDP.\nTo configure static PWs, create the static primary PW first.\nStatic VCs must be created on the PEs at both ends. The destination address of a VC is the IP address of the peer PE. The transmit label of the PE at one end is the receive label of the PE at the other end.\nPrerequisites\nMPLS has been enabled in the system view.MPLS L2VPN has been enabled in the system view.\n\nConfiguration Impact\nIf a static PW is configured on an AC interface, the Layer 3 features of the interface, such as the IP address and routing protocol, will not take effect. An interface cannot serve as both an L2VPN AC interface and an L3VPN AC interface. If an interface is bound to both a PW and an L3VPN, only the PW configuration takes effect on the interface. After the PW is deleted, the L3VPN configuration will take effect on the interface.\nFollow-up Procedure\nRun the display mpls static-l2vc command to view PW configurations.\nPrecautions\nSince the static secondary PW protects the static primary PW, you cannot configure the static secondary PW before configuring the static primary PW. If you attempt to configure the static secondary PW before the static primary PW, the attempt fails. For the same reason, when deleting PWs, delete the static secondary PW and then the static primary PW.\nIn a PW redundancy scenario, configure the same parameters for the primary, secondary, and bypass PWs. A parameter inconsistency causes the secondary or bypass PW to fail to take over traffic if the primary PW fails.\nThe secondary PWs cannot be created on the same AC interface.\nIf VCCV is not required for a static VC, VC ID does not need to be specified. If VCCV is required, VC ID must be specified.\nIf a sub-interface is bound to a PW, the sub-interface can be deleted only after the binding is removed.If a sub-interface is bound to a PW, you cannot change the encapsulation type of the main interface.\nWhen configuring static VCs, note the following:\nThe transmit label of the VRP ranges from 0 to 1048575, allowing the VRP to interwork with different types of devices.The receive label of the VRP ranges from 16 to 1023. Packets with labels not in this range will be dropped by the VRP.\nWhen PWs are used to carry ATM services, ATM cells are encapsulated into packets for transmission. max-atm-cells indicates the maximum number of ATM cells to be encapsulated into a packet that can be received by a device. After this parameter is set on a device, the device sends the parameter value to its remote device. atm-pack-overtime indicates the ATM cell encapsulation period. If the number of ATM cells is less than the configured maximum number allowed to be encapsulated into a packet, but the ATM cell encapsulation period elapses, the device encapsulates the existing ATM cells into a packet. This ensures real-time data transmission."
+}

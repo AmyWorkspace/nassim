@@ -1,0 +1,35 @@
+{
+    "PageTitle": "scheduler-parent",
+    "FuncDef": "This command defines an optional parent scheduler that governs the available bandwidth given to a policer in addition to the policer's PIR setting. When multiple schedulers, queues, and/or policers share a child status with the parent scheduler, theweightorlevelparameters define how this policer contends with the other children for the parent's bandwidth. This command and the configuration of a SAP egress policerport-parentorparentarbiter are mutually exclusive.",
+    "CLIs": [
+        "scheduler-parent <scheduler-name> [ weight <weight> ] [ level <level> ] [ cir-weight <cir-weight> ] [ cir-level <cir-level> ]",
+        "no scheduler-parent"
+    ],
+    "ParentView": [
+        "config>qos>sap-egress>policer"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "scheduler-name",
+            "Info": "Scheduler names are configured in the config>qos>scheduler-policy>tier context. There are no checks performed at the time of definition to ensure that the scheduler-name exists within an existing scheduler policy. For the policer to use the defined scheduler-name, the scheduler must exist on each egress SAP that the policer is created on. If a scheduler-name does not exist on the egress SAP, the policer operates in an orphaned state. Values-Any string up to 32 characters, composed of printable, 7-bit ASCII characters. If the string contains special characters (#, $, spaces, etc.), the entire string must be enclosed within double quotes.. ParamDefault: Default- None. Each parental association must be explicitly defined."
+        },
+        {
+            "Parameters": "weight weight",
+            "Info": "Defines the relative weight of this policer in comparison with other child policers, queues, and schedulers when competing for bandwidth on the parent scheduler-name at the above-CIR priority level defined by the level parameter. Values-0 to 100. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "level level",
+            "Info": "Defines the level of hierarchy when compared with other policers, queues, and schedulers when competing for bandwidth on the parent scheduler-name. Values-1 to 8 (8 is the highest priority). ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "cir-weight cir-weight",
+            "Info": "Defines the relative weight of this policer in comparison with other child policers, queues, or schedulers competing for bandwidth on the parent scheduler-name at the within-CIR priority level defined by the cir-level parameter. Values-0 to 100. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "cir-level cir-level",
+            "Info": "Defines the level of hierarchy when compared with other policers, queues, and schedulers that the policer will use to receive bandwidth for its within-CIR offered load. If the cir-level parameter is set to a value of 0 (the default value), the policer does not receive bandwidth during the schedulers within-CIR pass and the cir-weight parameter is ignored. If the cir-level parameter is 1 or greater, the cir-weight parameter is used. Values-0 to 8 (8 is the highest priority). ParamDefault: Default- 0"
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: no scheduler-parent"
+}

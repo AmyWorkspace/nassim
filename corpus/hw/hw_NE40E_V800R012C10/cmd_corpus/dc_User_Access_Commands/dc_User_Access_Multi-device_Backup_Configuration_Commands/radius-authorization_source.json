@@ -1,0 +1,36 @@
+{
+    "PageTitle": "radius-authorization source",
+    "FuncDef": "The radius-authorization source command binds the source IP address of the RADIUS authorization server to the remote backup service.\nThe undo radius-authorization source command deletes the binding relationship between the source IP address of the RADIUS authorization server and the remote backup service.\nThe radius-authorization source same-as nas-logic-ip command configures the source IP address of the packets that the Router sends back to the RADIUS server to be the same as the NAS IP address.\nThe undo radius-authorization source same-as nas-logic-ip command deletes the configured source IP address of the packets that the Router sends back to the RADIUS server which is the same as the NAS IP address.\nBy default, the source IP address of the RADIUS authorization server is not bound to the remote backup service.",
+    "CLIs": [
+        "radius-authorization source [ vpn-instance <vpn-name> ] <ip-address>",
+        "radius-authorization source same-as nas-logic-ip",
+        "undo radius-authorization source [ vpn-instance <vpn-name> ] <ip-address>",
+        "undo radius-authorization source same-as nas-logic-ip"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Indicates the source IP address.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback 10",
+            "[~HUAWEI-Loopback10] ip address 1.1.1.1 32",
+            "[*HUAWEI-Loopback10] commit",
+            "[~HUAWEI-Loopback10] quit",
+            "[~HUAWEI] remote-backup-service rui",
+            "[*HUAWEI-rm-backup-srv-rui] commit",
+            "[~HUAWEI-rm-backup-srv-rui] radius-authorization source 1.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn CoA and DM applications, the RADIUS authorization server sends requests to the Router, and the Router responds to the RADIUS authorization server. The RADIUS server then checks the source IP address of reply packets for security purposes. In N:1 RUI scenarios, the RADIUS authorization server determines the IP address of the Router to which authorization packets are sent based on the user's bill. This IP address can be a NAS-IP address or the address that the Router uses to exchange accounting-start packets with the RADIUS server.\nTo ensure that the RADIUS authorization server sends authorization packets to the exact Router in N:1 scenarios, run the radius-authorization source command to specify a source IP address to each pair of master and slave devices. You can run the radius-authorization source same-as nas-logic-ip command to configure the source IP address of the packets that the Router sends back to the RADIUS server to be the same as the NAS IP address or the radius-authorization source [ vpn-instance ] command to independently configure the source IP address. Such an IP address must already exist on the device and the routes must be reachable.\nIf a NAS IP address has been specified in the RADIUS server template, the radius-authorization source same-as nas-logic-ip command is easier. Otherwise, use the radius-authorization source [ vpn-instance vpn-instance-name ] source-ip-address command.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nBefore running the radius-authorization source command, a loopback interface must have been created, with the IP address the same as source-ip-address specified in the radius-authorization source command, and the route to the loopback interface's IP address must be reachable. The loopback interface's IP address cannot be used in other service applications.\nIf a NAS IP address has been specified in the RADIUS server template, the radius-authorization source same-as nas-logic-ip command is easier. Otherwise, use the radius-authorization source [ vpn-instance ] command."
+}

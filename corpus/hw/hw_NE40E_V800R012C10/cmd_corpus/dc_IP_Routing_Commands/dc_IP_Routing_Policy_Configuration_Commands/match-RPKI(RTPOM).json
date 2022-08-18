@@ -1,0 +1,33 @@
+{
+    "PageTitle": "if-match rpki origin-as-validation",
+    "FuncDef": "The if-match rpki origin-as-validation command configures a filtering rule based on the BGP origin AS validation result.\nThe undo if-match rpki origin-as-validation command deletes the filtering rule.\nBy default, no filtering rule based on the BGP origin AS validation result is set.",
+    "CLIs": [
+        "if-match rpki origin-as-validation { valid | invalid | not-found }",
+        "undo if-match rpki origin-as-validation [ valid | invalid | not-found ]"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "valid",
+            "Info": "Matches the BGP routes with Valid as the BGP origin AS validation result.\n-"
+        },
+        {
+            "Parameters": "invalid",
+            "Info": "Matches the BGP routes with Invalid as the BGP origin AS validation result.\n-"
+        },
+        {
+            "Parameters": "not-found",
+            "Info": "Matches the BGP routes with Not Found as the BGP origin AS validation result.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy test permit node 10",
+            "[*HUAWEI-route-policy] if-match rpki origin-as-validation invalid"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAttackers can steal user data by advertising routes that are more specific than those advertised by carriers. RPKI can address this issue by validating the origin ASs of BGP routes and apply the BGP origin AS validation result to route selection. The validation result can be Valid, Not Found, or Invalid.\nTo configure a filtering rule based on the BGP origin AS validation result, you can run the if-match rpki origin-as-validation command. After the filtering rule is configured, attribute of the routes that match the filtering rule can be modified based on the apply clause.\nA route-policy can consist of multiple nodes, and the relationship between these nodes is \"OR\". The system checks the nodes according to the node number. If a route matches a node in the route-policy, the route is not matched against the next node.Each node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route."
+}

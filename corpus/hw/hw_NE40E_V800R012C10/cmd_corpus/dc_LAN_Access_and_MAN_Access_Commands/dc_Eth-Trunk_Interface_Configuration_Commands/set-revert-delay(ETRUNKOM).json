@@ -1,0 +1,25 @@
+{
+    "PageTitle": "timer revert delay (E-Trunk view)",
+    "FuncDef": "The timer revert delay command sets a switchback delay of an E-Trunk.\nThe undo timer revert delay command restores the default switchback delay of an E-Trunk.\nThe default switchback delay of an E-Trunk is 120 seconds.",
+    "CLIs": [
+        "timer revert delay <delay-value>",
+        "undo timer revert delay"
+    ],
+    "ParentView": [
+        "E-Trunk view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay delay-value",
+            "Info": "Specifies a switchback t delay of an E-Trunk.\nThe value is an integer ranging from 0 to 10800, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] e-trunk 1",
+            "[*HUAWEI-e-trunk-1] timer revert delay 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a member Eth-Trunk interface on the local master device of an E-Trunk goes Down physically, after Trunk negotiation, the peer member Eth-Trunk interface goes Up physically. Then, the peer device enters the master state, and the local device enters the backup state. When the fault on the local device is rectified, after Trunk negotiation, the local device returns to the master state.\nWhen an E-Trunk works together with L2VPN services, after the fault on the master device is rectified, the status of the member Eth-Trunk interface on the master device is restored preferentially over PW. After the master device is recovered, if traffic on the member Eth-Trunk interface is immediately switched back to the master device, service traffic will be interrupted. In this situation, you need to set the switchback delay of the E-Trunk.\nConfiguration Impact\nAfter the timer revert delay command is run to set the switchback delay of the E-Trunk, only when the switchback delay timer expires, the local member Eth-Trunk goes Up, and the local device of the E-Trunk returns to the master state. This delays switching traffic on the member Eth-Trunk back to the master device, and therefore prevents service traffic from being interrupted.\nPrecautions\nThe switchback delay of an E-Trunk must be greater than the PW recovery time. This ensures that services are not interrupted when traffic is switched back to the master device.\nThe configured E-Trunk switchback delay must be the same on the upstream and downstream devices; otherwise, service traffic may be lost.\nWhen a CE is dual-homed to two PEs through an E-Trunk, if the maximum number of active links on the CE is 1, delayed switchback cannot be implemented for the E-Trunk. In this situation, you need to run the lacp preempt enable command on the CE to enable LACP preemption on the current Eth-Trunk interface and run the lacp preempt delay command to set the LACP preemption delay to be longer than the E-Trunk switchback delay."
+}

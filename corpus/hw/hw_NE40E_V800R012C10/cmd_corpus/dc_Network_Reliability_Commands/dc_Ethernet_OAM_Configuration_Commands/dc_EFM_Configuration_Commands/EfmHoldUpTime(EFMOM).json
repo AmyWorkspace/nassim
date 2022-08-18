@@ -1,0 +1,46 @@
+{
+    "PageTitle": "efm holdup-timer",
+    "FuncDef": "The efm holdup-timer command sets a time during which the EFM OAM protocol state of an interface remains Down.\nThe undo efm holdup-timer command restores the default time.\nBy default, the time is 0 seconds.",
+    "CLIs": [
+        "efm holdup-timer <time>",
+        "undo efm holdup-timer"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "40GE interface view",
+        "GE interface view",
+        "Layer 2 50GE interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "50GE interface view",
+        "Layer 2 GE interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "Layer 2 100GE interface view",
+        "25GE interface view",
+        "Layer 2 50|100GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time",
+            "Info": "Specifies a time during which the EFM OAM protocol state of an interface remains Down.\nThe value is an integer ranging from 0 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] efm enable",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] efm enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] efm trigger if-down",
+            "[*HUAWEI-GigabitEthernet1/0/0] efm holdup-timer 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the efm trigger if-down command is run to associate EFM OAM with a specified interface, the link layer protocol status of the interface is set to Down if a link connectivity fault is detected. This triggers rapid route convergence, blocks services, and implements rapid route switchovers. If a link connectivity fault is rectified, the status of the interface will be set to Up after the time specified by the efm holdup-timer command. The EFM OAM protocol state of the interface does not change to Up within the specified time. After the time expires, EFM OAM checks the link connectivity again.\nAfter the failed link recovers, EFM OAM works as follows:\nIf time parameter is not specified, the EFM OAM protocol state of the interface immediately changes to Up.If time parameter is specified, the EFM OAM protocol state of the interface changes to Up only after the specified time expires. This prevents the link from frequently alternating between Up and Down. You can run the recover efm-down command to immediately change the EFM OAM protocol state of the interface from Down to Up.\n\nPrerequisites\nEFM OAM has been globally enabled using the efm enable command in the system view.\nConfiguration Impact\nAfter the efm holdup-timer command is run, the EFM OAM protocol state of an interface changes from Down to Up after the configured time expires and a link connectivity fault is rectified."
+}

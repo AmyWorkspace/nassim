@@ -1,0 +1,59 @@
+{
+    "PageTitle": "flow-label (VSI-LDP-PW view)",
+    "FuncDef": "The flow-label command enables flow-label-based load balancing for an L2VPN PW.\nThe undo flow-label command disables flow-label-based load balancing of an L2VPN PW.\nThe flow-label disable command disables flow-label-based load balancing of an L2VPN PW.\nThe undo flow-label disable command restores flow-label-based load balancing of an L2VPN PW.\nBy default, a PW has the same flow-label-based load balancing capability as the VSI to which it belongs.",
+    "CLIs": [
+        "flow-label { { both | send | receive } [ static ] | disable }",
+        "undo flow-label { { both | send | receive } [ static ] | disable }",
+        "undo flow-label"
+    ],
+    "ParentView": [
+        "VSI-LDP-PW view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "both",
+            "Info": "Indicates both the send and receive capabilities of flow-label-based load balancing for the local device.\n-"
+        },
+        {
+            "Parameters": "send",
+            "Info": "Indicates the send capability of flow-label-based load balancing for the local device.\n-"
+        },
+        {
+            "Parameters": "receive",
+            "Info": "Indicates the receive capability of flow-label-based load balancing for the local device.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Statically configures flow-label-based load balancing.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi 1 static",
+            "[*HUAWEI-vsi-1] pwsignal ldp",
+            "[*HUAWEI-vsi-1-ldp] vsi-id 10",
+            "[*HUAWEI-vsi-1-ldp] peer 2.2.2.2 encapsulation vlan",
+            "[*HUAWEI-vsi-1-ldp] peer 2.2.2.2 pw p1",
+            "[*HUAWEI-vsi-1-ldp-pw-p1] flow-label both"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi 1 static",
+            "[*HUAWEI-vsi-1] pwsignal ldp",
+            "[*HUAWEI-vsi-1-ldp] vsi-id 10",
+            "[*HUAWEI-vsi-1-ldp] peer 2.2.2.2 encapsulation vlan",
+            "[*HUAWEI-vsi-1-ldp] peer 2.2.2.2 pw p1",
+            "[*HUAWEI-vsi-1-ldp-pw-p1] flow-label disable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen multiple links exist between P devices, configure flow-label-based load balancing to improve L2VPN traffic forwarding efficiency. After flow-label-based load balancing is enabled on a PE, the PE adds different labels for different L2VPN data flows to distinguish them. After a P device receives a data packet carrying a flow label, it selects a forwarding path based on the flow label in the data packet.\nTo enable flow-label-based load balancing for a specific L2VPN PW, run the flow-label command.\nNote that:\nIf flow-label-based load balancing is configured for both a VSI and a PW in this VSI, the configuration of the PW takes precedence.If the undo flow-label command is run in the VSI-LDP-PW view, only the flow-label-based load balancing capability that has been configured using the flow-label command in the VSI-LDP-PW view is disabled.If the flow-label command has been run for a VSI but not for a PW, you can run the flow-label disable command in the VSI-LDP-PW view to disable flow-label-based load balancing of the PW. If the PW needs the flow-label-based load balancing capability again, you can run the undo flow-label disable command to restore flow-label-based load balancing.\n\nPrerequisites\nMPLS L2VPN has been enabled.\nPrecautions\nWhen configuring flow-label-based load balancing, note the following:\nFlow-label-based load balancing can be enabled only when any of the following conditions is met:The receive parameter is configured on the local PE, and the send parameter is configured on the remote PE.The send parameter is configured on the local PE, and the receive parameter is configured on the remote PE.Both the send and receive parameters are configured on the local and remote PEs.\nIf the static flow-label-based load balancing configuration does not match on both ends, the device discards packets carrying a flow label, causing packet loss."
+}

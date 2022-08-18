@@ -1,0 +1,58 @@
+{
+    "PageTitle": "filter (OSPF area view)",
+    "FuncDef": "The filter export command filters the outgoing summary LSAs of the local area.\nThe undo filter export command restores the default setting.\nThe filter import command filters incoming summary LSAs of the local area.\nThe undo filter import command restores the default setting.\n\nBy default, the outgoing summary LSAs of the local area are not filtered.\n\n\nBy default, incoming summary LSAs are not filtered.",
+    "CLIs": [
+        "filter { acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> } export",
+        "filter { acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> } import [ include-abr-summary ]",
+        "filter <acl-number> export",
+        "filter <acl-number> import [ include-abr-summary ]",
+        "undo filter [ acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> | <acl-number> ] export",
+        "undo filter [ acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> | <acl-number> ] import"
+    ],
+    "ParentView": [
+        "OSPF area view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of route filter policy.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "include-abr-summary",
+            "Info": "Specifies a route-policy for the summarized route on the ABR.\n-"
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer ranging from 2000 to 2999."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix1 deny 1.1.1.1 24",
+            "[*HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] area 1",
+            "[*HUAWEI-ospf-100-area-0.0.0.1] filter ip-prefix prefix1 import"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix1 deny 1.1.1.1 24",
+            "[*HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] area 1",
+            "[*HUAWEI-ospf-1-area-0.0.0.1] filter ip-prefix prefix1 export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe filter export command can be used to filter out invalid LSAs to be sent to neighbors to reduce the size of the LSDB and speed up network convergence.\nThe filter import command can be used to filter out the invalid LSAs learned from neighbors to reduce the size of the LSDB and speed up network convergence.\nConfiguration Impact\nAfter filtering conditions are set for the outgoing Inter-Area-Prefix-LSAs to be advertised using the filter export command, only the outgoing Inter-Area-Prefix-LSAs that match the filtering conditions can be advertised.\nAfter filtering conditions are set for the incoming Inter-Area-Prefix-LSAs using the filter import command, only the incoming Inter-Area-Prefix-LSAs that match the filtering conditions can be accepted.\nPrecautions\nThe command can be configured only on an ABR.Run the filter import command to set filtering conditions for the incoming summary LSAs.Run the filter export command to set filtering conditions for the outgoing summary LSAs to be advertised."
+}

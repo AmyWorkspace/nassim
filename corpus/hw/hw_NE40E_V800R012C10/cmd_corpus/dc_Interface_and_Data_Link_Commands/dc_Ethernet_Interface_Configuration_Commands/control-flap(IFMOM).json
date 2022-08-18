@@ -1,0 +1,63 @@
+{
+    "PageTitle": "control-flap",
+    "FuncDef": "The control-flap command enables flapping control on an interface.\nThe undo control-flap command disables flapping control.\nBy default, flapping control is disabled on an interface.",
+    "CLIs": [
+        "control-flap [ <suppress> <reuse> <ceiling> <decay-ok> <decay-ng> ]",
+        "undo control-flap"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Remote-AP interface view",
+        "Serial interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "VE interface view",
+        "Global VE interface view",
+        "POS sub-interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "Vbridge interface view",
+        "Global VE sub-interface view",
+        "Sub-interface view",
+        "50GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "suppress",
+            "Info": "Input device actually suppress threshold value is 1000 times the actual value of the device.\nIf the penalty value exceeds the interface suppressing threshold, the interface is suppressed. When the interface is suppressed, the outputs of the display interface, display interface brief, and display ip interface brief commands show that the protocol status of the interface remains DOWN(dampening suppressed) and does not change with the physical status.\nThe value ranges from 1 to 20000. The default value is 2000. This value must be greater than the reuse threshold and less than the ceiling threshold."
+        },
+        {
+            "Parameters": "reuse",
+            "Info": "The value of the interface reuse threshold actually entered by the device is 1000 times the actual value of the device.\nIf the penalty value falls below the interface reuse threshold, the interface is freed from suppression. When the interface is freed from suppression, the protocol status of the interface is in compliance with the actual status and does not remain Down (dampening suppressed).\nThe value ranges from 1 to 20000. The default value is 750. This value must be smaller than the suppress threshold of the interface."
+        },
+        {
+            "Parameters": "ceiling",
+            "Info": "The maximum value of the interface suppression penalty value actually entered by the device is 1000 times the actual value of the device. The suppress penalty value stops increasing when it exceeds this value.\nThe value ranges from 1001 to 20000. The default value is 6000. This value must be greater than the suppress threshold of the interface."
+        },
+        {
+            "Parameters": "decay-ok",
+            "Info": "Specifies the half life of the penalty value for an interface in the Up state.\nWhen an interface is Up, if the period since the end of the previous half life reaches the current half life, the penalty value decreases by half.\nThe value ranges from 1 to 900, in seconds. The default value is 54s."
+        },
+        {
+            "Parameters": "decay-ng",
+            "Info": "Specifies the half life of the penalty value for an interface in the Down state.\nWhen the interface is Down, if the period since the end of the previous half life reaches the current half life, the penalty value decreases by half.\nThe value ranges from 1 to 900, in seconds. The default value is 54s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] control-flap 2000 750 16000 15 15"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPhysical signal interference and incorrect link layer configuration may cause a device interface to alternate between Up and Down frequently, causing routing protocols to flap constantly. This greatly affects the device and network, and may cause a specific device to collapse and the network to be unavailable.\nFlapping control applies to reduce the adverse impact on the network stability caused by interface status changes.\nBy default, the penalty value for interface suppression increases by 400 each time the interface goes Down, this value is 1000 times the actual value of the device.\nFor concepts and principles of interface flapping control, see interface flapping control.\ndecay-ok and decay-ng can be configured separately:\nIf an interface remains Up for a long period and the interface must be soon available when it is Up, decreasing decay-ok is recommended.If an interface remains Down for a long period and the interface must be long suppressed when it is Down, increasing decay-ng is recommended.\n\nPrecautions\nThis command can be configured only on an interface working in Layer 3 mode.\nTo view the running status and statistics of control-flap on an interface, run the display control-flap command.\nNULL interfaces and loopback interfaces do not support flapping control.\nDirectly connected interfaces that have static routes configured must both have control flapping enabled or disabled. If only one interface has control flapping enabled, the interface has to wait a period to go Up after it recovers. This hold-off time will cause the status of the two interfaces inconsistent, and packets are therefore discarded.\nIf the IP address of flapping control-enabled sub-interface is deleted when the sub-interface is in the suppressed state, the sub-interface will be always in the suppressed state.\nDo not run the control-flap command on an interface that a Virtual Router Redundancy Protocol (VRRP) backup group tracks. If this command is run on the interface and the interface recovers from a fault, the interface goes Up after a specified delay time elapses. During the delay, the network-side route is unreachable, and the VRRP status changes from Backup to Master. User-side traffic directed to the interface will be discarded."
+}

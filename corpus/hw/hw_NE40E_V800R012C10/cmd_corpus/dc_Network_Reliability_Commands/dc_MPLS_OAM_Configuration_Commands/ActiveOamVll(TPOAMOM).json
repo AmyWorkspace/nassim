@@ -1,0 +1,64 @@
+{
+    "PageTitle": "mpls oam l2vc enable",
+    "FuncDef": "The mpls oam l2vc enable command enables MPLS OAM to monitor a PW.\nThe undo mpls oam l2vc enable command disables MPLS OAM from monitoring a PW.\nBy default, MPLS OAM is disabled from monitoring a PW.",
+    "CLIs": [
+        "mpls oam l2vc enable send peer-ip <peer-ip> vc-id <vc-id> vc-type <vc-type>",
+        "mpls oam l2vc enable receive peer-ip <peer-ip> vc-id <vc-id> vc-type <vc-type>",
+        "undo mpls oam l2vc enable send peer-ip <peer-ip> vc-id <vc-id> vc-type <vc-type>",
+        "undo mpls oam l2vc enable receive peer-ip <peer-ip> vc-id <vc-id> vc-type <vc-type>"
+    ],
+    "ParentView": [
+        "MPLS-OAM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-ip peer-ip",
+            "Info": "Specifies the destination IP address of an L2VC.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id vc-id",
+            "Info": "Specifies the ID of an L2VC.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "vc-type vc-type",
+            "Info": "Specifies the type of an L2VC.\nEncapsulation types supported:ATM PWE3atm-1to1-vcc: One PW carries the ATM cells of one PVC.atm-1to1-vpc: One PW carries the ATM cells of one PVP.atm-aal5-pdu: One PW carries the AAL5 PDUs of one PVC.atm-aal5-sdu: One PW carries the AAL5 SDUs of one PVC.atm-nto1-vcc: One PW carries the ATM cells of multiple PVCs.atm-nto1-vpc: One PW carries the ATM cells of multiple PVPs.atm-trans-cell: ATM cells are transmitted over PWE3 VCs.\nTDM PWE3cesopsn-basic: CES is sensitive to E1 and T1 frame structures. E1 or T1 signals can be encapsulated into packets based on timeslots.satop-e1: SAToP is insensitive to the E1 frame structure and encapsulates a whole E1 frame into a PW packet.satop-t1: SAToP is insensitive to the T1 frame structure and encapsulates a whole T1 frame into a PW packet.\nOther encapsulation types:cep: This encapsulation type is used for CEP services.ethernet: This encapsulation type is used when Ethernet packets do not carry VLAN information.hdlc: HDLC is a bit-oriented link layer protocol.ip-interworking: This encapsulation type is used for interworking between Huawei devices.ip-layer2: This encapsulation type is used for interworking between Huawei devices and non-Huawei devices.ppp: PPP is a link layer protocol that specifies how to encapsulate and transmit network layer packets over P2P links.vlan: This encapsulation type is used when Ethernet packets carry VLAN information."
+        },
+        {
+            "Parameters": "send",
+            "Info": "Enables an OAM entity to send OAM packets.\n-"
+        },
+        {
+            "Parameters": "receive",
+            "Info": "Enables an OAM entity to receive OAM packets.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] mpls-oam",
+            "[*HUAWEI-mpls-oam] mpls oam l2vc enable send peer-ip 2.2.2.2 vc-id 100 vc-type ethernet"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] mpls-oam",
+            "[*HUAWEI-mpls-oam] mpls oam l2vc enable receive peer-ip 2.2.2.2 vc-id 100 vc-type ethernet"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMPLS OAM can monitor PWs, which can be dynamic PWs, static PWs, SS-PWs, or MS-PWs.\nPrerequisites\nMPLS OAM parameters have been configured for a PW using the mpls oam l2vc command.\nPrecautions\nIf auto-protocol has been specified in the mpls oam l2vc command, you do not need to run the mpls oam l2vc enable command.If auto-protocol is not specified, you must specify send and receive in the mpls oam l2vc enable command to enable an OAM entity to send and receive OAM packets for monitoring a PW.The nodes at both ends of a PW that OAM monitors has the following abilities:When the local end is enabled to send OAM packets and the peer end is enabled to receive OAM packets, the peer end initiates detection for a unidirectional PW but does not send BDI packets.When the local end is enabled to receive OAM packets and the peer end is enabled to send OAM packets, the local end initiates detection for a unidirectional PW but does not send BDI packets.When the local end is enabled to send OAM packets and the peer end is enabled to both send and receive OAM packets, the peer end initiates detection for a unidirectional PW and is able to send BDI packets, whereas the local end cannot receive the BDI packets.When the local end is enabled to send and receive OAM packets and the peer end is enabled to send OAM packets, the local end initiates detection for a unidirectional PW and is able to send BDI packets, whereas the peer end cannot receive the BDI packets.When the local and peer ends are enabled to both send and receive OAM packets, OAM is able to monitor the bidirectional PW."
+}

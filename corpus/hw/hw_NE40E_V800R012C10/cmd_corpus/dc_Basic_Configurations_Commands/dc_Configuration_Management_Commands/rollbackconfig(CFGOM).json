@@ -1,0 +1,38 @@
+{
+    "PageTitle": "rollback configuration",
+    "FuncDef": "The rollback configuration command rolls the system configuration back to a preceding configuration.",
+    "CLIs": [
+        "rollback configuration { to commit-id <commit-id> | last <number-of-commits> | to label <label> | to file <file-name> }"
+    ],
+    "ParentView": [
+        "User view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "to",
+            "Info": "The system will be rolled back to the configurations when the configuration rollback point is generated.\n-"
+        },
+        {
+            "Parameters": "commit-id commit-id",
+            "Info": "Specifies the label of the configuration rollback point to which the system configuration is expected to roll back.\nThe value is an integer that is generated automatically and ranging from 1000000001 to 1999999999, the value of periodical configuration rollback point is ranging from 2000000001 to 2999999999."
+        },
+        {
+            "Parameters": "last number-of-commits",
+            "Info": "Specifies the number of the last configuration rollback point to which the system rolls back.\nThe value is an integer ranging from 1 to 80."
+        },
+        {
+            "Parameters": "label label",
+            "Info": "Specifies a user label for a configuration rollback point. A specified user label indicates the historical configuration state to which the system configuration is expected to roll back.\nThe value is a string of 1 to 256 case-sensitive characters. It can be any visible ASCII character except for the space. However, the string can contain spaces if it is enclosed with double quotation marks (\" \"). The string cannot start with a digit or be a hyphen (-)."
+        },
+        {
+            "Parameters": "file file-name",
+            "Info": "Rolls back the current configuration to the configuration in the specified configuration file. After the rollback, the configuration on the device is the same as that in the specified configuration file.\nThe value is a string of 5 to 64 case-sensitive characters in the format of *.zip, *.cfg, or *.dat, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> rollback configuration to label test"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen an error occurs or the configuration procedure has an unexpected impact on services, run the rollback configuration command to roll the system configuration back to a specified configuration.\nAssume that a user has committed four configurations and four consecutive rollback points (A, B, C, and D) are generated. If an error is found in configurations committed at rollback point B and the system must be rolled back, configuration rollback allows the system to roll back to the configurations at rollback point A. Additionally, configuration rollback point E is generated and specially marked with a Rollback flag, indicating that this point is generated because of configuration rollback.\nIf a configuration rollback error is detected, system configurations can be rolled back to what they were before the configuration rollback operation was performed and the new configuration rollback point is specially marked.\nPrerequisites\nThe display configuration commit changes command has been run to view configuration changes at the rollback point, and system configurations have been determined to roll back. back system configurations.\nFollow-up Procedure\nRun the display configuration rollback result command to view the configurations that fail to be rolled back and the messages displayed when configuration commands are run.\nPrecautions\nIf an interface board is replaced or removed between the time of the previous configuration and the time of the current configuration, the configurations of the interface board may fail to be rolled back.During the configuration rollback, some configurations that involve differences may become invalid temporarily. For example, in the scenario where the authentication mode of the VTY channel is AAA, users may fail to log in to the device through new Telnet connections during the rollback."
+}

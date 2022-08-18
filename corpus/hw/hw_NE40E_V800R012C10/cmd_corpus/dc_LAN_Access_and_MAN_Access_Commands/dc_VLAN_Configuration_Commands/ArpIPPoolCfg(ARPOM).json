@@ -1,0 +1,37 @@
+{
+    "PageTitle": "ip pool",
+    "FuncDef": "The ip pool command configures an IP address pool for a sub-VLAN.\nThe undo ip pool command deletes the IP address pool of a sub-VLAN.\nBy default, no IP address pool is configured for sub-VLANs.",
+    "CLIs": [
+        "ip pool <start-address> [ to <end-address> ]",
+        "undo ip pool"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "start-address",
+            "Info": "Specifies the start IP address in an IP address pool.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "end-address",
+            "Info": "Specifies the end IP address in an IP address pool.\nIf end-address is not specified, only one IP address, that is, start-address, exists in the IP address pool.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 20",
+            "[*HUAWEI-vlan20] quit",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] aggregate-vlan",
+            "[*HUAWEI-vlan10] access-vlan 20",
+            "[*HUAWEI-vlan10] quit",
+            "[*HUAWEI] interface vlanif 10",
+            "[*HUAWEI-Vlanif10] quit",
+            "[*HUAWEI] vlan 20",
+            "[*HUAWEI-vlan20] ip pool 10.10.10.10 to 10.10.10.20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter assigning an IP address to the VLANIF interface of a super VLAN, you can run the ip pool command to specify an IP address range for users in a sub-VLAN of the super VLAN. In this manner, the ARP module filters out packets with IP addresses out of the IP address range so that the number of ARP packets can be controlled.\nIf the super VLAN has proxy ARP enabled, the device directly sends an ARP request from a user in the sub-VLAN to the destination sub-VLAN based on the IP address carried in the request, which reduces broadcast traffic.\nThe IP address pool configured using the ip pool command can be a single IP address or an IP address segment, but cannot be inconsecutive IP address segments.\nPrerequisites\nA super VLAN has been configured using the aggregate-vlan command in the VLAN view, and sub-VLANs of the super VLAN have been configured using the access-vlan command.\nConfiguration Impact\nAfter the ip pool command is run for a sub-VLAN, only ARP packets, including ARP request, ARP response, and proxy ARP, with the IP addresses in the IP address pool can be processed in the sub-VLAN.\nPrecautions\nBefore updating the IP address pool configured for a sub-VLAN, run the undo ip pool command to delete the existing one."
+}

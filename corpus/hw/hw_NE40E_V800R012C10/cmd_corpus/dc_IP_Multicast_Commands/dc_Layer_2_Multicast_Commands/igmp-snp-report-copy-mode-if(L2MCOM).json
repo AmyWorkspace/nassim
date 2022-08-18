@@ -1,0 +1,64 @@
+{
+    "PageTitle": "igmp-snooping report-listening (Sub-interface view)",
+    "FuncDef": "The igmp-snooping report-listening command enables the function to listen to Report and Leave messages on QinQ stacking or mapping sub-interfaces and configures a multicast message replication mode.\nThe undo igmp-snooping report-listening command restores the default configurations.\nBy default, IGMP snooping does not support QinQ stacking or mapping sub-interfaces, the function to listen to Report and messages on QinQ stacking or mapping sub-interfaces is disabled, and a multicast message replication mode is not configured.",
+    "CLIs": [
+        "igmp-snooping report-listening copy { by-vlan | by-unicast-mac }",
+        "undo igmp-snooping report-listening"
+    ],
+    "ParentView": [
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "by-vlan",
+            "Info": "Indicates multicast message replication by VLAN.\n-"
+        },
+        {
+            "Parameters": "by-unicast-mac",
+            "Info": "Indicates multicast message replication by unicast MAC address.\n-"
+        },
+        {
+            "Parameters": "copy",
+            "Info": "Enables the function to replicate multicast messages.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] igmp-snooping qinq-stacking report-listening enable",
+            "[*HUAWEI-vsi-vsi1] igmp-snooping qinq-stacking report-listening copy by-unicast-mac"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] igmp-snooping qinq-mapping report-listening enable",
+            "[*HUAWEI-vsi-vsi1] igmp-snooping qinq-mapping report-listening copy by-unicast-mac",
+            "[*HUAWEI-vsi-vsi1] igmp-snooping enable",
+            "[*HUAWEI-vsi-vsi1] igmp-snooping report-suppress",
+            "[*HUAWEI-vsi-vsi1] commit",
+            "[~HUAWEI-vsi-vsi1] quit",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] igmp-snooping report-listening copy by-unicast-mac"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn VPLS scenarios, QinQ stacking or mapping sub-interfaces remove VLAN tags from received multicast messages. To enable the function to listen to Report and Leave messages on QinQ stacking or mapping sub-interfaces and configure a multicast message replication mode, run the igmp-snooping report-listening command.\nPrerequisites\nQinQ stacking or mapping sub-interfaces have been configured in a VSI for which the command is to be run.\nQinQ stacking or mapping has been configured on a sub-interface for which the command is to be run.\nPrecautions\nThe command configuration in a sub-interface view does not take effect if QinQ stacking or mapping is not configured for the sub-interface.\nThe command configuration in a VSI view does not take effect if the igmp-snooping qinq-stacking report-listening enable or igmp-snooping qinq-mapping report-listening enable command has not been run for the VSI.\nIf QinQ stacking or mapping sub-interfaces are configured for the VSI, the igmp-snooping qinq-stacking report-listening enable or igmp-snooping qinq-mapping report-listening enable command must be run earlier than the igmp-snooping enable command.\nIf QinQ stacking or mapping sub-interfaces are configured for the VSI and the VSI is bound to a user instance, the igmp-snooping qinq-stacking report-listening enable or igmp-snooping qinq-mapping report-listening enable command must be run for the multicast instance of the user instance earlier than the igmp-snooping enable command.\nIf multicast message replication modes are configured in both the VSI and QinQ sub-interface views, the configuration in the QinQ sub-interface view has a higher priority. The configuration in the VSI view takes effect for a QinQ sub-interface only if a replication mode is not configured in the QinQ sub-interface view.\nIf the\nigmp-snooping report-listening command has been run for a QinQ sub-interface of a VSI, the following operations are not allowed:\nIf the sub-interface type is QinQ stacking, running the undo igmp-snooping qinq-stacking report-listening enable command in the VSI view is not allowed.If the sub-interface type is QinQ mapping, running the undo igmp-snooping qinq-mapping report-listening enable command in the VSI view is not allowed.If the VSI of the QinQ stacking or mapping sub-interface is bound to a user VSI, running the undo igmp-snooping qinq-stacking report-listening enable or undo igmp-snooping qinq-mapping report-listening enable command for the multicast VSI of the user VSI is not allowed.Disabling the function to listen to Report and Leave messages in the user VSI of the QinQ sub-interface is not allowed.\nThe igmp-snooping report-listening command supports QinQ stacking interfaces without a policy not the interfaces that are configured with the parameters in the qinq stacking vid 8021p command. These interfaces do not support Layer 2 multicast services."
+}

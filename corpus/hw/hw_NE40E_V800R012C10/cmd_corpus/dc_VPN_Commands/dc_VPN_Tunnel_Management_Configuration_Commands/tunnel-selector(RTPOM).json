@@ -1,0 +1,33 @@
+{
+    "PageTitle": "tunnel-selector",
+    "FuncDef": "The tunnel-selector command creates a tunnel selector and displays the tunnel selector view.\nThe undo tunnel-selector command deletes a tunnel selector.\nBy default, no tunnel selector is created.",
+    "CLIs": [
+        "tunnel-selector <name> <matchMode> node <node>",
+        "undo tunnel-selector <name> [ node <node> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "name",
+            "Info": "Specifies the name of a tunnel selector.\nThe value is a string of 1 to 40 case-sensitive characters, spaces not supported.\nThe string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "matchMode",
+            "Info": "Specifies the matching mode for the tunnel selector.\nThe value is an enumerated type:\npermit: Specifies \"permit\" as the matching mode for the tunnel selector. If a route matches all the if-match clauses of a node, the route matches the node and all the actions defined by the apply clause are performed on the route. If a route does not match any if-match clauses of a node, the route continues to match the next node.deny: Specifies \"deny\" as the matching mode for the tunnel selector. If a route matches all the if-match clauses of a node, the route is denied and does not match the next node."
+        },
+        {
+            "Parameters": "node node",
+            "Info": "Specifies the index of a node of the tunnel selector. When a route-policy is used to filter a route, the route first matches the node with the smallest node value.\nThe value is an integer ranging from 0 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-selector tps permit node 10",
+            "[*HUAWEI-tunnel-selector]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe tunnel-selector command is often used in BGP/MPLS IP VPN networking. A tunnel selector needs to be created in the following scenarios:\nThe ASBR in inter-AS VPN Option B networking needs to apply a tunnel policy to VPNv4 routes, BGP-VPNv6 that are received from PEs, although VPN instances are not configured on the ASBR.The SPE in the HoVPN networking needs to apply a tunnel policy to VPNv4 routes that are received from UPEs.The PE in inter-AS VPN Option C networking needs to apply a tunnel policy to recurse labeled routes to TE tunnels to guarantee bandwidth or implement load balancing among BGP LSPs.In an inter-AS VPN Option C scenario, to implement tunnel-based load-balancing among labeled BGP routes, run the tunnel-selector [all] command to configure a tunnel selector on the ASBR. If the all parameter is used, the tunnel selector applies to all BGP IPv4 unicast routes, including labeled routes, imported routes, and network segment routes.\n\nFollow-up Procedure\nConfigure the following clauses after creating a tunnel selector (each node of the tunnel selector consists of two parts):\nif-match clause: sets filtering conditions on a node. To filter routes based on the RD attributes, run the if-match rd-filter command. To filter routes based on next hop addresses, run the if-match ip next-hop or if-match ipv6 next-hop command.apply clause: applies a tunnel policy to the routes filtered by the if-match clause using the apply tunnel-policy command.\nIn addition, the system will have routes recurse to specified tunnels only after a tunnel selector is applied. The tunnel-selector command can be run in the BGP view for the application of a tunnel selector.\n\nPrecautions\nA change in the tunnel selector may cause VPN services to be interrupted, because BGP-VPNv4 or labeled BGP routes may fail to recurse to tunnels."
+}

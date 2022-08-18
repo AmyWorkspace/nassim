@@ -1,0 +1,33 @@
+{
+    "PageTitle": "vrrp arp send-mode simple",
+    "FuncDef": "The vrrp arp send-mode simple command enables a sub-interface for QinQ VLAN tag termination to send double-tagged gratuitous ARP packets carrying only the minimal inner VLAN ID when the VRRP status of the sub-interface in the VRRP backup group is Master.\nThe undo vrrp arp send-mode simple command enables a sub-interface for QinQ VLAN tag termination to send as many gratuitous ARP packets as there are VLAN IDs in the inner tag after the sub-interface becomes the master in a VRRP backup group.\nBy default, gratuitous ARP packets are sent as many as there are VLAN IDs in the inner tag.",
+    "CLIs": [
+        "vrrp arp send-mode simple",
+        "undo vrrp arp send-mode simple"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[~HUAWEI-GigabitEthernet1/0/1.1] control-vid 1 qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq termination pe-vid 2 ce-vid 1 to 20",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq vrrp pe-vid 2 ce-vid 1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vrrp vrid 1 virtual-ip 10.1.1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vrrp arp send-mode simple"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nUsers attached to a UPE are connected to NPEs. VRRP is configured on a sub-interface for QinQ VLAN tag termination of each NPE. The master device sends gratuitous ARP packets to all VLAN users. After VLAN users on the UPE learn the virtual MAC address, they send packets through the master device. To minimize the burden of many gratuitous ARP packets on the device, the vrrp arp send-mode simple command can be run on the sub-interface for QinQ VLAN tag termination to enable the master device to send gratuitous ARP packets only with the first VLAN ID specified in the inner tag and each VLAN ID in the outer tag.\nPrerequisites\nA VRRP backup group has been configured using the vrrp vrid virtual-ip command on the sub-interface for QinQ VLAN tag termination.\nConfiguration Impact\nThe vrrp arp send-mode simple command takes effect within VLANs specified only by VLAN IDs in the inner tag, but not by VLAN IDs in the outer tag. For example, VLAN IDs in the outer tag range from 1 to 10, and VLAN IDs in the inner tag range from 1 to 10. After the vrrp arp send-mode simple command is run, gratuitous ARP packets carry only VLAN 1 in the inner tag. A total of 10 gratuitous ARP packets (10 outer VLAN IDs x 1 inner VLAN ID) are sent.\nPrecautions\nThe vrrp arp send-mode simple command is run only on a sub-interface for QinQ VLAN tag termination."
+}

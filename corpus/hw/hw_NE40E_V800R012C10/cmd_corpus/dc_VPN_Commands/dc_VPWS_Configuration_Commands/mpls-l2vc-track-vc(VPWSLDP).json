@@ -1,0 +1,102 @@
+{
+    "PageTitle": "mpls l2vc track admin-vc",
+    "FuncDef": "The mpls l2vc track admin-vc command binds service PWs to an mPW.\nThe undo mpls l2vc track admin-vc command deletes the binding between a service PW and an mPW.\n\nBy default, no service PW is bound to an mPW.",
+    "CLIs": [
+        "mpls l2vc [ secondary | bypass ] track admin-vc interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo mpls l2vc [ secondary | bypass ] track admin-vc"
+    ],
+    "ParentView": [
+        "Global IMA-group sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "IP-Trunk interface view",
+        "400GE interface view",
+        "MP-group interface view",
+        "Trunk serial interface view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "POS-Trunk interface view",
+        "VE sub-interface view",
+        "VC4 interface view",
+        "25GE sub-interface view",
+        "IMA group interface view",
+        "Global VE sub-interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "400GE Layer 2 sub-interface view",
+        "40GE interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "Global MP-group interface view",
+        "XGE sub-interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "50|100GE sub-interface view",
+        "IMA-group sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "50GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "secondary",
+            "Info": "Binds secondary service PWs to an mPW.\n-"
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Binds bypass PWs to an mPW.\n-"
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the interface name.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface loopback 0",
+            "[*HUAWEI-Loopback0] mpls l2vc 1.1.1.1 1 admin",
+            "[*HUAWEI-Loopback0] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 1.1.1.1 5",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc track admin-vc interface loopback 0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface loopback 1",
+            "[*HUAWEI-Loopback1] mpls l2vc 2.2.2.2 2 admin",
+            "[*HUAWEI-Loopback1] quit",
+            "[*HUAWEI] interface GigabitEthernet 2/0/0",
+            "[*HUAWEI-GigabitEthernet2/0/0] mpls l2vc 2.2.2.2 7",
+            "[*HUAWEI-GigabitEthernet2/0/0] mpls l2vc 2.2.2.2 6 secondary",
+            "[*HUAWEI-GigabitEthernet2/0/0] mpls l2vc secondary track admin-vc interface loopback 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nTo accelerate PW fault detection, BFD is generally used. When a large number of service PWs originated from the same source and destined for the same device are available, a large number of BFD sessions are required, which consumes lots of resources. To reduce the consumption of public network link bandwidths and system resources, configure an mPW that has the same source and destination as the service PWs and bind the service PWs to the mPW. This configuration allows the service PWs to track the mPW status. Therefore, a BFD session can be configured only for the mPW to detect faults. The mPW then notifies all service PWs bound to it of the status. This allows the BFD session to also monitor the service PWs.\nTo bind service PWs to an mPW so that the service PW status is determined by the mPW status, run the mpls l2vc track admin-vc command.\n\nPrerequisites\n\nA service PW has been created using the mpls l2vc command, and an mPW has been created using the\nmpls l2vc admin command. Note that:\n\nThe peer IP addresses of the service PWs and mPW must be the same.\nOne service PW can be bound only to one mPW.\nService PWs with the same peer IP address can be bound only to the same mPW.\n\n\nConfiguration Impact\n\nAfter service PWs are bound to an mPW, the mPW is used to detect public network link faults:\n\nIf the mPW status remains unchanged, the service PW status also remains unchanged.\nIf the mPW detects a public network link fault, the mPW goes Down and notifies all service PWs bound to it.\nIf the service PWs are primary and secondary PWs, a PW switchover is triggered.\nIf the service PWs are not primary and secondary PWs, the service PWs go Down and no longer forward traffic.\nAfter the fault is rectified, the mPW goes Up. If the service PWs are primary and secondary PWs, a PW switchback is performed based on the configured switchback policy. If the service PWs are not primary and secondary PWs, the service PWs also go Up. Then the service PWs can be used to forward traffic again.\n\n\nPrecautions\n\nThe mpls l2vc track admin-vc command applies to primary and secondary PWs on PEs but not to multi-segment PWs."
+}

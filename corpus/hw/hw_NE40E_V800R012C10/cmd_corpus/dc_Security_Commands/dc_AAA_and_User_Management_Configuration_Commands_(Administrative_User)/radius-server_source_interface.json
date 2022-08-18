@@ -1,0 +1,37 @@
+{
+    "PageTitle": "radius-server source interface",
+    "FuncDef": "The radius-server source interface command configures the source interface of a RADIUS server. the device uses this source interface IP to send packets to the RADIUS server.\nThe undo radius-server source command deletes the source interface of the RADIUS server.\nBy default, source interface is not configured.",
+    "CLIs": [
+        "radius-server source interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo radius-server source"
+    ],
+    "ParentView": [
+        "RADIUS server group view",
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface, which can be GE, loopback, Eth-Trunk.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of the interface. If the interface is of the GE type, its number is in the format of slot number/board number/interface number. If the interface is of the loopback type or the Eth-Trunk type, it must be a created loopback interface or Eth-Trunk interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback 0",
+            "[*HUAWEI-LoopBack0] commit",
+            "[~HUAWEI-LoopBack0] quit",
+            "[~HUAWEI] radius-server source interface loopback 0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group group1",
+            "[~HUAWEI-radius-group1] radius-server source interface GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the source interface of a RADIUS server is configured, the packets sent from the device to the RADIUS server use the IP address of the source interface as the source IP address.\nConfiguration Impact\nIf the radius-server source interface command is run more than once in the same view, the latest configuration overrides the previous one.\nPrecautions\nThe source interface can be configured in the system view as the global source interface to send packets to any RADIUS server; the source interface can also be configured in the RADIUS server group view as the source interface to send packets to a RADIUS server in the RADIUS server group. If the source interface is configured in the RADIUS server group view, the source interface is used for the communication between the RADIUS server and the device. Otherwise, the global source interface is used.\nWhen a RADIUS server is deployed in a VPN and the device sends a packet to the RADIUS server, the IP address of the source interface configured using the radius-server source interface command is preferentially selected. If no source interface is configured, select the outbound interface with reachable route based on the VPN ID and destination IP address as the source IP address. If the required route is not found, select the IP address of any interface within the VPN as the source IP address.\nIn VS mode, this command is supported only by the admin VS."
+}

@@ -1,0 +1,32 @@
+{
+    "PageTitle": "xpl route-filter",
+    "FuncDef": "The xpl route-filter command creates a route-filter and displays the route-filter view.\nThe undo xpl route-filter command deletes a specified route-filter.\nBy default, no route-filters are configured.",
+    "CLIs": [
+        "xpl route-filter <route-filter-name>",
+        "undo xpl route-filter <route-filter-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. The string can contain letters, digits, underscores (_), hyphens (-), and dots (.). It must start with a letter or digit."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] xpl route-filter route-filter1",
+            "[*HUAWEI-xpl-filter] if ip route-source in ip-prefix1 then",
+            "[*HUAWEI-xpl-filter-if] apply med 60",
+            "[*HUAWEI-xpl-filter-if] elseif ip route-source in ip-prefix2 then",
+            "[*HUAWEI-xpl-filter-elif] apply med 70",
+            "[*HUAWEI-xpl-filter-elif] else",
+            "[*HUAWEI-xpl-filter-else] apply med 80",
+            "[*HUAWEI-xpl-filter-else] endif",
+            "[*HUAWEI-xpl-filter] end-filter"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nRoute-filters are used to filter routes based on sets or a single element and modify route attributes of the routes that meet matching rules. To create a route-filter and enter the route-filter view, run the xpl route-filter command. Route-filters consist of condition and action clauses.\nA condition clause is defined based on a set or single element, in the format of a condition clause in most cases. The action specified in the action clause is applied only to the routes that meet the matching rules of the condition clause.An action clause specifies an action to be applied to the routes that meet the matching rules of the condition clause. An action clause determines whether the routes match the route-filter or modifies their route attributes.\n\nFollow-up Procedure\n Run an if command in the route-filter view to configure a matching rule for the route-filter. Alternatively, configure an apply clause in the route-filter directly without configuring a matching rule.You can configure an empty route-filter, that is, run only the xpl route-filter and end-filter commands. In this case, the default action refuse is used. If an empty route-filter is specified in another route-filter using a call clause, the empty route-filter does not take effect.\n Configure an action clause for the routes that meet the matching rules using one of the following commands in the route-filter view:apply: sets a route attribute for the routes that meet the matching rules.approve: further filters the routes that meet the matching rules of the current if condition branch against the next if condition branch.call route-filter: further filters the routes that meet the matching rules of the current route-filter against the specified route-filter.finish: completes route filtering and allows the routes that meet matching rules to match the route-filter.refuse: denies routes that meet matching rules of a route-filter.break: enables the device to exit from the current route-filter. If the current route-filter is referenced by a parent route-filter, the device keeps implementing remaining condition and action clauses of the parent route-filter.Multiple action clauses can be configured if they do not conflict with each other.\n\n (Optional) Run the elseif command to filter the routes that fail to meet the matching rules specified in the if command and configure an action clause using one of the commands described in 2 for the elseif clause. You can configure multiple elseif clauses to filter the routes that fail to meet the previous matching rules or run the else command to match the routes that fail to meet all the previous matching rules. Then, configure an action clause using one of the commands described in 2. Run the endif command in the route-filter view to conclude the configuration of the current if condition branch.An if condition branch begins with if and ends with endif. One route-filter can have multiple if condition branches, and the if condition branches can be configured as follows:One if condition branch is followed by another.The if or elseif clause of one if condition branch is followed by another if condition branch. Such a configuration further filters routes that match if or elseif clause against the second if condition branch.\n\nRegardless of the configuration mode, route filtering continues until finish, break, refuse, or the last if condition branch.\n Run the end-filter command in the route-filter view to conclude the configuration of the route-filter.\n\nPrecautions\nA route-filter can contain multiple if clauses or do not contain any if clauses. If a route-filter is configured only with if clauses that match IPv4 routes, the route-filter matches IPv4 routes that meet the if-clause conditions and all IPv6 routes. If a route-filter is configured only with if clauses that match IPv6 routes, the route-filter matches IPv6 routes that meet the if-clause conditions and all IPv4 routes.\nUsing the same route-filter to filter both IPv4 and IPv6 routes may interrupt services in any of the following scenarios, and therefore is not recommended:\nSome if clauses in the route-filter are used match IPv4 routes, whereas some others are used to match IPv6 routes.The route-filter matches only IPv4 routes but is referenced by IPv6.The route-filter matches only IPv6 routes but is referenced by IPv4.\nIf the finish or refuse clause and the apply clause have not been executed at the end of route-filter processing, routes are denied by the route-filter by default. Otherwise, the routes are permitted by the route-filter.\nIf a route-filter or an XPL attribute set is referenced multiple times, the configuration takes a long time to be committed.\nTo exit from the route-filter view, run the abort command in the route-filter view."
+}

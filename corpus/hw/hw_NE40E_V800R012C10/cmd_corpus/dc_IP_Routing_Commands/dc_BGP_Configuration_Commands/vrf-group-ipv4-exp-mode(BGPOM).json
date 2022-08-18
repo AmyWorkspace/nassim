@@ -1,0 +1,41 @@
+{
+    "PageTitle": "peer exp-mode (BGP-VPN instance IPv4 address family view) (group)",
+    "FuncDef": "The peer exp-mode command specifies the mode in which a BGP label inherits the QoS priority in the outer tunnel label carried in packets.\nThe undo peer exp-mode command restores the default mode.\n\nThe default QoS priority inheriting mode varies according to the outer MPLS tunnel type:\n\n\nLDP: By default, the BGP label inherits the QoS priority carried in the outer MPLS tunnel label.",
+    "CLIs": [
+        "peer <peerGroupName> exp-mode { pipe | uniform }",
+        "undo peer <peerGroupName> exp-mode"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerGroupName",
+            "Info": "Specifies the name of a BGP peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "pipe",
+            "Info": "Allows the BGP label to use its own QoS priority.\n-"
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Allows the BGP label to inherit the QoS priority carried in the outer MPLS tunnel label.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-vpna] group test external",
+            "[*HUAWEI-bgp-vpna] peer test as-number 200",
+            "[*HUAWEI-bgp-vpna] peer test exp-mode uniform"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a CSC(Carrier Support Carrier) scenario, each packet arriving at a PE carries an inner private label, a BGP LSP label, and an outer MPLS tunnel label. The PE remove outer MPLS tunnel labels from packets before sending the packets to each other. If the BGP LSP label in a packet carries a QoS priority different from that in the outer MPLS tunnel label in the packet, run the peer exp-mode command on the PE to determine whether the BGP LSP label inherits the QoS priority carried in the outer MPLS tunnel label to be removed."
+}

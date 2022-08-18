@@ -1,0 +1,41 @@
+{
+    "PageTitle": "trust 8021p vlan remote",
+    "FuncDef": "The trust 8021p vlan remote command configures BA classification based on 802.1p values of packets on a Layer 2 interface.\nThe undo trust 8021p vlan remote command cancels the configuration.\nBy default, 802.1p-based BA classification is not configured for VLAN packets on a Layer 2 interface.",
+    "CLIs": [
+        "trust { 8021p | inner-8021p | outer-8021p } inbound vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> remote",
+        "undo trust { 8021p | inner-8021p | outer-8021p } inbound vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> remote"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view",
+        "Port extension Layer 2 interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies a start VLAN ID.\nThe value is an integer in the range 1 to 4094."
+        },
+        {
+            "Parameters": "to",
+            "Info": "Specifies a VLAN ID range.\n-"
+        },
+        {
+            "Parameters": "vlan-id2",
+            "Info": "Specifies an end VLAN ID.\nThe value is an integer in the range 1 to 4094. vlan-id2 must be greater than vlan-id1."
+        },
+        {
+            "Parameters": "remote",
+            "Info": "Enables BA classification on the interface of the master device and configures the port extension interface to deliver configurations to AP devices.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1024/4/0/0",
+            "[*HUAWEI-GigabitEthernet1024/4/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1024/4/0/0] port trunk allow-pass vlan 1 to 10",
+            "[*HUAWEI-GigabitEthernet1024/4/0/0] trust upstream default inbound vlan 1 remote",
+            "[*HUAWEI-GigabitEthernet1024/4/0/0] trust 8021p inbound vlan 1 remote"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe trust 8021p vlan command is used to configure a simple traffic classification-based QoS policy on a Layer 2 interface.\nFor the inbound interface traffic, the command is executed when the 802.1p field of packets is need to map to the internal priorities. For the outbound interface traffic, the command is executed when 802.1p field of packets is need to modify.\nExternal interfaces of APs function as inbound interfaces of traffic. To ensure that different queues are scheduled based on priorities, BA classification for AP devices is enabled on the interface of the master device.\nPrecautions\nThe trust inner-8021p [ inbound ] is mutually exclusive with the qos default-service-class command.\nBefore running the trust 8021p vlan command on an interface, use the trust upstream vlan command to bind a DS domain to the interface. Otherwise, the trust 8021p vlan configuration does not take effect."
+}

@@ -1,0 +1,45 @@
+{
+    "PageTitle": "source-policy (IPv6 PIM view/VPN instance IPv6 PIM view)",
+    "FuncDef": "The source-policy command configures a policy for filtering multicast data packets based on source addresses or based on source and group addresses.\nThe undo source-policy command restores the default configuration.\nBy default, the Router does not filter received multicast data packets based on source addresses or based on source and group addresses.",
+    "CLIs": [
+        "source-policy { <acl6-number> | acl6-name <acl6-name> }",
+        "undo source-policy"
+    ],
+    "ParentView": [
+        "IPv6 PIM view",
+        "VPN instance IPv6 PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl6-number",
+            "Info": "Specifies number of a basic or an advanced IPv6 ACL.\nThe value is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of an IPv6 ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 number 2001",
+            "[*HUAWEI-acl6-basic-2001] rule permit source 2001:db8::1 128",
+            "[*HUAWEI-acl6-basic-2001] rule deny source 2001:db8::2 128",
+            "[*HUAWEI-acl6-basic-2001] quit",
+            "[*HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] source-policy 2001"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 name myacl6",
+            "[*HUAWEI-acl6-advance-myacl6] rule permit ipv6 source 2001:db8::1 128",
+            "[*HUAWEI-acl6-advance-myacl6] rule deny ipv6 source 2001:db8::2 128",
+            "[*HUAWEI-acl6-advance-myacl6] quit",
+            "[*HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] source-policy acl6-name myacl6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo implement data flow control and limit information that downstream receivers can obtain, run the source-policy command to configure a policy using which the Router filters received multicast data packets based on source addresses or based on source and group addresses. The Router forwards a received multicast data packet only if it is permitted by an ACL rule defined in the filter policy, thus improving system security.\nThe source-policy command configuration also applies to multicast data packets encapsulated in Register messages.\nPrerequisites\nThe multicast routing function has been enabled using the multicast ipv6 routing-enable command in the public network instance view.\nConfiguration Impact\nIf the source-policy command is run more than once, the latest configuration overrides the previous one.\nIf a basic IPv6 ACL is used, the Router forwards only multicast data packets whose source addresses are permitted by rules of the ACL.If an advanced IPv6 ACL is configured, the Router forwards only multicast data packets whose source and group addresses are both permitted by rules of the ACL.If the specified IPv6 ACL does not exist, the Router discards all multicast data packets."
+}

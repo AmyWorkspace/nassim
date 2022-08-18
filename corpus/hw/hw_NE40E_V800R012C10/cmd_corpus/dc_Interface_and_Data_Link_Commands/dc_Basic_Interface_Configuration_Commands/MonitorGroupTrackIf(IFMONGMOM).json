@@ -1,0 +1,71 @@
+{
+    "PageTitle": "track monitor-group (interface view)",
+    "FuncDef": "The track monitor-group command configures an interface to track an interface monitoring group. This interface is called a track interface.\nThe undo track monitor-group command disables an interface from tracking an interface monitoring group.\nBy default, no interface is configured to track an interface monitoring group.",
+    "CLIs": [
+        "track monitor-group <monitor-group-name> [ trigger-down-weight <trigger-down-weight-value> ]",
+        "undo track monitor-group"
+    ],
+    "ParentView": [
+        "100GE-Trunk member Layer 2 interface view",
+        "100GE-Trunk member interface view",
+        "Layer 2 100GE interface view",
+        "100GE interface view",
+        "Layer 2 10GE interface view",
+        "10GE interface view",
+        "25GE-L2 view",
+        "25GE sub-interface view",
+        "25GE interface view",
+        "400GE-L2 view",
+        "400GE sub-interface view",
+        "400GE interface view",
+        "40GE-Trunk member Layer 2 interface view",
+        "40GE-Trunk member interface view",
+        "Layer 2 40GE interface view",
+        "40GE interface view",
+        "Layer 2 50GE interface view",
+        "50GE sub-interface view",
+        "50GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "Layer 2 GE interface view",
+        "GE optical interface view",
+        "GE sub-interface view",
+        "GE interface view",
+        "GE electrical interface view",
+        "Global VE interface view",
+        "Loopback interface view",
+        "PW-VE interface view",
+        "Remote-AP interface view",
+        "Vbridge interface view",
+        "VE interface view",
+        "Port extension Layer 2 interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "monitor-group-name",
+            "Info": "Specifies the name of a route monitoring group.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.\nThe character string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "trigger-down-weight trigger-down-weight-value",
+            "Info": "Specifies the maximum down weight value of a track interface.\nThe value is an integer ranging from 1 to 1000. By default, a track interface goes down only when all binding interfaces in the interface monitoring group go down."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] monitor-group group1",
+            "[*HUAWEI-monitor-group-group1] binding interface GigabitEthernet 1/0/0 down-weight 20",
+            "[*HUAWEI-monitor-group-group1] binding interface GigabitEthernet 1/0/1 down-weight 40",
+            "[*HUAWEI-monitor-group-group1] binding interface GigabitEthernet 1/0/2 down-weight 60",
+            "[*HUAWEI-monitor-group-group1] quit",
+            "[*HUAWEI] interface GigabitEthernet 2/0/0",
+            "[*HUAWEI-GigabitEthernet2/0/0] track monitor-group group1 trigger-down-weight 100",
+            "[*HUAWEI-GigabitEthernet2/0/0] quit",
+            "[*HUAWEI] monitor-group group1",
+            "[*HUAWEI-monitor-group-group1] monitor enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA user-side interface that tracks an interface monitoring group is called a track interface. To configure a user-side interface to track the status of an interface monitoring group, run the track monitor-group command on the interface.\nIf the down weight sum of all the binding interfaces in the monitoring group is greater than or equal to the value specified using trigger-down-weight-value on the track interface, the track interface goes down, and service traffic is switched to the backup link. Otherwise, the track interface goes up, and service traffic is switched back to the primary link.\nPrerequisites\nAn interface monitoring group has been created using the monitor-group command.\nConfiguration Impact\nAfter the track monitor-group command is run, the track interface changes its status based on the binding interface status.\nFollow-up Procedure\nRun the monitor enable command to associate the interface monitoring group with the track interface.\nPrecautions\nA maximum of 256 interfaces can be configured to track an interface monitoring group.A Trunk interface and its member interfaces cannot be associated with monitor group at the same time.Setting the value of trigger-down-weight-value on a track interface to be less than or equal to the down weight sum of all binding interfaces is recommended. If the value is greater than the down weight sum, packet loss occurs. For example, an interface monitoring group named group1 has two binding interfaces, GE 1/0/0 and GE 2/0/0, with the down weights 10 and 20 respectively. The value of trigger-down-weight-value on the track interface is 40, which is greater than the down weight sum 30 of GE 1/0/0 and GE 2/0/0. As a result, the track interface will never go down, and traffic cannot be switched to the backup link, causing packet loss."
+}

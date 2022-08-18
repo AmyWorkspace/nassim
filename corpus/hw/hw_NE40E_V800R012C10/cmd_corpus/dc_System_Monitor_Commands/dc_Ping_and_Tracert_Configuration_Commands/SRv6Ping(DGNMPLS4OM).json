@@ -1,0 +1,85 @@
+{
+    "PageTitle": "ping srv6-te policy",
+    "FuncDef": "The ping srv6-te policy command tests the connectivity of an SRv6 TE Policy.",
+    "CLIs": [
+        "ping srv6-te policy { policy-name <policyName> | endpoint-ip <endpointIpv6> color <colorId> | binding-sid <bsid> } [ end-op <endOp> ] [ -a <sourceAddr6> | -c <count> | -m <interval> | -s <packetSize> | -t <timeout> | -tc <tc> | -h <hopLimit> ] *"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name policyName",
+            "Info": "Specifies the name of an SRv6 TE Policy.\nThe value is a string of 1 to 31 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "endpoint-ip endpointIpv6",
+            "Info": "Specifies the destination address of an SRv6 TE Policy.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "color colorId",
+            "Info": "Specifies the color ID of an SRv6 TE Policy.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "binding-sid bsid",
+            "Info": "Specifies the binding SID of an SRv6 TE Policy.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "end-op endOp",
+            "Info": "Specifies the ID of an End.OP segment. If the bottom SID of the segment list is an End.X SID or binding SID, you must manually specify an End.OP SID when initiating a ping operation to the SRv6 TE Policy.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-a sourceAddr6",
+            "Info": "Specifies a source IPv6 address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-c count",
+            "Info": "Specifies the number of ICMP echo request messages to be sent.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-m interval",
+            "Info": "Specifies an interval at which ICMP echo request messages are sent.\nThe value is an integer ranging from 1 to 10000, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-s packetSize",
+            "Info": "Specifies the payload length of an ICMP echo request message.\nThe value is an integer ranging from 65 to 9600. The default value is 100."
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies a timeout time for waiting for the response to an ICMP echo request message.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-tc tc",
+            "Info": "Specifies a traffic class for ICMP echo request messages.\nThe value is an integer ranging from 0 to 255. The default value is 0."
+        },
+        {
+            "Parameters": "-h hopLimit",
+            "Info": "Specifies a hop limit.\nThe value is an integer ranging from 1 to 255. The default value is 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping srv6-te policy policy-name abc end-op 2001:db8:2::1 -a 2001:db8:1::1 -c 5 -m 2000 -t 2000 -s 100 -tc 0 -h 255",
+            "  PING srv6-te policy : 100  data bytes, press CTRL_C to break",
+            "  srv6-te policy's segment list:",
+            "  Preference: 200; Path Type: primary; Protocol-Origin: local; Originator: 0, 0.0.0.0; Discriminator: 200; Segment-List ID: 1; Xcindex: 1; end-op: 2001:db8:2::1",
+            "    Reply from 2001:db8:2::1 ",
+            "    bytes=100 Sequence=1 time=8 ms",
+            "    Reply from 2001:db8:2::1 ",
+            "    bytes=100 Sequence=2 time=2 ms",
+            "    Reply from 2001:db8:2::1 ",
+            "    bytes=100 Sequence=3 time=3 ms",
+            "    Reply from 2001:db8:2::1 ",
+            "    bytes=100 Sequence=4 time=3 ms",
+            "    Reply from 2001:db8:2::1 ",
+            "    bytes=100 Sequence=5 time=3 ms",
+            "",
+            "  --- srv6 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 2/3/8 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an SRv6 TE Policy network, if data forwarding fails over the SRv6 TE Policy, the control plane for SRv6 establishment cannot detect this failure, making network maintenance difficult. The SRv6 TE Policy ping mechanism can be used to detect such faults and locate faulty nodes. This mechanism is implemented using the ping srv6-te policy command. To test the connectivity of an SRv6 TE Policy, run the ping srv6-te policy command.\nPrerequisites\nSRv6 has been enabled on the device and is working properly.\nPrecautions\nIf the segment list changes during the SRv6 TE Policy ping test, the ping results may be inaccurate. It is recommended that you press Ctrl+C to stop and then re-initiate a ping operation.\nIf the IPv6 router ID is not specified, a source IPv6 address need to be configured manually when running this command."
+}

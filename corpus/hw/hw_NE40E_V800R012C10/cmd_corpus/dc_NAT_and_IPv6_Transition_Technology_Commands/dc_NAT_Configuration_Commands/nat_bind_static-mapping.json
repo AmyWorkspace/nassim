@@ -1,0 +1,33 @@
+{
+    "PageTitle": "nat bind static-mapping",
+    "FuncDef": "The nat bind static-mapping command enables the static source tracing algorithm and configures parameters for the algorithm.\nThe undo nat bind static-mapping command disables the static source tracing algorithm.\nBy default, no static source tracing algorithm is enabled for a NAT instance.",
+    "CLIs": [
+        "nat bind static-mapping <static-mapping-id>",
+        "undo nat bind static-mapping <static-mapping-id>"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "static-mapping-id",
+            "Info": "Specifies the ID of the static source tracing algorithm.\nThe value is an integer ranging from 1 to 2000."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat static-mapping",
+            "[*HUAWEI-nat-static-mapping] inside-pool 1",
+            "[*HUAWEI-nat-static-mapping-inside-pool-1] section 1 172.20.0.1 172.20.0.100",
+            "[*HUAWEI-nat-static-mapping-inside-pool-1] quit",
+            "[*HUAWEI-nat-static-mapping] global-pool 1",
+            "[*HUAWEI-nat-static-mapping-global-pool-1] section 1 10.0.0.1 10.0.0.255",
+            "[*HUAWEI-nat-static-mapping-global-pool-1] quit",
+            "[*HUAWEI-nat-static-mapping] static-mapping 1 inside-pool 1 global-pool 1 port-range 256 65535 port-size 256",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat bind static-mapping 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA static source tracing algorithm policy allows a device to apply mappings between a specified private address pool and IP addresses in a public address pool to a NAT instance.\nPrecautions\nThe nat bind static-mapping and nat statistics address-pool-usage enable commands are mutually exclusive.\nThe nat bind static-mapping and nat ip access-user limit commands are mutually exclusive.\nThe nat bind static-mapping and nat allow-access commands are mutually exclusive.\nWhen the load balancing function is used for an instance, the mapping of the static algorithm bound to the instance has the following requirements:\nFor the maximum number (such as n) of private network users supported by a single public IP address, the value must be the nth power of 2.For the address segment of each private network section, the number of private network user IP addresses in the address segment must be an integer multiple of n. The start IP address must be able to be divided by n with no remainder.If an instance is bound to multiple static algorithm mappings, the maximum number of private network users supported by a public IP address of each static algorithm must be the same.Distributed CGN (The domain and the user group in the DAA template cannot be bound to a NAT instance) is not supported."
+}

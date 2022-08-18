@@ -1,0 +1,49 @@
+{
+    "PageTitle": "public-address",
+    "FuncDef": "The public-address assign-first command enables public network IPv4 addresses to be preferentially allocated to users.\nThe undo public-address assign-first command restores the default setting.\nThe public-address nat enable command enables the NAT device to process traffic from public network IPv4 address users in distributed CGN scenarios before forwarding it based on the routing table.\nThe undo public-address nat enable command disables the NAT device from processing traffic from public network IPv4 address users before forwarding it based on the routing table.\nThe public-address nat-instance-down command allows CGN users to access a device using a public IP address if the CGN service board fails.\nThe undo public-address nat-instance-down command restores the default configuration.\n\nBy default, CGN users cannot access a device using a public IP address if a CGN service board fails.\n\n\nBy default, IPv4 addresses in idle address pools are allocated to users according to the configuration sequence of address pools.\n\n\nBy default, when a NAT instance is bound to a domain, the NAT device processes the traffic from both the public and private network IPv4 address users who get online from the domain before forwarding the traffic based on the routing table.",
+    "CLIs": [
+        "public-address { assign-first | nat enable | nat-instance-down }",
+        "undo public-address { assign-first | nat enable | nat-instance-down }"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "assign-first",
+            "Info": "Enables public network IPv4 addresses to be preferentially allocated to users.\n-"
+        },
+        {
+            "Parameters": "nat",
+            "Info": "Enables the NAT device to process traffic from public network IPv4 address users in distributed CGN scenarios before forwarding it based on the routing table.\n-"
+        },
+        {
+            "Parameters": "nat-instance-down",
+            "Info": "Allows CGN users to access a device using a public IP address if the CGN service board fails.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[*HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa] commit",
+            "[~*HUAWEI-aaa-domain-huawei] public-address nat-instance-down"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[*HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa] commit",
+            "[~HUAWEI-aaa-domain-huawei] undo public-address nat enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[*HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[~HUAWEI-aaa-domain-huawei] public-address assign-first"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf both public and private network IPv4 address pools are bound to a domain or delivered by a RADIUS server and the carrier wants the public network IPv4 addresses to be preferentially allocated to users, run the public-address assign-first command on the device.\nBy default, when public and private network address users coexist in a domain to which a NAT instance is bound, the NAT device processes the traffic from both the public and private network IPv4 address users who get online from the domain before forwarding the traffic based on the routing table. If traffic from public network address users is processed by the NAT device before being forwarded, NAT device resources will be wasted. The functions that public users support outnumber the functions that NAT users support. Therefore, in this situation, the NAT processing is unnecessary. Run the undo public-address nat enable command to disable the NAT processing. As a result, traffic from public network address users is forwarded based on the routing table.\nThe Internet Assigned Numbers Authority (IANA) defines that address pools within the network segments of 192.168.0.0/16, 10.0.0.0/8, 100.64.0.0/10 and 172.16.0.0/12 are private network address pools and the rest are public network IPv4 address pools. Run the undo public-address nat enable command if both public and private network IPv4 address pools are bound to a domain or delivered by a RADIUS server and the carrier does not want the NAT device to process traffic from users to whom public network IPv4 addresses are allocated.\nIf a CGN service board fails, CGN users cannot access the device using a private IP address. In this situation, you can run the public-address nat-instance-down command to allow the CGN users to use a public IP address for access.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe device determines whether an address pool is a public or private network address pool based on its gateway address. If the gateway address is within a private network segment, the address pool is considered a private network address pool.When configuring the public-address assign-first command, ensure that addresses in the configured address pool are within either the public or private network segments.By default, the public-address nat enable command is configured.The public-address nat enable command only takes effect on VSUF-80s/160s.The public-address nat-instance-down and public-address assign-first commands are mutually exclusive."
+}

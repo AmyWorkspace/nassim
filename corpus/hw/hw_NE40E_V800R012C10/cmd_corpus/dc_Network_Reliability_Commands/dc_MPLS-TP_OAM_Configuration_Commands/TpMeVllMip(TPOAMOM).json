@@ -1,0 +1,50 @@
+{
+    "PageTitle": "me mip switch-l2vc between vc-type",
+    "FuncDef": "The me mip switch-l2vc between vc-type command creates a maintenance entity (ME) instance for a maintenance entity group intermediate point (MIP) and binds the ME instance to a switch node over a multi-segment PW (MS-PW).\nThe undo me mip switch-l2vc between vc-type command deletes an ME instance created on a MIP.\nBy default, no ME instance is created.",
+    "CLIs": [
+        "me mip switch-l2vc <peer-ip-value> <vc-id-value> between <switch-peer-ip-v> <switch-vc-id-v> vc-type <vc-type-value> [ mip-id <mip-id-value> ]",
+        "undo me mip switch-l2vc <peer-ip-value> <vc-id-value> between <switch-peer-ip-v> <switch-vc-id-v> vc-type <vc-type-value>"
+    ],
+    "ParentView": [
+        "Maintenance entity group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-ip-value",
+            "Info": "Specifies the label switching router (LSR) ID for the PE over an MS-PW.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id-value",
+            "Info": "Specifies the virtual circuit (VC) ID.\nThe value is an integer ranging from 1 to 4294967295.\nVCs of the same type on a PE must be uniquely identified by the VC ID."
+        },
+        {
+            "Parameters": "switch-peer-ip-v",
+            "Info": "Specifies the LSR ID for the peer PE of the switch node over an MS-PW.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "switch-vc-id-v",
+            "Info": "Specifies the VC ID.\nThe value is an integer ranging from 1 to 4294967295.\nVCs of the same type on a PE must be uniquely identified by the VC ID."
+        },
+        {
+            "Parameters": "vc-type-value",
+            "Info": "Specifies the VC type.\nEncapsulation types supported:ATM PWE3atm-1to1-vcc: One PW carries the ATM cells of one PVC.atm-1to1-vpc: One PW carries the ATM cells of one PVP.atm-aal5-pdu: One PW carries the AAL5 PDUs of one PVC.atm-aal5-sdu: One PW carries the AAL5 SDUs of one PVC.atm-nto1-vcc: One PW carries the ATM cells of multiple PVCs.atm-nto1-vpc: One PW carries the ATM cells of multiple PVPs.atm-trans-cell: ATM cells are transmitted over PWE3 VCs.\nTDM PWE3cesopsn-basic: CES is sensitive to E1 and T1 frame structures. E1 or T1 signals can be encapsulated into packets based on timeslots.satop-e1: SAToP is insensitive to the E1 frame structure and encapsulates a whole E1 frame into a PW packet.satop-t1: SAToP is insensitive to the T1 frame structure and encapsulates a whole T1 frame into a PW packet.\nOther encapsulation types:cep: This encapsulation type is used for CEP services.ethernet: This encapsulation type is used when Ethernet packets do not carry VLAN information.hdlc: HDLC is a bit-oriented link layer protocol.ip-interworking: This encapsulation type is used for interworking between Huawei devices.ip-layer2: This encapsulation type is used for interworking between Huawei devices and non-Huawei devices.ppp: PPP is a link layer protocol that specifies how to encapsulate and transmit network layer packets over P2P links.vlan: This encapsulation type is used when Ethernet packets carry VLAN information."
+        },
+        {
+            "Parameters": "mip-id mip-id-value",
+            "Info": "Specifies the ID of a MIP.\nThe value is an integer ranging from 1 to 8191."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] mpls switch-l2vc 1.1.1.1 100 between 3.3.3.3 100 encapsulation vlan",
+            "[*HUAWEI] mpls-tp meg test",
+            "[*HUAWEI-mpls-tp-meg-test] me mip switch-l2vc 1.1.1.1 100 between 3.3.3.3 100 vc-type vlan"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf an MS-PW is used as a transport path, a MEG must have a single ME for this MS-PW. The MIP is the switch node over the MS-PW.\nTo monitor the path between the MEP and the MIP using MPLS-TP OAM, create ME instances on both the MEP and MIP. To create an ME instance on the MIP and bind the ME instance to the switch node over the MS-PW, run the me mip switch-l2vc command.\nMPLS-TP OAM supports only the loopback (LB) function to monitor a path from a MEP to a MIP. If a MEP sends a loopback message (LBM), a destination node MIP can be specified. After receiving the LBM, the MIP responds to the MEP with a loopback reply (LBR). This process completes the LB operation.\nPrerequisites\nA switch node exists on the MS-PW.\nConfiguration Impact\nAfter the me mip switch-l2vc command is run:\nThe MIP responds to the MEP with LBRs and does not initiate the LB detection.The MIP does not detect the MEG ID on the MEP side and cannot verify the MEG ID.The MIP does not support performance statistics."
+}

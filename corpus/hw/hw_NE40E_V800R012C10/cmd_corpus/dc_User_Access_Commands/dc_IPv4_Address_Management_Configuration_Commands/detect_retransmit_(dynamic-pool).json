@@ -1,0 +1,37 @@
+{
+    "PageTitle": "detect retransmit (dynamic-pool)",
+    "FuncDef": "The detect retransmit command configures the number of retransmission times and a retransmission interval for detecting address segment availability in a dynamic address pool.\nThe undo detect retransmit command deletes the number of retransmission times and a retransmission interval configured for detecting address segment availability in a dynamic address pool.\nBy default, the number of retransmission times is 3, and the retransmission interval is 3 days.",
+    "CLIs": [
+        "detect retransmit <retransmit-value> interval <day> <hour> <minute>",
+        "undo detect [ retransmit [ <retransmit-value> interval [ <day> <hour> <minute> ] ] ]"
+    ],
+    "ParentView": [
+        "IP address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval day",
+            "Info": "Specifies the interval days for detecting address segment availability.\nSpecifies days. The value is an integer ranging from 0 to 999."
+        },
+        {
+            "Parameters": "hour",
+            "Info": "Specifies the interval hours for detecting address segment availability.\nSpecifies hours. The value is an integer ranging from 0 to 23."
+        },
+        {
+            "Parameters": "minute",
+            "Info": "Specifies the interval minutes for detecting address segment availability.\nSpecifies minutes. The value is an integer ranging from 0 to 59."
+        },
+        {
+            "Parameters": "retransmit retransmit-value",
+            "Info": "Specifies the number of retransmission times.\nThe value is an integer ranging from 1 to 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei bas dynamic",
+            "[*HUAWEI-ip-pool-huawei] detect retransmit 5 interval 0 0 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe BRAS sends messages to the RADIUS server at intervals to detect the address segment availability. If an address segment is allowed by the RADIUS server, the RADIUS server responds with a detection success message. If not, the RADIUS server responds with a detection denial message.\nIf the RADIUS server is unreachable, the BRAS retransmits the detection message to the RADIUS server for a configured number of times. If the RADIUS server is still unreachable, the BRAS sets the address segment to Locked and does not assign addresses in this address segment to subsequent access users. After all users go offline, the BRAS sends a request to the RADIUS server for releasing this address segment. If the BRAS receives a response to the address segment release request, it deletes the address segment. If not, the BRAS deletes the address segment only after the local timer expires.\nIf an address segment is Locked, the BRAS can still send messages to detect the availability of it. If detection is successful, the BRAS sets the address segment to Unlocked so that the address segment becomes available.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe retransmission interval must be configured based on the RADIUS server performance."
+}

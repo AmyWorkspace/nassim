@@ -1,0 +1,51 @@
+{
+    "PageTitle": "mpls oam bidirectional-tunnel enable",
+    "FuncDef": "The mpls oam bidirectional-tunnel enable command enables MPLS OAM to monitor static bidirectional co-routed LSPs.\nThe undo mpls oam bidirectional-tunnel enable command disables MPLS OAM from monitoring static bidirectional co-routed LSPs.\nBy default, MPLS OAM is disabled monitoring static bidirectional co-routed LSPs.",
+    "CLIs": [
+        "mpls oam bidirectional-tunnel enable { send | receive } { <tunnel-type> <tunnel-number> | <tunnel-name> }",
+        "undo mpls oam bidirectional-tunnel enable { send | receive } { <tunnel-type> <tunnel-number> | <tunnel-name> }"
+    ],
+    "ParentView": [
+        "MPLS-OAM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "send",
+            "Info": "Enables a local device to send MPLS OAM packets.\n-"
+        },
+        {
+            "Parameters": "receive",
+            "Info": "Enables a local device to receive MPLS OAM packets.\n-"
+        },
+        {
+            "Parameters": "tunnel-type",
+            "Info": "Specifies the type of a tunnel.\n-"
+        },
+        {
+            "Parameters": "tunnel-number",
+            "Info": "Specifies the number of a tunnel.\n-"
+        },
+        {
+            "Parameters": "tunnel-name",
+            "Info": "Specifies the name of a tunnel.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] mpls te signal-protocol cr-static",
+            "[*HUAWEI-Tunnel10] mpls te bidirectional",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] mpls-oam",
+            "[*HUAWEI-mpls-oam] mpls oam bidirectional-tunnel Tunnel 10 type ffd frequency 3",
+            "[*HUAWEI-mpls-oam] mpls oam bidirectional-tunnel enable send Tunnel 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMPLS OAM can monitor the connectivity of static bidirectional co-routed LSPs and is widely used in IPRAN scenarios.\nThe mpls oam bidirectional-tunnel command sets MPLS OAM parameters. The auto-protocol parameter configured in that command enables the OAM auto protocol. If that parameter is not configured, the mpls oam bidirectional-tunnel enable command must be run additionally with the following parameter combinations to enable MPLS OAM to monitor static bidirectional co-routed LSPs:\nsend is configured on the ingress, and receive is configured on the egress. These settings enable the ingress to send reverse defect indication (BDI) packets to monitor a unidirectional LSP to the egress.receive is configured on the ingress, and send is configured on the egress. These settings enable the egress to send BDI packets to monitor a unidirectional LSP to the ingress.send is configured on the ingress, and send and receive are configured on the egress. These settings enable the egress to send and receive BDI packets to monitor a unidirectional LSP to the ingress. Although the egress can also send BDI packets to the ingress, the ingress cannot receive them.send and receive are configured on the ingress, and send is configured on the egress. These settings enable the ingress to send and receive BDI packets to monitor a unidirectional LSP to the egress. Although the ingress can also send BDI packets to the egress, the egress cannot receive them.send and receive are configured on both the ingress and egress. These settings enable the ingress and egress to send and receive BDI packets to monitor a bidirectional LSP.\n\nPrerequisites\nMPLS OAM parameters have been configured using the mpls oam bidirectional-tunnel command with the auto-protocol parameter not specified.\nConfiguration Impact\nTo prevent detection errors, specify send and then receive when enabling MPLS OAM, or specify receive and then send when disabling MPLS OAM."
+}

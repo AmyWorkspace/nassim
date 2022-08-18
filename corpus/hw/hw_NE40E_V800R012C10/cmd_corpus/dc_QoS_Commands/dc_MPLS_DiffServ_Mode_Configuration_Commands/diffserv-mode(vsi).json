@@ -1,0 +1,50 @@
+{
+    "PageTitle": "diffserv-mode (VSI view)",
+    "FuncDef": "The diffserv-mode command configures the MPLS Differentiated Services (Diff-Serv) model to provide end-to-end QoS assurance.\nThe undo diffserv-mode command restores the MPLS Diff-Serv model.\nBy default, the Uniform model is used.",
+    "CLIs": [
+        "diffserv-mode { pipe <service-class> <color> | short-pipe <service-class> <color> [ domain <ds-name> ] | uniform }",
+        "undo diffserv-mode"
+    ],
+    "ParentView": [
+        "VSI view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pipe",
+            "Info": "Specifies the pipe model.\n-"
+        },
+        {
+            "Parameters": "service-class",
+            "Info": "Specifies the service type when the packet enters the public network from the private network.\nThe value can be cs7, cs6, ef, af4, af3, af2, af1, or be."
+        },
+        {
+            "Parameters": "color",
+            "Info": "Specifies the color for marking the discard priority of a packet transmitted from a private network to a public network.\nThe value can be green, yellow, or red."
+        },
+        {
+            "Parameters": "short-pipe",
+            "Info": "Specifies the short Pipe model.\n-"
+        },
+        {
+            "Parameters": "domain ds-name",
+            "Info": "Specifies the DS domain name of the specified PHB applied to the egress in Short Pipe model.\nThe value is a string of 1 to 48 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Specifies the uniform model.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] commit",
+            "[~HUAWEI-l2vpn] quit",
+            "[~HUAWEI] vsi vsia",
+            "[*HUAWEI-vsi-vsia] diffserv-mode pipe af1 green"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a Diff-Serv mode:\nIf service priorities on an MPLS network need to be distinguished, configure the Uniform mode.If service priorities do not need to be distinguished, configure the Pipe or Short-pipe mode.\nWhen service class is configured for the packets that enter the public network from a private network:\nTo transmit signaling protocol, set service class to cs7 and cs6.To ensure the QoS for low-delay services, set the service class to ef.To ensure the bandwidth for key services, set service class to af4, af3, af2, or af1.Set the service class to be (a service class) for the services that do not need strict QoS assurance.\nThe packets with the preceding service classes are arranged in descending order of sending priorities.\nThe colors of packets that enter the public network from a private network are in ascending order of discard priorities. That is green, yellow, and red.\n\nPrecautions\nVXLAN does not support Pipe/Short-pipe mode. A VSI that is added to a VXLAN cannot be configured to work in Pipe/Short-pipe mode. A VSI that is configured to work in Pipe/Short-pipe mode cannot be added to a VXLAN."
+}

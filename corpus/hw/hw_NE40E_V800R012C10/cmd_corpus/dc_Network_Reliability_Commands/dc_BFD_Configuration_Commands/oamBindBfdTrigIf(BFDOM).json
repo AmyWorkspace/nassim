@@ -1,0 +1,37 @@
+{
+    "PageTitle": "oam-bind ingress bfd-session trigger if-down egress interface",
+    "FuncDef": "The oam-bind ingress bfd-session trigger if-down egress interface command enables unidirectional transmission of information about a fault from a BFD session to an interface.\nThe undo oam-bind ingress bfd-session trigger if-down egress interface command cancels the unidirectional transmission of information about a fault from a BFD session to an interface.\nBy default, unidirectional transmission of information about a fault from a BFD session to an interface is not configured.",
+    "CLIs": [
+        "oam-bind ingress bfd-session { <bfd-session-id> | session-name <bfd-session-name> } trigger if-down egress interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo oam-bind ingress bfd-session { <bfd-session-id> | session-name <bfd-session-name> } trigger if-down egress interface { <interface-name> | <interface-type> <interface-number> }"
+    ],
+    "ParentView": [
+        "OAM management view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "session-name bfd-session-name",
+            "Info": "Specifies-the-BFD-session-name.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and the number of an interface.\n-"
+        },
+        {
+            "Parameters": "bfd-session bfd-session-id",
+            "Info": "Specifies the local discriminator of a BFD session.\nThe value is an integer ranging from 1 to 16384."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd session bind peer-ip 10.10.20.2",
+            "[*HUAWEI-bfd-session-session] quit",
+            "[*HUAWEI] oam-mgr",
+            "[*HUAWEI-oam-mgr] oam-bind ingress bfd-session 1 trigger if-down egress interface GigabitEthernet1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe BFD session is associated with an interface. When a link fault is detected, the BFD session on the local device informs the OAM management module, which triggers the physical status of the interface to go Down. When the faulty link recovers, the BFD session on the local device informs the OAM management module, which triggers the interface to go Up.\nPrerequisites\nThe unidirectional transmission of information about a fault from a BFD session to an interface can be configured only when the following requirements are met:\nBoth BFD sessions have been set up, and the BFD sessions must in the Up state.The BFD session is a static BFD session.The BFD session and the interface are exclusively associated with each other. That is, after an interface is associated with BFD session 1, the interface cannot be associated with other BFD sessions. After BFD session 1 is associated with an interface, BFD session 1 cannot be associated with other interfaces."
+}

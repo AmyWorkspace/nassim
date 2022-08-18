@@ -1,0 +1,63 @@
+{
+    "PageTitle": "bfd bind peer-ipv6 source-ipv6 auto",
+    "FuncDef": "The bfd bind peer-ipv6 source-ipv6 auto command creates a BFD session for IPv6 with automatically negotiated discriminators and displays the BFD session view.\nBy default, no static BFD for IPv6 session with automatically negotiated discriminators is created.",
+    "CLIs": [
+        "bfd <sessname-value> bind peer-ipv6 <peerip6-value> [ vpn-instance <vpnname-value> ] { [ interface { <interface-value> | <ifType> <ifNum> } ] source-ipv6 <sourceip6-value> | source-ipv6 <sourceip6-value> [ select-board <slot-id> [ <slot-id2> ] ] } auto"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sessname-value",
+            "Info": "Specifies the name of a BFD session for IPv6.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string.\nWhen the name of a BFD session is configured, the uppercase and lowercase letters in the name must be the same as what you enter.BFD session names are case-insensitive. For example, ABC and abc are regarded as the same BFD session. If you have configured ABC as the name of a BFD session, the ABC BFD session view is directly displayed when you configure abc."
+        },
+        {
+            "Parameters": "peer-ipv6 peerip6-value",
+            "Info": "Specifies the peer IPv6 address bound to a BFD session for IPv6.\nThe value is in 32-digit hexadecimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpnname-value",
+            "Info": "Specifies the name of a VPN instance bound to a BFD session for IPv6.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "interface ifType ifNum",
+            "Info": "Specifies the type and number of a Layer 3 interface to which a BFD session for IPv6 is bound.\nThe interface is either a physical interface (such as a GE interface) or a logical interface (such as a trunk interface or a sub-interface)."
+        },
+        {
+            "Parameters": "source-ipv6 sourceip6-value",
+            "Info": "Specifies the source IPv6 address carried in a BFD packet.\nThe value is in 32-digit hexadecimal notation."
+        },
+        {
+            "Parameters": "select-board slot-id",
+            "Info": "Specifies the board to be forcibly selected by the BFD session state machine.\nThe value is a string of 1 to 19 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "slot-id2",
+            "Info": "Specifies the board to be forcibly selected by the BFD session state machine.\nIf both slot-id and slot-id2 are configured, only one board is selected, and slot-id is preferred. If slot-id fails to be selected, slot-id2 is selected. If both boards fail to be selected, board selection stops.\nThe value is a string of 1 to 19 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 address 2001:db8:1::2 127",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] bfd atob bind peer-ipv6 2001:db8:1::1::1 interface GigabitEthernet 1/0/0 source-ipv6 2001:db8:1::2 auto"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 address 2001:db8:1::2 127",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] bfd selectboard bind peer-ipv6 2001:db8:1::1 source-ipv6 2001:db8:1::2 select-board 1 auto"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA BFD session for IPv6 is established to rapidly detect faults in IPv6 links on a network. A device needs to establish a BFD session with a remote device on which a dynamic BFD session is established to detect faults in static routes. In this case, the bfd bind peer-ipv6 source-ipv6 auto command is used to create a BFD session for IPv6 with automatically negotiated discriminators.\nWhen creating a static BFD session for IPv6 with automatically negotiated discriminators:\nIf only the peer IPv6 address is specified, BFD detects faults in a multi-hop link.If both the peer IPv6 address and local interface are specified, BFD detects faults in a single-hop link. That is, BFD monitors a fixed route whose outbound interface is this interface and the next-hop address is the peer IPv6 address.If the source IPv6 address is specified for the interface whose physical status is to be monitored by BFD, BFD packets are correctly forwarded after URPF has been enabled. The source-ipv6 parameter must be configured correctly because the system checks only the validity of the source IPv6 address. A multicast or broadcast address is an invalid source IPv6 address.If both the peer IPv6 address and the VPN instance are specified, BFD detects faults in the multi-hop link for a specified VPN instance.If the peer IPv6 address, the VPN instance, and the local interface are specified, BFD detects faults in the single-hop link for a specified VPN instance.\n\nFollow-up Procedure\nAfter a static BFD session for IPv6 with automatically negotiated discriminators is created and the BFD session for IPv6 view is displayed:\nRun the description command to configure a description for the BFD session for IPv6.Run the min-tx-interval command to set a desired minimum interval at which BFD packets are sent.Run the min-rx-interval command to set a desired minimum interval at which BFD packets are received.Run the detect-multiplier command to set a local detection multiplier for the BFD session.Run the process-pst command to enable BFD to modify the PST if BFD detects a fault.Run the wtr command to set a WTR time for the BFD session for IPv6.\n\nPrecautions\nThe difference between a static BFD session for IPv6 and a static BFD session for IPv6 with automatically negotiated discriminators is as follows:A static BFD session for IPv6 requires the configuration of local and remote discriminators.A static BFD session for IPv6 with automatically negotiated discriminators does not require the configuration of local or remote discriminator.If the IPv6 address of an outbound interface is changed after the BFD session for IPv6 has been configured, the IPv6 address carried in the BFD packets will not be changed.The source and peer IPv6 address must be configured if automatic negotiation on a local discriminator is enabled. A multicast or broadcast address is an invalid IPv6 address.The source IPv6 address must be configured if BFD for IPv6 with automatic negotiation on a local discriminator is enabled.You can run the undo bfd session-name command to delete a specified BFD session and its binding information."
+}

@@ -1,0 +1,44 @@
+{
+    "PageTitle": "vpn-instance inbound(AAA Domain view)",
+    "FuncDef": "The vpn-instance inbound command binds an inbound VPN instance to an AAA domain.\nThe undo vpn-instance inbound command unbinds an inbound VPN instance from an AAA domain.\nBy default, no inbound VPN instance is bound to an AAA domain.",
+    "CLIs": [
+        "vpn-instance <vpn-instance-name> inbound",
+        "undo vpn-instance <vpn-instance-name> inbound"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance-name",
+            "Info": "Specifies the VPN instance name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates an inbound VPN instance in a half-duplex VPN scenario.\nWhen CE traffic isolation is required on a spoke PE, to ensure that traffic between local CEs is transmitted through a hub device along upstream LSPs, deploy half-duplex VPN and apply an inbound and outbound VPN instances to inbound and outbound traffic, respectively. In this way, two VPN instances can implement CE traffic isolation, simplifying configurations and reducing VPN resource consumption.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[~HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 22:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 3:3 export-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 4:4 import-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[~HUAWEI] quit",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[~HUAWEI-aaa-domain-huawei] vpn-instance vpn1 inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[~HUAWEI-aaa-domain-huawei] undo vpn-instance vpn1 inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn hub and spoke networking scenarios, CEs that belong to different VPNs communicate with each other through a hub device. However, CEs that belong to the same VPN can directly exchange data using a VPN routing and forwarding instance (VRF) instead of through a hub device. In this case, to monitor and collect statistics about all network traffic, you need to bind different VPNs to each CE. To save VPN resources and simplify configurations, run the vpn-instance inbound command to bind an inbound VPN instance to a domain. After the vpn-instance inbound command is run, spoke PEs cannot directly forward CE traffic between private interfaces and traffic of any CE connected to the same spoke PE must be forwarded by the hub device.\nPrerequisites\nThe VPN instance to be bound to a domain has been created using the ip vpn-instance command.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\n If both the vpn-instance and vpn-instance inbound commands are configured in the user online domain, the vpn-instance inbound command configuration takes effect in the upstream direction and the vpn-instance command configuration takes effect in the downstream direction. If both flexible access to VPN based on 802.1p values and the upstream VPN function are enabled, the upstream VPN function takes effect and the flexible access to VPN based on 802.1p values automatically becomes invalid. If the upstream VPN is configured in the user online domain and the trust vpn-instance access-interface command is run, the configured upstream VPN takes effect in the upstream direction and the VPN configured on the original BRAS interface takes effect in the downstream direction. The VPN instance name configured in the vpn-instance inbound command must be different from that configured in the vpn-instance command. Otherwise, the upstream VPN function does not take effect."
+}

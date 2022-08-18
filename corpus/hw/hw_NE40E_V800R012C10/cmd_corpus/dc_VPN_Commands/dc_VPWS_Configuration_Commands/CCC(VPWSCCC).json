@@ -1,0 +1,93 @@
+{
+    "PageTitle": "ccc",
+    "FuncDef": "The ccc command creates a local circuit cross connect (CCC) connection between two CEs connected to the same PE.\nThe undo ccc command deletes a local CCC connection.\nBy default, no local CCC connection is created.",
+    "CLIs": [
+        "ccc [ ip-interworking ] <ccc-connection-name> interface { <interface-name1> | <interface-type1> <interface-number1> } [ access-port ] [ <raw> ] out-interface { <interface-name2> | <interface-type2> <interface-number2> } [ access-port ] [ <outraw> ] [ jitter-buffer <depth> | idle-code <idle-code-value> | tdm-encapsulation <number> | rtp-header | max-atm-cells <max-atm-cell-value> | atm-pack-overtime <atm-pack-overtime> ] *",
+        "undo ccc [ ip-interworking ] <ccc-connection-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-interworking",
+            "Info": "Enables IP interworking for a local CCC connection.\n-"
+        },
+        {
+            "Parameters": "ccc-connection-name",
+            "Info": "Specifies a CCC connection name that uniquely identifies a CCC connection on a PE.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "interface interface-name1",
+            "Info": "Specifies the name of the AC interface connected to a CE.\n-"
+        },
+        {
+            "Parameters": "interface-type1",
+            "Info": "Specifies the type of the AC interface connected to a CE.\n-"
+        },
+        {
+            "Parameters": "interface-number1",
+            "Info": "Specifies the number of the AC interface connected to a CE.\n-"
+        },
+        {
+            "Parameters": "access-port",
+            "Info": "Specifies that only untagged packets can be forwarded.\nBy default, all packets can be forwarded.\nThis parameter applies only to Ethernet main interfaces.\n-"
+        },
+        {
+            "Parameters": "raw",
+            "Info": "Sets the encapsulation type on the AC interface to raw.\n-"
+        },
+        {
+            "Parameters": "out-interface interface-name2",
+            "Info": "Specifies the name of the AC interface connected to the other CE.\n-"
+        },
+        {
+            "Parameters": "interface-type2",
+            "Info": "Specifies the type of the AC interface connected to the other CE.\n-"
+        },
+        {
+            "Parameters": "interface-number2",
+            "Info": "Specifies the number of the AC interface connected to the other CE.\n-"
+        },
+        {
+            "Parameters": "outraw",
+            "Info": "Sets the encapsulation type on the AC interface to tagged.\n-"
+        },
+        {
+            "Parameters": "jitter-buffer depth",
+            "Info": "Specifies the depth of the jitter buffer, that is, the maximum jitter delay allowed.\nThe deeper the jitter buffer is, the greater the capabilities against the jitter. A deep jitter buffer, however, may cause a long delay when data streams are reestablished. Therefore, only an appropriate jitter buffer can ensure quality transmission of services.\nThe value is an integer ranging from 2 to 64, in milliseconds. The default value is 20."
+        },
+        {
+            "Parameters": "idle-code idle-code-value",
+            "Info": "Specifies the idle code that is filled in manually when the jitter buffer underflow occurs.\nUnderflow refers to the situation where there are insufficient packets in the jitter buffer to be forwarded. The idle code has no significance, and can be set to any value.\nThe value ranges from FF to FF, in hexadecimal notation. The default value is FF."
+        },
+        {
+            "Parameters": "tdm-encapsulation number",
+            "Info": "Specifies the number of TDM frames encapsulated in a CESoPSN or SAToP packet.\nThe number of TDM frames encapsulated in a CESoPSN or SAToP packet is set as required. A smaller number of TDM frames leads to shorter latency but a larger encapsulation cost, whereas a larger number of TDM frames leads to higher bandwidth usage but longer latency.\nThe value is an integer, which can be 8, 16, 24, 32, or 40. The default value is 32."
+        },
+        {
+            "Parameters": "rtp-header",
+            "Info": "Indicates that the RTP header is added to the transparently transmitted TDM frames. By default, transparently transmitted TDM frames have no RTP header.\n-"
+        },
+        {
+            "Parameters": "max-atm-cells max-atm-cell-value",
+            "Info": "Specifies the maximum number of ATM cells that can be transmitted.\nThe value is an integer ranging from 1 to 28. The default value is 1."
+        },
+        {
+            "Parameters": "atm-pack-overtime atm-pack-overtime",
+            "Info": "Specifies the ATM cell transmission timeout time.\nThe value is an integer ranging from 100 to 10000, in microseconds. The default value is 1000."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] ccc ccc-connect-1 interface GigabitEthernet 1/0/0 out-interface GigabitEthernet 1/0/1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nVPWS in CCC mode applies to small MPLS networks with simple topologies. It needs neither signaling negotiation nor control packet exchange. Therefore, it consumes fewer resources and is easy to understand. However, it is inconvenient for maintenance, requires manual configuration of the administrator, and has poor scalability.\nTwo CEs connected to the same PE can communicate with each other using a local CCC connection established between the two CEs.\nPrerequisites\nMPLS L2VPN has been enabled.\nConfiguration Impact\nAn interface cannot serve as both an L2VPN AC interface and an L3VPN AC interface at the same time. If an interface is bound to an L2VPN, its Layer 3 features such as the IP address and routing protocol will not take effect. If an interface is bound to an L2VPN and an L3VPN at the same time, only the L2VPN connection is available. The L3VPN connection becomes available after the interface is unbound from the L2VPN.\nPrecautions\nA local CCC connection is bidirectional and therefore only one connection is required.A sub-interface that is bound to a VPWS can be deleted only after it is unbound from the VPWS.raw and tagged can be specified in the ccc interface out-interface command only when the CCC connection is established on an Ethernet link and IP interworking is not configured.By default, the encapsulation type on Ethernet main interfaces and Ethernet sub-interfaces is raw."
+}

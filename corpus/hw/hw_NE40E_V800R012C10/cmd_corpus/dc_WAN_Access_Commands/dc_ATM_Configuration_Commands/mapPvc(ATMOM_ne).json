@@ -1,0 +1,33 @@
+{
+    "PageTitle": "map pvc",
+    "FuncDef": "The map pvc command configures the mapping between local and remote VPI/VCIs.\nThe undo map pvc command deletes the mapping between local and remote VPI/VCIs.\nBy default, no mapping between local and remote VPI/VCIs is configured.",
+    "CLIs": [
+        "map pvc <vpivci> [ bidirectional ]",
+        "undo map pvc"
+    ],
+    "ParentView": [
+        "ATM-PVC view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpivci",
+            "Info": "Specifies a virtual path identifier (VPI) / virtual channel identifier (VCI).\nThe PVC identified by vpivci must have been created.\nvpi: The value is an integer, and its range varies with the interface type.\nUNI interface: The value ranges from 0 to 255.NNI interface: The value ranges from 0 to 4095.\nvci: The value is an integer ranging from 0 to 2 and from 5 to 65535. Generally, the VCI value 65535 is reserved for special use and it is recommended that this value not be used."
+        },
+        {
+            "Parameters": "bidirectional",
+            "Info": "Indicates bidirectional mapping between local and peer VPI/VCIs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Serial 1/0/0:0",
+            "[~HUAWEI-Serial1/0/0:0] link-protocol atm",
+            "[*HUAWEI-Serial1/0/0:0] quit",
+            "[*HUAWEI] interface serial 1/0/0:0.1",
+            "[*HUAWEI-Serial1/0/0:0.1] pvc 1/20",
+            "[*HUAWEI-Serial-pvc-Serial1/0/0:0.1-1/20] map pvc 2/30 bidirectional"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nATM cell relay is a technique used to transmit ATM cells over PWE3 VCs. By interconnecting ATM networks over a PSN, ATM cell relay emulates traditional ATM services when they are transmitted over the PSN. This allows end users to be unaware of network differences and protects carriers' investment during network integration and construction.\nEach VC is identified by a VPI/VCI. To configure the mapping between local and remote VPI/VCIs, run the map pvc command. This configuration helps implement ATM cell relay.\nIf the local and peer VPI/VCI values are different, you need to run the map pvc command. Note the following:\nIf you do not specify bidirectional, the command configures unidirectional mapping between local and peer VPI/VCIs. Specifically, the mapping is performed only on the interface in the outbound direction.If you specify bidirectional, the command configures bidirectional mapping between local and peer VPI/VCIs. Specifically, the mapping is performed on the interface in both inbound and outbound directions.\n\nPrecautions\nIf the local and peer VPI/VCI values are the same, do not configure the mapping between them. The mapping is not performed on the interface in inbound or outbound direction.\nThe VPI/VCI value cannot be 0/0 or 255/65535."
+}

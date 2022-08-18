@@ -1,0 +1,43 @@
+{
+    "PageTitle": "if-match large-community-filter",
+    "FuncDef": "The if-match large-community-filter command sets a filtering rule that is based on a Large-Community filter.\nThe undo if-match large-community-filter command deletes the configured filtering rule.\nBy default, no filtering rule based on a Large-Community filter is set.",
+    "CLIs": [
+        "if-match large-community-filter <lcfName> [ whole-match ]",
+        "undo if-match large-community-filter <lcfName> [ whole-match ]",
+        "undo if-match large-community-filter"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lcfName",
+            "Info": "Specifies the name of a Large-Community filter.\nThe value is a string of 1 to 51 case-sensitive characters and cannot contain digits only. Spaces are allowed only when the string is enclosed in double quotation marks (\" \")."
+        },
+        {
+            "Parameters": "whole-match",
+            "Info": "Indicates exact match.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip large-community-filter basic a permit 100:200:300",
+            "[*HUAWEI] route-policy test permit node 10",
+            "[*HUAWEI-route-policy] if-match large-community-filter a"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip large-community-filter basic a permit 100:200:300",
+            "[*HUAWEI] route-policy test permit node 11",
+            "[*HUAWEI-route-policy] if-match large-community-filter a whole-match"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip large-community-filter basic aa permit 1:1:1",
+            "[*HUAWEI] route-policy test permit node 12",
+            "[*HUAWEI-route-policy] if-match large-community-filter aa"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe Large-Community attribute is a private attribute of BGP. Therefore, you can run the if-match large-community-filter command to filter BGP routes with a specified Large-Community attribute value. For the filtering rule to take effect, run the ip large-community-filter command to define a Large-Community filter first. For example:\nIf the if-match large-community-filter a command is run but the large-community-filter a command is not run, the if-match large-community-filter command fails to be delivered.If the if-match large-community-filter a and ip large-community-filter basic a permit 1:1:1 commands are both run, only BGP routes with the Large-Community value of 1:1:1 are permitted.\n\nPrerequisites\nA Large-Community filter has been configured using the ip large-community-filter command.\nConfiguration Impact\nThe BGP routes that match a filtering rule based on the Large-Community attribute are permitted, and the BGP routes that do not match a filtering rule based on Large-Community attribute are denied."
+}

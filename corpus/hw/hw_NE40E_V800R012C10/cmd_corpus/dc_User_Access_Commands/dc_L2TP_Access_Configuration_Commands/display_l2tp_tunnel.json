@@ -1,0 +1,126 @@
+{
+    "PageTitle": "display l2tp tunnel",
+    "FuncDef": "The display l2tp tunnel command displays information about L2TP tunnels that have been established.\nThe display l2tp tunnel-limit command displays the maximum number of L2TP tunnels that can be established and the number of already used L2TP tunnels on the device that functions as the LNS.",
+    "CLIs": [
+        "display l2tp tunnel [ lac | lns slot <slot-id> ] [ tunnel-item <tunnel-id> | tunnel-name <remote-name> ]",
+        "display l2tp tunnel-limit",
+        "display l2tp tunnel lac [ remote-address <ip-address> [ l2tp-group <group-name> ] | block ]",
+        "display l2tp tunnel lns slot <slot-id> backup"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lac",
+            "Info": "Displays the L2TP session information of the LAC.\n-"
+        },
+        {
+            "Parameters": "lns",
+            "Info": "Displays the L2TP session information of the LNS.\n-"
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Displays L2TP tunnel information on a tunnel board in a specified slot.\nThe value is a string of 1 to 15 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "tunnel-item tunnel-id",
+            "Info": "Displays information about the L2TP tunnel with a specified tunnel ID.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "tunnel-name remote-name",
+            "Info": "Displays information about the L2TP tunnel with a specified remote name.\nThe value is a string of 1 to 253 characters."
+        },
+        {
+            "Parameters": "remote-address ip-address",
+            "Info": "Specifies a remote IP address based on which the L2TP tunnel information is to be displayed.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "l2tp-group group-name",
+            "Info": "Specifies an L2TP group based on which the L2TP tunnel information is to be displayed.\nThe value is a string of 1 to 32 characters."
+        },
+        {
+            "Parameters": "block",
+            "Info": "Displays information about a locked L2TP tunnel.\n-"
+        },
+        {
+            "Parameters": "backup",
+            "Info": "Backup mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] display l2tp tunnel-limit",
+            "Info: This syntax is applicable only to LNS.",
+            "tunnel-limit = 49152",
+            "used-tunnel  = 6886"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] display l2tp tunnel",
+            "-------------------------------------------------------------",
+            " -----------tunnel information in LAC-----------------------",
+            " LocalTID RemoteTID RemoteAddress    Port   Sessions RemoteName",
+            " ------------------------------------------------------------------------------",
+            " 3        2         10.3.3.1          1701   1        lac1",
+            " ------------------------------------------------------------------------------",
+            "  Total 0,printed 0",
+            "  ----------------------------------------------------------",
+            "  -----------tunnel information in LNS----------------------",
+            " The tunnel information of k board 1",
+            " LocalTID RemoteTID RemoteAddress    Port   Sessions RemoteName",
+            "  Total 0, 0 printed from slot 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] display l2tp tunnel tunnel-item 2",
+            "  ----------------------------------------------------------                     ",
+            "  -----------tunnel information in LAC----------------------                    ",
+            "  ----------------------------------------------------------                     ",
+            "    Tunnel id           :2                                                      ",
+            "    Remote Tunnel id    :3                                                      ",
+            "    Tunnel State        :Up                                                     ",
+            "    Remote tunnel name  :hhw1                                                   ",
+            "    Remote Address      :10.50.50.1   port : 1701                               ",
+            "    ReCall Address      :0.0.0.0                                                ",
+            "    Local tunnel name   :hhw                                                    ",
+            "    Local Address       :10.40.40.1   port : 1701                               ",
+            "    active sessions     :1                                                      ",
+            "    tunnel per user     :0                                                      ",
+            "    Session Limit       :65535                                                  ",
+            "    Radius Session Limit:4294967295                                             ",
+            "    Control Ns          :6                                                      ",
+            "    Control Nr          :4                                                      ",
+            "    VRFfromRDS          :0                                                      ",
+            "    VRF                 :0                                                      ",
+            "    Retransmission      :5                                                      ",
+            "    Timeout             :2                                                      ",
+            "    Hello Interval      :60                                                     ",
+            "    Local RWS           :4                                                      ",
+            "    Remote RWS          :1024                                                   ",
+            "    OuterDscp           :0xff  ",
+            "    TunnelAssignmentID  :4                                                      ",
+            "    L2TPTunnelStartTime :2011-12-15 19:59:59(Continuance:0 days 00 hours 02 mins)                                                              ",
+            "  ----------------------------------------------------------                     ",
+            "                                                                                ",
+            "  ----------------------------------------------------------                     ",
+            "  -----------tunnel information in LNS----------------------                    ",
+            " The tunnel information of board 2                                              ",
+            " tunnel 2 does not exist"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] display l2tp tunnel lac block",
+            "-----------------------------------------------------------------------------",
+            "LocalTID RemoteTID RemoteAddress    Port   Sessions       RemoteName",
+            "L2TPTunnelStartTime                                       group-name",
+            "------------------------------------------------------------------------------",
+            "3           2       10.40.40.1      1701     1            test",
+            "2011-12-15?17:00:48(Continuance:0 days 00 hours 04 mins)  huawei",
+            "------------------------------------------------------------------------------",
+            "Total 0, printed 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo check the number of L2TP tunnels that have been established and information about the tunnels, such as the remote IP address, tunnel name, and UDP port number and the number of sessions established over the tunnels, run the display l2tp tunnel command.\nThe display l2tp tunnel-limit command displays the maximum number of L2TP tunnels that can be established and the number of already used L2TP tunnels.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.In the lns-group view, the bind slot command allocates 24 tunnels for a board. If the l2tp tunnel-limit command is run to reclaim resources of pre-allocated tunnels, the display l2tp tunnel limit command does not display the statistics of pre-allocated tunnels. After the undo l2tp tunnel-limit command is run, tunnels will be pre-allocated again."
+}

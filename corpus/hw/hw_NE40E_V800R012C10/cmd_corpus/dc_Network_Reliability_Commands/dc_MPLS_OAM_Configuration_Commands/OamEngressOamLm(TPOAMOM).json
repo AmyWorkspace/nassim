@@ -1,0 +1,44 @@
+{
+    "PageTitle": "mpls oam egress loss-measure oam-packet loss-ratio",
+    "FuncDef": "The mpls oam egress loss-measure oam-packet loss-ratio command configures alarm thresholds on the egress of an LSP for the OAM packet loss ratio.\nBy default, the alarm threshold for the OAM packet loss ratio on the egress of an LSP is zero.",
+    "CLIs": [
+        "mpls oam egress loss-measure oam-packet loss-ratio threshold1 <threshold1-value> threshold2 <threshold2-value> { lsp-name <lsp-name> | lsr-id <lsr-id> tunnel-id <tunnel-id> }",
+        "mpls oam egress loss-measure oam-packet loss-ratio { threshold1 <threshold1-value> | threshold2 <threshold2-value> } { lsp-name <lsp-name> | lsr-id <lsr-id> tunnel-id <tunnel-id> }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "threshold2 threshold2-value",
+            "Info": "Configures alarm threshold 2.\nThe value is an integer ranging from 0 to 100, in percentage."
+        },
+        {
+            "Parameters": "lsp-name lsp-name",
+            "Info": "Specifies the name of an LSP.\nThe value is a string of 1 to 35 characters, spaces not supported.\nIf quotation marks are used at both ends of an entered character sting, you can enter spaces in the string."
+        },
+        {
+            "Parameters": "lsr-id lsr-id",
+            "Info": "Specifies the IP address of the egress of an LSP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "tunnel-id tunnel-id",
+            "Info": "Specifies the tunnel ID of an LSP.\nThe value is an integer and the value range from 1 to 65535."
+        },
+        {
+            "Parameters": "threshold1 threshold1-value",
+            "Info": "Configures alarm threshold 1.\nThe value is an integer ranging from 0 to 100, in percentage."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls oam egress lsr-id 1.1.1.1 tunnel-id 100 auto-protocol",
+            "[*HUAWEI] mpls oam egress loss-measure oam-packet loss-ratio threshold1 20 threshold2 80 lsr-id 1.1.1.1 tunnel-id 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen configuring packet loss ratio detection on the egress of an LSP, run the mpls oam egress lost-measure single-ended loss-ratio command to configure alarm thresholds. If the detected packet loss ratio exceeds a specified alarm threshold, an alarm is reported. Two alarm thresholds can be configured. If the packet loss ratio exceeds alarm threshold 1 but does not reach alarm threshold 2, alarms are reported based on alarm threshold 1. If the packet loss ratio exceeds alarm threshold 2, alarms are reported based on both alarm thresholds 1 and 2.\nAlarm threshold 1 can be set to a small value, and its associated alarms are informational only. If the packet loss ratio exceeds alarm threshold 1 but does not reach alarm threshold 2, LSP APS is not triggered. You can optimize the network to prevent LSP APS.Alarm threshold 2 must be set to a value greater than alarm threshold 1, and its associated alarms must be cleared. If the packet loss ratio exceeds alarm threshold 2, LSP APS is triggered.\n\nPrerequisites\nMPLS and MPLS OAM have been enabled globally.The MPLS-OAM view has been displayed.The LSP that MPLS OAM monitors has been established.\n\nConfiguration Impact\nAfter the mpls oam egress lost-measure single-ended loss-ratio command is run, the system detects the packet loss ratio on the egress of an LSP. If the packet loss ratio exceeds alarm threshold 1, an alarm is reported. If the packet loss ratio exceeds alarm threshold 2, an alarm is reported and LSP APS is triggered. After the alarm is cleared, an LSP APS switchback is triggered.\nPrecautions\nYou must configure alarm thresholds based on the actual link status."
+}

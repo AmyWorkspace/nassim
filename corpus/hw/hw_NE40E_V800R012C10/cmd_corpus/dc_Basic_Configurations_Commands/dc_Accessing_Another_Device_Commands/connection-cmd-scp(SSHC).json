@@ -1,0 +1,108 @@
+{
+    "PageTitle": "scp",
+    "FuncDef": "The scp command upload files to or download files from the SCP server.",
+    "CLIs": [
+        "scp [ -a <source-ip-address> ] [ -force-receive-pubkey ] [ [ -port <server-port> ] | [ public-net | vpn-instance <vpn-instance-name> ] | [ identity-key <identity-key-type> ] | [ user-identity-key <user-key> ] | -r | -c | [ -cipher <cipher> ] | [ -prefer-kex { <prefer-kex> } ] ] * <source-filename> <destination-filename>",
+        "scp ipv6 [ [ vpn-instance <vpn-instance-name> ] | public-net ] [ -force-receive-pubkey ] [ [ -port <server-port> ] | [ identity-key <identity-key-type> ] | [ user-identity-key <user-key> ] | [ [ -a <source-ipv6-address> ] | [ -oi { <interface-name> | <interface-type> <interface-number> } ] ] | -r | -c | [ -cipher <cipher> ] | [ -prefer-kex { <prefer-kex> } ] ] * <source-filename> <destination-filename>",
+        "scp -i { <interface-name> | <interface-type> <interface-number> } [ -force-receive-pubkey ] [ [ -port <server-port> ] | [ identity-key <identity-key-type> ] | [ user-identity-key <user-key> ] | -r | -c | [ -cipher <cipher> ] | [ -prefer-kex { <prefer-kex> } ] ] * <source-filename> <destination-filename>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ip-address",
+            "Info": "Specifies the source IPv4 address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-force-receive-pubkey",
+            "Info": "Indicates that a server forcibly receives public key authentication.\n-"
+        },
+        {
+            "Parameters": "-port server-port",
+            "Info": "Specifies the port number of the remote SCP server.\nThe value is an integer ranging from 1 to 65535. The default value is 22."
+        },
+        {
+            "Parameters": "public-net",
+            "Info": "Specifies the public network where the server resides.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the VPN instance name on the remote SCP server.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "vpn-instance-name",
+            "Info": "Specifies the IPv6 VPN instance name on the remote SCP server.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "identity-key identity-key-type",
+            "Info": "Specifies a public key algorithm for server authentication.\nCurrently, the RSA_SHA2_512, RSA_SHA2_256, RSA, DSA, SM2, and ECC algorithms are supported. The default algorithm is ECC.\nTo ensure high security, do not use the RSA algorithm whose length is less than 2048 digits. You are advised to use RSA SHA2-512 or RSA SHA2-256 authentication algorithm which ensures higher security."
+        },
+        {
+            "Parameters": "user-identity-key user-key",
+            "Info": "Specifies a public key algorithm for user authentication.\nCurrently, the RSA_SHA2_512, RSA_SHA2_256, RSA, DSA, SM2, and ECC algorithms are supported. The default algorithm is ECC.\nTo ensure high security, do not use the RSA algorithm whose length is less than 2048 digits. You are advised to use RSA SHA2-512 or RSA SHA2-256 authentication algorithm which ensures higher security."
+        },
+        {
+            "Parameters": "-r",
+            "Info": "Uploads or downloads files in batches.\n-"
+        },
+        {
+            "Parameters": "-c",
+            "Info": "Enables compression.\n-"
+        },
+        {
+            "Parameters": "-cipher cipher",
+            "Info": "Specifies an encryption algorithm for file upload or download.\nEncryption algorithms supported depend on the ssh client cipher command settings."
+        },
+        {
+            "Parameters": "-prefer-kex prefer-kex",
+            "Info": "Specifies the preferred key exchange algorithm.\nPreferred algorithms for key exchange supported depend on the ssh client key-exchange command settings."
+        },
+        {
+            "Parameters": "source-filename",
+            "Info": "Specifies the name of the source file to be uploaded or downloaded.\nThe value is a string of 1 to 256 characters."
+        },
+        {
+            "Parameters": "destination-filename",
+            "Info": "Specifies the name of the destination file to uploaded or downloaded.\nThe value is a string of 1 to 256 characters."
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Specifies the source IPv6 address.\n-"
+        },
+        {
+            "Parameters": "source-ipv6-address",
+            "Info": "Specifies the source IPv6 address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-oi",
+            "Info": "Specifies the source interface for the IPv6 client, including the type and number of the interface. The IPv6 address configured in this interface view is the source IPv6 address of the packet. If no IPv6 address is configured for the source interface, the connection cannot be set up.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type the outbound interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of the outbound interface.\n-"
+        },
+        {
+            "Parameters": "-i interface-name",
+            "Info": "Specifies the name of the outbound interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] scp -a 10.1.1.1 -port 1026 vpn-instance vpn1 -cipher aes256_ctr license.txt john@10.10.10.1:",
+            "Trying 10.10.10.1 ...",
+            "Press CTRL+K to abort",
+            "Connected to 10.10.10.1 ...",
+            "Enter password:",
+            "license.txt                       100%     38529827Bytes          165Kb/s"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSCP is a secure file transfer method based on SSH2.0. Different from SFTP, SCP supports batch file upload or download.\nIf a VPN instance name is specified, the SCP client logs in to the SCP server in the specified VPN instance.To enhance security, use -a to configure a loopback address as the source IP address or use -i to configure a loopback interface as the outbound interface.If -r is specified, you can use the wildcard (*) to upload or download files in batches, for example, *.txt or huawei.*.If -c is specified, files are compressed before being transferred. File compression may take a long time and affect the file transfer rate. Therefore, compression is not recommended.\nFiles on the SCP server are in the format of username@hostname:[ path ] [ filename ].\nusername is the user name for logging in to the SCP server.hostname is the name or IP address of the SCP server.path is the working directory on the SCP server.filename is the name of a file.\nIf filename and path are not specified, the system uploads files to the root directory of the working directory on the SCP server. If filename is specified, the system uploads files to the SCP server If hostname is an IPv6 address, the IPv6 address must be included in square brackets ([ ]), for example, john@[2001:db8:1::1]:.\nIf the destination host address is an IPv6 link-local address, the local outbound interface must be specified.If the destination file has the same name as an existing directory, the source file is copied to the specified directory and the name of the newly generated file is the same as the source file name. If the destination file has the same name as an existing file, the system prompts you to replace the existing file and names each file with filename. If path is specified but filename is not specified, the system uploads files to the specified path on the SCP server.\n\nPrerequisites\nA VPN instance has been configured.\nThe SCP service function has been enabled using the scp server enable command.\nPrecautions\nIf a source IP address or a source interface is not specified, the system uses the source IP address or source interface specified in the scp client-source command.If a source IP address or source interface has been specified, the system does not use the source IP address or source interface specified in the scp client-source command.If a source IP address has been specified and VPN instance name is not specified, then the system uses Global VPN If it is configured else uses public vpn.in the source-filename and destination-filename fields, specifying the full file directory names as command keywords is recommended. If you specify the file names as command keywords, the command fails to be run because the command keywords are the same as the file names."
+}

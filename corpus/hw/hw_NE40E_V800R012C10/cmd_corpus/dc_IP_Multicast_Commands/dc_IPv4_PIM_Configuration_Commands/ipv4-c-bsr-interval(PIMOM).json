@@ -1,0 +1,27 @@
+{
+    "PageTitle": "c-bsr interval (VPN instance PIM view/PIM view of a public network instance)",
+    "FuncDef": "The c-bsr interval command sets the interval at which the bootstrap router (BSR) sends bootstrap messages.\nThe undo c-bsr interval command restores the default setting.\nBy default, the interval at which the BSR sends bootstrap messages is 60 seconds.",
+    "CLIs": [
+        "c-bsr interval <interval>",
+        "undo c-bsr interval"
+    ],
+    "ParentView": [
+        "VPN instance PIM view",
+        "PIM view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies an interval at which the BSR sends bootstrap messages.\nThe value is an integer ranging from 1 to 107374177, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] c-bsr interval 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo maintain the BSR status, a BSR dynamically elected among candidate-bootstrap routers (C-BSRs) needs to periodically send bootstrap messages carrying the BSR IP address and the rendezvous point (RP)-set information to the C-BSRs. To set the interval (called BS_interval) at which the BSR sends bootstrap messages, run the c-bsr interval command.\nOnly the BSR sends bootstrap messages, and each C-BSR starts a timer and waits to receive bootstrap messages from the BSR before the timer times out. The timeout period (called holdtime) of the timer can be configured using the c-bsr holdtime command.\nIf a C-BSR receives a bootstrap message from the BSR, the C-BSR resets the timer.If a C-BSR does not receive a bootstrap message after the holdtime times out, the C-BSR considers the BSR faulty and triggers a new round of BSR election to prevent service interruptions.\n\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nConfiguration Impact\nIf the c-bsr interval command is run more than once, the latest configuration overrides the previous one\nPrecautions\nYou must set the same BS_interval and the same holdtime on all C-BSRs in the same PIM domain. Otherwise, a BSR may be frequently elected. Note the following points:\nIf both BS_interval and holdtime are set, ensure that BS_interval is smaller than holdtime.If only BS_interval or Holdtime is set, calculate the other one using the formula: Holdtime = 2 x BS_interval + 10.If the holdtime is configured and the calculated BS_interval is smaller than the minimum value of BS_interval, the minimum value of BS_interval is used.If the BS_interval is configured and the calculated holdtime is greater than the maximum value of holdtime, the maximum value of holdtime is used.If neither the BS_interval nor the holdtime is configured, the default values are used. The default BS_interval is 60 seconds, and the default holdtime is 130 seconds."
+}

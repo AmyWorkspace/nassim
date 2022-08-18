@@ -1,0 +1,174 @@
+{
+    "PageTitle": "display mac-address (All views)",
+    "FuncDef": "The display mac-address command displays information about MAC address entries.\nThe display mac-address dynamic command displays dynamic MAC address entries on an network.\nThe display mac-address blackhole command displays information about static blackhole MAC address entries.\nThe display mac-address static command displays information about static MAC address entries.\nThe display mac-address limit-table command displays information about MAC address entries whose maximum number is limited using the mac-limit command.\nThe display mac-address dynamic-blackhole command displays dynamic black-hole MAC address entries.",
+    "CLIs": [
+        "display mac-address <mac-address> { [ vlan <vlan-id> ] | [ vsi <vsi-name> [ ce-vlan ] ] | [ ce-vlan ] } [ verbose ]",
+        "display mac-address { [ vlan <vlan-id> ] | [ vsi <vsi-name> [ ce-vlan ] ] | [ ce-vlan ] } [ verbose ]",
+        "display mac-address dynamic [ ineffective ] [ slot <slot-id> ] vlan <vlan-id> [ verbose | last-change ]",
+        "display mac-address blackhole { [ vlan <vlan-id> ] | [ vsi <vsi-name> ] } [ { verbose | { effective [ slot <slot-id> ] } } * ]",
+        "display mac-address static { { [ vlan <vlan-id> ] | [ <interface-type> <interface-number> | <interface-name> ] } * | [ vsi <vsi-name> ] } [ { verbose | { effective [ slot <slot-id> ] } } * ]",
+        "display mac-address limit-table interface { <interface-type> <interface-number> | <interface-name> } [ vlan <vlan-id> ]",
+        "display mac-address limit-table vsi <vsi-name> pw <pw-name>",
+        "display mac-address pbb [ last-change ]",
+        "display mac-address dynamic [ ineffective ] [ slot <slot-id> ] evpn <evpn-name> [ verbose | last-change ]",
+        "display mac-address dynamic-blackhole [ evpn <evpn-name> ] [ verbose | last-change ]",
+        "display mac-address evpn <evpn-name> [ verbose | last-change ]",
+        "display mac-address <mac-address> evpn <evpn-name> [ verbose | last-change ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac-address",
+            "Info": "Displays a specified MAC address entry.\nThe value is in the format of H-H-H. H is a 4-digit hexadecimal number, such as 00e0. If an H contains less than four hexadecimal digits, 0s are padded ahead. For example, if an H is e0, it is equal to 00e0."
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Displays the static MAC entries in a specified VLAN.\nIf no VLAN is specified, all the static MAC address entries in the system are displayed.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Displays the static MAC entries in a specified Virtual Switching Instance (VSI).\nIf no VSI is specified, the static MAC address entries of all VSIs are displayed.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ce-vlan",
+            "Info": "Displays the inner tag carried in the packets received by the QinQ stacking sub-interface.\n-"
+        },
+        {
+            "Parameters": "verbose",
+            "Info": "Displays detailed information of the static MAC address entries.\n-"
+        },
+        {
+            "Parameters": "ineffective",
+            "Info": "Displays dynamic MAC address entries of ineffective on an EVPN.\n-"
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Specifies the slot ID.\n-"
+        },
+        {
+            "Parameters": "last-change",
+            "Info": "Displays the date and time when MAC address entries on a specified EVPN are last updated.\n-"
+        },
+        {
+            "Parameters": "effective",
+            "Info": "Displays effective static MAC address entries or static blackhole MAC address entries.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the interface name.\n-"
+        },
+        {
+            "Parameters": "pw pw-name",
+            "Info": "Displays the MAC address learning rule in the specified pseudowire (PW).\nThe PW name is a string of 1 to 15 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "pbb",
+            "Info": "Displays the MAC address entries of a PBB (Provider backbone bridge).\n-"
+        },
+        {
+            "Parameters": "evpn evpn-name",
+            "Info": "Specifies an EVPN name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display mac-address static vsi vsi1 effective verbose",
+            "MAC address table of slot 1:",
+            "-------------------------------------------------------------------------------",
+            "MAC Address: 00e0-fc12-3456      VLAN/BD/VSI/SI/EVPN: 1                         ",
+            "Port       : GE4/0/2.1           Type               : static                   ",
+            "PEVLAN     : 1                   CEVLAN             : -                         ",
+            "TrustFlag  : 0                   TrustPort          : -                         ",
+            "Peer IP    : -                   VC-ID              : -                         ",
+            "Aging time : 300                 LSP/MAC_Tunnel     : 9/-                       ",
+            "TimeStamp  : 2123                ",
+            "MacAccountingEnable: Enable",
+            "MAC address used as destination:",
+            "Packet count:       1               Byte count:         123",
+            "MAC address used as source:",
+            "Packet count:       2               Byte count:         256",
+            "-------------------------------------------------------------------------------",
+            "Total matching items on slot 1 displayed = 1"
+        ],
+        [
+            "<HUAWEI> display mac-address evpn 123",
+            "MAC address table of slot 1:",
+            "-------------------------------------------------------------------------------",
+            "MAC Address    VLAN/BD/    PEVLAN CEVLAN Port/Peerip    Type      LSP/LSR-ID",
+            "               VSI/SI/EVPN                                         MAC-Tunnel",
+            "-------------------------------------------------------------------------------",
+            "00e0-fc12-3456 evpn123     -      -      GE1/0/1        dynamic    -",
+            "-------------------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display mac-address evpn 1 last-change",
+            "MAC address table of slot 1:",
+            "-------------------------------------------------------------------------------",
+            "MAC Address    VLAN/BD/    PEVLAN CEVLAN Port/Peerip     Type      Last Change",
+            "               VSI/SI/EVPN",
+            "-------------------------------------------------------------------------------",
+            "00e0-fc12-3457 1           1      -      GE3/0/6.1       dynamic   Jan 26 2018 10:20:39",
+            "-------------------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display mac-address 00e0-fc12-3459 vlan 10 verbose",
+            "MAC address table of slot 1:",
+            "-------------------------------------------------------------------------------",
+            "MAC Address: 00e0-fc12-3459      VLAN/BD/VSI/SI/EVPN: 10                        ",
+            "Port       : Eth1/0/0            Type               : static                    ",
+            "PEVLAN     : -                   CEVLAN             : -                         ",
+            "Aging time : -                   LSP/MAC_Tunnel     : -                         ",
+            "-------------------------------------------------------------------------------",
+            "Total matching items on slot 0 displayed = 1"
+        ],
+        [
+            "<HUAWEI> display mac-address verbose",
+            "BD: bridge-domain    Age: dynamic MAC learned time in seconds",
+            "MAC address table:",
+            "-------------------------------------------------------------------------------",
+            "MAC Address: 00e0-fc12-3458      VLAN/VSI/BD        : 1/-/-                     ",
+            "Type       : dynamic             Learned-From       : GE1/0/1                 ",
+            "PEVLAN     : 1                   CEVLAN             : -                         ",
+            "Aging time : 258866            ",
+            "MAC Address: 00e0-fc12-3459      VLAN/VSI/BD        : 10/-/-                    ",
+            "Type       : static              Learned-From       : GE1/0/2                   ",
+            "PEVLAN     : 10                  CEVLAN             : -                         ",
+            "Aging time : -                             ",
+            "-------------------------------------------------------------------------------",
+            "Total items displayed = 3"
+        ],
+        [
+            "<HUAWEI> display mac-address blackhole",
+            "MAC address table of slot 1:",
+            "-------------------------------------------------------------------------------",
+            "MAC Address    VLAN/BD/       PEVLAN CEVLAN Port      Type      LSP/LSR-ID",
+            "               VSI/SI/EVPN                                            MAC-Tunnel",
+            "-------------------------------------------------------------------------------",
+            "00e0-fc12-3456 1              -      -      -               blackhole -",
+            "-------------------------------------------------------------------------------",
+            "Total matching items on slot 1 displayed = 1"
+        ],
+        [
+            "<HUAWEI> display mac-address dynamic vlan 200",
+            "MAC address table of slot 1:",
+            "-------------------------------------------------------------------------------",
+            "MAC Address    VLAN/BD/       PEVLAN CEVLAN Port            Type      LSP/LSR-ID",
+            "               VSI/SI/EVPN                                            MAC-Tunnel",
+            "-------------------------------------------------------------------------------",
+            "00e0-fc12-3460 1              -      -      GE3/0/1         dynamic   -",
+            "-------------------------------------------------------------------------------",
+            "Total matching items on slot 1 displayed = 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA MAC address table is an interface-based Layer 2 forwarding table. It stores information about MAC addresses learned by a device. A MAC address entry contains a MAC address, an interface on which a packet is forwarded to this MAC address, and a VLAN to which the specified interface belongs or a VSI to which the specified interface is bound. Before forwarding a packet, the device searches the MAC address table based on the destination MAC address of the packet and locate the outbound interface quickly. This facilitates packet forwarding and reduces broadcast traffic.\nMAC address entries are divided into the following types:\nStatic MAC address entries: configured by users and used to forward packets with specified destination MAC addresses. Static MAC address entries protect a device against attacks of forged MAC addresses and will not be aged.Dynamic MAC address entries: obtained by a device through source MAC address learning and will be aged based on the aging time.Static blackhole MAC address entries: manually configured by users. To prevent invalid MAC address entries (for example, those of unauthorized users) from occupying the MAC address table and prevent hackers from attacking a device or network using forged MAC addresses, MAC addresses of untrusted users can be configured as static blackhole MAC addresses. A device discards packets destined for the static blackhole MAC addresses. These address entries do not age out.Dynamic blackhole MAC address entries: obtained by a device through learning source MAC addresses. On an EVPN network, to prevent MAC address entries from frequently flapping, the MAC address entries can be set to dynamic blackhole entries, so that related interfaces are blocked, and loops are rapidly eliminated. These address entries do not age out.\nTo view information about all MAC address entries on the device, run the display mac-address command.\n\nPrerequisites\nStatic blackhole MAC address entries have been configured using the mac-address blackhole command in the system view.\nThe static MAC address entries have been configured using the mac-address static command.\nPrecautions\nIf the MAC address table of a device contains a large number of MAC address entries, specifying a VLAN in the display mac-address command is recommended; Otherwise, excess output information may cause the following problems:\nThe displayed information is repeatedly refreshed, and required information cannot be obtained.The system does not respond because of long-time information traversing and searching.\nMAC address learning must be enabled on the device; otherwise, dynamic MAC address entries cannot be displayed using the display mac-address dynamic command.\nIf a device has learned a great number of static MAC address entries, specifying a VLAN in the display mac-address static command is recommended; otherwise, the excess output information may cause the following problems:\nThe displayed information is repeatedly refreshed, and required information cannot be obtained.The system does not respond because of long-time information traversing and searching."
+}

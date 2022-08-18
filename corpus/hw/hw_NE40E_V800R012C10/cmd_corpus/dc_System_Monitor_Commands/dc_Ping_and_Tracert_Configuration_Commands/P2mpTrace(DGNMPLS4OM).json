@@ -1,0 +1,102 @@
+{
+    "PageTitle": "tracert multicast-lsp",
+    "FuncDef": "The tracert multicast-lsp command checks the connectivity of a point to multi-point VPLS over P2MP, NGMVPN, static MLDP.",
+    "CLIs": [
+        "tracert multicast-lsp [ -a <source-ip> | -exp <exp-value> | -h <ttl-value> | -r <reply-mode> | -t <timeout> | -j <jitter-value> | t-flag ] * mldp p2mp root-ip <root-ip-address> { lsp-id <lsp-id> | opaque-value <opaque-value> } [ detail ]",
+        "tracert multicast-lsp [ -a <source-ip> | -exp <exp-value> | -h <ttl-value> | -r <reply-mode> | -t <timeout> | -j <jitter-value> | t-flag ] * te-auto-tunnel <auto-tunnel-name> [ leaf-destination <leaf-destination> ] [ detail ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ip",
+            "Info": "Source IP address of MPLS Echo Request messages to be sent.\nIf no source IP address is specified, the outbound interface's IP address is used as the source IP address of MPLS Echo Request messages to be sent.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies the EXP value of MPLS Echo Request messages to be sent.\nThe EXP value indicates the packet priority.\nThe value is an integer ranging from 0 to 7. The default value is 0."
+        },
+        {
+            "Parameters": "-h ttl-value",
+            "Info": "Specifies the TTL value of MPLS Echo Request messages to be sent.\nThe TTL value in the IP header specifies the lifetime of a datagram and the maximum hops the datagram goes through. The TTL value is set by the source node that sends a datagram. Each time a datagram passes a routing device, the TTL value is decreased by 1. When the TTL value becomes 0 on a routing device, the routing device discards the datagram and sends a timeout message to the source node.\nThe value is an integer ranging from 1 to 255. When the mldp p2mp root-ip parameter is specified, the default value of the parameter is 255. When the te-auto-tunnel parameter is specified, the default value of the parameter is 64."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies the mode in which the peer responds with MPLS Echo Reply messages.\nThe value is an integer ranging from 1 to 2. The default value is 2.\n1: no replyThis mode is used in unidirectional tests. The test is successful if the source node displays a timeout message. The test fails if the system displays a message showing that the Label Switched Path (LSP) does not exist.\n2: reply with an IPv4 or IPv6 UDP packet"
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies the timeout period for waiting for MPLS Echo Reply messages.\nThe value is an integer ranging from 2000 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-j jitter-value",
+            "Info": "Specifies a delay after which the destination node responds with an MPLS Echo Reply message.\nThe value is an integer ranging from 0 to 1000."
+        },
+        {
+            "Parameters": "t-flag",
+            "Info": "Indicates that a node responds with an MPLS Echo Reply message only after it receives a TTL timeout message.\n-"
+        },
+        {
+            "Parameters": "mldp",
+            "Info": "Specifies that the tunnel type is mLDP P2MP.\n-"
+        },
+        {
+            "Parameters": "p2mp",
+            "Info": "Specifies that the tunnel type is mLDP P2MP.\n-"
+        },
+        {
+            "Parameters": "root-ip root-ip-address",
+            "Info": "Specifies the IP address of the root node on a Point-to-Multipoint (P2MP) Label Distribution Protocol (LDP) LSP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "lsp-id lsp-id",
+            "Info": "Specifies the P2MP LDP LSP ID.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "opaque-value opaque-value",
+            "Info": "Specifies information used to uniquely identify a P2MP LDP LSP.\nThe value is an integer ranging from 1 to 254."
+        },
+        {
+            "Parameters": "detail",
+            "Info": "Specifies that to display detailed information.\n-"
+        },
+        {
+            "Parameters": "te-auto-tunnel auto-tunnel-name",
+            "Info": "Specifies the name of a te auto tunnel interface.\n-"
+        },
+        {
+            "Parameters": "leaf-destination leaf-destination",
+            "Info": "Specifies the destination node on a sub-LSP of a P2MP TE tunnel.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> tracert multicast-lsp -h 10 mldp p2mp root-ip 1.1.1.1 lsp-id 1",
+            "  LSP Trace Route FEC: Multicast P2MP LDP , press CTRL_C to break.",
+            "  TTL   Replier            Time    Type      Downstream",
+            "  1     192.168.1.9        40 ms   Transit   192.168.2.12/[1024 ]",
+            "  2     10.10.10.10        110 ms  Egress",
+            "  3     10.10.10.10        140 ms  Egress",
+            "  4     10.10.10.10        50 ms   Egress",
+            "  5     10.10.10.10        70 ms   Egress",
+            "  6     10.10.10.10        80 ms   Egress",
+            "  7     10.10.10.10        70 ms   Egress",
+            "  8     10.10.10.10        30 ms   Egress",
+            "  9     10.10.10.10        60 ms   Egress",
+            "  10    10.10.10.10        110 ms  Egress"
+        ],
+        [
+            "<HUAWEI> tracert multicast-lsp -h 2 te-auto-tunnel P2MPoh5121",
+            "  LSP Trace Route FEC: RSVP P2MP IPv4 P2MP-Auto-tunnel P2MPoh5121 , press CTRL_C to break.",
+            "  TTL   Replier            Time    Type      Downstream",
+            "  1     2.2.2.2            30 ms   Bud       172.16.3.2/[1048575 ]",
+            "  1     4.1.1.2            40 ms   Transit   5.1.1.2/[900001 ]",
+            "  2     2.2.2.2            30 ms   Bud       172.16.3.2/[1048575 ]",
+            "  2     6.6.6.6            60 ms   Egress",
+            "  2     3.3.3.3            80 ms   Egress",
+            "  2     5.5.5.5            80 ms   Egress"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo check the connectivity of a point to multi-point VPLS over P2MP, NGMVPN, static MLDP, run the tracert multicast-lsp command.\nTo check the P2MP LDP LSP connectivity, run the tracert multicast-lsp mldp p2mp root-ip command.To check the connectivity of a P2MP TE tunnel that is automatically generated, run the tracert multicast-lsp te-auto-tunnel command."
+}

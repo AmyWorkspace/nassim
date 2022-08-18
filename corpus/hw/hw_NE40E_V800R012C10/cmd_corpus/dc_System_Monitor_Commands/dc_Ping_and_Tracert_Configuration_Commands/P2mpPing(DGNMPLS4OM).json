@@ -1,0 +1,152 @@
+{
+    "PageTitle": "ping multicast-lsp",
+    "FuncDef": "The ping multicast-lsp command checks path information between nodes on a point to point dynamic P2MP.\nThe ping multicast-lsp command checks path information between nodes on a point to point VPLS over P2MP, NGMVPN, static P2MPTE, static MLDP network.",
+    "CLIs": [
+        "ping multicast-lsp [ -a <source-ip> | -c <count> | -exp <exp-value> | -m <interval> | -r <reply-mode> | -s <packet-size> | -t <time-out> | -j <jitter-value> | -v ] * te { <tunnel-name> | <tunnel-type> <tunnel-number> } [ leaf-destination <leaf-destination> ]",
+        "ping multicast-lsp [ -a <source-ip> | -c <count> | -exp <exp-value> | -m <interval> | -r <reply-mode> | -s <packet-size> | -t <time-out> | -j <jitter-value> | -v ] * te-auto-tunnel <auto-tunnel-name> [ leaf-destination <leaf-destination> ]",
+        "ping multicast-lsp [ -a <source-ip> | -c <count> | -exp <exp-value> | -m <interval> | -r <reply-mode> | -s <packet-size> | -t <time-out> | -j <jitter-value> | -v ] * mldp p2mp root-ip <root-ip-address> { lsp-id <lsp-id> | opaque-value <opaque-value> } [ leaf-destination <leaf-destination> ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ip",
+            "Info": "Source IP address of MPLS Echo Request messages to be sent.\nIf no source IP address is specified, the outbound interface's IP address is used as the source IP address of MPLS Echo Request messages to be sent.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "-c count",
+            "Info": "Specifies the number of MPLS Echo Request messages to be sent.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies the EXP value of MPLS Echo Request messages to be sent.\nThe EXP value indicates the packet priority.\nThe value is an integer ranging from 0 to 7. The default value is 0."
+        },
+        {
+            "Parameters": "-m interval",
+            "Info": "Specifies an interval at which MPLS Echo Request messages are sent.\nThe value is an integer ranging from 2000 to 10000, in milliseconds."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies the mode in which the peer responds with MPLS Echo Reply messages.\nThe value is an integer ranging from 1 to 2. The default value is 2.\n1: no replyThis mode is used in unidirectional tests. The test is successful if the source node displays a timeout message. The test fails if the system displays a message showing that the LSP does not exist.\n2: reply with an IPv4 or IPv6 UDP packet"
+        },
+        {
+            "Parameters": "-s packet-size",
+            "Info": "Specifies a packet payload length, excluding the IP header and UDP header.\nThe value is an integer ranging from 65 to 9600, in bytes. The default value is 100."
+        },
+        {
+            "Parameters": "-t time-out",
+            "Info": "Specifies the timeout period for waiting for MPLS Echo Reply messages.\nThe value is an integer ranging from 2000 to 65535, in milliseconds. The default value is 2000.\ntime-out must be less than -m interval."
+        },
+        {
+            "Parameters": "-j jitter-value",
+            "Info": "Specifies a delay after which the destination node responds with an MPLS Echo Reply message.\nThe value is an integer ranging from 0 to 1000."
+        },
+        {
+            "Parameters": "-v",
+            "Info": "Specifies the verbose information.\n-"
+        },
+        {
+            "Parameters": "te tunnel-name",
+            "Info": "Specifies the name of the TE tunnel interface.\n-"
+        },
+        {
+            "Parameters": "tunnel-type",
+            "Info": "Specifies the type of the TE tunnel interface.\n-"
+        },
+        {
+            "Parameters": "tunnel-number",
+            "Info": "Specifies the number of the TE tunnel interface.\n-"
+        },
+        {
+            "Parameters": "leaf-destination leaf-destination",
+            "Info": "Specifies the destination node on a sub-LSP of a P2MP TE tunnel.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "te-auto-tunnel auto-tunnel-name",
+            "Info": "Specifies the name of a te auto tunnel interface.\n-"
+        },
+        {
+            "Parameters": "mldp",
+            "Info": "Specifies that the tunnel type is mLDP P2MP.\n-"
+        },
+        {
+            "Parameters": "p2mp",
+            "Info": "Specifies that the tunnel type is mLDP P2MP.\n-"
+        },
+        {
+            "Parameters": "root-ip root-ip-address",
+            "Info": "Specifies the IP address of the root node on a P2MP label distribution protocol (LDP) label switched path (LSP).\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "lsp-id lsp-id",
+            "Info": "Specifies the LSP ID.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "opaque-value opaque-value",
+            "Info": "Specifies information used to uniquely identify a P2MP LDP LSP.\nThe value is an integer ranging from 1 to 254."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping multicast-lsp mldp p2mp root-ip 1.1.1.1 lsp-id 1",
+            "  LSP PING FEC: root-ip 1.1.1.1 opaque-value 01000400014497 : 100  data bytes, press CTRL_C to break",
+            "    Reply from 10.10.10.10: bytes=100 Sequence=1 time=60 ms",
+            "    Reply from 10.10.10.10: bytes=100 Sequence=2 time=50 ms",
+            "    Reply from 10.10.10.10: bytes=100 Sequence=3 time=30 ms",
+            "    Reply from 10.10.10.10: bytes=100 Sequence=4 time=100 ms",
+            "    Reply from 10.10.10.10: bytes=100 Sequence=5 time=80 ms",
+            "",
+            "    round-trip min/avg/max = 30/64/100 ms"
+        ],
+        [
+            "<HUAWEI> ping multicast-lsp te-auto-tunnel P2MPoh5121",
+            "  LSP PING FEC: RSVP P2MP IPv4 P2MP-Auto-tunnel P2MPoh5121 : 100  data bytes, press CTRL_C to break                                            ",
+            "    Reply from 2.2.2.2: bytes=100 Sequence=1 time=10 ms                                                                                ",
+            "    Reply from 3.3.3.3: bytes=100 Sequence=1 time=60 ms                                                                                 ",
+            "    Reply from 5.5.5.5: bytes=100 Sequence=1 time=60 ms                                                                             ",
+            "    Reply from 6.6.6.6: bytes=100 Sequence=1 time=80 ms                                                                             ",
+            "    Reply from 2.2.2.2: bytes=100 Sequence=2 time=20 ms                                                                             ",
+            "    Reply from 5.5.5.5: bytes=100 Sequence=2 time=50 ms                                                                             ",
+            "    Reply from 6.6.6.6: bytes=100 Sequence=2 time=70 ms                                                                             ",
+            "    Reply from 3.3.3.3: bytes=100 Sequence=2 time=70 ms                                                                             ",
+            "    Reply from 2.2.2.2: bytes=100 Sequence=3 time=50 ms                                                                             ",
+            "    Reply from 6.6.6.6: bytes=100 Sequence=3 time=100 ms                                                                            ",
+            "    Reply from 3.3.3.3: bytes=100 Sequence=3 time=110 ms                                                                            ",
+            "    Reply from 5.5.5.5: bytes=100 Sequence=3 time=110 ms                                                                            ",
+            "    Reply from 2.2.2.2: bytes=100 Sequence=4 time=30 ms                                                                             ",
+            "    Reply from 6.6.6.6: bytes=100 Sequence=4 time=50 ms                                                                             ",
+            "    Reply from 5.5.5.5: bytes=100 Sequence=4 time=60 ms                                                                             ",
+            "    Reply from 3.3.3.3: bytes=100 Sequence=4 time=60 ms                                                                             ",
+            "    Reply from 2.2.2.2: bytes=100 Sequence=5 time=30 ms                                                                             ",
+            "    Reply from 6.6.6.6: bytes=100 Sequence=5 time=40 ms                                                                             ",
+            "    Reply from 5.5.5.5: bytes=100 Sequence=5 time=80 ms                                                                             ",
+            "    Reply from 3.3.3.3: bytes=100 Sequence=5 time=80 ms                                                                             ",
+            "                                                                                                                                    ",
+            "  --- Destination: 2.2.2.2  ping statistics ---                                                                                     ",
+            "    5 packet(s) transmitted                                                                                                         ",
+            "    5 packet(s) received                                                                                                            ",
+            "    0.00% packet loss                                                                                                               ",
+            "    round-trip min/avg/max = 10/28/50 ms                                                                                            ",
+            "                                                                                                                                    ",
+            "  --- Destination: 3.3.3.3  ping statistics ---                                                                                     ",
+            "    5 packet(s) transmitted                                                                                                         ",
+            "    5 packet(s) received                                                                                                            ",
+            "    0.00% packet loss                                                                                                               ",
+            "    round-trip min/avg/max = 60/76/110 ms                                                                                           ",
+            "                                                                                                                                    ",
+            "  --- Destination: 5.5.5.5  ping statistics ---                                                                                     ",
+            "    5 packet(s) transmitted                                                                                                         ",
+            "    5 packet(s) received                                                                                                            ",
+            "    0.00% packet loss                                                                                                               ",
+            "    round-trip min/avg/max = 50/72/110 ms                                                                                           ",
+            "                                                                                                                                    ",
+            "  --- Destination: 6.6.6.6  ping statistics ---                                                                                     ",
+            "    5 packet(s) transmitted                                                                                                         ",
+            "    5 packet(s) received                                                                                                            ",
+            "    0.00% packet loss                                                                                                               ",
+            "    round-trip min/avg/max = 40/68/100 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo check path information between nodes on a point to point VPLS over P2MP, NGMVPN, static P2MPTE, static MLDP network, run the ping multicast-lsp command.\nTo check the P2MP LDP LSP connectivity, run the ping multicast-lsp mldp p2mp root-ip command.To check the connectivity of a P2MP TE tunnel that is automatically generated, run the ping multicast-lsp te-auto-tunnel command.To check the connectivity of a P2MP TE tunnel, run the ping multicast-lsp te command."
+}

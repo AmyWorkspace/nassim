@@ -1,0 +1,38 @@
+{
+    "PageTitle": "stp tc-protection",
+    "FuncDef": "The stp tc-protection command enables the TC BPDU protection function for a MSTP process.\nThe undo stp tc-protection command disables the TC BPDU protection function of the MSTP process.\n\nBy default, the TC BPDU protection function of an MSTP process is disabled. That is, each time when an MSTP process receives a TC BPDU, the MSTP process updates the forwarding entries. The time for a device to process the maximum number of TC BPDUs is the Hello time. A device processes one TC BPDU within a specified period.\n\n\nThe Hello time is the value of the Hello timer and specifies the interval at which the device sends BPDUs. You can configure the Hello time using the stp timer hello command.",
+    "CLIs": [
+        "stp tc-protection [ threshold <threshold> | interval <interval-value> ]",
+        "undo stp tc-protection [ threshold | interval ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "threshold threshold",
+            "Info": "Specifies the maximum number of TC BPDUs that a device processes within a specified period.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "interval interval-value",
+            "Info": "Specifies the time for a device to process the maximum number of TC BPDUs.\nThe value is an integer ranging from 1 to 600, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] stp tc-protection",
+            "[*HUAWEI] stp tc-protection threshold 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] stp tc-protection",
+            "[*HUAWEI] stp tc-protection interval 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] stp tc-protection"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a Layer 2 network running STP, a device that receives TC BPDUs will delete its MAC and ARP entries. Frequent deletion operations lead to high CPU usage. In this case, run the stp tc-protection command to enable the TC BPDU protection function.\nAfter the TC BPDU protection function is enabled using the stp tc-protection command, you can run the stp tc-protection interval command to set the time for a device to process the maximum number of TC BPDUs specified by the stp tc-protection threshold command. If the number of received TC BPDUs exceeds the maximum number, the device processes the excess TC BPDUs after the time specified by the stp tc-protection interval command expires. For example, if the time is set to 10 seconds and the maximum number is set to 5, when a device receives TC BPDUs, the device processes only the first 5 TC BPDUs within 10 seconds and processes the other TC BPDUs after the time expires. In this way, the device does not frequently update its MAC and ARP entries, reducing CPU usage.\nPrerequisites\nThe TC BPDU protection function has been enabled using the stp tc-protection command.\nConfiguration Impact\nThe device processes only the maximum number of TC BPDUs specified by the stp tc-protection threshold command within the time specified by the stp tc-protection interval command. Other TC BPDUs are delayed processing, which may slow down spanning tree convergence.\nFollow-up Procedure\nRun the stp tc-protection threshold command to set the maximum number of TC BPDUs that the device processes within a specified time.\nRun the stp tc-protection interval command to set the time for a device to process the maximum number of TC BPDUs."
+}

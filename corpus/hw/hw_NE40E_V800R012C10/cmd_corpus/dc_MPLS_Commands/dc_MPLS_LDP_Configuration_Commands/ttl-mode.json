@@ -1,0 +1,32 @@
+{
+    "PageTitle": "ttl-mode",
+    "FuncDef": "The ttl-mode command enables MPLS to process the TTL in a specified mode.\nThe undo ttl-mode command restores the default configuration.\nBy default, MPLS processes the TTL in pipe mode.",
+    "CLIs": [
+        "ttl-mode { pipe | uniform }",
+        "undo ttl-mode"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance IPv6 address family view",
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pipe",
+            "Info": "Enables MPLS to process the TTL in pipe mode.\n-"
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Enables MPLS to process the TTL in uniform mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[~HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna] ttl-mode uniform"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen IP packets in a VPN instance enter an MPLS tunnel, to configure the mode of processing the MPLS TTL carried in a private network label, run the ttl-mode command. In addition, the mpls te ttl-mode or mpls ldp ttl-mode commands configure the mode of processing the MPLS TTL in public network labels. The combinations of TTL processing modes are as follows:\nThe MPLS TTL processing modes for both the private network label and public network label are uniform.\nWhen an IP packet passes through an MPLS network, the IP TTL decreases by one on the ingress and is mapped to the MPLS TTL of the private network label. The MPLS TTL of the private network label is mapped to the MPLS TTL of the public network label. Then, the packet is processed in the standard TTL mode on the MPLS network. The egress removes the public network label, copies and pastes the MPLS TTL in the public network label to the MPLS TTL in the private network label, and removes the private network label. The egress then reduces the MPLS TTL by one and changes the IP TTL to a smaller value of the MPLS TTL and IP TTL.\nThe MPLS TTL processing mode for the private network label is pipe, and that for the public network label is uniform.\nWhen an IP packet passes through an MPLS network, the ingress reduces the IP TTL and copies and pastes the MPLS TTL that is fixed at 255 in the private network label to the MPLS TTL in the public network label. Then, the packet is processed in the standard TTL mode on the MPLS network. The egress removes the public network label, copies and pastes the MPLS TTL to the MPLS TTL in the private network label, and removes the private network label. The IP TTL is reduced by one only by the egress.\nThe MPLS TTL processing mode for the private network label is uniform, and that for the public network label is pipe.\nWhen an IP packet passes through an MPLS network, the ingress reduces the IP TTL by one and copies and pastes the IP TTL to the MPLS TTL of the private network label. The MPLS TTL of the public network label is fixed at 255. Then, the packet is processed in the standard TTL mode on the MPLS network. The egress removes the public network label and private network label in sequence, reduces the MPLS TTL by one, and changes the IP TTL to a smaller value of the MPLS TTL and the IP TTL.\nThe MPLS TTL processing modes for both the private network label and public network label are pipe.\nWhen an IP packet passes through an MPLS network, the IP TTL decreases by one on the ingress. The MPLS TTLs in the private network label and public network label are fixed at 255. Then, the packet is processed in the standard TTL mode on the MPLS network. The egress removes the public network label and private network label in sequence. The IP TTL is reduced by one only by the egress.\nMPLS processes the TTL to prevent loops and implement traceroute. The configuration of the mode for MPLS to process the TTL is the same as the configuration of MPLS to propagate the IP TTL.\nUniform Mode: The IP TTL value reduces by one each time it passes through a node in an MPLS network. When IP packets enter the MPLS network, the ingress reduces the IP TTL value by one and copies the IP TTL value to the MPLS TTL field. Each transit node only processes the MPLS TTL.Pipe Mode: The IP TTL value decreases by one only when passing through the ingress and egress. When IP packets enter the MPLS network, the ingress reduces the IP TTL value in packets by one and sets the MPLS TTL to a specific value. Transit nodes only process the MPLS TTL. When the egress receives the packets, it removes the MPLS label carrying the MPLS TTL from each packet and reduces the IP TTL value by one.\nIn SRv6 over VPN scenarios, MPLS can be enabled to process the TTL in uniform or pipe mode."
+}

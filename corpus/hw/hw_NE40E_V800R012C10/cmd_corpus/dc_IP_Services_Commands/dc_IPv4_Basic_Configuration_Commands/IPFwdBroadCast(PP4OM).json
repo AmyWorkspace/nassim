@@ -1,0 +1,44 @@
+{
+    "PageTitle": "ip forward-broadcast",
+    "FuncDef": "The ip forward-broadcast command enables an interface to receive and forward directed broadcast packets destined for its direct network segment.\nThe undo ip forward-broadcast command disables an interface from receiving or forwarding directed broadcast packets destined for its direct network segment.\nBy default, an interface is disabled from receiving or forwarding directed broadcast packets destined for its direct network segment.",
+    "CLIs": [
+        "ip forward-broadcast [ acl { <acl-number> | name <acl-name> } ]",
+        "undo ip forward-broadcast"
+    ],
+    "ParentView": [
+        "100GE-Trunk member Layer 2 interface view",
+        "100GE-Trunk member interface view",
+        "Layer 2 100GE interface view",
+        "100GE interface view",
+        "10GE interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE interface view",
+        "GE electrical interface view",
+        "VBDIF interface view",
+        "VLANIF interface view",
+        "Sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies an ACL number.\nThe value is an integer ranging from 2000 to 3999.\nA basic ACL number ranges from 2000 to 2999.An advanced ACL number ranges from 3000 to 3999."
+        },
+        {
+            "Parameters": "name acl-name",
+            "Info": "Specifies an ACL name.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported. The name must start with a letter or digit, and cannot contain only digits."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet3/0/0",
+            "[~HUAWEI-GigabitEthernet3/0/0] undo ip forward-broadcast"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA directed broadcast packet is broadcast to a specific network. In the destination IP address of such a packet, the network ID field contains the network ID of a specific network, and the host ID field contains all 1s.\nDirected broadcast packets can be used by attackers to attack the network system, bringing security risks. However, the device interfaces may need to receive or forward directed broadcast packets in some scenarios. For example, when an interface is configured as a UDP helper, it converts broadcast packets into unicast packets and sends them to a specific server. To allow this, enable the interface to receive and forward directed broadcast packets destined for its direct network segment.\nAn ACL can be referenced in this command to implement this function. For example, to use a basic ACL rule to implement this function, run the acl (system view) command to create a basic ACL and then the rule (ACL view) command in the basic ACL rule to create a rule with permit defined for the directed broadcast packets to be received and forwarded. Then run the ip forward-broadcast command with the ACL specified.\nPrecautions\nAfter a device is enabled to receive and forward directed broadcast packets from a directly-connected network segment, the device may consider the directed broadcast packets, for example, broadcast packets whose destination UDP port number is 7, as attack packets. Consequently, these directed broadcast packets are discarded by attack defense functions on the device. To properly forward these packets, disable the corresponding attack defense function."
+}

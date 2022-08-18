@@ -1,0 +1,36 @@
+{
+    "PageTitle": "ip rd-filter",
+    "FuncDef": "The ip rd-filter command configures a route distinguisher (RD) filter.\nThe undo ip rd-filter command deletes an RD filter.\nBy default, no RD filter is configured.",
+    "CLIs": [
+        "ip rd-filter <rdfIndex> [ index <index-number> ] <matchMode> { <rdStr> } &<1-10>",
+        "undo ip rd-filter <rdfIndex> [ index <index-number> ] [ <matchMode> { <rdStr> } &<1-10> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "rdfIndex",
+            "Info": "Specifies the number of an RD filter.\nThe value is an integer ranging from 1 to 1024."
+        },
+        {
+            "Parameters": "index index-number",
+            "Info": "Specifies the sequence number of an RD filter.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "matchMode",
+            "Info": "Specifies the matching mode of an RD filter.\nThe value is an enumerated type:\npermit: Permits a route to match the rules if its RD matches the rules.deny: Denies a route if its RD matches the rules."
+        },
+        {
+            "Parameters": "rdStr",
+            "Info": "Specifies the RD filter.\nAn RD filter can be configured in any of the following formats:16-bit AS number:32-bit user-defined number. For example, 101:3. The AS number ranges from 0 to 65535, and the user-defined number ranges from 0 to 4294967295.Integral 4-byte AS number:2-byte user-defined number, for example, 0:3 or 65537:3. An AS number ranges from 0 to 4294967295. A user-defined number ranges from 0 to 65535.4-byte AS number in dotted notation:2-byte user-defined number, for example, 0.0:3 or 0.1:0. A 4-byte AS number in dotted notation is in the format of x.y, where x and y are integers that range from 1 to 65535 and from 0 to 65535, respectively. A user-defined number ranges from 0 to 65535.32-bit IP address:16-bit user-defined number. For example, 192.168.122.15:1. The IP address ranges from 0.0.0.0 to 255.255.255.255, and the user-defined number ranges from 0 to 65535.In the preceding elements, either value around a colon (:) can be replaced by an asterisk (*) to match any value."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip rd-filter 1 permit 100:1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe RD filter has the following rules:\nIf the RD filter is not configured but is used to filter routes, the matching result is permit.For example, the RD filter 100 is not configured but is used by the route-policy:\nroute-policy test permit node 10\nif-match rd-filter 100\nWhen the route-policy is used to filter routes, the routes match this if-match clause, and the routes match the node 10 in the route-policy named test.\nIf the RD filter is configured but the RD of routes does not match any RD defined in the RD filter, the default matching result is deny.For example, the RD of routes is 100:1, and the configuration of the RD filter is as follows:\nip rd-filter 100 permit 1.1.1.1:100\nWhen the RD filter is used to filter routes, the matching result is deny.\nThe relationship between the rules of the RD filter is \"OR\", which is different from the community filter because each route has only one RD but can have multiple communities.For example, the RD filters in the following formats have the same matching results:\nFormat 1:\nip rd-filter 100 permit 100:1 200:1 2.2.2.2:1 3.3.3.3:1\nFormat 2:\nip rd-filter 100 permit 100:1 200:1\nip rd-filter 100 permit 2.2.2.2:1\nip rd-filter 100 permit 3.3.3.3:1\nThe community filters in the following formats have different matching results:\nFormat 1:\nip community-filter 1 permit 100:1 200:1 300:1\nFormat 2:\nip community-filter 1 permit 100:1\nip community-filter 1 permit 200:1 300:1\nIn the preceding configuration of the community filter, the community defined in each rule must be a sub-set of route communities so that the rule can be matched.\nRoutes are filtered according to the configuration order of multiple rules. For example:ip rd-filter 100 deny 200:1 5.5.5.5:1\nip rd-filter 100 permit 200:* 5.5.5.5:*\nIn this situation, the route with the RD 200:1 or 5.5.5.5:1 is denied. If the configuration order of multiple rules is reversed as follows:\nip rd-filter 100 permit 200:* 5.5.5.5:*\nip rd-filter 100 deny 200:1 5.5.5.5:1\nIn this situation, the route with the RD 200:1 or 5.5.5.5:1 is permitted.\n\n\nPrecautions\nAn RD filter-based matching rule is affected by the as-notation plain command:\nIf the as-notation plain command is run, route matching can succeed only after the RD is set to an integral 4-byte AS number using the rdStr parameter.If the as-notation plain command is not run, route matching can succeed only after the RD is set to a 4-byte AS number in dotted notation using the rdStr parameter.If the as-notation plain command is run after an RD filter is configured, you need to reconfigure the RD value using the rdStr parameter; otherwise, route matching may fail against an import or export route-policy, causing a network fault."
+}

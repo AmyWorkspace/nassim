@@ -1,0 +1,25 @@
+{
+    "PageTitle": "bgp-vpn label-block-size",
+    "FuncDef": "The bgp-vpn label-block-size command configures a BGP L2VPN label block size.\nThe undo bgp-vpn label-block-size command restores the default BGP L2VPN label block size.\nBy default, the BGP L2VPN label block size is 8.",
+    "CLIs": [
+        "bgp-vpn label-block-size <size-value>",
+        "undo bgp-vpn label-block-size [ <size-value> ]"
+    ],
+    "ParentView": [
+        "MPLS-L2VPN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "size-value",
+            "Info": "Specifies a BGP L2VPN label block size.\nThe value is an integer that can be 2, 4, or 8."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] bgp-vpn label-block-size 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn BGP L2VPN, PWs are established between the local and remote PE sites. After a local site is configured, L2VPN will apply for a label block with the offset being 0 or 1 and the length being 8. After the local PE receives label block information from the remote PE, the local PE applies for a requested label block with the length of 8 based on the remote site ID. If the remote PE has multiple sites whose IDs are inconsecutive, the local PE allocates inconsecutive label blocks to the remote PE, causing a waste of label block resources. To reduce label block resource consumption, run the bgp-vpn label-block-size command to change the label block size. For example, establish BGP L2VPN between PE1, PE2, and PE3 connected to each other. Assume that the default offset is 1, PE1's local site ID is 100, and PE1 assigns the label block with the offset being 1 and length being 8. After PE1 receives label block information from PE2 and PE3, PE1 assigns a label block with the offset being 192 and length being 8 to PE2's site 200 and a label block with the offset being 292 and length being 8 for PE3's site 300. After the bgp-vpn label-block-size 2 command is run to change the label block to 2, PE1 will assign a label block with the offset being 198 and length being 2 to PE2's site 200 and a label block with the offset being 298 and length being 2 for PE3's site 300. This implementation reduces label block resource consumption.\nPrerequisites\nThe MPLS-L2VPN view is displayed using the mpls l2vpn command.\nPrecautions\nRun this command before a BGP L2VPN service is established. If this command is run after the BGP L2VPN service establishment, the BGP L2VPN service cannot be allocated labels in case of insufficient label block resources."
+}

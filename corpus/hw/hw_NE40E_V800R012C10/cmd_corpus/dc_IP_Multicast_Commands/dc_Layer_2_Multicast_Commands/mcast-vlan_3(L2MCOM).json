@@ -1,0 +1,41 @@
+{
+    "PageTitle": "multicast-vlan igmp-querier-election user-vlan",
+    "FuncDef": "The multicast-vlan igmp-querier-election user-vlan command enables the querier election for user VLANs.\nThe undo multicast-vlan igmp-querier-election user-vlan command disables the querier election for user VLANs.\nBy default, the querier election is disabled.",
+    "CLIs": [
+        "multicast-vlan igmp-querier-election user-vlan { { <vlan-id1> [ to <vlan-id2> ] } &<1-10> }",
+        "undo multicast-vlan igmp-querier-election user-vlan { all | { <vlan-id1> [ to <vlan-id2> ] } &<1-10> }"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies the ID of the first user VLAN.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to vlan-id2",
+            "Info": "Specifies the ID of the last user VLAN.\nThe vlan-id2 value must be greater than the vlan-id1 value. vlan-id2 and vlan-id1 define a range together. If vlan-id2 is not specified, only the VLAN specified by vlan-id1 serves as the user VLAN.\nThe value is an integer ranging from 1 to 4094. The vlan-id2 value must be greater than the vlan-id1 value."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates all user VLANs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 200",
+            "[*HUAWEI-vlan200] quit",
+            "[*HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI] quit",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] igmp-snooping enable",
+            "[*HUAWEI-vlan10] multicast-vlan enable",
+            "[*HUAWEI-vlan10] multicast-vlan user-vlan 100",
+            "[*HUAWEI-vlan10] multicast-vlan igmp-querier-election user-vlan 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the multicast VLAN function is configured on two Routers connected to the same user VLAN, the users in the user VLAN will receive two copies of identical multicast data. To resolve this issue, run the multicast-vlan igmp-querier-election user-vlan command to enable the querier election function for user VLANs. With this function enabled, a Router that does not win a querier election will delete forwarding entries and will not create forwarding entries after receiving Report messages from user VLANs. As a result, the Router will not send multicast data to the user VLAN.\nPrerequisites\nThe igmp-snooping send-query source-address command has been run on each Router to set a source IP address contained in Query messages sent by a querier.\nConfiguration Impact\nIf the multicast-vlan igmp-querier-election user-vlan command is run more than once, all configurations take effect."
+}

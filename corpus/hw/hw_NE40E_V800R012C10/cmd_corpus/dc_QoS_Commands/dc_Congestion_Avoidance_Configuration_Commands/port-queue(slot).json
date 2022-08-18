@@ -1,0 +1,57 @@
+{
+    "PageTitle": "port-queue outbound bind mtunnel",
+    "FuncDef": "The port-queue outbound bind mtunnel command configures scheduling parameters in outbound direction for the eight class queues on the MTunnel interface of the distributed multicast VPN.\nThe undo port-queue outbound bind mtunnel command cancels the scheduling parameters that are configured for the eight class queues in outbound direction on the MTunnel interface of the multicast VPN, and restores the default setting.\nBy default, the BE, AF1, AF2, AF3, and AF4 queues are scheduled using the WFQ scheduling mode, with the scheduling weights being 10, 10, 10, 15, and 15, respectively, and the EF, CS6, and CS7 queues are scheduled using the PQ scheduling mode. No shaping value is configured for any queue, and the tail drop mode is used.",
+    "CLIs": [
+        "port-queue <cos-value> { { pq | wfq weight <weight-value> | lpq } | shaping { <shaping-value> | shaping-percentage <shaping-percentage-value> } | port-wred <wred-name> } * outbound bind mtunnel",
+        "undo port-queue <cos-value> outbound bind mtunnel"
+    ],
+    "ParentView": [
+        "Slot view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cos-value",
+            "Info": "Specifies the priority of a port queue.\nThe value can be:\naf1af2af3af4becs6cs7ef"
+        },
+        {
+            "Parameters": "pq",
+            "Info": "Specifies the scheduling mode of a queue as PQ scheduling.\n-"
+        },
+        {
+            "Parameters": "wfq",
+            "Info": "Specifies the scheduling mode of a queue as WFQ scheduling.\n-"
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Specifies the weight of a port queue.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "lpq",
+            "Info": "Specifies the scheduling mode of a queue as LPQ scheduling.\n-"
+        },
+        {
+            "Parameters": "shaping shaping-value",
+            "Info": "Specifies the rate of traffic shaping, which indicates the configured bandwidth of an interface and equals the PIR value.\nThe value is an integer that ranges from 0 to the 4294967294, in Mbit/s."
+        },
+        {
+            "Parameters": "shaping-percentage shaping-percentage-value",
+            "Info": "Specifies the traffic shaping rate, that is, the traffic shaping rate for each flow queue as percentage of the configured interface output bandwidth.\nThe value is an integer ranging from 0 to 100, in percentage."
+        },
+        {
+            "Parameters": "port-wred wred-name",
+            "Info": "Specifies the WRED template that is to be applied to the queue.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the outbound MTunnel interface of the distributed multicast VPN.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[*HUAWEI-slot-1] port-queue af1 wfq weight 22 shaping shaping-percentage 50 outbound bind mtunnel"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure scheduling parameters for multicast packet queues on the MTunnel interface of the distributed multicast VPN. When network congestion occurs, bandwidth is preferentially allocated to services in the queues of high priorities.\nWhen using the command, there is no special requirement on the order in which the queue scheduling method, shaping value, and referenced WRED template are configured. You can decide your configurations as required.\nConfiguration Impact\nThe bandwidth and delay of multicast packets on the MTunnel interface of the distributed multicast VPN are affected."
+}

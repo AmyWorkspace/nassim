@@ -1,0 +1,39 @@
+{
+    "PageTitle": "mpls te cspf multi-instance shortest-path",
+    "FuncDef": "The mpls te cspf multi-instance shortest-path command enables CSPF to calculate the shortest path using TEDB information of all IGP processes and areas.\nThe undo mpls te cspf multi-instance shortest-path command disables CSPF from calculating the shortest path TEDB information of all IGP processes and areas.\nBy default, the multi-instance shortest path policy is disabled.",
+    "CLIs": [
+        "mpls te cspf multi-instance shortest-path [ preferred-igp { isis | ospf } [ <process-id> ] ]",
+        "undo mpls te cspf multi-instance shortest-path"
+    ],
+    "ParentView": [
+        "MPLS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "preferred-igp",
+            "Info": "Enables CSPF to use a preferred IGP.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Enables CSPF to use the preferred IS-IS traffic engineering database (TEDB).\n-"
+        },
+        {
+            "Parameters": "ospf",
+            "Info": "Enables CSPF to use the preferred OSPF TEDB.\n-"
+        },
+        {
+            "Parameters": "process-id",
+            "Info": "Specifies an IGP process ID.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls te cspf",
+            "[*HUAWEI-mpls] mpls te cspf multi-instance shortest-path preferred-igp isis 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the IGP multi-instance scenario, without the\nmpls te cspf multi-instance shortest-path command, CSPF calculates the shortest path using TEDB information in the first area. If the shortest path is successfully calculated, it is used to establish an LSP even if another shortest path exists in another area. The\nmpls te cspf multi-instance shortest-path command enables CSPF to calculate the shortest path among all IGP processes and areas.\nIf multiple reachable paths have the same weights, CSPF calculates the shortest path using TEDB information of the preferred IGP process or area (OSPF).If preferred-igp is used, CSPF can be configured to use TEDB information in a specified preferred IGP process or area. If no shortest path is found, CSPF uses TEDB information in another IGP process or area to calculate the shortest path.\n\nConfiguration Impact\nThis command is mutually exclusive with the mpls te cspf preferred-igp command.\nPrecautions\nThis command applies to P2P tunnels, not P2MP tunnels.\nThe disjoint algorithm in isolated LSP computation computes isolated primary and hot-standby LSPs, which may cause a failure to obtain the shortest path."
+}

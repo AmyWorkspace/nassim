@@ -1,0 +1,68 @@
+{
+    "PageTitle": "authentication-mode (OSPF area view)",
+    "FuncDef": "The authentication-mode command configures an authentication mode and a password for an OSPF area.\nThe undo authentication-mode command cancels the configuration.\nBy default, authentication is not configured for an OSPF area. Configuring authentication is recommended to ensure system security.",
+    "CLIs": [
+        "authentication-mode simple [ plain <SPlainText> | [ cipher ] <SCipherText> ]",
+        "authentication-mode { md5 | hmac-md5 | hmac-sha256 } [ <KeyID> { plain <SPlainText> | [ cipher ] <SCipherText> } ]",
+        "authentication-mode keychain <Keychain-Name>",
+        "undo authentication-mode"
+    ],
+    "ParentView": [
+        "OSPF area view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "plain",
+            "Info": "Indicates simple-text authentication. You can only type in simple-text passwords, and the passwords are displayed in simple text in the configuration file.\nWhen configuring an authentication password, select the ciphertext mode. If you select the simple text mode, the password is saved as a simple text in the configuration file, which has a high risk. To ensure device security, change the password periodically.\nBy default, cipher takes effect for simple authentication."
+        },
+        {
+            "Parameters": "SPlainText",
+            "Info": "Specifies a simple text password.\nThe value is a string of 1 to 8 characters when simple is configured, and is a string of 1 to 255 characters when md5, hmac-md5, or hmac-sha256 is configured.\nA password cannot contain a question mark (?), but can contain spaces if surrounded by double quotation marks (\"\"). In this case, the double quotation marks are part of the password."
+        },
+        {
+            "Parameters": "cipher",
+            "Info": "Indicates cipher authentication. You can type in simple-text or ciphertext passwords, and the passwords are displayed in ciphertext in the configuration file.\nBy default, cipher takes effect for MD5, HMAC-MD5, or HMAC-SHA256 authentication."
+        },
+        {
+            "Parameters": "SCipherText",
+            "Info": "Specifies a ciphertext password.\nFor simple authentication, a simple-text password is 1 to 8 characters, and a ciphertext password is 24 to 128 characters.For MD5, HMAC-MD5, or HMAC-SHA256 authentication, a simple-text password is 1 to 255 characters, and a ciphertext password is 20 to 432 characters.\nA password cannot contain a question mark (?), but can contain spaces if surrounded by double quotation marks (\"\"). In this case, the double quotation marks are part of the password."
+        },
+        {
+            "Parameters": "simple",
+            "Info": "Indicates simple authentication.\nBy default, the simple authentication mode is cipher.\nThe new password is at least eight characters long and contains at least two of the following types: upper-case letters, lower-case letters, digits, and special characters.For security purposes, you are advised to configure a password in ciphertext mode. To further improve device security, periodically change the password.\n-"
+        },
+        {
+            "Parameters": "md5",
+            "Info": "Indicates MD5 authentication.\nFor the sake of security, using the HMAC-SHA256 algorithm rather than the MD5 algorithm is recommended.\n-"
+        },
+        {
+            "Parameters": "hmac-md5",
+            "Info": "Indicates HMAC-MD5 authentication.\nFor the sake of security, using the HMAC-SHA256 algorithm rather than the HMAC-MD5 algorithm is recommended.\n-"
+        },
+        {
+            "Parameters": "hmac-sha256",
+            "Info": "Indicates HMAC-SHA256 authentication.\n-"
+        },
+        {
+            "Parameters": "KeyID",
+            "Info": "Specifies an authentication key ID of the cipher authentication of the interface. The key ID must be consistent with that of the peer.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "keychain",
+            "Info": "Indicates the keychain authentication.\nBefore configuring this parameter, run the keychain command to create a keychain. Then, run the key-id, key-string, and algorithm commands to configure a key ID, a password, and an authentication algorithm for this keychain. Otherwise, the OSPF authentication will fail.\nCurrently, only the hmac-md5 and hmac-sha256 algorithms can be used for OSPF.\nIf the dependent keychain is deleted, the neighbor relationship may be interrupted. Therefore, exercise caution when deleting the keychain.\n-"
+        },
+        {
+            "Parameters": "Keychain-Name",
+            "Info": "Specifies the keychain name.\nThe value is a string of 1 to 47 case-insensitive characters.\nA password cannot contain a question mark (?), but can contain spaces if surrounded by double quotation marks (\"\"). In this case, the double quotation marks are part of the password."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] area 0",
+            "[*HUAWEI-ospf-100-area-0.0.0.0] authentication-mode hmac-sha256 1 cipher Huawei-123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOSPF authentication can be configured to improve network security and meet high security demands. When area authentication is used, interfaces on all devices in an area must have the same area authentication mode and the password.\nPrecautions\nArea authentication has a lower priority than interface identification. The ospf authentication-mode command can be used to change the priority of interface authentication."
+}

@@ -1,0 +1,44 @@
+{
+    "PageTitle": "tunnel select-seq ipv6",
+    "FuncDef": "The tunnel select-seq ipv6 command configures the sequence in which different types of IPv6 tunnels are selected and the number of tunnels participating in load balancing.\\.\nThe undo tunnel select-seq command restores the default setting.\nBy default, no IPv6 tunnel type is configured.",
+    "CLIs": [
+        "tunnel select-seq ipv6 { srv6-te-policy | srv6-te-policy-group } load-balance-number <loadBalanceNumber>",
+        "tunnel select-seq ipv6 srv6-te-policy srv6-te-policy-group load-balance-number <loadBalanceNumber> unmix",
+        "tunnel select-seq ipv6 srv6-te-policy-group srv6-te-policy load-balance-number <loadBalanceNumber> unmix",
+        "undo tunnel select-seq ipv6"
+    ],
+    "ParentView": [
+        "Tunnel policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "srv6-te-policy",
+            "Info": "Indicates the preference sequence of SRv6 TE Policy. The earlier this type of tunnel is listed, the higher the priority is.\n-"
+        },
+        {
+            "Parameters": "srv6-te-policy-group",
+            "Info": "Indicates the preference sequence of SRv6 TE Policy Group. The earlier this type of tunnel is listed, the higher the priority is.\n-"
+        },
+        {
+            "Parameters": "load-balance-number loadBalanceNumber",
+            "Info": "Specifies the number of tunnels participating in load balancing.\nThe value is an integer ranging from 1 to 128."
+        },
+        {
+            "Parameters": "unmix",
+            "Info": "Indicates that only one type of tunnel can be selected.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-policy policy1",
+            "[*HUAWEI-tunnel-policy-policy1] tunnel select-seq ipv6 srv6-te-policy load-balance-number 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-policy policy1",
+            "[*HUAWEI-tunnel-policy-policy1] tunnel select-seq ipv6 srv6-te-policy-group load-balance-number 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA tunnel policy determines the selection of tunnels for VPN services. The tunnel policy has a select-seq method. This policy specifies the sequence in which different types of tunnels are selected. The tunnel select-seq ipv6 command is used to configure a tunnel type prioritizing policy.\nAfter the tunnel select-seq command is run, the VPN instance preferentially selects the tunnel type with the highest priority according to the specified sequence. For example, after the tunnel select-seq ipv6 srv6-te-policy load-balance-number 2 command is run in the tunnel policy view, the VPN instance will preferentially select SRv6 TE Policy to transmit services on the backbone network.\nFollow-up Procedure\nAfter the tunnel type prioritizing policy is configured, you need to associate it with a VPN instance so that tunnels can be selected in sequence to carry VPN services and carry out load balancing.\nPrecautions\nIf the tunnel select-seq ipv6 command is run more than once, the latest configuration overrides the previous one.\nThe srv6-te-policy-group in the tunnel select-seq ipv6 and route recursive-lookup tunnel commands are mutually exclusive."
+}

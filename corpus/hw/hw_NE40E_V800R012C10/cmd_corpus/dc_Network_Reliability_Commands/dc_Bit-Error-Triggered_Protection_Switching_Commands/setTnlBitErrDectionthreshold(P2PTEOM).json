@@ -1,0 +1,42 @@
+{
+    "PageTitle": "mpls te bit-error-detection threshold",
+    "FuncDef": "The mpls te bit-error-detection threshold command sets the thresholds for bit-error-triggered RSVP-TE tunnel protection switching and revertive switching.\nThe undo mpls te bit-error-detection threshold command deletes the thresholds for bit-error-triggered RSVP-TE tunnel switching and revertive switching.\nBy default, an RSVP-TE tunnel does not have thresholds for bit-error-triggered RSVP-TE tunnel switching and revertive switching.",
+    "CLIs": [
+        "mpls te bit-error-detection threshold switch <switch-coe> <switch-pow> resume <resume-coe> <resume-pow>",
+        "undo mpls te bit-error-detection threshold"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "switch-pow",
+            "Info": "Specifies the threshold for bit-error-triggered RSVP-TE tunnel protection switching.\nThe value is an integer ranging from 1 to 7."
+        },
+        {
+            "Parameters": "resume resume-coe",
+            "Info": "Specifies the threshold for bit-error-triggered RSVP-TE tunnel revertive switching. The formula for calculating the threshold is as follows:\nRevertive switching threshold = (resume-coe) x 10-resume-pow.\nThe revertive switching threshold cannot be greater than the protection switching threshold.\nThe value is an integer ranging from 1 to 9."
+        },
+        {
+            "Parameters": "resume-pow",
+            "Info": "Specifies the threshold for bit-error-triggered RSVP-TE tunnel revertive switching.\nThe value is an integer ranging from 1 to 7."
+        },
+        {
+            "Parameters": "switch switch-coe",
+            "Info": "Specifies the threshold for bit-error-triggered RSVP-TE tunnel protection switching. The formula for calculating the threshold is as follows:\nProtection switching threshold = (switch-coe) x 10-switch-pow.\nThe value is an integer ranging from 1 to 9."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls rsvp-te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] mpls te bit-error-detection threshold switch 8 2 resume 4 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo precisely control bit-error-triggered RSVP-TE tunnel switching based on the sensitivity of services to bit errors, configure the thresholds for bit-error-triggered RSVP-TE tunnel protection switching and revertive switching on a tunnel interface.\nThen, the ingress of an RSVP-TE tunnel determines the bit error status of the primary and backup CR-LSPs based on the following rules: If the BER of a CR-LSP reaches or exceeds the threshold for bit-error-triggered RSVP-TE tunnel protection switching, the CR-LSP is in the excessive BER state. After the BER of the CR-LSP falls below the threshold for bit-error-triggered RSVP-TE tunnel revertive switching, the CR-LSP changes to the normalized BER state.\nBit error refers to the deviation between a bit that is sent and the bit that is received. BER is the number of bit errors divided by the total number of transferred bits during a specified period. The BER of a CR-LSP is calculated based on the BER of each section on a CR-LSP.\nPrerequisites\nThe mpls rsvp-te command has been run in the MPLS view to enable RSVP-TE."
+}

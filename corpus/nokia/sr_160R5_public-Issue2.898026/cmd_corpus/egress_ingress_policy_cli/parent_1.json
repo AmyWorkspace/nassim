@@ -1,0 +1,36 @@
+{
+    "PageTitle": "parent",
+    "FuncDef": "This command defines an optional parent scheduler that further governs the available bandwidth given the queue aside from the queue s PIR setting. When multiple schedulers, policers (at egress only), and/or queues share a child status with the parent scheduler, theweightorlevelparameters define how this queue contends with the other children for the parent s bandwidth.",
+    "CLIs": [
+        "parent <scheduler-name> [ weight <weight> ] [ level <level> ] [ cir-weight <cir-weight> ] [ cir-level <cir-level> ]",
+        "no parent"
+    ],
+    "ParentView": [
+        "config>qos>sap-ingress>queue",
+        "config>qos>sap-egress>queue"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "scheduler-name",
+            "Info": "The defined scheduler-name conforms to the same input criteria as the schedulers defined within a scheduler policy. Scheduler names are configured in the config>qos>scheduler-policy>tier level context. There are no checks performed at the time of definition to ensure that the scheduler-name exists within an existing scheduler policy. For the queue to use the defined scheduler-name, the scheduler exists on each egress SAP that the queue is eventually created on. For the duration where scheduler-name does not exist on the egress SAP, the queue operates in an orphaned state. Values-Any string up to 32 characters, composed of printable, 7-bit ASCII characters. If the string contains special characters (#, $, spaces, etc.), the entire string must be enclosed within double quotes.."
+        },
+        {
+            "Parameters": "weight",
+            "Info": "weight defines the relative weight of this queue in comparison to other child schedulers, policers, and queues, while vying for bandwidth on the parent scheduler-name. Any queues, policers, or schedulers defined as weighted receive no parental bandwidth until all policers, queues, and schedulers with a higher (numerically larger) priority on the parent have reached their maximum bandwidth or are idle. Values-0 to 100. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "level",
+            "Info": "The optional level parameter defines the level of hierarchy when compared to other schedulers and queues when vying for bandwidth on the parent scheduler-name. Queues or schedulers will not receive parental bandwidth until all queues, policers, and schedulers with a higher (numerically larger) priority on the parent have reached their maximum bandwidth or are idle. Values-1 to 8. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "cir-weight",
+            "Info": "Defines the weight that the queue or scheduler will use at the within-CIR port priority level (defined by the cir-level parameter). The weight is specified as an integer value from 0 to 100 with 100 being the highest weight. When the cir-weight parameter is set to a value of 0 (the default value), the queue or scheduler does not receive bandwidth during the port schedulers within-CIR pass and the cir-level parameter is ignored. If the cir-weight parameter is 1 or greater, the cir-level parameter comes into play. Values-0 to 100. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "cir-level",
+            "Info": "Defines the port priority that the queue or scheduler will use to receive bandwidth for its within-CIR offered-load. If the cir-weight parameter is set to a value of 0 (the default value), the queue or scheduler does not receive bandwidth during the port schedulers within-CIR pass and the cir-level parameter is ignored. If the cir-weight parameter is 1 or greater, the cir-level parameter comes into play. Values-0 to 8 (8 is the highest priority). ParamDefault: Default- 0"
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

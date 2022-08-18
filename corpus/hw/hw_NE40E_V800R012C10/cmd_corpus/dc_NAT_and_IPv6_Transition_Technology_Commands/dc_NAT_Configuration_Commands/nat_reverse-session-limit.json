@@ -1,0 +1,46 @@
+{
+    "PageTitle": "nat reverse-session-limit (NAT instance view)",
+    "FuncDef": "The nat reverse-session-limit command enables the limitation on the number of established network-to-user IP sessions.\nThe undo nat reverse-session-limit command disables the limitation on the number of established network-to-user IP sessions.\n\nBy default, the limitation on the number of established network-to-user IP sessions is enabled. The maximum number of network-to-user IP sessions for each user of a specific or all three protocols is as follows:\n\n\nTCP or UDP: 10240\n\nICMP: 512\n\nSummation of TCP, UDP and ICMP: 8192. If the maximum number of NAT sessions of all protocols is set, this setting takes preference over the setting for a specific type protocol.",
+    "CLIs": [
+        "nat reverse-session-limit { enable | tcp <session-number> | udp <session-number> | icmp <session-number> | total <session-number> }",
+        "undo nat reverse-session-limit { enable | { tcp | udp | icmp | total } [ <session-number> ] }"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "enable",
+            "Info": "Enables the limitation on the number of established network-to-user IP sessions.\n-"
+        },
+        {
+            "Parameters": "tcp session-number",
+            "Info": "Indicates the maximum number of TCP network-to-user IP sessions for each user.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "udp session-number",
+            "Info": "Indicates the maximum number of UDP network-to-user IP sessions for each user.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "icmp session-number",
+            "Info": "Indicates the maximum number of ICMP network-to-user IP sessions for each user.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "total session-number",
+            "Info": "Indicates the maximum number of all network-to-user IP sessions for each user.\nIf the total number of TCP, UDP, and ICMP network-to-user IP sessions for each user reaches the maximum number, NAT cannot be performed even if the number of TCP, UDP, or ICMP network-to-user IP sessions for each user has not reached the maximum number.\nThe value is an integer ranging from 1 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat reverse-session-limit enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat reverse-session-limit tcp 20000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSome unauthorized users may consume a lot of network-to-user session resources to attack devices. As a result, there is a possibility that no NAT session can be used by authorized users. To prevent this problem, set the maximum number of network-to-user IP sessions for a user.\nPrecautions\nAfter the number of network-to-user IP sessions established for a specific user reaches the upper limit, no more sessions can be established for the user. After existing NAT sessions age and the number of established network-to-user IP sessions falls below the upper limit, new sessions can be established for the user.\nTo enable the limitation on the number of established network-to-user IP sessions, run the nat reverse-session-limit enable command. The configured maximum number of network-to-user IP sessions that can be established can take effect only after the nat reverse-session-limit enable command is run."
+}

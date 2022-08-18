@@ -1,0 +1,79 @@
+{
+    "PageTitle": "import-route (IS-IS topology view)",
+    "FuncDef": "The import-route command enables IS-IS to import routes from other protocols.\nThe undo import-route command disables IS-IS from importing routes from other protocols.\nBy default, IS-IS does not import routes from any other protocol.",
+    "CLIs": [
+        "import-route { direct | static | { isis } [ <process-id> ] } [ cost <cost> | tag <tag> | { route-policy <route-policy-name> | route-filter <route-filter-name> } | [ level-1 | level-2 | level-1-2 ] ] *",
+        "import-route { { isis } [ <process-id> ] | direct } inherit-cost [ { level-1 | level-2 | level-1-2 } | tag <tag> | { route-policy <route-policy-name> | route-filter <route-filter-name> } ] *",
+        "undo import-route { direct | static | { isis } [ <process-id> ] }"
+    ],
+    "ParentView": [
+        "IS-IS topology view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "direct",
+            "Info": "Imports direct routes.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Imports active static routes.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Imports IS-IS routes.Before you specify this parameter, enable an IS-IS process with a.\nprocess-id different from the local one.\n-"
+        },
+        {
+            "Parameters": "process-id",
+            "Info": "Specifies the process ID of the imported protocol.\nThe value is an integer ranging from 1 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "cost cost",
+            "Info": "Specifies a cost for the imported route.\nThe value is an integer. The value range varies with the cost type.\nIf the cost type of the Router is wide or wide-compatible, the value ranges from 0 to 4261412864.For other cost types, the value ranges from 0 to 63.\nThe default value is 0.\nThe cost type can be configured using the cost-style command."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies the administrative tag assigned to the imported routes.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy. The routing policy is used to filter the imported routes so that only some of the routes of other routing domains can be imported.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route filter policy. The policy is used to filter the imported routes so that only some of the routes of other routing domains can be imported.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Imports routes to the Level-1 routing table.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Imports routes to the Level-2 routing table.\nIf the level of the routing table to which routes are imported is not specified in the command, the routes are imported to the Level-2 routing table by default.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Imports routes to Level-1 and Level-2 routing tables.\n-"
+        },
+        {
+            "Parameters": "inherit-cost",
+            "Info": "Retains the original cost of the imported route.\nIf this parameter is specified, no other cost type or cost value can be configured for the imported route, and the imported route cannot be a static route.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] topology red topology-id 10",
+            "[*HUAWEI-isis-1-topology-red] import-route direct inherit-cost"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip topology red",
+            "[*HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] cost-style wide",
+            "[*HUAWEI-isis-1] topology red topology-id 10",
+            "[*HUAWEI-isis-1-topology-red] import-route static cost 15"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen IS-IS and other routing protocols are deployed on a network, you can enable the traffic within an IS-IS domain to reach a destination outside the IS-IS domain using either of the following methods:\nRun the default-route-advertise command to configure boundary devices in the IS-IS domain to advertise default routes to the IS-IS domain.Run the import-route command to configure boundary devices in the IS-IS domain to import routes from other routing domains into the IS-IS domain.\nIf there are multiple boundary devices in the IS-IS domain, optimal routes destined for another routing domain need to be selected. This requires all devices in the IS-IS domain learn all or some external routes.\nConfigure boundary devices in the IS-IS domain to import routes from other routing domains into the IS-IS domain. Alternatively, run the route-policy route-policy-name command to import some external routes from other routing domains.\nAfter the import-route command is run on a device, the device will import external routes and advertise the imported routes in the IS-IS domain.\nThe import-route command run in the IS-IS view is valid for a base topology. The import-route command run in the IS-IS topology view is valid for the IS-IS topology or the IS-IS IPv6 topology and can only import the direct, IS-IS, and static routes.\n\nPrerequisites\nAn IS-IS process has been created using the isis command, and the protocol from which routes are imported has been configured.\nConfiguration Impact\nIS-IS cannot prevent external routing loops. Therefore, avoid the loops caused by manual configurations when configuring IS-IS to import external routes.\nAfter you configure the policy for importing routes using the route-policy parameters, the IS-IS process imports only the routes of the network segments that match the requirements to filter unwanted routes.\nPrecautions\nThe import-route (IS-IS) command cannot import the default route of an external protocol. To enable a router to advertise the default route of an external protocol it learns when updating the IS-IS routing table to other routers within the area, run the default-route-advertise (IS-IS) command.\nA segment routing-capable device can import IS-IS routes. If labels have been assigned to these routes, the labels are imported to a local process by default and advertised using LSPs, regardless of whether the labels are active.\nA segment routing-capable device can import labeled OSPF routes into the IS-IS routing table and use the routes to compute SR LSPs."
+}

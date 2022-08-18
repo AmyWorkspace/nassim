@@ -1,0 +1,44 @@
+{
+    "PageTitle": "dhcpv6 relay access-limit vlan",
+    "FuncDef": "The dhcpv6 relay access-limit vlan command configures the maximum number of access DHCPv6 clients in a specified VLAN on a DHCPv6 relay interface.\nThe undo dhcpv6 relay access-limit vlan command deletes the maximum number of access DHCPv6 clients on a DHCPv6 relay interface.\nBy default, the maximum number of access DHCPv6 clients is not limited on DHCPv6 relay interfaces. Only the maximum number of DHCPv6 clients on the entire device is limited.",
+    "CLIs": [
+        "dhcpv6 relay access-limit <limit-number> vlan <vlan-id> [ <end-vlan-id> ]",
+        "undo dhcpv6 relay access-limit [ <limit-number> ] vlan <vlan-id> [ <end-vlan-id> ]"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "PW-VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "limit-number",
+            "Info": "Specifies the maximum number of access DHCPv6 clients on a DHCPv6 relay interface.\nThe value is an integer ranging from 0 to 65536."
+        },
+        {
+            "Parameters": "vlan-id",
+            "Info": "Specifies the start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "end-vlan-id",
+            "Info": "Specifies the end VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[~HUAWEI-GigabitEthernet1/0/0.1] encapsulation dot1q-termination",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] dhcpv6 relay access-limit 2 vlan 100 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo limit the maximum number of access DHCPv6 clients during network planning or service adjustment, run the dhcpv6 relay access-limit command.\nThe dhcpv6 relay access-limit limit-number vlan vlan-id [ end-vlan-id ] command configures the maximum number of access DHCPv6 clients in a specified VLAN on a DHCPv6 relay interface. If both vlanid and end-vlan-id are configured to specify a VLAN range, the maximum number of access DHCPv6 clients applies to all the VLANs in this range. Each relay interface supports 16 VLAN ranges. For example, if the dhcpv6 relay access-limit 1 vlan 1 100 command is run on GE 1/0/1.1, one DHCPv6 client is allowed to go online through VLANs in the range 1-100.\nConfiguration Impact\nThis command takes effect for subsequent DHCPv6 clients that go online. The maximum number of online DHCPv6 clients is not limited.\nPrecautions\nIf the dhcpv6 relay access-limit command is run with a VLAN range specified, and then the undo dhcpv6 relay access-limit command is run with a smaller VLAN range specified, the first VLAN range is divided into two parts. After the VLAN range specified in the dhcpv6 relay access-limit command is divided into 16 parts, the undo dhcpv6 relay access-limit command can no longer be run."
+}

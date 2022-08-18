@@ -1,0 +1,98 @@
+{
+    "PageTitle": "mpls l2vpn reroute",
+    "FuncDef": "The mpls l2vpn reroute command configures the switchback policy for the primary and secondary PWs in VLL FRR mode or in master/slave mode of PW redundancy.\nThe undo mpls l2vpn reroute command restores the default switchback policy.\nThe mpls l2vpn holdoff command configures a switching delay for a PW.The undo mpls l2vpn holdoff command deletes the switching delay for a PW.\n\n\n By default, in VLL FRR mode and in master/slave mode of PW redundancy, the switchback policy is configured as delayed switchback. \n By default, no switching delay is configured for a PW.",
+    "CLIs": [
+        "mpls l2vpn reroute { { delay <delayTime> | immediately } [ resume <resumeTime> ] | never }",
+        "mpls l2vpn holdoff <holdoffTime>",
+        "undo mpls l2vpn reroute",
+        "undo mpls l2vpn holdoff <holdoffTime>"
+    ],
+    "ParentView": [
+        "Global IMA-group sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "Global MP-group interface view",
+        "XGE sub-interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "MP-group interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "Trunk serial interface view",
+        "50|100GE sub-interface view",
+        "IMA-group sub-interface view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "POS-Trunk interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "IMA group interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "400GE Layer 2 sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay delayTime",
+            "Info": "Specifies the delay for switching traffic back to the primary PW.\nThe value is an integer ranging from 10 to 10800, in seconds. The default value is 30."
+        },
+        {
+            "Parameters": "immediately",
+            "Info": "Indicates that traffic is switched back to the primary PW without delay.\n-"
+        },
+        {
+            "Parameters": "resume resumeTime",
+            "Info": "Specifies the time after which the peer PE on the secondary PW is notified that the local PE is recovered from the fault. This parameter applies only to the FRR mode.\nThe value is an integer ranging from 0 to 600, in seconds. The default value is 10."
+        },
+        {
+            "Parameters": "never",
+            "Info": "Indicates that after the fault on the primary PW is rectified, traffic is not switched back to the primary PW until the secondary PW becomes faulty.\n-"
+        },
+        {
+            "Parameters": "holdoff holdoffTime",
+            "Info": "Specifies the switching delay.\nThe value is an integer ranging from 1 to 180, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 1.1.1.1 20",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 1.1.1.2 21 secondary",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vpn reroute delay 35 resume 200"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 1.1.1.1 20",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 1.1.1.2 21 secondary",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vpn reroute immediately"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nThe mpls l2vpn reroute command is used to configure the switchback policy only after the primary and secondary PWs are configured in VLL FRR mode or in master/slave mode of PW redundancy. The switchback policy cannot be configured for the independent mode of PW redundancy.\nThe FRR and master/slave modes support three types of revertive policies:\n\nImmediate switchback: Traffic is immediately switched back to the primary PW, and a fault notification is sent to the remote PE over the secondary PW. This revertive switching policy applies to scenarios in which users hope traffic to be restored as soon as possible.\n\nYou can configure in FRR mode, but cannot do so in master/slave mode.\n\nDelayed switchback: Traffic is switched back to the primary PW after the delay time specified in . After the delay time elapses, the local PE of the secondary PW notifies the remote PE of a fault. If is configured in FRR mode, the peer PE of the secondary PW is notified of fault recovery only after elapses.\nNon-revertive: Traffic will not be switched back to the primary PW even after the primary PW recovers. Traffic will be switched back to the primary PW only when the secondary PW fails.\n\nIn the case of an asymmetric PWE3 FRR networking, where ACs are Ethernet links:\n\nIf the remote shutdown function is configured on the interface of a PE that connects a CE, you are not advised to use the immediate switchback policy, because this policy may lead to network flapping and traffic loss. You can use the delayed switchback policy and set to be a value greater than or equal to 30 seconds.\nIf the Ethernet OAM function is configured on the interface of a PE that connects the PE to a CE, and the switchback policy is configured, the value of cannot be 0 seconds. The value must be greater than or equal to 1 second.\n\nIn a scenario where PWs are associated with E-Trunk, only the immediate switchback policy can be used. After a PE receives a switchback notification packet, the PE immediately performs a PW switchback.\nIn a VPWS with the master/slave PW redundancy mode, if the master PW fails, traffic immediately switches to the slave PW. If the master PW flaps or an error occurs in the detection mechanism, traffic frequently switches between the master and slave PWs. To prevent this problem in a VPWS with the master/slave PW redundancy mode, run the holdoff command to configure a switching delay.\nThe VPWS with the master/slave PW redundancy mode supports two types of switching policies:\n\nImmediate switching: Traffic is immediately switched to the slave PW, and a fault notification is sent to the remote PE over the master PW.\nDelayed switching: The delay time needs to be configured by he mpls l2vpn holdoff command. When the master PW is fails, the traffic is switched to the slave PW after the delay time specified in holdoff-time, and then a fault notification is sent to the remote PE over the master PW."
+}

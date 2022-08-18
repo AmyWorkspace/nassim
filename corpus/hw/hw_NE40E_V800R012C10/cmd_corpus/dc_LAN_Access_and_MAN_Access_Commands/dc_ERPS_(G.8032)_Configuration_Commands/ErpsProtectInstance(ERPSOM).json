@@ -1,0 +1,33 @@
+{
+    "PageTitle": "protected-instance",
+    "FuncDef": "The protected-instance command configures an ERP instance for an ERPS ring.\nThe undo protected-instance command deletes the configured ERP instance.\nBy default, no ERP instance is configured on an ERPS ring.",
+    "CLIs": [
+        "protected-instance { all | { <instance-id1> [ to <instance-id2> ] } &<1-10> }",
+        "undo protected-instance { all | { <instance-id1> [ to <instance-id2> ] } &<1-10> }"
+    ],
+    "ParentView": [
+        "ERPS ring view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "all",
+            "Info": "Specifies all ERP instances.\n-"
+        },
+        {
+            "Parameters": "instance-id1",
+            "Info": "Specifies the ID1 of an ERP instance.\nThe value is an integer ranging from 0 to 4094.\nThe value of instIdEnd must be greater than or equal to instId."
+        },
+        {
+            "Parameters": "to instance-id2",
+            "Info": "Specifies the ID2 of an ERP instance.\nThe value is an integer ranging from 0 to 4094.\nThe value of instIdEnd must be greater than or equal to instId."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] erps ring 1",
+            "[*HUAWEI-erps-ring1] protected-instance 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a device running ERPS, the VLAN in which ERPS BPDUs and data packets are transmitted must be mapped to a protected instance so that ERPS forwards or blocks these packets based on rules. Otherwise, VLAN packets probably cause broadcast storms on the ring network. This will cause the network to be unavailable.\nConfiguration Impact\nIf the protected-instance command is run more than once on an ERPS ring to configure ERP instances, all these ERP instances take effect.\nIf any port has been added to the ERPS ring, no ERP instance can be modified. If the configured ERP instance needs to be deleted, run the undo erps ring command in the interface view or the undo port command in the ERPS ring view, and run the undo protected-instance command to delete the ERP instance.\nFollow-up Procedure\nPerform either of the following operations to configure the mapping between the ERP instance and VLANs and ensure that the control VLAN belongs to the configured ERP instance:\nConfigure the mapping between the instance and VLANs in the MST region view.\n Run the stp region-configuration command to enter the MST region view. Run the instance instance-id vlan command to configure the mapping between the ERP instance and the VLAN.\nA VLAN cannot be mapped to multiple MSTIs. If you map a VLAN that has already been mapped to an MSTI to another MSTI, the original mapping will be canceled.\nThe vlan-mapping modulo modulo command configures the mapping between MSTIs and VLANs based on a default algorithm. However, the mapping configured using this command cannot always meet the actual demand. Therefore, running this command is not recommended.\nConfigure the mapping between the instance and VLANs in the VLAN instance view.\n Run the vlan instance command to enter the VLAN instance view. Run the instance instance-id vlan command to map VLANs to the VLAN instance. The vlan instance command and the stp region-configuration command are mutually exclusive. If the mapping between an MSTI and VLANs has been configured in the MST region view displayed by the stp region-configuration command, you must delete (Optional) Run the check vlan instance mapping command to check the configured mapping.the configured mapping before using the vlan instance command."
+}

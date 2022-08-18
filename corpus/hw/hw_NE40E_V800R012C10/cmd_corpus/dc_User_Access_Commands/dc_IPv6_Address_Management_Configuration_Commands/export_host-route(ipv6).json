@@ -1,0 +1,33 @@
+{
+    "PageTitle": "export host-route(IPv6 address pool view)",
+    "FuncDef": "The export host-route command enables a device to advertise host routes in a remote address pool.\nThe undo export host-route command disables a device from advertising host routes in a remote address pool.\nBy default, a device does not advertise host routes in a remote address pool.",
+    "CLIs": [
+        "export host-route [ ipv6-address | pd-prefix | nd-prefix ] *",
+        "undo export host-route [ ipv6-address | pd-prefix | nd-prefix ] *"
+    ],
+    "ParentView": [
+        "IPv6 address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Advertises IPv6 routes.\n-"
+        },
+        {
+            "Parameters": "pd-prefix",
+            "Info": "Advertises PD routes.\n-"
+        },
+        {
+            "Parameters": "nd-prefix",
+            "Info": "Advertises ND routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 pool pool1",
+            "[~HUAWEI-ipv6-pool-pool1] export host-route"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a user has applied for an IPv6 address or prefix, the export host-route command can be used for the user to advertise the host route to other devices.\nConfiguration Impact\nIf the export host-route command is not run in the IPv6 address pool view, users can get online after having obtained IPv6 addresses or prefixes from a remote address pool, but do not advertise host routes to other devices. This causes the users to fail to access resources of other devices.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe command can only be run for a remote address pool, local address pool, or delegation address pool.If ipv6-address, pd-prefix, or nd-prefix is not configured, the export host-route command enables a device to advertise IPv6, ND, and PD routes. These routes are in the Active Adv state, meaning that they can be imported to other routing protocols. If ipv6-address, pd-prefix, or nd-prefix is configured, the export host-route command enables a device to advertise only the routes specified by the specified parameter.If IP addresses are delivered by the RADIUS server, two situations are available. When a non-remote address pool is used, IPv6, ND, and PD routes cannot be advertised. When a remote address pool is used, IPv6, ND, and PD routes are not advertised by default, but can be advertised after the export host-route command is run.Before running this command, ensure that the address pool is not used by any user. If you run this command when the address pool is used by some users, the UNR routes of these users will fail to be advertised.If the export host-route command is run with no parameter configured, the export host-route ipv6-address, export host-route pd-prefix, and export host-route nd-prefix commands take effect at the same time. When the export host-route command with a parameter configured in run in the view of an IPv6 address pool, the system checks whether the IPv6 prefix bound to the IPv6 address pool has the dhcpv6-unshare-only, pd-unshare-only, or slaac-unshare-onlycommand configured. If the bound IPv6 prefix pool has the preceding command configured, the export host-routecommand takes effect only if the user types specified in the IPv6 prefix pool and address pool are the same. To be specific: If ipv6-address is configured, the export host-route command takes effect only if the dhcpv6-unshare-only command is run in the view of the bound IPv6 prefix pool. If pd-prefix is configured, the export host-route command takes effect only if the pd-unshare-only command is run in the view of the boud IPv6 prefix pool. If nd-prefix is configured, the export host-route command takes effect only if the slaac-unshare-only command is run in the view of the bound IPv6 prefix pool."
+}

@@ -1,0 +1,30 @@
+{
+    "PageTitle": "local-mac remove all-but-mine",
+    "FuncDef": "The local-mac remove all-but-mine command configures a VSI to delete all the MAC address entries learned from PWs and AC interfaces, except the entries learned from the PW that sends the MAC Withdraw message with the TLV type of 0x404.\nThe undo local-mac remove all-but-mine command restores the default configuration.\nBy default, a VSI deletes all the MAC address entries learned from PWs and AC interfaces after receiving a MAC Withdraw message with the TLV type of 0x404.",
+    "CLIs": [
+        "local-mac remove all-but-mine",
+        "undo local-mac remove all-but-mine"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-BVSI view",
+        "VSI-IVSI-P2P view",
+        "VSI-IVSI-BEVPNINTERWORK view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] local-mac remove all-but-mine"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA CE is dual-homed to two PEs over PWs on a VPLS network. If a PE finds that an AC fault is removed, the PE sends MAC Withdraw messages with the TLV type of 0x404 to instruct a remote PE to update MAC address entries and perform a traffic switchover. For example, the primary link is CE1-->PE2-->PE1-->CE2 and the backup link is CE1-->PE3-->PE1-->CE2, CE1 connects to CE2 over primary PE2-->PE1 and secondary PE3-->PE1 on the network. After a fault in CE1-->PE2 is removed, PE2 sends to PE1 MAC Withdraw messages with the TLV type of 0x404 over PE2-->PE1. After PE1 receives the messages, PE1 removes MAC address entries learned from AC interfaces and PWs, but retains those learned from PE2-->PE1. The procedure complies with relevant standards. User traffic can then switch from PW2 to PE2-->PE1.\nTo allow communication between a Huawei device and a non-Huawei device in compliance with relevant standards, run the local-mac remove all-but-mine command. This command is run only on PE1.\nPrecautions\nThis command takes effect on a PE that receives MAC Withdraw messages with the TLV type of 0x404."
+}

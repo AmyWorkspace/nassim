@@ -1,0 +1,68 @@
+{
+    "PageTitle": "port shaping",
+    "FuncDef": "The port shaping command sets a shaping rate for data to be sent by an interface.\nThe undo port shaping command cancels the configuration.\nBy default, the shaping rate of an interface equals the bandwidth of the interface.",
+    "CLIs": [
+        "port shaping { <shaping-value> | shaping-percentage <shaping-percentage-value> } [ network-header-length <network-header-length-value> ] [ pbs <pbs-value> ] [ weight-mode ]",
+        "undo port shaping",
+        "undo port shaping shaping-percentage <shaping-percentage-value> [ network-header-length <network-header-length-value> ] [ pbs <pbs-value> ] [ weight-mode ]"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "25GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "Eth-Trunk interface view",
+        "FlexE interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "POS interface view",
+        "Tunnel interface view",
+        "Port extension Layer 2 interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "shaping-value",
+            "Info": "Specifies a shaping rate. A shaping rate indicates the peak information bandwidth of a traffic shaping-capable interface. The value is equal to the PIR.\nThe value is an integer ranging from 1 to 4294967294, in Mbit/s. The maximum value cannot exceed the interface bandwidth. The value can be a string of 256K or 512K , in bit/s."
+        },
+        {
+            "Parameters": "shaping-percentage shaping-percentage-value",
+            "Info": "Specifies the shaping rate percentage.This parameter is not supported in the tunnel interface view.\nThe value is an integer ranging from 1 to 100, in percentage."
+        },
+        {
+            "Parameters": "network-header-length network-header-length-value",
+            "Info": "Specifies the adjustment length of a service template. The device adds packet headers of different lengths to packets of different types. Therefore, enable the device to offset the length of actual packets to the desired one to allow rate limit to take effect.This parameter is not supported in the tunnel interface view.\nThe value is an integer that ranges from -63 to 63. The value of this parameter must be calculated theoretically based on different service types. If the bandwidth error is in the allowed range, this parameter does not need to be specified. This value can be determined based on the rule: The larger value indicates the lower actual transmission of the interface, and the smaller value indicates the higher actual transmission of the interface.\nThe default compensation value does not contain the IFG or preamble. If the compensation value needs to contain the IFG and preamble, set the length to 20."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies a cache size, namely, the maximum volume of traffic that a traffic shaping-capable interface can send. The value of this parameter is equal to the peak burst size (PBS).\nThe value is an integer that ranges from 1 to 2147483646, in bytes."
+        },
+        {
+            "Parameters": "weight-mode",
+            "Info": "To configure the system to allocate the shaping value based on the weight of member interfaces.This parameter can be configured only in the trunk view.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] port shaping 500"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 1",
+            "[~HUAWEI-Eth-Trunk1] port shaping 500 weight-mode"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Tunnel 10",
+            "[~HUAWEI-Tunnel10] tunnel-protocol gre",
+            "[*HUAWEI-Tunnel10] port shaping 500"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA typical application of traffic shaping is to control the volume and burst of outgoing traffic based on the network connection. Traffic shaping enables packets to be transmitted at a uniform rate.\nA traffic shaping-enabled device buffers nonconforming packets and send them evenly under the control of the token bucket. Traffic shaping reduces the number of packets to be dropped.\nTo configure the system to allocate the shaping value based on the weight of trunk member interfaces, run the port shaping [ weight-mode ] command in the trunk interface view. The weight of trunk member interfaces is specified using the distribute-weight command. For example, a trunk interface has two member interfaces. If the traffic shaping value of the trunk interface is set to 500 Mbit/s and the weight ratio of the two member interfaces is 4:1, the traffic shaping values of the two member interface are 400 Mbit/s and 100 Mbit/s, respectively. The trunk interface bandwidth is 500 Mbit/s in this case.\nPrerequisites\nInterface bandwidth has been configured.\nConfiguration Impact\nThe interface on which the port shaping command is run shapes traffic based on configured interface bandwidth.\nFollow-up Procedure\nAfter the port shaping command is run on an interface, the interface shapes traffic on the configured bandwidth. Because there is a difference between the length of a processed packet and the original packet, you need to run shaping service-template command to configure a network header length to achieve precise flow control by compensating a processed packet with a certain length.\nPrecautions\nIf precision compensation is configured in the command that is applied to a trunk interface, precision compensation takes effect only for the TM subcards.\nIf shaping-percentage is specified in the command, the command is applied only to physical main interfaces, POS interfaces, trunk interfaces, and IP-Trunk main interfaces.\nIf a multiple member interfaces of a trunk interface reside on different forwarding or traffic management modules, the effective shaping value for port-queue or port-shaping can be a multiple of the configured one.\nThe port shaping shaping-value [ weight-mode ], port shaping { shaping-value | shaping-percentage shaping-percentage-value }[ network-header-length network-header-length ] [ pbs pbs-value ], qos port-shaping member-link-scheduler distribute, and qos default user-queue commands are mutually exclusive.\nThis command is supported on a tunnel interface only when the protocol of the tunnel interface is set to GRE or GRE IPv6.\nIn multi-VS scenarios, after this command is configured on a trunk main interface, the command configuration is also effective for the trunk sub-interfaces that reside in other VSs."
+}

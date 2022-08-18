@@ -1,0 +1,34 @@
+{
+    "PageTitle": "nat address-group exclude-ip-address",
+    "FuncDef": "The nat address-group exclude-ip-address command excludes a specific IP address or a range of IP addresses from a NAT address pool.\nThe undo nat address-group exclude-ip-address command restores a specific IP address or a range of IP addresses in a NAT address pool.\nNo IP address is excluded from a NAT address pool by default.",
+    "CLIs": [
+        "nat address-group <address-group-name> exclude-ip-address <start-address> [ <end-address> ]",
+        "undo nat address-group <address-group-name> exclude-ip-address <start-address> [ <end-address> ]"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "address-group-name",
+            "Info": "Specifies the name of an IP address pool.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "start-address",
+            "Info": "Specifies the start IP address.\nThe value is an IPv4 address in dotted decimal notation."
+        },
+        {
+            "Parameters": "end-address",
+            "Info": "Specifies an end IP address. The end IP address must be greater than or equal to the start IP address.\nThe value is an IPv4 address in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat address-group group1 group-id 1 10.0.0.0 10.0.0.5",
+            "[*HUAWEI-nat-instance-cpe1] nat address-group group1 exclude-ip-address 10.0.0.0 10.0.0.5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDue to some unavailable IP address or IP address ranges, multiple NAT address pools must be configured so that each pool can only contain a continuous range of IP addresses. As a result, multiple policies for assigning public IP addresses have to be configured, which decreases the configuration flexibility. To address this problem, run the nat address-group exclude-ip-address command to remove a specific IP address or a network segment address from a continuous range in a NAT address pool, which increases configuration flexibility.\nPrerequisites\nA NAT address pool has been configured in the NAT instance view. In addition, the NAT address pool must not match the ACL used in an outbound policy configured using the nat outbound command.\nPrecautions\nA maximum of 10 IP addresses can be removed from a public IP address segment. The excluded IP addresses must be different.The nat address-group exclude-ip-address command only removes a public IP address or a public IP address segment.When you restore an IP address or an IP address range in a NAT address pool using the undo nat address-group command, the specified IP address or IP address range must be within the excluded IP address range.Only public IP addresses can be excluded from an IP address pool. exclude-ip-address cannot be out of the specified IP address range.If an address pool is configured by specifying mask, the device advertises specific UNRs instead of network segment UNRs after this command is run. If you run this command to exclude some public IP addresses, routes to the public IP addresses may fail to be advertised, and services may be interrupted."
+}

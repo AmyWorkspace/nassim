@@ -1,0 +1,43 @@
+{
+    "PageTitle": "aggregate default-route (BGP-VPN instance IPv6 address family view)",
+    "FuncDef": "The aggregate default-route command enables a BGP device to summarize the routes that match a specified IPv6 prefix list into a summary default route.\nThe undo aggregate default-route command restores the default configuration.\nBy default, BGP cannot summarize the routes that match a specified IPv6 prefix list into a summary default route.",
+    "CLIs": [
+        "aggregate default-route origin-ipv6-prefix <ipv6-prefix-name> [ attribute-policy <attribute-policy-name> ]",
+        "undo aggregate default-route",
+        "undo aggregate default-route origin-ipv6-prefix <ipv6-prefix-name> [ attribute-policy <attribute-policy-name> ]"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "attribute-policy attribute-policy-name",
+            "Info": "Specifies the name of an attribute route-policy for the summary default route.\nThe value is a string of 1 to 200 characters."
+        },
+        {
+            "Parameters": "origin-ipv6-prefix ipv6-prefix-name",
+            "Info": "Specifies the name of an IPv6 prefix list.\nThe value is a string of 1 to 169 characters and cannot contain spaces."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ipv6-prefix abc deny 2001:db8:: 32 less-equal 128",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vrf1",
+            "[*HUAWEI-bgp-vrf1] aggregate default-route origin-ipv6-prefix abc"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ipv6-prefix abc deny 2001:db8:: 32 less-equal 128",
+            "[*HUAWEI] route-policy policy1 permit node 10",
+            "[*HUAWEI-route-policy] if-match ipv6 address prefix-list abc",
+            "[*HUAWEI-route-policy] apply cost 100",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vrf1",
+            "[*HUAWEI-bgp-vrf1] aggregate default-route origin-ipv6-prefix abc attribute-policy policy1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo enable a BGP device to summarize the routes that match a specified IPv6 prefix list into a summary default route, run the aggregate default-route command. For details about the usage scenario, see \"IP Routing\" > \"BGP4+ Configuration\" > \"Configuring BGP4+ to Generate a Summary Default Route\" in the related configuration guide.\nPrerequisites\nAn IPv6 prefix list has been configured using the ip ipv6-prefix command.\nPrecautions\nThe number of entries in the IPv6 prefix list specified in the aggregate default-route command cannot exceed 200."
+}

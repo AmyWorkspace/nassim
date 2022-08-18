@@ -1,0 +1,125 @@
+{
+    "PageTitle": "display traffic policy not-support",
+    "FuncDef": "The display traffic policy not-support command displays the rules and actions that are not supported by a traffic policy on a specified board.",
+    "CLIs": [
+        "display traffic policy not-support policy <policy-name> slot <slot-num> inbound [ global-acl | vpn-acl | vsi-acl | vxlan-acl ]",
+        "display traffic policy not-support policy <policy-name> slot <slot-num> outbound [ global-acl | vxlan-acl ]",
+        "display pupp policy not-support policy <policy-name> slot <slot-num> { inbound | outbound }",
+        "display traffic policy not-support policy <policy-name> slot <slot-num> { inbound | outbound } vsi-acl ac-mode",
+        "display traffic policy not-support policy <policy-name> slot <slot-num> { inbound | outbound } gre-tunnel",
+        "display traffic policy not-support policy <policy-name> slot <slot-num> { inbound | outbound } vxlan-local-layer"
+    ],
+    "ParentView": [
+        "User view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "slot slot-num",
+            "Info": "Specifies a slot number.\nThe value is a string of 1 to 16 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates upstream traffic.\n-"
+        },
+        {
+            "Parameters": "global-acl",
+            "Info": "Indicates a global ACL.\n-"
+        },
+        {
+            "Parameters": "vpn-acl",
+            "Info": "Indicates VPN-based MF classification.\n-"
+        },
+        {
+            "Parameters": "vsi-acl",
+            "Info": "Indicates VSI-based MF classification.\n-"
+        },
+        {
+            "Parameters": "vxlan-acl",
+            "Info": "Indicates a VXLAN ACL.\n-"
+        },
+        {
+            "Parameters": "policy policy-name",
+            "Info": "Specifies a traffic policy name.\nThe value is a string of 1 to 127 characters."
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates downstream traffic.\n-"
+        },
+        {
+            "Parameters": "ac-mode",
+            "Info": "Indicates the AC side.\n-"
+        },
+        {
+            "Parameters": "vxlan-local-layer",
+            "Info": "Indicates the scenario where the QoS policy IDs of VXLAN packets are matched.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display traffic policy not-support policy test slot 1 outbound",
+            "-------------------------------------------------------------------",
+            "Classfier test",
+            "if-match ipv6 acl 3000",
+            "rule 5 permit **** destination 100::101 F:F::E:E ****",
+            "Behavior test",
+            "   redirect vsi test ",
+            "-------------------------------------------------------------------",
+            "Classfier test",
+            "if-match acl 3000",
+            "    rule 10 permit **** vpn-instance 1 ****",
+            "Behavior test",
+            "    -",
+            "-------------------------------------------------------------------",
+            "Classfier test",
+            "-",
+            "Behavior test",
+            "    redirect vsi test",
+            "-------------------------------------------------------------------",
+            "  Classfier test",
+            "Behavior test",
+            "    ip netstream sampler except deny-action",
+            "-------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display traffic policy not-support policy test slot 1 inbound gre-tunnel",
+            "-------------------------------------------------------------------",
+            "Classfier test",
+            "Behavior test",
+            "   user-queue cir 1000 pir 1000",
+            "-------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display traffic policy not-support policy gina slot 1 inbound vpn-acl",
+            "-------------------------------------------------------------------",
+            "Classfier gina",
+            "Behavior gina",
+            "ip netstream sampler fix-packets 1",
+            "-------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display traffic policy not-support policy gina slot 1 inbound vsi-acl",
+            "-------------------------------------------------------------------",
+            "Classfier gina ",
+            "Behavior gina",
+            "  ip netstream sampler fix-packets 1 ",
+            "-------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display pupp policy not-support policy test slot 1 outbound",
+            "-------------------------------------------------------------------",
+            "Classfier test",
+            "Behavior test",
+            "   redirect vsi test ",
+            "-------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display traffic policy not-support policy gina slot 1 outbound vxlan-local-layer",
+            "-------------------------------------------------------------------",
+            "Classfier gina ",
+            "Behavior gina",
+            "  remark qos-local-id 5 ",
+            "-------------------------------------------------------------------"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo view the rules and actions that are not supported by a traffic policy on a specified board, run the display traffic policy not-support command.\nTo check the rules and actions that are not supported by a specified traffic policy on a specified board in the PUPP scenario, run the display pupp policy not-support command.\nPUPP supports the following traffic behaviors: permit, deny, remark, and match termination.\nPUPP does not support the following rules:\nFor IPv4 ACL: VPN-instance, TTL, and logging.For IPv6 ACL: VPN-instance, packet priority, fragment, and logging.\nAfter the command is executed, the output information is displayed in difference:\nIf both the rules and the behaviors are supported in the profile, no record is displayed in the output information.If part of the rules and all the behaviors are supported in the profile, the classifier part displays record and the behavior part have no record.If part of the behaviors and all the rules are supported in the profile, the behavior part displays record and the classifier part have no record.If neither the rules nor the behaviors are supported in the profile, the classifier part and behavior part have records in the output information."
+}

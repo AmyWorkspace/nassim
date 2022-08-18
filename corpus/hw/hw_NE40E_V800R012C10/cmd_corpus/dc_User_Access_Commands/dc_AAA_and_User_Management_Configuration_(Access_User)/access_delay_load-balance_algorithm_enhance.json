@@ -1,0 +1,34 @@
+{
+    "PageTitle": "access delay load-balance algorithm enhance",
+    "FuncDef": "The access delay load-balance algorithm enhance enable command enables the enhanced load balancing algorithm.\nThe access delay load-balance algorithm enhance update-frequency command configures a threshold specifying the change in the number of users, which when reached, triggers the system to reselect the preferred user access interface in a load balancing group.\nThe undo access delay load-balance algorithm enhance enable command disables the enhanced load balancing algorithm.\nThe undo access delay load-balance algorithm enhance update-frequency command restores the default configuration.\nBy default, the enhanced load balancing algorithm is disabled, and the threshold for triggering the system to reselect the interface with the smallest number of users in a load balancing group is 1.",
+    "CLIs": [
+        "access delay load-balance algorithm enhance enable",
+        "access delay load-balance algorithm enhance update-frequency <update-frequency>",
+        "undo access delay load-balance algorithm enhance enable",
+        "undo access delay load-balance algorithm enhance update-frequency <update-frequency>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "update-frequency update-frequency",
+            "Info": "Specifies a threshold specifying the change in the number of users, which when reached, triggers the system to reselect the preferred user access interface in a load balancing group.\nThe value is an integer ranging from 1 to 1000."
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables the enhanced load balancing algorithm.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] access delay load-balance algorithm enhance enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] access delay load-balance algorithm enhance update-frequency 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the scenario where multiple physical interfaces residing on different boards of a device belong to the same VLAN or user group, after a user terminal broadcasts a PPPoE Active Discovery Initiation (PADI) packet, all the interfaces respond with a PPPoE Active Discovery Offer (PADO) packet. Due to different intermediate paths or response delays, some boards may be overloaded whereas others may have low resource utilization. To resolve this problem, run the access delay load-balance group group-name [ delay-time ] command to configure a load balancing group for user access. Then, run the access-delay delay-time load-balance-group group-name command in the BAS interface view to add BAS interfaces to the load balancing group. By default, BAS interfaces in a load balancing group either immediately respond to or delay responding to the received login requests for a configured period of time in accordance with MAC address-based hash results to implement inter-board load balancing.\nFor the MAC address-based hash algorithm to take effect, the user MAC addresses must be evenly distributed. Otherwise, inter-board load imbalance may occur. In this case, run the access delay load-balance algorithm enhance enable command to enable the enhanced load balancing algorithm. Then, the system selects the interface with the smallest number of users in a load balancing group as the preferred user access interface for PPPoE users.\nIf a large number of users go online and offline at the same time, the system frequently reselects the preferred user access interface in a load balancing group. This may affect the CPU usage of the system. To reduce the impact on the CPU, run the access delay load-balance algorithm enhance update-frequency update-frequency command to adjust the threshold for triggering the system to reselect the preferred user access interface in a load balancing group. The access delay load-balance algorithm enhance update-frequency update-frequency command configures a threshold specifying the change in the number of users, which when reached, triggers the system to reselect the preferred user access interface in a load balancing group. After this command is run, the system reselects the preferred user access interface in a load balancing group when the increase or decrease in the number of users on any interface in the group reaches that specified by . By default, the system reselects the preferred user access interface in a load balancing group when the number of users on any interface in the group changes.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe access delay load-balance algorithm enhance enable and access delay load-balance algorithm enhance update-frequency update-frequency commands take effect only for PPPoE users.The enhanced load balancing algorithm cannot be configured together with other configurations that affect access users on BAS interfaces in a load balancing group. For example, the access delay load-balance algorithm enhance enable command cannot be configured together with the access-limit user-number [ start-vlan start-vlan [ end-vlan end-vlan ] [ qinq qinq-vlan ] [ user-type { ipoe [ ipv4 | ipv6 ] | pppoe } ] ] command in the BAS interface view, the block [ start-vlan { start-vlan [ end-vlan end-vlan ] [ qinq pe-vlan ] | any qinq start-qinq-vlan [ end-qinq-vlan ] } ] command in the BAS interface view, or the block command in the AAA domain view. Otherwise, login fails for PPPoE users in the load balancing group if the interface with the access limit or block command configured is selected as the preferred user access interface."
+}

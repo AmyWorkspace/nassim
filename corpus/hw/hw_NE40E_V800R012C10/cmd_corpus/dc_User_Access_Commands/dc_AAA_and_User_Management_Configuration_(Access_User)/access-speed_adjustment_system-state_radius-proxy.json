@@ -1,0 +1,29 @@
+{
+    "PageTitle": "access-speed adjustment system-state radius-proxy active-session threshold",
+    "FuncDef": "The access-speed adjustment system-state radius-proxy active-session threshold command configures the suppression threshold and restoration threshold for the number of active RADIUS proxy sessions.\nThe undo access-speed adjustment system-state radius-proxy command restores the default configuration.\nBy default, the suppression threshold is 250 and the restoration threshold is 200 for the number of active RADIUS proxy sessions.",
+    "CLIs": [
+        "access-speed adjustment system-state radius-proxy active-session threshold restrain <restrain-threshold-value> resume <resume-threshold-value>",
+        "undo access-speed adjustment system-state radius-proxy [ active-session threshold restrain <restrain-threshold-value> resume <resume-threshold-value> ]"
+    ],
+    "ParentView": [
+        "AAA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "resume resume-threshold-value",
+            "Info": "Specifies the restoration threshold.\nThe value is an integer that ranges from 10 to 1000. The default value is 200."
+        },
+        {
+            "Parameters": "restrain restrain-threshold-value",
+            "Info": "Specifies the suppression threshold.\nThe value is an integer that ranges from 10 to 1000. The default value is 250."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] access-speed adjustment system-state radius-proxy active-session threshold restrain 200 resume 70"
+        ]
+    ],
+    "ExtraInfo": "When the BRAS functions as a RADIUS proxy, a proxy session is established on each RADIUS client. Active RADIUS proxy sessions are those for the interaction between the BRAS and RADIUS server. When the BRAS receives the first RADIUS request packet from a RADIUS client and then forwards the packet to the RADIUS server, a RADIUS proxy session is created accordingly. The status of this session is set to active. Once the BRAS completes interaction with the RADIUS server and the final response packet is sent from the RADIUS server to the RADIUS client, the status of the RADIUS proxy session is set to inactive.\nTherefore, the larger the number of active sessions, the large the number of RADIUS packets to be processed by the BRAS. This may cause the system to be overloaded, and some RADIUS packets may be discarded.\nIf the number of active RADIUS proxy sessions is greater than the specified suppression threshold, the BRAS proactively discards the first RADIUS request packets sent by some RADIUS clients in order to ensure that the subsequent packets of other RADIUS clients can be properly forwarded.If the number of active RADIUS proxy sessions is less than the specified restoration threshold, the BRAS does not discard the first RADIUS request packets sent by RADIUS clients any more.\nThere are many factors, such as the processing capability of the RADIUS server, the dialup speed of the terminal, and the processing capability of the BRAS, that may affect the number of active RADIUS proxy sessions. The default suppression threshold and restoration threshold may not apply to all scenarios. To configure the suppression threshold and restoration threshold of the number of active RADIUS proxy sessions in a specific scenario, run the access-speed adjustment system-state radius-proxy active-session threshold command."
+}

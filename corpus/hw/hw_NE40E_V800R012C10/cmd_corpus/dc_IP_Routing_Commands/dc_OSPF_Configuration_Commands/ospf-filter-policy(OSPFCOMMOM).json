@@ -1,0 +1,47 @@
+{
+    "PageTitle": "filter-policy import (OSPF view)",
+    "FuncDef": "The filter-policy import command configures a filtering policy to filter the routes received by OSPF.\nThe undo filter-policy import command restores the default setting.\nBy default, OSPF does not filter received routes.",
+    "CLIs": [
+        "filter-policy <acl-number> import",
+        "filter-policy { acl-name <acl-name> | ip-prefix <ip-prefix-name> | { route-policy <route-policy-name> | route-filter <route-filter-name> } [ secondary ] } import",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name> | ip-prefix <ip-prefix-name> | { route-policy <route-policy-name> | route-filter <route-filter-name> } [ secondary ] ] import"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the basic ACL number.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of route filter policy.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "secondary",
+            "Info": "Indicates the secondary route.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix1 deny 1.1.1.1 24",
+            "[*HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] filter-policy ip-prefix prefix1 import"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe filter-policy import command is used to configure a filtering policy for the received routes. Only the routes that pass the filtering are added to the routing information base (RIB) and advertised. The routes that fail the filtering are added to the OSPF routing table but not added to the RIB, and therefore, summary-LSAs, AS-External-LSAs, and NSSA LSAs are not advertised to other areas or processes.\nOSPF is a link-state dynamic routing protocol, with routing information carried in the LSA. Therefore, the filter-policy import command cannot be used to filter received LSAs or those to be advertised. The filter-policy import command is used to filter the routes calculated by OSPF.\nPrecautions\nWhen the rule command is used to configure a filtering rule for a named ACL, only the source address range that is specified in source and the time period that is specified in time-range take effect on the filtering rule."
+}

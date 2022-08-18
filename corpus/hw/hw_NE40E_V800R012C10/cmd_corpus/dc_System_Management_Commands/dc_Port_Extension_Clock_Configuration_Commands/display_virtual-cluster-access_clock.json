@@ -1,0 +1,158 @@
+{
+    "PageTitle": "display virtual-cluster-access clock",
+    "FuncDef": "The display virtual-cluster-access clock command displays the AP clock synchronization configuration on the master in the port extension scenario.",
+    "CLIs": [
+        "display virtual-cluster-access clock { frequency | time } config",
+        "display virtual-cluster-access clock ap [ <ap-id> ]",
+        "display virtual-cluster-access clock source ap <ap-id>"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "frequency",
+            "Info": "Specify frequency.\n-"
+        },
+        {
+            "Parameters": "time",
+            "Info": "Specify time.\n-"
+        },
+        {
+            "Parameters": "config",
+            "Info": "Device configuration.\n-"
+        },
+        {
+            "Parameters": "ap ap-id",
+            "Info": "ID of the AP.\nThe value is an integer that ranges from 1024 to 8191."
+        },
+        {
+            "Parameters": "source",
+            "Info": "Source.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "[~HUAWEI] display virtual-cluster-access clock frequency config",
+            " Frequency synchronization   : enable",
+            " Bits output threshold       : dnu",
+            " Frequency deviation detect  : enable",
+            " Unk map                     : dnu",
+            " System pll max out SSM      : ssua",
+            " 2M-1 pll max out SSM        : ssua",
+            " 2M-2 pll max out SSM        : ssua",
+            " Holdoff time                : 1000ms",
+            " WTR time                    : 0min",
+            "",
+            " AP-ID: 1024",
+            " clock tod protocol ubx",
+            " clock bits-type bits0 2mhz",
+            " clock sa-bit sa5 source bits0",
+            " clock source bits0 synchronization enable",
+            "",
+            " AP-ID: 1025",
+            " clock tod protocol nmea",
+            " clock bits-type bits1 1pps input",
+            " clock sa-bit sa6 source bits0 slot 11",
+            " clock source bits0 synchronization enable slot 12",
+            "",
+            " GigabitEthernet1024/3/0/6:",
+            " clock synchronization enable",
+            " clock ssm ssua",
+            "",
+            " GigabitEthernet1025/1/0/2:",
+            " clock synchronization enable",
+            " clock ssm ssub"
+        ],
+        [
+            "[~HUAWEI] display virtual-cluster-access clock time config",
+            " Time synchronization              : enable",
+            " PTP Domain                        : 0",
+            " Asymmetry measure                 : disable",
+            " Passive measure                   : disable",
+            " Passive-measure alarm-threshold   : 1000ns",
+            " Local time-source                 : 2",
+            " Local clock-accuracy              : 0x52",
+            " Local clock-class                 : 127",
+            " Local priority1                   : 110",
+            " Local priority2                   : 120",
+            "",
+            " AP-ID: 1024",
+            " ptp virtual-clock-id 7a46d58f",
+            " ptp clock-source bits1 receive-delay 2000",
+            " ptp clock-source bits1 send-delay 1000",
+            " ptp asymmetry-correction positive 1200 interface GigabitEthernet3/0/6",
+            "",
+            " AP-ID: 1025",
+            " ptp virtual-clock-id 12345678",
+            " ptp clock-source bits1 receive-delay 600",
+            " ptp clock-source bits1 send-delay 800",
+            " ptp asymmetry-correction negative 1100 interface GigabitEthernet1/0/2",
+            "",
+            " GigabitEthernet1024/3/0/6:",
+            " ptp enable",
+            " ptp delay-mechanism pdelay",
+            " ptp clock-step two-step",
+            " ptp announce-drop enable",
+            " ptp announce receipt-timeout 10",
+            " ptp announce-interval 5",
+            " ptp sync-interval 4",
+            " ptp min-delayreq-interval 10",
+            " ptp min-pdelayreq-interval 10",
+            " ptp mac-egress destination-mac 11-22-33",
+            "",
+            " GigabitEthernet1025/1/0/2:",
+            " ptp enable",
+            " ptp delay-mechanism pdelay",
+            " ptp clock-step two-step",
+            " ptp announce-drop enable",
+            " ptp announce receipt-timeout 10",
+            " ptp announce-interval 5",
+            " ptp sync-interval 4",
+            " ptp min-delayreq-interval 10",
+            " ptp min-pdelayreq-interval 10",
+            " ptp udp-egress source-ip 1.1.1.1"
+        ],
+        [
+            "[~HUAWEI] display virtual-cluster-access clock ap",
+            "Ap-ID      Trace-port        Freq-lock    Time-lock",
+            "------------------------------------------------------",
+            "1024       GE1/0/2           yes          yes  ",
+            "1025       GE1/0/1           yes          yes"
+        ],
+        [
+            "[~HUAWEI] display virtual-cluster-access clock ap 1024",
+            "Virtual Cluster Access Clock Ap Information",
+            "-----------------------------------------------------------------",
+            "Ap ID                     : 1024",
+            "Frequency                 : enable",
+            "Time                      : enable",
+            "Domain                    : 10",
+            "Trace port                : GE1/0/2",
+            "Pull-in range             : into",
+            "Frequency lock success    : yes",
+            "Time lock success         : no",
+            "Grand clock ID            : 001236fffe52acd8",
+            "Parent clock ID           : 7a46d5fffe8f5ad4",
+            "Step removed              : 2",
+            "-----------------------------------------------------------------"
+        ],
+        [
+            "[~HUAWEI] display virtual-cluster-access clock source ap 1024",
+            "Frequency sources :",
+            "-----------------------------------------------------------------------",
+            "Interface               Pri            State          In-SSM    Out-SSM",
+            "-----------------------------------------------------------------------",
+            "GE1/0/2                 255            normal         sec       dnu    ",
+            "GE4/0/0                 ---            normal  *      prc       sec    ",
+            "",
+            "Time sources :",
+            "-----------------------------------------------------------------------",
+            "Interface               State    Delay-mech  Ann-timeout  Type   Domain",
+            "-----------------------------------------------------------------------",
+            "GigabitEthernet1/0/2    slave    delay       3            BC     0",
+            "GigabitEthernet4/0/0    master   delay       3            BC     0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe display virtual-cluster-access clock { frequency | time } config command displays the port extended clock synchronization configuration in the port extension scenario.\nThe display virtual-cluster-access clock ap [ <ap-id> ] command displays AP synchronization information in the port extension scenario. When the ap-id parameter is not used, synchronization information about all AP nodes on the master is displayed. When the ap-id parameter is used, only the clock synchronization information about the specified AP is queried.\nThe display virtual-cluster-access clock source ap <ap-id> command displays the AP clock source status in the port extension scenario."
+}

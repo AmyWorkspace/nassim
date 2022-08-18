@@ -1,0 +1,73 @@
+{
+    "PageTitle": "arp static",
+    "FuncDef": "The arp static command configures a static Address Resolution Protocol (ARP) entry.\nThe undo arp static command deletes a static ARP entry.\nBy default, no static ARP entry is configured.",
+    "CLIs": [
+        "arp static <ip-address> <mac-address>",
+        "arp static <ip-address> <mac-address> vid <vlan-id>",
+        "arp static <ip-address> <mac-address> vpn-instance <vpn-instance-name> [ vid <vlan-id> ]",
+        "arp static <ip-address> <mac-address> [ vid <vlan-id> ] interface { <interface-name> | <interface-type> <interface-number> }",
+        "arp static <ip-address> <mac-address> vid <vlan-id> cevid <cevid> interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo arp static <ip-address> [ <mac-address> ]",
+        "undo arp static <ip-address> [ <mac-address> ] vpn-instance <vpn-instance-name>",
+        "undo arp static <ip-address> [ <mac-address> ] [ vid <vlan-id> ] interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo arp static <ip-address> [ <mac-address> ] vid <vlan-id> cevid <cevid> interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo arp static vpn-instance <vpn-instance-name>",
+        "undo arp static all"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of a static ARP entry.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies the MAC address of a static ARP entry.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        },
+        {
+            "Parameters": "vid vlan-id",
+            "Info": "Specifies the outer VLAN ID corresponding to a static ARP entry.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the VPN instance of a static ARP entry.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the interface that sends a static ARP message.\n-"
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the interface name that sends a static ARP message.\n-"
+        },
+        {
+            "Parameters": "cevid cevid",
+            "Info": "Specifies the inner VLAN ID corresponding to a static ARP entry.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates that all the static ARP entries are deleted.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] arp static 10.0.0.1 aa-fcc-12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] arp static 1.1.1.1 00e0-fc12-3456 vpn-instance vpn1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] arp static 1.1.1.1 00e0-fc12-3456 vid 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure mapping between IP addresses and MAC addresses for security or management purposes, run the arp static command.\nThe IP and MAC address mapping in a static ARP entry is fixed. Neither the host nor the device can adjust the mapping. Static ARP entries remain valid when the routing device works normally.\nTo allow packets whose destination IP addresses are not on a network segment to be forwarded by a certain gateway on the network segment.To filter out packets with invalid destination IP addresses. These invalid IP addresses can be bound to a non-existent MAC address.\n\nThe arp static command usage is as follows:\nTo configure common static ARP entries, run the arp static ip-address mac-address [ vpn-instance vpn-instance-name ] command. If vpn-instance vpn-instance-name parameter is specified, the ARP entry belongs to the specified VPN instance.To configure static ARP entries for a sub-interface, run the arp static ip-address mac-address [ vpn-instance vpn-instance-name ] vid vlan-id command. If vid vlan-id is not specified, the VLAN ID of 0 is used.\n\nImplementation Procedure\nCreate a static ARP entry. If the static ARP entry already exists, the system updates the entry.\nConfiguration Impact\nAfter a static ARP entry is configured, the ARP entry cannot be dynamically learned.\nPrecautions\nWhen configuring static ARP on a QinQ or dot1q VLAN tag termination sub-interface, you must specify an outbound interface. Otherwise, traffic cannot be forwarded. In this case, the QinQ or dot1q VLAN tag termination sub-interface does not learn the outbound interface of packets."
+}

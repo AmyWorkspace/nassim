@@ -1,0 +1,45 @@
+{
+    "PageTitle": "mpls oam l2vc lost-measure single-ended proactive",
+    "FuncDef": "The mpls oam l2vc lost-measure single-ended proactive command enables proactive single-ended frame loss measurement (LM) on a PW side.\nThe undo mpls oam l2vc lost-measure single-ended proactive command deletes the configuration.\nBy default, proactive single-ended frame loss measurement (LM) is not enabled on the  PW side.",
+    "CLIs": [
+        "mpls oam l2vc lost-measure single-ended proactive [ exp <exp-value> ] peer-ip <peer-ip> vc-id <vc-id> vc-type <vc-type>",
+        "undo mpls oam l2vc lost-measure single-ended proactive peer-ip <peer-ip> vc-id <vc-id> vc-type <vc-type>"
+    ],
+    "ParentView": [
+        "MPLS-OAM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "exp exp-value",
+            "Info": "Sets a priority value for LMMs.\nThe value is an integer ranging from 0 to 7. The larger the value, the higher the priority. The default value is 7."
+        },
+        {
+            "Parameters": "peer-ip peer-ip",
+            "Info": "Specifies the destination IP address of a PW.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id vc-id",
+            "Info": "Specifies the PW ID.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "vc-type vc-type",
+            "Info": "Specifies the type of a remote L2VC.\nEncapsulation types supported:ATM PWE3atm-1to1-vcc: One PW carries the ATM cells of one PVC.atm-1to1-vpc: One PW carries the ATM cells of one PVP.atm-aal5-pdu: One PW carries the AAL5 PDUs of one PVC.atm-aal5-sdu: One PW carries the AAL5 SDUs of one PVC.atm-nto1-vcc: One PW carries the ATM cells of multiple PVCs.atm-nto1-vpc: One PW carries the ATM cells of multiple PVPs.atm-trans-cell: ATM cells are transmitted over PWE3 VCs.\nTDM PWE3cesopsn-basic: CES is sensitive to E1 and T1 frame structures. E1 or T1 signals can be encapsulated into packets based on timeslots.satop-e1: SAToP is insensitive to the E1 frame structure and encapsulates a whole E1 frame into a PW packet.satop-t1: SAToP is insensitive to the T1 frame structure and encapsulates a whole T1 frame into a PW packet.\nOther encapsulation types:cep: This encapsulation type is used for CEP services.ethernet: This encapsulation type is used when Ethernet packets do not carry VLAN information.hdlc: HDLC is a bit-oriented link layer protocol.ip-interworking: This encapsulation type is used for interworking between Huawei devices.ip-layer2: This encapsulation type is used for interworking between Huawei devices and non-Huawei devices.ppp: PPP is a link layer protocol that specifies how to encapsulate and transmit network layer packets over P2P links.vlan: This encapsulation type is used when Ethernet packets carry VLAN information."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] mpls-oam",
+            "[*HUAWEI-mpls-oam] mpls oam l2vc lost-measure single-ended proactive exp 1 peer-ip 2.2.2.2 vc-id 100 vc-type ethernet"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPacket LM is a performance monitoring function provided by MPLS-TP. Single-ended frame LM is implemented on two MEPs over an LSP. The measurement results include the following data:\nNear-end frame loss: indicates the number and percentage of dropped frames that are sent from an RMEP to a MEP.Far-end frame loss: indicates the number and percentage of dropped frames that are sent from a MEP to an RMEP.\n\nPrerequisites\nMPLS and MPLS OAM have been enabled globally.The MPLS-OAM view has been displayed.The PW that MPLS OAM monitors has been established.\n\nPrecautions\nThis function must be enabled on both the local and remote ends to display correct statistics about proactive single-ended frame loss measurement on the local end.The system can display a maximum of 60 proactive single-ended frame LM records. If the number of proactive single-ended frame LM records exceeds 60, the earlier records are overwritten."
+}

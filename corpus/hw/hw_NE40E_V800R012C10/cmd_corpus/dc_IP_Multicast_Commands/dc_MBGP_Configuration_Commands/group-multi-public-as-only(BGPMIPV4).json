@@ -1,0 +1,48 @@
+{
+    "PageTitle": "peer public-as-only (BGP-IPv4 multicast address family view) (group)",
+    "FuncDef": "The peer public-as-only command configures an MBGP device to remove all private AS numbers from the AS_Path attribute in an MBGP Update packet to be sent.\nThe undo peer public-as-only command cancels the configuration.\nBy default, the AS-Path in an MBGP Update packet is allowed to carry private AS numbers.",
+    "CLIs": [
+        "peer <peerGroupName> public-as-only",
+        "peer <peerGroupName> public-as-only force [ replace ] [ include-peer-as ]",
+        "peer <peerGroupName> public-as-only limited [ replace ] [ include-peer-as ]",
+        "undo peer <peerGroupName> public-as-only",
+        "undo peer <peerGroupName> public-as-only force [ replace ] [ include-peer-as ]",
+        "undo peer <peerGroupName> public-as-only limited [ replace ] [ include-peer-as ]"
+    ],
+    "ParentView": [
+        "BGP-IPv4 multicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerGroupName",
+            "Info": "Specifies the name of an MBGP peer group.\nThe value is a string of 1 to 47 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "force",
+            "Info": "Deletes all private AS numbers from the AS_Path attribute except the private AS number of a specified peer or peer group.\n-"
+        },
+        {
+            "Parameters": "replace",
+            "Info": "Replaces the private AS numbers in the AS_Path attribute with the local AS number except the private AS number of a specified peer or peer group.\n-"
+        },
+        {
+            "Parameters": "include-peer-as",
+            "Info": "Indicates that no skip MBGP peer AS number.\n-"
+        },
+        {
+            "Parameters": "limited",
+            "Info": "Deletes private AS numbers from the leftmost one to the local or a public AS number except the private AS number of a specified peer or peer group.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group test internal",
+            "[*HUAWEI-bgp] ipv4-family multicast",
+            "[*HUAWEI-bgp-af-multicast] peer test enable",
+            "[*HUAWEI-bgp-af-multicast] peer test public-as-only"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn AS number ranges from 1 to 65535. A public AS number ranges from 1 to 64511 and a private AS number ranges from 64512 to 65534. The AS number 65535 is reserved for special applications.\nIf the 4-byte private AS number function is enabled using the private-4-byte-as enable command, private AS numbers range from 64512 to 65534 and from 4200000000 to 4294967294 (64086.59904 to 65535.65534 in the format of x.y).\nPublic AS numbers can be used on the Internet. Private AS numbers cannot be advertised to the Internet, and they are used only within ASs.\nIf the private AS number does not need to be advertised, the peer public-as-only command can be run to allow the AS_Path attribute to carry only the public AS number.\nGenerally, the AS_Path attribute contained in an MBGP Update packet sent by an MBGP device includes AS numbers, which can be public AS numbers or private AS numbers. The peer public-as-only command can be used to configure an MBGP device to remove all private AS numbers from the AS_Path attributes in Update packets to be sent. This frees external routers from checking the private AS numbers in Update packets.\nPrecautions\nSelect one of the preceding parameters based on the network topology to prevent routing loops or forwarding errors."
+}

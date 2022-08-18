@@ -1,0 +1,106 @@
+{
+    "PageTitle": "display mpls te tunnel bit-error-detection",
+    "FuncDef": "The display mpls te tunnel bit-error-detection command displays CR-LSP bit error status and BER information.",
+    "CLIs": [
+        "display mpls te tunnel bit-error-detection [ [ tunnel-name <tunnel-name> ] | [ lsp-id <ingress-lsr-id> <session-id> <local-lsp-id> ] | [ lsr-role { ingress | egress } ] ]",
+        "display mpls te tunnel bit-error-detection [ [ tunnel-name <tunnel-name> ] | [ lsp-id <ingress-lsr-id> <session-id> <local-lsp-id> ] | [ lsr-role { ingress | egress } ] ] verbose"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tunnel-name tunnel-name",
+            "Info": "Specifies the tunnel name.\nThe value is a string of 1 to 255 case-sensitive characters without spaces. The tunnel name specified here must be the same as that in the configuration file. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "lsp-id ingress-lsr-id",
+            "Info": "Specifies the ingress LSR ID of an LSP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "session-id",
+            "Info": "Specifies the session ID of an LSP.\nThe value is an integer ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "local-lsp-id",
+            "Info": "Specifies the local LSP ID.\nThe value is an integer ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "lsr-role",
+            "Info": "Specifies the role of the current node on an LSP.\n-"
+        },
+        {
+            "Parameters": "ingress",
+            "Info": "Displays the bit error status and BER of the LSP that uses the current node as its ingress.\n-"
+        },
+        {
+            "Parameters": "egress",
+            "Info": "Displays the bit error status and BER of the LSP that uses the current node as its egress.\n-"
+        },
+        {
+            "Parameters": "verbose",
+            "Info": "Displays detailed LSP bit error status and BER information.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display mpls te tunnel bit-error-detection",
+            "BED-Rate(R/L): R - Remote BFD Session, L - Local BFD Session",
+            "--------------------------------------------------------------------------------",
+            "LSP-ID                       LSP-Type    BED-State BED-Rate(R/L) Tunnel-Name",
+            "--------------------------------------------------------------------------------",
+            "5.5.5.5:1:67                 Primary     --               2e-2/0 Tunnel10",
+            "5.5.5.5:1:68                 Hot-Standby --                  0/0 Tunnel10",
+            "2.2.2.2:1:109                Primary     Start            2e-2/0 Tunnel10",
+            "2.2.2.2:1:110                Hot-Standby Stop                0/0 Tunnel10"
+        ],
+        [
+            "<HUAWEI> display mpls te tunnel bit-error-detection verbose",
+            "Tunnel-Name         : Tunnel11",
+            "     LSP-ID              : 10.1.1.1:1:32775",
+            "     LSP-Type            : Hot-Standby",
+            "     LSR-Role            : Ingress",
+            "     BED-State           : Stop",
+            "     Total BED-Rate(R/L) : 0/0",
+            "     Segment BED-Rate(L) :",
+            "",
+            "     Tunnel-Name         : Tunnel10",
+            "     LSP-ID              : 10.2.12.1:1:6",
+            "     LSP-Type            : Primary",
+            "     LSR-Role            : Egress",
+            "     BED-State           : --",
+            "     Total BED-Rate(R/L) : 0/1e-1",
+            "     Segment BED-Rate(L) :",
+            "     ----------------------------------------",
+            "     LSR-ID              BED-Rate",
+            "     ----------------------------------------",
+            "     4.1.1.1                 1e-1",
+            "     ----------------------------------------",
+            "",
+            "     Tunnel-Name         : Tunnel10",
+            "     LSP-ID              : 10.2.12.1:1:32779",
+            "     LSP-Type            : Hot-Standby",
+            "     LSR-Role            : Egress",
+            "     BED-State           : --",
+            "     Total BED-Rate(R/L) : 0/0",
+            "     Segment BED-Rate(L) :",
+            "",
+            "     Tunnel-Name         : Tunnel11",
+            "     LSP-ID              : 10.1.1.1:1:4",
+            "     LSP-Type            : Primary",
+            "     LSR-Role            : Ingress",
+            "     BED-State           : Start",
+            "     Total BED-Rate(R/L) : 0/1e-1",
+            "     Segment BED-Rate(L) :"
+        ],
+        [
+            "<HUAWEI> display mpls te tunnel bit-error-detection lsp-id 1.1.1.1 1 4",
+            "BED-Rate(R/L): R - Remote BFD Session, L - Local BFD Session",
+            "--------------------------------------------------------------------------------",
+            "LSP-ID                      LSP-Type    BED-State BED-Rate(R/L) Tunnel-Name",
+            "--------------------------------------------------------------------------------",
+            "1.1.1.1:1:4                 Primary     Start            0/1e-1 Tunnel11"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf you want to view the bit error status and BER of an LSP, run this command on the ingress or egress of the LSP.\nIf you do not specify any parameter when running this command, the information about all LSPs with the current node as their ingresses or egresses is displayed.\nPrecautions\nIf you want to view section BERs, run this command on the egress of an LSP and specify verbose."
+}

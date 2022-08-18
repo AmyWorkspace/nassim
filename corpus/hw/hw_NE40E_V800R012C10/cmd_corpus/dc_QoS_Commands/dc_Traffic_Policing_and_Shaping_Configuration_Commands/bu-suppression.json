@@ -1,0 +1,33 @@
+{
+    "PageTitle": "bu-suppression",
+    "FuncDef": "The bu-suppression command enables suppression for broadcast and unknown unicast traffic.\nThe undo bu-suppression command disables suppression for broadcast and unknown unicast traffic.\nBy default, suppression for broadcast and unknown unicast traffic is not enabled.",
+    "CLIs": [
+        "bu-suppression cir <cir-value> [ cbs <cbs-value> ] inbound",
+        "undo bu-suppression inbound"
+    ],
+    "ParentView": [
+        "QoS profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the CBS. The CBS indicates the committed volume of traffic that an interface allows to pass and the depth of the first bucket (assuming it is bucket A).\nThe value is an integer ranging from 0 to 4294967295, in bytes. The default cbs-value value is equal to cir-value.\nIf cir-value is smaller than 100000 kbit/s, the default value of cbs-value is calculated using the following formula: cir-value*(1500/8) bytes.If cir-value is greater than or equal to 100000 kbit/s, the default value of cbs-value is calculated using the following formula: 100000*(1500/8) bytes."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies the inbound direction.\n-"
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR. The CIR indicates the committed rate of traffic that an interface allows to pass.\nThe value is an integer ranging from 0 to 4294967295, in kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile p1",
+            "[*HUAWEI-qos-profile-p1] bu-suppression cir 1000 inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf broadcast and unknown unicast traffic increases on networks, the traffic consumes an increasing number of network resources, which degrades network performance.\nTo enable suppression for broadcast and unknown unicast traffic, run the bu-suppression command. When broadcast and unknown unicast traffic exceeds the upper threshold, excess broadcast and unknown unicast traffic is discarded until the traffic falls below the upper threshold.\nPrerequisites\nA QoS profile has been created.\nConfiguration Impact\nFor CAR and suppression: When suppression is enabled for a VSI or VLAN, Layer 2 suppression takes effect for the interface bound to the VSI or added to the VLAN. Layer 2 suppression identifies traffic types (known unicast, unknown unicast, broadcast, and multicast) and implements rate limiting based on specific configurations. When suppression is not enabled for a VSI or VLAN, Layer 2 suppression does not take effect for the interface bound to the VSI or added to the VLAN. In this case, traffic types (known unicast, unknown unicast, broadcast, and multicast) are not identified, and CAR is implemented for all traffic.\nFollow-up Procedure\nApply the QoS profile in which suppression for broadcast and unknown unicast traffic is enabled to an interface.\nPrecautions\nThe bu-suppression command takes effect only when the traffic directions specified for the bu-suppression command and the QoS profile are the same.\nThe LPUF-50/LPUF-50-L/LPUI-21-L/LPUI-51-L/LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101 boards do not support suppression for incoming Layer 2 traffic."
+}

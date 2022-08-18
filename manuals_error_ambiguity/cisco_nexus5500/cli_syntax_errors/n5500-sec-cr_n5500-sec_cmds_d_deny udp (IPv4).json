@@ -1,0 +1,64 @@
+{
+    "PageTitle": "deny udp (IPv4)",
+    "FuncDef": "To create an access control list (ACL) rule that denies UDP IPv4 traffic matching its conditions, use the deny command. To remove a rule, use the no form of this command.",
+    "CLIs": [
+        "[ <sequence-number> ] deny udp <source> [ <operator> <port> [ <port> ] | portgroup <portgroup> ] <destination> [ <operator> <port> [ <port> ] | portgroup <portgroup> ] [ dscp <dscp> | fragments | log | precedence <precedence> ]",
+        "no deny udp <source> [ <operator> <port> [ <port> ] | portgroup <portgroup> ] <destination> [ <operator> <port> [ <port> ] | portgroup <portgroup> ] [ dscp <dscp> | fragments | log | precedence <precedence>",
+        "no <sequence-number>"
+    ],
+    "ParentView": [
+        "ipv4 acl configuration mode"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sequence-number",
+            "Info": "(Optional) Sequence number of the deny command, which causes the switch to insert the command in that numbered position in the access list. Sequence numbers maintain the order of rules within an ACL. A sequence number can be any integer between 1 and 4294967295. By default, the first rule in an ACL has a sequence number of 10. If you do not specify a sequence number, the switch adds the rule to the end of the ACL and assigns to it a sequence number that is 10 greater than the sequence number of the preceding rule. Use the resequence command to reassign sequence numbers to rules."
+        },
+        {
+            "Parameters": "source",
+            "Info": "Source IPv4 addresses that the rule matches. For details about the methods that you can use to specify this argument, see the \u201cSource and Destination\u201d section in the \u201cUsage Guidelines\u201d section."
+        },
+        {
+            "Parameters": "destination",
+            "Info": "Destination IPv4 addresses that the rule matches. For details about the methods that you can use to specify this argument, see the \u201cSource and Destination\u201d section in the \u201cUsage Guidelines\u201d section."
+        },
+        {
+            "Parameters": "operator port [ port ]",
+            "Info": "(Optional) Rule that matches only packets that are from a source port or sent to a destination port that satisfies the conditions of the operator and port arguments. Whether these arguments apply to a source port or a destination port depends upon whether you specify them after the source argument or after the destination argument. The port argument can be the name or the number of a TCP or UDP port. Valid numbers are integers from 0 to 65535. For listings of valid port names, see \u201cTCP Port Names\u201d and \u201cUDP Port Names\u201d in the \u201cUsage Guidelines\u201d section. A second port argument is required only when the operator argument is a range. The operator argument must be one of the following keywords: eq -Matches only if the port in the packet is equal to the port argument. gt -Matches only if the port in the packet is greater than the port argument. lt -Matches only if the port in the packet is less than the port argument. neq -Matches only if the port in the packet is not equal to the port argument. range -Requires two port arguments and matches only if the port in the packet is equal to or greater than the first port argument and equal to or less than the second port argument."
+        },
+        {
+            "Parameters": "portgroup portgroup",
+            "Info": "(Optional) Specifies that the rule matches only packets that are from a source port or to a destination port that is a member of the IP port-group object specified by the portgroup argument. Whether the port-group object applies to a source port or a destination port depends upon whether you specify it after the source argument or after the destination argument. Use the object-group ip port command to create and change IP port-group objects."
+        },
+        {
+            "Parameters": "dscp dscp",
+            "Info": "(Optional) Specifies that the rule matches only those packets with the specified 6-bit differentiated services value in the DSCP field of the IP header. The dscp argument can be one of the following numbers or keywords: 0-63-The decimal equivalent of the 6 bits of the DSCP field. For example, if you specify 10, the rule matches only those packets that have the following bits in the DSCP field: 001010. af11 -Assured Forwarding (AF) class 1, low drop probability (001010) af12 -AF class 1, medium drop probability (001100) af13 -AF class 1, high drop probability (001110) af21 -AF class 2, low drop probability (010010) af22 -AF class 2, medium drop probability (010100) af23 -AF class 2, high drop probability (010110) af31 -AF class 3, low drop probability (011010) af32 -AF class 3, medium drop probability (011100) af33 -AF class 3, high drop probability (011110) af41 -AF class 4, low drop probability (100010) af42 -AF class 4, medium drop probability (100100) af43 -AF class 4, high drop probability (100110) cs1 -Class-selector (CS) 1, precedence 1 (001000) cs2 -CS2, precedence 2 (010000) cs3 -CS3, precedence 3 (011000) cs4 -CS4, precedence 4 (100000) cs5 -CS5, precedence 5 (101000) cs6 -CS6, precedence 6 (110000) cs7 -CS7, precedence 7 (111000) default -Default DSCP value (000000) ef -Expedited Forwarding (101110)"
+        },
+        {
+            "Parameters": "fragments",
+            "Info": "(Optional) Specifies that the rule matches only those packets that are noninitial fragments. You cannot specify this keyword in the same rule that you specify Layer 4 options, such as a TCP port number, because the information that the switch requires to evaluate those options is contained only in initial fragments."
+        },
+        {
+            "Parameters": "log",
+            "Info": "(Optional) Specifies that the device generates an informational logging message about each packet that matches the rule. The message includes the following information: Protocol Source and destination addresses Source and destination port numbers, if applicable"
+        },
+        {
+            "Parameters": "precedence precedence",
+            "Info": "(Optional) Specifies that the rule matches only packets that have an IP Precedence field with the value specified by the precedence argument. The precedence argument can be a number or a keyword as follows: 0-7-Decimal equivalent of the 3 bits of the IP Precedence field. For example, if you specify 3, the rule matches only packets that have the following bits in the DSCP field: 011. critical -Precedence 5 (101) flash -Precedence 3 (011) flash-override -Precedence 4 (100) immediate -Precedence 2 (010) internet -Precedence 6 (110) network -Precedence 7 (111) priority -Precedence 1 (001) routine -Precedence 0 (000)"
+        }
+    ],
+    "Examples": [
+        [
+            "switch(config)# ip access-list acl-lab-01",
+            "switch(config-acl)# deny udp 10.23.0.0/16 10.176.0.0/16",
+            "switch(config-acl)# deny udp 192.168.37.0/16 10.176.0.0/16",
+            "switch(config-acl)# permit ip any any"
+        ]
+    ],
+    "ExtraInfo": "When the switch applies an IPv4 ACL to a packet, it evaluates the packet with every rule in the ACL. The switch enforces the first rule whose conditions are satisfied by the packet. When the conditions of more than one rule are satisfied, the switch enforces the rule with the lowest sequence number.Source and DestinationYou can specify the source and destination arguments in one of several ways. In each rule, the method that you use to specify one of these arguments does not affect how you specify the other argument. When you configure a rule, use the following methods to specify the source and destination arguments:Address and network wildcard-You can use an IPv4 address followed by a network wildcard to specify a host or a network as a source or destination. The syntax is as follows:IPv4-address network-wildcardThis example shows how to specify the source argument with the IPv4 address and network wildcard for the 192.168.67.0 subnet:switch(config-acl)# deny udp 192.168.67.0 0.0.0.255 anyAddress and variable-length subnet mask-You can use an IPv4 address followed by a variable-length subnet mask (VLSM) to specify a host or a network as a source or destination. The syntax is as follows:IPv4-address/prefix-lenThis example shows how to specify the source argument with the IPv4 address and VLSM for the 192.168.67.0 subnet:switch(config-acl)# deny udp 192.168.67.0/24 anyHost address-You can use the host keyword and an IPv4 address to specify a host as a source or destination. The syntax is as follows:host IPv4-addressThis syntax is equivalent to IPv4-address /32 and IPv4-address 0.0.0.0.This example shows how to specify the source argument with the host keyword and the 192.168.67.132 IPv4 address:switch(config-acl)# deny udp host 192.168.67.132 anyAny address-You can use the any keyword to specify that a source or destination is any IPv4 address. For examples of the use of the any keyword, see the examples in this section. Each example shows how to specify a source or destination by using the any keyword.UDP Port NamesWhen you specify the protocol argument as udp , the port argument can be a UDP port number, which is an integer from 0 to 65535. It can also be one of the following keywords:biff -Biff (mail notification, comsat, 512) bootpc -Bootstrap Protocol (BOOTP) client (68) bootps -Bootstrap Protocol (BOOTP) server (67) discard -Discard (9) dnsix -DNSIX security protocol auditing (195) domain -Domain Name Service (DNS, 53) echo -Echo (7) isakmp -Internet Security Association and Key Management Protocol (5) mobile-ip -Mobile IP registration (434) nameserver -IEN116 name service (obsolete, 42) netbios-dgm -NetBIOS datagram service (138) netbios-ns -NetBIOS name service (137) netbios-ss -NetBIOS session service (139) non500-isakmp -Internet Security Association and Key Management Protocol (45) ntp -Network Time Protocol (123) pim-auto-rp -PIM Auto-RP (496) rip -Routing Information Protocol (router, in.routed, 52) snmp -Simple Network Management Protocol (161) snmptrap -SNMP Traps (162) sunrpc -Sun Remote Procedure Call (111) syslog -System Logger (514) tacacs -TAC Access Control System (49) talk -Talk (517) tftp -Trivial File Transfer Protocol (69) time -Time (37) who -Who service (rwho, 513) xdmcp -X Display Manager Control Protocol (177)\nCommand Default:A newly created IPv4 ACL contains no rules.",
+    "HTMLPage": "data/manuals/cisco/cisco_nexus5500/n5500-sec-cr_n5500-sec_cmds_d.html",
+    "ori_path": "data/cmdcorpus/cisco/cisco_nexus5500/cmd_corpus/n5500-sec-cr_n5500-sec_cmds_d/n5500-sec-cr_n5500-sec_cmds_d_deny udp (IPv4).json",
+    "msg": [
+        "Error CLI:no deny udp <source> [ <operator> <port> [ <port> ] | portgroup <portgroup> ] <destination> [ <operator> <port> [ <port> ] | portgroup <portgroup> ] [ dscp <dscp> | fragments | log | precedence <precedence>"
+    ]
+}

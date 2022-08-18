@@ -1,0 +1,111 @@
+{
+    "PageTitle": "display configuration changes",
+    "FuncDef": "The display configuration changes command displays the difference between a configuration file and the current running configuration file on the device.\nThe display configuration commit changes command displays configuration changes at specific configuration rollback points.",
+    "CLIs": [
+        "display configuration commit changes [ { at <commit-id> | since <commit-id> | last <number-of-commits> } [ with-tag ] ]",
+        "display configuration changes [ { running file <file-name> | file <file-name> running } [ with-tag ] ]",
+        "display configuration changes { running label <label> | label <label> running } [ with-tag ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "at commit-id",
+            "Info": "Displays configuration changes at a configuration rollback point.\nThe value is an integer that is generated automatically and ranging from 1000000001 to 1999999999."
+        },
+        {
+            "Parameters": "since commit-id",
+            "Info": "Displays configuration changes since the specified configuration rollback point was generated.\nThe value is an integer that is generated automatically and ranging from 1000000001 to 1999999999."
+        },
+        {
+            "Parameters": "last number-of-commits",
+            "Info": "Specifies the number of the latest configuration rollback points. Configuration changes in these rollback points are displayed.\nThe value is an integer ranging from 1 to 80."
+        },
+        {
+            "Parameters": "with-tag",
+            "Info": "Displays configuration changes that carry the <replace/> tag.\n-"
+        },
+        {
+            "Parameters": "running",
+            "Info": "Displays the running configuration, that is, the configuration data in the running/ database.\n-"
+        },
+        {
+            "Parameters": "file file-name",
+            "Info": "Specifies the name of a configuration file.\nThe name is a string of 5 to 64 characters in the format of .zip, .cfg, or .dat."
+        },
+        {
+            "Parameters": "label label",
+            "Info": "Specifies a label.\nThe value is an integer ranging from 1 to 256."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display configuration commit changes at 1000000065",
+            "Building configuration",
+            "  #",
+            "  aaa",
+            "+  local-user huawei password cipher @%@%ym<*-4`Hu=kF;b-%AiAF&C:1@%@%",
+            "+  local-user huawei service-type ftp ",
+            "+  local-user huawei ftp-directory cfcard:/"
+        ],
+        [
+            "<HUAWEI> display configuration commit changes since 1000000067",
+            "Building configuration...",
+            "  #",
+            "- snmp-agent",
+            "  #",
+            "- snmp-agent local-engineid 800007DB0338AB7F111100",
+            "  #",
+            "- snmp-agent community write public mib-view abc",
+            "  #",
+            "- snmp-agent community write private mib-view abc",
+            "  #"
+        ],
+        [
+            "<HUAWEI> display configuration commit changes last 2",
+            "Building configuration...",
+            "  #",
+            "- info-center logfile size 16",
+            "  #",
+            "+ info-center logfile size 32",
+            "  #"
+        ],
+        [
+            "<HUAWEI> display configuration commit changes",
+            "Building configuration",
+            "Commit changes of commitId 1000000114 2015-06-18 03:04:59",
+            "  #",
+            "- sysname HUAWEI",
+            "  #",
+            "+ sysname test",
+            "  #"
+        ],
+        [
+            "<HUAWEI> display configuration commit changes last 2 with-tag",
+            "Building configuration",
+            "  #",
+            "+ <cmd-script:vlan batch></cmd>vlan batch 1 to 1000",
+            "  <view-entry></view>aaa",
+            "+  domain abc",
+            "  #"
+        ],
+        [
+            "<HUAWEI> display configuration commit changes last 2",
+            "Building configuration...",
+            "  #",
+            "- info-center logfile size 16",
+            "  #",
+            "+ info-center logfile size 32",
+            "  #"
+        ],
+        [
+            "<HUAWEI> display configuration changes running file a.cfg",
+            "Building configuration",
+            "Warning: The specified configuration file is not the same as the current configuration. There are several differences as follow:",
+            "  #",
+            "- sysname test"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a misoperation is performed or some configurations fail, the system must roll back to a specified historical configuration. In this case, you can run the display configuration commit changes command to check configuration changes at configuration rollback points.When the with-tag parameter is carried to query configuration changes, you can query the differential configuration information with the specified tag. The information is mainly used in a configuration difference replacement scenario, providing contents to be pasted for the load configuration terminal command.To view the difference between the current running configuration file and a specified configuration file, run the display configuration changes running file file-name command.To view the difference between a specified configuration file and the current running configuration file, run the display configuration changes file file-name running command.The display configuration changes running label label command displays the difference between the current configuration and the configuration of a specified user label.The display configuration changes label label running command displays the difference between the configuration of a specified user label and the current configuration.This command can only compare the current running configuration file with a configuration file. When you run this command, the first specified configuration file is called source configuration, and the later specified configuration file is called target configuration. If the target configuration is different from the source configuration, the difference is displayed based on the following rules:An added command is displayed in the format of prefix+.A deleted command is displayed in the format of prefix-.If a command is modified, the original command is displayed in the format of prefix-, and the new command is displayed in the format of prefix+.\n\nPrerequisites\nYou have completed the system configuration, and configuration rollback points have been generated. You can run the display configuration commit list command to query generated configuration rollback points.\nFollow-up Procedure\nChoose to restore the configuration manually or to perform a configuration rollback by checking the configuration changes.\nPrecautions\nWhen a configuration difference comparison command is run, if repeated commands exist in the same view, the current command fails to be executed.\nThe specified configuration file specified by file-name must exist on the device."
+}

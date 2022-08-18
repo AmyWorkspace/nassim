@@ -1,0 +1,28 @@
+{
+    "PageTitle": "tunnel-selector (BGP-VPNv4 address family view)",
+    "FuncDef": "The tunnel-selector command applies a tunnel selector.\nThe undo tunnel-selector command deletes the configuration.\nBy default, no tunnel selector is applied to BGP-VPNv4, BGP-VPNv6 or labeled BGP routes. BGP-VPNv4, BGP-EVPN routes, BGP-VPNv6 or labeled BGP routes recurse only to LSPs.",
+    "CLIs": [
+        "tunnel-selector <tunnel-selector-name>",
+        "undo tunnel-selector"
+    ],
+    "ParentView": [
+        "BGP-VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tunnel-selector-name",
+            "Info": "Specifies the name of a tunnel selector.\nThe value is a string of 1 to 40 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-selector tps permit node 10",
+            "[*HUAWEI-tunnel-selector] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-af-vpnv4] tunnel-selector tps"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a BGP/MPLS IP VPN, run the tunnel-selector command to apply a tunnel selector to BGP-VPNv4 routes so that these routes can recurse to desired types of tunnels in the following situations:\nThe ASBR in inter-AS VPN Option B networking needs to apply a tunnel policy to VPNv4 routes that are received from PEs, although VPN instances are not configured on the ASBR.The SPE in the HoVPN networking needs to apply a tunnel policy to VPNv4 routes that are received from UPEs.The PE in inter-AS VPN Option C networking needs to apply a tunnel policy to recurse labeled routes to TE tunnels to guarantee bandwidth or implement load balancing among BGP LSPs.In an inter-AS VPN Option C scenario, to implement tunnel-based load-balancing among labeled BGP routes, run the tunnel-selector [all] command to configure a tunnel selector on the ASBR. If the all parameter is used, the tunnel selector applies to all BGP IPv4 unicast routes, including labeled routes, imported routes, and network segment routes.\n\nPrerequisites\nA tunnel selector has been configured using the tunnel-selector (system view) command.\nPrecautions\nDeleting the tunnel selector applied to BGP-VPNv4 routes may interrupt VPN services, because the BGP-VPNv4 routes may fail to recurse to tunnels.\nThe SRv6 TE Policy or SRv6 TE Policy Group of tunnel is not supported in a tunnel selector specified in the command."
+}

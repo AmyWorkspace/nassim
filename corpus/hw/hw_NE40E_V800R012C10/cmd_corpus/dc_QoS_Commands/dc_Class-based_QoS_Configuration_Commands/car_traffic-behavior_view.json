@@ -1,0 +1,86 @@
+{
+    "PageTitle": "car (traffic-behavior view)",
+    "FuncDef": "The car command configures and modifies traffic policing for a traffic behavior.\nThe undo car command cancels the traffic policing configuration.\nBy default, traffic policing is not configured for traffic behavior.",
+    "CLIs": [
+        "car { cir <cir-value> [ pir <pir-value> ] } [ cbs <cbs-value> [ pbs <pbs-value> ] ] [ adjust <adjust-value> ] [ green { discard | pass [ service-class <class> color <color> ] } | yellow { discard | pass [ service-class <class> color <color> ] } | red { discard | pass [ service-class <class> color <color> ] } ] * [ summary ] [ color-aware ]",
+        "undo car [ { cir <cir-value> [ pir <pir-value> ] } [ cbs <cbs-value> [ pbs <pbs-value> ] ] [ adjust <adjust-value> ] [ green { discard | pass [ remark dscp <dscp> | service-class <class> color <color> ] } | yellow { discard | pass [ remark dscp <dscp> | service-class <class> color <color> ] } | red { discard | pass [ remark dscp <dscp> | service-class <class> color <color> ] } ] * [ summary ] [ color-aware ] [ limit-type pps ] ]",
+        "undo car [ { cir <cir-value> [ pir <pir-value> ] } [ cbs <cbs-value> [ pbs <pbs-value> ] ] [ adjust <adjust-value> ] [ green { discard | pass [ service-class <class> color <color> ] } | yellow { discard | pass [ service-class <class> color <color> ] } | red { discard | pass [ service-class <class> color <color> ] } ] * [ summary ] [ color-aware ] ]"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR, that is, the committed information rate at which traffic is allowed to pass.\nThe value is an integer ranging from 0 to 4294967295, in Kbit/s."
+        },
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the PIR, that is, the maximum rate at which traffic is allowed to pass. In addition, pir-value should not be smaller than the set cir-value.\nThe value is an integer ranging from 0 to 4294967295, in Kbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the CBS, that is, the committed burst size. This indicates the number of bits that the device can transmit at a burst, which is also the depth of the first token bucket (assuming that this is bucket C).\nThe value is an integer ranging from 0 to 4294967295, in bytes."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies the PBS, that is, the volume of the peak traffic that can pass at a burst. PBS is considered the depth of the second bucket that is assumed to be bucket P.\nThe value is an integer that ranges from 0 to 4294967295, in bytes."
+        },
+        {
+            "Parameters": "adjust adjust-value",
+            "Info": "Specifies the value of packet length adjust.\nThe value is an integer that ranges from -32 to 31."
+        },
+        {
+            "Parameters": "green",
+            "Info": "Indicates the action to be taken on the packets when the traffic reaches the CIR. The default action is pass.\n-"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "Indicates that packets of a color (green, yellow, or red) are discarded.\n-"
+        },
+        {
+            "Parameters": "pass",
+            "Info": "Indicates that packets of a color (green, yellow, or red) can pass.\n-"
+        },
+        {
+            "Parameters": "service-class class",
+            "Info": "Specifies the CoS of packets to be re-marked.\nThe value is an enumerated type and can be case-insensitive CS7, CS6, EF, AF4, AF3, AF2, AF1, or BE."
+        },
+        {
+            "Parameters": "color color",
+            "Info": "Specifies the color of packets to be re-marked.\nThe value is an enumerated type and can be green, yellow, or red."
+        },
+        {
+            "Parameters": "yellow",
+            "Info": "Specifies the action to be taken on packets when the traffic rate of the packets exceeds the CIR but is smaller than the PIR. The default action is pass.\n-"
+        },
+        {
+            "Parameters": "red",
+            "Info": "Specifies the action to be taken on data packets when the traffic rate of the data packets exceeds the PIR. The default action is discard.\n-"
+        },
+        {
+            "Parameters": "summary",
+            "Info": "The parameter summary indicates the traffic policing takes effect on both value-added service and basic service. The paramter can be configured but it does not take effect.\n-"
+        },
+        {
+            "Parameters": "color-aware",
+            "Info": "Specifies the color-aware mode. By default, the color-blind mode is used.\n-"
+        },
+        {
+            "Parameters": "dscp dscp",
+            "Info": "Indicates the DSCP value of IPv4 or IPv6 packets.\nThis parameter can only configured in LPUF-51-E/LPUI-51-E/LPUI-51-S/LPUI-51-CM/LPUF-120/LPUF-120-B/LPUF-120-E/LPUI-102-E/LPUI-120/LPUI-120-B/LPUI-120-L/LPUI-52-E/LPUI-120-E/LPUI-120-CM/LPUF-240/LPUF-240-B/LPUF-240-E/LPUI-240/LPUI-240-B/LPUI-240-CM/LPUI-240-L/LPUF-480/LPUF-480-B/LPUI-480/LPUI-480-B/LPUI-480-L/LPUF-480-E/LPUI-480-CM/LPUF-400-E/LPUI-200/LPUI-200-L/LPUF-200/LPUF-200-B/LPUI-1T/LPUI-1T-B/LPUI-1T-L/LPUI-1T-CM/LPUI-241/LPUI-241-B/LPUI-241-CM/LPUF-241/LPUF-241-E/LPUI-480-CM/LPUF-52.\nThe value is an integer, ranging from 0 to 63."
+        },
+        {
+            "Parameters": "limit-type pps",
+            "Info": "Specifies that if the value cir-value or pir-value is configured, the packet is limited by second.\nIf the parameter limit-type pps is specified in a traffic policy, the CAR and statistics functions based on layer 2 and layer 3 packet length. If the command qos link-adjustment link-layer-exclude (Traffic policy view) is also configured in the traffic policy, the command qos link-adjustment link-layer-exclude does not take effect.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] car cir 1000 pir 6000 green pass service-class af1 color green yellow pass red discard"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run this command to restrict certain traffic that enters the device.\nIt is mainly applied to the network edge to ensure that the core device can process data normally.\nPrerequisites\nYou need to create a traffic behavior in the system view before setting the CAR in the traffic behavior view.\nConfiguration Impact\nWhen the traffic policy configured with the CAR action is applied to an interface, the CAR action is performed on the traffic matching the rules defined in the traffic classifier. That is, the excessive packets are discarded.\nAfter the traffic policing policy is applied to an interface, traffic policing is implemented for the traffic matching the rule based on the parameters set in the car command firstly. Then interface-based traffic policing is implemented for the traffic matching the rule based on the parameters set in the qos car command.\nFollow-up Procedure\nYou need to configure the traffic behavior and traffic policy, bind the traffic behavior to the traffic classifier in the traffic policy, and apply the traffic policy to interfaces.\nPrecautions\nIn MF classification, CAR based on the packet rate and CAR based on packet length compensation are mutually exclusive.\nThe parameter color-aware indicates that CAR is in color-aware mode. CAR is in color-blind mode by default. Use CAR for outgoing traffic as an example. If the color-aware mode is used, the CAR action for outgoing traffic is implemented based on the color modification result of the CAR, re-marking, and service-class actions on incoming traffic. If the color-blind mode is used, the CAR action for outgoing traffic is not implemented based on the color modification result.\nYellow packets are not identified for a single bucket at a single rate. Therefore, the packet color cannot be set to yellow.\nThe traffic policy that contains CAR can be applied to incoming or outgoing traffic on an interface.\nIf this command is configured for multiple times, the later configuration overrides the previous one.\nThe relationships between the CIR, PIR, CBS, and PBS in the command are described as follows:\nThe PIR is recommended to be greater than the configured CIR.The CBS is recommended to be greater than the configured CIR.The PBS is recommended to be greater than the configured PIR.\nYou are advised to follow the configuration rule: CBS >= PBS = CIR/8*(1-1.5)*1000\nIn the view of traffic behavior view, the command car and user-queue (traffic behavior view) are mutually exclusive.\nThe PIR values displayed on the device and NMS are as follows:\nWhen only the CIR is configured and the PIR is not configured, the default value of the PIR is 0. The PIR is not displayed in the command configuration file or on the NMS.\nYellow packets can not be configured, when PBS value is 0.\nThe adjust and limit-type  pps commands cannot both be configured."
+}

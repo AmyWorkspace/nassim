@@ -1,0 +1,72 @@
+{
+    "PageTitle": "redirect ipv6-nexthop",
+    "FuncDef": "The redirect ipv6-nexthop command assigns the IPv6 address and configures the outbound interface of the next hop for redirection. In addition, you can also apply the action to a specific interface according to a traffic behavior and redirect the traffic with a matching class.\nThe undo redirect ipv6-nexthop command cancels the configuration.\nBy default, the redirection of the IPv6 address and the outbound interface of the next hop are not configured in traffic behavior view.",
+    "CLIs": [
+        "redirect ipv6-nexthop <ipv6-address> vpn <vpn-name> [ nqa <nqa-test-administer-name> <name-of-nqa-test-instance> ] [ routing-filter { default-routing | blackhole-routing } * ] [ deny ] [ pri-type common ]",
+        "redirect ipv6-nexthop <ipv6-address> nqa <nqa-test-administer-name> <name-of-nqa-test-instance> [ routing-filter { default-routing | blackhole-routing } * ] [ deny ] [ pri-type common ]",
+        "redirect ipv6-nexthop <ipv6-address> [ routing-filter { default-routing | blackhole-routing } * ] [ deny ] [ pri-type common ]",
+        "redirect ipv6-nexthop <ipv6-address> interface { <interface-name> | <interface-type> <interface-number> } [ route-forward ] [ pri-type common ]",
+        "undo redirect ipv6-nexthop"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of the next hop for redirection.\nThe value is in the format of X:X::X:X with each X representing four hexadecimal digits."
+        },
+        {
+            "Parameters": "vpn vpn-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "nqa nqa-test-administer-name",
+            "Info": "Specifies the name of a manager of an NQA test instance.\nThe name is a string of 1 to 32 case-insensitive characters, spaces not supported.The string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "name-of-nqa-test-instance",
+            "Info": "Specifies the name of an NQA test instance.\nThe name is a string of 1 to 32 case-insensitive characters, spaces not supported.The string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "routing-filter default-routing",
+            "Info": "When this parameter is configured, if the IP address of the next hop matches the default route, the packets are forwarded based on their destination IP address.\n-"
+        },
+        {
+            "Parameters": "routing-filter blackhole-routing",
+            "Info": "When this parameter is configured, if the IP address of the next hop matches a black-hole route, the packets are forwarded based on their destination IP address.\n-"
+        },
+        {
+            "Parameters": "deny",
+            "Info": "If the next hop does not exist, the packet is discarded.\n-"
+        },
+        {
+            "Parameters": "pri-type common",
+            "Info": "Specifies the route priorities so that common routes take precedence. To be specific, when the destination IP address of a packet is reachable, the packet is forwarded preferentially based on the destination IP address. When the destination IP address of a packet is unreachable, the packet is forwarded based on policy-based routing.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of the outbound interface.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of the outbound interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of the outbound interface.\n-"
+        },
+        {
+            "Parameters": "route-forward",
+            "Info": "If a discard PBR policy is enabled in this command, and all the specified outbound interfaces were shut down, the parameter route-forward can be configured to return packets to the original forwarding process.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] redirect ipv6-nexthop 2001:db8::2:2 interface GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFor the IPv6 packets involved in the complex traffic classification, you can run the redirect ipv6-nexthop command to assign the IPv6 address and configure the outbound interface of the next hop for redirection.\nPrecautions\nIf you have specified the outbound interface, strong policy routing is enabled. The device forwards packets based on the specified next hop and the outbound interface but does not search the FIB table. The outbound interface can be a POS interface, GE interface, GE sub-interface, IP-trunk interface, Eth-Trunk interface and Eth-Trunk sub-interface, Serial interface, MP-group interface.\nOne traffic behavior has only one redirect configuration. To create another redirect configuration, you must delete the existing one.\nA traffic policy containing redirecting actions can be applied to only the inbound direction of an interface.\nTo switch the forward policy and discard policy, delete the original configuration and reconfigure one.\nAssociating redirection with NQA test ensures that the IP address of the next hop for redirection is reachable. The type of the NQA test instance must be ICMP. To implement real-time check on the reachability of the next hop for redirection, enable the NQA test instance to perform periodical check.\nPolicy-based routing supports redirection only for incoming traffic. MF classification configured for outgoing traffic does not take effect."
+}

@@ -1,0 +1,69 @@
+{
+    "PageTitle": "local-ce",
+    "FuncDef": "The local-ce ip command specifies on an AC interface the IP address of the Ethernet interface used by a local CE to connect to the AC interface.\nThe undo local-ce ip command deletes the configuration.\nThe local-ce mac broadcast command configures a broadcast address as the destination MAC address for a PE to send data frames to the local CE.\nThe undo local-ce mac broadcast command deletes the configuration.\nThe local-ce mac command on an AC interface the MAC address of the Ethernet interface used by a local CE to connect to the AC interface.\nThe undo local-ce mac command deletes the configuration.\n\n\n By default, the IP address of the Ethernet interface used by a local CE to connect to an AC interface is not specified on the AC interface. \n By default, a PE does not use the broadcast address as the destination MAC address to send data frames to a local CE. \n By default, the MAC address of the Ethernet interface used by a local CE to connect to an AC interface is not specified on the AC interface.",
+    "CLIs": [
+        "local-ce { ip <ip-address> | mac { <mac-address> | broadcast } }",
+        "undo local-ce ip",
+        "undo local-ce mac",
+        "undo local-ce mac broadcast"
+    ],
+    "ParentView": [
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "40GE interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "XGE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50|100GE sub-interface view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "400GE Layer 2 sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip ip-address",
+            "Info": "Specifies the IP address of the Ethernet main interface or sub-interface on the local CE.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies the MAC address of the Ethernet main interface or sub-interface on the local CE.\nThe value is in the format of H-H-H."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] local-ce mac 00e0-fc20-b3a8"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] local-ce mac broadcast"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] local-ce ip 192.168.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nIf IP interworking is configured on the Ethernet AC interface on a PE, you need to run the local-ce mac or local-ce ip command on this AC interface to specify the MAC or IP address of the Ethernet interface connecting the local CE to the AC interface, so as to ensure communication between CEs.\nIf neither of the preceding commands is executed, you can run the local-ce mac broadcast command to configure a broadcast address as the destination MAC address for the PE to send data frames to the local CE.\n\nPrerequisites\n\n\nIP interworking has been configured for VPWS connections on the PE.\nThe AC interface on the PE is an Ethernet interface.\n\n\nConfiguration Impact\n\nAfter receiving frames from a remote PE, a PE sends them to the local CE. If the MAC address of the local CE is neither statically configured using the local-ce mac command nor dynamically learned, the PE will send ARP requests to the IP address configured using the local-ce ip command.\nAfter a MAC address is configured using the local-ce mac command, a PE encapsulates the MAC address into the data frame received from the remote PE before sending the data frame to the local CE.\n\nPrecautions\n\nBy default, a PE detects whether the CE with the MAC address that is dynamically learned by the PE is still being connected at intervals of 20 minutes. If the PE detects that the CE is disconnected, it deletes the ARP entry with this MAC address.\nIf the AC interface on a PE is an Ethernet sub-interface, the PE attaches the VLAN tag of the sub-interface to the data frame received from the remote PE before sending the data frame to the local CE."
+}

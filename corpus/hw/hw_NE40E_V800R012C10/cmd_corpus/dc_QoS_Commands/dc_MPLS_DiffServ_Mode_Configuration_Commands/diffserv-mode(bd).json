@@ -1,0 +1,45 @@
+{
+    "PageTitle": "diffserv-mode(Bridge domain view)",
+    "FuncDef": "The diffserv-mode command configures a DiffServ mode for a bridge domain (BD) to implement end-to-end QoS guarantee.\nThe undo diffserv-mode command deletes the DiffServ mode configured for a BD.\nBy default, a BD uses the Uniform DiffServ mode.",
+    "CLIs": [
+        "diffserv-mode { pipe <service-class> <color> | short-pipe <service-class> <color> [ domain <ds-name> ] | uniform }",
+        "undo diffserv-mode"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pipe",
+            "Info": "Configures the DiffServ mode for a BD as Pipe.\n-"
+        },
+        {
+            "Parameters": "service-class",
+            "Info": "Specifies the Class of Service (CoS) when a packet enters a public network from a private network.\nThe value can be CS7, CS6, EF, AF4, AF3, AF2, AF1, or BE."
+        },
+        {
+            "Parameters": "color",
+            "Info": "Specifies a color for marking the drop precedence of a packet that enters a public network from a private network.\nThe value can be green, yellow, or red."
+        },
+        {
+            "Parameters": "short-pipe",
+            "Info": "Configures the DiffServ mode for a BD as Short Pipe.\n-"
+        },
+        {
+            "Parameters": "domain ds-name",
+            "Info": "Specifies a DS domain name that uses a specified PHB on an egress node when the DiffServ mode is Short Pipe.\nThe value is a string of 1 to 48 characters."
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Configures the DiffServ mode for a BD as Uniform.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] diffserv-mode pipe af1 green"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen multiple BDs access a VPLS network, run the diffserv-mode command to configure a DiffServ mode for each BD.\nWhen you configure a DiffServ mode, note the following:\nIf you want to differentiate service priorities in a BD, configure the Uniform mode.If you do not want to differentiate service priorities in a BD, configure the Pipe or Short-Pipe mode.\n\nConfiguration Impact\nWhen you configure a service type for packets entering a public network from a private network, you have the following options:\nTo transmit signaling protocols, configure the service type as CS7 or CS6.To guarantee low-delay services, configure the service type as EF.To guarantee bandwidth of key data services, configure the service type as AF4, AF3, AF2, or AF1.To transmit best-effort services without a strict QoS guarantee, configure the service type as BE.\nPackets of the preceding service types are sent in descending order of priorities.\nColors of packets enter a public network from a private network are marked green, yellow, and red in ascending order of drop precedence.\n\nPrecautions\nDifferent DiffServ mode is configured for PE egress and ingress with the following restriction:\nIn the same BD view, the vxlan vni command and diffserv-mode command are mutually exclusive.\nIf the diffserv-mode command is configured both in the BD view and VSI view, the one configured in the BD view takes effect.\nVXLAN supports only BDs in Uniform DiffServ mode but not BDs in Pipe or Short-pipe DiffServ mode. If a BD is bound to a VNI, the BD cannot be configured to work in Pipe or Short-pipe DiffServ mode. If a BD is configured to work in Pipe or Short-pipe DiffServ mode, the BD cannot be bound to a VNI."
+}

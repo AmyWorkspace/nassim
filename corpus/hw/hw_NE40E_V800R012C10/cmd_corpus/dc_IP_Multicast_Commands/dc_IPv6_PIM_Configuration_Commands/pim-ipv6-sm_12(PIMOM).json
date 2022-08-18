@@ -1,0 +1,70 @@
+{
+    "PageTitle": "pim ipv6 neighbor-policy",
+    "FuncDef": "The pim ipv6 neighbor-policy command configures a policy for filtering PIM neighbors and sets a range of valid PIM neighbor addresses.\nThe undo pim ipv6 neighbor-policy command restores the default setting.\nBy default, no policy is configured for filtering PIM neighbors, and the valid range of PIM neighbor addresses is not limited.",
+    "CLIs": [
+        "pim ipv6 neighbor-policy { <basic-acl6-number> | acl6-name <acl6-name> }",
+        "undo pim ipv6 neighbor-policy"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basic-acl6-number",
+            "Info": "Specifies the number of a basic IPv6 ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named basic IPv6 ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 number 2001",
+            "[*HUAWEI-acl6-basic-2001] rule permit source 2000::1 128",
+            "[*HUAWEI-acl6-basic-2001] quit",
+            "[*HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] pim ipv6 neighbor-policy 2001"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 name myacl basic",
+            "[*HUAWEI-acl6-basic-myacl] rule permit source 2000::1 128",
+            "[*HUAWEI-acl6-basic-myacl] quit",
+            "[*HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] pim ipv6 neighbor-policy acl6-name myacl"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo protect a Router against pseudo PIM Hello message attacks, run the pim ipv6 neighbor-policy command to set a range of valid PIM neighbor addresses. The Router then discards Hello messages received from devices whose addresses are not in the specified range.\nPrerequisites\nThe multicast routing function has been enabled using the multicast ipv6 routing-enable command in the public network instance view.\nConfiguration Impact\nIf the pim ipv6 neighbor-policy command is run more than once, the latest configuration overrides the previous one.\nAfter being configured with the pim ipv6 neighbor-policy command, an interface sets up neighbor relationships only with the devices whose IP addresses are in the specified range of valid addresses.\nIf a PIM neighbor address is permitted by the IPv6 ACL, Hello messages sent by this PIM neighbor are accepted.If a PIM neighbor address is denied by the IPv6 ACL or no action is configured for this PIM neighbor address, Hello messages sent by this PIM neighbor are discarded.If the IPv6 ACL specified in the pim ipv6 neighbor-policy command does not exist, all Hello messages are discarded.\n\nPrecautions\nTo make the neighbor filtering function take effect on an interface, this function must be configured on all Routers that set up PIM neighbor relationships with this interface."
+}

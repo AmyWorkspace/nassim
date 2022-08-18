@@ -1,0 +1,87 @@
+{
+    "PageTitle": "port-mirroring",
+    "FuncDef": "The port-mirroring command configures a mirrored port where the sent or received packets are mirrored.\nThe undo port-mirroring command deletes the configuration.\nBy default, no mirrored port is configure on the Device.",
+    "CLIs": [
+        "port-mirroring inbound [ cpu-packet ] [ user-defined-filter <id> ]",
+        "port-mirroring { inbound | outbound } vlan { <vlan-id1> [ to <vlan-id2> ] }",
+        "port-mirroring outbound [ user-defined-filter <id> ]",
+        "port-mirroring { inbound | outbound } fragment",
+        "undo port-mirroring inbound [ cpu-packet ] [ user-defined-filter <id> ]",
+        "undo port-mirroring { inbound | outbound } vlan { <vlan-id1> [ to <vlan-id2> ] }",
+        "undo port-mirroring outbound [ user-defined-filter <id> ]",
+        "undo port-mirroring { inbound | outbound } fragment"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "100GE interface view",
+        "10GE sub-interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "25GE sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "GE-Trunk member interface view",
+        "GE optical interface view",
+        "GE sub-interface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "Serial interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cpu-packet",
+            "Info": "Indicates packets to be sent to the CPU. If the cpu-packet keyword is not configured, all the packets received on the mirrored port are mirrored.\n-"
+        },
+        {
+            "Parameters": "user-defined-filter id",
+            "Info": "Specifies a user-defined rule ID.\nThe value is an integer ranging from 1 to 8."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates incoming packets, to be specific, the packets received by the mirrored port.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates outgoing packets, to be specific, the packets sent by the mirrored port.\n-"
+        },
+        {
+            "Parameters": "vlan vlan-id1",
+            "Info": "Specifies the start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vlan-id2",
+            "Info": "Specifies the end VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "fragment",
+            "Info": "Implements mirroring in the MP-group interface.\nThis parameter applies only to the <CR53CFE1> and <CR53C2CFB>.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] port-mirroring inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] port trunk allow-pass vlan 1 to 10",
+            "[*HUAWEI-GigabitEthernet1/0/0] port-mirroring inbound vlan 3 to 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] observe user-defined-filter 1 offset 10 value abcdabcd ffffffff",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] port-mirroring inbound user-defined-filter 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nInterface status of network devices need to be observed and analyzed during network running. If a forwarding interface is directly monitored and analyzed, its forwarding performance may be affected. Mirroring copies packets from an interface (specified as the mirrored port) to another interface (specified as the observing port). The observing port then forwards the copy of packets to a packet analyzer. Users can analyze mirrored packets to locate faults on the live network.\nPrerequisites\nNo other configuration is required before you run the port-mirroring command. To implement the mirroring function, you must configure an observing port and specify an observing port on an interface board.\nIf matching a packet against a user-defined any byte matching rule is required, run the observe user-defined-filter command to configure a user-defined any byte matching rule.\nPrecautions\nThe POS interface on which APS is enabled does not support port mirroring. The POS interface on which port mirroring is configured does not support APS.\nMirroring and local packet header obtaining are mutually exclusive.\nThe same interface can serve as either the mirrored port or the observing port.\nThe observing port and mirrored port cannot be configured on the main interface or sub-interfaces of the same Eth-Trunk interface.\nYou can specify the vlan parameter on a Layer 2 interface so that only packets with a specified VLAN ID are mirrored. When a Layer 2 interface is configured with the access type and is added to a VLAN using the port default vlan command, if only packets with a specified VLAN ID need to be mirrored, the original packets on the mirrored port do not carry any VLAN ID, but the mirrored packets sent by the observing carry one VLAN ID."
+}

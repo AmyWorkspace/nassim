@@ -1,0 +1,24 @@
+{
+    "PageTitle": "snmp-agent local-engineid",
+    "FuncDef": "The snmp-agent local-engineid command sets an engine ID for a local SNMP agent.\nThe undo snmp-agent local-engineid command restores the engine ID of a local SNMP agent to the default value.\nBy default, the VRP uses an internal algorithm to automatically generate an engine ID. The engine ID consists of an enterprise number and device information.",
+    "CLIs": [
+        "snmp-agent local-engineid <engineid>",
+        "undo snmp-agent local-engineid"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "local-engineid engineid",
+            "Info": "Specifies the engine ID of a local SNMP agent.\nThe value is a string of 10 to 64 hexadecimal characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent local-engineid 800007DB03360102101100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEach device managed by the NMS needs only one engine ID to identify an SNMP agent. By default, each device has one engine ID. The network administrator needs to ensure that every engine ID in a domain is unique. Communication between the NMS and SNMP agent can be authenticated and encrypted using this engine ID.\nThe snmp-agent local-engineid command configures the engine ID of a local SNMP entity. The algorithm for generating the engine ID follows the following rules:\nThe first bit must be one.The length of the octet strings varies. The first four octets are set to the binary equivalent of the agent, which is SNMP management private enterprise number and is assigned by the Internet Assigned Numbers Authority (IANA).The device information can be configured manually. It is recommended that the IP address or MAC address of the device be used as the device information to uniquely identify the device.\nIf a local engine ID is configured or changed, information about existing SNMPv3 users is deleted.\n\nConfiguration Impact\nThe password summary used by an SNMPv3 user is calculated using MD5 or SHA based on the user password and engine ID of a local SNMP agent. If the engine ID of the local SNMP agent is changed, the generated password summary becomes invalid. As a result, a new password summary needs to be generated for the SNMPv3 user.\nPrecautions\nThe default engine ID is saved in the configuration file. Restarting the device or changing the main control board will not change the engine ID.If you have set an engine ID using the snmp-agent local-engineid command, the configured ID is used as the engine ID of the local device.On a device with the SNMP agent function enabled using the snmp-agent command, the system automatically uses the default engine ID for the local SNMP agent."
+}

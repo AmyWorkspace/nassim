@@ -1,0 +1,54 @@
+{
+    "PageTitle": "peer as-path-filter export (BGP-VPN instance IPv4 address family view)",
+    "FuncDef": "The peer as-path-filter export command configures a policy based on an AS_Path list for filtering BGP routes to be advertised to a specified peer.\nThe undo peer as-path-filter export command cancels this configuration.\nBy default, no policy based on an AS_Path list is configured for filtering BGP routes to be advertised to a peer, and all the BGP routes will be advertised to the peer.",
+    "CLIs": [
+        "peer <ipv4-address> as-path-filter { <number> | <name> } export",
+        "undo peer <ipv4-address> as-path-filter { <number> | <name> } export"
+    ],
+    "ParentView": [
+        "BGP-labeled VPN instance IPv4 address family view",
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "number",
+            "Info": "Specifies the number of an AS_Path filter.\nThe value is an integer ranging from 1 to 256."
+        },
+        {
+            "Parameters": "name",
+            "Info": "Specifies the name of an AS_Path filter.\nThe value is a string of 1 to 51 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-vpna] peer 1.1.1.1 as-number 100",
+            "[*HUAWEI-bgp-instance-vpna] quit",
+            "[*HUAWEI-bgp] ipv4-labeled-unicast vpn-instance vpna",
+            "[*HUAWEI-bgp-labeled-vpna] peer 1.1.1.1 enable",
+            "[*HUAWEI-bgp-labeled-vpna] peer 1.1.1.1 as-path-filter 3 export",
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-vpna] peer 1.1.1.1 as-number 100",
+            "[*HUAWEI-bgp-vpna] peer 1.1.1.1 as-path-filter 3 export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the peer as-path-filter export command is used to apply a route filtering policy based on an AS_Path list to BGP routes to be advertised to a specified peer, the routers that do not match the policy are filtered out.\nPrerequisites\nThe ip as-path-filter command has been run to define an AS-Path filter.\nPrecautions\nOnly one AS_Path filter can be used to filter routes to be advertised to the same peer.\nThe peer as-path-filter export command is mutually exclusive with the peer route-filter export commands."
+}

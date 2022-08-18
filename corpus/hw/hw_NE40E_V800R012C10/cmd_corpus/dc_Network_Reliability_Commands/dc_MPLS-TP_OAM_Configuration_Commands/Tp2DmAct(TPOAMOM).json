@@ -1,0 +1,63 @@
+{
+    "PageTitle": "delay-measure two-way",
+    "FuncDef": "The delay-measure two-way command enables on-demand two-way frame DM and displays statistics in real time.\nBy default, on-demand two-way frame DM is disabled.",
+    "CLIs": [
+        "delay-measure two-way [ interval { 1000 | 10000 } | count <count-value> | exp <exp-value> | two-time-stamp ] *"
+    ],
+    "ParentView": [
+        "Maintenance entity group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Sets the interval at which DMMs are sent.\nThe value is either 1000 or 10000, in milliseconds. The default value is 1000."
+        },
+        {
+            "Parameters": "count count-value",
+            "Info": "Specifies the number of DMMs to be sent.\nThe value is an integer ranging from 1 to 60. The default value is 5."
+        },
+        {
+            "Parameters": "exp exp-value",
+            "Info": "Specifies a priority for DMMs.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7."
+        },
+        {
+            "Parameters": "two-time-stamp",
+            "Info": "Indicates that the calculation mode is two-timestamp.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls static-l2vc destination 4.4.4.4 400 transmit-vpn-label 100 receive-vpn-label 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] mpls-tp meg test",
+            "[*HUAWEI-mpls-tp-meg-test] me l2vc peer-ip 4.4.4.4 vc-id 400 vc-type vlan mep-id 1 remote-mep-id 2",
+            "[*HUAWEI-mpls-tp-meg-test] commit",
+            "[~HUAWEI-mpls-tp-meg-test] delay-measure two-way interval 1000 count 10",
+            "Two-way delay measure statistics",
+            "delay(us):        delay variation(us):",
+            "1347              --",
+            "1405              58",
+            "1390              15",
+            "1327              63",
+            "1426              99",
+            "1500              74",
+            "1416              84",
+            "1245              171",
+            "1322              77",
+            "1406              84",
+            "The Max delay: 1500, The Max delay variation: 171",
+            "The Min delay: 1245, The Min delay variation: 15",
+            "The delay average: 1378, The delay variation average: 81",
+            "Total sent Packets Number: 10, Total received Packets Number: 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDM is an MPLS-TP performance monitoring function. One-way frame DM and two-way frame DM are supported.\nTo enable on-demand one-way frame DM, run the delay-measure one-way command.To enable on-demand two-way frame DM and display statistics in real time, run the delay-measure two-way command.\nTwo-way frame DM is performed by a local MEP to send a DMM to its RMEP and then receive a DMR from the RMEP. After two-way frame DM is configured, a MEP sends a DMM with the TxTimeStampf value (the time when the DMM was sent) at the interval specified by interval. After receiving the DMM, the RMEP replies with a DMR. This reply carries RxTimeStampf (the time when the DMM was received) and TxTimeStampb (the time when the DMR was sent). The value in every field of the DMM is copied to the DMR, with the exception that the source and destination MAC addresses are interchanged. Upon receipt of the DMR, the MEP calculates the two-way frame delay using the following equation:\nFrame delay = (RxTimeb - TxTimeStampf) - (TxTimeStampb - RxTimeStampf)\nIf count-value is greater than 1, the frame delay is recalculated each time the specified interval expires. This process repeats until count-value is reached.\n\nPrerequisites\nThe ME of the MEG has been bound to a tunnel."
+}

@@ -1,0 +1,29 @@
+{
+    "PageTitle": "graceful-restart timer reconnect",
+    "FuncDef": "The graceful-restart timer reconnect command sets the value of the Reconnect timer of an LDP session.\nThe undo graceful-restart timer reconnect command restores the default Reconnect timer value.\nThe default value of the Reconnect timer of an LDP session is 300s.",
+    "CLIs": [
+        "graceful-restart timer reconnect <time>",
+        "undo graceful-restart timer reconnect"
+    ],
+    "ParentView": [
+        "MPLS-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time",
+            "Info": "Specifies the value of the reconnect timer of an LDP session.\nThe value is an integer ranging from 3 to 259200, in seconds. The default value (300s) is recommended."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] graceful-restart",
+            "[*HUAWEI-mpls-ldp] graceful-restart timer reconnect 45",
+            "Warning: All the related sessions will be deleted if the operation is performed! Continue? [Y/N]: y"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the GR restarter performs the active/standby switchover, the GR helper detects that the LDP session with the GR restarter fails, and then starts the Reconnect timer and waits for the reestablishment of the LDP session.\nIf the LDP session between the GR helper and the GR restarter has not been established after the Reconnect timer times out, the GR helper immediately deletes the MPLS forwarding entries associated with the GR restarter and exits from the GR help process.If the LDP session between the GR helper and the GR restarter is established before the Reconnect timer times out, the GR helper deletes the timer and starts the Recovery timer.\nDuring LDP GR, when the reestablishment time of the LDP session is negotiated, the value of the Reconnect timer that takes effect on the local end is the smaller value between the value of the neighbor-liveness timer on the GR helper and the value of the Reconnect timer on the GR restarter.\n\nPrerequisites\nMPLS and MPLS LDP have been enabled globally.\nLDP GR has been enabled globally.\nImplementation Procedure\nWhen the graceful-restart timer reconnect command is run, the system displays the following message:\nWarning: All the related sessions will be deleted if the operation is performed! Continue? [Y/N]:\nTo confirm to run the command, enter y.\nConfiguration Impact\nAfter the graceful-restart timer reconnect command is run, the reestablishment time of the LDP session is equal to the smaller value between the value of the neighbor-liveness timer on the GR helper and the value of the Reconnect timer on the GR restarter.\nPrecautions\nChanging the value of the Reconnect timer causes the reestablishment of all the LDP sessions."
+}

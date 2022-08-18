@@ -1,0 +1,40 @@
+{
+    "PageTitle": "opcode end-dt4",
+    "FuncDef": "The opcode end-dt4 command configures a static SRv6 End.DT4 SID operation code (Opcode).\nThe undo opcode end-dt4 command deletes a static SRv6 End.DT4 SID operation code.\nBy default, no static SRv6 End.DT4 SID operation code is configured.",
+    "CLIs": [
+        "opcode <func-opcode> end-dt4 [ vpn-instance <vpn-instance-name> [ evpn | evpn-l3vpn ] ]",
+        "undo opcode <func-opcode> [ end-dt4 [ vpn-instance <vpn-instance-name> [ evpn | evpn-l3vpn ] ] ]"
+    ],
+    "ParentView": [
+        "Segment routing IPv6 locator view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "func-opcode",
+            "Info": "Specifies a static SRv6 End.DT4 SID operation code.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Displays information about local SRv6 SID tables based on a specified VPN instance name.\nIf this parameter is not configured, it means that the End.DT4 SID is configured for the public network instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "evpn",
+            "Info": "EVPN protocol.\n-"
+        },
+        {
+            "Parameters": "evpn-l3vpn",
+            "Info": "EVPN and L3VPN protocol.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] locator test1 ipv6-prefix 100:: 64 static 32",
+            "[*HUAWEI-segment-routing-ipv6-locator] opcode ::300 end-dt4 vpn-instance vpn1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn SRv6 SID is a 128-bit IPv6 address expressed in the Locator:Function:Args format. The Function field is also called Opcode, and different operation codes define different functions. Operation codes can be dynamically assigned using a BGP or be configured using the opcode command.\nStatic operation codes must be configured within the static operation code segment to prevent conflicts with dynamically assigned operation codes. The length of a static operation code segment is configured through the static static-length parameter in the locator command to determine the number of static operation codes that can be configured in a specified locator range.\nAfter you run the opcode command to configure various types of operation codes, the Locator, Opcode, and Args fields form a unique SRv6 SID. The SRv6 SID is then added to the local SID table on the device and also advertised externally through a routing protocol. In forwarding, the Locator field in the SRv6 SID instructs other nodes to find the SRv6 SID generation node through addressing and forward SRv6 packets to the node; the Opcode field instructs the SRv6 SID generation node to implement corresponding functions.\nEnd.DT4 (short for decapsulation and specific IPv4 table lookup) supports packet decapsulation and lookup in a specified IPv4 routing table for packet forwarding. End.DT4 SIDs are mainly used in L3VPNv4 scenarios as per-VPN SIDs.\nEnd.DT4 can be disassembled into End + D + T4, where D indicates decapsulation and T4 indicates IPv4 table lookup for forwarding. Therefore, each End.DT4 SID needs to be bound to an IPv4 routing table, which can be either the IPv4 routing table of a VPN instance or a common IPv4 routing table.\nThe End.DT4 SID instruction includes the following operations:\n Removes the outer IPv6 header and SRH. Searches the IPv4 routing table bound to the End.DT4 SID to forward the inner IPv4 packet.\n\nPrecautions\nTo ensure proper forwarding, configured static SIDs and IPv6 addresses configured on interfaces cannot conflict with each other.\nWhen configuring this command:\nIf evpn or evpn-l3vpn parameters are not configured, then End.DT4 SID is only used for BGP L3VPN.If evpn parameters are configured, then End.DT4 SID is only used for EVPN L3VPN.If the evpn-l3vpn parameter is configured, the End.DT4 SID is used for both BGP L3VPN and EVPN L3VPN."
+}

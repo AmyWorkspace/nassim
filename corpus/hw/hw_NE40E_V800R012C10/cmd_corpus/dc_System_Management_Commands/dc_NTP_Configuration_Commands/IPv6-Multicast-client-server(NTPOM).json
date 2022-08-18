@@ -1,0 +1,51 @@
+{
+    "PageTitle": "ntp-service multicast-server ipv6",
+    "FuncDef": "The ntp-service multicast-server ipv6 command configures an interface on the local device to send NTP multicast packets. The local device runs in the multicast server mode.\nThe undo ntp-service multicast-server ipv6 command removes the local device from the NTP multicast server mode.\nBy default, the multicast service is not configured.",
+    "CLIs": [
+        "ntp-service multicast-server ipv6 [ <ipv6Addr> ] [ authentication-keyid <keyid> | ttl <ttl-number> | port <portNumber> ] *",
+        "undo ntp-service multicast-server ipv6 [ <ipv6Addr> ]"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "Loopback interface view",
+        "POS interface view",
+        "Tunnel interface view",
+        "VLANIF interface view",
+        "Virtual template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "authentication-keyid keyid",
+            "Info": "Specifies a key ID used when sending messages to a multicast client.\nThe value is an integer ranging from:\n1 to 4294967295 (version 1 to 3).1 to 65535 (version 4)."
+        },
+        {
+            "Parameters": "ttl ttl-number",
+            "Info": "Specifies the life span of multicast packets.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "port portNumber",
+            "Info": "Specifies the port number to be used as the destination port in NTP multicast packets.\nThe number is an integer that can be 123, or ranges from 1025 to 65535. The default value is 123."
+        },
+        {
+            "Parameters": "ipv6 ipv6Addr",
+            "Info": "Specifies a multicast IPv6 address.\nThe default value is FF0E::0101."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ntp-service authentication-keyid 4 authentication-mode hmac-sha256 123456",
+            "[*HUAWEI] interface 10GE 1/0/0",
+            "[*HUAWEI-10GE1/0/0] ipv6 enable",
+            "[*HUAWEI-10GE1/0/0] ntp-service multicast-server ipv6 FF0E::0101 authentication-keyid 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can configure a device to determine whether NTP multicast packets need to be sent through an existing interface to a configured multicast group address or not. Based on this, the local device acts as multicast server and sends multicast messages periodically for time synchronization to multicast clients.\nIn VS mode, this command is supported only by the admin VS.\nPrecautions\nIf this command is the first NTP configuration command, the system automatically adds the ntp-service [ ipv6 ] server disable command in the configuration file to disable the NTP service. To enable the NTP service, run the undo ntp-service [ ipv6 ] server disable command. If this command is the last NTP configuration command to be deleted, the system automatically deletes the ntp-service [ ipv6 ] server disable command from the configuration file.\nOn an IPv6 network, multiple primary IPv6 addresses can be configured on the source interface. The system by default uses the most recently updated IPv6 address as the source address of the NTP multicast server. To ensure that the server can properly receive and process packets from a client, set this address as the source address listened by the NTP server."
+}

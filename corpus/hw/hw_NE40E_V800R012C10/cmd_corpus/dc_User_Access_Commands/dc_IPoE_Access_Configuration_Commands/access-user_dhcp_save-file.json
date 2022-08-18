@@ -1,0 +1,28 @@
+{
+    "PageTitle": "access-user dhcp save-file",
+    "FuncDef": "The access-user dhcp save-file command writes DHCPv4 user information saved in the high-end memory to the CF card and specifies the directory and file name. The DHCPv4 users include those who share one MAC address but go online from multiple sessions.\nBy default, DHCPv4 user information saved in the high-end memory is not written to the CF card.",
+    "CLIs": [
+        "access-user dhcp save-file <file-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "save-file file-name",
+            "Info": "Specifies the directory and name of the file to which DHCPv4 user information saved in the high-end memory is written.\nThe name is a string of 1 to 64 case-insensitive characters. If you want to save DHCPv4 user information in the CF card of the master main control board, specify the directory and file name as cfcard:/autosave/*.bak or *.bak. If you want to save DHCPv4 user information in the CF card of the slave main control board, specify the directory and file name as slave#cfcard:/autosave/*.bak. The file name extension must be .bak."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] access-user dhcp auto-save max-user-number 16000",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-domain] domain test",
+            "[~HUAWEI-domain-test] commit",
+            "[~HUAWEI-domain-test] access-user dhcp auto-save enable",
+            "[~HUAWEI] access-user dhcp save-file cfcard:/autosave/user.bak"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the device is powered off and restarted, DHCPv4 user information saved in the high-end memory will be lost, affecting services. Run the access-user dhcp save-file command before powering off the device to write the DHCPv4 user information saved in the high-end memory to the CF card. After the device is restarted, run the access-user dhcp recover-file command to restore the DHCPv4 user information saved in the CF card to the high-end memory. The device then allows DHCPv4 users whose information is saved in the high-end memory to go online automatically.\nPrerequisites\nThe access-user dhcp auto-save command has been run to enable automatic backup of DHCPv4 user information globally and configure the maximum number of the DHCPv4 users.The access-user dhcp auto-save enable (domain view) command has been run to enable automatic backup of DHCPv4 user information in a domain.\n\nConfiguration Impact\nIf there is a large amount of DHCPv4 user information saved in the high-end memory, it takes a long time for the access-user dhcp save-file command to write the information to the CF card, which may affect services. Exercise caution when you run this command.\nThe information takes up storage space in the CF card. The more users whose information is saved in the CF card, the more storage space the information takes up.\nIf DHCPv4 user information changes when the command is being executed, the changed information cannot be written to the CF card.\nFollow-up Procedure\nRun the access-user dhcp auto-recover enable command to enable automatic DHCPv4 user login.\nAfter the device is restarted, run the access-user dhcp recover-file command to restore the DHCPv4 user information saved in the CF card to the high-end memory.\nPrecautions\nThis command is supported only on the admin VS.\nThe following DHCPv4 user information is saved: MAC address, IP address, VLAN, access interface, VPN instance name, domain name, lease, Option 82, Option 60, Option 61, and IP address of the DHCPv4 server. The DHCPv4 user information is used only when the DHCPv4 users go online automatically. To ensure security, do not save DHCPv4 user information in the CF card for a long time and clear it in time."
+}

@@ -1,0 +1,48 @@
+{
+    "PageTitle": "vrrp vrid track ipsec-instance",
+    "FuncDef": "The vrrp vrid track ipsec-instance command makes a VRRP backup group to track an IPSec instance and adjust its priority.\nThe undo vrrp vrid track ipsec-instance command restores the default setting.\nBy default, a VRRP backup group does not track the status of an IPSec instance.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id> track ipsec-instance <instance-id> [ reduced <value-reduced> ]",
+        "undo vrrp vrid <virtual-router-id> track ipsec-instance [ <instance-id> ]"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "25GE interface view",
+        "40GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE sub-interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view",
+        "VE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-router-id",
+            "Info": "Specifies the ID of a VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "instance-id",
+            "Info": "Specifies the ID of the bound IPSec instance.\nThe value is an integer ranging from 1 to 128."
+        },
+        {
+            "Parameters": "reduced value-reduced",
+            "Info": "Specifies the value by which the VRRP priority reduces if the tracked IPSec instance goes Down.\nThe value is an integer ranging from 1 to 255. By default, the VRRP priority reduces by 10 if the tracked IPSec instance goes Down."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] ipsec instance 1",
+            "[*HUAWEI-ipsec-instance-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] vrrp vrid 1 virtual-ip 10.1.1.10",
+            "[*HUAWEI-GigabitEthernet1/0/0] vrrp vrid 1 track ipsec-instance 1 reduced 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGenerally, IPSec tunnels are established to ensure the privacy, completeness, authenticity, and anti-relay of packets; the VRRP ensures the device-level reliability. When VRRP and IPSec tunnel are deployed on a same network, the status of an IPSec instance must be tracked by the VRRP backup group, which ensures the VRRP backup group can perform a master/slave switchover based on the status of the IPSec instance.\nBased on the status of the IPSec instance, the VRRP backup group adjusts its priority and switches the master and slave devices, ensuring that traffic can be protected.\nBefore configuring a VRRP backup group to track the status of an IPSec instance, confirm that there is a VSU on the device and the IPSec instance has been configured.\nAfter the vrrp vrid track ipsec-instance command is run:\nIf the tracked IPSec instance goes Down, the VRRP backup group will adjust its priority based on the value by which the VRRP priority reduces, then, new master and slave devices will be selected.If the tracked IPSec instance keeps Up, the VRRP priority remains the same.If the tracked IPSec instance is in the Delete state, the VRRP uses the original priority, and deletes the binding relationship with the IPSec instance.\nRun the undo vrrp vrid track ipsec-instance command, and the VRRP backup group uses the original priority and deletes the binding relationship."
+}

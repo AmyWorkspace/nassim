@@ -1,0 +1,43 @@
+{
+    "PageTitle": "prec",
+    "FuncDef": "This command defines a specific IP precedence value that must be matched to perform the associated reclassification actions. If an egress packet on the SAP matches the specified IP precedence value, the forwarding class, profile, or HSMDA egress queue accounting behavior may be overridden. By default, the forwarding class and profile of the packet is derived from ingress classification and profiling functions. The default behavior for HSMDA queue accounting is to use the counters associated with the queue to which the packet is mapped (applies to the 7450 ESS and 7750 SR).",
+    "CLIs": [
+        "prec <ip-prec-value> [ hsmda-counter-override <counter-id> ] [ fc <fc-name> ] [ profile { in | out | exceed | inplus } ]",
+        "no prec <ip-prec-value>"
+    ],
+    "ParentView": [
+        "config>qos>sap-egress"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "fc fc-name",
+            "Info": "This keyword is optional. When specified, packets matching the IP precedence value will be explicitly reclassified to the forwarding class specified as fc-name regardless of the ingress classification decision. The explicit forwarding class reclassification may be overwritten by a higher priority DSCP, IPv6 criteria, or IP criteria reclassification match. The FC name defined must be one of the eight forwarding classes supported by the system. To remove the forwarding class reclassification action for the specified precedence value, the prec command must be re-executed without the fc parameter defined. Values-be, l1, af, l2, h1, ef, h2 or nc."
+        },
+        {
+            "Parameters": "profile {in | out | exceed | inplus}",
+            "Info": "This keyword is optional. When specified, packets matching the IP precedence value will be explicitly reclassified to the specified profile regardless of the ingress profiling decision. The explicit profile reclassification may be overwritten by a higher priority DSCP, IPv6 criteria, or IP criteria reclassification match. To remove the profile reclassification action for the specified precedence value, the prec command must be re-executed without the profile parameter defined."
+        },
+        {
+            "Parameters": "in",
+            "Info": "Specifies that any packets matching the reclassification rule will be treated as in-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "out",
+            "Info": "Specifies that any packets matching the reclassification rule will be treated as out-of-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "exceed",
+            "Info": "Specifies that any packets matching the reclassification rule will be treated as exceed-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "inplus",
+            "Info": "Specifies that any packets matching the reclassification rule will be treated as inplus-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "hsmda-counter-override counter-id",
+            "Info": "The hsmda-counter-override parameter is optional and only has significance on SAPs that are created on an HSMDA. When specified, packets matching the IP precedence value will be mapped to the defined HSMDA exception counter-id for the packets queue group. The default behavior is to use the default counter on the queue group for the queue to which the packet is mapped. The hsmda-counter-override parameter may be overwritten by an IP criteria reclassification rule match. The specified counter-id must be specified as an integer from one to eight. To remove the HSMDA exception counter reclassification action for the specified DSCP value, the dscp command must be re-executed without the hsmda-counter-override parameter defined. Values-1 to 8."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

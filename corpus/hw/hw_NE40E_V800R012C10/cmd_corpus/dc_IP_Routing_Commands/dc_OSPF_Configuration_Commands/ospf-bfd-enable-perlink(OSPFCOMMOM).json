@@ -1,0 +1,34 @@
+{
+    "PageTitle": "ospf bfd (VLANIF interface view)",
+    "FuncDef": "The ospf bfd command enables bidirectional forwarding detection (BFD) on an OSPF interface, or sets parameter values for a BFD session.\nBy default, BFD is not enabled in the OSPF interface view.",
+    "CLIs": [
+        "ospf bfd enable per-link one-arm-echo"
+    ],
+    "ParentView": [
+        "VLANIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "one-arm-echo",
+            "Info": "Enables the echo detection mode.\n-"
+        },
+        {
+            "Parameters": "per-link",
+            "Info": "Enables BFD session per link.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables BFD.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 1",
+            "[*HUAWEI-vlan1] quit",
+            "[*HUAWEI] interface vlanif 1",
+            "[*HUAWEI-Vlanif1] ospf bfd enable per-link one-arm-echo"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEither a link fault or topology change on a network will cause routes to be re-calculated within an area. As such, speeding up the convergence of a routing protocol is critical to improving the network performance.\nAs link faults are inevitable, rapidly detecting these faults and notifying routing protocols is an effective way to quickly mitigate them. This includes associating BFD with a routing protocol to speed up convergence of the routing protocol once a link fault occurs.\nOn a network where BFD detects a link fault, even if the fault is rectified quickly, the involved interface is disconnected due to the fact that the associated BFD session is down. As a result, the link is unstable and traffic is lost. To prevent this issue and ensure high network reliability, run the ospf bfd incr-cost command on an OSPF interface to configure the interface to adjust its cost based on the status of an associated BFD session. If the interface detects a BFD session down event, the interface automatically increases its cost. If an increment value has been specified using cost-value in the command, the interface cost is raised by the specified value. If the max-reachable parameter has been specified in the command, the interface cost is changed to the maximum cost value. In this manner, the problem link associated with the BFD session is not preferentially selected, and traffic is transmitted through other links. When the interface detects that the BFD session goes up, the interface automatically restores its cost to the original value.\nIf multiple physical interfaces are bound to an Eth-Trunk in a VLAN and per-link one-arm-echo is not specified, the BFD session may go Down as long as one of the physical interfaces goes Down. As a result, the OSPF neighbor relationship goes Down. If per-link one-arm-echo is specified in this case, the BFD session goes Down only if all the physical interfaces are Down, which prevents the OSPF neighbor relationship from going Down.\nPrerequisites\nBFD has been enabled on the interface.\nConfiguration Impact\nIf global BFD is not enabled, you can enable BFD on an interface, but BFD sessions cannot be set up in this case. Similarly, if only parameters of a BFD session are set but the ospf bfd enable command is not used, the BFD session cannot be set up.\nBFD configured on an interface takes precedence over BFD configured for a process. If BFD is enabled on an interface, the BFD parameters on the interface are used to establish BFD sessions.\nPrecautions\nAfter BFD is enabled, BFD sessions can be created only between the two ends that have set up an OSPF neighbor relationship and the relationship is in the Full state.The ospf bfd enable and ospf bfd block commands are mutually exclusive.After BFD is disabled from an interface using the undo ospf bfd enable command, the parameters for setting up BFD sessions remain on this interface but no longer take effect."
+}

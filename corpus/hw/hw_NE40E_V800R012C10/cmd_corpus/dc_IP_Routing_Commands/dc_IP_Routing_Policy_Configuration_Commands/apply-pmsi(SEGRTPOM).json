@@ -1,0 +1,46 @@
+{
+    "PageTitle": "apply stitch-pmsi",
+    "FuncDef": "The apply stitch-pmsi command is used to stitch different types of Provider Multicast Service Interfaces (PMSI).\nThe undo apply stitch-pmsi command deletes the stitch of PMSIs.\nBy default, different types of PMSIs are not stitched.",
+    "CLIs": [
+        "apply stitch-pmsi { incoming { rsvp-te p2mp-template <p2mp-template-name> [ mldp root-ip <root-ip-address> ] } | mldp [ root-ip <root-ip-address> ] | rsvp-te p2mp-template <p2mp-template-name> }",
+        "undo apply stitch-pmsi"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "incoming",
+            "Info": "Specifies the inbound direction.\n-"
+        },
+        {
+            "Parameters": "rsvp-te",
+            "Info": "Specifies an RSVP-TE P2MP tunnel.\n-"
+        },
+        {
+            "Parameters": "p2mp-template p2mp-template-name",
+            "Info": "Specifies the P2MP template used by the RSVP-TE P2MP tunnel.\nThe value is a string of 1 to 31 case-sensitive characters. The value cannot contain spaces or start with an underscore (_)."
+        },
+        {
+            "Parameters": "mldp",
+            "Info": "Specifies the mLDP P2MP tunnel.\n-"
+        },
+        {
+            "Parameters": "root-ip root-ip-address",
+            "Info": "Specifies the IP address of the mLDP P2MP tunnel root node.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls te p2mp-template temp2mp",
+            "[*HUAWEI-te-p2mp-template-temp2mp] quit",
+            "[*HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] apply stitch-pmsi incoming rsvp-te p2mp-template temp2mp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a segmented next-generation multicast virtual private network (NG MVPN), different types of tunnels exist in an AS area. These tunnels are established through the different types of PMSIs carried in different routes. Run the apply stitch-pmsi command to stitch different types of PMSIs, so that the different types of tunnels can be connected and multicast traffic can be transmitted from end to end through segmented NG MVPN.\nPrerequisites\nA route-policy has been configured using the route-policy command.\nPrecautions\nIf the tunnel template specified in the p2mp-template parameter does not exist, the configuration cannot be applied. Before running the p2mp-template command, ensure that the mpls te p2mp-template command has been run."
+}

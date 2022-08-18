@@ -1,0 +1,46 @@
+{
+    "PageTitle": "network (BGP view)",
+    "FuncDef": "The network command imports routes to the BGP routing table and advertises them to peers.\nThe undo network command cancels the configuration.\nBy default, BGP does not import routes.",
+    "CLIs": [
+        "network { <ipv4-address> [ <mask> | <mask-length> ] } [ route-policy <route-policy-name> ] [ non-relay-tunnel ]",
+        "network { <ipv4-address> [ <mask> | <mask-length> ] } route-filter <route-filter-name> [ non-relay-tunnel ]",
+        "undo network { <ipv4-address> [ <mask> | <mask-length> ] }"
+    ],
+    "ParentView": [
+        "BGP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a route to be imported by BGP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies an IP address mask. If no mask is specified, the IP address is considered as a classful address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length of an IP address. If no mask length is specified, the IP address is considered as a classful address.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy that is used for route import.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "non-relay-tunnel",
+            "Info": "Prevents the routes imported by BGP from recursing to tunnels.\n-"
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of the route-filter that is used for route import.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] network 1.0.0.0 255.255.0.0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP itself cannot discover routes. Instead, it imports routes discovered by other protocols (such as an IGP or static routes) to the BGP routing table. These imported routes then are transmitted within an AS or between ASs. Before adding routes to the BGP routing table, BGP can filter them based on the routing protocol. Alternatively, if routes in the local routing table need to be manually added to the BGP routing table and then advertised, you can use the network command.\nThe Origin attribute of the routes imported to the BGP routing table using the network command is IGP.\nIf a route with a specific prefix or mask is added to the BGP routing table using the network command, this route is the optimal route selected from all types of protocol routes. Unlike the network command, the import-route command is used to add all routes of a specified protocol, such as RIP, OSPF, IS-IS, static routes, or direct routes to the BGP routing table.\nIn most cases, the routes imported by BGP can recurse to tunnels. However, in some other cases, if the routes imported by BGP recurse to tunnels, a problem will occur. For example, in a seamless MPLS scenario, if the egress protection function is configured on egress MASGs between which a tunnel exists and a route imported by BGP on one of the MASGs recurses to the tunnel, this MASG then recurses the route to another tunnel of a different type. In this case, traffic is directed to the other MASG, which slows down traffic switchover. As a result, the egress protection function does not take effect. To address this problem, specify non-relay-tunnel to prevent the routes imported by BGP from recursing to tunnels.\nPrecautions\nThe network command imports the routes in the local routing table that exactly match the specified destination address and prefix length to the BGP routing table. If mask is not specified, routes are matched against the natural network mask.\nWhen using the undo network command to delete the existing configuration, specify a correct mask.\nThe network route-policy route-policy-name command is mutually exclusive with the network route-filter route-filter-name command."
+}

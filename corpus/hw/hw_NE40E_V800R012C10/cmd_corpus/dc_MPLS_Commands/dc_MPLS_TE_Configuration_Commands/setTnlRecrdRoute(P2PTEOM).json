@@ -1,0 +1,30 @@
+{
+    "PageTitle": "mpls te record-route (Tunnel interface view)",
+    "FuncDef": "The mpls te record-route command enables the route and label record function for a tunnel.\nThe undo mpls te record-route command restores the default setting.\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.\nBy default, the route and label record is disabled.",
+    "CLIs": [
+        "mpls te record-route",
+        "mpls te record-route label",
+        "undo mpls te record-route"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "label",
+            "Info": "Enables the label record function.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] mpls te record-route"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf an MPLS TE tunnel is not established over an explicit path, the system does not record detailed path information. In this case, to view detailed path information about the tunnel, run the mpls te record-route command on a tunnel interface. After the configuration, RROs are carried in Path and Resv messages and record the IP address of each hop along the tunnel. In addition, the keyword label can be configured to record the label of each hop along the tunnel.\nThe route record function is automatically enabled in one of the following situations:\nThe mpls te backup hot-standby command is run to enable hot standby. The route record function that is automatically enabled helps prevent a primary tunnel and a hot-standby tunnel from sharing nodes.The mpls te fast-reroute command is run to enable FRR. The route record function that is automatically enabled helps prevent a primary tunnel and a bypass tunnel from sharing nodes.The mpls te bypass-tunnel command is run to configure a bypass tunnel. The route record function that is automatically enabled helps prevent a primary tunnel and a bypass tunnel to which the primary tunnel is bound from sharing nodes.\n\nConfiguration Impact\nThe mpls te record-route command enables the ingress to collect route and label information on a tunnel.\nThe ingress uses the collected information to determine the path for a hot-standby or FRR bypass tunnel.\nAfter hot standby is enabled, the route record function provides information for the ingress, and the ingress determines whether or not a primary tunnel is bound to an FRR bypass tunnel.After FRR is enabled, the route record function provides information for the ingress, and the ingress determines whether or not a primary tunnel is bound to a hot-standby tunnel.\n\nFollow-up Procedure\nThe display mpls te tunnel path command can be run to display routes and labels associated with each hop along a TE tunnel.\nPrecautions\nThe undo mpls te record-route command must be run before the mpls te signal-protocol command is run."
+}

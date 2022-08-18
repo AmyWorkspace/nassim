@@ -1,0 +1,62 @@
+{
+    "PageTitle": "import-route isis level-1 into level-2 (IS-IS topology view)",
+    "FuncDef": "The import-route isis level-1 into level-2 command enables IS-IS Level-1 area routes to leak to a Level-2 area.\nThe undo import-route isis level-1 into level-2 command disables IS-IS Level-1 area routes from leaking to a Level-2 area.\nBy default, all the Level-1 area routes (except default routes) can leak to a Level-2 area.",
+    "CLIs": [
+        "import-route isis level-1 into level-2 [ tag <tag> | filter-policy { <acl-number> | acl-name <acl-name> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> } | direct allow-filter-policy ] *",
+        "undo import-route isis level-1 into level-2"
+    ],
+    "ParentView": [
+        "IS-IS topology view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies the administrative tag assigned to the imported routes.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "filter-policy",
+            "Info": "Indicates a filtering policy to filter imported routes. Only the IS-IS Level-1 area routes that match the filtering policy can leak to a Level-2 area.\n-"
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL. Only the IS-IS Level-1 area routes that match the ACL rule can leak to a Level-2 area.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL. Only the IS-IS Level-1 area routes that match the ACL rule can leak to a Level-2 area.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list. Only the IS-IS Level-1 area routes that match the IP prefix list can leak to a Level-2 area.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy. Only the IS-IS Level-1 area routes that match the route-policy can leak to a Level-2 area.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route filter policy. The policy is used to filter the imported routes so that only some of the routes of other routing domains can be imported.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Imports direct routes.\n-"
+        },
+        {
+            "Parameters": "allow-filter-policy",
+            "Info": "Indicates a filtering policy to filter the direct routes. If the parameter is configured, only the IS-IS Level-1 area direct routes that match the filtering policy can leak to a Level-2 area. If the parameter is not configured, all Level-1 area direct routes will leak to a Level-2 area.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2000",
+            "[*HUAWEI-acl4-basic-2000] quit",
+            "[*HUAWEI] ip topology red",
+            "[*HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] cost-style wide",
+            "[*HUAWEI-isis-1] topology red topology-id 10",
+            "[*HUAWEI-isis-1-topology-red] import-route isis level-1 into level-2 filter-policy 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen multiple Level-1-2 devices in an IS-IS Level-1 area are connected to a Level-2 area, information about all the routes except the default route in the Level-1 area leak to the Level-2 area. The routes in the Level-1 area destined for one device in the Level-2 area may be forwarded by the same Level-1-2 device, causing traffic imbalance.\nYou can run the import-route isis level-1 into level-2 command on one Level-1-2 device to enable some Level-1 routes to leak to the Level-2 area and run the command on other Level-1-2 devices to enable the rest Level-1 routes to leak to the Level-2 area. Then, traffic that is sent from the Level-2 area and destined for different network segments in the Level-1 area will be forwarded to different Level-1-2 routers.\nPrerequisites\nAn IS-IS process has been created using the isis command.\nConfiguration Impact\nAfter the undo import-route isis level-1 into level-2 command is run, the IS-IS backbone area cannot obtain the routes in the Level-1 area, causing area disconnection.\nPrecautions\nIn the route-policy specified in this command, if-match clauses can be configured to set matching rules, but apply clauses cannot be configured to set route attributes."
+}

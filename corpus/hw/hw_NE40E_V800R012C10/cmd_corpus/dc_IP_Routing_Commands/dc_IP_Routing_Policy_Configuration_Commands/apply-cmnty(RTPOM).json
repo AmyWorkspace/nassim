@@ -1,0 +1,56 @@
+{
+    "PageTitle": "apply community",
+    "FuncDef": "The apply community command applies a BGP community attribute.\nThe undo apply community command deletes the configuration.\nBy default, no BGP community attributes are applied.",
+    "CLIs": [
+        "apply community none",
+        "apply community { <cmntyValue> | <cmntyNum> | internet | no-advertise | no-export | no-export-subconfed } &<1-32> [ additive ]",
+        "undo apply community"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cmntyValue",
+            "Info": "Specifies a community attribute, in the format of aa:nn.\naa and nn are integers, each ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "cmntyNum",
+            "Info": "Specifies the community number.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "internet",
+            "Info": "Indicates that the routes that match the filtering conditions can be sent to all peers. By default, all routes belong to the Internet community.\n-"
+        },
+        {
+            "Parameters": "no-advertise",
+            "Info": "Indicates that the routes that match the filtering conditions are not sent to any peer.\n-"
+        },
+        {
+            "Parameters": "no-export",
+            "Info": "Indicates that the routes that match the filtering conditions are sent to other sub-ASs but not to other ASs.\n-"
+        },
+        {
+            "Parameters": "no-export-subconfed",
+            "Info": "Indicates that the routes that match the filtering conditions are neither sent to other sub-ASs nor to other ASs.\n-"
+        },
+        {
+            "Parameters": "additive",
+            "Info": "Indicates that community attributes are added to the routes that match the filtering conditions.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "Deletes all the community attributes of routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip as-path-filter 8 permit ^10_",
+            "[*HUAWEI] route-policy setcommunity permit node 16",
+            "[*HUAWEI-route-policy] if-match as-path-filter 8",
+            "[*HUAWEI-route-policy] apply community no-export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe community attribute, a private attribute of BGP, simplifies the application of routing policies and facilitates route maintenance and management. A community is a set of destination addresses with the same characteristics. These addresses have no physical boundary and are independent of their ASs. They share one or multiple community attributes, which can be changed or set using the apply community command.\nRun the route-policy command to enter the route-policy view.A route-policy may consist of multiple nodes. The relationship between the nodes is \"OR\". The system matches a route against the nodes in sequence. If the route matches a node, the route matches the route-policy, and the system no longer matches it against other nodes.Each node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nConfiguration Impact\nIf the apply community command is configured in a route-policy, the community attributes of the BGP routes that match the route-policy are changed based on the configurations in the route-policy.\nFor example, the original community attribute of a BGP route is 30. If this BGP route matches a route-policy, the AS number is replaced or added based on the route-policy.\nIf the apply community 100 command is run, the community attribute is changed to 100.If the apply community 100 150 command is run, the community attribute is changed to 100, 150.If the apply community 100 150 additive command is run, the community attribute is changed to 30, 100, 150.If the apply community none command is run, the community attribute of the BGP route is deleted."
+}

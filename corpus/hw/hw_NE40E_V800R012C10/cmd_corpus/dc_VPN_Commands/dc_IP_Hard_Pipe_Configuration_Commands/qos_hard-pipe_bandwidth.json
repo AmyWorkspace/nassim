@@ -1,0 +1,34 @@
+{
+    "PageTitle": "qos hard-pipe bandwidth outbound",
+    "FuncDef": "The qos hard-pipe bandwidth outbound command configures an IP hard-pipe bandwidth.\nThe undo qos hard-pipe outbound command deletes the IP hard-pipe bandwidth.\nBy default, no IP hard-pipe bandwidth is configured.",
+    "CLIs": [
+        "qos hard-pipe { share-mode | exclusive-mode } bandwidth <bandwidth-value> outbound",
+        "undo qos hard-pipe [ { share-mode | exclusive-mode } bandwidth <bandwidth-value> ] outbound"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "share-mode",
+            "Info": "Indicates the shared mode.\n-"
+        },
+        {
+            "Parameters": "exclusive-mode",
+            "Info": "Indicates the exclusive mode.\n-"
+        },
+        {
+            "Parameters": "bandwidth-value",
+            "Info": "Specifies an IP hard-pipe bandwidth.\n<bandwidth-value> varies with interfaces.\nFor an Eth-Trunk interface: The value is an integer ranging from 1 to 4294967294, in Mbit/s.For a GE interface on which the port shaping <shaping-value> [ network-header-length <network-header-length> ] [ pbs <pbs-value> ] command is not configured to restrict the rate at which the interface sends packets: The minimum value is 1, and the maximum value is the interface bandwidth minus 20, in Mbit/s(reserved for soft pipe services).For a GE interface on which the port shaping <shaping-value> [ network-header-length <network-header-length> ] [ pbs <pbs-value> ] command is configured to restrict the rate at which the interface sends packets: The minimum value is 1, and the maximum value is the shaping value minus 20, in Mbit/s(reserved for soft pipe services)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet2/0/0",
+            "[*HUAWEI-GigabitEthernet2/0/0] qos hard-pipe share-mode bandwidth 800 outbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDuring network planning, traffic is classified as hard-pipe traffic and soft-pipe traffic based on interfaces. Hard-pipe traffic must have low delay and no packet loss and not be affected by soft-pipe traffic. Therefore, fixed bandwidth must be allocated to hard-pipe traffic on interfaces. This bandwidth is exclusively available to hard-pipe traffic.\nThe hardware capability determines the supported hard pipe mode.\nTo check the hard pipe capability of interfaces, run the display qos hard-pipe ability command.\nFor those boards or subcards that have strong hardware capabilities and support separation between the soft pipe and hard pipe, setting the mode to share-mode is recommended.For those boards or subcards that have weak hardware capabilities and do not support separation between the soft pipe and hard pipe, setting the hard pipe mode to exclusive-mode is recommended.\n\nPrecautions\nHard pipes work in exclusive mode, which prevents soft pipe service traffic from using the exclusive port. This ensures the desired bandwidth and latency for hard pipe services.\nThe IP hard pipe shared mode is supported only on the /5835-5815-5816-5830v200/.\nWhen the public-network interface of the TE LSP for the IP hard pipe is an inter-subcard trunk interface, each subcard applies for an IP hard pipe bandwidth, causing the IP hard pipe bandwidth consumption to multiply.\nIf some member interfaces of the Trunk do not support share-mode, or exclusive-mode, this command cannot be configured on the Trunk interface.\nIf an interface is bound to a VSI instance and VPLS hard pipe is enabled for the VSI instance using the hard-pipe enable command, the qos hard-pipe bandwidth command cannot be configured on the interface.\nIf both qos hard-pipe share-mode bandwidth, qos car, and car (traffic behavior view) are configured, the qos hard-pipe share-mode bandwidth command configuration overrides the car configuration."
+}

@@ -1,0 +1,34 @@
+{
+    "PageTitle": "dhcpv6-server algorithm",
+    "FuncDef": "The dhcpv6-server algorithm command configures the algorithm for selecting DHCPv6 servers.\nThe undo dhcpv6-server algorithm command restores the default setting.\nBy default, the algorithm for selecting DHCPv6 servers is master/backup.",
+    "CLIs": [
+        "dhcpv6-server algorithm { master-backup | loading-share | polling }",
+        "undo dhcpv6-server algorithm"
+    ],
+    "ParentView": [
+        "DHCPv6 server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "master-backup",
+            "Info": "Configures the algorithm for selecting DHCPv6 servers as master/backup.\n-"
+        },
+        {
+            "Parameters": "loading-share",
+            "Info": "Configures the algorithm for selecting DHCPv6 servers as load balancing.\n-"
+        },
+        {
+            "Parameters": "polling",
+            "Info": "Configures the algorithm for selecting DHCPv6 servers as polling.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcpv6-server group huawei",
+            "[*HUAWEI-dhcpv6-server-group-huawei] commit",
+            "[~HUAWEI-dhcpv6-server-group-huawei] dhcpv6-server algorithm loading-share"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen there is more than one DHCPv6 server in a DHCPv6 server group, you can configure the algorithm for selecting DHCPv6 servers as load balancing, master/backup or polling.\nLoad balancing: The device distributes the load based on the weights of DHCPv6 servers.Master/backup: The first server that you configure is the master server and the others are backup servers.Polling: When multiple servers are configured, the device sends Solicit, Request, Rebind, and Confirm messages to all servers and selects the server that first responds to the messages for subsequent message exchanges.\n\nConfiguration Impact\nThe parameter weight configured in the dhcpv6-server command is valid only if the parameter loading-share is configured in the dhcpv6-server algorithm command.\nPrecautions\nIf the IP address of the link-address route is used as the source IP address and the DHCP6 server is configured with the polling mode:\nWhen a server is configured in the DHCPv6 server group, regardless of whether the polling mode is configured, only the configured server sends packets. Information about only this server, such as the IP address and VPN information, is saved in the user table.If multiple DHCPv6 servers are configured in the DHCPv6 server group and both the DHCPv6 server with the same VPN information as the user and the DHCPv6 server with different VPN information from the user exist, the response packets sent by the DHCPv6 servers to the BRAS contain the VPN information about the user. Therefore, the user considers the DHCPv6 server with the same VPN information as the user a reachable one and records the VPN information in the DHCPv6 server information of the user table. If the BRAS receives renew packets, the DHCPv6 server information saved in user entries is sent to the servers through packets. If the DHCPv6 server is unreachable, lease renewal fails, and rebind packets need to be sent to renew the lease.If multiple servers are configured in the DHCPv6 server group and the VPN information about the servers is different from that of the user, the response packets sent by the servers to the BRAS contain the user's VPN information and the BRAS matches the user's VPN information and the server's VPN information. If the match fails, the user fails to go online."
+}

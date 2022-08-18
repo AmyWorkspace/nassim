@@ -1,0 +1,60 @@
+{
+    "PageTitle": "action",
+    "FuncDef": "This command defines the reclassification actions that should be performed on any packet matching the defined IP flow criteria within the entries match node. When defined under theip-criteriacontext, the reclassification only applies to IPv4 packets. When defined under theipv6-criteriacontext, the reclassification only applies to IPv6 packets.",
+    "CLIs": [
+        "action [ fc <fc-name> ] [ hsmda-counter-override <counter-id> ] [ profile { in | out | exceed | inplus } ] [ policer <policer-id> ] [ port-redirect-group-queue ] [ queue <queue-id> ] [ use-fc-mapped-queue ]",
+        "no action"
+    ],
+    "ParentView": [
+        "config>qos>sap-egress>ip-criteria>entry",
+        "config>qos>sap-egress>ipv6-criteria>entry"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "fc fc-name",
+            "Info": "The fc reclassification action is optional. When specified, packets matching the IP flow reclassification entry will be explicitly reclassified to the forwarding class specified as fc-name regardless of the ingress classification decision. The fc-name defined must be one of the eight forwarding classes supported by the system. To remove the forwarding class reclassification action for the IP flow entry, the action command must be re-executed without the fc reclassification action defined. Values-fc |class|, |class|be, l2, af, l1, h2, ef, h1, nc."
+        },
+        {
+            "Parameters": "profile {in | out | exceed | inplus}",
+            "Info": "The profile reclassification action is optional. When specified, packets matching the IP flow reclassification entry will be explicitly reclassified to the configured profile regardless of the ingress profiling decision. To remove the profile reclassification action for the IP flow reclassification entry, the action command must be re-executed without the profile reclassification action defined."
+        },
+        {
+            "Parameters": "in",
+            "Info": "The in parameter is mutually exclusive to the exceed, inplus, and out parameters following the profile reclassification action keyword. In, exceed, inplus, or out must be specified when the profile keyword is present. When in is specified, any packets matching the reclassification rule will be treated as in-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "out",
+            "Info": "The out parameter is mutually exclusive to the exceed, inplus, and in parameters following the profile reclassification action keyword. In, exceed, inplus, or out must be specified when the profile keyword is present. When out is specified, any packets matching the reclassification rule will be treated as out-of-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "exceed",
+            "Info": "The exceed parameter is mutually exclusive to the out, inplus, and in parameters following the profile reclassification action keyword. In, exceed, inplus, or out must be specified when the profile keyword is present. When exceed is specified, any packets matching the reclassification rule will be treated as exceed-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "inplus",
+            "Info": "The inplus parameter is mutually exclusive to the out, exceed, and in parameters following the profile reclassification action keyword. In, exceed, inplus, or out must be specified when the profile keyword is present. When inplus is specified, any packets matching the reclassification rule will be treated as inplus-profile by the egress forwarding plane."
+        },
+        {
+            "Parameters": "hsmda-counter-override counter-id",
+            "Info": "The hsmda-counter-override parameter is optional and only has significance on SAPs that are created on an HSMDA. When specified, packets matching the IP precedence value will be mapped to the defined HSMDA exception counter ID for the packets queue group. The default behavior is to use the default counter on the queue group for the queue to which the packet is mapped. The hsmda-counter-override parameter may be overwritten by an IP criteria reclassification rule match. The counter-id must be specified as an integer from one to eight. To remove the ESMDA exception counter reclassification action for the specified DSCP value, the dscp command must be re-executed without the hsmda-counter-override parameter defined. This keyword is mutually exclusive with the redirection to a policer. Values-1 to 8."
+        },
+        {
+            "Parameters": "policer policer-id",
+            "Info": "When the action policer command is executed, a valid policer ID must be specified. The parameter policer ID references a policer ID that has already been created within the SAP egress QoS policy. Values-1 to 63."
+        },
+        {
+            "Parameters": "port-redirect-group-queue queue queue-id",
+            "Info": "Used to override the forwarding class default egress queue destination to an egress port queue group. The specific egress queue group instance to use is specified at the time the QoS policy is applied to the SAP. Therefore, this parameter is only valid if SAP-based redirection is required. The queue parameter overrides the policer s default egress queue destination to a specified queue-id in the egress port queue group instance. Values-1 to 8."
+        },
+        {
+            "Parameters": "queue queue-id",
+            "Info": "This parameter overrides the policer s default egress queue destination to a specified local SAP queue of that queue-id. A queue of ID queue-id must exist within the egress QoS policy. Values-1 to 8."
+        },
+        {
+            "Parameters": "use-fc-mapped-queue",
+            "Info": "This parameter overrides the policer s default egress queue destination to the queue mapped by the traffic s forwarding class."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

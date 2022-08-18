@@ -1,0 +1,73 @@
+{
+    "PageTitle": "port-mirroring instance (qinq)",
+    "FuncDef": "The port-mirroring instance pe-vid command configures mirroring on an EVC Layer 2 QinQ sub-interface.\nThe undo port-mirroring instance pe-vid command cancels the configuration.\nBy default, mirroring is not configured on an EVC Layer 2 QinQ sub-interface.",
+    "CLIs": [
+        "port-mirroring instance <instance-name> { inbound | outbound } pe-vid <pe-vlan-id> ce-vid <ce-vlan-id-begin> [ to <ce-vlan-id-end> ] identifier { none | pe-vid | ce-vid | pe-ce-vid } [ group <group-name> ]",
+        "undo port-mirroring instance <instance-name> { inbound | outbound } pe-vid <pe-vlan-id> ce-vid <ce-vlan-id-begin> [ to <ce-vlan-id-end> ]"
+    ],
+    "ParentView": [
+        "EVC view of an Eth-Trunk interface",
+        "EVC view of an Ethernet interface"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "instance-name",
+            "Info": "Specifies the name of a mirroring instance.\nThe value is a string of 1 to 31 case-insensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates mirroring for upstream traffic.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates mirroring for downstream traffic.\n-"
+        },
+        {
+            "Parameters": "pe-vid",
+            "Info": "Multiple mirroring instances are created based on the outer tag value.\n-"
+        },
+        {
+            "Parameters": "pe-vlan-id",
+            "Info": "Specifies the VLAN ID (outer VLAN tag value) on the PE.\nThe value is an integer that ranges from 1 to 4094 ."
+        },
+        {
+            "Parameters": "ce-vid",
+            "Info": "Multiple mirroring instances are created based on the inner tag value. For example, to mirror packets with ce-vid ranging from 1 to 5, if identifier ce-vid is configured in the command, five mirroring instances are created, with each for one ce-vid.\n-"
+        },
+        {
+            "Parameters": "ce-vlan-id-begin",
+            "Info": "Specifies the start VLAN ID (inner VLAN tag value) on the CE.\nThe value is an integer that ranges from 1 to 4094 ."
+        },
+        {
+            "Parameters": "ce-vlan-id-end",
+            "Info": "Specifies the end VLAN ID (inner VLAN tag value) on the CE.\nThe value is an integer that ranges from 1 to 4094 ."
+        },
+        {
+            "Parameters": "identifier",
+            "Info": "Indicates the mode of distinguishing mirroring instances. This parameter applies to the scenario where mirroring instances are not shared. If identifier is not configured in the command, all packets on the mirrored port are mirrored.\nThe keyword meanings are as follows:\nnone: All packets on the interface share one mirroring instance.vid: Mirroring instances are distinguished based on the tag value."
+        },
+        {
+            "Parameters": "none",
+            "Info": "Only one mirroring instance is created for all packets on the mirrored port.\n-"
+        },
+        {
+            "Parameters": "pe-ce-vid",
+            "Info": "Multiple mirroring instances are created based on the outer and inner tag values.\n-"
+        },
+        {
+            "Parameters": "group group-name",
+            "Info": "Indicates that packets on multiple EVC Layer 2 sub-interfaces share one mirroring instance. This configuration allows users to mirror packets on more interfaces when mirroring instance resources are insufficient.\nDifferent EVC Layer 2 sub-interfaces use the same mirroring instance name. If group is configured in the command, packets on these interfaces trigger the generation of multiple mirroring instances, consuming more instance resources.\nThe value is a string of 1 to 31 case-insensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mirror instance a location",
+            "[*HUAWEI-mirror-instance-a] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0.1 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] encapsulation qinq vid 1 ce-vid 2",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] port-mirroring instance a inbound pe-vid 1 ce-vid 2 identifier pe-ce-vid group 22"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an EVC scenario, to mirror packets on an EVC Layer 2 sub-interface, specify a mirrored port on which the packets are copied to an observing port. Based on different encapsulation types of an EVC Layer 2 sub-interface, specific packets on the mirrored port are copied to the observing port.\nIf the encapsulation type of an EVC Layer 2 sub-interface is QinQ, packets are copied to the observing port based on the inner tag value, outer tag value, or inner and outer tag values.\nConfiguration Impact\nAfter mirroring is enabled, specific packets will be copied to the observing port, affecting the processing of normal service packets.\nPrecautions\nThe command only support When the encapsulation type of an EVC Layer 2 sub-interface is QinQ.\nAn EVC sub-interface can function only as a mirrored port, not an observing port."
+}

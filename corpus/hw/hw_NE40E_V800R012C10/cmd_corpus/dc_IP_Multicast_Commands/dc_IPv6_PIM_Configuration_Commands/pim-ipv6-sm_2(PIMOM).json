@@ -1,0 +1,55 @@
+{
+    "PageTitle": "pim ipv6 hello-option lan-delay",
+    "FuncDef": "The pim ipv6 hello-option lan-delay command sets the time in which a PIM interface delays sending Prune messages on a shared network segment.\nThe undo pim ipv6 hello-option lan-delay command restores the default value.\nBy default, a PIM interface delays sending Prune messages on a shared network segment for 500 milliseconds.",
+    "CLIs": [
+        "pim ipv6 hello-option lan-delay <interval>",
+        "undo pim ipv6 hello-option lan-delay"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the time in which a PIM interface delays sending Prune messages on a shared network segment.\nThe value is an integer ranging from 1 to 32767, in milliseconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] pim ipv6 hello-option lan-delay 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nHello messages sent by the Router carry lan-delay and override-interval parameters. lan-delay indicates the delay in sending Prune messages in a LAN. When the values of lan-delay on all Routers on the same link are different, the maximum value among these values is used after negotiation.\nIf one Router receives a Prune message from an upstream interface, it indicates that other downstream Routers still exist in the LAN. If the Router still needs to receive multicast data, it must send a Join message to the upstream interface to override the prune action within the set override-interval.\nWhen receiving a Prune message from a downstream interface, the Router does not perform the prune action immediately until the Prune-Pending Timer (PPT) times out. The PPT equals the value of the lan-delay plus the override-interval. If the Router receives a Join message from its downstream device before the PPT expires, the Router cancels the prune action.\nTo prevent redundant traffic, a shared network segment should have only one forwarder. Therefore, each Router sends an Assert message immediately after its forwarding interface receives the same multicast packet on a shared network segment, which indicates that more than one forwarder exists. Then, the Routers elect a unique forwarder, called the assert winner. The assert winner periodically sends Assert messages to maintain its winner state. The Router that fails in the election disable its downstream interfaces from forwarding multicast data within a specified timeout period, but restore the pruned interfaces to forward packets if they do not receive any Assert messages from the assert winner after the timeout period expires. To set such a timeout period, run the undo pim ipv6 holdtime assert command.\nPrerequisites\nThe multicast ipv6 routing-enable command is run in the public network instance view.\nConfiguration Impact\nIf the pim ipv6 hello-option lan-delay command or pim ipv6 holdtime assert command is run more than once, the latest configuration overrides the previous one."
+}

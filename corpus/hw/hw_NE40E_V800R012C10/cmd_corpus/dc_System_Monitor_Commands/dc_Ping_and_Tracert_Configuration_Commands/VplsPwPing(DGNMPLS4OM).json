@@ -1,0 +1,156 @@
+{
+    "PageTitle": "ping vpls",
+    "FuncDef": "The ping vpls command checks PW connectivity on a VPLS network.",
+    "CLIs": [
+        "ping vpls [ -c <echo-number> | -m <time-value> | -s <data-bytes> | -t <timeout-value> | -r <reply-mode> | -exp <exp-value> | -v | -g ] * vsi <vsi-name> { peer <peer-address> [ negotiate-vc-id <vc-id> ] [ control-word [ remote <remote-address> <remote-pw-id> [ sender <sender-address> ] ] ] | <local-site-id> <remote-site-id> } [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]",
+        "ping vpls [ -c <echo-number> | -m <time-value> | -s <data-bytes> | -t <timeout-value> | -r <reply-mode> | -exp <exp-value> | -v | -g ] * vsi <vsi-name> <local-site-id> <remote-site-id> [ control-word ] [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-c echo-number",
+            "Info": "Specifies the number of MPLS Echo Request packets to be sent.\nWhen network quality is not high, more packets can be sent to check network quality based on a packet loss ratio.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-m time-value",
+            "Info": "Specifies the time to wait before a next MPLS Echo Request packet is sent.\nWhen network quality is not high, set the value greater than or equal to 2000 milliseconds.\nThe value is an integer ranging from 1 to 10000 in milliseconds. The default value is 2000.\nm time-value must be greater than or equal to -t timeout-value."
+        },
+        {
+            "Parameters": "-s data-bytes",
+            "Info": "Specifies the number of bytes of MPLS Echo Request packets to be sent.\nThe value is an integer ranging from 65 to 9600, in bytes. The default value is 100.\nThe minimum packet length is not fixed and depends on command parameter settings.For example, when neither the exp-value parameter nor the bypass parameter is specified, a packet contains a minimum of 65 bytes. If the exp-value parameter is specified, the minimum packet length is increased by 8; if the bypass parameter is specified, the minimum packet length is increased by 12."
+        },
+        {
+            "Parameters": "-t timeout-value",
+            "Info": "Specifies the timeout period for MPLS Echo Request packets to be sent.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000.\nt timeout-value must be less than or equal to -m time-value."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies the mode in which the peer returns an MPLS Echo Reply packet.\nThe value is an integer ranging from 1 to 4. Each mode is described as follows:\n1: no reply2: reply with an IPv4 or IPv6 UDP packet3: reply with an IPv4 or IPv6 UDP packet carrying the router-alert option4: reply through the control channel of the application plane\nCurrently, only values 1, 2, and 4 are supported."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies the EXP value in MPLS Echo Request packets to be sent.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "-v",
+            "Info": "Displays detailed output information.\n-"
+        },
+        {
+            "Parameters": "-g",
+            "Info": "Performs the test using MPLS fragments.\n-"
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies the name of a VSI to be checked.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "peer peer-address",
+            "Info": "Specifies an IP address for a peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "negotiate-vc-id vc-id",
+            "Info": "Specifies a PW ID for a local PE.\nThe value is an integer ranging from 1 to 4294967295.\nNote the following points when configuring VPLS:\nIf negotiate-vc-id is not specified in the peer command, the VC ID is unique and equal to the VSI ID. For VPLS ping, you do not need to specify vc-id parameter because the VC is unique when vsi-name parameter and peer-address parameter are specified. The specified vc-id value must be the same as the existing VSI ID.If you specify negotiate-vc-id in the peer command, you must specify vsi-name parameter, peer-address parameter, and vc-id parameter for VPLS ping."
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Indicates that the control word is encapsulated into a packet.\nWhen detecting an MS-PW, you can specify control-word.\n-"
+        },
+        {
+            "Parameters": "remote remote-address",
+            "Info": "Specifies the destination address of a remote LDP session.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "remote-pw-id",
+            "Info": "Specifies the ID of a remote PW.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "sender sender-address",
+            "Info": "Specifies a source address. For MS-PW E2E detection, specify a source IP address for the public network device that communicates with the remote PE. The source IP address is usually the IP address of an adjacent superstratum provider edge (SPE) or user-end provider edge (UPE).\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "local-site-id",
+            "Info": "Specifies the ID of the local CE.\nThe value is an integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "remote-site-id",
+            "Info": "Specifies the ID of the remote CE.\nThe value is an integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Forwards packets through a specified public backup LSP of a VPLS PW.\nIf bypass is specified on the inbound interface, packets from the initiator are forwarded through the public backup LSP. If the response end supports backup LSP detection, packets are forwarded through the public backup LSP; otherwise, the response end replies in the specified -r mode.\nIn a hybrid load balancing scenario, if multiple backup LSPs exist, packets are forwarded through a randomly selected LSP rather than any specified backup LSP.If reply packets are transmitted through an application-plane control channel, the PEs at both ends of a PW must have protection paths configured. Otherwise, when the peer PE does not have any public backup LSP, PW ping reply packets cannot be returned.\n-"
+        },
+        {
+            "Parameters": "-si interface-name",
+            "Info": "Specifies the name of a simulated inbound interface.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of a simulated inbound interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of a simulated inbound interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping vpls vsi a2 peer 10.1.1.1",
+            "    PW PING : FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID = 2 : 100 data bytes, press CTRL_C to break",
+            "    Reply from 10.1.1.1: bytes=100 Sequence=1 time=60 ms",
+            "    Reply from 10.1.1.1: bytes=100 Sequence=2 time=50 ms",
+            "    Reply from 10.1.1.1: bytes=100 Sequence=3 time=60 ms",
+            "    Reply from 10.1.1.1: bytes=100 Sequence=4 time=60 ms",
+            "    Reply from 10.1.1.1: bytes=100 Sequence=5 time=60 ms",
+            "- -- FEC: FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID = 2 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 50/58/60 ms"
+        ],
+        [
+            "<HUAWEI> ping vpls vsi v1 1 2",
+            "  PW PING FEC: L2 VPN ENDPOINT. Sender VEID = 1, Remote VEID = 2 : 100 data bytes, press CTRL_C to break",
+            "  Reply from 10.1.1.2: bytes=100 Sequence=1 time=5 ms",
+            "  Reply from 10.1.1.2: bytes=100 Sequence=2 time=3 ms",
+            "  Reply from 10.1.1.2: bytes=100 Sequence=3 time=3 ms",
+            "  Reply from 10.1.1.2: bytes=100 Sequence=4 time=2 ms",
+            "  Reply from 10.1.1.2: bytes=100 Sequence=5 time=3 ms",
+            "- -- FEC : L2 VPN ENDPOINT. Sender VEID = 1, Remote VEID = 2 ping statistics ---",
+            " 5 packet(s) transmitted",
+            " 5 packet(s) received",
+            " 0.00% packet loss",
+            " round-trip min/avg/max = 2/3/5 ms"
+        ],
+        [
+            "<HUAWEI> ping vpls vsi a2 peer 10.1.1.1 bypass -si GigabitEthernet1/0/1",
+            "PW PING : FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID =2 : 100 data bytes, press CTRL_C to break",
+            " Reply from 10.1.1.1: bytes=100 Sequence=1 time=60 ms",
+            " Reply from 10.1.1.1: bytes=100 Sequence=2 time=50 ms",
+            " Reply from 10.1.1.1: bytes=100 Sequence=3 time=60 ms",
+            " Reply from 10.1.1.1: bytes=100 Sequence=4 time=60 ms",
+            " Reply from 10.1.1.1: bytes=100 Sequence=5 time=60 ms",
+            "- -- FEC: FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID = 2 ping statistics ---",
+            " 5 packet(s) transmitted",
+            " 5 packet(s) received",
+            " 0.00% packet loss",
+            " round-trip min/avg/max = 50/58/60 ms"
+        ],
+        [
+            "<HUAWEI> ping vpls -s 2000 -g vsi a2 peer 3.3.3.9",
+            "PW PING : FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID = 2 : 2000 data bytes, press CTRL_C to break",
+            "    Reply from 3.3.3.9: bytes=2000 Sequence=1 time=60 ms",
+            "    Reply from 3.3.3.9: bytes=2000 Sequence=2 time=50 ms",
+            "    Reply from 3.3.3.9: bytes=2000 Sequence=3 time=60 ms",
+            "    Reply from 3.3.3.9: bytes=2000 Sequence=4 time=60 ms",
+            "    Reply from 3.3.3.9: bytes=2000 Sequence=5 time=60 ms",
+            "- -- FEC: FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID = 2 ping statistics ---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max = 50/58/60 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo monitor PW connectivity on a VPLS network, run the ping vpls command.\nPrerequisites\nBasic VPLS network configurations are complete."
+}

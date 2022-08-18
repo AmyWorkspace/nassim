@@ -1,0 +1,105 @@
+{
+    "PageTitle": "igmp static-group",
+    "FuncDef": "The igmp static-group command configures an interface to statically join multicast groups.\nThe undo igmp static-group command deletes the multicast groups that an interface statically joins.\nBy default, an interface does not join any multicast group statically.",
+    "CLIs": [
+        "igmp static-group <group-address> [ inc-step-mask { <group-mask> | <group-mask-length> } number <group-number> ] [ source <source-address> ]",
+        "undo igmp static-group { all | <group-address> inc-step-mask { <group-mask> | <group-mask-length> } number <group-number> [ source <source-address> ] }"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "Tunnel interface view",
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "POS sub-interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-address",
+            "Info": "Specifies the IP address of the multicast group that an interface statically joins. In batch configuration mode, this parameter specifies the initial address of the multicast group range.\nThe value ranges from 224.0.1.0 to 239.255.255.255, in dotted decimal notation."
+        },
+        {
+            "Parameters": "inc-step-mask",
+            "Info": "Indicates the step mask of a group address in batch configuration mode.\n-"
+        },
+        {
+            "Parameters": "group-mask",
+            "Info": "Specifies the step mask of a group address in batch configuration mode, that is, the distance between two group addresses.\nThe value is in the wildcard mask format, and ranges from 0.0.0.1 to 15.255.254.255, in dotted decimal notation."
+        },
+        {
+            "Parameters": "group-mask-length",
+            "Info": "Specifies the length of the step mask in batch configuration mode.\nThe value is an integer ranging from 5 to 32."
+        },
+        {
+            "Parameters": "number group-number",
+            "Info": "Specifies the number of group addresses in batch configuration mode.\nThe value is an integer ranging from 2 to 512."
+        },
+        {
+            "Parameters": "source source-address",
+            "Info": "Specifies a multicast source address.\nThe address is in dotted decimal notation."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates all multicast groups that an interface statically joins.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp static-group 224.1.1.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp static-group 232.1.1.1 source 192.168.11.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp static-group 225.1.1.1 inc-step-mask 32 number 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp static-group 232.1.1.1 inc-step-mask 32 number 2 source 192.168.11.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 2/0/0.10",
+            "[*HUAWEI-GigabitEthernet2/0/0.10] qinq termination pe-vid 1 ce-vid 1 to 2",
+            "[*HUAWEI-GigabitEthernet2/0/0.10] igmp static-group 225.0.0.1 inc-step-mask 0.0.0.1 number 17 qinq pe-vid 1 ce-vid 1 to 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf users want to receive multicast data for a group for a long time, the igmp static-group command can be used to configure the interface connected to user hosts to statically join groups. This allows the interface to rapidly respond to users' requests, thus reducing the channel switching time.\nIf users want to receive multicast data sent by a specific multicast source for a long time, source source-address can be set to specify a multicast source address.\nThe igmp static-group command is run on the interface connected to user hosts. The interface can statically join a single or multiple multicast groups at one time, including source-specific multicast groups.\nIf hosts need to join one or several multicast groups stably and permanently through the sub-interface for QinQ VLAN tag termination or the sub-interface for dot1q VLAN tag termination, you can run the igmp static-group command to statically add the sub-interface for QinQ VLAN tag termination or the sub-interface for dot1q VLAN tag termination to the multicast group(s).\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nConfiguration Impact\nAfter the igmp static-group command is run on the interface connected to user hosts, the entries corresponding to IGMP groups that the interface statically joins never time out. The router considers that this interface is always connected to group members, and continues to forward qualified multicast packets to the network segment where the interface resides.\nAfter you run the igmp static-group command without specifying the qinq or dot1q keyword to configure batch multicast static groups for the first time and when you run this command again, the new configuration overrides the previous one if only the value of group-number is changed but the values of group-address and group-mask | group-mask-length remain unchanged.\nTo add an interface to multiple multicast groups in batches, run the igmp static-group command with inc-step-mask and number parameters. A group-mask-length value is converted to a group-mask value using the following formula: group-mask = 1<<(32-group-mask-length). The << symbol represents the left-shift operator, using which the binary format of an integer is shifted left for a specified number of digits. Extra binary digits out of the left boundary are discarded, and 0s are added at the right boundary. For example, 1<<0 represents 0.0.0.1, 1<<1 represents 0.0.0.2, and 1<<3 represents 0.0.0.4. If group-mask-length is used to configure the step mask of group addresses in batch configuration mode and the display current-configuration command is used to view related configurations, the step mask of group addresses is always displayed in group-mask format.\nAfter you run the igmp static-group command and specify the qinq or dot1q keyword to configure batch multicast static groups for the first time and when you run this command again, the new configuration overrides the previous one if only the value of group-number is changed but the values of group-address and group-mask | group-mask-length and the values of tag parameters remain unchanged. If the values of tag parameters have been changed, the device considers that the later command is different from the first one and the new configuration does not overwrite the previous configuration.\nNote the following when you statically add a sub-interface for QinQ VLAN tag termination or a sub-interface for dot1q VLAN tag termination to multicast groups:\nThe static group with tag parameters can be configured only on the sub-interface for QinQ VLAN tag termination or the sub-interface for dot1q VLAN tag termination.You can specify the qinq keyword only for the sub-interface for QinQ VLAN tag termination and dot1q keyword only for the sub-interface for dot1q VLAN tag termination.You must specify the qinq or dot1q keyword.The specified range of VLAN IDs must be consistent with that specified in the dot1q termination vid command or the qinq termination pe-vid ce-vid command. If they are inconsistent, only the intersected tag values take effect.\n\nFollow-up Procedure\nIf a user host no longer wants to receive multicast data for a group that the user host statically joins, delete the static group configuration.\nPrecautions\nIf an interface belongs to an NDR (Non-Designated Router) or Assert Loser device, the interface is not used as an outbound interface of PIM routing entries, so the multicast traffic cannot be statically directed to targets by running the igmp static-group command.\nYou are allowed to configure overlapped multicast group addresses in different batch configurations of multicast groups.\nAfter an interface is configured to statically join multicast groups in batches, do not delete any command related to static group configuration before the system completes the batch static group configuration."
+}

@@ -1,0 +1,57 @@
+{
+    "PageTitle": "vrrp vrid",
+    "FuncDef": "The vrrp vrid command configures a VRRP backup group.\nThe undo vrrp vrid command deletes a VRRP backup group.\n\nBy default, no VRRP backup group is configured.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id> [ virtual-ip <virtual-address> ]",
+        "undo vrrp vrid <virtual-router-id> [ virtual-ip <virtual-address> ]"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-router-id",
+            "Info": "Specifies the ID of a VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "virtual-ip virtual-address",
+            "Info": "Specifies the virtual IP address of a VRRP backup group. The virtual IP address and the IP address of the interface where the VRRP backup group resides must be on the same network segment. If the VRRP backup group is an LBRG member group, you do not need to assign a virtual IP address to the VRRP backup group.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 virtual-ip 10.10.10.10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 virtual-ip 10.10.10.11"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nA VRRP backup group can be used to implement gateway redundancy without causing networking changes. The VRRP backup group uses the master device to forward traffic along an active link. One virtual IP address serves one separate user group, in which users have the same reliability requirements. This setting helps prevent the default gateway addresses from varying according to location changes of VRRP routers.\nA VRRP backup group works in either master/backup or load balancing mode.\n\nIn master/backup mode, a single VRRP backup group works and consists of a master device and one or more backup devices. The master and backup devices have different priorities. The master device has the highest priority among all devices in the backup group. If the network is working properly, the master device transmits all services. If the master device fails, a backup device with a higher priority than others takes over traffic.\nIn load balancing mode, two or more VRRP backup groups are set up and their master devices forward traffic. These master devices load-balance traffic for various users.\n\nIf VRRP backup groups need to work in load balancing mode, repeat this step to configure two or more VRRP backup groups on the interface and assign different VRIDs to them. In addition, virtual IP addresses of VRRP backup groups must be different.\n\nFollow-up Procedure\n\nAfter a VRRP backup group is configured, you can optimize VRRP performance by operations such as changing VRRP packet attributes or the interval at which VRRP packets are sent. This improves VRRP link stability.\n\nPrecautions\n\nIf the addresses of a VRRP backup group have all been deleted, the system automatically deletes the VRRP backup group.\nThe VRRP backup group to be configured as an LBRG must have been assigned a virtual IP address.\nAfter the interface learns ARP entries and the ARP entries age, ARP age probe packets to be sent carry this interface's IP address as the source IP address, not the virtual IP address.\nA maximum of 16 virtual IP addresses can be configured for each VRRP group."
+}

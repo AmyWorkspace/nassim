@@ -1,0 +1,34 @@
+{
+    "PageTitle": "dhcpv6-server destination source",
+    "FuncDef": "The dhcpv6-server destination source command configures the source and destination IPv6 addresses for the device functioning as the DHCPv6 server when addresses are assigned from local IPv6 address pools to implement inter-chassis address borrowing.\nThe undo dhcpv6-server destination source command cancels the configurations.\nBy default, no source or destination IPv6 address is configured for the device functioning as the DHCPv6 server to implement inter-chassis borrowing.",
+    "CLIs": [
+        "dhcpv6-server destination <destination-ipv6-address> source <source-ipv6-address> [ vpn-instance <vpn-instance> ]",
+        "undo dhcpv6-server destination <destination-ipv6-address> source <source-ipv6-address> [ vpn-instance <vpn-instance> ]"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "source source-ipv6-address",
+            "Info": "Specifies the source IPv6 address for the device functioning as the DHCPv6 server.\nThe value is a 32-bit hexadecimal number in the format of X:X::X:X."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "destination destination-ipv6-address",
+            "Info": "Specifies the destination IPv6 address for the device functioning as the DHCPv6 server.\nThe value is a 32-bit hexadecimal number in the format of X:X::X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service s1",
+            "[*HUAWEI-rm-backup-srv-s1] commit",
+            "[~HUAWEI-rm-backup-srv-s1] dhcpv6-server destination 1::1 source 2::2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a dual-device hot backup scenario where the master and backup devices are configured with address pools in shared mode, run the dhcpv6-server destination command to configure the source and destination IPv6 addresses for the device functioning as the DHCPv6 server. If routes between the master and backup devices are reachable and IPv6 addresses are assigned from a RUI-slave address pool on a device, IPv6 addresses can be borrowed from a local or delegation address pool on the peer device using DHCPv6 relay. In this way, the device on which a RUI-slave address pool is deployed functions as the DHCPv6 client, whereas the device on which a local address pool is deployed functions as the DHCPv6 server. If RUI-slave address pools are deployed on both the master and backup devices, the two devices function as the DHCPv6 server for each other. If routes between the master and backup devices are unreachable, IPv6 addresses can be assigned from a local RUI-slave address pool only when local address pools are unavailable\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nWhen binding address pools to a domain, you are advised to bind local address pools before binding RUI-slave address pools to the domain. This ensures that IPv6 addresses are preferentially assigned from local address pools. Addresses are borrowed from the peer device only when local address pools are unavailable or no IPv6 address can be assigned from the local address pools.\nWhen an IPv6 address pool of the rui-slave type is bound to the RBS view, if the IPv6 address pool has been bound to a domain and the accounting-stop-packet include all-stack-ip user-type ipoe command has been configured on the domain, the dhcpv6-server destination command cannot be run in the RBS view."
+}

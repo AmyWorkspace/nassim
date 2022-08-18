@@ -1,0 +1,104 @@
+{
+    "PageTitle": "portal-server",
+    "FuncDef": "The portal-server command sets the mandatory parameters in the domain, including the IP address of the portal server, redirected URL, number of forcible redirection attempts, URL parameters, and whether a user is redirected to the first URL entered by the user, user MAC address in redirection packets. The IP address determines whether to implement the mandatory portal service to the users in the domain.\nThe undo portal-server command cancels the portal service and restores the default setting.\nBy default, the captive portal service is disabled in a domain.",
+    "CLIs": [
+        "portal-server user-first-url-key { <user-number> | default-name }",
+        "portal-server identical-url",
+        "portal-server { <ip-address> | <ipv6-address> | redirect-limit <limit-value> | url <url-string> | url-parameter }",
+        "portal-server url-parameter shared-key-cipher [ shared-key-cipher ]",
+        "undo portal-server { [ <ip-address> | <ipv6-address> ] | [ redirect-limit [ <limit-value> ] ] | [ url [ <url-string> ] ] | [ url-parameter ] }",
+        "undo portal-server user-first-url-key [ <user-number> | default-name ]",
+        "undo portal-server identical-url",
+        "undo portal-server url-parameter shared-key-cipher"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-number",
+            "Info": "Specifies the keyword used in the function of displaying the page at the first URL.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "default-name",
+            "Info": "Uses the default keyword wlanuserfirsturl in the function of displaying the page at the first URL.\n-"
+        },
+        {
+            "Parameters": "identical-url",
+            "Info": "Configures portal-server identical url.\n-"
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IPv4 address of the portal server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of the portal server.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "redirect-limit limit-value",
+            "Info": "Specifies the number of forcible redirection attempts.\nThe value ranges from 1 to 5. The default value is 2."
+        },
+        {
+            "Parameters": "url url-string",
+            "Info": "Indicates the redirected URL address.\nThe value ranges from 1 to 200, like http://www.portal.com. It is null by default."
+        },
+        {
+            "Parameters": "url-parameter",
+            "Info": "Indicates whether the redirected URL carries wlanusername. If url-parameter is specified, the redirected URL carries wlanusername. If url-parameter is not specified, the redirected URL does not carry wlanusername.\n-"
+        },
+        {
+            "Parameters": "shared-key-cipher shared-key-cipher",
+            "Info": "Specifies the keyword for generating ciphertext user MAC address to be displayed. After the portal-server redirect-key command with cipher configured is run, shared-key-cipher generates ciphertext user MAC address to be displayed. Specifies the empty shared-key when only shared-key-cipher, instead of <shared-key-cipher>, is configured.\nThe value is a string of 1 to 16 or 1 to 128 characters. You can set a character string with 1 to 16 characters. If you enter the ciphertext shared-key-cipher displayed in the configuration file, the value can be a string of 1 to 128 characters"
+        },
+        {
+            "Parameters": "user-first-url-key",
+            "Info": "Configures the portal server to display the page at the first URL that a user enters.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[*HUAWEI-aaa-domain-huawei] portal-server 10.10.10.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[*HUAWEI-aaa-domain-huawei] portal-server redirect-limit 3"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[*HUAWEI-aaa-domain-huawei] portal-server url-parameter"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[*HUAWEI-aaa-domain-huawei] portal-server url http://www.huawei.com"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[*HUAWEI-aaa-domain-huawei] portal-server user-first-url-key userfirsturl"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[*HUAWEI-aaa-domain-huawei] portal-server identical-url"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a user accesses an external network for the first time, the NE40E redirects the access request to the specified server (normally the portal server of carriers). This operation is called mandatory portal. The Internet website that the user first accesses is one of the services of the website specified by carriers.\nThe IP address of the forcibly-redirected URL should be the same as the IP address of the portal server.\nIf the HW-Portal-Mode attribute is delivered in a RADIUS authentication packet or CoA message, the default number of forcible redirection attempts is used, and the configured value fails to take effect.\nIf the portal-server url-parameter command is used, the parameter wlanusername is carried in the URL for redirection. If you have configured the function of redirecting a user to the first URL entered by the user and the portal server supports this function, the portal server displays the page at the URL that the user enters before portal authentication if the user passes the portal authentication. Otherwise, the user is directed to the portal page and has to enter the initial URL again after the portal authentication to access the page.\nIn IPv6 forcible redirection scenarios, you must run the portal-server identical-url command. This configuration allows IPv4 and IPv6 users to use identical URL and the IPv6 redirection web page to be pushed to users.\nWhen users are forcibly redirected to the portal server, if you do not want the actual user MAC address to be displayed, run the portal-server redirect-key command with cipher aes128 configured. Then the user MAC address is displayed in ciphertext. Shared-key-cipher in the portal-server url-parameter shared-key-cipher command is used to generate the ciphertext user MAC address to be displayed.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf the portal-redirect redirect-time command is run in the domain or AAA view, the portal-server redirect-limit command configured in the same view fails to take effect."
+}

@@ -1,0 +1,30 @@
+{
+    "PageTitle": "tnl-policy (VPN instance IPv6 address family view)",
+    "FuncDef": "The tnl-policy command associates a tunnel policy with a VPN instance IPv6 address family.\nThe undo tnl-policy command cancels the configured association.\nBy default, a VPN instance IPv6 address family selects a tunnel in the order of conventional LSPs, CR-LSPs, and Local_IfNet, and does not perform load balancing.",
+    "CLIs": [
+        "tnl-policy <policy-name>",
+        "undo tnl-policy"
+    ],
+    "ParentView": [
+        "VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name",
+            "Info": "Specifies the name of a tunnel policy to be associated with a VPN instance IPv6 address family.\nThe value is a string of 1 to 39 case-sensitive characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-policy po1",
+            "[*HUAWEI-tunnel-policy-po1] tunnel select-seq lsp load-balance-number 2",
+            "[*HUAWEI-tunnel-policy-po1] quit",
+            "[*HUAWEI] ip vpn-instance vpn2",
+            "[*HUAWEI-vpn-instance-vpn2] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn2-af-ipv6] route-distinguisher 22:33",
+            "[*HUAWEI-vpn-instance-vpn2-af-ipv6] tnl-policy po1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, a VPN instance selects a tunnel in the order of conventional LSPs, CR-LSPs, and Local_IfNet to forward data on the backbone network and cannot implement multi-path load balancing at the same time. To ensure transmission quality by using a TE tunnel to transmit VPN services or improve transmission efficiency by load balancing VPN services among tunnels, run the tunnel-policy command to configure a tunnel policy and run the tnl-policy command in the IPv6 address family view to reference the tunnel policy.\nPrerequisites\nThe ipv6-family command has been run in the VPN instance view to enable the IPv6 address family, and the route-distinguisher command has been run in the VPN instance view to set an RD for the VPN instance IPv6 address family.\nConfiguration Impact\nIf the tunnel policy associated with a VPN instance enabled with the IPv6 address family cannot match an existing tunnel on the network, the VPN instance enabled with the IPv6 address family will have routes recurse to tunnels based on the default tunnel policy. If the recursion fails, services will be interrupted.\nFollow-up Procedure\nIf the associated tunnel policy does not exist, run the tunnel-policy command to create the tunnel policy.\nPrecautions\nThe SRv6 TE Policy or SRv6 TE Policy Group of tunnel is not supported in a tunnel policy specified in the command."
+}

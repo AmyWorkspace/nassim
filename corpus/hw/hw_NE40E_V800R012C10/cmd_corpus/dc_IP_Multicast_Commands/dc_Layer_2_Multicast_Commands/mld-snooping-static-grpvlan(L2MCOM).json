@@ -1,0 +1,86 @@
+{
+    "PageTitle": "l2-multicast ipv6 static-group group-address vlan",
+    "FuncDef": "The l2-multicast ipv6 static-group command configures static member interfaces for a multicast group.\nThe undo l2-multicast ipv6 static-group command cancels the configuration.\nBy default, no static member interfaces are configured for a multicast group.",
+    "CLIs": [
+        "l2-multicast ipv6 static-group [ source-address <source-address> ] group-address <group-address> vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10>",
+        "undo l2-multicast ipv6 static-group [ source-address <source-address> ] group-address { all | group-address } vlan { all | { <vlan-id1> [ to <vlan-id2> ] } &<1-10> }"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Eth-Trunk interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "source-address source-address",
+            "Info": "Specifies a multicast source address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "group-address group-address",
+            "Info": "Specifies a multicast group address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X. The value ranges from FF00:: to FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF."
+        },
+        {
+            "Parameters": "vlan vlan-id2",
+            "Info": "Specifies a VLAN ID. The value of vlan-id2 must be greater than that of vlan-id1.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vlan vlan-id1",
+            "Info": "Specifies a VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates multicast group addresses of all VLANs or VSIs.\n-"
+        },
+        {
+            "Parameters": "all",
+            "Info": "Specifies all VLANs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mld-snooping enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[~HUAWEI-GigabitEthernet1/0/1] l2-multicast ipv6 static-group group-address FF33::1 vlan 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[*HUAWEI-vsi-vsi0] quit",
+            "[*HUAWEI] mld-snooping enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] l2-multicast ipv6 static-group group-address FF33::1 vsi vsi0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[*HUAWEI-vsi-vsi0] quit",
+            "[*HUAWEI] mld-snooping enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] l2-multicast ipv6 static-group group-address ff33::1 vsi vsi0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf hosts need to regularly receive the data of a multicast group (including source-specific group) on an interface, run the l2-multicast ipv6 static-group command to configure the interface as a static member interface of the multicast group.\nStatic member interfaces can be configured on different positions on a network to enable users to receive data for multicast groups regularly. Run one or more of the following commands listed in Table 1.\nPrerequisites\nMLD snooping has been enabled globally and in the VLAN/VSI view.\nConfiguration Impact\nA static member interface does not respond to MLD Query messages. After the undo l2-multicast ipv6 static-group command is run on a static member interface, the interface does not initiate MLD Done messages any more.\nIf the l2-multicast ipv6 static-group command is run more than once, all configurations take effect.\nPrecautions\nIf the number of (S, G) entries of a group has reached the maximum value (128), no static entry will be created after the l2-multicast ipv6 static-group command is run. No entry containing this group address will be generated even after the reset mld-snooping group all command is run in the system view to refresh entries."
+}

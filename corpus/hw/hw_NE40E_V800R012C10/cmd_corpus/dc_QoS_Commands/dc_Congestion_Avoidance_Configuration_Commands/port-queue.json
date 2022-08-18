@@ -1,0 +1,108 @@
+{
+    "PageTitle": "port-queue",
+    "FuncDef": "The port-queue command sets scheduling parameters for port queues in the outbound direction of a non-low-speed interface.\nThe undo port-queue command restores the default settings.\nBy default, the BE, AF1, AF2, AF3, and AF4 queues are scheduled using the WFQ scheduling mode, with the scheduling weights being 10, 10, 10, 15, and 15, respectively, and the EF, CS6, and CS7 queues are scheduled using the PQ scheduling mode. The shaping percentage is set to 100 for all queues, and the tail drop mode is used.",
+    "CLIs": [
+        "port-queue <cos-value> { { pq | wfq weight <weight-value> | lpq } | shaping { <shaping-value> | shaping-percentage <shaping-percentage-value> } [ pbs <pbs-value> ] | port-wred <wred-name> | low-latency } * outbound",
+        "port-queue <cos-value> cir { { <cir-value> [ cbs <cbs-value> ] cir-schedule pq pir <pir-value> } | { cir-percentage <cir-percentage-value> [ cbs <cbs-value> ] cir-schedule pq pir pir-percentage <pir-percentage-value> } } [ pbs <pbs-value> ] pir-schedule { pq | wfq weight <weight-value> | lpq } [ port-wred <wred-name> ] outbound",
+        "undo port-queue <cos-value> [ pq | wfq | lpq | shaping | port-wred | low-latency ] outbound",
+        "undo port-queue <cos-value> [ cir { { <cir-value> [ cbs <cbs-value> ] cir-schedule pq pir <pir-value> } | { cir-percentage <cir-percentage-value> [ cbs <cbs-value> ] cir-schedule pq pir pir-percentage <pir-percentage-value> } } [ pbs <pbs-value> ] pir-schedule { pq | wfq weight <weight-value> | lpq } [ port-wred <wred-name> ] ] outbound"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "Port extension Layer 2 interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cos-value",
+            "Info": "Specifies the class of service.\nThe value is an enumerated type and can be cs7, cs6, ef, af4, af3, af2, af1, or be."
+        },
+        {
+            "Parameters": "pq",
+            "Info": "Specifies the scheduling mode of a queue as PQ scheduling.\n-"
+        },
+        {
+            "Parameters": "wfq",
+            "Info": "Specifies the scheduling mode of a queue as WFQ scheduling.\n-"
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Specifies the scheduling weight after bandwidth is allocated to PQ queues.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "lpq",
+            "Info": "Specifies the scheduling mode of a queue as LPQ scheduling.\n-"
+        },
+        {
+            "Parameters": "shaping shaping-value",
+            "Info": "Specifies a shaping rate.\nThe value is an integer ranging from 0 to 4294967294, in Mbit/s.The value range is related to the peak traffic that can be sent by the interface after the port shaping command is run. The valid value range is subject to the display on a device."
+        },
+        {
+            "Parameters": "shaping-percentage shaping-percentage-value",
+            "Info": "Specifies the traffic shaping rate , namely, the traffic shaping rate for each class queue as percentage of the configured interface output bandwidth.This parameter is not supported in the tunnel interface view.\nThe value is an integer ranging from 0 to 100, in percentage."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies a cache size, namely, the maximum volume of traffic that a port shaping-capable interface can send. The value of this parameter is equal to the peak burst size (PBS).\nThe value is an integer that ranges from 1 to 65535, in bytes."
+        },
+        {
+            "Parameters": "port-wred wred-name",
+            "Info": "Specifies the WRED profile of a queue.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the outbound direction.\n-"
+        },
+        {
+            "Parameters": "low-latency",
+            "Info": "Specifies the low-latency mode.This parameter is not supported in the tunnel interface view.\n-"
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR.\nThe value is an integer ranging from 0 to 4294967294, in Mbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the CBS.\nThe value is an integer ranging from 1 to 65535, in bytes."
+        },
+        {
+            "Parameters": "cir-schedule",
+            "Info": "Specifies the scheduling mode for CIR.\n-"
+        },
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the PIR.\nThe value is an integer ranging from 0 to 4294967294, in Mbit/s."
+        },
+        {
+            "Parameters": "cir-percentage cir-percentage-value",
+            "Info": "Specifies the CIR percentage.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "pir-percentage pir-percentage-value",
+            "Info": "Specifies the PIR percentage.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "pir-schedule",
+            "Info": "Specifies the scheduling mode for PIR.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] port-queue af1 shaping 100 outbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol gre",
+            "[*HUAWEI-Tunnel10] port-queue af1 shaping 100 outbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] port-queue af1 cir 1000 cir-schedule pq pir 2000 pir-schedule pq outbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a network is congested, you can run the port-queue command to configure queue scheduling so that service packets in the queues of a high priority, such as VoIP packets and video packets, are scheduled based on priorities.\nAfter packets enter the queues on an interface, the interface schedules packets based on policies. If no congestion occurs on\nPrecautions\nThe boards that support CIR are as following: LPUI-2T/LPUI-2T-B/LPUF-241/LPUF-241-R/LPUI-241/LPUI-241-B/LPUF-481/LPUF-402-E.\nAfter channelized sub-interfaces are configured,LPUF-51-E/LPUI-51-E/LPUI-51-CM/LPUF-120/LPUF-120-B/LPUF-120-E/LPUI-102-E/LPUI-120/LPUI-120-B/LPUI-120-L/LPUI-52-E/LPUI-120-E/LPUI-120-CM/LPUF-240/LPUF-240-B/LPUF-240-E/LPUI-240/LPUI-240-B/LPUI-240-CM/LPUI-240-L boards equipped with SD5813 modules do not support the port-queue cs6 configuration."
+}

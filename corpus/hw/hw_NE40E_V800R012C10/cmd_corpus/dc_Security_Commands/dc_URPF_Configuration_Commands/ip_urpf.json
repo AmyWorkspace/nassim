@@ -1,0 +1,42 @@
+{
+    "PageTitle": "ip urpf (traffic behavior view)",
+    "FuncDef": "The ip urpf command enables URPF check in the traffic behavior view.\nThe undo ip urpf command disables URPF check in the traffic behavior view.\nBy default, URPF check is disabled.",
+    "CLIs": [
+        "ip urpf { strict | loose } [ allow-default ]",
+        "undo ip urpf [ strict | loose ] [ allow-default ]"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "strict",
+            "Info": "Indicates URPF strict check. After receiving a packet, a router searches for the interface board slot ID, interface number, and VLAN ID (only for VLAN packets) information corresponding to the source IP address of the packet in the FIB table, and matches the obtained interface board slot ID, interface number, and VLAN ID information against the information of the packet. If they match, the router forwards the packet; if they do not match, the router discards the packet.\n-"
+        },
+        {
+            "Parameters": "loose",
+            "Info": "Indicates URPF loose check. After receiving a packet, a router uses the source IP address in the packet as the destination address, and searches the FIB table for an outbound interface mapped to the destination IP address. If the outbound interface is found, the router forwards the packet; if the outbound interface is not found, the router discards the packet.\n-"
+        },
+        {
+            "Parameters": "allow-default",
+            "Info": "Enables the device to forward the packets that pass the URPF check and match the default route.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic classifier huaweical",
+            "[*HUAWEI-classifier-huaweical] if-match any",
+            "[*HUAWEI-classifier-huaweical] quit",
+            "[*HUAWEI] traffic behavior huaweibeh",
+            "[*HUAWEI-behavior-huaweibeh] ip urpf strict",
+            "[*HUAWEI-behavior-huaweibeh] quit",
+            "[*HUAWEI] traffic policy huaweipol",
+            "[*HUAWEI-trafficpolicy-huaweipol] classifier huaweical behavior huaweibeh",
+            "[*HUAWEI-trafficpolicy-huaweipol] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] traffic-policy huaweipol inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGenerally, when receiving a packet, a router obtains the destination address of the packet and searches the forwarding table for a route to the destination address. If a route to the destination address is found, the packet is forwarded; otherwise, the packet is discarded.If a device receives a packet with a bogus source address and forwards the packet or sends a response packet, the device or the source address is attacked. When a packet is received on a URPF-enabled interface, the interface obtains the source address and inbound interface of the packet, takes the source address as the destination address to search for the corresponding inbound interface, and then compares the found interface with the inbound interface. If the two interfaces do not match, the interface considers the source address as a spoofing one and discards the packet. In this manner, URPF can effectively protect against malicious attacks by blocking packets with bogus source addresses.\nPrecautions\nIn the application of URPF in the traffic behavior view, if URPF check is configured in a traffic behavior and the traffic behavior is associated with a traffic policy applied to an interface, the URPF check takes effect on the traffic that matches the configured traffic classification on the interface.\nWhen traffic policy template is applied in the outbound direction, the URPF function applied in the traffic behavior view which is associated with the traffic policy template does not take effect."
+}

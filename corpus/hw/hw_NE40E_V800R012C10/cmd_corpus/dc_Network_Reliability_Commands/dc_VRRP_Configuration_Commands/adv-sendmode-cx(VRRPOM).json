@@ -1,0 +1,37 @@
+{
+    "PageTitle": "vrrp advertise send-mode",
+    "FuncDef": "The vrrp advertise send-mode command configures a sending mode for VRRP Advertisement packets in a super VLAN.\nThe undo vrrp advertise send-mode command cancels the configuration.\nBy default, a super VLAN sends VRRP Advertisement packets only to a sub-VLAN with the smallest VLAN ID among all the sub-VLANs in the Up state.",
+    "CLIs": [
+        "vrrp advertise send-mode <sub-vlan-id>",
+        "vrrp advertise send-mode all",
+        "undo vrrp advertise send-mode"
+    ],
+    "ParentView": [
+        "VLANIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sub-vlan-id",
+            "Info": "Specifies the ID of a sub-VLAN to which VRRP advertisement packets are sent.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Enables VRRP Advertisement packets to be broadcast to all sub-VLANs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] quit",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] aggregate-vlan",
+            "[*HUAWEI-vlan100] access-vlan 10",
+            "[*HUAWEI-vlan100] quit",
+            "[*HUAWEI] interface vlanif 100",
+            "[*HUAWEI-Vlanif100] vrrp vrid 1 virtual-ip 10.10.10.10",
+            "[*HUAWEI-Vlanif100] vrrp advertise send-mode 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a VRRP backup group is configured on VLAN aggregation-enabled devices and VRRP Advertisement packets are transmitted to all sub-VLANs, a great deal of bandwidth resources are consumed. To improve bandwidth usage efficiency, enable VRRP Advertisement packets to be transmitted only to a specified sub-VLAN.\nPrerequisites\nA super VLAN and sub-VLANs have been configured.\nA VRRP backup group has been configured on a VLANIF interface of a super VLAN.\nConfiguration Impact\nThe all parameter is not recommended. If the all parameter is specified, a super VLAN broadcasts a VRRP Advertisement packet to all its sub-VLANs, which affects CPU performance.\nPrecautions\nIf both VRRP and static ARP are configured on a device, note the following issues:\nIf VRRP is enabled on a VLANIF interface, a virtual IP address cannot be an IP address that maps to a MAC address in a static ARP entry. If a virtual IP address maps to a MAC address in a static ARP entry, a forwarding failure occurs. For example, if a MAC address in a static ARP entry on a VLANIF interface maps to an IP address of 10.1.1.1, the IP address of 10.1.1.1 cannot be the virtual IP address of a VRRP backup group configured on the VLANIF interface.When a static ARP entry is configured on a VLANIF interface with a VRRP backup group configured, the virtual IP address of the VRRP backup group cannot be an IP address that maps to the MAC address in the static ARP entry. Otherwise, a forwarding failure occurs. For example, if a VRRP backup group on a VLANIF interface is assigned an IP address of 10.1.1.1, the IP address of 10.1.1.1 cannot map to a MAC address in a static ARP entry configured on the VLANIF interface."
+}

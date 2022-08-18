@@ -1,0 +1,59 @@
+{
+    "PageTitle": "cc interval",
+    "FuncDef": "The cc interval command sets an interval at which continuity check messages (CCMs) are sent.\nThe undo cc interval command restores the default interval.\nBy default, the default interval is 1000 milliseconds.",
+    "CLIs": [
+        "cc interval { <3.3> | 10 | 100 | 1000 | 10000 | 60000 | 600000 }",
+        "undo cc interval"
+    ],
+    "ParentView": [
+        "Maintenance entity group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "3.3",
+            "Info": "Indicates that CCMs are set at an interval of 3.3 ms.\n-"
+        },
+        {
+            "Parameters": "10",
+            "Info": "Indicates that CCMs are set at an interval of 10 ms.\n-"
+        },
+        {
+            "Parameters": "100",
+            "Info": "Indicates that CCMs are set at an interval of 100 ms.\n-"
+        },
+        {
+            "Parameters": "1000",
+            "Info": "Indicates that CCMs are set at an interval of 1000 ms.\n-"
+        },
+        {
+            "Parameters": "10000",
+            "Info": "Indicates that CCMs are set at an interval of 10000 ms.\n-"
+        },
+        {
+            "Parameters": "60000",
+            "Info": "Indicates that CCMs are set at an interval of 60000 ms.\n-"
+        },
+        {
+            "Parameters": "600000",
+            "Info": "Indicates that CCMs are set at an interval of 600000 ms.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls static-l2vc destination 4.4.4.4 400 transmit-vpn-label 100 receive-vpn-label 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] mpls-tp meg test",
+            "[*HUAWEI-mpls-tp-meg-test] me l2vc peer-ip 4.4.4.4 vc-id 400 vc-type vlan mep-id 1 remote-mep-id 2",
+            "[*HUAWEI-mpls-tp-meg-test] cc interval 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCC detects LOC on a link between any MEPs in a MEG.\nTo set an interval at which CCMs are sent, run the cc interval command. If a MEP does not receive CCMs from its RMEP within a period of 3.5 times a specified interval, the connectivity between the MEP and its RMEP fails.\nOptional CCM transmission intervals and their usage scenarios are as follows:\ninterval is 3.3 ms: 300 frames are sent per second. This interval is recommended for protection switching.interval is 10 ms: 100 frames are sent per second.interval is 100 ms: 10 frames are sent per second. This interval is recommended for performance monitoring.interval is 1000 ms: 1 frame is sent per second. This interval is recommended in fault management.interval is 10000 ms: 6 frames are sent per minute.interval is 60000 ms: 1frames are sent per minute.interval is 600000 ms: 6 frames are sent per hour.\nSelect a proper CCM transmission interval to meet CC application requirements.\n\nPrerequisites\nThe ME of the MEG has been bound to a tunnel.\nPrecautions\nIf CC has been enabled, canceling the CCM receiving function is recommended before you run the cc interval command to prevent CCM misreporting.The intervals configured on a MEP and its RMEP must be the same; otherwise, CC fails."
+}

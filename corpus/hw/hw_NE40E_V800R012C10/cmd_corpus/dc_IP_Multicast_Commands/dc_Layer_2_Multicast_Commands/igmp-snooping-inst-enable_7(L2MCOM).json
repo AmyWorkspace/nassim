@@ -1,0 +1,26 @@
+{
+    "PageTitle": "igmp-snooping query-interval",
+    "FuncDef": "The igmp-snooping query-interval command sets the interval at which a querier sends general query messages.\nThe undo igmp-snooping query-interval command restores the default setting.\nBy default, a querier sends general query messages at an interval of 60s.",
+    "CLIs": [
+        "igmp-snooping query-interval <query-interval>",
+        "undo igmp-snooping query-interval"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "query-interval",
+            "Info": "Specifies the interval at which a querier sends general query messages.\nThe value ranges from 1 to 655351, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] igmp-snooping query-interval 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe igmp-snooping query-intervaligmp snooping query interval command has the following functions:\nSets the interval at which a querier sends general query messages. If the querier function is enabled, the igmp-snooping query-interval command can be used to set the interval at which a querier sends general query messages. This enables a device to periodically send general query messages in order to maintain group memberships. The shorter the interval is, the more frequently general query messages are sent and the more bandwidth and device resources are consumed. Ensure that the interval at which IGMP general query messages are sent is greater than the maximum response time of IGMP general query messages; otherwise, multicast group members may be deleted mistakenly.Changes the aging time of member ports. After receiving a Report message from a downstream device, a device sets the aging time of the corresponding member port based on the following formula: Aging time of a member port = Number of times group-specific query messages are sent x Interval at which general query messages are sent + Maximum time for a downstream host to respond to a querier. The default aging time is 130 seconds. The interval at which IGMP general query messages are sent in the formula is set using the igmp-snooping query-interval command. The number of times group-specific group query messages are sent is set using the igmp-snooping robust-count command. The maximum time for a downstream host to respond to a querier is set using the igmp-snooping max-response-time command.\n\nPrerequisites\nIGMP snooping has been configured using the igmp-snooping enable command.\nConfiguration Impact\nIf the igmp-snooping query-interval command is run in the same view several times, the latest configuration overrides the previous one.\nThe default query-interval value in this command is 60 seconds, which is different than the default value 125 seconds defined by the relevant standard. A Huawei querier and a non-Huawei querier must send IGMP general query messages at the same interval.\nPrecautions\nWhen the igmp-snooping query-interval command is used to set the aging time of member ports, the settings of parameters in this command must be consistent on a Layer 2 device and its upstream Layer 3 device; otherwise, multicast data transmission between Layer 2 and Layer 3 networks will be interrupted.\nThe interval at which a querier sends general query messages in a VLAN fails to be set when a Dot1q termination sub-interface has been added to the VLAN."
+}

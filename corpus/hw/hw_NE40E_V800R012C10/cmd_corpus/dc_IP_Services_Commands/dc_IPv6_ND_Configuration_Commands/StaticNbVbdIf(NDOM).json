@@ -1,0 +1,51 @@
+{
+    "PageTitle": "ipv6 neighbor (VBDIF interface view)",
+    "FuncDef": "The ipv6 neighbor command configures a static entry in the IPv6 neighbor discovery cache.\nThe undo ipv6 neighbor command deletes a static entry from the IPv6 neighbor discovery cache.\nBy default, no static entry is configured.",
+    "CLIs": [
+        "ipv6 neighbor <ipv6-address> <mac-address> vlan <vlan-id> { <interface-type> <interface-number> | <interface-name> }",
+        "ipv6 neighbor <ipv6-address> <mac-address> vlan <vlan-id> cevlan <ce-vid> { <interface-type> <interface-number> | <interface-name> }",
+        "ipv6 neighbor <ipv6-address> <mac-address> { <interface-type> <interface-number> | <interface-name> }",
+        "ipv6 neighbor <ipv6-address> <mac-address>",
+        "undo ipv6 neighbor <ipv6-address>"
+    ],
+    "ParentView": [
+        "VBDIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a static entry.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies the data link layer address of the static entry.\nThe value is in the format of H-H-H. Each H is a 4-digit hexadecimal number, such as 00e0. If you enter fewer than four digits, the system pads 0s before the input digits. For example, if you enter e0, the system changes it to 00e0."
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies the outer VLAN ID of PE.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the type and number of a physical interface.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of a physical interface.\n-"
+        },
+        {
+            "Parameters": "cevlan ce-vid",
+            "Info": "Specifies the inner VLAN ID of CE.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] quit",
+            "[*HUAWEI] interface Vbdif 10",
+            "[*HUAWEI-Vbdif10] ipv6 enable",
+            "[*HUAWEI-Vbdif10] ipv6 neighbor 2001:db8:1::1 00-e0-fc-12-34-56 Ethernet3/0/0.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo filter the illegal packets, you can create static ND entries, binding the destination IPv6 addresses of these packets to nonexistent MAC addresses.\nPrerequisites\nBefore running the ipv6 neighbor command to configure a static entry, you need to run the ipv6 enable command in the interface view to enable the IPv6 function on the interface.\nConfiguration Impact\nAn ND entry enters the REACHABLE state after being created, indicating that the interface connected to this neighbor is Up. If the interface connected to this neighbor turns Down, the ND entry needs to be deleted.\nThe static ND entries overwrite the ND entries dynamically learnt by routers. That is, static ND entries are of higher priorities than dynamically learnt ND entries.\nPrecautions\nIf the IPv6 address or MAC address specified in the ipv6 neighbor command is incorrect, communication with this neighbor fails."
+}

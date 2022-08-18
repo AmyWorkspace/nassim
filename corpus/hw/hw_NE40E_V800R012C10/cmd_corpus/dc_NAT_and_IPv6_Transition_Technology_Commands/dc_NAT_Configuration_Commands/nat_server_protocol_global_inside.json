@@ -1,0 +1,63 @@
+{
+    "PageTitle": "nat server protocol global inside (NAT instance view)",
+    "FuncDef": "The nat server protocol global inside command configures an internal server that runs a specific protocol.\nThe undo nat server protocol global inside command deletes the configuration of an internal server that runs a specific protocol.\nBy default, no internal server that runs a specific protocol is configured.",
+    "CLIs": [
+        "nat server protocol { tcp | udp | <protocol-number> } global <global-address> [ <global-protocol> ] [ vpn-instance <vpn-instance-name> ] inside <host-address> [ <host-protocol> ] [ vpn-instance <vpn-instance-name> ] [ extendable ]",
+        "nat server protocol { tcp | udp | <protocol-number> } global <global-address> [ <global-protocol> ] [ vpn-instance <vpn-instance-name> ] inside <host-address> [ <host-protocol> ] [ vpn-instance <vpn-instance-name> ] [ outbound | extendable ]",
+        "undo nat server protocol { tcp | udp | <protocol-number> } global <global-address> [ <global-protocol> ] [ vpn-instance <vpn-instance-name> ] inside <host-address> [ <host-protocol> ] [ vpn-instance <vpn-instance-name> ] [ extendable ]",
+        "undo nat server protocol { tcp | udp | <protocol-number> } global <global-address> [ <global-protocol> ] [ vpn-instance <vpn-instance-name> ] inside <host-address> [ <host-protocol> ] [ vpn-instance <vpn-instance-name> ] [ outbound | extendable ]"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tcp",
+            "Info": "Indicates that an internal server runs TCP.\n-"
+        },
+        {
+            "Parameters": "udp",
+            "Info": "Indicates that an internal server runs UDP.\n-"
+        },
+        {
+            "Parameters": "protocol-number",
+            "Info": "Specifies a protocol number.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "global global-address",
+            "Info": "Specifies the public IP address of an internal server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "global-protocol",
+            "Info": "Specifies the protocol that an internal server runs to communicate with an external device. The value can be POP2, POP3, or SMTP.\nIf global-protocol is set to a non-0 integer, the destination port number in external user packets must be the same as global-protocol. A port number inconsistency causes these users to fail to access an internal server.If global-protocol is set to 0, port numbers carried in external user packets can be set to any numbers so that the users can access an internal server.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which an internal server belongs.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "inside host-address",
+            "Info": "Specifies the private IP address of an internal server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "host-protocol",
+            "Info": "Specifies the protocol that an internal server runs. For example, the protocol can be PoP2, PoP3, or SMTP.\nIf global-protocol is set to a non-0 integer, host-protocol must be set to any non-0 integer.If global-protocol is set to 0, host-protocol can only be set to 0.\nThe value is a string of 1 to 31 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "extendable",
+            "Info": "Indicates the extended NAT server identifier, meaning that an internal server with a private IP address and different public IP addresses can be configured.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates that public network users can access an internal server only after private network users get online.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat server protocol tcp global 192.168.12.12 ftp inside 10.12.12.12 ftp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nNAT hides the structure of an internal network, including devices on the internal network. A device on an external network may need to access an internal host, such as a web or FTP server.\nConfiguration Impact\nThe internal server function enables a NAT device to translate the public IP address to the private IP address based on a static mapping entry that contains a private IP address, a private port number, a public IP address, and a public port number or a static mapping entry that contains a private IP address and a public IP address.\nPrecautions\nWhen you configure the internal server function, note the following:\nWhen the non-easy IP mode is used to configure a global address, the global address must be different from an existing IP address assigned to a device or its interface, preventing IP address conflicts.The global-address must be different from any IP address in a NAT address pool.After the outbound parameter is configured, the internal server can take effect only if the internal server user triggers an access attempt and the user table is created.In a centralized scenario, do not configure the outbound parameter, which prevents traffic from being discarded if a public network user initiates an access attempt to visit an internal server.In a distributed scenario, configure the outbound parameter so that a public network user can visit an internal server only after a private network user gets online through a dial-up. If the internal server user on the private network does not get online, traffic that the public network user sends to the internal server is discarded.After the extendable parameter is configured, the mapping between a pair of a private IP address and a private port number and different pairs of public IP addresses and public port numbers can be configured for an internal server in a NAT instance.After the extendable parameter is configured, the command and nat server-mode enable, nat filter mode full-cone, nat filter mode full-cone 5-tuple-session commands are mutually exclusive, and the static source tracing algorithm cannot be bound to the NAT instance.After the extendable parameter is configured, a public network-side user cannot access different public IP addresses of the same private network server.\nIf the FTP/RTSP/SIP server is deployed on the private network side, you are advised to configure the NAT server at the address level. When the port-level NAT server is used, the connection may be interrupted.\nNAT ALG does not take effect on protocol packets that match port-level NAT internal server mappings."
+}

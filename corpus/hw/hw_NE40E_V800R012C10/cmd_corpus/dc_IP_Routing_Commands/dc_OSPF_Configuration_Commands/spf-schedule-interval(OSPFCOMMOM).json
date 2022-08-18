@@ -1,0 +1,51 @@
+{
+    "PageTitle": "spf-schedule-interval",
+    "FuncDef": "The spf-schedule-interval command sets the interval for OSPF to calculate routes.\nThe undo spf-schedule-interval command restores the default setting.\nBy default, the intelligent timer is enabled. The maximum interval for the SPF calculation is 5000 ms, the initial interval is 50 ms, and the Holdtime interval is 200 ms.",
+    "CLIs": [
+        "spf-schedule-interval <interval1>",
+        "spf-schedule-interval intelligent-timer <max-interval> <start-interval> <hold-interval> [ conservative ]",
+        "spf-schedule-interval millisecond <interval2>",
+        "undo spf-schedule-interval"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval1",
+            "Info": "Specifies the interval for OSPF to perform the SPF calculation.\nThe value is an integer ranging from 1 to 10, in seconds."
+        },
+        {
+            "Parameters": "intelligent-timer",
+            "Info": "Sets the interval for the SPF calculation of OSPF through an intelligent timer.\n-"
+        },
+        {
+            "Parameters": "max-interval",
+            "Info": "Specifies the maximum interval for OSPF to perform the SPF calculation.\nThe value is an integer ranging from 1 to 300000, in milliseconds."
+        },
+        {
+            "Parameters": "start-interval",
+            "Info": "Specifies the initial interval for OSPF to perform the SPF calculation.\nThe value is an integer ranging from 1 to 60000, in milliseconds."
+        },
+        {
+            "Parameters": "hold-interval",
+            "Info": "Specifies the Holdtime interval for OSPF to perform the SPF calculation.\nThe value is an integer ranging from 1 to 60000, in milliseconds."
+        },
+        {
+            "Parameters": "conservative",
+            "Info": "Enables conservative mode for OSPF to perform the SPF calculation.\n-"
+        },
+        {
+            "Parameters": "millisecond interval2",
+            "Info": "Specifies the interval for OSPF to perform the SPF calculation.\nThe value is an integer ranging from 1 to 10000, in milliseconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] spf-schedule-interval 6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBased on the LSDB, the device that runs OSPF can calculate the Shortest Path Tree (SPT) with itself as the root based on the SPF algorithm, and determine the next hop to the destination network according to the SPT. By adjusting SPF calculation interval, you can reduce bandwidth and router resources that are consumed by the frequent change of the network.\nIf fast route convergence is required, you can set a millisecond-level interval to speed up route calculation.\nWhen the OSPF LSDB changes, the shortest path needs be recalculated. Frequent network changes occupy many system resources and affect the efficiency of routers. You can configure an intelligent timer and set an interval for the SPF calculation to prevent excessive router memory and bandwidth resource consumption.\nIf an intelligent timer is used, the interval for the SPF calculation is as follows:\nThe initial interval for the SPF calculation is specified in start-interval.The interval for the SPF calculation for the nth (n>=2) time is equal to hold-interval * 2(n-2).When the interval specified in hold-interval * 2(n-2) reaches the maximum interval specified in max-interval, OSPF performs the SPF calculation at the maximum interval until no SPF calculation is performed within max-interval. After the maximum interval elapses, the calculation mechanism goes back to step 1.If no flapping occurs within the interval of- If no flapping occurs in the previous interval and flapping occurs in the current interval, SPF calculation is delayed for a period of the start-interval. After the SPF calculation is complete, the current interval is used for the next SPF calculation.\nIf a common timer is used, the interval for the SPF calculation is as follows:\nThe interval for the first SPF calculation is 0. Specifically, the SPF calculation is performed immediately when the first route update message is received.The interval for a subsequent SPF calculation is the value specified by interval1 or by millisecond interval2."
+}

@@ -1,0 +1,40 @@
+{
+    "PageTitle": "sensor-group (Subscription view)",
+    "FuncDef": "The sensor-group command associates a sampling sensor group and configures a sampling interval, redundancy suppression, and a heartbeat interval for the sensor group.\nThe undo sensor-group command cancels the association of a sampling sensor group.\nBy default, no sampling sensor group is associated.",
+    "CLIs": [
+        "sensor-group <sensor-name> [ sample-interval <sample-interval> { [ suppress-redundant ] | [ heartbeat-interval <heartbeat-interval> ] } * ]",
+        "undo sensor-group <sensor-name> [ sample-interval <sample-interval> { [ suppress-redundant ] | [ heartbeat-interval <heartbeat-interval> ] } * ]"
+    ],
+    "ParentView": [
+        "Subscription view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sensor-name",
+            "Info": "Specifies the name of a sampling sensor group to be associated.\nThe value is a string of 1 to 31 characters. The value must be the name of a sampling sensor group created in the telemetry view."
+        },
+        {
+            "Parameters": "sample-interval sample-interval",
+            "Info": "Specifies a sampling interval.\nThe value is an integer ranging from 0 to 1800000, in milliseconds. Currently, only the values 0, 10, 100, 1000, 5000, 10000, 30000, 60000, 180000, 300000, 900000, and 1800000 are supported. The default value is 60000."
+        },
+        {
+            "Parameters": "suppress-redundant",
+            "Info": "Indicates that redundancy suppression is enabled for sampling. If the data remains unchanged during a heartbeat interval after the data is sent last time, no more data is sent.\n-"
+        },
+        {
+            "Parameters": "heartbeat-interval heartbeat-interval",
+            "Info": "Specifies a heartbeat interval.\nThe value is an integer ranging from 1 to 60, in seconds. The value of heartbeat-interval must be an integral multiple of the value of sample-interval in the same dimension."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] telemetry",
+            "[~HUAWEI-telemetry] sensor-group 1",
+            "[*HUAWEI-telemetry-sensor-group-1] quit",
+            "[*HUAWEI-telemetry] subscription test",
+            "[*HUAWEI-telemetry-subscription-test] sensor-group 1 sample-interval 100 suppress-redundant heartbeat-interval 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA sampling sensor group created in the telemetry view must be associated in the subscription view to perform sampling tasks.\nA maximum of five sampling sensor groups can be associated for each subscription using this command.\nPrecautions\nWhen the sampling type is alarm, the sampling interval, redundancy suppression, and heartbeat interval configurations do not take effect.When the sampling type is OnChange, the sampling is performed immediately. The sampling interval takes effect only when it is set to 0 ms. The redundancy suppression and heartbeat interval configurations are mutually exclusive with the OnChange sampling.When the sampling interval is set to 0 ms, periodic sampling and user-defined sampling do not take effect.The sampling sensor group to be associated must be created in the telemetry view first. Otherwise, association fails.If the sampling path configured in a sampling sensor group to be associated contains threshold filtering conditions, redundancy suppression and a heartbeat interval cannot be configured. That is, the threshold filtering configuration is mutually exclusive with the redundancy suppression and heartbeat interval configurations.If the sampling interval configured is shorter than the minimum sampling precision (not involved in alarm and event sampling), the device reports data based on the minimum sampling precision. If the sampling interval configured is longer than the minimum sampling precision and is not an integral multiple of the minimum sampling precision, the device reports data based on the round-down integral multiple of the minimum sampling precision. For example, if the minimum sampling precision of the sampling path huawei-debug:debug/cpu-infos/cpu-info is 1000 and the value of sample-interval of the sensor-group command is 100, the device reports data every 1000 ms.Recommended configuration: Sampling period = (Total number of sampling instances) / (Number of sampling instances in each minimum sampling period) * (Minimum sampling period)"
+}

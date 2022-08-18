@@ -1,0 +1,33 @@
+{
+    "PageTitle": "apply ip-address next-hop",
+    "FuncDef": "The apply ip-address next-hop command sets the next hop address for a route.\nThe undo apply ip-address next-hop command cancels the configuration.\nBy default, no next hop address is set.",
+    "CLIs": [
+        "apply ip-address next-hop { <address> | peer-address | blackhole }",
+        "undo apply ip-address next-hop { <address> | peer-address | blackhole }"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "address",
+            "Info": "Specifies the next hop address.\nThe value is an IPv4 address, in dotted decimal notation."
+        },
+        {
+            "Parameters": "peer-address",
+            "Info": "If the apply ip-address next-hop peer-address command is run in a route-policy that is used as an export route-policy on a device, the device sets the next hop address of a route to be advertised to a peer to its own IP address.\nIf the command is run in a route-policy that is used as an import route-policy, the device sets the next hop address of a filtered route that has been received from the peer to the peer's IP address.\n-"
+        },
+        {
+            "Parameters": "blackhole",
+            "Info": "Adds a black-hole flag to a route.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] apply ip-address next-hop 10.1.1.8"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set a next hop address of a route, run the apply ip-address next-hop command.\nRun the route-policy command to enter the Route-policy view.A route-policy may consist of multiple nodes. The relationship between the nodes is \"OR\". The system matches a route against the nodes in sequence. If the route matches a node, the route matches the route-policy, and the system no longer matches it against other nodes.Each node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.\nIn BGP, the route-policy can be an import or export policy. Even if the next hop address configured in the route-policy is unreachable, the BGP peers still adds the routes to the BGP routing table, but the routes are invalid and cannot be installed in the IP routing table.\nTo add a black-hole flag to a route, run the apply ip-address next-hop blackhole command.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nConfiguration Impact\nIf a BGP route matches a route-policy, the next hop address of the BGP route is changed.\nPrecautions\nWhen a route-policy has been specified in the import-route or network command, the apply clause configured for the route-policy using the apply ip-address next-hop command does not take effect.\nThe command sets a next hop IP address for the routes that match the relevant route-policy, which may change the service forwarding path. Therefore, exercise caution when running this command.\nIf an import route-policy is used to change the next hops of the matched routes received from a direct EBGP peer to indirectly connected interface addresses, the peer ebgp-max-hop command must be run to ensure that the routes can recurse to reachable next hops. This is because direct EBGP routes do not recurse by default. If the next hop of a direct EBGP route encounters the preceding change, the new next hop of the route is unreachable, adversely affecting services.\nIf the apply ip-address next-hop command is run more than once, the last configuration overrides the previous one."
+}

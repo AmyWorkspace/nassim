@@ -1,0 +1,45 @@
+{
+    "PageTitle": "mpls switch-l2vc encapsulation switchover",
+    "FuncDef": "The mpls switch-l2vc encapsulation switchover command forcibly switches traffic from the primary PW to the secondary PW.\nThe undo mpls switch-l2vc encapsulation switchover command forcibly switches traffic from the secondary PW back to the primary PW.\nBy default, the mpls switch-l2vc switchover command is not configured.",
+    "CLIs": [
+        "mpls switch-l2vc <ip-address> <vc-id> encapsulation { ethernet | fr | hdlc | ip-interworking | ip-layer2 | ppp | vlan } switchover",
+        "undo mpls switch-l2vc <ip-address> <vc-id> encapsulation { ethernet | fr | hdlc | ip-interworking | ip-layer2 | ppp | vlan } switchover"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of U-PE. The value is the LSR ID of the peer device.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id",
+            "Info": "Specifies the ID of a Layer 2 VC.\nThe value is a decimal integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "encapsulation",
+            "Info": "Specifies the type of PW encapsulation mode.\n-"
+        },
+        {
+            "Parameters": "ip-interworking",
+            "Info": "Enables heterogeneous media IP interworking between Huawei devices.\n-"
+        },
+        {
+            "Parameters": "ip-layer2",
+            "Info": "Enables heterogeneous media IP interworking between a Huawei device and a non-Huawei device.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] mpls switch-l2vc 1.1.1.1 1 between 2.2.2.2 2 backup 3.3.3.3 3 encapsulation vlan",
+            "[*HUAWEI] mpls switch-l2vc 1.1.1.1 1 encapsulation vlan switchover"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a large network, if two PEs cannot establish a signaling connection because they are in different ASs, you can configure PW switching on SPEs to connect the two PEs using an MS-PW.\nIf an SPE is configured with the primary and secondary PWs working in master/slave PW redundancy mode, traffic is transmitted over the primary PW in normal situations. If you want the traffic to be transmitted over the secondary PW due to reasons such as device upgrade or service re-deployment, you can use this command to forcibly switch traffic from the primary PW to the secondary PW. After the device is upgraded or services are re-deployed, you can run the undo mpls switch-l2vc switchover command to forcibly switch traffic from the secondary PW to the primary PW. If the primary PW is normal, traffic will be switched back to the primary PW after you run the undo mpls switch-l2vc switchover command.\nBefore running the mpls switch-l2vc switchover command, ensure that the secondary PW is normal and can forward traffic.Before running the undo mpls switch-l2vc switchover command, ensure that the primary PW is normal and can forward traffic.\nIf the secondary MS-PW fails after traffic is forcibly switched to the secondary PW, the traffic will be switched back to the primary PW.\n\nPrerequisites\nMPLS and L2VPN have been enabled.\nThe primary and secondary PWs have been configured on the SPE using the mpls switch-l2vc command.\nConfiguration Impact\nPW signaling is not negotiated for a dynamic MS-PW on the SPE. Instead, PW information on both PEs is transparently transmitted on the SPE.\nExercise caution when using the undo mpls switch-l2vc all command because it will delete all the MS-PW on the devices.\nA PW switchover will be performed after you run the mpls switch-l2vc switchover or undo mpls switch-l2vc switchover command. If the PW to be switched to is Down or unavailable, the switchover fails.\nFollow-up Procedure\nRun the display mpls switch-l2vc command to check whether the VC status is Up.\nPrecautions\nThe combination of the Peer IP, PW ID and PW type must be unique on a node. The PW IDs at the two ends of an MS-PW can be the same.\nThe VCCV feature is enabled by default and does not need to be configured. If the control word function is enabled, VCCV in control word mode is supported by default.\nThe destination IP address is the LSR ID of the remote peer for the single-homing PW.The specified VC ID is the VC ID of the single-homing PW.The encapsulation type is the same as that specified using the mpls switch-l2vc command."
+}

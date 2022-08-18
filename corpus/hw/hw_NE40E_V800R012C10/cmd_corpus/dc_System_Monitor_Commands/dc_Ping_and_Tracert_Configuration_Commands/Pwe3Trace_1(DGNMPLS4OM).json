@@ -1,0 +1,95 @@
+{
+    "PageTitle": "tracert vc -vpn-instance",
+    "FuncDef": "The tracert vc -vpn-instance command detects the segment-by-segment connectivity of the LSP between PEs in the BGP networking.",
+    "CLIs": [
+        "tracert vc -vpn-instance <vpn-instance-name> <local-ce-id> <remote-ce-id> [ -exp <exp-value> | -f <firstTtl> | -m <maxTtl> | -r <reply-mode> | -t <timeout> | -g ] * { control-word | label-alert [ no-control-word ] } [ full-lsp-path ] [ detail ] [ bypass -si { <sourceIfName> | <sourceIfType> <sourceIfNum> } ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "local-ce-id",
+            "Info": "Specifies the ID of the local CE.\nIt is a decimal integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "remote-ce-id",
+            "Info": "Specifies the ID of the remote CE.\nIt is a decimal integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies the value of the EXP field in an outer label in an echo request packet.\nIt is a decimal integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "-f firstTtl",
+            "Info": "Specifies the value of the first TTL.\nIt is a decimal integer ranging from 1 to 255 and must be smaller than max-ttl. By default, the value is 1."
+        },
+        {
+            "Parameters": "-m maxTtl",
+            "Info": "Specifies the value of the maximum TTL.\nIt is a decimal integer ranging from 1 to 255 and must be larger than the value of first-ttl. By default, the value is 30."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies the mode in which the peer responds to the echo reply packet.\nIt is a decimal integer ranging from 1 to 4.The meaning of each value is as follows:\n1: indicates no reply.2: indicates a reply with an IPv4 or IPv6 UDP datagram.3: indicates a reply with an IPv4 or IPv6 datagram carrying an MPLS router alert label.4: indicates a reply through the control channel of the application plane."
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies the timeout period for waiting for MPLS echo reply packets.\nThe value is a decimal integer ranging from 0 to 65535 ms. By default, the value is 5."
+        },
+        {
+            "Parameters": "-g",
+            "Info": "Performs the test using MPLS fragments.\n-"
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Indicates the control word encapsulated in packets.\n-"
+        },
+        {
+            "Parameters": "label-alert",
+            "Info": "Indicates the router alert label encapsulated in packets.\n-"
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "Disables the control word mode.\n-"
+        },
+        {
+            "Parameters": "full-lsp-path",
+            "Info": "Displays information about responses of all nodes along the LSP that an echo request packet passes. If this parameter is not specified, only the response of each PW node along the LSP is displayed.\n-"
+        },
+        {
+            "Parameters": "detail",
+            "Info": "Displays details carried in MPLS Echo Reply packets.\n-"
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Forwards packets through a specified public bypass LSP of a PW.\n-"
+        },
+        {
+            "Parameters": "-si sourceIfName",
+            "Info": "Specifies the name of an inbound interface.\nSets the inbound interface of MPLS ECHO-REQUEST packets to simulate a remote device to send packets. It can be used to detect the fault of the packet forwarding path that enters through a specific interface.\n-"
+        },
+        {
+            "Parameters": "sourceIfType",
+            "Info": "Specifies the name of an inbound type.\n-"
+        },
+        {
+            "Parameters": "sourceIfNum",
+            "Info": "Specifies the name of an inbound number.\n-"
+        },
+        {
+            "Parameters": "-vpn-instance vpn-instance-name",
+            "Info": "Specifies the VPN instance name.\nIt is a string of 1 to 31 case-sensitive characters without spaces."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> tracert vc -vpn-instance vpn1 1 2 label-alert full-lsp-path",
+            "TTL   Replier            Time    Type      Downstream",
+            "  0                                Ingress   10.2.2.2/[21505 1026 ]",
+            "  1     10.2.2.2           60 ms   Transit   10.3.3.3/[1026 ]",
+            "  2     10.3.3.3           50 ms   Transit   10.4.4.4/[3 ]",
+            "  3     10.1.1.1           70 ms   Egress"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter an Echo Reply packet is received, packet information is displayed.\nAfter the control word is encapsulated, in the case of a multi-segment PW, on the switch node, if the TTL value of the label does not time out, the Echo Request packet is not sent to the CPU. In control word mode, the source obtains less PW information, but the performance of the node is seldom affected and meanwhile the source is unaware of the downstream information about this switch node. When there are a large number of packets, the control word mode is recommended.\nAfter the router alert is encapsulated, in the case of a multi-segment PW, on the switch node, the Echo Request packet is sent to the CPU. In router alert mode, the source obtains more PW information, but in the case of a great number of packets, the performance of the node is affected severely. In the case of a small number of packets, the router alert mode is recommended."
+}

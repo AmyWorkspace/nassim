@@ -1,0 +1,33 @@
+{
+    "PageTitle": "binding interface (Monitoring group view)",
+    "FuncDef": "The binding interface command adds an interface to an interface monitoring group. This interface is called a binding interface.\nThe undo binding interface command deletes an interface from an interface monitoring group.\nBy default, no interface is added to an interface monitoring group.",
+    "CLIs": [
+        "binding interface { <interface-type> <interface-number> | <interface-name> } [ down-weight <down-weight-value> ]",
+        "undo binding interface { <interface-type> <interface-number> | <interface-name> }"
+    ],
+    "ParentView": [
+        "Monitoring group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the type and number of a binding interface.\nThe value that include but are not limited to:\nEthernet physical interfaces:Ethernet interfaceGE interface10GE interface40GE interface100GE interface\nEth-Trunk interfacePW-VE interface"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies an interface name.\n-"
+        },
+        {
+            "Parameters": "down-weight down-weight-value",
+            "Info": "Specifies a down weight for a binding interface.\nThe value is an integer ranging from 1 to 1000. The default value is 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] monitor-group group1",
+            "[*HUAWEI-monitor-group-group1] binding interface GigabitEthernet 1/0/0 down-weight 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA network-side interface that is added to an interface monitoring group is called a binding interface. An interface monitoring group monitors the binding interface status. The user-side interfaces (track interfaces) change their status according to the binding interface status. To add an interface to an interface monitoring group in a dual-system backup scenario, run the binding interface command.\nIf the down weight sum of all the binding interfaces in the monitoring group is greater than or equal to the value specified using downWeightValue on the track interface, the track interface goes down, and service traffic is switched to the backup link. Otherwise, the track interface goes up, and service traffic is switched back to the primary link.\nPrerequisites\nAn interface monitoring group has been created using the monitor-group command.\nFollow-up Procedure\nRun the track monitor-group command to configure an interface to track the interface monitoring group.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nA maximum of 32 interfaces can be added to an interface monitoring group.\nOnly the master LAG member interface can serve as a binding interface."
+}

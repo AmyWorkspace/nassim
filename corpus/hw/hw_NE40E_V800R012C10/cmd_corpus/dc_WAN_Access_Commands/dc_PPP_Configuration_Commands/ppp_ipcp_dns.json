@@ -1,0 +1,58 @@
+{
+    "PageTitle": "ppp ipcp dns",
+    "FuncDef": "The ppp ipcp dns command sets a DNS server IP address for an interface on a device.\nThe undo ppp ipcp dns command deletes a DNS server IP address.\nBy default, no DNS server IP address is set for an interface on a device.",
+    "CLIs": [
+        "ppp ipcp dns { <primary-dns-address> [ <secondary-dns-address> ] | admit-any }",
+        "undo ppp ipcp dns { <primary-dns-address> [ <secondary-dns-address> ] | admit-any }"
+    ],
+    "ParentView": [
+        "Global MP-group interface view",
+        "LMP configuration view",
+        "MP-group interface view",
+        "POS interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "primary-dns-address",
+            "Info": "Specifies the IP address of the primary DNS server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "secondary-dns-address",
+            "Info": "Specifies the IP address of the secondary DNS server.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "admit-any",
+            "Info": "Accepts any DNS server IP address from the peer.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface pos 1/0/1",
+            "[~HUAWEI-Pos1/0/1] ppp ipcp dns 10.1.1.1 10.1.1.2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] lmp",
+            "[*HUAWEI-lmp] commit",
+            "[~HUAWEI] quit",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] lmp interface enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] interface Lmpif1/0/0",
+            "[*HUAWEI-Lmpif1/0/0] ppp ipcp dns 10.1.1.1 10.1.1.2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface mp-group 1/0/1",
+            "[*HUAWEI-Mp-group1/0/1] ppp ipcp dns 10.1.1.1 10.1.1.2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface global-mp-group 1",
+            "[*HUAWEI-Global-Mp-Group1] ppp ipcp dns 10.1.1.1 10.1.1.2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe PPP link establishment involves the Link Control Protocol (LCP) and Network Control Protocol (NCP) negotiation phases. The NCP phase supports the Internet Protocol Control Protocol (IPCP) negotiation, which involves the IP addresses of the two sides, the MPLS Control Protocol (MPLSCP) negotiation, and the Open System Interconnection Control Protocol (OSICP) negotiation.\nWhen a device initiates a PPP connection to the Device (for example, a PC dials up to the Device), the Device assigns a DNS server IP address to the device. The device can then access the desired domain name. You can configure the Device to accept any DNS server IP address from the device.\nPrerequisites\nPPP is configured as the link layer protocol of the interface.\nConfiguration Impact\nIf the ppp ipcp dns command is run more than once, the latest configuration overrides the previous one. After the configuration, the configured DNS server IP address is used for negotiation.\nPrecautions\nAfter the configuration, you must run the shutdown, commit, and undo shutdown commands in the corresponding interface view for the configuration to take effect."
+}

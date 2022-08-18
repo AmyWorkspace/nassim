@@ -1,0 +1,36 @@
+{
+    "PageTitle": "dhcp snooping trusted interface",
+    "FuncDef": "The dhcp snooping enable command enables DHCP snooping.\nThe undo dhcp snooping enable command disables DHCP snooping.\nThe dhcp snooping trusted interface command configures an interface in a VLAN as a trusted interface.\nThe undo dhcp snooping trusted interface command restores the default configuration.\n\nBy default:\n\n\nDHCP snooping is disabled.\n\nAfter DHCP snooping is enabled, all interfaces are untrusted interfaces.",
+    "CLIs": [
+        "dhcp snooping { enable | trusted } interface { <interface-type> <interface-number> | <interface-name> }",
+        "undo dhcp snooping { enable | trusted } interface { <interface-type> <interface-number> | <interface-name> }"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of an interface.\n-"
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the name of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] port default vlan 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] dhcp snooping enable",
+            "[*HUAWEI-vlan100] dhcp snooping trusted interface GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo enable DHCP snooping, run the dhcp snooping enable command. Enable DHCP snooping in the following order: globally, for a VLAN, for a BD, and for an interface. You can configure DHCP snooping functions only after DHCP snooping is enabled globally.\nBogus DHCP servers may send incorrect IP addresses to DHCP clients. As a result, DHCP clients cannot obtain services. To resolve this problem, enable DHCP snooping and configure interfaces connected to legitimate DHCP servers trusted. The other interfaces are untrusted by default. The device discards the DHCP reply packets received from untrusted interfaces to prevent bogus DHCP server attacks.\nIf no interface is specified, all VLAN interfaces are trusted. As a result, dynamic binding tables cannot be generated on these interfaces.\nPrerequisites\nDHCP snooping has been enabled globally by running the dhcp snooping enable command.\nThe interface is added to the specified VLAN.\nConfiguration Impact\nThe undo dhcp enable command disables DHCP snooping. However, related configurations are not deleted.\nWhen DHCP snooping is enabled, all interfaces are in untrusted mode by default. To configure an interface as a trusted interface, perform one of the following operations:\nRun the dhcp snooping trusted command on an interface to configure the interface as a trusted interface.Run the dhcp snooping trusted command in a BD to configure all interfaces in the BD as trusted interfaces.Run the dhcp snooping trusted interface interface-type interface-number command on a VLAN to configure an interface as a trusted interface.\n\nPrecautions\nAfter DHCP snooping is enabled, all interfaces are untrusted by default. When DHCP snooping is disabled, all interfaces are trusted by default.After a sub-VLAN is added to a super-VLAN, DHCP snooping cannot be enabled on the VLANIF interfaces for both the sub-VLAN and super-VLAN. Layer 3 interfaces have to be switched to Layer 2 interfaces before being added to a VLAN. Otherwise, Layer 3 interfaces cannot be added to a VLAN.DHCP snooping cannot be enabled for both the VLAN and its VLANIF interface.DHCP snooping cannot be enabled for both the BD and its VBDIF interface.DHCP snooping cannot be enabled for both the Layer 2 sub-interfaces and the VBDIF interfaces.DHCP snooping is applied to users on the AC-side interface and not applied to users on the PW-side interface.If both DHCP snooping and DHCP relay/DHCP server are required, DHCP snooping must be enabled on the Layer 3 interface where the DHCP relay/DHCP server is deployed.If a whitelist has been applied when DHCP snooping is enabled, ensure that whitelist rules have been configured for all valid DHCP servers in the whitelist.When DHCP snooping is enabled in the view of a BD, VLAN, or interface where a whitelist has been applied, the following message is displayed: A whitelist has been applied. Configure complete whitelist rules for valid DHCP servers."
+}

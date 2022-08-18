@@ -1,0 +1,56 @@
+{
+    "PageTitle": "spf-schedule-interval(OSPFv3 view)",
+    "FuncDef": "The spf-schedule-interval command sets the interval for OSPFv3 to calculate routes through an intelligent SPF timer.\nThe undo spf-schedule-interval command restores the default setting.\nBy default, the intelligent timer is enabled. The maximum interval for the SPF calculation is 5000 ms, the initial interval is 50 ms, and the Holdtime interval is 200 ms.",
+    "CLIs": [
+        "spf-schedule-interval <delay-interval> <hold-interval>",
+        "spf-schedule-interval intelligent-timer <max-interval> <start-interval> <hold-interval-1>",
+        "spf-schedule-interval millisecond <interval2>",
+        "undo spf-schedule-interval"
+    ],
+    "ParentView": [
+        "OSPFv3 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay-interval",
+            "Info": "Specifies the interval between the route change detection and the SPF calculation.\nThe value is an integer ranging from 0 to 65535, in seconds. The default value is 5."
+        },
+        {
+            "Parameters": "hold-interval",
+            "Info": "Specifies the holding interval between two consecutive SPF calculations.\nThe value is an integer ranging from 0 to 65535, in seconds. The default value is 10."
+        },
+        {
+            "Parameters": "intelligent-timer",
+            "Info": "Sets the SPF calculation interval through an intelligent timer.\n-"
+        },
+        {
+            "Parameters": "max-interval",
+            "Info": "Specifies the maximum interval for performing the OSPFv3 SPF calculation.\nThe value is an integer ranging from 1 to 120000, in milliseconds. The default value is 5000."
+        },
+        {
+            "Parameters": "start-interval",
+            "Info": "Specifies the initial interval for performing the OSPFv3 SPF calculation.\nThe value is an integer ranging from 1 to 60000, in milliseconds. The default value is 50."
+        },
+        {
+            "Parameters": "hold-interval-1",
+            "Info": "Specifies the holding interval for performing the OSPFv3 SPF calculation.\nThe value is an integer ranging from 1 to 60000, in milliseconds. The default value is 200."
+        },
+        {
+            "Parameters": "millisecond interval2",
+            "Info": "Specifies the interval for performing the OSPFv3 SPF calculation.\nThe value is an integer ranging from 1 to 10000, in milliseconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] spf-schedule-interval 5 6"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] spf-schedule-interval intelligent-timer 10000 700 4000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBased on the LSDB, the device that runs OSPFv3 can calculate the Shortest Path Tree (SPT) with itself as the root based on the SPF algorithm, and determine the next hop to the destination network according to the SPT. When the OSPFv3 LSDB changes, the shortest path needs to be recalculated. Frequent network changes and SPF calculation consume many system resources and affect router performance. You can configure an intelligent timer and set a proper interval for the SPF calculation to prevent excessive router memory and bandwidth resources from being consumed.\nIf fast route convergence is required, you can set a millisecond-level interval to speed up route calculation. In other networking environments, the default value is recommended.\nConfiguration Impact\nThe interval for the SPF calculation is as follows:\nThe initial interval for the SPF calculation is specified in start-interval.The interval for the SPF calculation for the nth (n>=2) time is equal to hold-interval-1 *2(n-2).When the interval specified in hold-interval-1 * 2(n-2) reaches the maximum interval specified in max-interval, OSPFv3 performs the SPF calculation at the maximum interval until no SPF calculation is performed within max-interval. After the maximum interval elapses, the calculation mechanism goes back to step 1.If no flapping occurs within the interval of max-interval that starts upon the end of the previous SPF calculation, the intelligent timer exits.If no flapping occurs in the previous interval and flapping occurs in the current interval, SPF calculation is delayed for a period of the start-interval. After the SPF calculation is complete, the current interval is used for the next SPF calculation."
+}

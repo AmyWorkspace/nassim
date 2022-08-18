@@ -1,0 +1,27 @@
+{
+    "PageTitle": "spt-switch-threshold",
+    "FuncDef": "The spt-switch-threshold command sets a multicast data forwarding rate threshold at which a receiver's designated router (DR) performs a switchover from the rendezvous point tree (RPT) to the shortest path tree (SPT).\nThe undo spt-switch-threshold command restores the default value.\nBy default, a receiver's DR performs a switchover from the RPT to the SPT immediately after receiving the first multicast data packet.",
+    "CLIs": [
+        "spt-switch-threshold <traffic-rate>",
+        "undo spt-switch-threshold [ <traffic-rate> ]"
+    ],
+    "ParentView": [
+        "VPN instance IPv6 PIM view",
+        "IPv6 PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "traffic-rate",
+            "Info": "Specifies a multicast data forwarding rate threshold at which a receiver's DR performs a switchover from the RPT to the SPT.\nMulticast data forwarding rate = Number of multicast data bytes received in a period/Duration of the period (the duration can be specified using the timer spt-switch command).\nWhen the multicast data forwarding rate exceeds traffic-rate, the system performs a switchover from the RPT to the SPT. After the switchover is complete, the system does not switch traffic back to the RPT any more.\nThe value is an integer ranging from 1 to 4194304, in kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] spt-switch-threshold 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn PIM-SM, a source's DR encapsulates multicast data packets in a Register message and sends the Register message to the rendezvous point (RP). The RP then transmits the multicast data packets along the RPT. The RP and the receiver's DR are responsible for checking the rate of multicast data packets.\nIf a rate threshold is configured on the receiver's DR, the receiver's DR sends a Join message to the source only it finds that the rate of multicast data packets exceeds the threshold and then triggers the switchover from the RPT to the SPT. To set such a rate threshold, run the spt-switch-threshold command.\nThis command takes effect on the Router that functions as the receiver's DR, but does not take effect on the RP.\nPrerequisites\nThe multicast routing function has been enabled using the multicast ipv6 routing-enable command in the public network instance view.\nPrecautions\nIf the spt-switch-threshold command is run more than once for one multicast group, the first command that the multicast group matches takes effect."
+}

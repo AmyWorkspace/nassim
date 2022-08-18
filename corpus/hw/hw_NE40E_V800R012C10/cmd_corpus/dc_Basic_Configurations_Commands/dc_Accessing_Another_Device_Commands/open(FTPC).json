@@ -1,0 +1,105 @@
+{
+    "PageTitle": "open",
+    "FuncDef": "The open command establishes the FTP connection with FTP server.",
+    "CLIs": [
+        "open [ -a <source-ip> | -i { <interface-type> <interface-number> | <interface-name> } ] <host-ip-address> [ <port-number> ] [ vpn-instance <vpn-instance-name> | public-net ]",
+        "open ipv6 [ -a <source-ip6> ] <host-ipv6-address> [ <port-number> ] [ vpn-instance <vpn-instance-name> | public-net ]",
+        "open ipv6 [ -a <source-ip6> ] <host-ipv6-address> -oi { <interface-type> <interface-number> | <interface-name> } [ <port-number> ] [ vpn-instance <vpn-instance-name> | public-net ]"
+    ],
+    "ParentView": [
+        "FTP client view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ip",
+            "Info": "Specifies the source IPv4 address of the local machine.\nThe value is in the decimal format."
+        },
+        {
+            "Parameters": "-i interface-name",
+            "Info": "Specifies the source interface name.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the source interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the source interface number.\n-"
+        },
+        {
+            "Parameters": "host-ip-address",
+            "Info": "Specifies the host IP address or the host with a specific name.\nTo view the mapping between the IPv4 address and host name, run the display dns dynamic-host or display ip host command.\nThe value is a string of 0 to 4294967295 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "port-number",
+            "Info": "Specifies the FTP server port number.\nPort number is an integer that ranges from 1 to 65535. By default, the port number is 21."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the VPN instance name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "vpn-instance-name",
+            "Info": "Specifies the IPv6 VPN instance name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "public-net",
+            "Info": "Specifies the public network where the FTP server resides.\nIf you have run the set net-manager vpn-instance command to configure the default VPN instance used for an NMS to manage devices and want to use FTP to access a public network server, you must specify this parameter.\n-"
+        },
+        {
+            "Parameters": "ipv6 host-ipv6-address",
+            "Info": "Specifies the host IPv6 address or the host with a specific name.\nTo view the mapping between the IPv4 address and host name, run the display dns dynamic-host or display ip host command.\nThe value is a string case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "source-ip6",
+            "Info": "Source IPv6 address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-oi",
+            "Info": "Specifies the source interface for the IPv6 FTP client, including the type and number of the interface. The IPv6 address configured in this interface view is the source IPv6 address of the packet. If no IPv6 address is configured for the source interface, the FTP connection cannot be set up.\nSetting the loopback interface as the source IPv6 address is recommended.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ftp",
+            "[ftp] open -a 10.1.1.1 10.1.1.2",
+            "Username:abcd",
+            "password:"
+        ],
+        [
+            "<HUAWEI> ftp",
+            "[ftp] open -i loopBack0 10.1.1.2 1000",
+            "Username:abcd",
+            "password:"
+        ],
+        [
+            "<HUAWEI> ftp",
+            "[ftp] open 10.1.1.2 1000 vpn-instance vrp",
+            "Username:abcd",
+            "password:"
+        ],
+        [
+            "<HUAWEI> ftp",
+            "[ftp] open ipv6 2001:db8:1::1 -oi GigabitEthernet 1/0/1",
+            "Trying 2001:db8:1::1",
+            "Press CTRL+K to abort",
+            "Connected to 2001:db8:1::1",
+            "220 FTP service ready.",
+            "User(ftp 2001:db8:1::1:(none)):huawei",
+            "331 Password required for huawei",
+            "Password:"
+        ],
+        [
+            "<HUAWEI> ftp",
+            "[ftp] open ipv6 2001:db8:1::1",
+            "Trying 2001:db8:1::1 ...",
+            "Press CTRL+K to abort",
+            "Connected to 2001:db8:1::1",
+            "220 FTP service ready.",
+            "User(2001:db8:1::1:(none)):root",
+            "331 Password required for root",
+            "Enter Password:"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run the ftp command in the user view to connect the FTP client and server and enter the FTP client view. If FTP is disconnected, you can run this command to establish an FTP connection.\nPrerequisites\nThe VPN specified by vpn-instance has been configured.\nConfiguration Impact\nAfter establishing successful connection with the host, you can upload or download files.\nIf server monitors the FTP connection through default port, you need not specify the port number. Otherwise you must specify the port number."
+}

@@ -1,0 +1,124 @@
+{
+    "PageTitle": "trace mac",
+    "FuncDef": "The trace mac command locates faults in the links between a source device and a destination device. This mechanism is called GMAC trace.",
+    "CLIs": [
+        "trace mac <mac-address> vlan <vlan-id> [ interface { <interface-name> | <interface-type> <interface-number> } | -t <timeout> | -h ] *",
+        "trace mac <mac-address> { vsi <vsi-name> | l2vc <l2vc-id> { raw | tagged } } [ interface { <interface-name> | <interface-type> <interface-number> } | { [ pe-vid <pe-vid> ce-vid <ce-vid> ] | [ dot1q-vlan <vlan-id> ] } | -t <timeout> | -h ] *"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies the bridge MAC address of a destination device.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0. It cannot be a broadcast or multicast MAC address."
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies a VLAN ID.\nThe value is an integer that ranges from 1 to 4094 ."
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the interface name of an outbound interface for sending a trace message.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type of an outbound interface for sending a ping message.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number of an outbound interface for sending a ping message.\n-"
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies the timeout period during which the device waits for a reply.\nThe value is an integer ranging from 1 to 65535, in milliseconds. The default value is 2000 ms."
+        },
+        {
+            "Parameters": "-h",
+            "Info": "Display the host name and IP address of each hop.\n-"
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies the name of a virtual switch instance (VSI).\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "l2vc l2vc-id",
+            "Info": "Specifies the ID of a Layer 2 virtual circuit.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "raw",
+            "Info": "Strip the VLAN tag.\n-"
+        },
+        {
+            "Parameters": "tagged",
+            "Info": "Attach the VLAN tag.\n-"
+        },
+        {
+            "Parameters": "pe-vid pe-vid",
+            "Info": "Specifies the ID of the VLAN to which the PE belongs. This is the value of the outer VLAN tag.\nThe value is an integer that ranges from 1 to 4094 ."
+        },
+        {
+            "Parameters": "ce-vid ce-vid",
+            "Info": "Specifies the ID of the VLAN to which the CE belongs. This is the value of the inner VLAN tag.\nThe value is an integer that ranges from 1 to 4094 ."
+        },
+        {
+            "Parameters": "dot1q-vlan vlan-id",
+            "Info": "Specifies the VLAN ID carried by the packet.\nThe value is an integer that ranges from 1 to 4094 ."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] trace mac enable",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] trace mac 00e0-fc23-3459 vlan 2",
+            "Tracing the route to 00e0-fc23-3459 over a maximum of 255 hops:",
+            "-------------------------------------------------------------------------------",
+            "Hops     Mac                Ingress                     Ingress Action      Relay Action",
+            "          Forwarded         Egress                      Egress Action                   ",
+            "--------------------------------------------------------------------------------",
+            "1     00e0-fc12-3459      GigabitEthernet2/0/1      IngOK                 RlyFDB       ",
+            "      Forwarded            GigabitEthernet1/0/1       EgrOK      ",
+            "2     00e0-fc12-3457      GigabitEthernet1/0/1       IngOK                RlyFDB       ",
+            "      Forwarded            GigabitEthernet1/0/0       EgrOk        ",
+            "3     00e0-fc23-3459      GigabitEthernet1/0/0       IngOK                RlyHit       ",
+            "      Not Forwarded",
+            "Info: Succeed in tracing the destination address 00e0-fc23-3459."
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] trace mac enable",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] trace mac 00e0-fc12-3458 vsi vsi1 -h",
+            "Tracing the route to 00e0-fc12-3458 over a maximum of 255 hops:",
+            " Hops  Host Name (IP Address)",
+            "       Mac             Ingress                   Ingress Action    Relay Action",
+            "       Forwarded       Egress                    Egress Action  ",
+            " 1     HUAWEIA (10.10.10.16)",
+            "       00e0-fc22-3459  GigabitEthernet2/0/1           IngOK             RlyFDB",
+            "       Forwarded       GigabitEthernet1/0/1.1         EgrOK              ",
+            " 2     HUAWEIB (10.10.10.13)",
+            "       00e0-fc12-3458  GigabitEthernet3/0/1           IngOK             RlyHit",
+            "       Not Forwarded ",
+            "Info: Succeeded in tracing the destination address 00e0-fc12-3458."
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] trace mac enable",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] trace mac 00e0-fc12-3458 l2vc 1 raw",
+            "Tracing the route to 00e0-fc12-3458 over a maximum of 255 hops:",
+            " Hops  Host Name (IP Address)",
+            "       Mac             Ingress                   Ingress Action    Relay Action",
+            "       Forwarded       Egress                    Egress Action  ",
+            " 1     HUAWEIA (10.10.10.16)",
+            "       00e0-fc22-3459  GigabitEthernet2/0/1           IngOK             RlyFDB",
+            "       Forwarded       GigabitEthernet1/0/1.1         EgrOK              ",
+            " 2     HUAWEIB (10.10.10.13)",
+            "       00e0-fc12-3458  GigabitEthernet3/0/1           IngOK             RlyHit",
+            "       Not Forwarded ",
+            "Info: Succeeded in tracing the destination address 00e0-fc12-3458."
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a network with GMAC trace enabled, the source device does not need to be a MEP, and the intermediate or destination device does not need to be a MEP or MIP. In other words, GMAC trace can be implemented without the need to configure an MD, MA, or a MEP on the source, intermediate, or destination device. The only requirement is to enable all intermediate devices to reply with LTRs.\nIf devices between PEs are interconnected through a L2VPN,\nWhen packets received by PEs carry double tags, use the QinQ tag termination sub-interface that is bound to the L2VC/VSI to access the L2VPN. If you need to determine connectivity between PEs, specify the parameter pe-vid and ce-vid.When packets received by PEs carry one tag, use the Dot1q tag termination sub-interface that is bound to the L2VC/VSI to access the L2VPN. If you need to determine connectivity between PEs, specify the parameter dot1q-vlan vlan-id.When the destination of GMAC trace is the MAC address of the device, Ingress Port is the name of the interface where the PW resides and the ingress MAC address is the MAC address of the device.\nThe MAC address specified in the general MAC ping must be the physical MAC address of the physical interface in the Layer 2 scenario.\n\nPrerequisites\nThe GMAC ping function has been enabled using the trace mac enable command.\nPrecautions\nThe two devices must be enabled with 802.1ag of the same version."
+}

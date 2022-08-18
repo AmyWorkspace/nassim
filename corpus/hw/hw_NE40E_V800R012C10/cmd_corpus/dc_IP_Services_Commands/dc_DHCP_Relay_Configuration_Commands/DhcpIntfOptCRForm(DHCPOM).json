@@ -1,0 +1,54 @@
+{
+    "PageTitle": "dhcp option82 (Interface view)",
+    "FuncDef": "The dhcp option82 command configures the format of Option 82 in DHCP packets.\nThe undo dhcp option82 command restores the default format of Option 82 in DHCP packets.\nBy default, Option 82 in DHCP packets is in the type1 format.",
+    "CLIs": [
+        "dhcp option82 { circuit-id | remote-id } format self-define <self-define-value>",
+        "undo dhcp option82 { circuit-id | remote-id } format"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10GE interface view",
+        "25GE interface view",
+        "400GE Layer 2 sub-interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE Layer 2 sub-interface view",
+        "50GE interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "Eth-Trunk interface view",
+        "GE Layer 2 sub-interface view",
+        "GE optical interface view",
+        "GE interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "MP-group interface view",
+        "VE sub-interface view",
+        "Layer 2 sub-interface view",
+        "Sub-interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "circuit-id format",
+            "Info": "Option 82 suboption 1: circuit-id(CID), which is generally used to encapsulate the slot ID and port number.\n-"
+        },
+        {
+            "Parameters": "remote-id format",
+            "Info": "Option 82 suboption 2: remote-id (CID), which is generally used to encapsulate the MAC and VLAN information.\n-"
+        },
+        {
+            "Parameters": "self-define self-define-value",
+            "Info": "Specifies a user-defined DHCP Option 82 format.\nThe value is a string of 1 to 251 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp enable",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] dhcp option82 insert enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] dhcp option82 circuit-id format self-define Ethernet1/0/0:0.0HUAWEI"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe option 82 contains the location information of DHCP clients, such as information about login interface, VLAN, and address. After the option 82 field is configured, the device can set up dynamic binding entries with accurate interface information. Based on the option 82 field, the DHCP server assigns IP addresses and policies for DHCP clients.\nAfter a user-defined Option 82 format is configured, the device encapsulates the user-defined Option 82 format into packets.\nPrerequisites\nPerform the following operations before running the command:\nGlobally enable DHCP using the dhcp enable command. Enable the Option 82 inserting function as required.\nRun the dhcp option82 insert enable (interface view) command to enable a device to insert Option 82 into DHCP packets. If no Option 82 field exists in a received DHCP packet, the device inserts the Option 82 field into the packet. If the Option 82 field exists in a received DHCP packet, the device checks whether the Option 82 field contains sub-options. If the Option 82 field contains sub-options, the device does not change the sub-options. If the Option 82 field does not contain sub-options and the sub-option format is configured, the device inserts sub-options into the Option 82 field.Run the dhcp option82 rebuild enable (interface view) command to enable a device to forcibly insert Option 82 into DHCP packets. If no Option 82 field exists in a received DHCP packet, the device inserts the Option 82 field into the packet. If the Option 82 field exists in a DHCP packet, the device deletes the Option 82 field and inserts a new Option 82 field into the packet."
+}

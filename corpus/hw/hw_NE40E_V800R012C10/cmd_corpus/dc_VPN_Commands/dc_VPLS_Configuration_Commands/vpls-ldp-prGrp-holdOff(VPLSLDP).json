@@ -1,0 +1,33 @@
+{
+    "PageTitle": "holdoff (Protection group view)",
+    "FuncDef": "The holdoff command configures a switching delay for a PW protection group with the master/slave PW redundancy mode.\nThe undo holdoff command deletes the switching delay for a PW protection group with the master/slave PW redundancy mode.\nBy default, no switching delay is configured for a PW protection group with the master/slave PW redundancy mode. In this situation, if a fault occurs on the primary PW, traffic immediately switches from the primary PW to the secondary PW.",
+    "CLIs": [
+        "holdoff <holdoffTime>",
+        "undo holdoff"
+    ],
+    "ParentView": [
+        "Protection group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "holdoffTime",
+            "Info": "Specifies the switching delay.\nThe value is an integer ranging from 1 to 180, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 12",
+            "[*HUAWEI-vsi-vsi1-ldp] protect-group group1",
+            "[*HUAWEI-vsi-vsi1-ldp-protect-group-group1] protect-mode pw-redundancy master",
+            "[*HUAWEI-vsi-vsi1-ldp-protect-group-group1] holdoff 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, if a working path fails, traffic immediately switches to the protection path. If the working path flaps or an error occurs in the detection mechanism, traffic frequently switches between the working and protection paths. To prevent this problem in a PW protection group with the master/slave PW redundancy mode, run the holdoff command to configure a switching delay. If the working path recovers before the specified switching delay expires, traffic does not switch to the protection path. If the working path remains faulty after the specified switching delay expires, traffic switches to the protection path.\nPrerequisites\nThe PW redundancy mode of the PW protection group has been configured as master/slave.\nConfiguration Impact\nIf the holdoff command is run more than once, the latest configuration overrides the previous one.\nAfter you configure a switching delay, traffic forwarded during the delay period will be interrupted if the primary PW fails to recover before the delay period expires.\nPrecautions\nA PW protection group with the independent PW redundancy mode does not support delayed switching.\nOn a VPLS network that uses BFD for fault detection, traffic immediately switches from the primary PW to the secondary PW after BFD detects a fault on the primary PW, irrespective of whether delayed switching is configured. It is recommended that you determine whether to use BFD or delayed switching based on your requirements."
+}

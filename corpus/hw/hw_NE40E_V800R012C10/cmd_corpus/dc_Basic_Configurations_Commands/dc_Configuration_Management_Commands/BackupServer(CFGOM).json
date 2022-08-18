@@ -1,0 +1,64 @@
+{
+    "PageTitle": "set save-configuration backup-to-server",
+    "FuncDef": "The set save-configuration backup-to-server command configures the system to periodically save configuration files to a specific server.\nThe undo set save-configuration backup-to-server command cancels the configuration.\nBy default, the system does not periodically save configurations to a server.",
+    "CLIs": [
+        "set save-configuration backup-to-server server <server-ip> [ vpn-instance <vpn-instance-name> ] transport-type { tftp | { ftp | sftp } [ port <port-value> ] user <user-name> password <password> } [ path <folder> ]",
+        "undo set save-configuration backup-to-server server [ <server-ip> | <server-ip> vpn-instance <vpn-instance-name> | <server-ip> vpn-instance <vpn-instance-name> port <port-value> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "transport-type",
+            "Info": "Indicates the transmission mode.\nThe value can be ftp, tftp, or sftp."
+        },
+        {
+            "Parameters": "tftp",
+            "Info": "Specifies the transmission mode is TFTP.\n-"
+        },
+        {
+            "Parameters": "ftp",
+            "Info": "Specifies the transmission mode is FTP.\n-"
+        },
+        {
+            "Parameters": "sftp",
+            "Info": "Specifies the transmission mode is SFTP.\n-"
+        },
+        {
+            "Parameters": "port port-value",
+            "Info": "Specifies the port number used to send a configuration file to a server.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "user user-name",
+            "Info": "Specifies the name of the user that accesses the server using FTP or SFTP.\nThe value is a string of 1 to 64 characters without spaces.\nExcept the question mark (?) and space. However, when quotation marks (\") are used around the password, spaces are allowed in the password."
+        },
+        {
+            "Parameters": "password password",
+            "Info": "Specifies the password of the user that accesses the server using FTP or SFTP.\nIn the case of a password in plaintext, the value is a string of 1 to 255 case-sensitive characters without spaces. In the case of a ciphertext password, the value is a string of 20 to 432 case-sensitive characters without spaces. A 24-character ciphertext password configured in an earlier version is also supported in this version.\nExcept the question mark (?) and space. However, when quotation marks (\") are used around the password, spaces are allowed in the password."
+        },
+        {
+            "Parameters": "path folder",
+            "Info": "Specifies the path of the configuration file on the server. If this parameter is not configured, the root path of FTP, SFTP, or TFTP services is used by default.\nThe value is a string of 1 to 64 case-sensitive characters."
+        },
+        {
+            "Parameters": "server server-ip",
+            "Info": "Specifies the IP address of the server to which the system periodically saves the configuration file.\nThe IP address is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] set save-configuration backup-to-server server 10.1.1.1 transport-type ftp port 88 user huawei password huawei-1234"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] set save-configuration backup-to-server server 10.1.1.1 transport-type tftp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the local database is insufficient in space or damaged, or when you need to back up configuration files, run the set save-configuration backup-to-server command.The configuration file generated after this command is run is in the same format as the configuration file for the next startup. If the configuration file for the next startup is a .dat file, the configuration file generated is also a .dat file. If the configuration file for the next startup is a .cfg or .zip file, the configuration file generated is a .zip file. The configuration files that are backed up to the server are named after the date and time. The names of the backup files vary according to the time, and existing backup files will not be overwritten.You can configure multiple servers running the set save-configuration backup-to-server command several times.After you run the command, the system periodically checks the configuration file. It performs a save configuration files to a specific server operation only when detecting a configuration change.\n\nPrerequisites\nThe set save-configuration command has been run to enable the automatic saving function and enable FTP, SFTP, or TFTP on the server.\nThe periodic saving interval depends on the interval configured using the set save-configuration command.\nPrecautions\nThe system supports a maximum of five servers. The servers are independent of each other. If the system fails to save configuration files to a server, the system reports traps to the NMS and records logs.When configuration files are being uploaded, the system does not save configurations to a server until the configuration files are uploaded.The time of the configuration file generated after this command is run is the UTC.After a bound VPN instance is deleted, the VPN configuration specified using the set save-configuration backup-to-server command will not be cleared but does not take effect. If you configure the VPN instance with the same name again, the VPN function restores.A device does not support a server with the same IP address but different VPN instances. To be specific, if multiple VPN instances have been configured for a server with a specific IP address, the device can send configuration files only to one VPN instance. For example, if the set save-configuration backup-to-server command is run twice to configure the system to save configuration files to different VPN instances of the same server, only the later configuration takes effect.When you run this command to save configuration files to a server, the system supports only the binary transmission mode. Therefore, the server must support the binary transmission mode."
+}

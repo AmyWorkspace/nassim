@@ -1,0 +1,33 @@
+{
+    "PageTitle": "timer connect-retry (BGP multi-instance view)",
+    "FuncDef": "The timer connect-retry command sets a global ConnectRetry interval.\nThe undo timer connect-retry command restores the default setting.\nBy default, the ConnectRetry interval is 32s.",
+    "CLIs": [
+        "timer connect-retry <connect-retry-time>",
+        "undo timer connect-retry"
+    ],
+    "ParentView": [
+        "BGP multi-instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "connect-retry-time",
+            "Info": "Specifies a ConnectRetry interval.\nThe value ranges from 1 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100 instance aa",
+            "[*HUAWEI-bgp-instance-aa] ipv4-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-instance-aa-vpn1] group test external",
+            "[*HUAWEI-bgp-instance-aa-vpn1] peer test as-number 200",
+            "[*HUAWEI-bgp-instance-aa-vpn1] peer test timer connect-retry 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen BGP initiates a TCP connection, the ConnectRetry timer is stopped if the TCP connection is established successfully. If the attempt to establish a TCP connection fails, BGP tries again to establish the TCP connection after the ConnectRetry timer expires. The ConnectRetry interval can be adjusted as needed.\nThe ConnectRetry interval can be reduced in order to lessen the time BGP waits to retry establishing a TCP connection after the first attempt fails.To suppress route flapping caused by constant peer flapping, the ConnectRetry interval can be increased to accelerate route convergence.\n\nPrerequisites\nThe peer as-number command has been used to create a peer or peer group.\nPrecautions\nA ConnectRetry interval can be configured globally, or on a particular peer or peer group. A ConnectRetry interval configured on a specific peer or peer group takes precedence over a global ConnectRetry interval.\nIf both the peer { ipv4-address | ipv6-address } timer connect-retry connect-retry-time command and the peer group-name timer connect-retry connect-retry-time command are run on a device, the configuration of the peer { ipv4-address| ipv6-address } timer connect-retry connect-retry-time command takes effect, but the configuration of the peer group-name timer connect-retry connect-retry-time command does not.If both the peer { group-name | ipv4-address | ipv6-address } timer connect-retry connect-retry-time command and the timer connect-retry connect-retry-time command are run on a device, the configuration of the peer { group-name | ipv4-address | ipv6-address } timer connect-retry connect-retry-time command takes effect, but the configuration of the timer connect-retry connect-retry-time command does not."
+}

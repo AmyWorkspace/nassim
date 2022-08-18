@@ -1,0 +1,78 @@
+{
+    "PageTitle": "snmp-agent usm-user",
+    "FuncDef": "The snmp-agent usm-user command adds a user to an SNMP user list.\nThe undo snmp-agent usm-user command deletes a user from an SNMP user list.\nBy default, an SNMP user list does not have any user.",
+    "CLIs": [
+        "snmp-agent [ remote-engineid <engine-Id> ] usm-user v3 <user-name> <group-name> [ authentication-mode <authen-protocol> <authKey> [ privacy-mode <privacy-protocol> <privKey> ] ] [ acl { <acl-number> | <aclName> } ]",
+        "snmp-agent [ remote-engineid <engine-Id> ] usm-user v3 <user-name> authentication-mode <authen-protocol>",
+        "snmp-agent [ remote-engineid <engine-Id> ] usm-user v3 <user-name> privacy-mode <privacy-protocol>",
+        "snmp-agent [ remote-engineid <engine-Id> ] usm-user v3 <user-name> [ group <group-name> | acl { <acl-number> | <aclName> } ] *",
+        "snmp-agent [ remote-engineid <engine-Id> ] usm-user v3 <user-name> authentication-mode <authen-protocol> [ localized-configuration ] cipher <authKey>",
+        "snmp-agent [ remote-engineid <engine-Id> ] usm-user v3 <user-name> privacy-mode <privacy-protocol> [ localized-configuration ] cipher <privKey>",
+        "undo snmp-agent [ remote-engineid <engine-Id> ] usm-user v3 <user-name> [ group | acl | authentication-mode | privacy-mode ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "remote-engineid engine-Id",
+            "Info": "Specifies the ID of an engine associated with a user.\nThe value is a string of 10 to 64 case-insensitive characters, spaces not supported. All 0s or all Fs are invalid."
+        },
+        {
+            "Parameters": "v3",
+            "Info": "Enables the SNMPv3 security mode.\n-"
+        },
+        {
+            "Parameters": "user-name",
+            "Info": "Specifies a user name.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "authentication-mode authen-protocol",
+            "Info": "Specifies the security level as authentication.\nIf this parameter is specified, an SNMP agent or NMS must check whether the received message is sent by an authorized NMS or SNMP agent and whether the message has been changed in transmission. Relevant standards defines Keyed-Hashing for Message Authentication Code (HMAC), an effective tool that uses the security hash function and key to generate a message authentication code. This tool is widely used on the Internet. SNMP uses HMAC-MD5-96, HMAC-SHA-96, HMAC-128-SHA-224, HMAC-192-SHA-256, HMAC-256-SHA-384, or HMAC-384-SHA-512.\nmd5: Enables the Hashed Message Authentication Code for Message Digest 5-96 (HMAC-MD5-96).sha: Enables the Hashed Message Authentication Code for Secure Hash Algorithm 96 (HMAC-SHA-96).sha2-224: Enables the HMAC-SHA2-224sha2-256: Enables the HMAC-SHA2-256sha2-384: Enables the HMAC-SHA2-384sha2-512: Enables the HMAC-SHA2-512sha2-256 and more complex algorithms are safer than sha2-224, sha and md5. It is recommended to use sha2-256 and a more complex algorithm."
+        },
+        {
+            "Parameters": "privacy-mode privacy-protocol",
+            "Info": "Enables encryption.\n3des168: Enables the Triple Data Encryption Standard 168 (3DES168) algorithm.aes128: Enables the Advanced Encryption Standard 128 (AES128) algorithm.aes192: Enables the Advanced Encryption Standard 192 (AES192) algorithm.aes256: Enables the Advanced Encryption Standard 256 (AES256) algorithm.des56: Enables the Data Encryption Standard 56 (DES56) algorithm.AES128 and another algorithm with higher encryption security than AES128 are more secure than DES56 and 3DES1688. AES128 or another algorithm with higher encryption security than AES128 is recommended."
+        },
+        {
+            "Parameters": "privKey",
+            "Info": "Specifies the password in either simple text or ciphertext.\nThe password is a string of 8 to 255 characters in simple text or a string of 32 to 432 characters in ciphertext.\nIf the password is in ciphertext, users need to input the character string that has been processed using the encryption algorithm."
+        },
+        {
+            "Parameters": "acl acl-number",
+            "Info": "Specifies an ACL number.\nSNMP only supports basic ACLs.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl aclName",
+            "Info": "Specifies the name of a named basic ACL.\nIf no matching rule is configured for the referenced ACL, the matching rule is permit by default.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported. The name must start with a letter or digit, and cannot contain only digits."
+        },
+        {
+            "Parameters": "group group-name",
+            "Info": "Name of the SNMP user list to which a user belongs.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "localized-configuration",
+            "Info": "Indicates the localized password configuration mode. The ciphertext password in the configuration file relates to the engine ID of the device.\nAfter the SNMPv3 authentication and encryption passwords are configured through MIB, the ciphertext password in the configuration file is a localized password.\nYou are advised not to set this parameter when configuring the SNMPv3 authentication and encryption passwords in CLI mode. If you want to set this parameter, the cipher password value must be a localized password. If you copy a ciphertext password with localized-configuration from the configuration file of another device, the password cannot be used.\n-"
+        },
+        {
+            "Parameters": "cipher authKey",
+            "Info": "Indicates the ciphertext mode. You can enter only a ciphertext password, and the password can be queried in the configuration file.\nThe password is a string of 8 to 255 characters in simple text or a string of 32 to 432 characters in ciphertext.\nIf the password is in ciphertext, users need to input the character string that has been processed using the encryption algorithm."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2001",
+            "[*HUAWEI-acl4-basic-2001] quit",
+            "[*HUAWEI] snmp-agent usm-user v3 John group Johngroup acl 2001"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent usm-user v3 John authentication-mode sha2-512",
+            "Please configure the authentication password (8-255)",
+            "Enter Password:",
+            "Confirm Password:"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDifferent from SNMPv1 or SNMPv2c, SNMPv3 implements access control, identity authentication, and data encryption using the local processing module and user-based security module. SNMPv3 helps achieve higher security and confidentiality and is applicable to a wider range than SNMPv1 and SNMPv2c.\nThe snmp-agent usm-user command configures a user in an SNMP user group, configures an authentication password and privacy password, and grants this user view-specific access.\nPrecautions\nThe configured SNMP user needs to be added to a valid SNMP user list. Otherwise, the SNMP user cannot be added to an SNMP user list.\nAuthentication modes: SHA2-256 and more complex algorithms are safer than SHA2-224, SHA and MD5. It is recommended to use SHA2-256 and a more complex algorithm.\nPrivacy modes: DES56 and 3DES168 are less secure when compared with AES128 and higher encryption algorithms. Using AES128 or higher algorithms is recommended.\nIf the system attempts to authenticate user information based on an encrypted password before allowing a user to log in, the NMS must provide an authentication password and an encryption password. An authentication and encryption password can be set in either of the following modes:\nConfirmation mode: Run either the snmp-agent usm-user authentication-mode or snmp-agent usm-user privacy-mode command and press Enter before inputting a password. This mode allows a user to enter a password twice.Non-confirmation mode: Run either the snmp-agent usm-user authentication-mode or snmp-agent usm-user privacy-mode command with the cipher specified. This mode allows a user to enter a ciphertext password.\nThe non-confirmation mode is used when a user copies an existing instance of either the snmp-agent usm-user authentication-mode or snmp-agent usm-user privacy-mode command.\nWhen you run the snmp-agent usm-user v3 user-name group-name authentication-mode authen-protocol authKey [ privacy-mode privacy-protocol privKey ] [ acl { acl-number | aclName } ] command in non-confirmation mode or copy and paste the command on a device to configure a USM user, do not specify one of the following group names:\na, ac, aclg, gr, gro, grou, groupau, aut, auth, authe...authentication-modep, pr, pri...privacy-mode\nTo improve system security, you are advised to configure different authentication and encryption passwords for an SNMP user. In addition, do not configure authentication or encryption passwords in which the same string of characters is repeated, such as Huawei-1234Huawei-1234."
+}

@@ -1,0 +1,49 @@
+{
+    "PageTitle": "ppp mru-negotiate",
+    "FuncDef": "The ppp mru-negotiate command enables maximum receive unit (MRU) negotiation at the PPP link control layer.\nThe undo ppp mru-negotiate command restores the default negotiation mode.\nBy default, the PPP link control layer performs the IPv4 MRU negotiation.",
+    "CLIs": [
+        "ppp mru-negotiate ipv4",
+        "ppp mru-negotiate ipv6",
+        "undo ppp mru-negotiate"
+    ],
+    "ParentView": [
+        "LMP configuration view",
+        "POS interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6",
+            "Info": "Enables the IPv6 MRU negotiation at the PPP link control layer.\n-"
+        },
+        {
+            "Parameters": "ipv4",
+            "Info": "Enables the IPv4 MRU negotiation at the PPP link control layer.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface pos 1/0/1",
+            "[~HUAWEI-Pos1/0/1] mtu 1300",
+            "[*HUAWEI-Pos1/0/1] ppp mru-negotiate ipv4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface serial 1/0/0:2",
+            "[~HUAWEI-Serial1/0/0:2] ppp mru-negotiate ipv4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] lmp",
+            "[*HUAWEI-lmp] commit",
+            "[~HUAWEI] quit",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] lmp interface enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] interface Lmpif1/0/0",
+            "[*HUAWEI-Lmpif1/0/0] ppp mru-negotiate ipv4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe MRU indicates the capability of an interface on receiving packets. By default, the IPv4 MRU negotiation is performed at the link control layer. If an interface is configured with the IPv6 MTU, the IPv6 MRU negotiation can be performed at the link control layer only after the interface is enabled with PPP IPv6 MRU negotiation. When the negotiation ends, the MTU of the link adopts the smaller one of the MTUs (the negotiated MRUs) of the two interfaces, and the MRUs of the two interfaces do not change. Therefore, the MTU of an interface cannot be greater than the MRU of the interface, which ensures that both ends are capable of receiving packets from each other.\nAfter a PPP link is set up, it performs LCP negotiation. If MRU negotiation is enabled, the MRU of the PPP link is negotiated during LCP negotiation.\nPrerequisites\nPPP is configured as the link layer protocol of the interface.\nConfiguration Impact\nChanging the configuration triggers PPP renegotiation.\nPrecautions\nAfter the configuration, you must run the shutdown, commit, and undo shutdown commands in the corresponding interface view for the configuration to take effect."
+}

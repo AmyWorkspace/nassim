@@ -1,0 +1,66 @@
+{
+    "PageTitle": "nssa (OSPFv3 area view)",
+    "FuncDef": "The nssa command configures an NSSA.\nThe undo nssa command restores an OSPFv3 NSSA to a common OSPFv3 area.\nBy default, no OSPFv3 area is configured as an NSSA.",
+    "CLIs": [
+        "nssa [ { default-route-advertise [ backbone-peer-ignore | cost <cost-value> | tag <tag-value> | type <type-value> ] * } | no-import-route | no-summary | set-n-bit | translator-always | translator-interval <interval-value> | suppress-forwarding-address ] *",
+        "undo nssa"
+    ],
+    "ParentView": [
+        "OSPFv3 area view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "default-route-advertise",
+            "Info": "Generates default Type-7 LSAs on the ASBR and then advertises them to the NSSA.\nThe ABR generates a default NSSA LSA (Type7 LSA) automatically and advertises it in the NSSA.\n-"
+        },
+        {
+            "Parameters": "backbone-peer-ignore",
+            "Info": "Prevents an ABR from checking the neighbor status in the backbone area. Specifically, the ABR generates default Type 7 LSAs and advertises them to the NSSA as long as an interface is up in the backbone area.\n-"
+        },
+        {
+            "Parameters": "cost cost-value",
+            "Info": "Specifies the default cost of Type 7 LSAs.\nThe value is an integer ranging from 1 to 16777214. The default value is 1."
+        },
+        {
+            "Parameters": "tag tag-value",
+            "Info": "Specifies the tag value of the OSPFv3 route imported to an NSSA.\nThe value is an integer ranging from 0 to 4294967295. The default value is 0."
+        },
+        {
+            "Parameters": "type type-value",
+            "Info": "Specifies the default type of Type 5 LSAs.\nThe value can be 1 or 2.\n1: Type 1 external route2: Type 2 external route\nThe default value is 2."
+        },
+        {
+            "Parameters": "no-import-route",
+            "Info": "Indicates that no external routes are imported to NSSAs.\n-"
+        },
+        {
+            "Parameters": "no-summary",
+            "Info": "Disables ABRs from sending summary LSAs to NSSAs.\n-"
+        },
+        {
+            "Parameters": "set-n-bit",
+            "Info": "Indicates that the N-bit is set in DD packets.\n-"
+        },
+        {
+            "Parameters": "translator-always",
+            "Info": "Specifies the ABR in an NSSA as the translator. Multiple ABRs in an NSSA can be configured as translators.\n-"
+        },
+        {
+            "Parameters": "translator-interval interval-value",
+            "Info": "Specifies the timeout period of a translator.\nThe value is an integer ranging from 1 to 120, in seconds. The default value is 40 seconds."
+        },
+        {
+            "Parameters": "suppress-forwarding-address",
+            "Info": "Indicates that no forwarding address (FA) is set for Type 5 LSAs that are converted from Type 7 LSAs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] area 1",
+            "[*HUAWEI-ospfv3-1-area-0.0.0.1] nssa"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn NSSA is configured in the scenario where AS external routes are to be imported but not forwarded to save system resources. AS external routes can be imported to an NSSA and transmitted to the entire NSSA.\nAll Routers in the NSSA must be configured with NSSA attributes using the nssa command. The nssa command is applicable to the following scenarios:\nThe keyword default-route-advertise is used to generate default Type 7 LSAs. Regardless of whether there is route ::/0 in the routing table on an ABR, a Type 7 LSA default route is generated. A Type 7 LSA default route can be generated only when there is route ::/0 in the routing table on an ASBR.If an ASBR also functions as an ABR, setting no-import-route prevents external routes imported using the import-route command from being advertised to the NSSA.To reduce the number of LSAs that are transmitted to the NSSA, set no-summary on an ABR to prevent the ABR from transmitting Type 3 LSAs to the NSSA.\nAfter the nssa default-route-advertise backbone-peer-ignore no-summary command is run, the ABR generates default Type 7 and Type 3 LSAs as\nlong as an interface is up in the backbone area. The default Type3 LSAs preferentially take effect.\nIf set-n-bit is set, the DD packets sent by the Router carry the N-bit being 1.If multiple ABRs are deployed in the NSSA, the system automatically selects an ABR (generally the Router with the largest router ID) as a translator to convert Type 7 LSAs into Type 5 LSAs. You can also set translator-always on an ABR to specify the ABR as an all-the-time translator. To specify two ABRs for load balancing, configure translator-always on two ABRs to specify the ABRs as all-the-time translators. You can use this command to pre-configure a fixed translator to prevent LSA flooding caused by translator role changes.translator-interval is used to ensure uninterrupted services when translator roles change. The value must be greater than the flooding period.You can configure suppress-forwarding-address to disable converted Type 5 LSAs from inheriting the FA of Type 7 LSAs.\n\nConfiguration Impact\nBy default, if backbone-peer-ignore is not configured, the ABR advertises the default route only when a neighbor is in the Full state.\nConfiguring or deleting NSSA attributes may trigger routing updates in the area. A second configuration of NSSA attributes can be implemented or canceled only after a routing update is complete.\nPrecautions\nWhen the last ordinary area (other than a stub area or NSSA) in an OSPF process is deleted, useless Type 5 LSAs originated by the local Router in the area will be deleted immediately. The local Router still reserves useless Type 5 LSAs received from other Routers. These useless Type 5 LSAs will not be deleted until the aging time reaches 3600s."
+}

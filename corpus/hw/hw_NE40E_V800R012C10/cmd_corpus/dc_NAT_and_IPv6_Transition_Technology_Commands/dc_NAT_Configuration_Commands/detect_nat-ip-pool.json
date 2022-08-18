@@ -1,0 +1,37 @@
+{
+    "PageTitle": "detect retransmit (Global CGN address pool view)",
+    "FuncDef": "The detect retransmit command configures the number of retransmission times and a retransmission interval for detecting address segment availability in a dynamic address pool.The undo detect retransmit command deletes the number of retransmission times and a retransmission interval configured for detecting address segment availability in a dynamic address pool.\nBy default, the number of retransmission times is 3, and the retransmission interval is 3 days.",
+    "CLIs": [
+        "detect retransmit <retransmit-value> interval <day-value> <hour-value> <minute-value>",
+        "undo detect [ retransmit [ <retransmit-value> interval [ <day-value> <hour-value> <minute-value> ] ] ]"
+    ],
+    "ParentView": [
+        "Global CGN address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "retransmit-value",
+            "Info": "Specifies the number of retransmission times.\nThe value is an integer ranging from 1 to 10. The default priority value is 3."
+        },
+        {
+            "Parameters": "interval day-value",
+            "Info": "Specifies a retransmission interval.\nday specifies days. The value is an integer ranging from 0 to 999.\nWhen the detection retransmission interval is set to 0, it indicates no detection."
+        },
+        {
+            "Parameters": "hour-value",
+            "Info": "Specifies a retransmission interval.\nhour specifies hours. The value is an integer ranging from 0 to 23."
+        },
+        {
+            "Parameters": "minute-value",
+            "Info": "Specifies a retransmission interval.\nminute specifies minutes. The value is an integer ranging from 0 to 59."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat ip-pool pool1 dynamic",
+            "[*HUAWEI-nat-ip-pool-pool1] detect retransmit 2 interval 1 1 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe global dynamic address pool probe function uses CGN to send request packets to an address pool server, and the server responds. If CGN receives responses indicating successful probe within the probe interval and within the number of retransmissions, CGN successfully probes the dynamic address pool.\nPrecautions\nThis command is supported only on the admin VS.\nThe detect retransmit command takes effect only on the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S.\nThe probe of global dynamic address pools is triggered by a global 1s timer. Each time the timer expires, a specified number of address pools or segments are traversed based on the following rules:\nA total of 128 global address pools are traversed at a time.A total of 256 dynamic address segments are traversed at a time.A total of 16 or more address segments to be renewed or released are traversed at a time.\nThe probe ends once one of the preceding conditions is met. In the extreme scenario, a single global dynamic address pool can be traversed every second. If N global dynamic address pools are configured, set the probe period (in seconds) greater than or equal to N + (2048 - N)/128 for a specified global dynamic address pool. After the probe period is modified, probes are not triggered immediately. Probes can be triggered and probe packets can be sent if the specified global dynamic address pool is being detected and the configured probe period elapses."
+}

@@ -1,0 +1,36 @@
+{
+    "PageTitle": "erps vpls-subinterface enable",
+    "FuncDef": "The erps vpls-subinterface enable command enables an interface to instruct its VSI-bound sub-interfaces to update ARP and MAC address entries after it receives TC packets.\nThe undo erps vpls-subinterface enable command disables an interface from instructing its VSI-bound sub-interfaces to update ARP and MAC address entries after it receives TC packets.\nBy default, an interface does not instruct its VSI-bound sub-interfaces to update ARP and MAC address entries after it receives TC packets.",
+    "CLIs": [
+        "erps vpls-subinterface enable",
+        "undo erps vpls-subinterface enable"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Eth-Trunk interface view",
+        "Layer 2 50GE interface view",
+        "Port extension Layer 2 interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] erps ring 2",
+            "[*HUAWEI-erps-ring2] control-vlan 100",
+            "[*HUAWEI-erps-ring2] protected-instance all",
+            "[*HUAWEI-erps-ring2] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] stp disable",
+            "[*HUAWEI-GigabitEthernet1/0/1] erps ring 2",
+            "[~HUAWEI-GigabitEthernet1/0/1] erps vpls-subinterface enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn normal situations, when the topology of an ERPS ring changes and an interface receives TC packets, the ERPS ring reselects a blocked interface, and accordingly all devices will update ARP and MAC address entries. However, if an ERPS-enabled interface has sub-interfaces that are bound to VSIs, the sub-interfaces cannot detect the topology change immediately so that ARP and MAC entries will not be updated in time on the VPLS network. To prevent this problem, run the erps vpls-subinterface enable command to enable an ERPS-enabled interface to instruct its VSI-bound sub-interfaces to update ARP and MAC address entries after it receives TC packets.\nPrerequisites\nAn interface has been added to an ERPS ring using the erps ring command.\nConfiguration Impact\nAfter the erps vpls-subinterface enable command is run, when the forwarding status of an interface changes to Discarding, its VSI-bound sub-interfaces will change to the Flowdown state to prevent loops on the VPLS network on which a CE is dual-homed to PEs.\nServices configured on the interface will be temporarily interrupted when you run the erps vpls-subinterface enable or undo erps vpls-subinterface enable command.\nIn an LDP VPLS or EVC VPLS scenario, after the erps vpls-subinterface enable command is run, the remote VPLS device clears the MAC address table when the ERPS network topology changes, regardless of the MAC-withdraw configuration.\nPrecautions\nThe erps vpls-subinterface enable command is required only when an ERPS ring connects to a VPLS network through sub-interfaces.The erps vpls-subinterface enable and stp vpls-subinterface enable commands are mutually exclusive on the same interface.If an interface is deleted from an ERPS ring using the undo erps ring command, the erps vpls-subinterface enable command configured on the interface is also deleted."
+}

@@ -1,0 +1,44 @@
+{
+    "PageTitle": "evpn binding vpn-instance (Bridge domain view)",
+    "FuncDef": "The evpn binding vpn-instance command binds an EVPN instance to a BD.\nThe undo evpn binding vpn-instance command unbinds an EVPN instance from a BD.\nBy default, an EVPN instance is not bound to any BD.",
+    "CLIs": [
+        "evpn binding vpn-instance <vpn-instance-name>",
+        "evpn binding vpn-instance <vpn-instance-name> bd-tag <bd-tag>",
+        "undo evpn binding vpn-instance <vpn-instance-name>"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance-name",
+            "Info": "Specifies the name of an EVPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "bd-tag bd-tag",
+            "Info": "Specifies a BD tag value.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn vpn-instance vrf1 bd-mode",
+            "[*HUAWEI-evpn-instance-vrf1] route-distinguisher 100:1",
+            "[*HUAWEI-evpn-instance-vrf1] vpn-target 1:1",
+            "[*HUAWEI-evpn-instance-vrf1] quit",
+            "[*HUAWEI] bridge-domain 100",
+            "[*HUAWEI-bd100] vxlan vni 200 split-horizon-mode",
+            "[*HUAWEI-bd100] evpn binding vpn-instance vrf1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn vpn-instance vrf1 bd-mode",
+            "[*HUAWEI-evpn-instance-vrf1] route-distinguisher 100:1",
+            "[*HUAWEI-evpn-instance-vrf1] vpn-target 1:1",
+            "[*HUAWEI-evpn-instance-vrf1] quit",
+            "[*HUAWEI] bridge-domain 100",
+            "[*HUAWEI-bd100] evpn binding vpn-instance vrf1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn EVPN instance can be bound only to BDs. To bind an EVPN instance to a BD, run the evpn binding vpn-instance command. An EVPN instance can be bound to a BD in two ways: using a VXLAN Network Identifier (VNI) and using MPLS. In VNI mode, an EVPN instance is bound to a BD after a VNI is configured. In MPLS mode, an EVPN instance is bound to a BD directly in the BD view.\nIf you want to implement the VLAN-aware function that allows different VLANs to access the same EVPN instance and isolate the BDs to which the VLANs belong, specify the bd-tag parameter when you bind the EVPN instance to the BDs. On devices at both ends of an EVPN, the same BD tag must be configured for the EVPN instance bound to a BD.\nPrerequisites\nIf you use the VNI mode, ensure that a VNI has been created and associated with a BD and forwarding in split horizon mode has been enabled for a VXLAN tunnel using the vxlan vni split-horizon-mode command.\nPrecautions\nThe ways for binding an EVPN instance to a BD are mutually exclusive. To switch a binding way, remove the existing binding relationship and establish another binding relationship.\nAn EVPN instance has been bound in the BD view. Running the evpn binding vpn-instance command in the BD view to bind another EVPN instance will overwrite the current binding relationship.\nIf a VSI with a PW tag or a VSI with a Spoken PW configured has been bound to a BD, the evpn binding vpn-instance command cannot be run to bind an EVPN instance to the BD."
+}

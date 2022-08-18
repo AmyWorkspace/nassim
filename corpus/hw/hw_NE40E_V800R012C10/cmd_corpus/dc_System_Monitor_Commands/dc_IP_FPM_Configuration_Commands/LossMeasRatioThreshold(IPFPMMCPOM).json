@@ -1,0 +1,30 @@
+{
+    "PageTitle": "loss-measure ratio-threshold",
+    "FuncDef": "The loss-measure ratio-threshold command configures the packet loss alarm threshold and its clear alarm threshold.\nThe undo loss-measure ratio-threshold command restores the default packet loss alarm threshold and its clear alarm threshold.\nBy default, the packet loss alarm threshold and its clear alarm threshold are not configured, meaning that the system does not generate a packet loss alarm or clear alarm.",
+    "CLIs": [
+        "loss-measure ratio-threshold upper-limit <upper-limit> lower-limit <lower-limit>",
+        "undo loss-measure ratio-threshold"
+    ],
+    "ParentView": [
+        "IPFPM-MCP instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "upper-limit upper-limit",
+            "Info": "Specifies the packet loss alarm threshold.\nThe value is a string of 1 to 10 characters ranging from 0.000001 to 100, accurate to 6 decimal places, in percentage."
+        },
+        {
+            "Parameters": "lower-limit lower-limit",
+            "Info": "Specifies the packet loss clear alarm threshold.\nThe value is a string of 1 to 10 characters ranging from 0.000001 to 100, accurate to 6 decimal places, in percentage.\nThe lower-limit must be less than or equal to upper-limit."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa ipfpm mcp",
+            "[*HUAWEI-nqa-ipfpm-mcp] instance 1",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1] loss-measure ratio-threshold upper-limit 10 lower-limit 5.5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn IP FPM statistical period is an interval between when a TLP counts the number of packets or bytes and when the TLP records the send and receive timestamps. The period can be set to 1s, 10s, 60s, or 600s. By default, the IP FPM statistical period is 10s.\nTo configure the packet loss alarm threshold and its clear alarm threshold, run the loss-measure ratio-threshold command. The conditions for alarm generation are as follows:\nIf the packet loss for five consecutive statistical periods exceeds the configured upper-limit, the hwIpfpmLossRatioExceed alarm is generated, and the link fault occurrence is notified in real time.If the packet loss for five consecutive statistical periods falls below the configured lower-limit, the hwIpfpmLossRatioRecovery alarm is generated, and the link fault rectification is notified in real time.\nTo help network operation and maintenance, run the loss-measure ratio-threshold command based on network performance requirements.\n\nPrecautions\nIf the loss-measure ratio-threshold command is run more than once, the latest configuration overrides the previous one.\nThe loss-measure ratio-threshold command only configures the thresholds. The system generates a packet loss alarm or its clear alarm only when the packet loss alarm or its clear alarm function is enabled and the packet loss for five consecutive statistical periods reaches the configured alarm threshold or falls below the configured clear alarm threshold."
+}

@@ -1,0 +1,79 @@
+{
+    "PageTitle": "mpls l2vc track admin-vrrp",
+    "FuncDef": "The mpls l2vc track admin-vrrp command binds a service PW to an mVRRP group.\nThe undo mpls l2vc track admin-vrrp command unbinds a service PW from an mVRRP group.\n\nBy default, no service PW is bound to mVRRP.",
+    "CLIs": [
+        "mpls l2vc track admin-vrrp interface { <interface-number> | <interface-type> <interface-number> } vrid <virtual-router-id> [ pw-redundancy ]",
+        "undo mpls l2vc track admin-vrrp"
+    ],
+    "ParentView": [
+        "50GE Layer 2 sub-interface view",
+        "40GE interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "XGE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50|100GE sub-interface view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "400GE Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "vrid virtual-router-id",
+            "Info": "Specifies the ID of the mVRRP group.\nThe ID is a decimal integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "pw-redundancy",
+            "Info": "Indicates that whether packets can be forwarded is determined after the local and remote PW ends negotiate the master/backup status of the PW. This parameter is only used in PW redundancy. If this parameter is not specified, the packet forwarding is stopped on the local PW end after the mVRRP back group bound to the PW switches to the backup state.\n-"
+        },
+        {
+            "Parameters": "interface interface-number",
+            "Info": "Specifies the interface name.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] ip address 192.168.0.1 255.255.255.0",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vrrp vrid 100 virtual-ip 192.168.0.100",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] admin-vrrp vrid 100",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.2",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] mpls l2vc 1.1.1.1 100",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] mpls l2vc track admin-vrrp interface GigabitEthernet 1/0/0.1 vrid 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nThe active and standby PWs are determined by means of negotiation. Two PWs are configured on one PE to connect to two peer PEs, with both PWs being in the master state on the local device. The peer PEs determine the master and backup PWs by means of mVRRP, with one PW in the master state and the other in the backup state. The PEs on both ends negotiate and finally determine the active PW.\n\nPrerequisites\n\nA service PW has been created using the mpls l2vc command.\n\nPrecautions\n\nA service PW can be bound only to one mVRRP group.\nThe service PW and mVRRP group must be configured on different sub-interfaces of the same physical interface. Otherwise, the status of the mVRRP group cannot reflect the actual status of the service PW."
+}

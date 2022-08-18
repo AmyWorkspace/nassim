@@ -1,0 +1,34 @@
+{
+    "PageTitle": "interface-status-change mac-withdraw enable (VSI-LDP view)",
+    "FuncDef": "The interface-status-change mac-withdraw enable command configures PEs to send LDP MAC Withdraw messages to all peers when the status of the AC interface bound to the VSI changes.\nThe undo interface-status-change mac-withdraw enable command disables PEs from sending LDP MAC Withdraw messages to all peers when the status of the AC interface bound to the VSI changes.\nBy default, a VSI does not send LDP MAC Withdraw messages.",
+    "CLIs": [
+        "interface-status-change [ up | down ] mac-withdraw enable",
+        "undo interface-status-change [ up | down ] mac-withdraw enable"
+    ],
+    "ParentView": [
+        "VSI-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "up",
+            "Info": "Configures a PE to send MAC Withdraw messages with the 0x404 TLV type to all peers when the bound AC interface goes Up.\nAfter a peer receives a MAC Withdraw message with the 0x404 TLV type, it clears MAC addresses in the VSI.\n-"
+        },
+        {
+            "Parameters": "down",
+            "Info": "Configures a PE to send MAC Withdraw messages with the 0x406 TLV type to all peers when the bound AC interface goes Down.\nAfter a peer receives a MAC Withdraw message with the 0x406 TLV type, it clears MAC addresses learned by the VSI over a specific PW.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi v1 static",
+            "[*HUAWEI-vsi-v1] pwsignal ldp",
+            "[*HUAWEI-vsi-v1-ldp] interface-status-change mac-withdraw enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, when the status of an AC interface on a PE changes, the PE does not send MAC Withdraw messages to its peers. As a result, its peers are unaware of the fact that the CE connecting to that AC interface is unreachable. Subsequently, traffic bound to the CE gets lost before MAC addresses in the VSI age out. To solve this problem, run the\ninterface-status-change mac-withdraw enable command. Then, when the AC interface status changes, the PE sends a MAC Withdraw message to all its peers. After a peer receives the MAC Withdraw message, it clears MAC addresses in the VSI based on the MAC Withdraw message type.\nWhen the status of an AC interface changes from Up to Down or an AC interface in the Up state leaves a VSI, the PE sends MAC Withdraw messages with the 0x406 TLV type to its peers. Upon receipt, a peer clears the MAC addresses learned over the specified PW from the VSI.When the status of an AC interface changes from Down to Up or an AC interface in the Up state joins a VSI, the PE sends MAC Withdraw messages with the 0x404 TLV type to its peers. Upon receipt, a peer clears MAC addresses in the VSI.\n\nPrecautions\nThis command takes effect only after the mac-withdraw enable command is also used."
+}

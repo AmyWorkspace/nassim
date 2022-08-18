@@ -1,0 +1,37 @@
+{
+    "PageTitle": "mld-snooping proxy (VSI view)",
+    "FuncDef": "The mld-snooping proxy command enables MLD snooping proxy in a VLAN/VSI.\nThe undo mld-snooping proxy command disables MLD snooping proxy in a VLAN/VSI.\nBy default, MLD snooping proxy is disabled in a VLAN/VSI.",
+    "CLIs": [
+        "mld-snooping proxy",
+        "undo mld-snooping proxy"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mld-snooping enable",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] mld-snooping proxy"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mld-snooping enable",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[*HUAWEI-vsi0] mld-snooping proxy"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nForwarding entries are set up based on MLD messages exchanged between a Layer 3 device and user hosts. If there are many user hosts, redundant MLD messages increase the workload of the Layer 3 device.\nMLD snooping proxy can address this problem. MLD snooping proxy provides two functions: querier and unified message transmission, which should be both implemented on the Layer 3 device without MLD snooping proxy. With the querier function, a Layer 2 device can send MLD Query messages. With the unified message transmission function, a Layer 2 device can receive and terminate MLD Query messages sent from users, and then send them in a unified manner. To enable MLD snooping proxy, run the mld-snooping proxy command, which helps reduce the burden of the Layer 3 device and saves bandwidth resources on the Layer 2 and Layer 3 devices.\nConfiguration Impact\nAfter MLD snooping proxy is enabled on a device, users' Report messages will be terminated on the device and cannot be sent to upstream devices.\nPrecautions\nThe\nmld-snooping proxy command fails to be run in a VLAN view in any of the following conditions:\nThe VLAN is bound to a VSI.The querier function is enabled in the VLAN.IPv6 PIM is enabled on Layer 3 VLANIF interface of the VLAN.Report message suppression is enabled in the VLAN using the mld-snooping report-suppress command.\nThe\nmld-snooping proxy command fails to be run in a VSI view in any of the following conditions:\nThe VSI is bound to a BD.The querier function is enabled in the VSI.Report message suppression is enabled in the VSI using the mld-snooping report-suppress command."
+}

@@ -1,0 +1,38 @@
+{
+    "PageTitle": "peer advertise-large-community (BGP-EVPN address family view)",
+    "FuncDef": "The peer advertise-large-community command enables the function to advertise routes carrying the large-community attribute to a BGP EVPN peer.\nThe undo peer advertise-large-community command disables the function to advertise routes carrying the large-community attribute to a BGP EVPN peer.\nBy default, a device does not advertise routes carrying the large-community attribute to a BGP EVPN peer.",
+    "CLIs": [
+        "peer <peerIpv4Addr> advertise-large-community [ disable ]",
+        "undo peer <peerIpv4Addr> advertise-large-community [ disable ]"
+    ],
+    "ParentView": [
+        "BGP-EVPN address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerIpv4Addr",
+            "Info": "Specifies the IPv4 address of a peer.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "disable",
+            "Info": "Disables the Large-Community attribute from being advertised to a BGP peer.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix 1 permit 10.1.1.0 24",
+            "[*HUAWEI] route-policy RP permit node 10",
+            "[*HUAWEI-route-policy] if-match ip-prefix 1",
+            "[*HUAWEI-route-policy] apply large-community 35551:100:65552 additive",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.1.1.2 as-number 200",
+            "[*HUAWEI-bgp] l2vpn-family evpn",
+            "[*HUAWEI-bgp-af-evpn] peer 10.1.1.2 enable",
+            "[*HUAWEI-bgp-af-evpn] peer 10.1.1.2 route-policy RP export",
+            "[*HUAWEI-bgp-af-evpn] peer 10.1.1.2 advertise-large-community"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo enable the function to advertise routes carrying the large-community attribute to the BGP EVPN peer, run the peer advertise-community command.\nPrerequisites\nA route-policy has been used to define the large-community attribute."
+}

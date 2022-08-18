@@ -1,0 +1,30 @@
+{
+    "PageTitle": "radius-server extended-source-ports",
+    "FuncDef": "The radius-server extended-source-ports command configures the extended source interfaces that the device uses to send and receive RADIUS packets.\nThe undo radius-server extended-source-ports command cancels the configuration of extended source interfaces.\nThe radius-server extended-source-ports algorithm round-robin command enables the device to use the round-robin algorithm to select an extended source port when sending RADIUS packets.\nThe undo radius-server extended-source-ports algorithm round-robin command cancels the configuration.\nBy default, the system is not configured with extended source interfaces. In this case, the device uses interface 1812 to send and receive RADIUS authentication packets and interface 1813 to send and receive RADIUS accounting packets. The device does not use the round-robin algorithm to select an extended source port when sending RADIUS packets. Instead, the device preferentially selects the first extended source port. If the first extended source port is unavailable, it selects the next extended source port.",
+    "CLIs": [
+        "radius-server extended-source-ports [ start-port <start-port-number> ] port-number <port-number>",
+        "radius-server extended-source-ports algorithm round-robin",
+        "undo radius-server extended-source-ports",
+        "undo radius-server extended-source-ports algorithm round-robin"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "start-port start-port-number",
+            "Info": "Specifies the start port number.\nIt is an integer ranging from 50000 to 55535."
+        },
+        {
+            "Parameters": "port-number port-number",
+            "Info": "Specifies the number of extended source ports.\nIt is an integer ranging from 1 to 32."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server extended-source-ports algorithm round-robin"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf start-port is not specified, the system automatically allocates a certain number (equaling port-number) of valid extended source ports.\nAfter this command is run, the device uses the extended source interfaces to send and receive RADIUS packets. The first half of the extended source interfaces are for RADIUS authentication packets; the second half of the extended source interfaces are for RADIUS accounting packets. If the count of extended source interfaces is an odd number, the interfaces for RADIUS authentication packets are one more than the interfaces for RADIUS accounting packets.\nThe radius-server extended-source-ports command and the undo radius-server extended-source-ports command take effect 30 seconds after you run them. If you run the radius-server extended-source-ports command or the undo radius-server extended-source-ports command repeatedly at an interval of less than 30 seconds, the system prompts \"Error: The operation that enables or disables extended of RADIUS source ports is already in processing, please wait for a moment to execute this command.\"\nBefore configuring new extended source interfaces, you must run the undo radius-server extended-source-ports command to delete existing extended source interfaces.\nIf to-be-sent RADIUS packets are load balanced among extended source ports, run the radius-server extended-source-ports algorithm round-robin command to enable the device to use the round-robin algorithm to select an extended source port.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

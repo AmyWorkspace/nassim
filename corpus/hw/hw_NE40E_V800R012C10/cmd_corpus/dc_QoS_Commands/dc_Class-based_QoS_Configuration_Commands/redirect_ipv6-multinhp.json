@@ -1,0 +1,79 @@
+{
+    "PageTitle": "redirect ipv6-multinhp",
+    "FuncDef": "The redirect ipv6-multinhp command configures multiple outbound interfaces for redirection and their next hops. It is an extension of the redirect ip-nexthop command. Each nhp ipv6-address interface interface-name describes an outbound interface and its next hop.\nThe undo redirect ipv6-multinhp command cancels the configuration.\nBy default, the multiple outbound interfaces for redirection and their next hops are not configured in traffic behavior view.",
+    "CLIs": [
+        "redirect ipv6-multinhp { nhp <ipv6-address> vpn <vpn-name> nqa <nqa-test-administer-name> <name-of-nqa-test-instance> } &<2-16> [ routing-filter { default-routing | blackhole-routing } * ] [ deny ] [ pri-type common ]",
+        "redirect ipv6-multinhp { nhp <ipv6-address> interface { <interface-name> | <interface-type> <interface-number> } } &<2-16> [ loadbalance [ sip-hash ] ] [ route-forward ] [ pri-type common ]",
+        "redirect ipv6-multinhp { nhp <ipv6-address> vpn <vpn-name> } &<2-16> [ routing-filter { default-routing | blackhole-routing } * ] [ deny ] [ pri-type common ]",
+        "redirect ipv6-multinhp { nhp <ipv6-address> } &<2-16> [ routing-filter { default-routing | blackhole-routing } * ] [ deny ] [ pri-type common ]",
+        "redirect ipv6-multinhp { nhp <ipv6-address> nqa <nqa-test-administer-name> <name-of-nqa-test-instance> } &<2-16> [ routing-filter { default-routing | blackhole-routing } * ] [ deny ] [ pri-type common ]",
+        "undo ipv6 redirect",
+        "undo redirect ipv6-multinhp"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "nhp ipv6-address",
+            "Info": "Specifies the IPv6 address of the next hop to which a route is redirected.\nThe value is in the format of X:X::X:X with each X representing four hexadecimal digits."
+        },
+        {
+            "Parameters": "vpn vpn-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "nqa nqa-test-administer-name",
+            "Info": "Specifies the name of a manager of an NQA test instance.\nIf multiple NQA instances are configured, the device selects the first routable IP address whose bound NQA instance is up for packet forwarding.\nThe name is a string of 1 to 32 case-insensitive characters, spaces not supported.The string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "name-of-nqa-test-instance",
+            "Info": "Specifies the name of an NQA test instance.\nThe name is a string of 1 to 32 case-insensitive characters, spaces not supported.The string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "routing-filter blackhole-routing",
+            "Info": "When this parameter is configured, if the IP address of the next hop matches a black-hole route, the packets are forwarded based on their destination IP address.\n-"
+        },
+        {
+            "Parameters": "routing-filter default-routing",
+            "Info": "When this parameter is configured, if the IP address of the next hop matches the default route, the packets are forwarded based on their destination IP address.\n-"
+        },
+        {
+            "Parameters": "deny",
+            "Info": "If the next hop does not exist, the packet is discarded.\n-"
+        },
+        {
+            "Parameters": "pri-type common",
+            "Info": "Defines the route priorities so that the common route, route matching a specified route-policy, and default route take effect in sequence.\nIf both load balance and pri-type common are configured, common routes are preferentially selected. If common routes are reachable, redirection is not performed. If common routes are unreachable, redirection is performed in load balancing mode.\n-"
+        },
+        {
+            "Parameters": "loadbalance",
+            "Info": "Specifies the load balancing mode of redirected packets. After the loadbalance parameter is specified, load balancing can be implemented among all next hops. By default, load balancing is implemented based on the quintuple.\n-"
+        },
+        {
+            "Parameters": "sip-hash",
+            "Info": "Indicates source IP address-based hash for load balancing.\n-"
+        },
+        {
+            "Parameters": "route-forward",
+            "Info": "If a discard PBR policy is enabled in this command and all the specified outbound interfaces were shut down, the parameter route-forward can be configured to return packets to the original forwarding process.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance ADM ADM_1100",
+            "[*HUAWEI-nqa-ADM-ADM_1100] quit",
+            "[*HUAWEI] nqa test-instance AIS AIS_1122",
+            "[*HUAWEI-nqa-AIS-AIS_1122] quit",
+            "[*HUAWEI] traffic behavior f1",
+            "[*HUAWEI-behavior-f1] redirect ipv6-multinhp nhp 2001:db8::2:1 nqa ADM ADM_1100 nhp 2001:db8::2:2 nqa AIS AIS_1122"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic behavior beh1",
+            "[*HUAWEI-behavior-beh1] redirect ipv6-multinhp nhp 2001:db8::2:1 interface GigabitEthernet 1/0/0 nhp fe80::2 interface GigabitEthernet 1/0/1 nhp 2001:db8::2:2 interface GigabitEthernet 1/0/2 loadbalance"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn the live network, if users require some traffic not to be forwarded along the common path but to be forwarded to multiple specific next hops, run this command. The multiple next hops to which traffic is redirected back up each other to enhance traffic forwarding reliability.\nIn a scenario in which a discard PBR policy is configured to redirect packets to multiple next hops:\nAt least two pairs of outbound interfaces and next hops are required. A maximum of 16 pairs of outbound interfaces and next hops can be entered.When redirection forwarding is performed for packets, the outbound interface with a higher priority is preferentially selected. If the interface is unavailable or the route is updated, the outbound interface with a lower priority is selected.When loadbalance is not specified, the outbound interface and the next hop entered at first have the highest priority. The following is in a descending order.\nIn a scenario in which a forward PBR policy is configured to redirect packets to multiple next hops:\nAt least two next hops are required. A maximum of 16 next hops can be entered.An interface redirects packets in descending order of the priorities of the next hops (The next hop that is configured first has the highest priority, and the priorities of the following hops are in descending order). If traffic is redirected to a low-priority next hop, after the route to a higher-priority next hop becomes available, the redirection next hop is switched back from the low-priority next hop to the higher-priority next hop. If the\nnon-revertive command is configured, the redirection next hop is not switched back in such a scenario.\nIf traffic is redirected to a low-priority next hop, after the route to a higher-priority next hop becomes available, the redirection next hop is switched back from the low-priority next hop to the higher-priority next hop.\nIn a scenario in which a discard or forward PBR policy is configured to redirect packets to multiple next hops, you can specify pri-type common in the command to define the route priorities so that the common route, route matching a specified PBR policy, and default route take effect in sequence.\nWhen the next hop or outbound interface to which traffic is redirected is determined, the packet forwarding process is the same as that in the scenario of packets being redirected to a single hop. For details, see the redirect ipv6-nexthop command.\n\nPrecautions\nPolicy-based routing supports redirection only for incoming traffic. MF classification configured for outgoing traffic does not take effect.\nWhen running this command to configure a discard PBR policy, you must specify both the outbound interface and the next hop. The command does not check whether the configured next hop IP address is mapped to the name of the outbound interface.\nTo switch between the forward and discard PBR policies, delete the original policy and reconfigure the other one.\nAssociating redirection with NQA test ensures that the IP address of the next hop for redirection is reachable. The type of the NQA test instance must be ICMP. To implement real-time check on the reachability of the next hop for redirection, enable the NQA test instance to perform periodical check.\nThe IP address of the next hop to which traffic is redirected takes effect only when the NQA test instance is successfully complete.\nThe redirect nexthop address must match the network segment of the outbound interface.\nWhen the outbound interface is a POS interface and the remote link is faulty and the its interface is not Up, to prevent packet loss caused by traffic redirection to the faulty link, you can run the transmission-alarm down command to configure the POS interface to go Down after detecting the fault on the remote link to prevent traffic from being redirected to the faulty link."
+}

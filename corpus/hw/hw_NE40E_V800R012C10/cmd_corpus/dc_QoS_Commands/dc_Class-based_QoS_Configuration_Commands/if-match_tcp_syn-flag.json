@@ -1,0 +1,88 @@
+{
+    "PageTitle": "if-match tcp syn-flag",
+    "FuncDef": "The if-match ipv6 tcp syn-flag command configures a matching rule for multi-field (MF) classification based on the value of SYN flag in the IPv6 TCP packet header.\nThe undo if-match ipv6 tcp syn-flag command deletes a matching rule for MF classification based on the value of SYN flag in the IPv6 TCP packet header.\nNo matching rules are configured for MF classification based on the value of SYN Flag in the IPv6 TCP packet header.\nThe if-match tcp syn-flag command configures a matching rule for complex traffic classification based on the SYN Flag value in the TCP packet header.\nThe undo if-match tcp syn-flag command cancels the configuration.\nBy default, the matching rule for complex traffic classification based on the SYN Flag value in the TCP packet header is not configured in traffic classifier view.",
+    "CLIs": [
+        "if-match tcp syn-flag { { <tcpflag-value> [ mask <tcpflag-mask> ] } | { bit-match { established | fin | syn | rst | psh | ack | urg | ece | cwr | ns } } }",
+        "if-match ipv6 tcp syn-flag { { <tcpflag-value-ipv6> [ mask <tcpflag-mask-ipv6> ] } | { bit-match { established | fin | syn | rst | psh | ack | urg } } }",
+        "undo if-match tcp syn-flag { { <tcpflag-value> [ mask <tcpflag-mask> ] } | { bit-match { ack | cwr | ece | established | fin | ns | psh | rst | syn | urg } } }",
+        "undo if-match ipv6 tcp syn-flag { { <tcpflag-value-ipv6> [ mask <tcpflag-mask-ipv6> ] } | { bit-match { established | fin | syn | rst | psh | ack | urg } } }"
+    ],
+    "ParentView": [
+        "Traffic classifier view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tcpflag-value",
+            "Info": "Specifies the value of SYN Flag in the TCP packet header.\nThe value is an integer ranging from 0 to 511."
+        },
+        {
+            "Parameters": "mask tcpflag-mask",
+            "Info": "Specifies the mask corresponding to the SYN flag value in the TCP packet headers.\nThe value is an integer ranging from 0 to 511."
+        },
+        {
+            "Parameters": "mask tcpflag-mask-ipv6",
+            "Info": "Specifies the mask corresponding to the SYN flag value in the IPv6 TCP packet headers.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "bit-match",
+            "Info": "Matches SYN Flag against the rule on a per-bit basis.\n-"
+        },
+        {
+            "Parameters": "established",
+            "Info": "Matches TCP packets in the Established state.\n-"
+        },
+        {
+            "Parameters": "fin",
+            "Info": "Matches TCP packets based on the FIN flag.\n-"
+        },
+        {
+            "Parameters": "syn",
+            "Info": "Matches TCP packets based on the SYN flag.\n-"
+        },
+        {
+            "Parameters": "rst",
+            "Info": "Matches TCP packets based on the RST flag.\n-"
+        },
+        {
+            "Parameters": "psh",
+            "Info": "Matches TCP packets based on the PSH flag.\n-"
+        },
+        {
+            "Parameters": "ack",
+            "Info": "Matches TCP packets based on the ACK flag.\n-"
+        },
+        {
+            "Parameters": "urg",
+            "Info": "Matches TCP packets based on the URG flag.\n-"
+        },
+        {
+            "Parameters": "ece",
+            "Info": "Matches TCP packets based on the ECE flag.\n-"
+        },
+        {
+            "Parameters": "cwr",
+            "Info": "Matches TCP packets based on the CWR flag.\n-"
+        },
+        {
+            "Parameters": "ns",
+            "Info": "Matches TCP packets based on the NS flag.\n-"
+        },
+        {
+            "Parameters": "tcpflag-value-ipv6",
+            "Info": "Specifies the SYN flag value in the IPv6 TCP packet headers.\nThe value is an integer ranging from 0 to 63."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic classifier class1",
+            "[*HUAWEI-classifier-class1] if-match tcp syn-flag 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic classifier class1",
+            "[*HUAWEI-classifier-class1] if-match ipv6 tcp syn-flag 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a traffic policy needs to be configured for IPv6 TCP packets carrying a specified SYN flag value, run the if-match ipv6 tcp syn-flag command in the traffic classifier view to configure a matching rule for MF classification based on the value of SYN flag in the IPv6 TCP packet header, and then configure the corresponding traffic behavior and traffic policy and apply the traffic policy to an interface.\nTo configure a certain traffic policy for the traffic with a certain SYN Flag value, you can run this command in the traffic classifier view to configure a matching rule for complex traffic classification based on the SYN Flag value. Then, you need to configure the corresponding traffic behavior and traffic policy, and apply the policy to interfaces.\nPrerequisites\nA traffic classifier has been configured in the system view and the traffic classifier view is displayed.\nConfiguration Impact\nThe action defined in the traffic behavior will be implemented for IPv6 TCP packets matching the SYN flag value-based ACL rule.\nThe traffic action in the traffic behavior bound to the traffic classifier is performed for the packets matching the specified SYN Flag value.\nFollow-up Procedure\nConfigure a traffic behavior and traffic policy, and associate the traffic classifier with the traffic behavior in the traffic policy. Apply the traffic policy to an interface.\nPrecautions\nYou can configure a maximum of 16 such rules for a traffic classifier. To be specific, one traffic classifier can match a maximum of 16 SYN flag value-based matching rules. A later setting does not override an earlier setting.\nAfter this command is configured, the SYN flag values are sorted out based on the configuration sequence. An SYN flag value-based matching rule can be deleted only when all the parameters specified in the delete command are the same as those in the rule. The deletion sequence can be different from the configuration sequence."
+}

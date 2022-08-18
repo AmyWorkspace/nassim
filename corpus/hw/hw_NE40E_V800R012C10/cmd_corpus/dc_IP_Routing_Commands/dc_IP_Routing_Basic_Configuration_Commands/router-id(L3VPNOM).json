@@ -1,0 +1,24 @@
+{
+    "PageTitle": "router id",
+    "FuncDef": "The router id command sets the router ID in the RM module.\nThe undo router id command deletes the configured router ID.\nBy default, the router ID in the RM module is 0.0.0.0 if no IPv4 interface address is configured for a device.",
+    "CLIs": [
+        "router id <router-id>",
+        "undo router id"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "router-id",
+            "Info": "Specifies the router ID in the format of an IPv4 address.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] router id 1.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSome dynamic routing protocols require that a router should have a router ID. If no router ID is specified when these protocols are started on a router, the router ID in the RM module is used by default.\nThe rules for selecting a router ID are as follows:\n If you set a router ID using the router id command, the set router ID is used. If no router ID is set, the router ID is selected according to the following rules:\nIf loopback interfaces with IP addresses exist, the largest IP address of the loopback interfaces is selected as the router ID.If there is no loopback interface with an IP address, the largest IP address of other interfaces is selected as the router ID, regardless of whether the interface is Up.\n2. The router ID is reselected only when the interface address that is selected as the router ID is deleted or changed. The router ID is not reselected in any of the following cases:\nThe interface is Down.A loopback interface is configured when the IP address of a non-loopback interface is selected as the router ID.A larger IP address is configured for an interface.\nYou can run the display router id command to view the router ID.\n3. Each VPN instance selects the router ID from the addresses of the interfaces in the VPN instance according to rules 1 and 2.\n4. If two main control boards are installed on a device, the system backs up the configured router ID and the router ID selected among interface IP addresses. During a master/slave main control board switchover, the system validates the router ID selected among interface IP addresses. If the router ID is invalid, the system reselects a router ID.\nThe router ID configured for each protocol takes precedence over that configured in the system view. A protocol selects the router ID configured in the system view only when no router ID is configured for the protocol. If the router ID configured in the system view changes, you need to run the reset command for each protocol to obtain the new router ID. For BGP, a new router ID can take effect only after the reset bgp all command is run.\n\nPrecautions\nIf the device is restarted in DB mode, the router ID used after the restart is the one saved in the DB before the restart. If the device is restarted in CFG mode and the router id command is not configured on the device, the IP address of the interface whose configuration is restored the first is used as the router ID after the restart.\nTo enhance network stability, configuring the address of a loopback interface as the router ID is recommended."
+}

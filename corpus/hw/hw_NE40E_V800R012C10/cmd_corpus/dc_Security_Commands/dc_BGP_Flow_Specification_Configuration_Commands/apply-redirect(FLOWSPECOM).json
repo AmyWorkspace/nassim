@@ -1,0 +1,56 @@
+{
+    "PageTitle": "apply redirect (Flow-Route view)",
+    "FuncDef": "The apply redirect command enables a device to redirect the traffic matching a filtering rule.\nThe undo apply redirect command cancels the configuration.\nBy default, no traffic is redirected.",
+    "CLIs": [
+        "apply redirect { vpn-target <vpn-target-import> | ip <redirect-ip-rt> }",
+        "apply redirect ip <redirect-ip-rt> color <colorvalue>",
+        "undo apply redirect",
+        "undo apply redirect ip [ <redirect-ip-rt> [ color <colorvalue> ] ]"
+    ],
+    "ParentView": [
+        "Flow-Route view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-target vpn-target-import",
+            "Info": "Specifies the name of a target VPN to which attack traffic is redirected.\nThe value is in the format of AS number (in the range from 0 to 65535):user-defined number (in the range from 0 to 4294967295), ipv4-address:AS number (in the range from 0 to 65535), AS number (in the range from 0 to 65535).AS number (in the range from 0 to 65535):AS number (in the range from 0 to 65535), or user-defined number (in the range from 65536 to 4294967295):AS number (in the range from 0 to 65535). The AS number and user-defined number cannot both be 0s. Specifically, a VPN target cannot be 0:0 or 0.0:0."
+        },
+        {
+            "Parameters": "ip redirect-ip-rt",
+            "Info": "Specifies a redirected IP address.\nThe value is in the format of ipv4-address:0 or ipv4-address:1. ipv4-address is in dotted decimal notation.\nIn the scenario where the controller delivers BGP Flow Specification rules, redirect-ip-rt can recurse to a tunnel or direct route based on the community 0x90000002 attribute carried in BGP Flow Specification packets.In the scenario where BGP Flow Specification routes are converted from the BGP Flow Specification rules delivered by the controller, redirect-ip-rt can recurse to a tunnel or direct route based on the community 0x90000001 attribute carried in BGP Flow Specification packets."
+        },
+        {
+            "Parameters": "color colorvalue",
+            "Info": "Sets a value of the color attribute to redirect traffic to an SR-MPLS TE Policy tunnel.\nCurrently, this parameter can be configured only in the Flow-Route view.\nThe value of the color attribute is in the format of color flag:4-byte user-defined number; for example, the value can be set to 0:100. Currently, the color flag can only be 0, and the user-defined number ranges from 0 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] flow-route Rule1",
+            "[*HUAWEI-flow-route] if-match port equal 24",
+            "[*HUAWEI-flow-route] apply redirect vpn-target 4:4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-policy fl",
+            "[*HUAWEI-tunnel-policy-fl] tunnel select-seq srte-policy load-balance-number 1 unmix",
+            "[*HUAWEI-tunnel-policy-fl] quit",
+            "[*HUAWEI] tunnel-selector fl permit node 10",
+            "[*HUAWEI-tunnel-selector] apply tunnel-policy fl",
+            "[*HUAWEI-tunnel-selector] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.1.1.1 as-number 200",
+            "[*HUAWEI-bgp] ipv4-family flow",
+            "[*HUAWEI-bgp-af-ipv4-flow] peer 10.1.1.1 enable",
+            "[*HUAWEI-bgp-af-ipv4-flow] peer 10.1.1.1 redirect ip",
+            "[*HUAWEI-bgp-af-ipv4-flow] redirect ip recursive-lookup tunnel tunnel-selector fl",
+            "[*HUAWEI-bgp-af-ipv4-flow] quit",
+            "[*HUAWEI-bgp] quit",
+            "[*HUAWEI] flow-route Rule1",
+            "[*HUAWEI-flow-route] if-match port equal 24",
+            "[*HUAWEI-flow-route] apply redirect ip 1.1.1.1:0 color 0:6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe apply redirect command is used to redirect the traffic matching a filtering rule to a specified VPN instance or next-hop IP address to protect the target device from attacks.\nTo accurately redirect matching traffic to a specified SR-MPLS TE Policy tunnel, specify redirect-ip-rt and colorvalue in the command. Traffic can be redirected to the SR-MPLS TE Policy tunnel only if the tunnel matches the configured traffic policy and redirect-ip-rt and colorvalue.\nPrerequisites\nA BGP Flow Specification route or BGP VPN Flow Specification route has been configured using the flow-route command in the system view.\nConfiguration Impact\nIf the apply redirect command is run multiple times for the same BGP Flow Specification route or BGP VPN Flow Specification route, only the latest configuration takes effect.\nIf a BGP FlowSpec route received from a peer carries the redirection next-hop attribute specified using the apply redirect ip command, the device can process this attribute only after the peer redirect ip command is run on the device.\nPrecautions\nBGP IPv6 FLOW Specification does not support next hop IPv6 addresses for redirection."
+}

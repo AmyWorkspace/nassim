@@ -1,0 +1,39 @@
+{
+    "PageTitle": "ip-dscp-inbound",
+    "FuncDef": "The ip-dscp-inbound command converts the DSCP value of upstream IP packet into the corresponding CoS and color the packet.\nThe undo ip-dscp-inbound command restores the default settings.\nBy default, the mappings from DSCP values of upstream IP packets to internal CoSs and colors in a DS domain are shown in Table 1 in Usage Scenario.",
+    "CLIs": [
+        "ip-dscp-inbound <dscp-value> phb <service-class> [ <color> ]",
+        "ip-dscp-inbound <dscp-value> to <dscp-value> phb <service-class> [ <color> ] [ exclude-user-defined ]",
+        "undo ip-dscp-inbound [ <dscp-value> ]",
+        "undo ip-dscp-inbound <dscp-value> to <dscp-value>"
+    ],
+    "ParentView": [
+        "DiffServ domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dscp-value",
+            "Info": "Specifies the DSCP value of the upstream IP packet.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "phb service-class",
+            "Info": "Specifies the CoS value. The value is of the enumeration type.\nIt is case-insensitive and can be EF, AF1, AF2, AF3, AF4, BE, CS6, or CS7."
+        },
+        {
+            "Parameters": "color",
+            "Info": "Specifies the color used to mark the packet.\nThe value is an enumerated type and can be green, yellow, or red."
+        },
+        {
+            "Parameters": "exclude-user-defined",
+            "Info": "One-click DS domain modification that does not override user-defined configurations.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] diffserv domain d1",
+            "[*HUAWEI-dsdomain-d1] ip-dscp-inbound 2 phb af1 green"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a device functions as the gateway of different networks, the precedence, such as the 802.1p, DSCP, and EXP values, in the packets that access the device is mapped to the internal precedence of the device that is presented through the CoSs and colors. When the device sends out the packets, the internal precedence is mapped back to the external precedence.\nSimple traffic classification is usually implemented on the core devices of the network.\nTo perform QoS scheduling for upstream packets that carry DSCP values, you can run this command to convert the DSCP values of the upstream IP packets into the corresponding CoSs and color the packet.\nTable 1 Mappings from DSCP values of upstream IP packets to internal CoSs and colors in a DS domainDSCP\n\nService\n\nColor\n\nDSCP\n\nService\n\nColor\n\n\n\n00\n\nbe\n\ngreen\n\n32\n\naf4\n\ngreen\n\n\n01\n\nbe\n\ngreen\n\n33\n\nbe\n\ngreen\n\n\n02\n\nbe\n\ngreen\n\n34\n\naf4\n\ngreen\n\n\n03\n\nbe\n\ngreen\n\n35\n\nbe\n\ngreen\n\n\n04\n\nbe\n\ngreen\n\n36\n\naf4\n\nyellow\n\n\n05\n\nbe\n\ngreen\n\n37\n\nbe\n\ngreen\n\n\n06\n\nbe\n\ngreen\n\n38\n\naf4\n\nred\n\n\n07\n\nbe\n\ngreen\n\n39\n\nbe\n\ngreen\n\n\n08\n\naf1\n\ngreen\n\n40\n\nef\n\ngreen\n\n\n09\n\nbe\n\ngreen\n\n41\n\nbe\n\ngreen\n\n\n10\n\naf1\n\ngreen\n\n42\n\nbe\n\ngreen\n\n\n11\n\nbe\n\ngreen\n\n43\n\nbe\n\ngreen\n\n\n12\n\naf1\n\nyellow\n\n44\n\nbe\n\ngreen\n\n\n13\n\nbe\n\ngreen\n\n45\n\nbe\n\ngreen\n\n\n14\n\naf1\n\nred\n\n46\n\nef\n\ngreen\n\n\n15\n\nbe\n\ngreen\n\n47\n\nbe\n\ngreen\n\n\n16\n\naf2\n\ngreen\n\n48\n\ncs6\n\ngreen\n\n\n17\n\nbe\n\ngreen\n\n49\n\nbe\n\ngreen\n\n\n18\n\naf2\n\ngreen\n\n50\n\nbe\n\ngreen\n\n\n19\n\nbe\n\ngreen\n\n51\n\nbe\n\ngreen\n\n\n20\n\naf2\n\nyellow\n\n52\n\nbe\n\ngreen\n\n\n21\n\nbe\n\ngreen\n\n53\n\nbe\n\ngreen\n\n\n22\n\naf2\n\nred\n\n54\n\nbe\n\ngreen\n\n\n23\n\nbe\n\ngreen\n\n55\n\nbe\n\ngreen\n\n\n24\n\naf3\n\ngreen\n\n56\n\ncs7\n\ngreen\n\n\n25\n\nbe\n\ngreen\n\n57\n\nbe\n\ngreen\n\n\n26\n\naf3\n\ngreen\n\n58\n\nbe\n\ngreen\n\n\n27\n\nbe\n\ngreen\n\n59\n\nbe\n\ngreen\n\n\n28\n\naf3\n\nyellow\n\n60\n\nbe\n\ngreen\n\n\n29\n\nbe\n\ngreen\n\n61\n\nbe\n\ngreen\n\n\n30\n\naf3\n\nred\n\n62\n\nbe\n\ngreen\n\n\n31\n\nbe\n\ngreen\n\n63\n\nbe\n\ngreen\n\n\n\n\n\nPrerequisites\nThe DS domain is created in the system view.\nImplementation Procedure\nAfter the ip-dscp-inbound command is configured in the DS domain that is bound to the inbound interface of packets, packets are marked with different CoSs and colors according to the mappings configured by this command to perform congestion management and avoidance.\nConfiguration Impact\nPackets are marked with different CoSs and colors according to the mappings defined in the DS domain.\nFollow-up Procedure\nThe DS domain configured with mappings is applied to interfaces.\nPrecautions\nIf you do not specify dscp-value, the undo ip-dscp-inbound command restores all configured mappings from DSCP values of upstream IP packets to internal CoSs and colors.\nFor IP packets, the system predefines a default domain for users. The default mappings from the DSCP values to the CoSs and colors are specified in the default domain. You can change the mappings in the default domain.\nIn VS mode, this command is supported only by the admin VS."
+}

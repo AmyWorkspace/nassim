@@ -1,0 +1,34 @@
+{
+    "PageTitle": "ip-pool (Remote backup service view)",
+    "FuncDef": "The ip-pool command binds an IP address pool to a remote backup service in the remote backup service view.\nThe undo ipv6-pool command removes the binding between an IP address pool and a remote backup service.\nBy default, no IP address pools are bound to a remote backup service in the remote backup service view.",
+    "CLIs": [
+        "ip-pool <pool-name> [ metric <metric-num> ]",
+        "undo ip-pool <pool-name> [ metric <metric-num> ]"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pool-name",
+            "Info": "Specifies the name of an IP address pool.\nThe value is a string of 1 to 128 case-insensitive characters. The bound IP address pool must have been configured in the system view using the ip pool command."
+        },
+        {
+            "Parameters": "metric metric-num",
+            "Info": "Specifies the priority of the IP address pool route into tunnel. The smaller the value, the higher the priority.\nThe value is an integer ranging from 1 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip-pool pool1 bas remote",
+            "[~HUAWEI-ip-pool-pool1] gateway 10.10.110.1 255.255.0.0",
+            "[~HUAWEI-ip-pool-pool1] commit",
+            "[~HUAWEI-ip-pool-pool1] quit",
+            "[~HUAWEI] remote-backup-service rbs",
+            "[*HUAWEI-rm-backup-srv-rbs] commit",
+            "[~HUAWEI-rm-backup-srv-rbs] ip-pool pool1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA maximum of 4096 IP address pools can be bound to a remote backup service, and an IP address pool can be bound only to one remote backup service. The IP address pool must have been configured, which can be either a local or a remote IP address pool.\nThe corresponding IP address pools must be configured in the RBS view for the protection tunnel. The egress for the IP address pool's network segment routes is destined for the protection tunnel.\nAfter an IP address pool is bound to a remote backup service, the IP address pool cannot be deleted before the binding is removed.\nThe network segment route cost of the IPv4 address pool can be any of the following:\nIf is specified, the network segment route cost of the IPv4 address pool is the specified one.If is not specified:For an rui-slave address pool, its network segment route cost is 20 by default.For a primary address pool, its network segment route cost is 10 by default.\nAfter a non-rui-slave address pool is bound to the remote backup service, its network segment route cost is determined by the track interface status and switching policy in the remote backup service:\nIf the track interface is Down, the switching policy is met so that the routes to the address pool are withdrawn and the network segment route cost is changed to 65535.If the system is restarted, the routes to the address pool are delayed advertisement, and the network segment route cost is changed to 65535. After the track interface goes Up, service data is restored. Then routes to the address pool are advertised, and the network segment route cost is restored to the configured value or default value.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

@@ -1,0 +1,41 @@
+{
+    "PageTitle": "oam-bind efm interface bfd-session",
+    "FuncDef": "The oam-bind efm interface bfd-session command enables bidirectional transmission of fault messages between EFM OAM and BFD.\nThe undo oam-bind efm interface bfd-session command deletes bidirectional transmission of fault messages between EFM OAM and BFD.\nBy default, bidirectional transmission of fault messages between EFM OAM and BFD is not configured.",
+    "CLIs": [
+        "oam-bind efm interface { <interface-name> | <interface-type> <interface-number> } bfd-session <bfd-session-id>",
+        "undo oam-bind efm interface { <interface-type> <interface-number> | <interface-name> } bfd-session <bfd-session-id>"
+    ],
+    "ParentView": [
+        "OAM management view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an Ethernet interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an Ethernet interface.\n-"
+        },
+        {
+            "Parameters": "bfd-session-id",
+            "Info": "Specifies the ID of a BFD session.\nThe value is an integer ranging from 1 to 16384."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd session bind peer-ip 10.10.20.2",
+            "[*HUAWEI-bfd-session] quit",
+            "[*HUAWEI] efm enable",
+            "[*HUAWEI] interface GigabitEthernet1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] efm enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] oam-mgr",
+            "[*HUAWEI-oam-mgr] oam-bind efm interface GigabitEthernet 1/0/1 bfd-session 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf EFM OAM is deployed on one side and BFD is deployed on another side of a device, association between EFM OAM and BFD can be configured on the device. This allows EFM OAM and BFD to notify each other of faults and ensures reliable service transmission.\nAssociation between EFM OAM and BFD is bidirectional. The details are as follows:\nIf EFM OAM detects a link fault, it will notify BFD of the fault.If BFD detects a link fault, it will notify EFM OAM of the fault.\n\nPrerequisites\nEFM OAM has been globally enabled using the efm enable command in the system view.EFM OAM has been enabled using the efm enable command in the interface view.BFD has been enabled.\n\nPrecautions\nOnly the following types of BFD sessions support association between EFM OAM and BFD:\nStatic BFD for LSP (LDP, TE, TE-LSP, static-LSP, and VLL PW) sessions (a PST is required)BFD for IP sessions (no PST is required)\nDynamic sessions, auto sessions, and VSI BFD sessions are not supported."
+}

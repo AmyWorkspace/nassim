@@ -1,0 +1,78 @@
+{
+    "PageTitle": "peer (VSI-LDP view)",
+    "FuncDef": "The peer command specifies a peer for a VSI.\nThe undo peer command deletes the peer specified for a VSI.\nBy default, no peer is specified for a VSI.",
+    "CLIs": [
+        "peer <peer-address> [ negotiation-vc-id <vc-id> ] [ encapsulation { vlan | ethernet } ] [ tnl-policy <policy-name> ] [ upe | ac-mode ] [ secondary ] [ ignore-standby-state ]",
+        "undo peer <peer-address> [ negotiation-vc-id <vc-id> ] [ encapsulation { vlan | ethernet } ] [ tnl-policy <policy-name> ] [ upe | ac-mode ] [ secondary ] [ ignore-standby-state ]"
+    ],
+    "ParentView": [
+        "VSI-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the IPv4 address of a peer. Generally, peer-address is a loopback address of the peer and does not need to be consistent with the destination address of the tunnel.\nThe address is in dotted decimal notation"
+        },
+        {
+            "Parameters": "negotiation-vc-id vc-id",
+            "Info": "Specifies the ID of a VC. The VC ID is usually used when both ends need to communicate but the VSI IDs on both ends are different. The value of the parameter vc-id must be different from the VSI ID configured for another local VSI and other VSI IDs specified locally by the negotiate-vc-id command. In other words, the specified VC ID must be an unused one. If negotiate-vc-id is configured on the local end, the negotiate-vc-id or vsi-id configured on the peer must be consistent with negotiate-vc-id configured on the local end.\nThe VSI ID is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "encapsulation",
+            "Info": "Specifies the encapsulation type of a PW.\n-"
+        },
+        {
+            "Parameters": "vlan",
+            "Info": "Specifies the encapsulation type of the VSI instance is VLAN.\n-"
+        },
+        {
+            "Parameters": "ethernet",
+            "Info": "Specifies the encapsulation type of the VSI instance is ethernet.\n-"
+        },
+        {
+            "Parameters": "tnl-policy policy-name",
+            "Info": "Specifies the name of the tunnel policy adopted by the peer. policy-name must be consistent with that specified in the tunnel-policy command run in the system view.\nThe value is a string of 1 to 39 case-sensitive characters without spaces. By default, an LDP LSP is used."
+        },
+        {
+            "Parameters": "upe",
+            "Info": "Identifies whether the peer is a client PE. This parameter applies to HVPLS. This parameter is used when you specify a UPE peer on an SPE.\n-"
+        },
+        {
+            "Parameters": "ac-mode",
+            "Info": "Sets a PW to AC mode.\n-"
+        },
+        {
+            "Parameters": "secondary",
+            "Info": "Specifies the secondary PW.\n-"
+        },
+        {
+            "Parameters": "ignore-standby-state",
+            "Info": "Configures the created PW to ignore the secondary state sent from the peer device.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi company1",
+            "[*HUAWEI-vsi-company1] pwsignal ldp",
+            "[*HUAWEI-vsi-company1-ldp] vsi-id 100",
+            "[*HUAWEI-vsi-company1-ldp] peer 3.3.3.3"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi company1",
+            "[*HUAWEI-vsi-company1] pwsignal ldp",
+            "[*HUAWEI-vsi-company1-ldp] vsi-id 100",
+            "[*HUAWEI-vsi-company1-ldp] peer 3.3.3.3 negotiation-vc-id 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFor the VSI that adopts the static member discovery mechanism, you need to manually specify the peer address for the VSI.\nTo configure a spoke PW on the HVPLS network, you can configure upe in the peer command. If the specified peer is a UPE, the peer is on the user side, which does not comply with split horizon.\nIn a split horizon scenario, the data packets received from the PW at the PSN side are not forwarded to other PWs. Instead, they are forwarded to the private network. On a VPLS network, full mesh and split horizon are used to prevent loops. HVPLS partitions the network, and the devices of different levels forward data to each other without complying with the split horizon principle.\nTo configure a VPWS accessing VPLS network, you can adopt one of the following configurations to create a PW:Configuring the VSI ID to be the same as the VC ID of the peerConfiguring the value of negotiation-vc-id to be the same as the VC ID of the peer\nIf the value of negotiation-vc-id is different from the value of vsi-id specified in the vsi-id command, you have to configure negotiation-vc-id when running the undo peer command to delete the VSI peer. Otherwise, the VSI peer cannot be deleted.\nOn a network where PW redundancy is configured, when the primary PW fails, traffic is switched to the secondary PW. If the secondary PW is in the backup state, traffic cannot be forwarded, resulting in packet loss. If ignore-standby-state is configured for the PWs on the dual-homed PEs, the secondary PW will ignore the secondary state indicated by the peer and be always in the forwarding state, preventing packet loss during a primary/secondary PW switchover.The secondary PW can be created to protect the primary PW. When the primary PW fails, traffic can be immediately switched to the secondary PW, preventing traffic interruption.\nNote the following when you specify the secondary PW:\nThe primary PW of the same VSI must exist and be unique, and the primary PW is not configured on a static U-PE.After secondary is configured in the peer command, the number of PWs that can be configured for the VSI is restricted. If the secondary PW is configured for a VSI, that VSI can have only two PWs, the primary PW and the secondary PW.To change the primary or secondary state of a PW, you need to delete the PW and then reconfigure it. In addition, the state parameter specified in the undo peer command must be consistent with the configured state of the PW.Before deleting the primary PW, delete the secondary PW of the same VSI.On a PBB VPLS network where PW redundancy is configured, multiple I-VSIs are bound to a B-VSI, and ignore-standby-state is not used during PW configuration, the primary/secondary PW switchover relies on protocol convergence when the primary PW fails.Figure 6 shows the networking of the active/standby PW stitching EVPN Anycast VXLAN active-active scenario in the feature description \"EVPN Splicing\" on which PWs and an EVPN anycast VTEP are spliced and the splicing points (PE2 and PE3) work in active-active mode. PE1 is dual-homed to PE2 and PE3 through a VPLS network. PE2 and PE3 work in master/backup mode, and assume that PW1 is the primary PW and PW2 is the secondary PW. PE2 and PE3 work in active-active mode when PE4 is dual-homed to them. PE2 and PE3 use a virtual anycast VTEP address to establish an anycast VXLAN tunnel with PE4. A bypass VXLAN tunnel is established between PE2 and PE3 to forward traffic in case of a link fault.\nThe bypass VXLAN tunnel works in Hub PW mode, whereas the anycast VXLAN tunnel works in Spoke PW mode. PW1 and PW2 are common VPLS PWs, and they are Hub PWs by default. In this case, PW1 does not process traffic forwarded by the bypass VXLAN tunnel. If PW1 is configured as a Spoke PW using the peer upe command, PW1 does not process traffic forwarded by the anycast VXLAN tunnel. To enable PW1 to process traffic sent by both anycast VXLAN tunnel and bypass VXLAN tunnel, run the peer ac-mode command to set PW1 to AC mode.\n\nPrerequisites\nLDP sessions have been set up between all the PEs to fully mesh PEs on a VPLS network through PWs.The VSI ID has been set in the VSI-LDP view.The peer [ negotiation-vc-id ] pw command can be used to create the PW view only after the peer [ negotiation-vc-id ] [ tnl-policy ] command has been run to specify the IP address of the peer.\n\nConfiguration Impact\nSpecifying the peer address means manually specifying the members in a VPLS domain.The execution of the undo peer command will interrupt traffic of the peer. Exercise caution when using this command.\n\nPrecautions\nA VPLS network is a point-to-multipoint L2VPN and therefore multiple peers can be specified for one VSI.\nIf a BD has bound a VSI and an EVPN instance bound, the upe parameter cannot be specified in the peer command to specify a UPE as a peer for the VSI."
+}

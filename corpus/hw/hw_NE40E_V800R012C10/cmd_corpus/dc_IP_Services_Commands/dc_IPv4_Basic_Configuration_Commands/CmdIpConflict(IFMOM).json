@@ -1,0 +1,31 @@
+{
+    "PageTitle": "ip address conflict disable",
+    "FuncDef": "The ip address conflict check disable command disables the IP address conflict detection function.\nThe undo ip address conflict check disable command restores the default configuration.\nThe ipv6 address conflict check disable command disables the IPv6 address conflict detection function.\nThe undo ipv6 address conflict check disable command restores the default configuration.\nThe ip address conflict preempt enable command enables the preemption function for conflicting IP addresses.\nThe undo ip address conflict preempt enable command restores the default configuration.\nThe ipv6 address conflict preempt enable command enables the preemption function for conflicting IPv6 addresses.\nThe undo ipv6 address conflict preempt enable command restores the default configuration.\nBy default, the IP address conflict detection function is enabled.",
+    "CLIs": [
+        "ip address conflict check disable",
+        "ipv6 address conflict check disable",
+        "ip address conflict preempt enable",
+        "ipv6 address conflict preempt enable",
+        "undo ip address conflict check disable",
+        "undo ipv6 address conflict check disable",
+        "undo ip address conflict preempt enable",
+        "undo ipv6 address conflict preempt enable"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip address conflict check disable",
+            "[*HUAWEI] ip address conflict preempt enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 address conflict check disable",
+            "[*HUAWEI] ipv6 address conflict preempt enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n In scenarios of upgrade and capacity expansion on the live network, existing interfaces need to be replaced. If a customer has limited IP address resources and therefore is unwilling to assign new IP addresses for replacement interfaces, run the ip address conflict check disable command to disable the IP address conflict detection function, so that conflicting IP addresses can be configured for different interfaces. Configure the IP addresses of the to-be-replaced interfaces for new interfaces. The IP addresses take effect on the new interfaces after the to-be-replaced interfaces are shut down or their IP addresses are deleted.\nIf the IP address or broadcast address of an interface is the same as that of another interface, IP address conflict occurs. In this case, the IP address takes effect only on the interface with a higher priority.\nIn IP address conflict scenarios, the default priorities of interfaces are as follows:\nManagement network interfaces have the highest priority.Loopback interfaces have the second highest priority.All other interfaces are ranked by interface names in lexicographical order. The higher the position in the lexicographical order, the higher the priority.Among interfaces of the same type, the smaller the interface ID, the higher the priority.\nYou need to check the physical link status of an interface when selecting the interface on which an IP address takes effect. Select the interface with the highest priority among interfaces whose physical link status is Up.\n2. After the ip address conflictcheck disable command or ipv6 address conflictcheck disable command are run to disable the IP address conflict detection function, if IP address conflict exists on different interfaces, run the ip address conflict preempt enable command or ipv6 address conflict check disable command to enable the preemption function for conflicting IP addresses, so that conflicting IP addresses take effect on the interfaces with higher priorities.\nFor example, an IP address is configured for interface A, and the same IP address is configured for interface B which has a higher priority:If the preemption function for conflicting IP addresses is enabled, the IP address immediately takes effect on interface B which has a higher priority, and the IP address becomes invalid on interface A.If the preemption function for conflicting IP addresses is disabled, the IP address continues to take effect on interface A, and the IP address is invalid on interface B. The IP address takes effect on interface B and becomes invalid on interface A only when the physical link status of interface A is Down or the device is restarted.\n\nPrerequisites\nIn scenarios where the preemption function for conflicting IP addresses is disabled, conflicting IP addresses continue to take effect on the original interfaces after a master/slave switchover is performed. However, conflicting IP addresses take effect on interfaces with higher priorities after the device is restarted.\nPrecautions\nIf the primary IP address of an interface does not take effect due to IP address conflict, its secondary IP address also becomes invalid. If the primary IP address of an interface takes effect, its secondary IP address takes effect only when no duplicate IP address exists on the network."
+}

@@ -1,0 +1,66 @@
+{
+    "PageTitle": "maximum-prefix",
+    "FuncDef": "To control how many prefixes can be received from a neighbor, use the maximum-prefix command. To disable this function, use the no form of this command.",
+    "CLIs": [
+        "maximum-prefix <maximum> [ threshold ] [ restart <restart-interval> ] [ warning-only ]",
+        "no maximum-prefix"
+    ],
+    "ParentView": [
+        "peer template configuration mode",
+        "bgp router configuration mode",
+        "bgp neighbor address family configuration mode"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "maximum",
+            "Info": "Maximum number of prefixes allowed from the specified neighbor. The number of prefixes that can be configured is limited only by the available system resources on a router. Range: 1 to 300000."
+        },
+        {
+            "Parameters": "threshold",
+            "Info": "(Optional) Specifies the percentage of the maximum-prefix limit at which the router starts to generate a warning message. Range: 1 to 100. Default: 75."
+        },
+        {
+            "Parameters": "restart interval",
+            "Info": "(Optional) Specifies the time interval (in minutes) that a peering session is reestablished. Range: 1 to 65535."
+        },
+        {
+            "Parameters": "warning-only",
+            "Info": "(Optional) Allows the router to generate a syslog message when the maximum-prefix limit is exceeded, instead of terminating the peering session."
+        }
+    ],
+    "Examples": [
+        [
+            "switch(config)# router bgp 64496",
+            "switch(config-router)# network 192.168.0.0",
+            "switch(config-router)# maximum-prefix 1000",
+            "switch(config-router)#"
+        ],
+        [
+            "switch(config)# router bgp 64496",
+            "switch(config-router)# network 192.168.0.0",
+            "switch(config-router)# maximum-prefix 5000 50",
+            "switch(config-router)#"
+        ],
+        [
+            "switch(config)# router bgp 64496",
+            "switch(config-router)# network 192.168.0.0",
+            "switch(config-router)# maximum-prefix 2000 restart 30",
+            "switch(config-router)#"
+        ],
+        [
+            "switch(config)# router bgp 64496",
+            "switch(config-router)# network 192.168.0.0",
+            "switch(config-router)# maximum-prefix 500 warning-only",
+            "switch(config-router)#"
+        ],
+        [
+            "switch(config)# router bgp 64496",
+            "switch(config-router)# neighbor 192.168.1.3 remote-as 64497",
+            "switch(config-router-neighbor)# address-family ipv4 multicast",
+            "switch(config-router-neighbor-af)# maximum-prefix 1500",
+            "switch(config-router-neighbor-af)#"
+        ]
+    ],
+    "ExtraInfo": "The number of prefixes that can be configured is limited only by the available system resources on a router.The maximum-prefix command allows you to configure a maximum number of prefixes that a Border Gateway Protocol (BGP) routing process accepts from the specified peer. This feature provides a mechanism (in addition to distribute lists, filter lists, and route maps) to control prefixes received from a peer.When the number of received prefixes exceeds the maximum number configured, BGP disables the peering session (by default). If you configure the restart interval , BGP automatically reestablishes the peering session at the configured time interval. If you do not configure the restart interval and a peering session is terminated because the maximum prefix limit has been exceed, the peering session is not reestablished until you enter the clear ip bgp command. If the warning-only keyword is configured, BGP sends only a log message and continues to peer with the sender.There is no default limit on the number of prefixes that can be configured with this command. Limitations on the number of prefixes that can be configured are determined by the amount of available system resources.\nCommand Default:This command is disabled by default. Peering sessions are disabled when the maximum number of prefixes is exceeded. If you do not configure the restart interval, a disabled session stays down after the maximum-prefix limit is exceeded.",
+    "HTMLPage": "data/manuals/cisco/cisco_nexus5500/n5500-ucast-cr_n5k-bgp_cmds_m.html"
+}

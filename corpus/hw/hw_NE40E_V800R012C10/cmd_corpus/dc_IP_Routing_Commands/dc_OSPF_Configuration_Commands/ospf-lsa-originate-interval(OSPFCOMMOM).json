@@ -1,0 +1,45 @@
+{
+    "PageTitle": "lsa-originate-interval",
+    "FuncDef": "The lsa-originate-interval command sets the interval at which LSAs are updated.\nThe undo lsa-originate-interval command restores the default configuration.\nBy default, the intelligent timer is enabled; the maximum interval at which LSAs are updated is 5000 ms, the initial interval is 500 ms, and the Holdtime interval is 1000 ms.For Type-3,Type-4 and Type-10 LSAs, the default interval is 5s.",
+    "CLIs": [
+        "lsa-originate-interval { 0 | intelligent-timer <max-interval> <start-interval> <hold-interval> [ other-type <interval> ] | other-type <interval> [ intelligent-timer <max-interval> <start-interval> <hold-interval> ] }",
+        "undo lsa-originate-interval"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "0",
+            "Info": "Sets the interval at which LSAs are updated to 0 ms, that is, deletes the initial interval (5s) for updating LSAs.\n-"
+        },
+        {
+            "Parameters": "intelligent-timer",
+            "Info": "Sets the intelligent timer to update OSPF Type-1 LSA (Router LSA) , Type-2 LSA (Network LSA).\n-"
+        },
+        {
+            "Parameters": "max-interval",
+            "Info": "Specifies the maximum interval at which LSAs are updated.\nThe value ranges from 1 to 300000, in milliseconds."
+        },
+        {
+            "Parameters": "start-interval",
+            "Info": "Specifies the initial interval at which LSAs are updated.\nThe value ranges from 0 to 60000, in milliseconds."
+        },
+        {
+            "Parameters": "hold-interval",
+            "Info": "Specifies the Holdtime interval at which LSAs are updated.\nThe value ranges from 1 to 60000, in milliseconds."
+        },
+        {
+            "Parameters": "other-type interval",
+            "Info": "Sets the interval to update OSPF Type-3 LSA (Network-summary-LSA), Type-4 LSA (ASBR-summary-LSA) and Type-10 LSA (Opaque LSA).\nThe value is an integer ranging from 0 to 10, in seconds. The default value is 5."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] lsa-originate-interval 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOSPF sets the interval at which LSAs are updated to 5s. This prevents network connections or frequent route flapping from consuming excessive network bandwidth or device resources. On a stable network that requires fast route convergence, you can change the interval for updating LSAs to 0s. In this manner, the device can fast respond to topology or route changes, which speeds up route convergence. On an unstable network, routes are calculated frequently, which consumes a great number of CPU resources. In addition, LSPs that describe the unstable topology are generated and transmitted on the unstable network. Frequently processing such LSAs affects the rapid and stable operation of the entire network. You can configure an intelligent timer so that the device can dynamically adjust the interval according to the user configuration and the frequency of triggering events (such as route calculation) to speed network convergence.\nIf there is no special network requirement, default values are recommended.\nImplementation Procedure\nAfter an intelligent timer is enabled, the interval for updating LSAs is as follows:\n The initial interval for updating LSAs is specified by start-interval. The interval for updating LSAs for the nth (n>=2) time equal hold-interval x 2(n-2). When the interval specified by hold-interval x 2(n-2) reaches the maximum interval specified by max-interval, OSPF updates LSAs at the maximum interval for three consecutive times. Then, OSPF updates LSAs at the initial interval specified by start-interval.\n\nPrecautions\nSetting the interval in the lsa-originate-interval command to be a value greater than or equal to the Holdtime interval specified in the lsa-arrival-interval command is recommended."
+}

@@ -1,0 +1,41 @@
+{
+    "PageTitle": "l2-multicast ipv6 fast-channel (VSI view)",
+    "FuncDef": "The l2-multicast ipv6 fast-channel command enables prompt join.\nThe undo l2-multicast ipv6 fast-channel command disables prompt join.\nBy default, prompt join is disabled.",
+    "CLIs": [
+        "l2-multicast ipv6 fast-channel [ source-address <source-address> <SrcAddrMaskLen> ] group-address <group-address> <GrpAddrMaskLen>",
+        "undo l2-multicast ipv6 fast-channel [ source-address <source-address> <SrcAddrMaskLen> ] group-address <group-address> <GrpAddrMaskLen>"
+    ],
+    "ParentView": [
+        "VSI-AUTO view",
+        "VSI-BD view",
+        "VSI-DEFAULT view",
+        "VSI-STATIC view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "source-address source-address",
+            "Info": "Specifies a multicast source address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "SrcAddrMaskLen",
+            "Info": "Specifies the mask length for the source address.\nThe value is an integer ranging from 64 to 128."
+        },
+        {
+            "Parameters": "group-address group-address",
+            "Info": "Specifies a multicast group IP address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X. The value ranges from FF00::0 to FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF."
+        },
+        {
+            "Parameters": "GrpAddrMaskLen",
+            "Info": "Specifies the mask length for the group address.\nThe value is an integer ranging from 64 to 128."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mld-snooping enable",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] l2-multicast ipv6 fast-channel source-address 1::128 128 group-address ff15::1 128"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter receiving the first MLD Report for a multicast group, the device needs to apply for resources for this group and then generates a forwarding entry. This decreases the speed at which hosts join the multicast group. To speed up host join, run the l2-multicast ipv6 fast-channel command to enable prompt join. With this function enabled, the device applies for resources for multicast groups in advance. When the device receives an MLD Report message for a multicast group, it can immediately forward multicast data for the multicast group, shortening the delay for the device to respond to the Report message.\nConfiguration Impact\nIf the device has reserved resources for a multicast group but does not receive an MLD Report message for this multicast group for a long period of time, resources will be wasted and device performance will be degraded."
+}

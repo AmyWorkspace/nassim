@@ -1,0 +1,36 @@
+{
+    "PageTitle": "exclude-port (DS-Lite instance view)",
+    "FuncDef": "The exclude-port command enables a device to filter out packets with a specified port number or a specified range of port numbers.\nThe undo exclude-port command disables a device from filtering out packets with a specified port number or a specified range of port numbers.\nBy default, no packets of a specified port number or a range of port numbers are filtered out.",
+    "CLIs": [
+        "exclude-port { <port> [ to <port> ] } &<1-10>",
+        "undo exclude-port { <port> [ to <port> ] } &<1-10>",
+        "undo exclude-port all"
+    ],
+    "ParentView": [
+        "DS-Lite instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "port",
+            "Info": "Specifies the number of a single port, a start port. The start port number must be less than the end port number.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "to port",
+            "Info": "Specifies the number of an end port. The start port number must be less than the end port number.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Deletes all filtered port numbers.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ds-lite instance cpe1 id 1",
+            "[*HUAWEI-ds-lite-instance-cpe1] exclude-port 1 to 10",
+            "Warning: Excluded ports cannot be used by sessions, and the total number of available ports in a Dslite pool will decrease.",
+            " Continue? [Y/N]:"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo secure networks from virus, configure the port filter function on a CGN service board to prevent an unwanted port from being translated to a filtered port and resulting in a packet forwarding failure.\nOn a centralized CGN network, a carrier deploys the port filter function on two network interfaces of a core router (CR) to filter out packets on destination port 1434 (Worm.NetKiller2003). When a packet from the public network side reaches the private network side, the CR checks the packet's destination port. If the port is within the filtered port range, the CR discards the packet. The port filter function may cause the CR to discard returned packets. A CGN service board translates a private source port into a filtered port used to forward packets from a private network to a public network. After packets are returned from the public network to the private network, the CR finds that the packets' destination port is within a range of filtered ports and unexpectedly discards the packets, which interrupts user services. To prevent such an error, configure the port filter function on a CGN service board so that the board can filter out the ports that the CR is configured to filter out. The CGN service board is prevented from translating the source port into a filtered port. This prevents returned user packets from being discarded by the CR.\nConfiguration Impact\nIf the exclude-port command is run more than once, all configurations take effect. After the exclude-port command is run, the filtered ports in the DS-Lite instance view are displayed in ascending order, and consecutive ports are displayed after combination. For example, the exclude-port 1 2 3 4 5 command is combined into exclude-port 1 to 5.\nPrecautions\nYou can configure a maximum of 10 parameters in the view of each DS-Lite instance. A maximum of 512 ports can be filtered.\nNote the following issues before you run the exclude-port command:\nPorts used by port-level DS-Lite server cannot be filtered out. If ports are used by port-level DS-Lite server, the exclude-port command cannot be run. if public ports are filtered out and the port-level NAT server function is configured, the filtered ports cannot be used in the port-level NAT server function.The exclude-port command cannot be run if a filter port list to be configured and a filter port list to be deleted overlap.\nNote the following issues after the\nexclude-port command is run:\nThe port forwarding and the exclude-port command can be run on an interface simultaneously. If port forwarding rules apply to some ports, the exclude-port command run to filter these ports cannot take effect immediately. After users get offline and the port forwarding rules are withdrawn, the filtered ports cannot apply the rules.Running the exclude-port command causes an established flow table to be reestablished.If the port range allocated to a user contains filtered ports, the user cannot get online through these ports. If most ports in the port range allocated to a user are filtered out, the user's most traffic fails to be forwarded. If a user has gone online and traffic already exists, this issue also occurs when the exclude-port command is run.\nOn a centralized CGN network, the CR is enabled to filter out private network packets with a specified source port (for example, port 1434). After a DS-Lite device translates the source port into another port (for example, port 1024) that is out of the range of filtered ports, the CR properly forwards the packets that should have been filtered out. To prevent such an error, perform the port filter function on a device before the CGN device receives them."
+}

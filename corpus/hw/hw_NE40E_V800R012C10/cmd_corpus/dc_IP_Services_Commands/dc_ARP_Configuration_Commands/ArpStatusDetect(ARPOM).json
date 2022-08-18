@@ -1,0 +1,53 @@
+{
+    "PageTitle": "arp status-detect",
+    "FuncDef": "The arp status-detect command enables association between ARP and interface status.\nThe undo arp status-detect command disables association between ARP and interface status.\n\nBy default, association between ARP and interface status is disabled, an interface sends ARP probe messages in strict mode, ARP probe messages are sent at an interval of 1000 milliseconds, an interface sends ARP probe messages for three consecutive times.",
+    "CLIs": [
+        "arp status-detect <ip-address>",
+        "arp status-detect { interval <detect-interval> | times <detect-times> | mode loose }",
+        "undo arp status-detect [ <ip-address> ]",
+        "undo arp status-detect { interval [ <detect-interval> ] | times [ <detect-times> ] | mode [ loose ] }"
+    ],
+    "ParentView": [
+        "GE sub-interface view",
+        "40GE interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the destination IP address of ARP probe messages sent by an interface. The destination IP address of ARP probe messages must be on the same network segment as the IP address of the local interface. The probed device does not need to be configured.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "interval detect-interval",
+            "Info": "Specifies the interval at which ARP probe messages are sent.\nThe value is an integer ranging from 200 to 10000, in milliseconds."
+        },
+        {
+            "Parameters": "times detect-times",
+            "Info": "Specifies the maximum number of times an interface can consecutively send ARP probe messages. If no ARP reply messages are received within the specified period, the protocol status of the interface is set to Down.\nThe value is an integer ranging from 1 to 10."
+        },
+        {
+            "Parameters": "mode loose",
+            "Info": "Indicates that an interface sends ARP probe messages in loose mode.\n\nIn strict mode, an interface sends ARP probe messages when the physical status is Up. The protocol status of the local interface remains unchanged only when the local interface receives an ARP reply packet from the peer interface and the source IP address of the ARP reply packet is the same as the destination IP address of the ARP probe packet. If no ARP reply packet is received from the peer interface within the allowable attempts, the protocol status of the local interface is set to Down.\nIn loose mode, an interface sends ARP probe messages only when both the physical status and protocol status are Up. The protocol status of the local interface remains unchanged only when the local interface receives an ARP packet from the peer interface and the source IP address of the ARP packet is the same as the destination IP address of the ARP probe packet. If no ARP packet is received from the peer interface within the allowable attempts, the protocol status of the local interface is set to Down.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] ip address 10.1.1.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/1] arp status-detect 10.1.1.2",
+            "[*HUAWEI-GigabitEthernet1/0/1] arp status-detect mode loose"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nTo minimize the impact of device faults on services and improve network availability, a network device must be able to quickly detect communication faults of devices that are not directly connected. Then, measures can be taken to quickly rectify the faults to ensure the normal running of services.\nAssociation between ARP and interface status allows the local interface to send ARP probe packets to the peer interface and checks whether the peer interface can properly forward packets based on whether a reply packet is received. This triggers fast route convergence.\n\nPrecautions\n\nBefore enabling association between ARP and interface status, run the ip address ip-address { mask | mask-length } [ sub ] command to configure the IP address of the local interface.\nIn the sub-interface view, this command applies only to Layer 3 sub-interfaces.\nSet the interval at which ARP probe messages are sent to a large value to prevent interface flapping upon operations such as primary/secondary switching."
+}

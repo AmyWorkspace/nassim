@@ -1,0 +1,31 @@
+{
+    "PageTitle": "undo snmp-agent inform",
+    "FuncDef": "The undo snmp-agent inform command restores the default parameters.\nBy default, the time-out waiting period for Inform ACK messages is 15 seconds, the number of times to retransmit Inform messages is 3, and the maximum number of informs in the inform buffer is 39.",
+    "CLIs": [
+        "undo snmp-agent inform { timeout | resend-times | pending } *"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "timeout",
+            "Info": "Set the timeout period for SNMP informs.\n-"
+        },
+        {
+            "Parameters": "resend-times",
+            "Info": "Set the number of times an SNMP inform is retransmitted.\n-"
+        },
+        {
+            "Parameters": "pending",
+            "Info": "Set the number of SNMP inform that are waiting for the acknowledgement from the NMS.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] undo snmp-agent inform pending resend-times timeout"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter sending an Inform message, an SNMP agent waits for an Inform ACK message sent by the NMS. You can run the snmp-agent inform command to set parameters timeout, resend-times, and pending for Inform messages.\nThese three parameters affect one another. For example, if the timeout period for waiting for Inform ACK messages prolongs or the number of attempts to retransmit Inform messages increases, but the maximum number of Inform messages to be confirmed is not changed, the number of Inform messages to be confirmed increases, causing the inform buffer to be quickly filled up.\nOnce the inform buffer is filled up, the earliest Inform message in the inform buffer is deleted each time a new Inform message enters the queue. The deleted Inform messages are not retransmitted to the NMS. To prevent this problem, increase the maximum number of Inform messages to be confirmed in the inform buffer.\nYou can configure the snmp-agent inform command to contain the parameter timeout, resend-times, or pending as needed.\nWhen a large number of Inform messages are dropped on a network, run the snmp-agent inform pending command to increase the inform buffer.When the transmission speed on the network is low, increase the timeout period. Increasing the timeout period will increase the waiting time of Inform messages in the inform buffer. You can also run the snmp-agent inform { timeout | pending } * command to increase the inform message.When the transmission speed on the network is high, run the snmp-agent inform timeout command to reduce the timeout period.When Inform messages are transmitted on an unreliable network, increase the retransmission times. In this case, the Inform messages in the inform buffer need to wait for a longer time to be confirmed. You can run the snmp-agent inform { resend-times | pending } * command to increase the inform buffer.\n\nPrerequisites\nParameters for sending Inform messages take effect only after the IP address of the target host for receiving Inform messages is configured using the snmp-agent target-host inform command.\nThe IP address of the target host for receiving Inform messages has been configured using the snmp-agent target-host inform command.\nConfiguration Impact\nYou must set suitable parameters timeout, resend-times, and pending. Setting an inappropriate parameter deteriorates SNMP working efficiency.\nPrecautions\nOnly parameters for sending Inform messages need to be configured using the snmp-agent inform command. Parameters for sending trap messages do not need to be configured.\nYou must set the parameters timeout and resend-times based on network conditions. Setting an inappropriate parameter deteriorates the transmission efficiency of SNMP messages. If the parameters timeout and resend-times are already configured using the snmp-agent inform command, after the snmp-agent inform address command is run on a specified target host, the earlier configure is overwritten.\n<\nOnly parameters for sending Inform messages need to be configured using the snmp-agent inform address command. Parameters for sending trap messages do not need to be configured."
+}

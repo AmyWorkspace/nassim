@@ -1,0 +1,55 @@
+{
+    "PageTitle": "dhcp-server dead-count",
+    "FuncDef": "The dhcp-server command configures a DHCPv4 server. A DHCPv4 server group contains a maximum of eight DHCPv4 servers.\nThe undo dhcp-server command removes the DHCPv4 server(s). If you do not use any parameter, all DHCPv4 servers in the DHCPv4 server group are removed.\nBy default, no DHCPv4 server is configured.",
+    "CLIs": [
+        "dhcp-server <ip-address> [ vpn-instance <vpn-instance-name> ] { dead-count <dead-count> | timeout <timeout-value> | dead-time <dead-time> | nak-count <nak-count> } *",
+        "dhcp-server { dead-count <dead-count> | timeout <timeout-value> | dead-time <dead-time> | nak-count <nak-count> } *",
+        "undo dhcp-server [ <ip-address> [ vpn-instance <vpn-instance-name> ] ] { dead-count | timeout | dead-time | nak-count } *"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of a DHCP server.\nThe value is an IPv4 address in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "dead-count dead-count",
+            "Info": "Specifies the maximum number of times at which the DHCP server does not send response packets.\nThe value is an integer ranging from 1 to 64.The default value is 0."
+        },
+        {
+            "Parameters": "timeout timeout-value",
+            "Info": "Specifies the timeout period for waiting for response packets from a DHCP server.\nThe value is an integer ranging from 1 to 60, in seconds. The default value is 25."
+        },
+        {
+            "Parameters": "dead-time dead-time",
+            "Info": "Specifies the recovery time of a DHCP server.\nThe value is an integer ranging from 1 to 65535, in minutes. The default value is 3."
+        },
+        {
+            "Parameters": "nak-count nak-count",
+            "Info": "Specifies the maximum number of NAK packets a DHCP server can receive consecutively.\nThe value is an integer ranging from 0 to 255. The default value is 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp-server group group-name",
+            "[~HUAWEI-dhcp-server-group-group-name] dhcp-server 3.3.3.3",
+            "[~HUAWEI-dhcp-server-group-group-name] quit",
+            "[*HUAWEI] dhcp-server 3.3.3.3 nak-count 15"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp-server group group-name",
+            "[~HUAWEI-dhcp-server-group-group-name] dhcp-server 192.168.1.1",
+            "[~HUAWEI-dhcp-server-group-group-name] quit",
+            "[*HUAWEI] dhcp-server 192.168.1.1 dead-count 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBoth the master and slave DHCP servers are deployed in the live network. The master is preferentially used to allocate addresses to users. If the master DHCP server goes Down, the slave DHCP server takes over to allocates addresses. In real-world situations, if the DHCP server does not respond, it does not mean that the DHCP server fails or no address is available on the DHCP server, and it is probably because a user fails to pass authentication. If one unauthorized user fails to pass authentication, the DHCP server will be switched to the slave DHCP server to allocate addresses. After a period of time, the master DHCP server is forcibly set to Up. As a result, repeated master/slave DHCP server switchovers occur in the live network. If the command is configured, the DHCP server goes Down only after the number of times at which the DHCP server does not send response packets exceeds a specified value. Because there is little probability that several unauthorized users consecutively apply for addresses, the number of master/slave DHCP server switchovers is reduced.\nIf the device sends a DHCP packet to a DHCP server for times specified by dead-count, but the device does not receive response packets from the DHCP server after the maximum time specified by ( +1) x ) elapses, the device considers the DHCP server abnormal and sets the DHCP server status to Down.\nAfter the time specified by  elapses, the device sets the DHCP server status to Up (the server may not be actually Up). The device resends packets to establish a connection with the DHCP server. If the server still does not respond, the device resets the server status to Down. If the status of all the DHCP servers are set to Down, when the device sends a DHCP packet to a DHCP server, the device sets the DHCP server status to Up (the server may not be actually Up). The device resends packets to establish a connection with the DHCP server. If the server still does not respond, the device resets the server status to Down.\nWhen a remote IP address pool is used and you want to change the default number NAK packets a DHCP server can receive consecutively, run the dhcp-server nak-count command.\nPrerequisites\nA master/slave DHCP server group has been configured.\nConfiguration Impact\nIf the DHCP server fails, the device can detect the fault within 25s() by default. The slave DHCP server then takes over to allocate addresses to the subsequent users. In this sense, only the users who get online within the 25s() are affected.\nAfter the command is configured, the device can detect the fault after a maximum of 25 x (n + 1) seconds if the  value is n. In this case, a lot more users will be affected.\nIf you specify  as non-zero in the dhcp-server nak-count command, after the number of NAK packets a DHCP server receives consecutively exceeds the specified value, the DHCP server status is set to Down. In addition, the DHCP server status goes Up automatically after a specific period of time. If you specify  as zero in the command, the DHCP server status is not changed due to the number NAK packets when the DHCP server receives NAK packets consecutively.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nWhen multiple DHCP servers configured in a DHCP server group have different timeout values and the DHCP servers work in polling mode, the maximum timeout value takes effect on all these DHCP servers."
+}

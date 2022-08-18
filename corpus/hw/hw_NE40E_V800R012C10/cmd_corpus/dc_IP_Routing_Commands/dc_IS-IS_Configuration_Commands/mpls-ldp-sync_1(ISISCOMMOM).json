@@ -1,0 +1,27 @@
+{
+    "PageTitle": "ldp-sync enable (IS-IS view)",
+    "FuncDef": "The ldp-sync enable command enables LDP-IGP synchronization on all IGP interfaces in an IGP process or instance.\nThe undo ldp-sync enable command disables LDP-IGP synchronization on all interfaces in an IGP process or instance.\nLDP-IGP synchronization is disabled on all IGP interfaces by default.",
+    "CLIs": [
+        "ldp-sync enable",
+        "ldp-sync enable mpls-binding-only",
+        "undo ldp-sync enable"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mpls-binding-only",
+            "Info": "Enables synchronization between LDP and IS-IS only on MPLS LDP interfaces in an IS-IS process. This parameter can only be configured in the IS-IS view.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 100",
+            "[*HUAWEI-isis-100] network-entity 10.0001.1010.1020.1030.00",
+            "[*HUAWEI-isis-100] ldp-sync enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLDP-IGP synchronization reduces LSP traffic loss on a network with both primary and backup LSPs. Traffic loss occurs in either of the following situations:\nThe primary link works properly and an LDP local session or LDP adjacency between two nodes on the primary LSP fails. IGP still uses the primary link. As a result, LSP traffic cannot be switched to the standby link, and traffic is continuously discarded. In this situation, you can configure LDP-IGP synchronization. If an LDP local session or LDP adjacency fails, the IGP advertises the maximum cost of the faulty link. The route is switched to the standby link, and the LSP is also switched to the standby link.If a link on the primary LSP recovers, IGP routes converge. IGP routes associated with the primary LSP become reachable earlier than the primary LSP because IGP routes converge faster than LDP routes. Revertive traffic is discarded because the backup LSP becomes unavailable after the IGP convergence is complete but the primary LSP is not established. In this situation, you can configure LDP-IGP synchronization. If a link on the primary LSP recovers, IGP advertises the maximum cost of the active link, delaying the IGP route switchback until LDP convergence is complete.IS-IS view: IS-IS-enabled interface on a local device. If the mpls-binding-only parameter is configured, synchronization between LDP and IS-IS can only be enabled on MPLS LDP-enabled IS-IS interfaces.\n\nFollow-up Procedure\nRun the isis ldp-sync block command to disable LDP-IGP synchronization on desired IGP interfaces.\nPrecautions\nLDP-IGP synchronization can be enabled globally or on a specified interface. If this function is enabled both globally and on an interface, the configuration on the interface takes effect. If the isis ldp-sync mpls-binding-only command is run on an IS-IS interface even in the IS-IS view, LDP and IS-IS synchronization can be successfully enabled.\nBefore running the ldp-sync enable command, ensure that LDP is enabled on all IGP-enabled interfaces. Otherwise, services on the interfaces that do not enable LDP may be affected."
+}

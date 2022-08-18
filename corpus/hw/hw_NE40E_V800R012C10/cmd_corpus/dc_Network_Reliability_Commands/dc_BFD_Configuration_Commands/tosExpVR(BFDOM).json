@@ -1,0 +1,38 @@
+{
+    "PageTitle": "tos-exp (BFD view)",
+    "FuncDef": "The tos-exp command sets priorities of BFD control packets for all dynamic or static BFD sessions.\nThe undo tos-exp command restores the default setting.\nThe default priority is 7, which is the highest priority of BFD control packets.",
+    "CLIs": [
+        "tos-exp <tos-value> dynamic",
+        "tos-exp <tos-value> static",
+        "undo tos-exp <tos-value> dynamic",
+        "undo tos-exp dynamic",
+        "undo tos-exp <tos-value> static",
+        "undo tos-exp static"
+    ],
+    "ParentView": [
+        "BFD view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tos-value",
+            "Info": "Specifies a priority for BFD control packets.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "dynamic",
+            "Info": "Indicates the priority of BFD control packets for dynamic BFD sessions.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Indicates the priority of BFD control packets for static BFD sessions.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] tos-exp 5 dynamic",
+            "[*HUAWEI-bfd] tos-exp 6 static"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPriorities of BFD sessions can be set based on the importance of services bound to BFD sessions. For an important service, run the tos-exp command to set a high priority for BFD control packets. When the system is congested, BFD control packets with a higher priority are preferentially sent.\nChanging the priorities of BFD control packets helps check whether BFD control packets with different priorities can be forwarded properly.\nPrerequisites\nBFD has been globally enabled using the bfd command.\nConfiguration Impact\nRunning the tos exp command will change priorities of BFD control packets for BFD sessions. When there are large numbers of BFD sessions, updating the priorities of BFD control packets for all BFD sessions takes time.\nPrecautions\nFor static BFD sessions, if the tos-exp command is run in the BFD session view to set a priority and the tos-exp command is run in the BFD view to set a priority, the configuration of the tos-exp command in the BFD session view takes effect.For static BFD sessions, if the tos-exp command is run in the BFD session view to set a priority to 7 (the default value) and the tos-exp command is run in the BFD view to set a priority to a non-default value, the configuration of the tos-exp command in the BFD session view takes effect.To specify the tos-value parameter in the undo tos-exp dynamic command, the value of the tos-value parameter must be the same as the set priority of BFD control packets. If the value of the tos-value parameter is not specified the same as the set priority, running the undo tos-exp dynamic command fails.For dynamic BFD sessions, if a priority value is set for BFD packets of a specific service, this priority takes effect. If such a priority is not set, the priority configured using the tos-exp tos-value dynamic command takes effect.For dynamic BFD sessions, if multiple services share a BFD session and a specific priority value is set for BFD packets of each service, the smallest tos-exp value takes effect.When there are large numbers of dynamic BFD sessions, updating the priorities of packets for all dynamic BFD sessions takes time.The host-packet type control-protocol dscp command cannot be used to change the priority of BFD packets."
+}

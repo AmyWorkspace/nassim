@@ -1,0 +1,29 @@
+{
+    "PageTitle": "graceful-restart timer recovery",
+    "FuncDef": "The graceful-restart timer recovery command sets the value of the LSP Recovery timer.\nThe undo graceful-restart timer recovery command restores the default LSP Recovery timer value.\nThe default value of the LSP Recovery timer is 300s.",
+    "CLIs": [
+        "graceful-restart timer recovery <time>",
+        "undo graceful-restart timer recovery"
+    ],
+    "ParentView": [
+        "MPLS-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time",
+            "Info": "Specifies the value of the LSP Recovery timer.\nThe value is an integer ranging from 3 to 259200, in seconds. The default value (300s) is recommended."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] graceful-restart",
+            "[*HUAWEI-mpls-ldp] graceful-restart timer recovery 45",
+            "Warning: All the related sessions will be deleted if the operation is performed! Continue? [Y/N]:y"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the LDP session is reestablished, the GR helper starts the Recovery timer and waits for the recovery of the LSP.\nIf the Recovery timer times out, the GR helper considers that the GR process is completed on the GR restarter and deletes the unrecovered LSPs.If all the LSPs recover before the Recovery timer times out, the GR helper considers that the GR process is completed on the GR restarter only after the Recovery timer times out.\nWhen a network with a large number of routes fails, run the graceful-restart timer recovery command to increase the value of the Recovery timer to ensure that all LSPs recover before the timer expires.\nDuring the LDP GR process, the value of the LSP Recovery timer that takes effect on the local end is negotiated as the smaller one of the values of the LSP Recovery timers configured on both ends of an LDP session.\n\nPrerequisites\nMPLS and MPLS LDP have been enabled globally.\nLDP GR has been enabled globally.\nImplementation Procedure\nWhen the graceful-restart timer recovery command is run, the system displays the following message:\nWarning: All the related sessions will be deleted if the operation is performed! Continue? [Y/N]:\nTo confirm to run the command, enter y.\nConfiguration Impact\nAfter the graceful-restart timer recovery command is run, the value of the LSP Recovery timer that takes effect on the local end is equal to the smaller one of the values of the LSP Recovery timers configured on both ends of an LDP session.\nPrecautions\nChanging the value of the LSP Recovery timer causes the reestablishment of all the LDP sessions."
+}

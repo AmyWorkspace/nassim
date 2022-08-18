@@ -1,0 +1,71 @@
+{
+    "PageTitle": "ccc interface in-label out-label",
+    "FuncDef": "The ccc interface in-label out-label command configures a remote CCC connection between a local CE and a remote CE that connect to different PEs.\nThe undo ccc command deletes a remote CCC connection.\nBy default, no remote CCC connection is created.",
+    "CLIs": [
+        "ccc [ ip-interworking ] <ccc-connection-name> interface { <interface-type1> | <interface-type1> <interface-number1> } [ <interface-number1> ] in-label <in-label-value> out-label <out-label-value> { nexthop <nexthop-address> | out-interface { <interface-name2> | <interface-type2> <interface-number2> } } [ control-word | no-control-word ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-interworking",
+            "Info": "Indicates heterogeneous IP interworking for a remote CCC connection.\n-"
+        },
+        {
+            "Parameters": "ccc-connection-name",
+            "Info": "Specifies a remote CCC connection name. It uniquely identifies a remote CCC connection on a PE.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.\nThe string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "interface interface-type1 interface-number1",
+            "Info": "Specifies the type and number of an inbound interface.\n-"
+        },
+        {
+            "Parameters": "interface-number1",
+            "Info": "Sets the encapsulation type on the inbound interface to raw.\n-"
+        },
+        {
+            "Parameters": "in-label in-label-value",
+            "Info": "Specifies the value of an in-label.\nThe value is an integer ranging from 16 to 32783."
+        },
+        {
+            "Parameters": "out-label out-label-value",
+            "Info": "Specifies the value of an out-label.\nThe value is an integer ranging from 0 to 1048575."
+        },
+        {
+            "Parameters": "nexthop nexthop-address",
+            "Info": "Specifies the IP address of a next hop.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "out-interface interface-type2 interface-number2",
+            "Info": "Specifies the type and number of an outbound interface.\n-"
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Enables the control word function.\nBy default, the control word function is not enabled.\n-"
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "Disables the control word function.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*PE1] ccc ccc-connection-1 interface GigabitEthernet 1/0/0 in-label 100 out-label 200 nexthop 2.2.2.2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*PE1] ccc ip-interworking ccc-connection-2 interface GigabitEthernet 2/0/0 in-label 300 out-label 400 nexthop 3.3.3.3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCCC VPWS applies to small-scale MPLS networks with simple topologies. Because it does not require signaling negotiation or control packet exchange, CCC consumes fewer resources; however, it must be configured by network administrators, and therefore has poor scalability and is difficult to maintain.\nIf two CEs connect to different PEs, run the ccc interface in-label out-label command to create remote CCC connections for the two CEs to communicate.\nPrerequisites\nMPLS L2VPN has been enabled.\nPrecautions\nRemote CCC connections are configured on the PEs connecting to the CEs. A remote CCC connection is unidirectional, and therefore two such connections must be created.If the outbound interface is a broadcast interface or a P2MP interface , you must configure nexthop to specify a next hop IP address. When static CR-LSPs are configured on the P devices, if the outbound interface is a broadcast or P2MP interface, you must also specify a next hop IP address.If a sub-interface is bound to a VPWS PW, the sub-interface can be deleted only after the binding is removed.If a sub-interface is bound to a VPWS PW, you cannot change the encapsulation type of the main interface.PEs use connection names to identify different CCC connections. The name of a CCC connection can vary on different PEs. If P devices connect to PEs, you must configure static CR-LSPs between the P devices and PEs. Do not configure a CCC connection named type. Otherwise, you cannot run the display vll ccc command to check information about this CCC connection. Note that the out-label of a device is the in-label of the next device."
+}

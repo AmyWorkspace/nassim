@@ -1,0 +1,34 @@
+{
+    "PageTitle": "service-class",
+    "FuncDef": "The service-class command marks the CoS value and color for the packets matched the traffic policy which configured this rule in its traffic behavior.\nThe undo service-class command restores the CoS value and color of packets to the default setting.\nBy default, the upstream board (in the inbound direction of an interface) of the device re-sets the CoS and color based on the packet priority and the inbound mapping table.",
+    "CLIs": [
+        "service-class <service-class> color <color> [ no-remark ]",
+        "undo service-class <service-class> color <color> [ no-remark ]",
+        "undo service-class"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "service-class",
+            "Info": "Specifies the CoS value. The value is of the enumeration type.\nThe value is an enumerated type and can be case-insensitive EF, AF1, AF2, AF3, AF4, BE, CS6, or CS7."
+        },
+        {
+            "Parameters": "color color",
+            "Info": "Specifies the color used to mark the packets.\nThe value is an enumerated type and can be green, yellow, or red."
+        },
+        {
+            "Parameters": "no-remark",
+            "Info": "Enables the no-remark flag.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] service-class cs6 color green"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the complex traffic classification, you can run this command to mark the CoS value and color for the packets matched the traffic policy which configured this rule in its traffic behavior, such as the video packet flow. The traffic policy containing this command marks the CoS and color for matching packets.\nIf this function is configured on inbound direction, the PHB is enabled on the outbound interface of a packet, and the outbound interface modifies the DSCP, 802.1p, or EXP value of the packet. The parameter no-remark can be specified when the packet priority fields do not need to be modified. If this function is configured on outbound direction, whether the PHB is enabled will not be affected.\nPrerequisites\nThe traffic classifier and traffic behavior are created in the system view.\nConfiguration Impact\nThe traffic will be marked to a specified Cos value and color, which matches the traffic policy which configured this rule in its traffic behavior.\nFollow-up Procedure\nYou need to configure the traffic policy, bind the traffic behavior to the traffic classifier in the traffic policy, and apply the traffic policy to interfaces.\nPrecautions\nIf the command is configured in a board without eTM, the command takes effected only on the inbound direction. If the command is configured in a board with eTM, the command takes effected both the inbound and the outbound direction. But the outbound configuration does not affet whether the PHB is enabled. The no-mark parameter takes effected only on the inbound direction.\nIt is used to specify the CoS and discarding priority of packets so that the matched packets can enter the queues of the corresponding CoS values. In this manner, the device does not need to determine the CoS of packets by searching the behavior aggregate (BA) table according to the precedence field in a packet header. In addition, this enables the device to transparently transmit packets without changing the precedence fields of packets."
+}

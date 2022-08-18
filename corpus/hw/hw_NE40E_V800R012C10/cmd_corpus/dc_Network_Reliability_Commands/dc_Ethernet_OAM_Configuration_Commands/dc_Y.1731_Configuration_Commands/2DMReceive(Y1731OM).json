@@ -1,0 +1,41 @@
+{
+    "PageTitle": "delay-measure two-way receive",
+    "FuncDef": "The delay-measure two-way receive command enables DM frame reception on the remote MEP to implement the two-way frame delay measurement.\nThe undo delay-measure two-way receive command removes the configuration of DM frame reception from the remote MEP.\nBy default, DM frame reception is not configured on the remote MEP in an MA.",
+    "CLIs": [
+        "delay-measure two-way receive test-id <test-id>",
+        "undo delay-measure two-way receive [ test-id <test-id> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "test-id test-id",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/0 inward",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send mep-id 1 enable",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 2",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep ccm-receive mep-id 2 enable",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1",
+            "[*HUAWEI-md-md1-ma-ma1] delay-measure two-way receive test-id 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter you configure on-demand two-way frame delay measurement using the delay-measure two-way send command and proactive two-way frame delay measurement using the delay-measure two-way continual send command, you must run the flow-name delay-measure two-way receive command to enable the DMM reception function.\nPrerequisites\nThe delay-measure two-way receive command takes effect only after the following configurations are complete:\nRun the cfm version standard command in the system view to specify IEEE Standard 802.1ag-2007 for CFM.The CFM function is enabled globally by using the cfm enable command in the system view.An MD is created by using the cfm md command in the system view.An MA is created by using the ma command in the MD view.An inward-facing MEP has been created using the mep mep-id command in the MA view.A remote MEP in the MA is created by using the remote-mep command in the MA view.A test instance in the MA is created by using the test-id command in the MA view."
+}

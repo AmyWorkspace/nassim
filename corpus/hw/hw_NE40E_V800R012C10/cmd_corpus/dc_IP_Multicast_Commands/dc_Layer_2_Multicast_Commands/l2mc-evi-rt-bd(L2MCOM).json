@@ -1,0 +1,37 @@
+{
+    "PageTitle": "evi vpn-target",
+    "FuncDef": "The evi vpn-target command associates the EVI-RT extended community attributes of IGMP Join Synch routes with a BD.\nThe undo evi vpn-target command deletes the EVI-RT extended community attributes of IGMP Join Synch routes associated with a BD.\nBy default, the EVI-RT extended community attributes of IGMP Join Synch routes are not associated with a BD.",
+    "CLIs": [
+        "evi vpn-target <vrfRt> [ <vrfRtType> ]",
+        "undo evi vpn-target <vrfRt> [ <vrfRtType> ]"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vrfRt",
+            "Info": "Specifies an EVI VPN target added to VPN target lists of the EVPN instance address family for IGMP Join Synch routes.\nvpn-target can be in any of the following formats:\n2-byte AS number:4-byte user-defined number, for example, 1:3. The AS number is an integer ranging from 0 to 65535, and the user-defined number is an integer ranging from 0 to 4294967295. The AS number and user-defined number cannot both be 0s. Specifically, a VPN target cannot be 0:0.Integral 4-byte AS number:2-byte user-defined number, for example, 65537:3. The AS number ranges from 65536 to 4294967295, and the user-defined number ranges from 0 to 65535.4-byte AS number in dotted notation:2-byte user-defined number, for example, 0.0:3 or 0.1:0. The 4-byte AS number in dotted notation is in the format of x.y, where x and y are integers that both range from 0 to 65535. The user-defined number ranges from 0 to 65535. The AS number and user-defined number cannot both be 0s. Specifically, a VPN target cannot be 0:0.0.32-bit IP address:16-bit user-defined number, such as 192.168.122.15:1. The IP address ranges from 0.0.0.0 to 255.255.255.255, and the user-defined number ranges from 0 to 65535."
+        },
+        {
+            "Parameters": "vrfRtType",
+            "Info": "Adds an EVI VPN target to specified VPN target lists of the EVPN instance address family.\nThis vlaue can be:\nexport-extcommunity: Adds an EVI VPN target to the export VPN target list of the EVPN instance address family.\nimport-extcommunity: Adds an EVI VPN target to the import VPN target list of the EVPN instance address family.\nboth: Adds an EVI VPN target to both the import and export VPN target lists of the EVPN instance address family. If vrfRtType is not specified, both is used by default."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] evpn vpn-instance vrf1 bd",
+            "[*HUAWEI-evpn-instance-vrf1] route-distinguisher 100:1",
+            "[*HUAWEI-evpn-instance-vrf1] quit",
+            "[*HUAWEI] bridge-domain 1",
+            "[*HUAWEI-bd1] evpn binding vpn-instance vrf1",
+            "[*HUAWEI-bd1] igmp-snooping enable",
+            "[*HUAWEI-bd1] igmp-snooping proxy",
+            "[*HUAWEI-bd1] igmp-snooping signal-synch enable",
+            "[*HUAWEI-bd1] evi vpn-target 1:1 both"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen IGMP snooping runs in a BD in an EVPN scenario, PEs synchronize IGMP signaling through BGP EVPN IGMP Join Synch routes. Each IGMP Join Synch route must carry a unique EVI-RT extended community attribute. To configure a unique EVI-RT extended community attribute in a BD, run the evi vpn-target command.\nPrerequisites\nIGMP signaling synchronization based on IGMP Join Synch routes has been enabled using the igmp-snooping signal-synch enable command in a BD."
+}

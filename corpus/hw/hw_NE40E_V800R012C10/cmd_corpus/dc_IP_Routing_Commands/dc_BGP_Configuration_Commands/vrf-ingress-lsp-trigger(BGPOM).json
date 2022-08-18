@@ -1,0 +1,36 @@
+{
+    "PageTitle": "ingress-lsp trigger route-policy (BGP-VPN instance IPv4 address family view/BGP-labeled VPN instance IPv4 address family view)",
+    "FuncDef": "The ingress-lsp trigger route-policy command specifies a routing policy to control the creation of ingress LSPs based on private labeled BGP IPv4 routes.\nThe undo ingress-lsp trigger command restores the default configuration.\nBy default, ingress LSPs are not created based on received private BGP labeled routes.",
+    "CLIs": [
+        "ingress-lsp trigger route-policy <policy-name>",
+        "undo ingress-lsp trigger"
+    ],
+    "ParentView": [
+        "BGP-labeled VPN instance IPv4 address family view",
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy policy-name",
+            "Info": "Specifies the name of a routing policy to be used to create ingress LSPs based on BGP labeled routes.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] ip ip-prefix test-prefix permit 192.168.1.1 16 greater-equal 16 less-equal 32",
+            "[*HUAWEI] route-policy test-policy permit node 10",
+            "[*HUAWEI-route-policy] if-match ip-prefix test-prefix",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-vpna] ingress-lsp trigger route-policy test-policy"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a CSC scenario, BGP VPN labeled routes are required in order to establish end-to-end LSPs. To create ingress LSPs based on the BGP VPN labeled routes that match a route-policy, run the ingress-lsp trigger command.\nPrerequisites\nIf the routing policy specified in the ingress-lsp trigger command does not exist, you need to configure the routing policy using the route-policy command first.\nConfiguration Impact\nIf the ingress-lsp trigger command is run more than once, the latest configuration overrides the previous one."
+}

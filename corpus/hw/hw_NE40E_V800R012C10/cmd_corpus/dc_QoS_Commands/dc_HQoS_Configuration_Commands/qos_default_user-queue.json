@@ -1,0 +1,55 @@
+{
+    "PageTitle": "qos default user-queue",
+    "FuncDef": "The qos default user-queue outbound command modifies the default user queue scheduling parameters.\nThe undo qos default user-queue outbound command cancels the new user queue scheduling parameters.\nBy default, the default user queue scheduling parameters are used.",
+    "CLIs": [
+        "qos default user-queue { cir <cir-value> | cbs <cbs-value> | pir <pir-value> | pbs <pbs-value> | weight <weight-value> } * outbound",
+        "undo qos default user-queue outbound"
+    ],
+    "ParentView": [
+        "GE-Trunk member interface view",
+        "GE optical interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR.\nThe value can be 0 or an integer ranging from 16 to 4294967294, in kbit/s. The minimum CIR that can be configured is 0 kbit/s. The default CIR is 10000 kbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the CBS.\nThe value is an integer ranging from 1 to 4194304, in bytes. By default, the value complies with the following formula: cbs-value (byte) = cir-value (kbit/s) x 10 (ms)/8."
+        },
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the PIR.\nThe value can be 0 or an integer ranging from 16 to 4294967294, in kbit/s. The minimum value of the PIR can be set to the specified value of the CIR.\nIf no CIR is configured, the minimum PIR that can be configured is 10000 kbit/s.If the configured CIR is not 0, the minimum PIR that can be configured is the specified CIR.If the configured CIR is 0, the minimum PIR that can be configured is 0 kbit/s.The default PIR is the interface bandwidth."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies the PBS.\nThe value is an integer ranging from 1 to 4194304, in bytes. By default, the value complies with the following formula: pbs-value (byte) = pir-value (kbit/s) x 10 (ms)/8."
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Specifies the weight value.\nThe value is an integer ranging from 1 to 63."
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates outgoing packets.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] qos default user-queue cir 20000 cbs 33 pir 30000 pbs 44 weight 23 outbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 1",
+            "[~HUAWEI-Eth-Trunk1] quit",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] eth-trunk 1",
+            "[*HUAWEI-GigabitEthernet1/0/0-eth-trunk 1] qos default user-queue cir 20000 cbs 300 pir 30000 pbs 400 weight 12 outbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThis command applies to the LPUF-480/LPUF-480-B/LPUI-480/LPUI-480-B/LPUI-480-L/LPUF-480-E/LPUI-480-CM/LPUI-200/LPUI-200-L/LPUF-200/LPUF-200-B/LPUI-1T/LPUI-1T-B/LPUI-1T-L/LPUI-1T-CM/LPUI-241/LPUI-241-B/LPUI-241-CM/LPUF-241/LPUF-241-E/LPUF-52 LPUI-200/LPUI-200-L/LPUF-200/LPUF-200-B/LPUI-241/LPUI-241-B/LPUI-241-CM//LPUF-241/LPUF-241-E/LPUI-480-CM/LPUF-52 P51-E/P101-E/LPUI-51-E.\nOn the CR5D0EFGFE70/CR5D0L5XFE70/CR5D0L2XFE70/CR5DL2XEFG7E/CR5D0L5XFA7E/CR5D0L5XFE71/CR5DLAXFAJ7E , the default weight of an SQ is 64. On the other boards or subcards, the default weight of an SQ is 10.\nFor example, a main interface has three sub-interfaces.\nOn sub-interface 1, HQoS is not configured, and common QoS is applied to traffic.On sub-interface 2, three QoS profiles are configured, with a user-queue command being configured in each profile. To be specific, HQoS is configured for three SQs on sub-interface 2.On sub-interface 3, one QoS profile is configured, with a user-queue command being configured in the profile. To be specific, HQoS is configured for one SQ on sub-interface 3.\nIn this case, the scheduling weight rate of the three sub-interfaces is as follows: sub-interface 1:sub-interface 2:sub-interface 3 = 64:30:10.\nIn multi-VS scenarios, after this command is configured on a trunk main interface, the command configuration is also effective for the trunk sub-interfaces that reside in other VSs."
+}

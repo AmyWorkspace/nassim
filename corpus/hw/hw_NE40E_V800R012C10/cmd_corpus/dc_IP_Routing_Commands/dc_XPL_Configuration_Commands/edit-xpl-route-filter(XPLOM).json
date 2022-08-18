@@ -1,0 +1,31 @@
+{
+    "PageTitle": "edit xpl route-filter",
+    "FuncDef": "The edit xpl route-filter command displays the route-filter paragraph editing interface view.\nBy default, no route-filters are configured.",
+    "CLIs": [
+        "edit xpl route-filter <route-filter-name>"
+    ],
+    "ParentView": [
+        "User view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters. For example, test (12)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> edit xpl route-filter aaa",
+            "xpl route-filter aaa",
+            "if ip route-source in ip-prefix1 then",
+            "apply med 60",
+            "elseif ip route-source in ip-prefix2 then",
+            "apply med 70",
+            "else",
+            "apply med 80",
+            "endif",
+            "end-filter"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nRoute-filters are used to filter routes based on sets or a single element and modify route attributes of the routes that meet matching rules. To enter the route-filter paragraph editing interface view, run the edit xpl route-filter command. Route-filters consist of condition and action clauses:Condition clause: A condition clause is defined based on a set or single element, in the format of a condition clause in most cases. The action specified in the action clause is applied only to the routes that match the conditions specified in the condition clause.Action clause:\nAn action clause specifies an action to be applied to the routes that match the conditions specified in the condition clause.An action clause determines whether the routes match the route-filter or modifies their route attributes.\nTo configure a route-filter in the route-filter paragraph editing interface view, perform the following steps:\n Configure a start clause in the format of xpl route-filter route-filter-name($var1,$var2,...) for a route-filter. A maximum of eight parameters can be configured in a start clause, and the parameters can be used in condition or action clauses. Configure a condition clause in the format of if+condition clause+then and connect the conditions in the clause with the Boolean operator NOT, AND, or OR. For details about condition clauses, see Condition Clauses.Route-filters can have only action clauses and can also be empty (configured with only a start clause and an end clause).\n Configure an action clause. For details about action clauses, see Action Clauses.Multiple action clauses can be configured if they do not conflict with each other. Action clauses (excluding approve, refuse, finish, break, and call route-filter route-filter-name) must follow apply.\n (Optional) Configure elseif+condition clause+then to filter the routes that fail to match the conditions specified in the if clause and specify an action clause for the elseif clause. You can configure multiple elseif clauses to filter the routes that fail to meet the previous matching rule or configure an else clause to match the routes that fail to meet all the previous matching rules. Each if, elseif, or else clause must be followed by an action clause. Configure a conclusive condition clause (endif).Steps 2 to 5 describe how to configure an if condition branch. One route-filter can have multiple if condition branches, and the if condition branches can be configured as follows:\nOne if condition branch is followed by another.The if+condition clause+then or elseif+condition clause+then is followed by another if condition branch. Such a configuration further filters routes that match if+condition clause+then or elseif+condition clause+then against the second if condition branch.\nRegardless of the configuration mode, route filtering continues until finish, break, refuse, or the last if condition branch.\n Configure an end clause (end-filter) for the route-filter.\n\nPrecautions\nA route-filter can contain multiple if clauses or do not contain any if clauses. If a route-filter is configured only with if clauses that match IPv4 routes, the route-filter matches IPv4 routes that meet the if-clause conditions and all IPv6 routes. If a route-filter is configured only with if clauses that match IPv6 routes, the route-filter matches IPv6 routes that meet the if-clause conditions and all IPv4 routes.\nUsing the same route-filter to filter both IPv4 and IPv6 routes may interrupt services in any of the following scenarios, and therefore is not recommended:\nSome if clauses in the route-filter are used match IPv4 routes, whereas some others are used to match IPv6 routes.The route-filter matches only IPv4 routes but is referenced by IPv6.The route-filter matches only IPv6 routes but is referenced by IPv4.\nIf the finish or refuse clause and the apply clause have not been executed at the end of route-filter processing, routes are denied by the route-filter by default. Otherwise, the routes are permitted by the route-filter.\nIf a route-filter or an XPL attribute set is referenced multiple times, the configuration takes a long time to be committed."
+}

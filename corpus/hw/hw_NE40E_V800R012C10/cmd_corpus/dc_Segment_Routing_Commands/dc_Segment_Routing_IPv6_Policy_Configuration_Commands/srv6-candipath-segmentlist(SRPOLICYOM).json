@@ -1,0 +1,35 @@
+{
+    "PageTitle": "segment-list (SRv6 candidate path view)",
+    "FuncDef": "The segment-list command references a segment list configured for the candidate path of an SRv6 TE Policy.\nThe undo segment-list command deletes segment list reference configuration.\nBy default, an SRv6 TE policy candidate path does not reference an segment list.",
+    "CLIs": [
+        "segment-list <list-name> [ weight <weight-value> | path-mtu <mtu-value> ] *",
+        "undo segment-list <list-name> [ weight <weight-value> | path-mtu <mtu-value> ] *"
+    ],
+    "ParentView": [
+        "SRv6 candidate path view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "list-name",
+            "Info": "Name of the segment list.\nThe value is a string of 1 to 31 case-sensitive characters. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Weight value of the segment list.\nIf the weight configured for a segment list of a candidate path is less than the average weight, the segment list does not forward traffic. (Average weight = Sum of weights configured for all segment lists of a candidate path/Maximum number of segment lists that can be used by the involved device for load balancing).\nFor example, if a maximum of M segment lists can be used by a device for load balancing and a candidate path has a total of N segment lists, the average weight of the N segment lists is calculated as follows: (Weight 1 + Weight 2 + ... + Weight N)/M = X. Segment lists whose weights are less than X do not forward traffic. Note that m indicates the number of load balancing entries supported by the device, not the total number of segment lists. For example, if there are four segment lists, the device supports 16 load balancing channels, and the weights are 100, 100, 100, and 1. The average weight is (100+100+100+1)/16. The weight of the last segment list is lower than the average value and no traffic is forwarded, traffic is balanced among the other three segment lists.\nThe value is an integer that ranges from 1 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "path-mtu mtu-value",
+            "Info": "Mtu value of the segment list.\nThe value is an integer that ranges from 1280 to 9600."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] srv6-te policy p2 endpoint 10::10 color 100",
+            "[*HUAWEI-segment-routing-ipv6-policy-p2] candidate-path preference 200",
+            "[*HUAWEI-segment-routing-ipv6-policy-p2-path] segment-list s1 weight 1 path-mtu 1280"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter configuring a segment list for the candidate path of an SRv6 TE Policy, you can run the segment-list command in the candidate path view to reference the segment list. This enables traffic to be forwarded through the segment list if the candidate path is preferentially selected."
+}

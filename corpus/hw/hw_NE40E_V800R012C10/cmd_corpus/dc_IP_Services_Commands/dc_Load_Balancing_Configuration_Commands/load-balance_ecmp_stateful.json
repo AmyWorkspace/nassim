@@ -1,0 +1,32 @@
+{
+    "PageTitle": "load-balance ecmp stateful enable",
+    "FuncDef": "The load-balance ecmp stateful enable command enables the ECMP load balancing consistency function and set the ECMP load balancing consistency parameters.\nThe undo load-balance ecmp stateful enable command disables the ECMP load balancing consistency function.\nBy default, the ECMP load balancing consistency function is disabled.",
+    "CLIs": [
+        "load-balance ecmp stateful enable [ min-number <min-number-value> max-number <max-number-value> accuracy <accuracy-value> ]",
+        "undo load-balance ecmp stateful enable"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-number min-number-value",
+            "Info": "Specifies the minimum number of interfaces for ECMP load balancing consistency check.\nThe value is an integer ranging from 1 to 64. The default value is 1."
+        },
+        {
+            "Parameters": "max-number max-number-value",
+            "Info": "Specifies the maximum number of interfaces for ECMP load balancing consistency check.\nThe value is an integer ranging from 1 to 64. The default value is 64."
+        },
+        {
+            "Parameters": "accuracy accuracy-value",
+            "Info": "Specifies the accuracy of ECMP load balancing.\nThe value is an integer ranging from 1 to 4. The default value is 1.\nValue 1 indicates the original number of routes for load balancing. Value 2 indicates 64 routes for load balancing. Value 3 indicates 128 routes for load balancing. Value 4 indicates 256 routes for load balancing."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] load-balance ecmp stateful enable min-number 1 max-number 20 accuracy 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a switch that participates in traffic load balancing becomes faulty, the number of equal-cost routes reduces, and so all traffic needs to be load balanced again using the hash algorithm. As a result, traffic forwarding paths may change. Requests of the same user may be sent to different servers, greatly affecting the services in which sessions need to be maintained. To prevent this problem, run the load-balance ecmp stateful enable command. This command enables the ECMP load balancing consistency function so that hash calculation is performed only for traffic on the faulty link, without affecting traffic on other normal links.\nPrerequisites\nTo use the ECMP load balancing consistency function, ensure that different destination addresses are reachable through the same or completely different equal-cost multiple paths.\nPrecautions\nAfter enabling this function, do not change the configured load balancing hash algorithm, hash algorithm offset, and load balancing mode. Otherwise, this function may be unable to take effect.This function may be unable to take effect when outbound ports of equal-cost links are intermittently disconnected.The ECMP load balancing consistency function only takes effect only for common IPv4 traffic, but not for traffic transmitted over tunnels.The ECMP load balancing consistency function is unable to take effect for IPv6 traffic."
+}

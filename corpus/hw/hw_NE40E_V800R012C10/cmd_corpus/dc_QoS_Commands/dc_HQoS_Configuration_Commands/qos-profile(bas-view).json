@@ -1,0 +1,142 @@
+{
+    "PageTitle": "qos-profile (bas interface view)",
+    "FuncDef": "The qos-profile command applies a QoS profile to traffic on the BAS interface.\nThe undo qos-profile command cancels the QoS profile that is applied to traffic on the BAS interface.\nBy default, no QoS profile is applied to to traffic on the BAS interface.",
+    "CLIs": [
+        "qos-profile <profile-name> [ inbound | outbound ] [ identifier { none | option82 | access-line-id | pe-vid | ce-vid | pe-ce-vid | vlan-id } ] [ group <group-name> ] [ session-limit <max-session-number> ]",
+        "qos-profile <profile-name> [ inbound | outbound ] vlan <vlan-id-begin> [ to <vlan-id-end> ] [ identifier { vlan-id | none | option82 | access-line-id } ] [ group <group-name> ] [ session-limit <max-session-number> ]",
+        "qos-profile <profile-name> [ inbound | outbound ] pe-vid <pe-vlan-id> ce-vid <ce-vlan-id-begin> [ to <ce-vlan-id-end> ] [ identifier { pe-vid | ce-vid | pe-ce-vid | none | option82 | access-line-id } ] [ group <group-name> ] [ session-limit <max-session-number> ]",
+        "qos-profile <profile-name> [ inbound | outbound ] any-other user-vlan [ identifier { none | option82 | vlan-id | access-line-id } ] [ group <group-name> ] [ session-limit <max-session-number> ]",
+        "qos-profile <profile-name> [ inbound | outbound ] any-other qinq [ identifier { none | option82 | pe-vid | ce-vid | pe-ce-vid | access-line-id } ] [ group <group-name> ] [ session-limit <max-session-number> ]",
+        "undo qos-profile [ inbound | outbound ] [ identifier { vlan-id | pe-vid | ce-vid | pe-ce-vid } ]",
+        "undo qos-profile [ inbound | outbound ] vlan <vlan-id-begin> [ to <vlan-id-end> ]",
+        "undo qos-profile [ inbound | outbound ] pe-vid <pe-vlan-id> ce-vid <ce-vlan-id-begin> [ to <ce-vlan-id-end> ]",
+        "undo qos-profile [ inbound | outbound ] any-other { qinq | user-vlan }"
+    ],
+    "ParentView": [
+        "BAS interface view (FE)",
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "profile-name",
+            "Info": "Specifies the name of a QoS profile.\nThe value is a string of 1 to 63 characters."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates that the QoS profile is applied to the incoming traffic on interfaces.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates that the QoS profile is applied to the outgoing traffic on interfaces.\n-"
+        },
+        {
+            "Parameters": "identifier",
+            "Info": "Specifies which queue packets enter.\nWhen the identifier is not specified, all users share the bandwidth of one SQ.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "Indicates that packets enter the default queue. Indicates that users share the bandwidth of one SQ.\n-"
+        },
+        {
+            "Parameters": "option82",
+            "Info": "Indicates that packets enter different queues for scheduling according to the Option 82 field.\n-"
+        },
+        {
+            "Parameters": "access-line-id",
+            "Info": "Indicates that residential users are identified based on Dhcpv4 option82/Dhcpv6 option18+37 information.\n-"
+        },
+        {
+            "Parameters": "pe-vid pe-vlan-id",
+            "Info": "Specifies the PE VLAN ID of packets.\nThe value is a decimal integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "pe-vid",
+            "Info": "Indicates that packets enter different queues for scheduling according to the VLAN ID of the PE. Packets with the same PE-VID use the bandwidth of one SQ alone.\n-"
+        },
+        {
+            "Parameters": "ce-vid ce-vlan-id-begin",
+            "Info": "Specifies the start CE VLAN ID (the value of the inner tag) of a packet.\nThe value is a decimal integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid",
+            "Info": "Indicates that packets enter different queues for scheduling according to the VLAN ID of the CE. Packets with the same CE-VID use the bandwidth of one SQ alone.\n-"
+        },
+        {
+            "Parameters": "pe-ce-vid",
+            "Info": "Indicates that packets enter different queues for scheduling according to the PE-CE VLAN ID. Packets with the same PE-CE VLANID use the bandwidth of one SQ alone.\n-"
+        },
+        {
+            "Parameters": "vlan-id",
+            "Info": "Indicates that packets enter different queues for scheduling according to the VLAN ID. Packets with the same VLAN ID use the bandwidth of one SQ alone.\n-"
+        },
+        {
+            "Parameters": "group group-name",
+            "Info": "Specifies the name of a shared group of QoS profile instances.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "session-limit max-session-number",
+            "Info": "Specifies the maximum number of sessions for a residential user.\nThe value is a decimal integer ranging from 1 to 256."
+        },
+        {
+            "Parameters": "vlan vlan-id-begin",
+            "Info": "Specifies the start VLAN ID.\nThe value is an integer that ranges from 1 to 4094."
+        },
+        {
+            "Parameters": "to vlan-id-end",
+            "Info": "Specifies the end VLAN ID.\nThe value is an integer that ranges from 1 to 4094. The value of vlan-id2 must be greater than that of vlan-id1 ."
+        },
+        {
+            "Parameters": "to ce-vlan-id-end",
+            "Info": "Specifies the end CE VLAN ID of a packet (the value of the inner tag).\nThe value is a decimal integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "any-other",
+            "Info": "Any-other.\n-"
+        },
+        {
+            "Parameters": "user-vlan",
+            "Info": "User-vlan.\n-"
+        },
+        {
+            "Parameters": "qinq",
+            "Info": "Qinq.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile p1",
+            "[*HUAWEI-qos-profile-p1] commit",
+            "[*HUAWEI-qos-profile-p1] quit",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] bas",
+            "[*HUAWEI-GigabitEthernet1/0/0-bas] access-type layer2-subscriber",
+            "[*HUAWEI-GigabitEthernet1/0/0-bas] qos-profile p1 inbound group g1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile p1",
+            "[*HUAWEI-qos-profile-p1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/7.1",
+            "[*HUAWEI-GigabitEthernet1/0/7.1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/7.1] user-vlan 1 5",
+            "[*HUAWEI-GigabitEthernet1/0/7.1-vlan-1-5] bas",
+            "[*HUAWEI-GigabitEthernet1/0/7.1-bas] access-type layer2-subscriber",
+            "[*HUAWEI-GigabitEthernet1/0/7.1-bas] qos-profile p1 inbound vlan 1 to 5 identifier vlan-id group g2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile p1",
+            "[*HUAWEI-qos-profile-p1] quit",
+            "[~HUAWEI] interface GigabitEthernet 1/0/7.1",
+            "[*HUAWEI-GigabitEthernet1/0/7.1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/7.1] user-vlan 1 20 qinq 1 10",
+            "[*HUAWEI-GigabitEthernet1/0/7.1-vlan-1-20-QinQ-1-10] bas",
+            "[*HUAWEI-GigabitEthernet1/0/7.1-bas] access-type layer2-subscriber",
+            "[*HUAWEI-GigabitEthernet1/0/7.1-bas] qos-profile p1 inbound pe-vid 1 ce-vid 1 to 10 identifier pe-vid"
+        ]
+    ],
+    "ExtraInfo": "To apply a QoS profile to single-tagged VLAN packets from users, you need to specify the VLAN ID in the QoS profile.\nTo apply a QoS profile to double-tagged VLAN packets from users, you need to specify the pe-vid and ce-vid in the QoS profile.\nThe car and user-queue commands in the QoS profile take effect in the BAS view. Traffic suppression-related commands, however, do not take effect.\nWhen pe-vid or ce-vid is used to distinguish homes and session-limit is configured for one home for multiple times, only the latest configuration takes effect.\nThe QoS profile with CAR configured does not apply to Layer 3 sub-interfaces in outbound direction."
+}

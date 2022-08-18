@@ -1,0 +1,38 @@
+{
+    "PageTitle": "bpdu-tunnel stp vlan",
+    "FuncDef": "The bpdu-tunnel stp vlan command configures an interface to allow tagged bridge protocol data units (BPDUs) to pass.\nThe undo bpdu-tunnel stp vlan command restores the default configuration.\nBy default, an interface does not forward tagged BPDUs.",
+    "CLIs": [
+        "bpdu-tunnel stp vlan <vlan-id1> [ to <vlan-id2> ]",
+        "undo bpdu-tunnel stp vlan <vlan-id1> [ to <vlan-id2> ]"
+    ],
+    "ParentView": [
+        "Layer 2 100GE interface view",
+        "Layer 2 10GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Layer 2 Eth-Trunk interface view",
+        "Layer 2 GE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies a VLAN range. <lowVid> specifies the start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vlan-id2",
+            "Info": "Specifies a VLAN range. <highVid> specifies the end VLAN ID.\n<highVid> must be greater than <lowVid>. <lowVid> and <highVid> specify a VLAN range.\nIf you do not specify to <highVid>, the interface allows only BPDUs with VLAN ID being <lowVid> to pass.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] bpdu-tunnel stp vlan 100 to 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen different user networks are connected to the same interface of a PE on the convergence layer and the user networks need to send BPDUs over the carrier network to perform the spanning tree calculation, the BPDUs from the user networks carry VLAN tags. You can run the stp bpdu vlan command to configure the VLAN IDs of the BPDUs.\nRun the bpdu-tunnel stp vlan command on the user-side interfaces of the PEs. In this situation, the PEs do not send BPDUs to their CPUs for processing. Instead, they transparently transmit the BPDUs through BPDU tunnels over the carrier network to user networks.\nIn most cases, the bpdu-tunnel stp vlan command is configured on the user-side interface of a PE.\nPrerequisites\nIf the interface is a Layer 3 interface, it must have been switched to a Layer 2 interface using the portswitch command.\nConfiguration Impact\nIf the bpdu-tunnel stp vlan command is run more than once, all configurations take effect.\nFollow-up Procedure\nIf a spanning tree protocol is enabled on the interface, run the stp disable command to disable the spanning tree protocol.\nPrecautions\nThe bpdu-tunnel stp vlan and bpdu-tunnel enable commands cannot be both configured on the same interface. If they are both configured, the system prompts a configuration conflict."
+}

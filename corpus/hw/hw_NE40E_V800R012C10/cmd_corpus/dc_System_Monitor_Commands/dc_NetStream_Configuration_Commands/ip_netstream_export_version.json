@@ -1,0 +1,62 @@
+{
+    "PageTitle": "netstream export version",
+    "FuncDef": "The ip netstream export version command specifies the output version and AS option for NetStream IPv4 original flows.\nThe undo ip netstream export version command restores the default output version and AS option configured for NetStream original IPv4 flows.\nThe ipv6 netstream export version command specifies the output version and AS option for NetStream IPv6 original flows.\nThe undo ipv6 netstream export version command restores the output version and AS option configured for NetStream IPv6 original flows to the default values.\nBy default, NetStream original flows are output in V5 format and do not carry information about the AS number or BGP next hop.",
+    "CLIs": [
+        "ip netstream export version { 5 [ origin-as | peer-as ] | 9 [ origin-as | peer-as ] [ bgp-nexthop ] [ ttl ] | ipfix [ origin-as | peer-as ] [ bgp-nexthop ] [ ttl ] }",
+        "ipv6 netstream export version { 9 [ origin-as | peer-as ] [ bgp-nexthop ] [ ttl ] | ipfix [ origin-as | peer-as ] [ bgp-nexthop ] [ ttl ] }",
+        "undo ip netstream export version",
+        "undo ipv6 netstream export version"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "5",
+            "Info": "Outputs NetStream original flows in V5 format.\n-"
+        },
+        {
+            "Parameters": "origin-as",
+            "Info": "Specifies the origin-as (start AS number) as the AS number of a specified IP address and encapsulates the AS number into NetStream packets sent to the NMS for statistics analysis.\n-"
+        },
+        {
+            "Parameters": "peer-as",
+            "Info": "Specifies the peer-as (peer AS number) as the AS number of a specified IP address and encapsulates the AS number into NetStream packets sent to the NMS for statistics analysis.\n-"
+        },
+        {
+            "Parameters": "9",
+            "Info": "Outputs NetStream original flows in V9 format.\n-"
+        },
+        {
+            "Parameters": "bgp-nexthop",
+            "Info": "Indicates whether the output NetStream packets carry BGP next-hop information. NetStream flows output in V5 format do not support the BGP next hop. Carriers can use BGP next hop information to perform accounting on traffic in various ASs.\n-"
+        },
+        {
+            "Parameters": "ttl",
+            "Info": "Indicates the output NetStream original flows packets carry TTL information.\n-"
+        },
+        {
+            "Parameters": "ipfix",
+            "Info": "Outputs NetStream original flows in ipfix format.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Displays the IPv6 netstream feature.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Displays the IPv4 netstream feature.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip netstream export version 9 peer-as bgp-nexthop"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 netstream export version 9 peer-as bgp-nexthop"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe ip netstream export version command specifies the output version and AS option for NetStream original flows. After enabling NetStream sampling and setting the sampling rate, set the output version for NetStream original flows.\nNetStream IPv4 original flows can be output in the V5 or V9 or IPFIXpacket format, but aggregated flows can be output in the V8 or V9 or IPFIXpacket format. Differing from the previous versions greatly, V9, or IPFIX which is based on the template, outputs NetStream packet statistics more flexibly, expands the elements of a newly defined flow more easily, and generates new records more easily. Compared with the V9 format, the IPFIX format improves packet extensibility and compatibility, security, and reliability. IPFIX, V9, V5, and V8 formats are mutually exclusive.\nThe V5 format is fixed, and the system cost is low. In most cases, NetStream original flows are output in V5 format. In any of the following situations, however, NetStream original flows must be output in V9 or IPFIX format:\nNetStream original flows need to carry BGP next-hop information.Interface indexes carried in the output NetStream original flows need to be extended from 16 bits to 32 bits.\nCompared with the V9 format, the IPFIX format has an enterprise identifier field added, improving packet extensibility. When setting this field, you must use the IPFIX format for the outputting of NetStream IPv4 original flows.\nIPv6 original flows can be output only in V9 or IPFIX format.\n\nPrerequisites\nThe NMS is able to parse flows output in the V9 or IPFIX format.\nConfiguration Impact\nThe ip netstream export index-switch command and ipv6 netstream export index-switch command can be used to extend interface indexes from 16 bits to 32 bits only when original flows are output in the V9 or IPFIX format.\nPrecautions\nWhen interface indexes of the output original flows are 32 bits, you cannot change the output version of original flows from V9 or IPFIX to V5.\nOriginal flows output in V5 format do not carry BGP next-hop information."
+}

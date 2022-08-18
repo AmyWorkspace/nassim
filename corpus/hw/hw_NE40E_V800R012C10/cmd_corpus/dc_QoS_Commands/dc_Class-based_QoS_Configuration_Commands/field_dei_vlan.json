@@ -1,0 +1,38 @@
+{
+    "PageTitle": "field dei enable vlan",
+    "FuncDef": "The field dei enable vlan command specifies the DEI capability for a range of VLANs on an interface.\nThe undo field dei enable vlan command cancels the function of specifying the DEI capability for a range of VLANs on an interface.\nBy default, the DEI capability is not enabled for the packets within a specified VLAN range on an interface.",
+    "CLIs": [
+        "field dei enable vlan { { <vlan-id1> [ to <vlan-id2> ] } &<1-10> | all }",
+        "undo field dei enable vlan { { <vlan-id1> [ to <vlan-id2> ] } &<1-10> | all }"
+    ],
+    "ParentView": [
+        "Interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies the start VLAN ID.\nThe value is an integer that ranges from 1 to 4094."
+        },
+        {
+            "Parameters": "to vlan-id2",
+            "Info": "Specifies the end VLAN ID.\nThe value is an integer ranging from 1 to 4094. The value of vlan-id2 must be greater than that of vlan-id1."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Enables or disables the DEI capability for all VLAN packets on the specified interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 2",
+            "[*HUAWEI-vlan2] quit",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] port default vlan 2",
+            "[*HUAWEI-GigabitEthernet1/0/0] field dei enable vlan 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe field dei enable vlan command sets the capability of an interface to recognize the drop precedence of 802.1p packets. After this capability is assigned on an interface, the device can then identify the drop precedence of packets according to the CFI of the packet in the inbound or outbound direction of the interface. The packets with higher drop precedence are dropped first when a network is congested.\nThe Drop Eligible Indicator (DEI) and CFI share the same bit. If DEI is disabled, this bit is occupied by the CFI.\nThe DEI function takes effect only after simple traffic classification is configured and trust priority of 802.1p . After you enable DEI for a VLAN and configure simple traffic classification, packets enter queues based on CoSs and are marked with different colors based on the values of their CFI fields.\nWhen DEI is enabled, if the DEI value is 1, the packet is marked yellow; if the DEI value is 0, the packet is marked green.If DEI is disabled, the device maps the external priority of a packet to the internal priority based on the 802.1p value, regardless of whether the DEI value is 0 or 1. By default, all packets are marked green.\n\nPrerequisites\nThe DEI function takes effect only when the trust upstream command is run to configure BA classification and the trust 8021p command is run to trust 802.1p values of packets.\nPrecautions\nThis command is supported only on a Layer 2 main interface and can be successfully configured only when the VLAN ID specified in this command falls within the VLAN ID range of the Layer 2 main interface."
+}

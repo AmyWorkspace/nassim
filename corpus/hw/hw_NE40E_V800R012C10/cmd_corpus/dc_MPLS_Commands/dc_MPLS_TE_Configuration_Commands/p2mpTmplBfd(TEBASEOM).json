@@ -1,0 +1,41 @@
+{
+    "PageTitle": "bfd enable (MPLS TE P2MP template view)",
+    "FuncDef": "The bfd enable command enables BFD for P2MP TE.\nThe undo bfd enable command disables BFD for P2MP TE.\nThe bfd command sets parameters for BFD sessions that monitor P2MP TE tunnels.\nThe undo bfd command restores default parameters for BFD sessions that monitor P2MP TE tunnels.\nBy default, the minimum interval at which BFD packets are sent is 10 ms, the minimum interval at which BFD packets are received is 10 ms, and the local detection multiplier is 3.",
+    "CLIs": [
+        "bfd enable",
+        "bfd { min-tx-interval <min-tx-interval> | min-rx-interval <min-rx-interval> | detect-multiplier <multiplier> } *",
+        "undo bfd enable",
+        "undo bfd { min-tx-interval | min-rx-interval | detect-multiplier } *"
+    ],
+    "ParentView": [
+        "MPLS TE P2MP template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-tx-interval min-tx-interval",
+            "Info": "Specifies the minimum interval at which BFD packets are sent.\nThe value is an integer that ranges from 3 to 20000."
+        },
+        {
+            "Parameters": "min-rx-interval min-rx-interval",
+            "Info": "Specifies the minimum interval at which BFD packets are received.\nThe value is an integer that ranges from 3 to 20000."
+        },
+        {
+            "Parameters": "detect-multiplier multiplier",
+            "Info": "Specifies a BFD detection multiplier.\nThe value is an integer that ranges from 3 to 50."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls te p2mp-te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls te p2mp-template Template1",
+            "[*HUAWEI-te-p2mp-template-Template1] bfd enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf P2MP TE tunnels are established to transmit NG MVPN and multicast VPLS services, BFD for P2MP TE can be configured to rapidly detect faults in P2MP TE tunnels, which improves network reliability. To configure BFD for P2MP TE, run the bfd enable command in the P2MP tunnel template view so that BFD sessions for P2MP TE can be automatically established while P2MP TE tunnels are being established.\nTo set BFD parameters, run the bfd command. The parameters include the minimum interval at which BFD packets are sent, the minimum interval at which BFD packets are received, and the BFD detection multiplier.\nEffective local interval at which BFD packets are sent = MAX { Locally configured interval at which BFD packets are sent, Remotely configured interval at which BFD packets are received }Effective local interval at which BFD packets are received = MAX { Remotely configured interval at which BFD packets are sent, Locally configured interval at which BFD packets are received }Local BFD detection period = Effective local interval at which BFD packets are received x Remotely configured BFD detection multiplier\nThe detection multiplier is the maximum number of BFD packets dropped before a BFD peer is declared Down.\n\nPrerequisites\nA P2MP tunnel template has been configured using the mpls te p2mp-template command.\nBFD has been globally enabled using the bfd command."
+}

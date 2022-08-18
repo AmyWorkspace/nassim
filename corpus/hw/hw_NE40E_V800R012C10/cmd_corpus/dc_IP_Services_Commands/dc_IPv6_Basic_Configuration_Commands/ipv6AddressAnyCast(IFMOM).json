@@ -1,0 +1,71 @@
+{
+    "PageTitle": "ipv6 address anycast",
+    "FuncDef": "The ipv6 address anycast command configures an anycast IPv6 address.\nThe undo ipv6 address anycast command deletes an anycast IPv6 address.\nBy default, anycast IPv6 addresses are not configured.",
+    "CLIs": [
+        "ipv6 address { <ipv6-address> <prefix-length> | <ipv6-address/prefix-length> } anycast",
+        "undo ipv6 address { <ipv6-address> <prefix-length> | <ipv6-address/prefix-length> } anycast"
+    ],
+    "ParentView": [
+        "PW-VE interface view",
+        "Tunnel interface view",
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "50GE sub-interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address to be configured for the interface.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the prefix length of the IPv6 address.\nThe value is an integer that ranges from 1 to 128. In the EUI-64 address format, the prefix length must be less than 64."
+        },
+        {
+            "Parameters": "ipv6-address/prefix-length",
+            "Info": "Specifies the IPv6 address and prefix length of an interface.\nThe value is the IPv6 address/IPv6 address prefix length."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol ipv6-ipv4 6to4",
+            "[*HUAWEI-Tunnel10] ipv6 enable",
+            "[*HUAWEI-Tunnel10] ipv6 address 2001:db8:1:: 64 anycast"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 address 2001:db8:5::10 124 anycast"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn anycast address is used to identify a group of interfaces that are configured on different nodes. The packets that are sent to an anycast address are transmitted to an interface that is in the interface group identified by the anycast address and is closest to the source node. (The distance between an interface and the source node is calculated based on a routing protocol).\nWhen the 6to4 tunnel is used for communication between the 6to4 network and the native IPv6 network, you can configure an anycast address whose prefix is 2002:c058:6301/48 on the tunnel interface of the 6to4 relay router. If an anycast address is used, you need to configure the same address for the tunnel interfaces of all devices. In this manner, the number of addresses is reduced.\nPrerequisites\nBefore running this command, run the ipv6 enable command on the interface view to enable the IPv6 function of the tunnel interface.\nConfiguration Impact\nWhen the undo command is run, if no parameter is specified, all IPv6 addresses (including anycast addresses but excluding the link-local address that is configured automatically) are deleted.\nPrecautions\nAn anycast address cannot be used as a source address. Therefore, when a device is used to send packets, a global unicast address is configured for the device.\nAn anycast address is not necessarily a subnet-router anycast address and can be a global unicast address configured using the ipv6 address anycast command.\nAn interface can be configured with a maximum of 64 anycast IPv6 addresses."
+}

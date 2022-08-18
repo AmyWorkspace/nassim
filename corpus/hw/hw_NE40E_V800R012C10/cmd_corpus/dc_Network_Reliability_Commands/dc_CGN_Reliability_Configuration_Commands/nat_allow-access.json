@@ -1,0 +1,53 @@
+{
+    "PageTitle": "nat allow-access (NAT instance view)",
+    "FuncDef": "The nat allow-access command binds a private or public VPN instance to a NAT instance.\nThe undo nat allow-access command unbinds a private or public VPN instance from a NAT instance.\nBy default, a NAT instance is not bound to any private or public VPN instance.",
+    "CLIs": [
+        "nat allow-access { inside vpn-instance <inside-vpn-instance-name> | global vpn-instance <global-vpn-instance-name> } *",
+        "undo nat allow-access [ { inside vpn-instance <inside-vpn-instance-name> | global vpn-instance <global-vpn-instance-name> } * ]"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "inside",
+            "Info": "Specifies a private VPN instance.\n-"
+        },
+        {
+            "Parameters": "vpn-instance inside-vpn-instance-name",
+            "Info": "Specifies the name of a private VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "vpn-instance global-vpn-instance-name",
+            "Info": "Specifies the name of a public VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "global",
+            "Info": "Specifies a public VPN instance.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance ivpn",
+            "[*HUAWEI-vpn-instance-ivpn] ipv4-family",
+            "[*HUAWEI-vpn-instance-ivpn-af-ipv4] route-distinguisher 200:1",
+            "[*HUAWEI-vpn-instance-ivpn-af-ipv4] vpn-target 101:101 export-extcommunity",
+            "[*HUAWEI-vpn-instance-ivpn-af-ipv4] vpn-target 101:101 import-extcommunity",
+            "[*HUAWEI-vpn-instance-ivpn-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-ivpn-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-ivpn] quit",
+            "[~HUAWEI] ip vpn-instance global-vpn",
+            "[*HUAWEI-vpn-instance-gvpn] ipv4-family",
+            "[*HUAWEI-vpn-instance-gvpn-af-ipv4] route-distinguisher 200:2",
+            "[*HUAWEI-vpn-instance-gvpn-af-ipv4] vpn-target 102:102 export-extcommunity",
+            "[*HUAWEI-vpn-instance-gvpn-af-ipv4] vpn-target 102:102 import-extcommunity",
+            "[*HUAWEI-vpn-instance-gvpn-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-gvpn-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-gvpn] quit",
+            "[~HUAWEI] nat instance nat1 id 1",
+            "[*HUAWEI-nat-instance-nat1] nat allow-access inside vpn-instance ivpn global vpn-instance gvpn"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn centralized VPN NAT inter-chassis hot backup scenarios, to address traffic discarding on the user-side or network-side VPN, run the nat allow-access command to bind a private or public VPN instance to a NAT instance.\nPrerequisites\nA private or public VPN instance has been configured.\nConfiguration Impact\nAfter this command is run, the user table and session table that do not belong to the private or public VPN instance are deleted.\nPrecautions\nIf the user-side VPN instance is different from the private VPN instance bound to the NAT instance, user traffic is dropped. If the network-side VPN instance is different from the public VPN instance bound to the NAT instance, user traffic is also dropped.\nIf multiple VPN flows are required, you must configure multiple NAT instances because each NAT instance provides access for only one VPN flow. The private and public VPN instances bound to a NAT instance can be different.\nThis command is applicable only to the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S in centralized VPN NAT scenarios.\nThe nat allow-access and nat bind static-mapping commands are mutually exclusive.\nThe load balancing configuration and the nat allow-access command configuration are mutually exclusive in the NAT instance. A device does not check whether the two configurations conflict with each other when restoring configurations with a configuration file."
+}

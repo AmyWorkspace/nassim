@@ -1,0 +1,102 @@
+{
+    "PageTitle": "rule (Layer 2 ACL view)",
+    "FuncDef": "The rule command creates or modifies an ACL rule in the Layer 2 ACL view.\nThe undo rule command deletes an ACL rule in the Layer 2 ACL view.\nBy default, no Layer 2 ACL rule is created.",
+    "CLIs": [
+        "rule [ <rule-id> ] [ name <rule-name> ] { permit | deny } [ [ type { type | arp | ip | ipv6 | mpls | rarp } [ <type-mask> ] ] | source-mac <source-mac> [ <source-mac-mask> ] | destination-mac <dest-mac> [ <dest-mac-mask> ] | 8021p <8021p> | cvlan-8021p <cvlan-8021p> | time-range <time-name> ] *",
+        "undo rule [ name <rule-name> ] { permit | deny } [ [ type { type | arp | ip | ipv6 | mpls | rarp } [ <type-mask> ] ] | source-mac <source-mac> [ <source-mac-mask> ] | destination-mac <dest-mac> [ <dest-mac-mask> ] | 8021p <8021p> | cvlan-8021p <cvlan-8021p> | time-range <time-name> ] *",
+        "undo rule <rule-id> [ to <end-rule-id> ]"
+    ],
+    "ParentView": [
+        "Layer 2 ACL view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "rule-id",
+            "Info": "Specifies the ID of an ACL rule.\nThe value is an integer ranging from 0 to 4294967294."
+        },
+        {
+            "Parameters": "name rule-name",
+            "Info": "Specifies the name of an ACL rule.\nThe value is a string of 1 to 32 case-sensitive characters that cannot begin with an underscore (_), spaces not supported."
+        },
+        {
+            "Parameters": "permit",
+            "Info": "Permits packets that match conditions.\n-"
+        },
+        {
+            "Parameters": "deny",
+            "Info": "Denies packets that match conditions.\n-"
+        },
+        {
+            "Parameters": "type type",
+            "Info": "Matches packets based on a Layer 2 protocol type.\nIf type is not specified, all Ethernet frames are matched.\nThe value must be a hexadecimal number and start with 0x. The length ranges from 3 to 6 digits.\nIf the value of type is greater than 0x600, this field indicates an upper-layer protocol of Ethernet II frames.0x0800: The upper-layer protocol is IPv4.0x0806: The upper-layer protocol is ARP.0x0835: The upper-layer protocol is RARP.\nIf the value of type is less than 0x600, this field indicates the length of IEEE 802.3 frames."
+        },
+        {
+            "Parameters": "arp",
+            "Info": "Address Resolution Protocol.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Any IP protocol.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Any IPv6 protocol.\n-"
+        },
+        {
+            "Parameters": "mpls",
+            "Info": "Multiprotocol Label Switching.\n-"
+        },
+        {
+            "Parameters": "rarp",
+            "Info": "Reverse Address Resolution Protocol.\n-"
+        },
+        {
+            "Parameters": "type-mask",
+            "Info": "Specifies the mask for an Ethernet frame protocol.\nThe value is a hexadecimal number and starts with 0x. The length ranges from 3 to 6 digits.The type and type-mask parameters together identify the value range of the field. For example, to match all IEEE 802.3 frames (with the value of type less than 0x600), two commands are required: rule { permit | deny } type 0x0000 0xFc00 and rule { permit | deny } type 0x0400 0xFe00. To match IPv4 traffic, run the rule { permit | deny } type 0x0800 0xFFFF command."
+        },
+        {
+            "Parameters": "source-mac source-mac",
+            "Info": "Specifies a source MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        },
+        {
+            "Parameters": "source-mac-mask",
+            "Info": "Specifies the mask for a source MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        },
+        {
+            "Parameters": "destination-mac dest-mac",
+            "Info": "Specifies a destination MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        },
+        {
+            "Parameters": "dest-mac-mask",
+            "Info": "Specifies a destination MAC address mask.\nThe value is in the format of H-H-H. Each H is a 4-digit hexadecimal number."
+        },
+        {
+            "Parameters": "time-range time-name",
+            "Info": "Specifies a time range during which an ACL rule takes effect.\nA time range is configured using the time-range command.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "8021p 8021p",
+            "Info": "Specifies the 802.1p priority in an inner VLAN tag.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "cvlan-8021p cvlan-8021p",
+            "Info": "Specifies the 802.1p priority in an inner VLAN tag.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "undo",
+            "Info": "Cancel current setting.\n-"
+        },
+        {
+            "Parameters": "to end-rule-id",
+            "Info": "Specifies an end rule ID for Layer 2 ACL rules in batches.end-rule-id must be greater than rule-id.\nThe value is an integer ranging from 0 to 4294967294."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 4999",
+            "[*HUAWEI-acl4-L2-4999] rule permit destination-mac 0-0-1 source-mac 0-0-2 type 0x0800"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a Layer 2 ACL is created, run the rule command to add rules to the ACL.\nPrerequisites\nA Layer 2 ACL has been created using the acl command in the system view. A time range has been configured using the time-range command in the system view if you want to specify a validity period when creating a Layer 2 ACL rule.\nConfiguration Impact\nWhen specifying an ACL rule ID, note the following:\nIf a rule with a specified rule ID already exists, and the new rule conflicts with the existing one, the conflicting part in the new rule overwrites that in the existing rule.If no rule with the specified rule ID exists, a rule with the specified rule ID is created.\nWhen an ACL rule ID is not specified and a rule is added, the system automatically allocates an ID to this rule. ACL rules are arranged in ascending order of rule IDs, with the difference between two adjacent rules as an ACL increment.\nThe rule IDs automatically generated by the system start from the ACL increment. For example, if the ACL increment is 5, the rule ID starts from 5; if the ACL increment is 2, the rule ID starts from 2. This allows you to add rules before the first rule.\n\nPrecautions\nIf auto is configured when you run the acl command to create an ACL, you cannot specify a rule ID when creating a rule. The system automatically uses the ACL increment as the start rule ID, and the subsequent rules are numbered by an ACL increment in ascending order.\nYou must specify the rule ID when deleting a rule. To check rule IDs, run the display acl command.\nBefore deleting an ACL rule, run the display acl command to check whether the ACL rule has been applied to other services. Delete the rule only when it is not applied to other services."
+}

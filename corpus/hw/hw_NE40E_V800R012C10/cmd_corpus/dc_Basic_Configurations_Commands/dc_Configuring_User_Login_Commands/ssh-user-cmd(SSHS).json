@@ -1,0 +1,119 @@
+{
+    "PageTitle": "ssh user",
+    "FuncDef": "The ssh user command creates an SSH user.\nThe ssh user assign command assigns an existing public key to an SSH user.\nThe ssh user authentication-type command configures the authentication type of an SSH user.\nThe ssh user service-type command configures the service type for the SSH user.\nThe ssh user sftp-directory command configures the authorized directory of the SFTP service for SSH users.\nBy default, no ssh user is created, public key is not assigned to the user, the authentication type of the SSH user is not configured, the service type of the SSH user is not configured, the authorized directory of the SFTP service for the SSH user is not configured.",
+    "CLIs": [
+        "ssh user <user-name>",
+        "ssh user <user-name> service-type { sftp | stelnet | snetconf } *",
+        "ssh user <user-name> sftp-directory <directoryname>",
+        "ssh user <user-name> assign { rsa-key | dsa-key | ecc-key | sm2-key } <key-name>",
+        "ssh user <user-name> authentication-type { password | rsa | password-rsa | dsa | password-dsa | all | ecc | password-ecc | sm2 | password-sm2 }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-name",
+            "Info": "Indicates the name of an SSH user.\nThe name is a string of 1 to 253 characters."
+        },
+        {
+            "Parameters": "rsa-key",
+            "Info": "Specifies to assign a RSA public key to a user.\n-"
+        },
+        {
+            "Parameters": "dsa-key",
+            "Info": "Specifies to assign a DSA public key to a user.\n-"
+        },
+        {
+            "Parameters": "ecc-key",
+            "Info": "Specifies to assign a ECC public key to a user.\n-"
+        },
+        {
+            "Parameters": "key-name",
+            "Info": "Specifies the name of an ECC public key generated on the client.\nThe value is a string of 1 to 40 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "password",
+            "Info": "Indicates password authentication.\n-"
+        },
+        {
+            "Parameters": "rsa",
+            "Info": "Indicates RSA authentication.\nTo ensure high security, do not use the RSA algorithm whose length is less than 2048 digits as the authentication type for the SSH user. You are advised to use a more secure ECC authentication algorithm for higher security.\n-"
+        },
+        {
+            "Parameters": "password-rsa",
+            "Info": "Indicates that both password authentication and RSA authentication must be adopted.\n-"
+        },
+        {
+            "Parameters": "dsa",
+            "Info": "Indicates DSA authentication.\n-"
+        },
+        {
+            "Parameters": "password-dsa",
+            "Info": "Indicates that both password authentication and DSA authentication must be adopted.\n-"
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates all authentication modes.\n-"
+        },
+        {
+            "Parameters": "ecc",
+            "Info": "Indicates ECC authentication.\n-"
+        },
+        {
+            "Parameters": "password-ecc",
+            "Info": "Indicates that both password authentication and ECC authentication must be adopted.\n-"
+        },
+        {
+            "Parameters": "sftp",
+            "Info": "Indicates the SFTP service type.\n-"
+        },
+        {
+            "Parameters": "stelnet",
+            "Info": "Indicates the STelnet and SCP service type.\n-"
+        },
+        {
+            "Parameters": "snetconf",
+            "Info": "Indicates the Snetconf service type.\n-"
+        },
+        {
+            "Parameters": "sftp-directory directoryname",
+            "Info": "Specifies the directory name of the SFTP server.\nThe name is a string of 1 to 255 characters."
+        },
+        {
+            "Parameters": "sm2-key",
+            "Info": "Specifies to assign a SM2 public key to a user.\n-"
+        },
+        {
+            "Parameters": "sm2",
+            "Info": "Indicates SM2 authentication.\n-"
+        },
+        {
+            "Parameters": "password-sm2",
+            "Info": "Indicates that both password authentication and SM2 authentication must be adopted.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssh user testuser"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssh user testuser assign ecc-key key1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssh user testuser assign sm2-key sm2key001"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssh user testuser service-type all"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssh user testuser sftp-directory cfcard:/ssh"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can create a user using either of the following methods:\nRun the ssh user command.After the ssh user authentication-type, ssh user service-type, and ssh user sftp-directory command are run, the system automatically create a user named user-name if the system detects that the user named user-name does not exist.\nThe privilege of user supported depends on the ssh authorization-type default command configured by the user.\nWhen the system assigns a public key to a user:\nThe system considers the public key assigned last as valid.The newly configured public key takes effect during the next login.\nWhen ECC/DSA/RSA authentication is used to authenticate an SSH user, the client sends the ECC/DSA/RSA public key that is generated locally to the server, and the server then assigns the ECC public key to the SSH user.\nThe public key to be assigned must be valid.\nTo ensure high security, do not use the RSA algorithm whose length is less than 2048 digits as the authentication type for the SSH user. You are advised to use a more secure ECC authentication algorithm for higher security.\nA new SSH user cannot log in unless being configured with an authentication type. The newly configured authentication type takes effect on next login.\nIf an authentication type has been configured, the configuration will be deleted after the ssh user authentication-type command is run, and a new authentication type configured using the command will be used.\nThe ssh user service-type command configures the service type for the SSH user.\nThe ssh user sftp-directory command configures the sftp directory for the SSH user.\nIf the username user does not exist, a new SSH user with the specified username is created, and the configured directory is used as an authorized SFTP directory. You can also use the user name configured using the local-user user-name ftp-directory directory command for login.If the configured directory and the directory configured using local-user user-name ftp-directory directory do not exist, the SFTP client fails to connect to the SSH server.\nWhen an SFTP user logs in to a device, the directory configured using ssh user username sftp-directory directoryname is preferentially selected, followed by the directory configured using local-user user-name ftp-directory directory.\nThe commands take effects for both ipv4 and ipv6 functions.\nYou can run the display ssh user-information command to view the configuration of all SSH users."
+}

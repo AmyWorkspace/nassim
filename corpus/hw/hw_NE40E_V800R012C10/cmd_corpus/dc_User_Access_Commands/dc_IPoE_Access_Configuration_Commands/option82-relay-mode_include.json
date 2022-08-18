@@ -1,0 +1,43 @@
+{
+    "PageTitle": "option82-relay-mode include",
+    "FuncDef": "The option82-relay-mode include command configures the access-line-id information included in the RADIUS attributes, like Calling-Station-Id attribute, NAS-Port-Id or BB-Caller-Id attribute.\nThe undo option82-relay-mode include command restores the default setting.\nBy default, when the access-line-id information is trusted, the RADIUS attributes includes only the link ID in the Option 82 information.",
+    "CLIs": [
+        "option82-relay-mode include { allvalue | { agent-circuit-id | agent-remote-id [ <separator> ] } * }",
+        "undo option82-relay-mode include"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "allvalue",
+            "Info": "Indicates that all access-line-id information is contained in the RADIUS attributes.\n-"
+        },
+        {
+            "Parameters": "agent-circuit-id",
+            "Info": "Indicates that the circuit ID is contained in the RADIUS attributes.\n-"
+        },
+        {
+            "Parameters": "agent-remote-id",
+            "Info": "Indicates that the remote agent ID is contained in the RADIUS attributes.\n-"
+        },
+        {
+            "Parameters": "separator",
+            "Info": "Specifies a separator between fields, in characters.\nThe value is a string of 1 to 1 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] bas",
+            "[*HUAWEI-GigabitEthernet1/0/1-bas] commit",
+            "[*HUAWEI-GigabitEthernet1/0/1-bas] access-type layer2-subscriber",
+            "[*HUAWEI-GigabitEthernet1/0/1-bas] client-option82",
+            "[*HUAWEI-GigabitEthernet1/0/1-bas] option82-relay-mode include agent-circuit-id"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe access-line-id information may be carried by DHCPv4 Option 82, DHCPv6 Options 18, 37, and 17, or a PPPoE+ option.\nOn a network where a DSLAM is deployed, the DSLAM sends information about user locations to the . After parsing the access-line-id information, the NE40E adds the parsed information to the RADIUS attributes of a RADIUS packet and then sends the packet to the RADIUS server. The RADIUS server verifies the information carried in the RADIUS attributes by comparing it with the existing information that has been configured in the database on the RADIUS server.\nConfiguration Impact\nIf allvalue is configured, the NE40E copies all the received access-line-id information to the RADIUS attributes and sends the attribute to the RADIUS server.If only agent-circuit-id is configured, the NE40E converts the value of agent-circuit-id from access-line-id information based on a specific rule and then sends the attribute to the RADIUS server. By default, the value of agent-circuit-id from access-line-id information is directly copied to the RADIUS attributes, without having to be converted.If only agent-remote-id is configured, the NE40E converts the value of agent-remote-id from access-line-id information based on a specific rule and then sends the attribute to the RADIUS server. By default, the value of agent-remote-id is directly copied to the RADIUS attributes, without having to be converted.If both agent-circuit-id and agent-remote-id are configured, the NE40E converts the values of agent-circuit-id and agent-remote-id from access-line-id based on a specific rule, copies the two attributes to the RADIUS attributes, and then sends the RADIUS attributes to the RADIUS server. By default, the values of agent-circuit-id and agent-remote-id are directly copied to the RADIUS attributes.If both agent-circuit-id and agent-remote-id are configured and is specified, the NE40E converts the values of agent-circuit-id and agent-remote-id from access-line-id based on a specific rule, adds a separator between the two values, copies the values and separator to the RADIUS attributes, and then sends the attribute to the RADIUS server. By default, the value of agent-circuit-id and agent-remote-id are directly copied to the RADIUS attributes.\nThe option82-relay-mode include can be effective only after the client-option82 or client-access-line-id command has been run on the BAS interface and the access-line-id field is not empty.\nThe rule of converting an attribute value is configured by using the option82-relay-mode subopt or access-line-id translate command. If hex is configured, the attribute value is converted into a hexadecimal string. If is specified or no parameter is specified, the attribute value is not converted.\n\nPrecautions\nThis command is supported only on the admin VS.\nThe functions of the access-line-id include command and the option82-relay-mode include command are the same. Both of them are used to configure the RADIUS attribute to carry the access-line-id information. If they have been both run more than once in the same view, the last configuration overrides the previous one."
+}

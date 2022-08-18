@@ -1,0 +1,99 @@
+{
+    "PageTitle": "modify hop",
+    "FuncDef": "The modify hop command is used to modify an existing hop in an explicit path.",
+    "CLIs": [
+        "modify hop <ip-address1> <ip-address2> [ exclude | include [ [ strict | loose ] | [ incoming | outgoing ] ] * ]",
+        "modify hop <ip-address1> to { hop <ip-address2> [ exclude | include [ [ strict | loose ] | [ incoming | outgoing ] ] * ] | sid label <label-value> type { adjacency | prefix } }",
+        "modify index <indexValue> to { hop <ip-address2> [ exclude | include [ [ strict | loose ] | [ incoming | outgoing ] ] * ] | sid label <label-value> type { adjacency | prefix | binding-sid } }",
+        "modify sid label <contrastLabel> index <indexValue> to { hop <ip-address2> [ exclude | include [ [ strict | loose ] | [ incoming | outgoing ] ] * ] | sid label <label-value> type { adjacency | prefix | binding-sid } }"
+    ],
+    "ParentView": [
+        "Explicit path view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address1",
+            "Info": "Specifies the hop ip address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "ip-address2",
+            "Info": "Specifies the IPv4 address, if configure next hop as strict mode, please specify interface address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "exclude",
+            "Info": "Prevents a CR-LSP set up on an explicit path from passing through a specified link or node.\n-"
+        },
+        {
+            "Parameters": "include",
+            "Info": "Requires a CR-LSP set up on an explicit path to pass through a specified link or node.\n-"
+        },
+        {
+            "Parameters": "strict",
+            "Info": "Indicates the strict explicit path, requiring a specified node to be connected directly to its previous hop.\n-"
+        },
+        {
+            "Parameters": "loose",
+            "Info": "Indicates the loose explicit path, allowing a specified node to be connected indirectly to its previous hop.\n-"
+        },
+        {
+            "Parameters": "incoming",
+            "Info": "Indicates the inbound interface.\n-"
+        },
+        {
+            "Parameters": "outgoing",
+            "Info": "Indicates the outbound interface.\n-"
+        },
+        {
+            "Parameters": "to",
+            "Info": "Specifies a range.\n-"
+        },
+        {
+            "Parameters": "sid contrastLabel",
+            "Info": "Specifies the label value.\nThe value is an integer ranging from 16 to 1048575."
+        },
+        {
+            "Parameters": "label label-value",
+            "Info": "Specifies the label value.\nThe value is an integer ranging from 16 to 1048575."
+        },
+        {
+            "Parameters": "type",
+            "Info": "Specifies the type of segment identifier.\n-"
+        },
+        {
+            "Parameters": "adjacency",
+            "Info": "Specifies the Adjacency SID.\n-"
+        },
+        {
+            "Parameters": "prefix",
+            "Info": "Specifies the Prefix SID.\n-"
+        },
+        {
+            "Parameters": "index indexValue",
+            "Info": "Specifies the index value.\nThe value is an integer ranging from 1 to 96."
+        },
+        {
+            "Parameters": "binding-sid",
+            "Info": "Specifies the Binding SID.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] explicit-path p1",
+            "[*HUAWEI-explicit-path-p1] next hop 10.0.0.125",
+            "[*HUAWEI-explicit-path-p1] modify hop 10.0.0.125 10.0.0.200 exclude"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] explicit-path p1",
+            "[*HUAWEI-explicit-path-p1] modify hop 10.0.0.125 to sid label 123 type prefix"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe modify hop command is used to modify nodes for an explicit path.\nPrecautions\nWhen you run this command to modify an existing hop in an explicit path, the IP address of another hop that already exists in the explicit path cannot be used.\nBinding SID label type cannot be mixed with the IP type. When the IP address is changed to the SID type, the number of hops of the SID type cannot exceed 10. In addition, ensure that the RSVP-TE Tunnel interface on the local device uses the explicit path and cannot be changed to the label type."
+}

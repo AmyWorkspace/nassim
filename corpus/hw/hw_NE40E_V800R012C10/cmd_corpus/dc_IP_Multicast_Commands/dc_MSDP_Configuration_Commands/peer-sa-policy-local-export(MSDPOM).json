@@ -1,0 +1,40 @@
+{
+    "PageTitle": "peer sa-policy local-export",
+    "FuncDef": "The peer sa-policy local-export command configures a policy for filtering the locally created source active (SA) messages to be sent to a specified Multicast Source Discovery Protocol (MSDP) peer.\nThe undo peer sa-policy local-export command restores the default configuration.\nBy default, the device sends all locally created (S, G) messages.",
+    "CLIs": [
+        "peer <peer-address> sa-policy local-export acl { <advanced-acl-number> | <acl-name> }",
+        "peer <peer-address> sa-policy local-export",
+        "undo peer <peer-address> sa-policy local-export"
+    ],
+    "ParentView": [
+        "VPN instance MSDP view",
+        "MSDP view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the address of an MSDP peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "acl advanced-acl-number",
+            "Info": "Specifies the number of an advanced ACL.\nThe value is an integer ranging from 3000 to 3999. If the ACL is not specified, all SA messages carrying (S, G) information are filtered."
+        },
+        {
+            "Parameters": "acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 3100",
+            "[*HUAWEI-acl4-advance-3100] rule permit ip source 10.15.0.0 0.0.255.255 destination 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-advance-3100] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] msdp",
+            "[*HUAWEI-msdp] peer 10.10.7.6 connect-interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-msdp] peer 10.10.7.6 sa-policy local-export acl 3100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run the peer sa-policy local-export command to configure a policy for filtering SA messages so that only the locally created SA messages that match the policy are sent to the specified MSDP peer.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nMSDP peers have been configured.\nConfiguration Impact\nIf you run this command multiple times, only the latest configuration takes effect.\nIf the ACL parameter is not configured, the device does not send any locally created SA message to the specified MSDP peer.\nIf an ACL is configured, only the local SA messages of (S, G) that match the ACL are sent to the specified MSDP peer.\nPrecautions\nIf the import-source command is run in the MSDP view and the peer sa-policy local-export command is run on the MSDP peer, the peer sa-policy local-export configuration takes effect."
+}

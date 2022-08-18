@@ -1,0 +1,75 @@
+{
+    "PageTitle": "tracert srv6-te policy",
+    "FuncDef": "The tracert srv6-te policy command tests the nodes through which an SRv6 TE Policy passes.",
+    "CLIs": [
+        "tracert srv6-te policy { policy-name <policyName> | endpoint-ip <endpointIpv6> color <colorId> | binding-sid <bsid> } [ end-op <endOp> ] [ -a <sourceAddr6> | -f <initHl> | -m <maxHl> | -s <packetSize> | -w <timeout> | -p <destPort> | -tc <tc> ] *"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name policyName",
+            "Info": "Specifies the name of an SRv6 TE Policy.\nThe value is a string of 1 to 31 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "endpoint-ip endpointIpv6",
+            "Info": "Specifies the destination address of an SRv6 TE Policy.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "color colorId",
+            "Info": "Specifies the color ID of an SRv6 TE Policy.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "binding-sid bsid",
+            "Info": "Specifies the binding SID of an SRv6 TE Policy.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "end-op endOp",
+            "Info": "Specifies the ID of an End.OP segment. If the bottom SID of the segment list is an End.X SID or binding SID, you must manually specify an End.OP SID when initiating a tracert operation to the SRv6 TE Policy.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-a sourceAddr6",
+            "Info": "Specifies a source IPv6 address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-f initHl",
+            "Info": "Specifies an initial hop limit.\nThe value is an integer ranging from 1 to 255. The default value is 1."
+        },
+        {
+            "Parameters": "-m maxHl",
+            "Info": "Specifies a maximum hop limit.\nThe value is an integer ranging from 1 to 255. The default value is 30."
+        },
+        {
+            "Parameters": "-s packetSize",
+            "Info": "Specifies the payload length of an ICMP echo request message.\nThe value is an integer ranging from 65 to 9600. The default value is 100."
+        },
+        {
+            "Parameters": "-w timeout",
+            "Info": "Specifies a timeout time for waiting for the response to an ICMP echo request message.\nThe value is an integer ranging from 1 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-p destPort",
+            "Info": "Specifies a destination UDP port number.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "-tc tc",
+            "Info": "Specifies a traffic class for ICMP echo request messages to be sent.\nThe value is an integer ranging from 0 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> tracert srv6-te policy policy-name abc end-op 2001:db8:2::1 -a 2001:db8:1::1 -p 5 -m 20 -tc 0",
+            "  Trace srv6-te trace : 100  data bytes, press CTRL_C to break",
+            "  srv6-te policy's segment list:",
+            "  Preference: 200; Path Type: primary; Protocol-Origin: local; Originator: 0, 0.0.0.0; Discriminator: 200; Segment-List ID: 1; Xcindex: 1; end-op: 2001:db8:2::1",
+            "  TTL    Replier                                 Time    Type      SRH",
+            "",
+            "  0                                                      Ingress   [SRH: 2001:db8:1::F:1, 2001:db8:2::F:1, 2001:db8:2::1, SL=2] ",
+            "  1      2001:db8:A::192:168:103:2               22 ms   Transit   [SRH: 2001:db8:1::F:1, 2001:db8:2::F:1, 2001:db8:2::1, SL=2] ",
+            "  2      2001:db8:A::192:168:106:2               10 ms   Transit   [SRH: 2001:db8:1::F:1, 2001:db8:2::F:1, 2001:db8:2::1, SL=1] ",
+            "  3      2001:db8:2::1                           4 ms    Egress"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an SRv6 TE Policy network, if data forwarding fails over the SRv6 TE Policy, the control plane for SRv6 establishment cannot detect this failure, making network maintenance difficult. The SRv6 TE Policy tracert mechanism can be used to detect such faults and locate faulty nodes. This mechanism is implemented using the tracert srv6-te policy command. To test the nodes through which an SRv6 TE Policy passes, run the tracert srv6-te policy command. The command output can be used for fault diagnosis.\nPrerequisites\nSRv6 has been enabled on the device and is working properly.\nPrecautions\nIf the segment list changes during the SRv6 TE Policy tracert test, the tracert results may be inaccurate. It is recommended that you press Ctrl+C to stop and then re-initiate a tracert operation.\nIf the IPv6 router ID is not specified, a source IPv6 address need to be configured manually when running this command."
+}

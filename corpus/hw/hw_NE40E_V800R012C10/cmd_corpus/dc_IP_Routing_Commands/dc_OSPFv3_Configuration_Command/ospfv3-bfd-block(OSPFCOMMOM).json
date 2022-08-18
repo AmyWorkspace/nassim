@@ -1,0 +1,52 @@
+{
+    "PageTitle": "ospfv3 bfd block",
+    "FuncDef": "The ospfv3 bfd block command enables BFD on an OSPFv3 interface and sets parameter values for a BFD session.\nThe undo ospfv3 bfd block command disables BFD from an interface, or restores the default parameter values of a BFD session.\nBy default, BFD is not enabled on an OSPFv3 interface.",
+    "CLIs": [
+        "ospfv3 bfd block [ instance <instance-id> ]",
+        "undo ospfv3 bfd block [ instance <instance-id> ]"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "VBDIF interface view",
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "instance instance-id",
+            "Info": "Indicates the ID of the instance to which the interface belongs.\nThe value is an integer ranges from 0 to 255."
+        },
+        {
+            "Parameters": "block",
+            "Info": "Disables BFD from an OSPFv3 interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ospfv3 1 area 0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ospfv3 bfd enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ospfv3 bfd block"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEither a link fault or topology change on a network will cause routes to be re-calculated within an area. As such, speeding up the convergence of a routing protocol is critical to improving the network performance.\nAs link faults are inevitable, rapidly detecting these faults and notifying routing protocols is an effective way to quickly mitigate them. This includes associating BFD with a routing protocol to speed up convergence of the routing protocol once a link fault occurs.\nPrerequisites\nBFD has been enabled on the interface.\nImplementation Procedure\nThe receive-interval is negotiated by the local and peer ends by comparing the values of the local min-rx-interval and the peer min-tx-interval. If the local end fails to receive a BFD packet from the neighbor within an interval of receive-interval * multiplier-value, the local end considers the neighbor Down.\nConfiguration Impact\nIf global BFD is not enabled, BFD can be enabled on an interface. The BFD session, however, cannot be set up after BFD is enabled on the interface. If the parameters of a BFD session are set but the ospfv3 bfd enable command is not run, the BFD session cannot be set up.\nThe BFD configuration on an interface takes precedence over that in a process. If BFD is enabled on an interface, a BFD session is established according to the BFD parameters set on the interface.\nFollow-up Procedure\nRun the display ospfv3 bfd session command to view the information about neighbors enabled with BFD.\nPrecautions\nAfter BFD is enabled, a device sets up BFD sessions with only adjacencies.\nThe ospfv3 bfd enable command and ospfv3 bfd block command are mutually exclusive in function, and the later configuration overwrites the previous one.\nAfter BFD is disabled from an interface using the undo ospfv3 bfd enable command, the parameters for setting up BFD sessions remain on this interface but no longer take effect."
+}

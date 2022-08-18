@@ -1,0 +1,30 @@
+{
+    "PageTitle": "mpls te switch-delay",
+    "FuncDef": "The mpls te switch-delay command sets the switching delay and deletion delay for a TE tunnel.\nundo mpls te switch-delay command restores the default interval.\nBy default, the switching delay is 5000 ms and deletion delay is 20, 000 ms.",
+    "CLIs": [
+        "mpls te switch-delay <switch-time> delete-delay <delete-time>",
+        "undo mpls te switch-delay"
+    ],
+    "ParentView": [
+        "MPLS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "switch-time",
+            "Info": "Specifies the delay time for switching TE traffic from a primary CR-LSP to a Modified CR-LSP.\nThe value is an integer ranging from 0 to 600000, in milliseconds. By default, the value is 5000."
+        },
+        {
+            "Parameters": "delete-delay delete-time",
+            "Info": "Specifies the delay time for deleting a primary CR-LSP after TE traffic has switched to a Modified CR-LSP.\nThe value is an integer ranging from 0 to 600000, in milliseconds. By default, the value is 20000."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls te switch-delay 3000 delete-delay 8000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMPLS TE adopts the make-before-break mechanism. When an MPLS TE tunnel's attributes (such as bandwidth and path) change, a new CR-LSP (also called modified CR-LSP) with the new attributes needs to be established. With make-before-break, the new CR-LSP is established before the original CR-LSP (also called the primary CR-LSP) is torn down, minimizing data loss during a traffic switchover to the new CR-LSP.\nIn actual applications, if the traffic volume greatly differs on an upstream node and a downstream node, the forwarding entries may be inconsistent on the two nodes. When this is the case, traffic may be interrupted for a short time.\nTo prevent this issue, run the mpls te switch-delay command on the tunnel ingress to set switching and deletion delays. Then, after a new CR-LSP is established, the system waits for the specified switching delay to expire before switching traffic to the new CR-LSP. After the switchover is complete, the system waits for the specified deletion delay to expire before tearing down the original primary CR-LSP.\nFor example:\nThe traffic on the upstream node of a TE tunnel is light but heavy on the downstream node. In such a scenario, the upstream node may switch traffic to the modified CR-LSP before forwarding entries are updated completely on the downstream node. When this is the case, traffic will be interrupted for a short time after being switched to the modified CR-LSP. To resolve this issue, run the mpls te switch-delay command to adjust the switching and deletion delays.\nPrerequisites\nMPLS TE has been enabled globally using the mpls te command.\nConfiguration Impact\nSetting an appropriate switching or deletion delay time is recommended. A large value may cause other CR-LSPs to fail to be established when the number of CR-LSPs approaches to the upper limit or route flapping occurs.\nPrecautions\nDuring the switching or deletion delay time, changing or deleting a set delay time does not take effect."
+}

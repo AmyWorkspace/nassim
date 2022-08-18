@@ -1,0 +1,111 @@
+{
+    "PageTitle": "vrrp vrid track bfd-session",
+    "FuncDef": "The vrrp vrid track bfd-session command enables a VRRP backup group to track a BFD session.\nThe undo vrrp vrid track bfd-session command disables a VRRP backup group from tracking a BFD session.\n\nBy default, a VRRP backup group does not track a BFD session.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id> track bfd-session <bfd-session-id> [ increased <value-increased> | reduced <value-reduced> ]",
+        "vrrp vrid <virtual-router-id> track bfd-session session-name <bfd-configure-name> [ increased <value-increased> | reduced <value-reduced> ]",
+        "vrrp vrid <virtual-router-id> track bfd-session <bfd-session-id> { peer | link }",
+        "vrrp vrid <virtual-router-id> track bfd-session session-name <bfd-configure-name> { peer | link }",
+        "undo vrrp vrid <virtual-router-id> track bfd-session [ <bfd-session-id> | session-name <bfd-configure-name> ]"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-router-id",
+            "Info": "Specifies the ID of a VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "bfd-session-id",
+            "Info": "Specifies the local discriminator of a BFD session tracked by a VRRP backup group.\nThe value is an integer ranging from 1 to 16384."
+        },
+        {
+            "Parameters": "increased value-increased",
+            "Info": "Specifies the value by which the VRRP priority increases if the tracked BFD session goes Down. This parameter takes effect on both the master and backup devices in a VRRP backup group.\nThe value is an integer ranging from 1 to 255. As 255 is the priority of an IP address owner, the largest priority can be set to 254."
+        },
+        {
+            "Parameters": "reduced value-reduced",
+            "Info": "Specifies the value by which the VRRP priority decreases if the tracked BFD session goes Down. This parameter takes effect on both the master and backup devices in a VRRP backup group.\nThe value is an integer ranging from 1 to 255. The smallest priority is 1. By default, the VRRP priority reduces by 10 if the tracked BFD session goes Down."
+        },
+        {
+            "Parameters": "session-name bfd-configure-name",
+            "Info": "Specifies the name of the BFD session tracked by the VRRP backup group.\nThe value is a string of 1 to 15 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "peer",
+            "Info": "Indicates that a tracked BFD session is a peer BFD session.\n-"
+        },
+        {
+            "Parameters": "link",
+            "Info": "Indicates that a tracked BFD session is a link BFD session.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/2",
+            "[*HUAWEI-GigabitEthernet1/0/2] ip address 10.1.10.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/2] quit",
+            "[*HUAWEI] bfd test bind peer-ip 10.1.1.1 interface GigabitEthernet 1/0/2",
+            "[*HUAWEI-session-test] discriminator local 1",
+            "[*HUAWEI-session-test] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 virtual-ip 10.1.1.11",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 track bfd-session 1 reduced 20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/3",
+            "[*HUAWEI-GigabitEthernet1/0/3] ip address 10.1.10.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/3] quit",
+            "[*HUAWEI] bfd atob bind peer-ip 10.1.10.2 interface GigabitEthernet1/0/3 source-ip 10.1.10.1 auto",
+            "[*HUAWEI-session-atob] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/4",
+            "[*HUAWEI-GigabitEthernet1/0/4] vrrp vrid 2 virtual-ip 10.1.10.11",
+            "[*HUAWEI-GigabitEthernet1/0/4] vrrp vrid 2 track bfd-session session-name atob reduced 20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/5",
+            "[*HUAWEI-GigabitEthernet1/0/5] ip address 10.1.20.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/5] quit",
+            "[*HUAWEI] bfd peer1 bind peer-ip 10.1.20.2 interface GigabitEthernet1/0/5 source-ip 10.1.20.1 auto",
+            "[*HUAWEI-session-peer1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/6",
+            "[*HUAWEI-GigabitEthernet1/0/6] vrrp vrid 3 virtual-ip 10.1.20.11",
+            "[*HUAWEI-GigabitEthernet1/0/6] vrrp vrid 3 track bfd-session session-name peer1 peer"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nIf a link between devices in a VRRP backup group fails, the VRRP backup group performs a master/backup switchover after a period of 3.5 times the interval at which VRRP packets are sent. Packet loss may occur during this period. BFD can rapidly monitor links and detect link faults, which helps prevent the preceding problem. The vrrp vrid track bfd-session command is used to configure a VRRP backup group to track BFD sessions. If the tracked BFD session status changes, the BFD module notifies the VRRP module of the change. After receiving the notification, the VRRP module adjusts the priorities of VRRP devices or directly changes VRRP status to rapidly implement a master/backup VRRP switchover.\n\nThe vrrp vrid virtual-router-id track bfd-session { bfd-session-id | session-name bfd-configure-name } [ increased value-increased | reduced value-reduced ] command is used to configure a VRRP backup group to track a common BFD session. If the BFD session detects a fault and goes Down, it notifies the VRRP module of the status change. After receiving the notification, the VRRP module increases or reduces the VRRP priorities of devices to perform a master/backup VRRP switchover. Backup devices use BFD sessions to monitor the status of the master device.\nThe vrrp vrid virtual-router-id track bfd-session { bfd-session-id | session-name bfd-configure-name } [ peer | link ] command is used to configure the VRRP backup group to track a peer or link BFD session. If the peer or link BFD session detects a fault and goes Down, it notifies the VRRP module of the status change. After receiving the notification, the VRRP module directly performs a master/backup VRRP switchover without changing VRRP priorities of devices. VRRP devices identify a local fault after receiving BFD packets from a peer BFD session and a remote fault after receiving BFD packets from a link BFD session.\n\n\nPrerequisites\n\n\nA VRRP backup group has been configured using the vrrp vrid virtual-ip command.\nBFD has been enabled using the bfd command.\nA static BFD session has been created using the bfd bind peer-ip command, and a local discriminator has been configured using the discriminator command on each end of the BFD session. Or a static BFD session with automatically negotiated discriminators has been created using the bfd bind peer-ip source-ip auto command.\n\n\nConfiguration Impact\n\nWhen configuring a VRRP backup group to track a link BFD session, use either of the following parameters as needed:\n\nsession-name bfd-configuration: allows a static BFD session or a static BFD session with automatically negotiated discriminators to be bound to the VRRP backup group.\nsession-id: allows only a static BFD session to be bound to the VRRP backup group.\n\nAfter the VRRP backup group is configured to track a link BFD session, the type of the BFD session cannot be changed. To change the BFD session type, delete existing BFD configurations and reconfigure a BFD session of a desired type.\n\nPrecautions\n\nIf a VRRP device is an IP address owner, the association between the VRRP backup group and BFD does not take effect.\nThe increased value-increased or reduced value-reduced parameter in the vrrp vrid track bfd-session command affects the change in device status in a VRRP backup group. The increased or reduced value must ensure that changes in VRRP priorities can trigger a master/backup switchover. For example, the priorities of the master and backup devices in a VRRP backup group are 120 and 110 (displayed using the display vrrp command), respectively. If the increased 20 parameter is configured on the backup device, the priority of the backup device becomes 130, a value greater than the priority of the master device. As a result, a master/backup switchover is triggered.\nThe VRRP considers that the BFD session detects a Down event in the following situations:\n\nNo BFD session is configured on a peer device.\nThe peer BFD session is shut down.\nThe peer BFD session is deleted.\nBFD session negotiation fails.\nThe BFD session is Down.\n\nThe VRRP considers that the BFD session detects an Up event in the following situations:\n\nBFD session negotiation is successful.\nThe BFD session changes from Down to Up."
+}

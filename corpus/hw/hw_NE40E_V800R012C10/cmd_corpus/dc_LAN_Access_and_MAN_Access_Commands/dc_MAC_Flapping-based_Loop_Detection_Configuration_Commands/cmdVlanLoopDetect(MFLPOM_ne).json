@@ -1,0 +1,45 @@
+{
+    "PageTitle": "loop-detect eth-loop (VLAN view)",
+    "FuncDef": "The loop-detect eth-loop command enables MAC flapping-based loop detection and configures loop detection parameters.\nThe undo loop-detect eth-loop command disables the function.\nBy default, MAC flapping-based loop detection is disabled.",
+    "CLIs": [
+        "loop-detect eth-loop loop-times <loop-times> detect-cycle <detect-cycle-time> cycles <cycles> [ retry-times <retry-times> block-time <block-time> | alarm-only ]",
+        "undo loop-detect eth-loop"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "loop-times loop-times",
+            "Info": "Specifies the number of MAC address entry flaps allowed in a detection cycle.\nIf a device detects more MAC address entry flaps than the number specified by loop-times within the detection cycle specified by detect-cycle-time, the device concludes that a loop has occurred.\nWhen a blocking priority is configured for an interface bound to a VSI, a VLAN or a BD using the loop-detect eth-loop priority priority command:\nIf priority is 1 and the number of MAC address entry flaps detected in a detect-cycle-time is greater than or equal to the configured loop-times, a loop has occurred.\nIf priority is greater than 1 and the number of MAC address entry flaps detected in a detect-cycle-time is greater than the configured loop-times, a loop has occurred.\nThe value is an integer ranging from 3 to 1000."
+        },
+        {
+            "Parameters": "detect-cycle detect-cycle-time",
+            "Info": "Specifies a detection cycle.\nThe value is an integer ranging from 3 to 30, in seconds."
+        },
+        {
+            "Parameters": "cycles cycles",
+            "Info": "Specifies the number of detection cycles. If a device detects loops within the consecutive detection cycles, the device blocks an interface or a PW or just reports an alarm.\nIf cycles cycles is not specified and the device detects MAC address entry flapping for more times than that specified in loop-times within the detection cycle, the device concludes that a loop has occurred. If cycles cycles is specified and the device detects MAC address entry flapping for more times than that specified in loop-times within a detection cycle (the first one) and the consecutive detection cycles specified by cycles, the device concludes that a loop has occurred.\nWhen configuring MAC flapping-based loop detection on multiple devices in a VSI, a VLAN or a BD, specify different values for cycles cycles so that each device blocks an interface or PW in a different detection cycle. This configuration prevents the devices from blocking different interfaces on a loop and avoids the impact on traffic forwarding.\nThe value is an integer ranging from 1 to 15."
+        },
+        {
+            "Parameters": "retry-times retry-times",
+            "Info": "Specifies the number of times when loops are allowed to occur.\nAfter an interface is unblocked, if the number of times when loops occur exceeds retry-times, the interface is blocked permanently.\nIf neither alarm-only or retry-times is configured, the system blocks an interface or a PW permanently when detecting a loop.\nIf retry-times is 0, interfaces are not blocked permanently. Instead, the blocking period is doubled each time the interface is blocked, up to a maximum of five times. For example:\nIn a scenario where detect-cycle-time is 3s, loop-times is 30, cycles is 1, block-time is 10s, and retry-times is 0, if a MAC address of an interface in a VSI, a VLAN or a BD flaps more than 10 times per second within 3s, the interface is blocked for 10s (as specified in block-time), and then recovers. Each subsequent time the interface is blocked, block-time doubles up to a maximum of 320s.\nThe value is an integer ranging from 0 to 5."
+        },
+        {
+            "Parameters": "block-time block-time",
+            "Info": "Specifies the blocking time for interfaces.\nThe value is an integer ranging from 10 to 65535, in seconds."
+        },
+        {
+            "Parameters": "alarm-only",
+            "Info": "Only alarm when the loop occurs.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] loop-detect eth-loop loop-times 3 detect-cycle 10 cycles 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen CEs access a VLAN with redundancy backup configured through Layer 2 sub-interfaces, loops may occur on the VLAN, causing broadcast storms. In this situation, you can run the loop-detect eth-loop command to configure MAC flapping-based loop detection on devices of the VLAN. When detecting a loop, a device blocks the interface with the loop to prevent broadcast storms.\nretry-times retry-times and block-time block-time must both be specified. For example, retry-times is specified as 2 and block-time as 100s. When detecting loops in the VSI, the device blocks interfaces using the following methods:\nWhen detecting a loop on an interface for the first time, the device keeps the interface blocked for 100s.\nDuring the first detection cycle (specified by detect-cycle-time) after the first blocking period ends (the blocked interface recovers), if the device detects a loop, it keeps the interface blocked for 2 x 100s.\nDuring the second detection cycle (specified by detect-cycle-time) after the second blocking period ends, if the device detects a loop, it keeps the interface blocked for 4 x 100s.\nDuring the third detection cycle (specified by detect-cycle-time) after the third blocking period ends, if the device detects a loop, it keeps the interface blocked permanently. The reason for the permanent blocking is that three loops occur after the first blocking period ends, which exceeds the maximum number of loops specified by retry-times.\nIf no loops are detected during detect-cycle-time*30, the blocking count is cleared. If a loop is detected later block-time is restored.\nConfiguration Impact\nAfter MAC flapping-based loop detection is configured on a device and the device receives packets with forged source MAC addresses from attackers, the device may incorrectly conclude that a loop has occurred and block an interface based on the configured blocking policy. As a result, traffic destined for the interface is affected.\nPrecautions\nAfter MAC flapping-based loop detection is configured on a device and the device receives packets with fake source MAC addresses from attackers, the device may mistakenly conclude that a loop has occurred and block an interface based on the configured blocking policy. Therefore, key user traffic may be blocked. It is recommended that you disable MAC flapping-based loop detection on properly running devices. If you have to use MAC flapping-based loop detection to detect whether links operate properly during site deployment, be sure to disable this function after this stage.\nEach time when the system detects a loop, the system records a log and reports an alarm to the NMS.\nA maximum of 32 sub-interfaces can be blocked in the same VLAN.\nIf a blocking priority for MAC flapping-based loop detection is configured on an interface bound to a VSI, a VLAN or a BD using the loop-detect eth-loop priority priority command, the detection cycle is as follows:\nIf priority is 1, the detection cycle is calculated as follows: Detection cycle = 1 x detect-cycle-time x cyclesIf priority is 2, the detection cycle is calculated as follows: Detection cycle = 4 x detect-cycle-time x cyclesIf priority is 3, the detection cycle is calculated as follows: Detection cycle = 8 x detect-cycle-time x cyclesIf priority is 4, the interface is never blocked, and the MAC flapping-based loop detection function does not take effect.\nHigh-priority interfaces have a longer detection time, and low-priority interfaces are preferentially blocked if the MAC flapping based-loop detection function detects a loop.\nIf MAC flapping-based loop detection and VPLS multi-homing (VPLS multi-homing enables data packets to be blocked on the backup PE's AC interface, preventing loops) have been deployed, the AC interfaces of both the master and backup PEs may be blocked because the backup PE's AC interface does not block Layer 2 protocol packets."
+}

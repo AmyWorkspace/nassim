@@ -1,0 +1,49 @@
+{
+    "PageTitle": "mpls oam l2vc loss-measure oam-packet loss-ratio",
+    "FuncDef": "The mpls oam l2vc loss-measure oam-packet loss-ratio command configures alarm thresholds on a PW for the OAM packet loss ratio.\nBy default, the alarm threshold for the OAM packet loss ratio is 0.",
+    "CLIs": [
+        "mpls oam l2vc loss-measure oam-packet loss-ratio threshold1 <threshold1-value> threshold2 <threshold2-value> peer-ip <peer-ip> vc-id <vc-id> vc-type <vc-type>",
+        "mpls oam l2vc loss-measure oam-packet loss-ratio { threshold1 <threshold1-value> | threshold2 <threshold2-value> } peer-ip <peer-ip> vc-id <vc-id> vc-type <vc-type>"
+    ],
+    "ParentView": [
+        "MPLS-OAM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "threshold2 threshold2-value",
+            "Info": "Sets alarm threshold 2.\nThe value is an integer ranging from 0 to 100, in percentage."
+        },
+        {
+            "Parameters": "peer-ip peer-ip",
+            "Info": "Specifies the destination IP address of a PW.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id vc-id",
+            "Info": "Specifies the PW ID.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "vc-type vc-type",
+            "Info": "Specifies the type of a remote L2VC.\nEncapsulation types supported:ATM PWE3atm-1to1-vcc: One PW carries the ATM cells of one PVC.atm-1to1-vpc: One PW carries the ATM cells of one PVP.atm-aal5-pdu: One PW carries the AAL5 PDUs of one PVC.atm-aal5-sdu: One PW carries the AAL5 SDUs of one PVC.atm-nto1-vcc: One PW carries the ATM cells of multiple PVCs.atm-nto1-vpc: One PW carries the ATM cells of multiple PVPs.atm-trans-cell: ATM cells are transmitted over PWE3 VCs.\nTDM PWE3cesopsn-basic: CES is sensitive to E1 and T1 frame structures. E1 or T1 signals can be encapsulated into packets based on timeslots.satop-e1: SAToP is insensitive to the E1 frame structure and encapsulates a whole E1 frame into a PW packet.satop-t1: SAToP is insensitive to the T1 frame structure and encapsulates a whole T1 frame into a PW packet.\nOther encapsulation types:cep: This encapsulation type is used for CEP services.ethernet: This encapsulation type is used when Ethernet packets do not carry VLAN information.hdlc: HDLC is a bit-oriented link layer protocol.ip-interworking: This encapsulation type is used for interworking between Huawei devices.ip-layer2: This encapsulation type is used for interworking between Huawei devices and non-Huawei devices.ppp: PPP is a link layer protocol that specifies how to encapsulate and transmit network layer packets over P2P links.vlan: This encapsulation type is used when Ethernet packets carry VLAN information."
+        },
+        {
+            "Parameters": "threshold1 threshold1-value",
+            "Info": "Sets alarm threshold 1.\nThe value is an integer ranging from 0 to 100, in percentage."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] mpls-oam",
+            "[*HUAWEI-mpls-oam] mpls oam l2vc loss-measure oam-packet loss-ratio threshold2 50 peer-ip 2.2.2.2 vc-id 100 vc-type ethernet"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen configuring OAM packet loss ratio detection on a PW, you can run the mpls oam ingress loss-measure oam-packet loss-ratio command to configure alarm thresholds. If the detected packet loss ratio exceeds a specified alarm threshold, an alarm is reported.\nTwo alarm thresholds can be configured. If the packet loss ratio exceeds alarm threshold 1 but does not reach alarm threshold 2, alarms are reported based on alarm threshold 1. If the packet loss ratio exceeds alarm threshold 2, alarms are reported based on both alarm thresholds 1 and 2.\nAlarm threshold 1 can be set to a small value, and its associated alarms are informational only.\nAlarm threshold 2 must be set to a value greater than alarm threshold 1, and its associated alarms must be cleared.\nConfiguration Impact\nAfter the mpls oam bidirectional-tunnel loss-measure oam-packet loss-ratio command is run, the system detects the packet loss ratio. If the packet loss ratio exceeds a specified alarm threshold, SD1-NEAR or SD2-NEAR alarms are reported. When an alarm is generated, APS is triggered on the protection ring. After the alarm is cleared, an APS switchback is triggered.\nPrecautions\nYou must configure alarm thresholds based on the actual link status."
+}

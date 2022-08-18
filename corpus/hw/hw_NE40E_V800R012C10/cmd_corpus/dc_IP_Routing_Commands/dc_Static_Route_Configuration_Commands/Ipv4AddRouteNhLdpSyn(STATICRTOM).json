@@ -1,0 +1,63 @@
+{
+    "PageTitle": "ip route-static ldp-sync",
+    "FuncDef": "The ip route-static ldp-sync command enables synchronization between LDP and static routes.\nBy default, synchronization between LDP and static routes is not enabled.",
+    "CLIs": [
+        "ip route-static [ vpn-instance <vpn-source-name> ] <ip-address> { <mask> | <mask-length> } { <interface-name> | <interface-type> <interface-number> } [ <nexthop-address> ] [ preference <preference> | tag <tag> ] * ldp-sync [ description <text> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-source-name",
+            "Info": "Specifies the name of a VPN instance. If the name of a VPN instance is specified, a router searches the routing table of the VPN instance for an outbound interface of the static route based on the next hop IP address specified by the nexthop-address parameter. If the nexthop-address parameter is not configured, that is, the Next-Table function is configured, the router searches the routing table of the VPN instance for a forwarding path if it fails to find one in the public network forwarding table.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies a destination IP address.\nThe value is in dotted decimal notation and is 192.168.1.254 by default."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies a mask for an IP address.\nThe value is in dotted decimal notation and is 192.168.1.254 by default."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length. A 32-bit mask is represented by consecutive 1s, and the mask in dotted decimal notation can be replaced by the mask length.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of the outbound interface of the static route.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of the outbound interface of the static route.\n-"
+        },
+        {
+            "Parameters": "nexthop-address",
+            "Info": "Specifies the next hop IP address of a route.\nThe value is in dotted decimal notation and is 192.168.1.254 by default."
+        },
+        {
+            "Parameters": "preference preference",
+            "Info": "Specifies a priority for the static route.\nThe value is an integer ranging from 1 to 255. The default value is 60. The smaller the value, the higher the priority."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies a tag value for the static route. The tag can be used by a routing policy. For example, the tag can be used during route import.\nThe value is an integer ranging from 1 to 4294967295. The default value is 0."
+        },
+        {
+            "Parameters": "ldp-sync",
+            "Info": "Enables synchronization between LDP and the static route.\nOn an MPLS network with primary and backup links, Label Switching Routers (LSRs) establish Label Switching Paths (LSPs) based on static routes. When the LDP session of the primary link becomes faulty (the fault is not caused by a link failure) or the primary link recovers, configuring synchronization between LDP and static routes minimizes traffic loss during traffic switchover and switchback. After ldp-sync is configured, synchronization between LDP and static routes is enabled, and static routes respond to changes of the LDP session status. This synchronizes LDP and static routes LDP.\nOnly the static route with a specified outbound interface can be configured with synchronization between LDP and static routes. The specified outbound interface cannot be a loopback or null interface.\n-"
+        },
+        {
+            "Parameters": "description text",
+            "Info": "Specifies the description of the static route.\nTo check the configured description, run the display this or display current-configuration command in the system view.\nThe description parameter cannot be followed by other parameters, such as bfd and preference. Otherwise, the configuration will be used only as the description. For example, if ip route-static 1.1.1.1 255.255.255.255 NULL0 description aa preference 10 is run, aa preference 10 is used as the description.\nThe value is a string of 1 to 150 characters, spaces supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip route-static 10.11.0.1 32  GigabitEthernet 1/0/0 ldp-sync"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a simple network, static routes alone can ensure that the network runs properly. If the Router cannot run dynamic routing protocols to generate routes to the destination, configure static routes on the Router. The ip route-static ldp-sync command enables synchronization between LDP and static routes."
+}

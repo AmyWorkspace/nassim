@@ -1,0 +1,38 @@
+{
+    "PageTitle": "advertise route-reoriginate",
+    "FuncDef": "The advertise route-reoriginate command configures a VPN instance to advertise regenerated routes to the VPNv4 address family.\nThe undo advertise route-reoriginate command disables a VPN instance from advertising regenerated routes to the VPNv4 address family.\nBy default, no VPN instance advertises regenerated routes to the VPNv4 address family.",
+    "CLIs": [
+        "advertise { best-route | valid-routes } route-reoriginate",
+        "advertise route-reoriginate",
+        "undo advertise { best-route | valid-routes } route-reoriginate",
+        "undo advertise route-reoriginate"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "best-route",
+            "Info": "Advertises only optimal routes in the BGP VPN routing table to a VPN instance for regeneration.\n-"
+        },
+        {
+            "Parameters": "valid-routes",
+            "Info": "Advertises only valid routes in the BGP VPN routing table to a VPN instance for regeneration.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-vpn1] advertise best-route route-reoriginate"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an HVPN scenario, different UPEs communicate with each other through SPEs and NPEs. When there are a large number of UPEs, if the per instance per label mode is configured for the VPN instances and the per next hop per label mode is configured for the VPNv4 address family of the SPEs, the UPEs have to receive a large number of labels. If the UPEs have comparatively low capacity, a traffic forwarding error may occur.\nTo solve this problem, import the VPNv4 routes received by the SPEs into the VPN instances. The VPN instances regenerate these routes and then advertise them to the VPNv4 address family. Because the per instance per label mode is configured for the VPN instances, one label is allocated per VPN instance when the regenerated routes are advertised to the UPEs, which reduces the number of VPN labels assigned to VPNv4 routes. To enable a VPN instance to advertise regenerated routes to the VPNv4 address family, run the advertise route-reoriginate command on an SPE. A regenerated route carries the RD of the VPN instance, RT of the original route, and RT of the VPN instance.\nFollow-up Procedure\nTo enable the SPE to advertise the regenerated routes in the VPNv4 address family to a BGP VPNv4 peer, run the peer advertise route-reoriginated vpnv4 command.\nPrecautions\nIf best-route or valid-routes is not specified, all routes in the BGP VPN routing table are advertised to the VPN instance and then regenerated."
+}

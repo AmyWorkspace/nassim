@@ -1,0 +1,57 @@
+{
+    "PageTitle": "trap-threshold crc-error packet-error-ratio (Port extension interface view)",
+    "FuncDef": "The trap-threshold crc-error packet-error-ratio command enables CRC error threshold crossing detection and sets an alarm generation threshold and alarm clearance threshold for the CRC error frame ratio.\nThe undo trap-threshold crc-error command disables CRC error threshold crossing detection.\nBy default, CRC error threshold crossing detection is disabled, and no threshold is set for the CRC error frame ratio.",
+    "CLIs": [
+        "trap-threshold crc-error packet-error-ratio alarm-threshold <alarm-coefficient-value> <alarm-power-value> [ resume-threshold <resume-coefficient-value> <resume-power-value> ] [ trigger-lsp ] [ trigger-section ]",
+        "undo trap-threshold crc-error"
+    ],
+    "ParentView": [
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "alarm-coefficient-value",
+            "Info": "Specifies a coefficient (x in xE-y) of the alarm generation threshold for the CRC error frame ratio.\nThe value is an integer that ranges from 1 to 9."
+        },
+        {
+            "Parameters": "alarm-power-value",
+            "Info": "Specifies a power (y in xE-y) of the alarm generation threshold for the CRC error frame ratio.\nThe value is an integer that ranges from 1 to 5."
+        },
+        {
+            "Parameters": "resume-threshold",
+            "Info": "Sets an alarm clearance threshold for the CRC error frame ratio. If this parameter is not specified, the system automatically decreases the alarm threshold by an order of magnitude, ensuring link quality when an alarm is cleared. For example, if the alarm clearance threshold is not specified and the alarm generation threshold is set to 2E-3, the system automatically sets the alarm clearance threshold to 2E-4.\nThe value of resume-threshold cannot be greater than that of alarm-threshold."
+        },
+        {
+            "Parameters": "resume-coefficient-value",
+            "Info": "Specifies a coefficient (x in xE-y) of the alarm generation threshold for the CRC error frame ratio.\nThe value is an integer that ranges from 1 to 9."
+        },
+        {
+            "Parameters": "resume-power-value",
+            "Info": "Specifies a power (y in xE-y) of the alarm generation threshold for the CRC error frame ratio.\nThe value is an integer that ranges from 1 to 5."
+        },
+        {
+            "Parameters": "trigger-lsp",
+            "Info": "Enables the function of triggering an LSP switchover when the CRC error frame ratio reaches the alarm threshold. This is an optional parameter. If it is not specified, an alarm is generated but LSP switching is not triggered when the CRC error frame ratio reaches the alarm threshold.\n-"
+        },
+        {
+            "Parameters": "trigger-section",
+            "Info": "Enables the function of triggering a section switchover when the CRC error frame ratio reaches the alarm threshold. This is an optional parameter. If it is not specified, an alarm is generated but section switching is not triggered when the CRC error frame ratio reaches the alarm threshold.\n-"
+        },
+        {
+            "Parameters": "packet-error-ratio",
+            "Info": "CRC mispack rate.\n-"
+        },
+        {
+            "Parameters": "alarm-threshold",
+            "Info": "Sets an alarm generation threshold for the CRC error frame ratio.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] trap-threshold crc-error packet-error-ratio alarm-threshold 3 2 resume-threshold 3 3 trigger-lsp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set an alarm generation threshold and an alarm clearance threshold for the CRC error frame ratio, run the trap-threshold crc-error packet-error-ratio command. The system reports an alarm to the NMS. If the trigger-lsp or trigger-section parameter is specified, an alarm triggers LSP or section switching.\nConfiguration Impact\nIf the trigger-lsp or trigger-section parameter is specified, traffic is switched to the standby link after an alarm is reported. If the trigger-lsp and trigger-section parameters are both configured on a physical interface, the later configuration takes effect. If the trigger-section parameter is configured and the CRC error frame ratio reaches the alarm threshold on a physical interface, section switching is triggered to set the link layer status for the interface to the bit error status. If an IGP and LDP use the interface as an outbound interface, LSP recalculation and convergence are triggered."
+}

@@ -1,0 +1,35 @@
+{
+    "PageTitle": "cc exp",
+    "FuncDef": "The cc exp command sets a priority for continuity check messages (CCMs).\nThe undo cc exp command restores the default priority.\nThe default priority of CCMs is 7.",
+    "CLIs": [
+        "cc exp <exp-value>",
+        "undo cc exp"
+    ],
+    "ParentView": [
+        "Maintenance entity group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "exp-value",
+            "Info": "Sets a priority for CCMs.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls static-l2vc destination 4.4.4.4 400 transmit-vpn-label 100 receive-vpn-label 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] mpls-tp meg test",
+            "[*HUAWEI-mpls-tp-meg-test] me l2vc peer-ip 4.4.4.4 vc-id 400 vc-type vlan mep-id 1 remote-mep-id 2",
+            "[*HUAWEI-mpls-tp-meg-test] cc exp 6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCC monitors connectivity between two MEPs in a MEG. The cc interval command can be run on a MEP to set an interval at which CCMs are sent. A MEP sends CCMs to its remote MEP (RMEP) at a specified interval. If the RMEP does not receive CCMs within a period of 3.5 times if the specified interval, the RMEP considers that the connectivity between the MEPs has errors, reports an alarm, and enters the Down state. After that, automatic protection switching (APS) is triggered on both MEPs. After receiving a CCM from the MEP, the RMEP will clear the alarm and exit from the Down state.\nIf the MPLS-TP network is severely congested and the priority of CCMs is low, CCMs fail to be sent. If the peer device does not receive any CCMs within a period of 3.5 times the specified interval, it incorrectly considers the link failed and triggers APS. The cc exp command is required to set a proper priority for CCMs after CC is enabled.\nPrerequisites\nThe ME of the MEG has been bound to a tunnel."
+}

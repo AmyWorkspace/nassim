@@ -1,0 +1,95 @@
+{
+    "PageTitle": "mpls te auto-frr attributes (Interface view)",
+    "FuncDef": "The mpls te auto-frr attributes affinity command configures an affinity for a bypass tunnel.\nThe undo mpls te auto-frr attributes affinity command deletes an affinity for a bypass tunnel.\nBy default, no affinity is configured for a bypass tunnel.",
+    "CLIs": [
+        "mpls te auto-frr attributes { bandwidth <bandwidth> | priority <setup-priority> [ <hold-priority> ] | hop-limit <hop-limit-value> } *",
+        "mpls te auto-frr attributes affinity property <properties> [ mask <mask-value> ]",
+        "mpls te auto-frr attributes affinity { { include-all | include-any | exclude } { <bit-name> } &<1-32> } *",
+        "undo mpls te auto-frr attributes { bandwidth [ bandwidth ] | priority [ <setup-priority> [ <hold-priority> ] ] | hop-limit [ <hop-limit-value> ] } *",
+        "undo mpls te auto-frr attributes",
+        "undo mpls te auto-frr attributes affinity [ property [ <properties> [ mask [ <mask-value> ] ] ] ]",
+        "undo mpls te auto-frr attributes affinity { { include-all | include-any | exclude } { <bit-name> } &<1-32> } *"
+    ],
+    "ParentView": [
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Eth-Trunk sub-interface view",
+        "GMPLS-UNI interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "POS sub-interface view",
+        "GE sub-interface view",
+        "XGE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "XGE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "bandwidth bandwidth",
+            "Info": "Specifies the bandwidth value for a bypass tunnel.\nThe value is an integer ranging from 0 to 4000000000, and the actual maximum value is the maximum reservable bandwidth of a primary tunnel, in kbit/s. After bandwidth protection is enabled, the default bypass tunnel bandwidth is equal to the primary tunnel bandwidth."
+        },
+        {
+            "Parameters": "priority setup-priority",
+            "Info": "Specifies the setup priority.\nThe value is an integer ranging from 0 to 7. The smaller the value, the higher the priority. The default setup priority is 7."
+        },
+        {
+            "Parameters": "hold-priority",
+            "Info": "Specifies the holding priority.\nThe value is an integer ranging from 0 to 7. The smaller the value, the higher the priority. The default holding priority is 7."
+        },
+        {
+            "Parameters": "hop-limit hop-limit-value",
+            "Info": "Specifies the hop limit value.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "affinity",
+            "Info": "Specify affinity parameters.\n-"
+        },
+        {
+            "Parameters": "property properties",
+            "Info": "Specifies the affinity value of a bypass tunnel.\nThe value ranges from 0x0 to 0xffffffff, in hexadecimal notation. The default value is 0x0."
+        },
+        {
+            "Parameters": "mask mask-value",
+            "Info": "Specifies the mask for an affinity, which is used to determine which link attributes to be checked during path selection for a tunnel.\nThe 32-bit value ranges from 0x0 to 0xFFFFFFFF, each bit in which represents a property. The default value is 0x0."
+        },
+        {
+            "Parameters": "include-all",
+            "Info": "Allows CSPF to include a link when calculating a path, only if each link administrative group bit has the same name as each affinity bit.\n-"
+        },
+        {
+            "Parameters": "include-any",
+            "Info": "Allows CSPF to include a link when calculating a path, if at least one link administrative group bit has the same name as an affinity bit.\n-"
+        },
+        {
+            "Parameters": "exclude",
+            "Info": "Allows CSPF to exclude a link when calculating a path, if any link administrative group bit has the same name as an affinity bit.\n-"
+        },
+        {
+            "Parameters": "bit-name",
+            "Info": "Specifies the referenced affinity names.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls te auto-frr attributes affinity property a04 mask e0c"
+        ]
+    ],
+    "ExtraInfo": "Prerequisites\nMPLS and MPLS TE have been enabled using the mpls and mpls te commands, respectively.\nConfiguration Impact\nIf an affinity of an automatic bypass tunnel is changed, a node starts the make-before-break mechanism to reestablish the primary tunnel and checks the binding between the primary and automatic bypass tunnels.\nIf the existing automatic bypass tunnel satisfies a new affinity, the binding remains.If the existing automatic bypass tunnel does not satisfy a new affinity, the node deletes the binding and reestablishes an automatic bypass tunnel.\n\nPrecautions\nThe mpls te auto-frr attributes command is configured on the interface of the primary tunnel; the mpls te auto-frr attributes affinity command is configured on the interface of the bypass tunnel.\nWith an affinity configured, if an automatic bypass tunnel that satisfies the specified affinity cannot be established, a node will bind a manual bypass tunnel satisfying the affinity to the primary tunnel."
+}

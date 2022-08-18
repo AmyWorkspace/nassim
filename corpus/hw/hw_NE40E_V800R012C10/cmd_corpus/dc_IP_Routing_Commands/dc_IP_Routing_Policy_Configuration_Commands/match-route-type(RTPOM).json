@@ -1,0 +1,124 @@
+{
+    "PageTitle": "if-match route-type",
+    "FuncDef": "The if-match route-type command configures a filtering rule based on route types.\nThe undo if-match route-type command cancels the configuration.\nBy default, no filtering rule based on route types is configured.",
+    "CLIs": [
+        "if-match route-type { external-type1 | external-type2 | external-type1or2 | is-is-level-1 | is-is-level-2 | internal | nssa-external-type1 | nssa-external-type2 | nssa-external-type1or2 }",
+        "if-match route-type { ibgp | ebgp }",
+        "if-match route-type mvpn { 1 | 3 } *",
+        "if-match route-type evpn { ad | es | inclusive | join | leave | mac | prefix | smet } *",
+        "undo if-match route-type { external-type1 | external-type2 | external-type1or2 | is-is-level-1 | is-is-level-2 | internal | nssa-external-type1 | nssa-external-type2 | nssa-external-type1or2 }",
+        "undo if-match route-type { ibgp | ebgp }",
+        "undo if-match route-type mvpn",
+        "undo if-match route-type evpn"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "external-type1",
+            "Info": "Indicates OSPF external Type 1 routes.\n-"
+        },
+        {
+            "Parameters": "external-type2",
+            "Info": "Indicates OSPF external Type 2 routes.\n-"
+        },
+        {
+            "Parameters": "external-type1or2",
+            "Info": "Indicates OSPF external routes.\n-"
+        },
+        {
+            "Parameters": "is-is-level-1",
+            "Info": "Indicates IS-IS Level-1 routes.\n-"
+        },
+        {
+            "Parameters": "is-is-level-2",
+            "Info": "Indicates IS-IS Level-2 routes.\n-"
+        },
+        {
+            "Parameters": "internal",
+            "Info": "Indicates internal routes, including OSPF inter-area routes and intra-area routes.\n-"
+        },
+        {
+            "Parameters": "nssa-external-type1",
+            "Info": "Indicates NSSA external Type 1 routes.\n-"
+        },
+        {
+            "Parameters": "nssa-external-type2",
+            "Info": "Indicates NSSA external Type 2 routes.\n-"
+        },
+        {
+            "Parameters": "nssa-external-type1or2",
+            "Info": "Indicates NSSA external routes.\n-"
+        },
+        {
+            "Parameters": "ibgp",
+            "Info": "Indicates IBGP routes.\n-"
+        },
+        {
+            "Parameters": "ebgp",
+            "Info": "Indicates EBGP routes.\n-"
+        },
+        {
+            "Parameters": "mvpn",
+            "Info": "Indicates MVPN routes.\n-"
+        },
+        {
+            "Parameters": "1",
+            "Info": "Indicates intra-AS I-PMSI A-D routes.\n-"
+        },
+        {
+            "Parameters": "3",
+            "Info": "Indicates S-PMSI A-D routes.\n-"
+        },
+        {
+            "Parameters": "evpn",
+            "Info": "Indicates EVPN routes.\n-"
+        },
+        {
+            "Parameters": "ad",
+            "Info": "Indicates EVPN Ethernet A-D routes.\n-"
+        },
+        {
+            "Parameters": "es",
+            "Info": "Indicates EVPN Ethernet segment routes.\n-"
+        },
+        {
+            "Parameters": "inclusive",
+            "Info": "Indicates EVPN inclusive multicast routes.\n-"
+        },
+        {
+            "Parameters": "join",
+            "Info": "Indicates EVPN IGMP Join Synch routes.\n-"
+        },
+        {
+            "Parameters": "leave",
+            "Info": "Indicates EVPN IGMP Leave Synch routes.\n-"
+        },
+        {
+            "Parameters": "mac",
+            "Info": "Indicates EVPN MAC advertisement routes.\n-"
+        },
+        {
+            "Parameters": "prefix",
+            "Info": "Indicates EVPN IP prefix routes.\n-"
+        },
+        {
+            "Parameters": "smet",
+            "Info": "Indicates EVPN SMET routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] if-match route-type nssa-external-type1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] if-match route-type mvpn 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo filter routes based on the route type, run the if-match route-type command.\nRun the route-policy command to enter the Route-policy view.A route-policy may consist of multiple nodes. The relationship between the nodes is \"OR\". The system matches a route against the nodes in sequence. If the route matches a node, the route matches the route-policy, and the system no longer matches it against other nodes.Each node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nPrecautions\nFor the same node in a route-policy, if two if-match route-type clauses are the same, the latter if-match route-type will not override the previous one. After the latter clause is configured, both clauses take effect. The relationship between if-match route-type clauses is \"OR\". That is, the actions defined in apply clauses can be performed on a route if the route matches one of the filtering rules. For example, if both the if-match route-type is-is-level-1 and if-match route-type external-type1or2 commands are configured on the same node of a route policy, both IS-IS Level-1 routes and OSPF external routes can match the route-policy.\nexternal-type1or2 refers to external-type1 or external-type2. For the same node in a route policy, configuring both the if-match route-type external-type1 and if-match route-type external-type2 is equivalent to configuring the if-match route-type external-type1or2 command. The two operations generate the same configuration file.\nSimilarly, nssa-external-type1or2 refers to nssa-external-type1 or nssa-external-type2. For the same node in a route policy, configuring both the if-match route-type nssa-external-type1 and if-match route-type nssa-external-type2 commands is equivalent to configuring the if-match route-type nssa-external-type1or2 command. The two operations generate the same configuration file."
+}

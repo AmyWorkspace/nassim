@@ -1,0 +1,35 @@
+{
+    "PageTitle": "mpls te soft-preemption (Tunnel interface view)",
+    "FuncDef": "The mpls te soft-preemption command enables the soft preemption function in the view of a specified tunnel interface on the ingress.\nThe undo mpls te soft-preemption command disables the soft preemption function the view of a specified tunnel interface on the ingress. If tunnel soft preemption is enabled in the MPLS view, the global configuration takes effect on the local tunnel interface on the ingress.\nThe mpls te soft-preemption block command disables the soft preemption function for tunnels on the ingress.\nThe undo mpls te soft-preemption block command unblocks the soft preemption function for tunnels on the ingress. If tunnel soft preemption is enabled in the MPLS view, the global configuration is inherited for tunnels.\nBy default, if soft preemption is disabled in the MPLS view, a local tunnel is incapable of this function. If soft preemption is enabled in the MPLS view, the local tunnel is capable of this function.",
+    "CLIs": [
+        "mpls te soft-preemption",
+        "mpls te soft-preemption block",
+        "undo mpls te soft-preemption",
+        "undo mpls te soft-preemption block"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] mpls te soft-preemption"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] mpls te soft-preemption block"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe setup and holding priorities and the preemption function are configured to allow TE tunnels to be established preferentially to transmit important services, preventing random resource competition during tunnel establishment.\nIf there is no path meeting the bandwidth requirement of a desired tunnel, a device can tear down an established tunnel and use bandwidth resources assigned to that tunnel to establish a desired tunnel. This is called preemption. The following preemption modes are supported:\nHard preemption: A tunnel with a higher setup priority can preempt resources assigned to a tunnel with a lower holding priority. Consequently, some traffic is dropped on the tunnel with a lower holding priority during the hard preemption process.Soft preemption: After a tunnel with a higher setup priority preempts the bandwidth of a tunnel with a lower holding priority, the soft preemption function retains the tunnel with a lower holding priority for a specified period of time. If the ingress finds a better path for this tunnel after the time elapses, the ingress uses the make-before-break (MBB) mechanism to reestablish the tunnel over the new path. If the ingress fails to find a better path after the time elapses, the tunnel goes Down.\nTo enable soft preemption, run the mpls te soft-preemption command.\n\nPrerequisites\nMPLS TE has been configured as a tunnel protocol using the tunnel-protocol mpls te command.\nRSVP-TE has been configured using the mpls te signal-protocol rsvp-te command.\nConfiguration Impact\nThe priority and preemption attributes are used in conjunction to determine resource preemption among tunnels. If multiple tunnels are to be established, tunnels with higher setup priorities can be established by preempting resources. If resources, such as bandwidth, are insufficient, a tunnel with a higher setup priority can preempt resources of an established tunnel with a lower holding priority."
+}

@@ -1,0 +1,67 @@
+{
+    "PageTitle": "radius-server format-attribute",
+    "FuncDef": "The radius-server format-attribute command configures the format of the NAS-Port or NAS-Port-Id attribute.\nThe undo radius-server format-attribute command deletes the configured attribute format.\nThe radius-server format-attribute calling-station-id command selects a calling-station-ID attribute format that a specified vendor defines.\nThe undo radius-server format-attribute calling-station-id command deletes the configured calling-station-ID attribute format.\nThe radius-server format-attribute include sub-slot command enables the system to use the interface number format of slot number/sub-slot number/interface number in the calling-station-ID and NAS-port-ID attributes.\nThe undo radius-server format-attribute include sub-slot command enables the system to use the interface number format of slot number/interface number in the calling-station-ID and NAS-port-ID attributes.\nBy default, no calling-station-ID attribute is configured, and therefore no vendor-specific format is specified and the default interface number format is slot number/interface number in the calling-station-ID and NAS-port-ID attributes.",
+    "CLIs": [
+        "radius-server format-attribute nas-port <format-string>",
+        "radius-server format-attribute nas-port-id vendor { { <vendor-id> [ <format-string> ] | redback-simple } | redback-addition }",
+        "radius-server format-attribute include sub-slot",
+        "radius-server format-attribute nas-port-id { version1 | version2 }",
+        "radius-server format-attribute calling-station-id vendor <vendor-id> [ include option82 ] [ version1 ]",
+        "undo radius-server format-attribute nas-port",
+        "undo radius-server format-attribute nas-port-id",
+        "undo radius-server format-attribute calling-station-id",
+        "undo radius-server format-attribute include sub-slot"
+    ],
+    "ParentView": [
+        "RADIUS server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "format-string",
+            "Info": "Specifies the format.\nThe rule for specifying format-string is as follows:\nFormat 1:\nThe keywords s, t, p, o, and i stand for slot, subslot, port, out-vlan (qinqvlan)/vpi, and inner-vlan (user-vlan)/vci respectively. The keywords n and z are used as paddings. The keyword n indicates 1 and the keyword z indicates 0.The keywords s, t, p, o, i, n, and z must be followed by numbers, and the numbers must range from 1 to 32. The keywords s, t, p, o, and i can be present in the format string only once.The keywords s, t, p, o, i, n, and z must range from 1 to 9.n and z can be present multiple times at any position. They are followed by numbers. For example, n12 indicates that this position is filled by twelve 1s, and z12 indicates that this position is filled by twelve 0s.The character string must contain 32 bits.The format string must start with s, t, p, o, i, n, or z and end with a number.If no VLAN exists, you can add n or z before 0 or i to indicate whether this position is filled by 0s or 1s. That is, n and z can be followed by numbers or o/i in this case.To specify the format string, determine the interface type, and then determine the encapsulation type of the interface. If the format string does not contain 0 or i, the NAS-Port attribute does not contain the QinQ VLAN or user VLAN field. If the format string contains 0 and i but no outer VLAN exists, the outer VLAN field is filled by 0s. If i is added before 0 or i, this field is filled by 1s when no outer VLAN or inner VLAN exists.\nFormat 2: m32, indicating the 32 least significant bits of a user MAC address.\nThe value is a string of 1 to 32 characters."
+        },
+        {
+            "Parameters": "nas-port-id",
+            "Info": "No. 87 RADIUS attribute.\n-"
+        },
+        {
+            "Parameters": "vendor vendor-id",
+            "Info": "Specifies the ID of a supplier.\nThe value is an integer ranging from 1 to 65535. Currently, only 2352, 2636, and 9 are supported."
+        },
+        {
+            "Parameters": "redback-simple",
+            "Info": "Specifies the format of Redback-simple to encapsulate the NAS-Port-Id attribute. \"VLAN-ID\" is used as \"VLANID\" in the format of Redback-simple.\n-"
+        },
+        {
+            "Parameters": "redback-addition",
+            "Info": "Specifies the format of redback-addition to encapsulate the NAS-Port-Id attribute.\n-"
+        },
+        {
+            "Parameters": "version2",
+            "Info": "Indicates generating the NAS-Port-Id attribute in the following format:\n<interface-type><slot>/<sub-slot><port>.<subinterface>[:<out-vlan>][.<in-vlan>].\nThe Interface-type is fastEthernet/ gigabitEthernet/trunk.\nIf a logical interface is configured for a trunk interface, the interface information in the preceding format is the same as that of the logical interface. If no logical interface is configured on a trunk interface, the values of slot, sub-slot, and port in the preceding format are 0, 0, and trunk ID, respectively.The logical interface is specified using the.\nnas logic-port command.\n-"
+        },
+        {
+            "Parameters": "option82",
+            "Info": "Adds the Option 82 information that begins with a number sign (#) after the vendor ID of RedBack.include.\noption82 takes effect only if you set.\nvendor-id to 2352.\n-"
+        },
+        {
+            "Parameters": "nas-port",
+            "Info": "No. 5 RADIUS attribute.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group group1",
+            "[*HUAWEI-radius-group1] commit",
+            "[~HUAWEI-radius-group1] radius-server format-attribute nas-port s2t2p6no10ni12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group group1",
+            "[*HUAWEI-radius-group1] commit",
+            "[~HUAWEI-radius-group1] radius-server format-attribute calling-station-id vendor 2352"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the NE40E is connected to a non-Huawei device, run the radius-server format-attribute command to allow the NE40E to configure the format of the NAS-Port-Id attribute\nTo allow the NE40E to communicate with a non-Huawei RADIUS server, run the radius-server format-attribute calling-station-id command to select a calling-station-ID attribute format that the specified vendor defines.\nThe radius-server format-attribute include sub-slot command is used to select the interface number format of slot number/sub-slot number/interface number in the calling-station-ID and NAS-port-ID attributes, as required by a RADIUS server.\nConfiguration Impact\nSee the More Information About NAS-Port-Id (87)."
+}

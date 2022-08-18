@@ -1,0 +1,40 @@
+{
+    "PageTitle": "isis authentication-mode hmac-sha256 key-id cipher",
+    "FuncDef": "The isis authentication-mode hmac-sha256 key-id cipher command configures IS-IS to authenticate received Hello packets, LSPs, and SNPs and to encrypt Hello packets, LSPs, and SNPs to be sent.If virtual access IS-IS enabled, authentication must be configured for security, so there is no corresponding undo command.\nBy default, IS-IS does not authenticate received Hello packets, LSPs, and SNPs or encrypt Hello packets, LSPs, and SNPs to be sent. It is recommended that you configure authentication and use the HMAC-SHA256 algorithm to improve security, preventing routing information from being tampered with.",
+    "CLIs": [
+        "isis authentication-mode hmac-sha256 key-id <key-id> cipher <cipher-text> [ send-only ]"
+    ],
+    "ParentView": [
+        "Virtual access port-extension view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "key-id key-id",
+            "Info": "Specifies a key ID for the HMAC-SHA256 algorithm.\nThe value is an integer ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "cipher",
+            "Info": "Indicates the ciphertext mode. You can enter a plaintext or ciphertext, and it is displayed in ciphertext in the configuration file. The ciphertext mode is used by default.\nThe new password is at least eight characters long and contains at least two of the following types: upper-case letters, lower-case letters, digits, and special characters.\n-"
+        },
+        {
+            "Parameters": "cipher-text",
+            "Info": "Specifies a simple text or ciphertext.\nA ciphertext password is a character string that is encrypted using a special algorithm. A ciphertext is used for configuration restoration. The parameter value must be the same as the ciphertext in the configuration file.\nThe value is a string of case-sensitive characters that can be letters or digits.\nIn simple authentication, the value is a string of 1 to 16 characters in a simple text, or a string of 24 to 128 characters in a ciphertext.In md5 or hmac-sha256 authentication, the value is a string of 1 to 255 characters in a simple text, or a string of 20 to 432 characters in a ciphertext.A 24-character ciphertext password configured in an earlier version is also supported in this version.A password cannot contain a question mark (?), but can contain spaces if surrounded by double quotation marks (\"\"). In this case, the double quotation marks are part of the password."
+        },
+        {
+            "Parameters": "send-only",
+            "Info": "Indicates that IS-IS encapsulates authentication information into Hello packets, LSPs, and SNPs to be sent but does not authenticate received Hello packets, LSPs, and SNPs.\n-"
+        },
+        {
+            "Parameters": "hmac-sha256",
+            "Info": "Indicates that the HMAC-SHA256 algorithm is used to encrypt a password for authentication or encryption.For the sake of security, using the HMAC-SHA256 algorithm rather than the MD5 algorithm is recommended.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] virtual-access port-extend",
+            "[*HUAWEI-virtual-access-portextend] isis authentication-mode hmac-sha256 key-id 2 cipher Huawei-123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo ensure network security, you can enable a router to authenticate received packets based on the pre-defined authentication mode or add authentication information to the packets to be sent. Only the packets that are authenticated can be forwarded on the network.\nThe isis authentication-mode command enables the local node to discard all the Hello packets with authentication passwords that are different from the one set using this command. You can also enable the device to add the set authentication password to all the Hello packets to be sent.\nPrecautions\nIf a password is set, but neither ip nor osi is specified, osi is defaulted.\nIf a broadcast interface is emulated as a P2P interface using the isis circuit-type command or then restored to the broadcast interface through the undo isis circuit-type command, the authentication configuration on the interface is restored to the default setting.\nFor a P2P interface, only Level-1 authentication is specified by default."
+}

@@ -1,0 +1,29 @@
+{
+    "PageTitle": "nhrp network-id",
+    "FuncDef": "The nhrp network-id command specifies the NHRP domain for a local mGRE interface.\nThe undo nhrp network-id command restores the default NHRP domain of the local mGRE interface.\nBy default, the local mGRE interface belongs to NHRP domain 0.",
+    "CLIs": [
+        "nhrp network-id <netId>",
+        "undo nhrp network-id <netId>",
+        "undo nhrp network-id"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "netId",
+            "Info": "Specifies an NHRP domain. This domain takes effect only on the local device.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nhrp enable",
+            "[*HUAWEI] interface tunnel 0",
+            "[*HUAWEI-Tunnel0] tunnel-protocol gre p2mp",
+            "[*HUAWEI-Tunnel0] nhrp enable",
+            "[*HUAWEI-Tunnel0] nhrp network-id 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe nhrp network-id command specifies NHRP domains for mGRE interfaces to isolate various mGRE interfaces into different NHRP domains. A VPN tunnel is set up between two devices to forward NHRP packets. The network IDs of the inbound and outbound mGRE interfaces determine whether to set up a tunnel.\nPrerequisites\nThe following operations have been performed:\nRun the interface tunnel command to create a tunnel interface and display the tunnel interface view.Run the tunnel-protocol gre p2mp command to set the tunnel encapsulation mode to mGRE.\n\nConfiguration Impact\nIf the inbound and outbound interfaces for NHRP packets are both mGRE interfaces, compare the network IDs of the two interfaces. The configuration impact on different types of NHRP packets is as follows:\nNHRP Registration Request packet and NHRP Registration Reply packet\nThe NHRP module does not forward NHRP Registration packets. Therefore, it has no impact on the NHRP registration process.\nNHRP Resolution Request packet\nIf the inbound and outbound mGRE interfaces for the NHRP packets have different network IDs, the NHRP module discards the packet and sends an NHRP Resolution Reply packet to the source peer device.\nNHRP Resolution Reply packet, Purge Request packet, Purge Reply packet and Redirect packet\nIf the inbound and outbound mGRE interfaces for the NHRP packets have different network IDs, the NHRP module discards the packet.\n\nPrecautions\nAfter network IDs are changed, the NHRP peer learned by the device is not affected and the existing IPSec tunnel will not be changed."
+}

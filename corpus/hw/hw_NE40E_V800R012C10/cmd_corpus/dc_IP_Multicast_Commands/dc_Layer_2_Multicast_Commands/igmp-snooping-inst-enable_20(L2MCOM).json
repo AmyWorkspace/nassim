@@ -1,0 +1,34 @@
+{
+    "PageTitle": "igmp-snooping ip-policy",
+    "FuncDef": "The igmp-snooping ip-policy command configures a policy for filtering Report or Leave messages sent by hosts in a VLAN. This means that you can limit users that can enjoy multicast services.\nThe undo igmp-snooping ip-policy command restores the default setting.\nBy default, no policy is configured for filtering Report or Leave messages sent by hosts in a VLAN. This means that any user in the VLAN can enjoy multicast services.",
+    "CLIs": [
+        "igmp-snooping ip-policy { <acl-number> | acl-name <acl-name> }",
+        "undo igmp-snooping ip-policy"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of an ACL.\nThe value ranges from 2000 to 3999. The ACL is used to specify the permitted or denied source or destination addresses contained in IGMP Report or Leave messages sent by hosts in a VLAN."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of an ACL.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported. The name must start with a letter or digit, and cannot contain only digits."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2000",
+            "[*HUAWEI-acl-basic-2000] rule deny source 10.0.0.1 0",
+            "[*HUAWEI-acl-basic-2000] rule permit source any",
+            "[*HUAWEI-acl-basic-2000] quit",
+            "[*HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan 11",
+            "[*HUAWEI-vlan11] igmp-snooping ip-policy 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo improve multicast service deployment security, configure a policy to filter out IGMP Report or Leave messages sent by specific hosts.\nIf a basic ACL is specified in the igmp-snooping ip-policy command, IGMP Report or Leave messages with specified source IP addresses are accepted or rejected. If an advanced ACL is specified in this command, IGMP Report or Leave messages with specified source and destination IP addresses are accepted or rejected."
+}

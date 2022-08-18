@@ -1,0 +1,28 @@
+{
+    "PageTitle": "ais link-status",
+    "FuncDef": "The ais link-status command enables alarm indication signal (AIS) to monitor an interface.\nThe undo ais link-status command disables AIS from monitoring an interface.\nBy default, AIS does not monitor an interface.",
+    "CLIs": [
+        "ais link-status interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo ais link-status interface { <interface-name> | <interface-type> <interface-number> }"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of an interface to be monitored by AIS.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] ais enable",
+            "[*HUAWEI-md-md1-ma-ma1] ais link-status interface GigabitEthernet1/0/1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn MD nesting scenarios, if the MEP of a low-level MD detects a fault, the MEP sends an alarm to the NMS. After a specified period elapses, if the MEP of a high-level MD also detects the fault, the MEP sends an alarm that is the same as the one sent by the MEP of the low-level MD to the NMS. In this case, the MEP of the high-level MD needs to be suppressed from sending alarms to the NMS. You can enable the AIS function for the low-level and high-level MDs.\nTo speed up the sending of AIS packets, run the ais link-status command to configure AIS to monitor interfaces. A MEP sends an AIS packet immediately after the monitored interface goes Down, instead of waiting for the timeout of continuity check messages (CCMs). This suppresses the MEP in a high-level MD from sending the same alarm to the NMS.\nPrerequisites\nAn MD has been created using the cfm md command.An MA has been created using the ma command.The AIS function has been enabled using the ais enable command.\n\nPrecautions\nIn an MD:\nBoth inward- and outward-facing MEPs can receive AIS packets.Outward-facing MEPs can send AIS along PWs, and inward-facing MEPs can send AIS packets along ACs."
+}

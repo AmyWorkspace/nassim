@@ -1,0 +1,42 @@
+{
+    "PageTitle": "port-reservation (NAT instance view)",
+    "FuncDef": "The port-reservation command sets a range of ports to be reserved for PCP in a NAT instance.\nThe undo port-reservation command deletes a range of ports to be reserved for PCP in a NAT instance.\nBy default, no range of ports to be reserved for PCP is set in a NAT instance.",
+    "CLIs": [
+        "port-reservation <start-port> to <end-port> [ extend well-known-port ]",
+        "undo port-reservation [ <start-port> to <end-port> [ extend well-known-port ] ]"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "start-port",
+            "Info": "Specifies a start port number.\nThe value is an integer ranging from 1024 to 65535. The value must be a multiple of 64."
+        },
+        {
+            "Parameters": "to end-port",
+            "Info": "Specifies an end port number.\nThe value is an integer ranging from 1024 to 65535. The end port number must be greater than the start port number, and the end port number is a multiple of 64. The difference between the start and end port numbers is a multiple of 64."
+        },
+        {
+            "Parameters": "extend",
+            "Info": "Extend Ports.\n-"
+        },
+        {
+            "Parameters": "well-known-port",
+            "Info": "Specify the well-known port range 1?1023 as the reserved port range for PCP.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] port-reservation 1024 to 65535"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] port-reservation 1024 to 65535 extend well-known-port"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe customer expects to use reserved ports for PCP to improve the probability of successful port allocation.\nPrerequisites\nA NAT instance has been created, and the NAT instance view is displayed.\nConfiguration Impact\nThe user applies for a port that is in the reserved port range. The port is idle. The PCP request carries the port without the perfer failure option.The user applies for a port that is in the reserved port range. If the port is not idle and the PCP request does not carry the perfer failure option, the port is randomly allocated from the reserved port. If the port is not idle, the port is not allocated and the port is not allocated. In this case, an error message is returned.The user applies for a port that is not in the reserved port range. If the PCP request does not carry the perfer failure option, a port is randomly allocated from the reserved port.The user applies for a port that is not in the reserved port range. If the PCP request carries the perfer failure option, the port is not allocated and an error message is returned.\n\nPrecautions\nThis command is mutually exclusive with the port-forwarding address-group, port-single enable, nat bind static-mapping, and l2-aware enable commands.\nWhen the port-reservation command or its undo form is used, a device deletes flow tables in centralized NAT or displays a message indicating that a user is online and the command fails in distributed NAT."
+}

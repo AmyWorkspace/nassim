@@ -1,0 +1,46 @@
+{
+    "PageTitle": "loss-measure single-ended-synthetic remote-ratio-threshold",
+    "FuncDef": "The loss-measure single-ended-synthetic remote-ratio-threshold command configures alarm thresholds for the far-end frame loss ratio of proactive SLM.\nThe undo loss-measure single-ended-synthetic remote-ratio-threshold command deletes alarm thresholds for the far-end frame loss ratio of proactive SLM.\nBy default, no alarm thresholds are configured for the far-end frame loss ratio of proactive SLM.",
+    "CLIs": [
+        "loss-measure single-ended-synthetic remote-ratio-threshold test-id <test-id-value> upper-limit <upper-limit> lower-limit <lower-limit>",
+        "undo loss-measure single-ended-synthetic remote-ratio-threshold test-id <test-id-value> [ upper-limit <upper-limit> lower-limit <lower-limit> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "upper-limit upper-limit",
+            "Info": "Configures an upper alarm threshold for the far-end frame loss ratio of proactive SLM.\nThe value is a string of 1 to 8 case-insensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "lower-limit lower-limit",
+            "Info": "Configures a lower alarm threshold for the far-end frame loss ratio of proactive SLM.\nThe value is a string of 1 to 8 case-insensitive characters, spaces not supported. The lower alarm threshold must be less than the upper alarm threshold."
+        },
+        {
+            "Parameters": "test-id test-id-value",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 mac 00e0-fc12-7890",
+            "[*HUAWEI-md-md1-ma-ma1] loss-measure single-ended-synthetic remote-ratio-threshold test-id 1 upper-limit 72.4 lower-limit 60.1150"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEthernet frame loss measurement (ETH-LM) enables a local MEP and its RMEP to exchange ETH-LM frames to collect frame loss statistics on E2E links. ETH-LM modes are classified into near-end ETH-LM and far-end ETH-LM. Near-end ETH-LM applies to an inbound interface, and far-end ETH-LM applies to an outbound interface on a MEP. ETH-LM counts the number of errored frame seconds to determine the duration when a link is unavailable.\nTo set the upper and lower threshold for the far-end packet loss rate in SLM, run the loss-measure single-ended-synthetic remote-ratio-threshold command. If the far-end packet loss rate exceeds the upper threshold or is lower than the lower threshold, the number of threshold-crossing events is counted. The display y1731 period-data command displays the number of threshold-crossing times.\nPrerequisites\nAn MD has been created using the cfm md command, and an MA has been configured using the ma command."
+}

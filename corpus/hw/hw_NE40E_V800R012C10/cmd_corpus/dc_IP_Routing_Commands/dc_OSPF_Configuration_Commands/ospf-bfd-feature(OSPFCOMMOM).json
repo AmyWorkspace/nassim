@@ -1,0 +1,35 @@
+{
+    "PageTitle": "bfd all-interfaces enable (OSPF view)",
+    "FuncDef": "The bfd all-interfaces enable command enables BFD in an OSPF process.\nThe undo bfd all-interfaces enable command disables BFD in an OSPF process.\nThe bfd all-interfaces incr-cost command enables an OSPF process to adjust the cost based on BFD.\nThe undo bfd all-interfaces incr-cost command disables an OSPF process from adjusting the cost based on BFD.\n\nBy default, BFD is disabled.\n\n\nBy default, an OSPF process does not adjust the cost based on BFD.",
+    "CLIs": [
+        "bfd all-interfaces enable",
+        "bfd all-interfaces incr-cost { <cost> | max-reachable }",
+        "undo bfd all-interfaces enable",
+        "undo bfd all-interfaces incr-cost [ <cost> | max-reachable ]"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "incr-cost cost",
+            "Info": "Specifies a cost adjustment value.\nThe value is an integer ranging from 1 to 65534."
+        },
+        {
+            "Parameters": "max-reachable",
+            "Info": "Adjusts the link cost of an OSPF interface to the maximum link cost 65535.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables BFD.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] bfd all-interfaces incr-cost 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBFD can fast detect a fault on a network, minimizing the impact of the fault on services.\nYou can enable BFD either on an interface or in an OSPF process. The configurations of BFD on an interface take precedence over those in an OSPF process.\nWhen BFD detects a fault and the system recovers quickly, the interface is disconnected due to BFD Down. As a result, the link is unstable and traffic is lost.\nTo ensure network reliability and solve the preceding problem, you can run the bfd all-interfaces incr-cost command to adjust the link cost. When an OSPF process detects BFD Down, it automatically increases the cost of the interface so that the link is no longer selected and traffic can be transmitted through other links. When BFD Up is detected, the cost of this process is automatically restored to the original cost.\nPrerequisites\nAn OSPF process has been created using the ospf command.\nBFD has been enabled for the OSPF process using the bfd all-interfaces enable command.\nPrecautions\nThe interface-specific BFD-associated cost value has a higher priority than the process-specific BFD-associated cost value.\nA BFD session can be created only when the bfd all-interfaces enable command is run on both ends to enable global BFD. In addition, BFD sessions can be created only between the two ends that have set up an OSPF neighbor relationship in the Full state.\nThe bfd all-interfaces command run in the OSPF view and the ospf bfd block command are mutually exclusive."
+}

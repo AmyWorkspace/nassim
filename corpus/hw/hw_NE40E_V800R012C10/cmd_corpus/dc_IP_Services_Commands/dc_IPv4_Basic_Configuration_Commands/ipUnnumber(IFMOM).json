@@ -1,0 +1,68 @@
+{
+    "PageTitle": "ip address unnumbered (interface view)",
+    "FuncDef": "The ip address unnumbered command enables an interface to borrow an IP address from another interface.\nThe undo ip address unnumbered command disables an interface from borrowing an IP address from another interface.\nBy default, an interface is disabled from borrowing an IP address from another interface.",
+    "CLIs": [
+        "ip address unnumbered interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo ip address unnumbered"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "Tunnel interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Global MP-group interface view",
+        "LMP configuration view",
+        "Serial interface view",
+        "ServiceIf interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "LMP interface view",
+        "50GE sub-interface view",
+        "Trunk serial interface view",
+        "GE sub-interface view",
+        "POS-Trunk interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the name of an interface whose IP address is borrowed.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of an interface whose IP address is borrowed.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/0",
+            "[~HUAWEI-GigabitEthernet2/0/0] ip address 1.1.1.1 24",
+            "[*HUAWEI-GigabitEthernet2/0/0] quit",
+            "[*HUAWEI] interface Pos 1/0/0",
+            "[*HUAWEI-Pos1/0/0] ip address unnumbered interface GigabitEthernet 2/0/0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack 0",
+            "[*HUAWEI-LoopBack0] ip address 1.1.1.1 24",
+            "[*HUAWEI-LoopBack0] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] ip address unnumbered interface loopback 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo save IP address resources, run the ip address unnumbered command to configure an interface to borrow an IP address from another interface. If an interface is only occasionally used, it is unnecessary to configure an IP address for the interface. Instead, configure the interface to borrow an IP address from another interface.\nThe following interfaces support IP borrowing from other interfaces such as Ethernet and loopback interfaces:\nInterfaces encapsulated with PPPTunnel interfacesGlobal-VE sub-interfaces and VE sub-interfacesEthernet interfaces and GE sub-interfacesVlanif interfacesEth-Trunk sub-interfaces\n\nPrerequisites\nThe numbered interface has been configured with an IP address using the ip address command or has obtained an IP address through negotiation.\nConfiguration Impact\nAfter an unnumbered interface borrows an IP address, the interface can use this IP address to communicate with other devices. The display interface command displays the borrowed IP address and its subnet mask.\nPrecautions\nBecause an interface with a borrowed IP address does not have its own IP address, the system cannot generate any route for the interface. Therefore, you need to manually configure the route to implement interconnection between routers.\nWhen configuring IP address unnumbered on an interface, note the following:\nThe IP address of the numbered interface cannot be a borrowed IP address.The IP address of the numbered interface can be lent to multiple interfaces.If the numbered interface has multiple IP addresses, only the primary IP address can be lent.If the numbered interface is not configured with any IP address, the IP address 0.0.0.0 is borrowed.The IP address of the virtual loopback interface can be lent to other interfaces, but the virtual loopback interface cannot borrow an IP address from another interface.\nIf a tunnel interface is not configured to borrow IP addresses of other interfaces, the tunnel interface does not have an IP address by default."
+}

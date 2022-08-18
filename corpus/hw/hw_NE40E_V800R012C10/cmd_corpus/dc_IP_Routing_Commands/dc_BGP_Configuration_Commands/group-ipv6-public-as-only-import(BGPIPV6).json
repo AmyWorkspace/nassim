@@ -1,0 +1,32 @@
+{
+    "PageTitle": "peer public-as-only import (BGP-IPv6 unicast address family view) (group)",
+    "FuncDef": "The peer public-as-only import command enables a device to remove private AS numbers from the AS_Path list in received BGP Update messages.\nThe undo peer public-as-only import command allows a device to accept BGP Update messages in which the AS_Path list carries private AS numbers.\nBy default, a device does not remove private AS numbers from the AS_Path list when receiving BGP Update messages.",
+    "CLIs": [
+        "peer <peerGroupName> public-as-only import [ force ]",
+        "undo peer <peerGroupName> public-as-only import [ force ]"
+    ],
+    "ParentView": [
+        "BGP-IPv6 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerGroupName",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "force",
+            "Info": "Deletes all private AS numbers from the AS_Path attribute.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group test",
+            "[*HUAWEI-bgp] ipv6-family unicast",
+            "[*HUAWEI-bgp-af-ipv6] peer test enable",
+            "[*HUAWEI-bgp-af-ipv6] peer test public-as-only import"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn general, an AS number is an integer ranging from 1 to 4294967295. A public AS number ranges from 1 to 64511, and from 65536 (which represents 1.0 in the x.y format) to 4294967295 (65535.65535 in the x.y format). A private AS number ranges from 64512 to 65534. The AS number 65535 is reserved for special use.\nIf the 4-byte private AS number function is enabled using the private-4-byte-as enable command, the private AS number range also includes 4200000000 to 4294967294 (or 64086.59904 to 65535.65534 in the x.y format).\nPublic AS numbers can be advertised to the Internet, whereas private AS numbers cannot. Private AS numbers can only be used within ASs. If they are used on the Internet, routing loops may occur.\nTo prevent routing loops, run the peer public-as-only import command. After the command is run with no parameter specified:\nIf the AS_Path list in BGP Update messages contains only private AS numbers, BGP deletes these private AS numbers and then accepts the Update messages.\nIf the AS_Path list contains both public and private AS numbers, BGP does not delete the private AS numbers. If private AS numbers are deleted in this case, a forwarding error may occur. To forcibly delete all the private AS numbers in the AS_Path list, specify the force parameter in the peer public-as-only import command."
+}

@@ -1,0 +1,40 @@
+{
+    "PageTitle": "tariff-level-cfg",
+    "FuncDef": "The tariff-level-cfg command configures the accounting status or IP type for a DAA tariff level.\nThe undo tariff-level-cfg command restores the default configuration of a DAA tariff level.\nBy default, accounting is enabled for DAA tariff levels, and the IP type is IPv4.",
+    "CLIs": [
+        "tariff-level-cfg <level> { accounting off | ip-type ipv6 }",
+        "undo tariff-level-cfg <level> { accounting off | ip-type ipv6 }"
+    ],
+    "ParentView": [
+        "Value-added service policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "level",
+            "Info": "Specifies a DAA tariff level.\nThe value is an integer ranging from 1 to 8."
+        },
+        {
+            "Parameters": "off",
+            "Info": "Configures the accounting status of a DAA tariff level as disabled.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Configures an IP type for a DAA tariff level as ipv6.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] value-added-service policy test daa",
+            "[*HUAWEI-vas-policy-test] commit",
+            "[~HUAWEI-vas-policy-test] tariff-level-cfg 1 accounting off"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] value-added-service policy test daa",
+            "[*HUAWEI-vas-policy-test] commit",
+            "[~HUAWEI-vas-policy-test] tariff-level-cfg 1 ip-type ipv6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen DAA services are configured for dual-stack users, if you want the device to send service traffic statistics through the IPv4 or IPv6 attributes to the RADIUS server, specify the IP type for the services.If the user-queue mode is configured for DAA services to implement rate limit and service separation is disabled, the device collects DAA IPv4 or IPv6 traffic statistics based on the IP type configured for the tariff level. This allows IPv4 and IPv6 traffic statistics to be collected separately based on SQs. Traffic that enters non-DAA queues is collected as IPv4 traffic by default.\n\nPrecautions\nThis command is supported only on the admin VS.\nThe device collects and reports statistics on the DAA service traffic based on the IP type configured for each traffic level, which is irrelevant to the traffic type that actually matches a level. When deploying dual-stack DAA services, ensure that the ACL type of each service is consistent with the IP type configured for the tariff level. This prevents IPv4 and IPv6 traffic from matching the same level.accounting off is valid only for DAA services that do not have uniform accounting. To configure non-accounting for DAA services in uniform accounting mode, run the value-added-serviceaccount-type none command or run the accounting-scheme command in the service policy view to specify the non-accounting scheme.After packets are implemented with DAA CAR and enter Flow Queues, the IPv4 or IPv6 type of packets can be identified based on the tariff level. For the packets whose tariff level cannot be identified, the system considers them as IPv4 packets when collecting statistics."
+}

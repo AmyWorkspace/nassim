@@ -1,0 +1,65 @@
+{
+    "PageTitle": "ipv6 address cga",
+    "FuncDef": "The ipv6 address cga command configures a CGA global unicast address.\nThe undo ipv6 address cga command deletes a CGA global unicast address.\nBy default, no CGA global unicast address.",
+    "CLIs": [
+        "ipv6 address { <ipv6-address> <prefix-length> | <ipv6-address/prefix-length> } cga",
+        "undo ipv6 address { <ipv6-address> <prefix-length> | <ipv6-address/prefix-length> } cga"
+    ],
+    "ParentView": [
+        "PW-VE interface view",
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address to be configured for the interface.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the prefix length of an IPv6 address.\nThe value is an integer ranging from 1 to 128."
+        },
+        {
+            "Parameters": "ipv6-address/prefix-length",
+            "Info": "Specifies the IPv6 address and prefix length of an interface.\nThe value is the IPv6 address/IPv6 address prefix length."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] rsa key-pair label huawei modulus 2048",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 security rsakey-pair huawei",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 security modifier sec-level 1",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 address 2001:db8::1/64 cga"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo enable IPv6 SEND to protect ND messages, you need to configure a CGA IPv6 address on an interface. Running the ipv6 address cga command configures a CGA IPv6 global unicast address.\nPrerequisites\nBefore running the ipv6 address cga command, you must complete the following configurations:\nRun the rsa key-pair label command in the system view to create an RSA key pair.Run the ipv6 enable command in the interface view to enable IPv6 on the interface.Run the ipv6 security rsakey-pair command in the interface view to bind the created RSA key pair to the interface.Run the ipv6 security modifier command in the interface view to configure a modifier value and a security level for the CGA address.\n\nConfiguration Impact\nIf a CGA IPv6 address is configured for an interface, an ND message sent by the interface will carry CGA and RSA options. After receiving the ND message, the remote interface checks the validity of the ND message sender and the integrity of the ND message based on the CGA and RSA options. If the strict security mode is configured on a local interface, the interface processes secure packets and discards insecure packets sent from a remote interface.\nFollow-up Procedure\nRun the ipv6 nd security strict command to enable the strict security mode on the interface.\nPrecautions\nRunning the undo ipv6 address command without specifying any parameter will delete all IPv6 addresses (including the CGA global unicast address) except the automatically configured IPv6 link-local address.\nAfter the undo rsa key-pair label label-name command is run in the system view, the IPv6 address of the CGA type of the RSA key corresponding to each interface will be deleted.\nAn interface can be configured with only one link-local address, which can be the link-local address of the CGA type.\nAn interface allows the configuration of a maximum of 64 global unicast addresses."
+}

@@ -1,0 +1,37 @@
+{
+    "PageTitle": "if-match extcommunity-filter",
+    "FuncDef": "The if-match extcommunity-filter command sets a filtering rule that is based on the VPN-Target extended community filter.\nThe undo if-match extcommunity-filter command cancels the configuration.\nBy default, no filtering rule based on the VPN-Target extended community filter is set.",
+    "CLIs": [
+        "if-match extcommunity-filter { <basIndex> | <advIndex> } &<1-16>",
+        "if-match extcommunity-filter <ecfName>",
+        "undo if-match extcommunity-filter { <basIndex> | <advIndex> } &<1-16>",
+        "undo if-match extcommunity-filter <ecfName>",
+        "undo if-match extcommunity-filter"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basIndex",
+            "Info": "Specifies the number of the basic VPN-Target extended community filter.\nThe value is an integer ranging from 1 to 199."
+        },
+        {
+            "Parameters": "advIndex",
+            "Info": "Specifies the number of the advanced VPN-Target extended community filter.\nThe value is an integer ranging from 200 to 399."
+        },
+        {
+            "Parameters": "ecfName",
+            "Info": "Specifies the name of the VPN-Target extended community filter.\nThe value is a string of 1 to 51 case-sensitive characters, spaces not supported. The string cannot be all numbers. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip extcommunity-filter 1 permit rt 100:1",
+            "[*HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] if-match extcommunity-filter 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe extended community attributes help flexibly control the route-policy. You can use the if-match extcommunity-filter command to configure a node to filter routes based on the VPN-Target extended community filter. After such a filtering rule is configured, you can apply the apply clauses to change the attributes of the routes that match the VPN-Target extended community attributes-based filtering rule.\nThe if-match extcommunity-filter command is applicable only to BGP routes and must work with the ip extcommunity-filter command. For example:\nIf the if-match extcommunity-filter 1 command is used but the VPN-Target extended community filter 1 is not configured, all routes match the filtering rule.If the if-match extcommunity-filter 1 command is used after the ip extcommunity-filter 1 permit rt 1:1 command is used, the BGP routes with the VPN-Target extended community attribute 1:1 are permitted.\n\nPrerequisites\nA VPN-Target extended community filter has been configured using the ip extcommunity-filter command.\nConfiguration Impact\nWhen you filter routes based on the VPN-Target extended community attributes, the routes that match the filtering rule are permitted and the routes that do not match the filtering rule are denied.\nPrecautions\nA maximum of 16 VPN-Target extended community filters can be configured in the if-match extcommunity-filter command. The relationship between these VPN-Target extended community filters is OR. Specifically, if a route matches one of these VPN-Target extended community filters, it matches the matching rules of the command."
+}

@@ -1,0 +1,40 @@
+{
+    "PageTitle": "qinq termination pe-vid ce-vid any",
+    "FuncDef": "The qinq termination pe-vid ce-vid any command enables a sub-interface to terminate double-tagged packets.\nThe undo qinq termination pe-vid ce-vid any command disables a sub-interface from terminating double-tagged packets.\n\nBy default, a sub-interface is disabled from terminating double-tagged packets.",
+    "CLIs": [
+        "qinq termination pe-vid <pe-vid> [ to <high-pe-vid> ] ce-vid any",
+        "undo qinq termination pe-vid <pe-vid> [ to <high-pe-vid> ] ce-vid any"
+    ],
+    "ParentView": [
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "VE sub-interface view",
+        "100ge sub-interface view",
+        "25GE sub-interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pe-vid",
+            "Info": "Specifies the start VLAN ID in the outer VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to high-pe-vid",
+            "Info": "Specifies the end VLAN ID in the outer VLAN tag. If the command with pe-vid to high-pevid specified is run more than once, all configurations take effect.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] control-vid 1 qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq termination l2 symmetry",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq termination pe-vid 1000 ce-vid any"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\n\nInter-VLAN communication\n\n\n        VLANs are widely used because they can isolate Layer 2 user packets. Each VLAN logically isolates a broadcast domain from other broadcast domains in a physical LAN. Hosts in each VLAN can communicate with each other, but not hosts in other VLANs. Layer 3 routing techniques must be used to enable inter-VLAN communication. The following interfaces can be used to implement inter-VLAN communication:\n        \nVLANIF interfaces on Layer 3 switches\nLayer 3 Ethernet interfaces on routers\n\n\nTraditional Layer 3 Ethernet interfaces do not identify VLAN packets. After receiving VLAN packets, they consider the packets invalid and discard them. To implement inter-VLAN communication, create Ethernet sub-interfaces on a Layer 3 Ethernet interface and configure the sub-interfaces to remove tags from VLAN packets.\n\nCommunication between devices in the LAN and WAN\n\nMost LAN packets carry VLAN tags. Certain WAN protocols such as Point-to-Point Protocol (PPP) cannot identify VLAN packets. To send VLAN packets from a LAN to a WAN, a device must record VLAN information carried in VLAN packets, remove VLAN tags, and then forward the packets.\n\n        VLAN packets are classified as dot1q packets (each carries only one VLAN tag) or QinQ packets (each carries two VLAN tags). Accordingly, there are two VLAN tag termination modes:\n        \nDot1q termination, which terminates tags carried in dot1q packets.To configure dot1q termination, run the dot1q termination vid command in the sub-interface view.\nQinQ termination, which terminates tags carried in QinQ packets.To configure QinQ termination, run the qinq termination pe-vid ce-vid any command in the sub-interface view.\n\n\n\nPrerequisites\n\nQinQ termination has been configured on a sub-interface using the encapsulation qinq-termination command.\nThe encapsulation qinq-termination command is replaced by the control-vid qinq-termination command.\nWhen users need to communicate through an L2VPN, the qinq termination l2 sysmetry command must be run to configure a QinQ VLAN tag termination sub-interface to access the L2VPN in symmetric mode and then any must be specified in the qinq termination pe-vid ce-vid command to configure the sub-interface to ignore the VLAN ID in the inner tag.\n\nConfiguration Impact\n\nAfter the qinq termination pe-vid ce-vid command is run, the VLAN tag termination sub-interface processes packets in the following ways:\n\nAfter receiving a packet, the inbound interface removes the tag carried in the packet and then forwards the packet at Layer 2. The outbound interface determines whether the sent packet carries tags.\nBefore sending a packet, the outbound interface adds the corresponding VLAN information to the packet.\n\nIf you bind a QinQ VLAN tag termination sub-interface to a virtual switching instance (VSI) or virtual private wire service (VPWS) to access a Layer 2 virtual private network (L2VPN), configure the mode in which the sub-interface connects to the L2VPN. For details, see the qinq termination l2 command."
+}

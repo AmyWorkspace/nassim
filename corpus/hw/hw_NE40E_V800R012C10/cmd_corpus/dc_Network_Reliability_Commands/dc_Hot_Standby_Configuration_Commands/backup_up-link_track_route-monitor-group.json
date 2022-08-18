@@ -1,0 +1,29 @@
+{
+    "PageTitle": "backup up-link track route-monitor-group",
+    "FuncDef": "The backup up-link track route-monitor-group command configures a vBRAS-UP to track a route monitoring group, detecting network-side link faults.\nThe undo backup up-link track route-monitor-group command restores the default configuration.\nBy default, a vBRAS-UP is not configured to track a route monitoring group.",
+    "CLIs": [
+        "backup up-link track route-monitor-group <route-group-name> trigger-down-weight <down-weight-value>",
+        "undo backup up-link track route-monitor-group <route-group-name> [ trigger-down-weight <down-weight-value> ]"
+    ],
+    "ParentView": [
+        "CU-agent view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-group-name",
+            "Info": "Specifies the name of a route monitoring group.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "trigger-down-weight down-weight-value",
+            "Info": "Specifies a route weight for reporting a network-side fault.\nThe value is an integer ranging from 1 to 32000.\nThe value cannot be greater than the weight sum of all Down routes in a route monitoring group."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cu-agent",
+            "[~HUAWEI-cu-agent] backup up-link track route-monitor-group test trigger-down-weight 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a CU separation UP dual-device hot backup scenario, if a network-side route goes Down, the vBRAS-CP cannot detect the Down event and therefore do not switch traffic to the secondary link. As a result, traffic is overloaded or lost. To enable the vBRAS-CP to detect network-side faults, configure a route monitoring group, add network-side routes to the route monitoring group, and run the backup up-link track route-monitor-group command to configure a vBRAS-UP to track the route monitoring group. When detecting a route fault, the vBRAS-UP reports the fault to the vBRAS-CP, triggering a master/backup switchover.\nPrerequisites\nA route monitoring group has been created using the ip route-monitor-group command in the system view, and routes to be tracked have been added to the route monitoring group using the track ip route command.\nConfiguration Impact\nAfter the backup up-link track route-monitor-group command is run, user-side services are switched to the secondary link if the weight sum of all Down routes in a specified route monitoring group reaches the value specified by.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

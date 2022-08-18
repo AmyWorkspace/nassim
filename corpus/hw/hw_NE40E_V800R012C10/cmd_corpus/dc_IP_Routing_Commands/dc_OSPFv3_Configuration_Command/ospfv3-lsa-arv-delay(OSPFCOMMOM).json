@@ -1,0 +1,29 @@
+{
+    "PageTitle": "lsa-arrival-interval suppress-flapping (OSPFv3 view)",
+    "FuncDef": "The lsa-arrival-interval suppress-flapping command configures a suppression period in case received OSPFv3 LSAs flap.\nThe undo lsa-arrival-interval suppress-flapping command restores the default suppression period.\nBy default, the suppression period is 10s, and the suppression threshold is 30.",
+    "CLIs": [
+        "lsa-arrival-interval suppress-flapping <interval> [ threshold <count> ]",
+        "undo lsa-arrival-interval suppress-flapping"
+    ],
+    "ParentView": [
+        "OSPFv3 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the suppression period that takes effect when received OSPFv3 LSAs flap.\nThe value is an integer ranging from 0 to 600, in seconds. The default value is 10s If the value is set to 0, OSPFv3 LSAs are not suppressed."
+        },
+        {
+            "Parameters": "threshold count",
+            "Info": "Specifies the suppression threshold that takes effect when received OSPFv3 LSAs flap.\nThe value is an integer ranging from 3 to 100. The default value is 30."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] lsa-arrival-interval suppress-flapping 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf no flapping occurs among received OSPFv3 LSAs, the configuration of the lsa-arrival-interval command prevents the device from frequently receiving LSAs. If received OSPFv3 LSAs flap, the configuration of the lsa-arrival-interval suppress-flapping command minimizes the impact of the flapping on services. The larger value of the two intervals specified in the commands is used as the suppression period.\nThe suppression mechanism takes effect based on the following rules:\nFlapping detection: OSPFv3 starts a flapping counter. If the interval between two OSPFv3 LSAs that are received successively is less than or equal to 10s, OSPFv3 records a flapping event and increases the flapping_count by 1.Suppression phase: If the flapping_count is greater than or equal to count, flapping suppression takes effect.Suppression exit: If the interval between two OSPFv3 LSAs that are received successively is greater than 10s, OSPFv3 resets the flapping_count and exits from suppression."
+}

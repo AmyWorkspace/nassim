@@ -1,0 +1,47 @@
+{
+    "PageTitle": "mld-snooping ssm-mapping",
+    "FuncDef": "The mld-snooping ssm-mapping command configures the mapping between an any-source multicast group address in the source-specific multicast (SSM) range and a multicast source address.\nThe undo mld-snooping ssm-mapping command deletes a configured mapping.\nBy default, no mapping is configured between an any-source multicast group address in the SSM range and a multicast source address.",
+    "CLIs": [
+        "mld-snooping ssm-mapping <group-address> <mask-length> <source-address>",
+        "undo mld-snooping ssm-mapping <group-address> <mask-length> <source-address>"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-address",
+            "Info": "Specifies an IPv6 multicast group address in the SSM range.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X. And the value must be within the group address range defined in the SSM policy."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length of an IPv6 multicast group address.\nThe value is an integer ranging from 16 to 128."
+        },
+        {
+            "Parameters": "source-address",
+            "Info": "Specifies an IPv6 multicast source address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mld-snooping enable",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] mld-snooping ssm-mapping FF33::1 64 1::1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[~HUAWEI] mld-snooping enable",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] mld-snooping ssm-mapping FF33::1 64 2::2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe SSM mapping mechanism is used to convert MLDv1 Report messages into messages with (S, G) information. This mechanism enables hosts that do not support MLDv2 to enjoy SSM services. After a mapping is configured between a multicast group G and multicast source addresses such as S1 and S2, the device checks the group addresses of received MLDv1 Report messages. If the group addresses are in the SSM group address range, the device converts the messages into one or multiple MLDv2 IS_IN (S1, S2......) messages with the group address being G.\nPrecautions\nSSM mapping has been enabled using the mld-snooping ssm-mapping enable command.\nIf an SSM mapping policy is configured using the mld-snooping ssm-mapping enable [ policy ] command, the mld-snooping ssm-mapping command cannot be run to configure SSM source/group address mapping entries."
+}

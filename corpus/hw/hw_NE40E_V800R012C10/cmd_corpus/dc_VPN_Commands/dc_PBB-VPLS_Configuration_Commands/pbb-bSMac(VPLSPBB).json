@@ -1,0 +1,48 @@
+{
+    "PageTitle": "pbb backbone-source-mac (VSI-BVSI view)",
+    "FuncDef": "The pbb backbone-source-mac command configures a B-SMAC address.\nThe undo pbb backbone-source-mac command deletes a B-SMAC address.\nBy default, no B-SMAC address is configured.",
+    "CLIs": [
+        "pbb backbone-source-mac <source-mac-address>",
+        "undo pbb backbone-source-mac",
+        "undo pbb backbone-source-mac <source-mac-address>"
+    ],
+    "ParentView": [
+        "VSI-BVSI view",
+        "VSI-IVSI-P2P view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "source-mac-address",
+            "Info": "Specifies a B-SMAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0. The value cannot be all 0s or all 1s (which is a broadcast address) and its eighth bit cannot be 1 (the address whose eighth bit is 1 is a multicast address).\nA B-SMAC address is a virtual MAC address.The B-SMAC address specified through source-mac-address must be the same as the B-DMAC address on the remote end."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] pbb i-vsi enable",
+            "[*HUAWEI-vsi-vsi1] pbb backbone-source-mac 00e0-fc00-1234"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi2",
+            "[*HUAWEI-vsi-vsi2] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi2-ldp] vsi-id 2",
+            "[*HUAWEI-vsi-vsi2-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] pbb b-vsi enable",
+            "[*HUAWEI-vsi-vsi1] pbb backbone-source-mac 00e0-fc00-0002"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter configuring the I-VSI and B-VSI, perform the following configurations for PBB VPLS to take effect:\nRun the pbb service-type p2p command to configure a PBB VPLS service type for the I-VSI.Run the pbb i-tag command to configure an I-tag for the I-VSI.Run the pbb backbone-source-mac command to configure a B-SMAC address for the I-VSI.Run the pbb backbone-destination-mac command to configure a B-DMAC address for the I-VSI or B-VSI.\nIn PBB VPLS, PEs perform PBB encapsulation on received user-side packets by adding a PBB header containing B-SMAC and B-DMAC addresses to these packets. SPEs on the backbone network need to learn only B-MAC addresses instead of all user MAC addresses. This implementation reduces the burden of MAC address learning on SPEs. To configure a B-SMAC address, run the pbb backbone-source-mac command.\n\nConfiguration Impact\nIf the pbb backbone-source-mac command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nThe B-SMAC address must be unique on the entire network.A B-SMAC address can be configured in either an I-VSI or a B-VSI. If an I-VSI and the B-VSI to which the I-VSI is bound have different B-SMAC addresses, the B-SMAC address configured in the I-VSI takes effect.After an I-VSI is bound to a B-VSI, you must remove the binding before changing a B-SMAC address or running the undo pbb backbone-source-mac command.In scenarios where multiple paths are established between two PEs and multiple I-VSIs are bound to a single B-VSI, at least one of B-SMAC addresses must be configured for an I-VSI to carry out load balancing. In addition, B-SMAC addresses configured in different I-VSIs must be different."
+}

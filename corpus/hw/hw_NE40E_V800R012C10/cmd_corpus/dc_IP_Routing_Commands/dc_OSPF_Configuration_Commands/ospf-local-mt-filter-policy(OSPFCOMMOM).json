@@ -1,0 +1,44 @@
+{
+    "PageTitle": "local-mt filter-policy (OSPF view)",
+    "FuncDef": "The local-mt filter-policy command configures filtering conditions for OSPF local MT.\nThe undo local-mt filter-policy command removes the filtering conditions from OSPF local MT.\nBy default, no filtering conditions are configured for OSPF local MT.",
+    "CLIs": [
+        "local-mt filter-policy acl <acl-number>",
+        "local-mt filter-policy acl <acl-name>",
+        "local-mt filter-policy { ip-prefix <ip-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> }",
+        "undo local-mt filter-policy"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Indicates the name of the IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of route filter policy.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix1 permit 0.0.0.0 0 greater-equal 17 less-equal 18",
+            "[*HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] local-mt filter-policy ip-prefix prefix1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen multicast and an IGP Shortcut-enabled MPLS TE tunnel are configured on a network, the outbound interface of the route calculated by an IGP may not be a physical interface but a TE tunnel interface. The TE tunnel interface on the Device sends multicast Join packets over a unicast route to the multicast source address. The multicast Join packets are transparent to the from which the TE tunnel passes. As a result, the cannot generate multicast forwarding entries.\nTo solve the problem, enable OSPF local MT so that a multicast routing table can be generated for multicast packet forwarding. After local MT is enabled, if the outbound interface of a calculated route is an IGP Shortcut-enabled TE tunnel interface, the RM module creates an MIGP routing table for the multicast protocol, calculates a physical outbound interface for the route, and adds the route to the MIGP routing table.To control the number of entries in the MIGP routing table and speed up the MIGP route lookup, run the local-mt filter-policy command to configure filtering conditions so that the device adds only the routes that match the filtering conditions to the multicast source address to the MIGP routing table.\nPrecautions\nConfigure a routing policy before you enable local MT, because if an excessive number of routes to a non-multicast source address exist in an MIGP routing table, the number of entries may exceed the upper limit.\nWhen you run the rule (basic ACL view) command to configure filtering conditions for a named ACL, only the configurations specified by source and time-range take effect."
+}

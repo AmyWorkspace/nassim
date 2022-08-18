@@ -1,0 +1,49 @@
+{
+    "PageTitle": "port vlan-stacking",
+    "FuncDef": "The port vlan-stacking vlan command enables VLAN stacking on an interface and configures the interface to add a VLAN tag to each received single-tagged packet.\nThe port vlan-stacking ce-default-vlan command enables VLAN stacking on an interface and configures the interface to add a VLAN tag to an untagged packet that it receives.\nThe undo port vlan-stacking command restores the default configuration.\nBy default, VLAN stacking is not configured on interfaces.",
+    "CLIs": [
+        "port vlan-stacking vlan <vlan-id1> [ to <vlan-id2> ] stack-vlan <vlan-id3>",
+        "port vlan-stacking ce-default-vlan stack-vlan <vlan-id3>",
+        "undo port vlan-stacking vlan <vlan-id1> [ to <vlan-id2> ] [ stack-vlan <vlan-id3> ]",
+        "undo port vlan-stacking ce-default-vlan"
+    ],
+    "ParentView": [
+        "Layer 2 100GE interface view",
+        "Layer 2 10GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Layer 2 Eth-Trunk interface view",
+        "Layer 2 GE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Indicates the start value of the inner VLAN range.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vlan-id2",
+            "Info": "Indicates the end value of the inner VLAN range.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "stack-vlan vlan-id3",
+            "Info": "Specifies the VLAN ID in the outer tag to be added to a packet.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-default-vlan",
+            "Info": "Specifies that the interface adds a VLAN tag to an untagged packet that it receives.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan batch 40 to 50 20",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] port vlan-stacking vlan 40 to 50 stack-vlan 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nVLAN stacking, also known as selective QinQ, is a Layer 2 technology that adds outer VLAN tags to packets based on their VLAN IDs.\nOn access networks of carriers, users must be differentiated based on their applications and access locations or devices. After VLAN stacking is configured on an interface, the interface adds different outer VLAN tags to packets based on their VLAN IDs to differentiate users.\nA VLAN stacking interface has the following features:\nThe interface can be configured with multiple VLAN IDs and add different outer VLAN tags to frames from different VLANs.After receiving a frame from a VLAN, the interface adds a VLAN tag to the frame; before sending a frame to a VLAN, the interface removes the outer VLAN tag.\n\nPrerequisites\nBefore you run the port vlan-stacking command:\nIf the interface is a Layer 3 interface, it has been switched to a Layer 2 interface using the portswitch command.You must run the port link-type { hybrid | trunk } command to set the link type of an Ethernet interface to hybrid or trunk.\nBy default, the link type of an Ethernet interface is hybrid."
+}

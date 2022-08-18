@@ -1,0 +1,29 @@
+{
+    "PageTitle": "ecmp prefer",
+    "FuncDef": "The ecmp prefer command configures whether the routes with a TE tunnel interface as the outbound interface or routes with an IPv4 interface as the outbound interface are preferentially selected to load-balance OSPF traffic.\nThe undo ecmp prefer restores the default configuration.\nBy default, routes are equally selected to load-balance OSPF traffic, regardless of whether the outbound interface is a TE tunnel interface or an IPv4 interface.",
+    "CLIs": [
+        "ecmp prefer { te-tunnel | intact }",
+        "undo ecmp prefer"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "te-tunnel",
+            "Info": "Indicates that the routes with a TE tunnel interface as the outbound interface are preferentially selected to load-balance OSPF traffic.\n-"
+        },
+        {
+            "Parameters": "intact",
+            "Info": "Indicates that the routes with a TE tunnel interface as the outbound interface and at least one route with an IPv4 interface as the outbound interface are selected to load-balance OSPF traffic.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] ecmp prefer te-tunnel"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an OSPF TE scenario, ECMP load-balances traffic over multiple equal-cost paths to the same destination, regardless of bandwidth. When the link bandwidth values differ greatly, links with lower bandwidth may be congested with traffic, whereas links with higher bandwidth are relatively idle. To configure a next hop for an OSPF equal-cost route for load balancing, run the ecmp prefer command.\nWhen an IGP Shortcut-enabled TE tunnel is configured on an OSPF network, you can specify one of the following parameters in the ecmp prefer command based on the network type.\nte-tunnel: Specify this parameter when devices between the two routers connected by the TE tunnel do not support MPLS. If you specify this parameter, routes with a TE tunnel interface as the outbound interface are preferentially selected to load-balance OSPF traffic, which prevents MPLS traffic loss.intact: Specify this parameter so that at least one route with an IPv4 interface as the outbound interface is selected along with routes with a TE tunnel interface as the outbound interface to load-balance OSPF traffic. If the TE tunnel fails, traffic can be forwarded along the route with an IPv4 interface as the outbound interface, which prevents traffic loss.\n\nPrerequisites\nAn OSPF process has been created and the OSPF view has been displayed using the ospf command."
+}

@@ -1,0 +1,75 @@
+{
+    "PageTitle": "netconf authorization-rule",
+    "FuncDef": "The netconf authorization-rule command configures a NETCONF authorization rule for operations and data nodes.\nThe undo netconf authorization-rule command deletes a NETCONF authorization rule.\nNo NETCONF authorization rule is configured by default.",
+    "CLIs": [
+        "netconf authorization-rule <rule-name> { { deny { rpc-operation <rpc-oper-name> | schema-path <data-node-path> } } | { permit { rpc-operation <rpc-oper-name> | schema-path <data-node-path> access-operation { read | write | execute } * } } } [ description <description-text> ]",
+        "undo netconf authorization-rule <rule-name>"
+    ],
+    "ParentView": [
+        "Task group view",
+        "User group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "rule-name",
+            "Info": "Specifies the name of a NETCONF authorization rule.\nThe value is a string of 1 to 15 case-sensitive characters, and it cannot contain spaces.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "deny",
+            "Info": "Indicates that a NETCONF authorization rule is rejected.\n-"
+        },
+        {
+            "Parameters": "rpc-operation rpc-oper-name",
+            "Info": "Specifies remote procedure call (RPC) operations for NETCONF authorization.\nThe value is a string of 1 to 255 characters, and it cannot contain spaces."
+        },
+        {
+            "Parameters": "schema-path data-node-path",
+            "Info": "Specifies the path of a NETCONF authorization node.\nThe value is a string of 1 to 255 characters starting with a slash (/), and it cannot contain spaces."
+        },
+        {
+            "Parameters": "permit",
+            "Info": "Indicates that the NETCONF authorization rule is permitted, show as Table 1.\n-"
+        },
+        {
+            "Parameters": "access-operation",
+            "Info": "Indicates an operation allowed by a user.\n-"
+        },
+        {
+            "Parameters": "read",
+            "Info": "Indicates the read permission.\n-"
+        },
+        {
+            "Parameters": "write",
+            "Info": "Indicates the write permission.\n-"
+        },
+        {
+            "Parameters": "execute",
+            "Info": "Indicates the execute permission.\n-"
+        },
+        {
+            "Parameters": "description description-text",
+            "Info": "Specifies the description of a NETCONF authorization rule.\nA question mark (?) is not supported. The ASCII codes ranging from 0-31 or 127-255 are not supported. The value is a string of 1 to 63 characters.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[*HUAWEI-aaa] user-group tg1",
+            "[*HUAWEI-aaa-user-group-tg1] netconf authorization-rule rule1 deny rpc-operation edit-config description deny edit-config"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[*HUAWEI-aaa] task-group tg1",
+            "[*HUAWEI-aaa-task-group-tg1] netconf authorization-rule rule2 permit rpc-operation get description permit get operation"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[*HUAWEI-aaa] task-group tg1",
+            "[*HUAWEI-aaa-task-group-tg1] netconf authorization-rule rule3 permit schema-path /snmp access-operation read write execute description permit snmp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a NETCONF session is set up using Secure Shell (SSH), all SSH users can manage session-related devices, which poses security risks. To resolve this problem, run the netconf authorization-rule command to configure a NETCONF authorization rule. NETCONF authorization allows you to authorize specific users to perform NETCONF operations and access NETCONF resources. After NETCONF authorization is configured, run the display netconf authorization command to view related information.\nSet of protocol operations that the server supports are as follow.\ncommit: Commits the configuration in a candidate database to the running database.copy-config: Copies the configuration database.delete-config: Deletes the configuration database.discard-changes: Discards the configuration that has not been committed.discard-commit: Cancels or ends a confirmed-commit operation.edit-config: Modifies the configuration database.execute-action: Performs schema-based actions.get: Obtains data from the running database or device statistics.get-config: Obtains data from a running database, candidate database, and startup database.get-next: Obtains remaining data from the device again if the set-id attribute is returned in the previous query.kill-session: Ends a session.lock: Locks a configuration database to allow only the running session to be written in.unlock: Unlocks a configuration database to allow all session to be written in.update: Synchronizes a candidate database with a running database.sync-full: Synchronizes a device configuration file to a target server in compressed mode.sync-increment: Synchronizes a device configuration file between two check points.\n\nPrerequisites\nTo enable a NETCONF component, run the snetconf server enable or protocol inbound ssh port 830 command.\nTo create a task group, run the task-group task-group-name command."
+}

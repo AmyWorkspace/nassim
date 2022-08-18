@@ -1,0 +1,58 @@
+{
+    "PageTitle": "ptp device-type",
+    "FuncDef": "The ptp device-type command sets a clock mode for a PTP device.\nThe undo ptp device-type command deletes the configured PTP clock mode for a PTP device.\nNo PTP clock mode is set by default.",
+    "CLIs": [
+        "ptp device-type { oc | bc | e2etc | p2ptc | e2etcoc | p2ptcoc | tcandbc }",
+        "ptp device-type { t-bc | t-tc }",
+        "undo ptp device-type [ t-bc | t-tc ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "oc",
+            "Info": "Configures a 1588v2 device as an ordinary clock (OC). Only a single interface on an OC is in a 1588v2 domain. The interface synchronizes time signals with its upstream clock and advertises the time to downstream clocks.\n-"
+        },
+        {
+            "Parameters": "bc",
+            "Info": "Configures a 1588v2 device as a boundary clock (BC). A BC has multiple 1588v2 clock interfaces. One interface of a BC synchronizes time signals with its upstream clock, and other interfaces distribute the time to downstream clocks.\n-"
+        },
+        {
+            "Parameters": "e2etc",
+            "Info": "Configures a 1588v2 device as an end-to-end transparent clock (E2ETC). A TC only transparently transmits 1588v2 packets, but does not participate in 1588v2 clock synchronization.\n-"
+        },
+        {
+            "Parameters": "p2ptc",
+            "Info": "Configures a 1588v2 device as a peer-to-peer transparent clock (P2PTC).\n-"
+        },
+        {
+            "Parameters": "e2etcoc",
+            "Info": "Configures a 1588v2 device as an end-to-end transparent clock and an ordinary clock (E2ETCOC). A TCOC is a specific TC, which is an ordinary TC in terms of time synchronization but has an additional function of frequency recovery implemented by exchanging 1588v2 packets an upstream clock.\n-"
+        },
+        {
+            "Parameters": "p2ptcoc",
+            "Info": "Configures a 1588v2 device as a peer-to-peer transparent clock and an ordinary clock (P2PTCOC).\n-"
+        },
+        {
+            "Parameters": "tcandbc",
+            "Info": "Configures a 1588v2 device as a boundary clock (BC) and a transparent clock (TC).\n-"
+        },
+        {
+            "Parameters": "t-bc",
+            "Info": "Configure device type as telecom boundary clock.\n-"
+        },
+        {
+            "Parameters": "t-tc",
+            "Info": "Configure device type as telecom transparent clock.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ptp enable",
+            "[~HUAWEI] ptp device-type oc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe device must be configured with a clock type before they run PTP to synchronize clock signals. To set a PTP clock mode, run the ptp device-type command.\nWhen the 1588v2 protocol is used, the following device types are supported: oc, bc, e2etc, e2etcoc, p2ptc, p2ptcoc, and tcandbc. After the protocol is switched to G.8275.1 or CU106, the device type supports telecom boundary clock (t-bc) and telecom transparent clock (t-tc). In both protocols, the device type can be set to none, indicating that no clock device type is configured.\nPrecautions\nEach 1588v2 device can be configured only with a single type. Perform either of the following procedures to change a clock type on a 1588v2-enabled device.\n To ensure compatible settings between the existing and updated clock types, perform the following steps:\nRun the undo ptp enable command in the interface view to disable 1588v2.Run the undo ptp device-type command to delete the existing clock type setting.Run the undo ptp slaveonly command on an OC to disable the slave-only mode.Run the undo ptp delay-mechanism command on an OC, a BC, or a TCandBC to cancel the delay measurement mechanism.\n2. Directly run the ptp device-type command to change the clock type. This command does not affect 1588v2 functions or parameters configured on interfaces.\nBC, OC, and TCandBC devices can switch to one another. E2ETC, P2PTC, E2ETCOC, and P2PTCOC devices can switch to one another.Ensure that a device of a specific type must meet requirements of an updated type. If the device has configurations that are not supported by the updated type, delete the configurations before switching the device types."
+}

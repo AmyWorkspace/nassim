@@ -1,0 +1,37 @@
+{
+    "PageTitle": "multicast bas-policy out",
+    "FuncDef": "The multicast bas-policy out command specifies a multicast bandwidth limit policy and sets bandwidth limits on an interface.\nThe undo multicast bas-policy out deletes a multicast bandwidth limit policy and bandwidth limits on an interface.\nBy default, no multicast bandwidth limit policy or bandwidth limits are configured on an interface.",
+    "CLIs": [
+        "multicast bas-policy <policy-name> out bandwidth <traffic-rate> level-1 <level-1-traffic-rate>",
+        "undo multicast bas-policy <policy-name> out [ bandwidth <traffic-rate> level-1 <level-1-traffic-rate> ]"
+    ],
+    "ParentView": [
+        "GE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name",
+            "Info": "Specifies the name of a multicast bandwidth limit policy.\nThe value is a string of 1 to 15 case-sensitive characters. Digits, letters, and underscores (_) are supported, but spaces are not."
+        },
+        {
+            "Parameters": "bandwidth traffic-rate",
+            "Info": "Specifies the total maximum bandwidth on an interface.\nThe value is an integer, in kbit/s. The value ranges from 1 to 1048576 for a 1GE interface and ranges from 1 to 10485760 for a 10GE interface."
+        },
+        {
+            "Parameters": "level-1 level-1-traffic-rate",
+            "Info": "Specifies the maximum level-1 bandwidth on an interface.\nThe value is an integer, in kbit/s. The value ranges from 1 to 1048576 for a 1GE interface and ranges from 1 to 10485760 for a 10GE interface."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast bas-policy",
+            "[*HUAWEI-multicast-bas-policy] policy policy1",
+            "[*HUAWEI-multicast-bas-policy-policy1] quit",
+            "[*HUAWEI-multicast-bas-policy] quit",
+            "[*HUAWEI] interface GigabitEthernet 2/0/0",
+            "[*HUAWEI-GigabitEthernet2/0/0] multicast bas-policy policy1 out bandwidth 10000 level-1 8000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo specify a multicast bandwidth limit policy and set bandwidth limits on a specific interface, run the multicast bas-policy out bandwidth level-1 command in the interface view.\nIf the consumed level-1 bandwidth is A1 and the consumed level-2 bandwidth is A2, the device calculates the remaining level-1 bandwidth B1 and remaining level 2 bandwidth B2 when receiving a new service request:\nB1 = Maximum level-1 bandwidth - A1B2 = Maximum level-2 bandwidth - A2\nIf the remaining bandwidth B1 or B2 (determined by the level of bandwidth that a group is configured to consume) is sufficient, the device permits the service request; otherwise, the device denies the service request.\n\nPrerequisites\nA multicast bandwidth limit policy has been configured.\nConfiguration Impact\nThe multicast bas-policy out bandwidth level-1 command configuration applies to the specific GE interface and all its sub-interfaces.\nPrecautions\nIf the maximum number of multicast programs allowed is also specified, the device denies a new service request when either the maximum number of multicast programs or the bandwidth limit is exceeded.The command configuration is effective only for users on GE interfaces."
+}

@@ -1,0 +1,25 @@
+{
+    "PageTitle": "default-ip-address",
+    "FuncDef": "The default-ip-address command configures the default multicast address for a BFD session.\nThe undo default-ip-address command restores the default multicast address for a BFD session.\nBy default, the default multicast address for a BFD session is 224.0.0.184.",
+    "CLIs": [
+        "default-ip-address <default-ip-value>",
+        "undo default-ip-address"
+    ],
+    "ParentView": [
+        "BFD view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "default-ip-value",
+            "Info": "Specifies the multicast address for a BFD session.\nThe value ranges from 224.0.0.107 to 224.0.0.250, in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] default-ip-address 224.0.0.150"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the physical status of a link is to be monitored and the peer IP address is unavailable (for example, when no peer IP address exists on an Eth-Trunk member link), you can bind a BFD session to a multicast address and enable BFD control packets to be sent to the multicast address before BFD monitors the physical status.\nYou must change the default multicast address in either of the following situations:\nOther protocols use this multicast address on a live network.Multiple BFD sessions detect faults in a specified path. If BFD detects faults in a link between Layer 3 interfaces and these Layer 3 interfaces are connected by BFD-capable Layer 2 switching devices, multiple BFD sessions function. These BFD sessions must be configured with different default multicast addresses.\n\nPrerequisites\nBFD has been globally enabled using the bfd command in the system view.\nConfiguration Impact\nAll established BFD sessions associated with multicast will use this configured multicast address.\nFollow-up Procedure\nRun the bfd bind peer-ip default-ip command to configure a BFD session before using the BFD session to detect the physical status.\nPrecautions\nIf a BFD session bound to a default multicast address has been configured, the default multicast address cannot be changed.\nA default multicast address can be deleted only after all BFD sessions using this default multicast address have been deleted.\nWhen you change the multicast address on one end, change the multicast address on the other end to the same value within 1 minute. If the multicast addresses are not changed to the same within 1 minute, the system cannot receive the error message about section layer error codes.\nThis command can be configured only on an Admin-VS and takes effect for all VSs. For example, if a BFD session bound to a default multicast address has been configured for VS1, the default multicast address cannot be changed on the admin VS."
+}

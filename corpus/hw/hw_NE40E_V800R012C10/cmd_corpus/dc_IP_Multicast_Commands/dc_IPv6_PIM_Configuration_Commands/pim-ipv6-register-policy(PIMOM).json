@@ -1,0 +1,41 @@
+{
+    "PageTitle": "register-policy(IPv6)",
+    "FuncDef": "The register-policy command configures a policy used by a rendezvous point (RP) to filter Register messages.\nThe undo register-policy command restores the default configuration.\nBy default, no Register message filter policy is configured.",
+    "CLIs": [
+        "register-policy { <registerPolicyAclNum> | acl6-name <regPolicyName> }",
+        "undo register-policy"
+    ],
+    "ParentView": [
+        "IPv6 PIM view",
+        "VPN instance IPv6 PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "registerPolicyAclNum",
+            "Info": "Specifies the number of an advanced IPv6 ACL.\nThe value is an integer ranging from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl6-name regPolicyName",
+            "Info": "Specifies the name of an advanced IPv6 ACL.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported. The name must start with a letter or digit, and cannot contain only digits."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 3000",
+            "[*HUAWEI-acl6-advance-3000] rule permit ipv6 source 3:1:: 64 destination ff02:13:: 64",
+            "[*HUAWEI-acl6-advance-3000] quit",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] register-policy 3000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 name myacl6",
+            "[*HUAWEI-acl6-advance-myacl6] rule permit ipv6 source 3:1:: 64 destination ff02:13:: 64",
+            "[*HUAWEI-acl6-advance-myacl6] quit",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] register-policy acl6-name myacl6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo prevent Register message attacks, run the register-policy command to enable a router to permit or deny specific Register messages.\nThe register-policy command takes effect only for subsequently received Register messages. That is, the multicast entries that have been registered successfully are not deleted and can still be used for multicast data forwarding.\nPrerequisites\nThe multicast ipv6 routing-enable command is run in the public network instance view.\nConfiguration Impact\nIf the register-policy command is run more than once, the latest configuration overrides the previous one.\nIf the (S, G) information contained in a Register message is denied by ACL rules or if no ACL action is configured for the (S, G) information, the RP discards the Register message and does not register the multicast source indicated by the (S, G) information.\nThe RP accepts only Register messages permitted by ACL rules. If a specified ACL does not exist, the RP discards all Register messages and does not register any multicast sources."
+}

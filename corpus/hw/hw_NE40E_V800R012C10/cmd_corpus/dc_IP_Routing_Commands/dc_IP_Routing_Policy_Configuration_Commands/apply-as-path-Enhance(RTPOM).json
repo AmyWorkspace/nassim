@@ -1,0 +1,37 @@
+{
+    "PageTitle": "apply as-path (Route-policy view)",
+    "FuncDef": "The apply as-path command replaces the original AS_Path attribute, or adds, deletes a specified AS number to the AS_Path attribute.\nThe undo apply as-path command cancels the configuration.\nBy default, the original AS_Path attribute is not replaced and no AS number is added to or deleted from the AS_Path attribute.",
+    "CLIs": [
+        "apply as-path <asValues> { additive | overwrite | delete }",
+        "undo apply as-path <asValues> { additive | overwrite | delete }"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "asValues",
+            "Info": "Specifies an AS number.\nAS_Path attribute value. The value is a string of 1 to 3071 characters. The attribute is used together with double quotation marks (\" \"). A minimum of 129 groups of AS numbers and a maximum of 256 groups of AS numbers can be configured in the AS_Path attribute, and divide them with space in the middle. The AS numbers in each group can be in the following formats:\nInteger format: The value is an integer ranging from 1 to 4294967295.x.y format: x and y are both integers ranging from 1 to 65535 and from 0 to 65535, respectively."
+        },
+        {
+            "Parameters": "additive",
+            "Info": "Adds the specified AS number to the original AS_Path attribute.\n-"
+        },
+        {
+            "Parameters": "overwrite",
+            "Info": "Replaces the AS numbers in the original AS_Path attribute.\n-"
+        },
+        {
+            "Parameters": "delete",
+            "Info": "Deletes the specified AS number from the original AS_Path attribute.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] apply as-path \"1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129\" overwrite"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe AS_Path attribute is a private attribute of BGP used to record all ASs that a route passes through from the local area to the destination in distance-vector (DV) order. The AS_Path attribute can be used to control route selection and prevent routing loops. When the filtering conditions specified by if-match clauses are met and the matching mode is set to permit, you can use the apply as-path command to set the AS_Path attributes of the routes that match the filtering conditions.\nRun the route-policy command to enter the Route-policy view.A route-policy may consist of multiple nodes. The relationship between the nodes is \"OR\". The system matches a route against the nodes in sequence. If the route matches a node, the system no longer matches it against other nodes.Each node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nPrecautions\nRunning the apply as-path command changes the path through which network traffic passes. Use this command only when you are familiar with the network topology and impact of the command on services.\nThe apply as-path and apply as-path (enhance) commands function the same except the following:\nThe apply as-path command can be used to configure a maximum of 128 AS numbers, whereas the apply as-path (enhance) command can be used to configure 129 to 256 AS numbers."
+}

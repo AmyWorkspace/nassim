@@ -1,0 +1,44 @@
+{
+    "PageTitle": "ipv6 neighbor vid (VLANIF interface view)",
+    "FuncDef": "The iipv6 neighbor vid command configures a static entry in the IPv6 neighbor discovery cache.\nThe undo ipv6 neighbor vid command deletes a static entry from the IPv6 neighbor discovery cache.\nBy default, no static entry is configured.",
+    "CLIs": [
+        "ipv6 neighbor <ipv6-address> <mac-address> vid <vlan-id> { <interface-name> | <interface-type> <interface-number> }",
+        "undo ipv6 neighbor <ipv6-address>"
+    ],
+    "ParentView": [
+        "VLANIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a static entry.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies the data link layer address of the static entry.\nThe value is in the format of H-H-H. Each H is a 4-digit hexadecimal number, such as 00e0. If you enter fewer than four digits, the system pads 0s before the input digits. For example, if you enter e0, the system changes it to 00e0."
+        },
+        {
+            "Parameters": "vlan-id",
+            "Info": "Specifies the ID of the VLAN to which an interface belongs.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of a physical interface.\n-"
+        },
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the type and number of a physical interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] quit",
+            "[*HUAWEI] interface Vlanif 10",
+            "[*HUAWEI-vlanif10] ipv6 enable",
+            "[*HUAWEI-vlanif10] ipv6 neighbor 2001:db8::1 fe-e0-89 vid 10 GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo filter the illegal packets, you can create static ND entries, binding the destination IPv6 addresses of these packets to nonexistent MAC addresses.\nPrerequisites\nBefore running the ipv6 neighbor command to configure a static entry, you need to run the ipv6 enable command in the interface view to enable the IPv6 function on the interface.\nConfiguration Impact\nAn ND entry enters the REACHABLE state after being created, indicating that the interface connected to this neighbor is Up. If the interface connected to this neighbor turns Down, the ND entry needs to be deleted.\nThe static ND entries overwrite the ND entries dynamically learnt by routers. That is, static ND entries are of higher priorities than dynamically learnt ND entries.\nPrecautions\nYou can configure a maximum of 16K static ND entries on an interface.\nIf the IPv6 address or MAC address specified in the ipv6 neighbor command is incorrect, communication with this neighbor fails.\nYou can run the reset ipv6 neighbors command to delete dynamic ND entries."
+}

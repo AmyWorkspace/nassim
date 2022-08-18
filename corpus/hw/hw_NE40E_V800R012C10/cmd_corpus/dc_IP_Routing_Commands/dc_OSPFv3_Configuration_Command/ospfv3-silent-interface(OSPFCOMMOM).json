@@ -1,0 +1,36 @@
+{
+    "PageTitle": "silent-interface (OSPFv3 view)",
+    "FuncDef": "The silent-interface command disables an interface from receiving and sending OSPFv3 packets.\nThe undo silent-interface command restores the default setting.\nBy default, an interface can receive and send OSPFv3 packets.",
+    "CLIs": [
+        "silent-interface { all | { <interface-name> | <interface-type> <interface-number> } }",
+        "undo silent-interface { all | { <interface-name> | <interface-type> <interface-number> } }"
+    ],
+    "ParentView": [
+        "OSPFv3 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "all",
+            "Info": "Indicates all interfaces in a specified process.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] silent-interface GigabitEthernet1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo prevent OSPFv3 routes from being received by other routers on the network and disable the local router from receiving updated routes, run the silent-interface command. After an interface is disabled from receiving and sending OSPFv3 packets, the interface can still advertise its routes but cannot exchange Hello packets with others. Therefore, no neighbor relationship can be established between the interface and others. This can enhance the networking adaptability of OSPFv3 and reduce system resource consumption.\nFor example, when no OSPFv3 neighbor relationship is required between a user-side interface and a user terminal, but routes of the interface still need to be advertised to implement user-and-network interworking, run this command.\nDisabling interfaces from receiving or sending OSPFv3 packets is a solution to routing loops.\nConfiguration Impact\nDifferent processes can disable the same interface from sending and receiving OSPFv3 packets. However, the silent-interface command takes effect only on the OSPFv3 interface of the process.\nPrecautions\nIf the undo silent-interface command has been run in the current process, running the silent-interface all command causes the undo silent-interface command configuration to be deleted. As a result, the OSPFv3 neighbor relationship established using the interface specified in the undo silent-interface command goes down."
+}

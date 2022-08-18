@@ -1,0 +1,54 @@
+{
+    "PageTitle": "import-rib vpn-instance (BGP multi-instance VPN instance IPv4 address family view)",
+    "FuncDef": "The import-rib vpn-instance command imports BGP routes from a VPN instance into a BGP multi-instance VPN instance routing table.\nThe undo import-rib vpn-instance command cancels the configuration.\nBy default, a device does not import BGP routes from a VPN instance into a BGP multi-instance VPN instance routing table.",
+    "CLIs": [
+        "import-rib { vpn-instance <vpn-instance-name> } [ include-label-route ] [ valid-route ] [ route-policy <route-policy-name> | route-filter <route-filter-name> ]",
+        "undo import-rib { vpn-instance <vpn-instance-name> } [ include-label-route ] [ valid-route ] [ route-policy <route-policy-name> | route-filter <route-filter-name> ]"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "include-label-route",
+            "Info": "Includes labeled routes that are received from BGP peers and that are leaked to a specified VPN instance.\n-"
+        },
+        {
+            "Parameters": "valid-route",
+            "Info": "Imports only valid routes of a specified route type.\n-"
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] ip vpn-instance vpnb",
+            "[*HUAWEI-vpn-instance-vpnb] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpnb-af-ipv4] route-distinguisher 100:2",
+            "[*HUAWEI-vpn-instance-vpnb-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpnb-af-ipv4] quit",
+            "[*HUAWEI-instance-vpnb] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-a-vpna] import-rib vpn-instance vpnb"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a device to import BGP routes from a specified VPN instance into a BGP multi-instance VPN instance IPv4 routing table, run the import-rib vpn-instance command in the BGP multi-instance VPN instance IPv4 address family view.\nIf the valid-route parameter is specified in the import-rib vpn-instance command, all valid BGP routes in the specified VPN instance are imported. If the valid-route parameter is not specified, only active BGP routes among valid BGP routes are imported.\nIf the include-label-route parameter is specified in the import-rib vpn-instance command, the device will import the labeled routes that are received from BGP peers and that are leaked to the specified VPN instance.\nIf you want newly imported BGP routes to be preferentially selected, specify the route-policy route-policy-name or route-filter route-filter-name parameter so that the BGP attribute values in the filtered routes to be imported can be changed using the specified route-policy or route-filter.\nPrecautions\nIf the route-policy route-policy-name parameter is specified in the import-rib vpn-instance command, the if-match interface command configuration in the route-policy will not take effect.\nThe import-rib vpn-instance command configuration does not take effect for unlabeled routes that are leaked locally or remotely. Nor does this configuration take effect for the routes imported using the import-route command or network command."
+}

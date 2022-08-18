@@ -1,0 +1,57 @@
+{
+    "PageTitle": "multicast extranet select-rpf",
+    "FuncDef": "The multicast extranet select-rpf command configures a multicast routing policy for a VPN instance, specifying that the upstream interface of the RPF route selected by the PIM entry corresponding to a multicast group address belongs to another VPN or public network instance.\nThe undo multicast extranet select-rpf command deletes the multicast routing policy of a VPN instance.\nBy default, no multicast routing policies are configured for VPN instances.",
+    "CLIs": [
+        "multicast extranet select-rpf public group <group-address> { <group-mask> | <group-mask-length> }",
+        "multicast extranet select-rpf vpn-instance <vpn-instance-name> group <group-address> { <group-mask> | <group-mask-length> }",
+        "undo multicast extranet select-rpf all",
+        "undo multicast extranet select-rpf public group <group-address> { <group-mask> | <group-mask-length> }",
+        "undo multicast extranet select-rpf vpn-instance <vpn-instance-name> group <group-address> { <group-mask> | <group-mask-length> }"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-mask",
+            "Info": "Specifies the mask of a multicast group address.\nThe value ranges from 240.0.0.0 to 255.255.255.255, in dotted decimal notation."
+        },
+        {
+            "Parameters": "group-mask-length",
+            "Info": "Specifies the mask length of a multicast group address.\nThe value is an integer ranging from 4 to 32."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "group group-address",
+            "Info": "Specifies a multicast group address range for PIM entries to which a multicast routing policy applies.\nThe value is a string case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates all multicast routing policies.\n-"
+        },
+        {
+            "Parameters": "public",
+            "Info": "Specifies a public network instance as the source instance.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn2",
+            "[*HUAWEI-vpn-instance-vpn2] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn2-af-ipv4] route-distinguisher 200:1",
+            "[*HUAWEI-vpn-instance-vpn2-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn2] quit",
+            "[*HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] multicast extranet select-rpf vpn-instance vpn2 group 225.1.1.0 24"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMVPN extranet enables a service provider on a VPN to provide multicast services for users on other VPNs. To configure MVPN extranet in remote cross scenarios where a source VPN instance is configured on a receiver PE, run the multicast extranet select-rpf command to configure a multicast routing policy, specifying that the upstream interface of the RPF route selected by the PIM entry corresponding to a multicast group address belongs to another VPN or public network instance.\nPrerequisites\nThe multicast routing-enable command has been configured in the VPN.\nPrecautions\nvpn-instance-name specified in the multicast extranet select-rpf command cannot be the current VPN instance. If the upstream interface of an RPF route belongs to a public network instance, public must be selected.The group address range specified in the newly configured multicast routing policy cannot overlap the existing group address range."
+}

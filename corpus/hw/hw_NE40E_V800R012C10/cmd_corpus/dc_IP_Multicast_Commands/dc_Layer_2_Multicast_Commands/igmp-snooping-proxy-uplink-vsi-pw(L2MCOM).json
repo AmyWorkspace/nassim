@@ -1,0 +1,45 @@
+{
+    "PageTitle": "igmp-snooping proxy-uplink-port remote-peer",
+    "FuncDef": "The igmp-snooping proxy-uplink-port remote-peer command configures an interface as an IGMP snooping proxy uplink interface. No IGMP Query message can be sent to this interface.\nThe undo igmp-snooping proxy-uplink-port remote-peer command cancels the configuration.\nBy default, no IGMP snooping proxy uplink interface exists in a VSI.",
+    "CLIs": [
+        "igmp-snooping proxy-uplink-port remote-peer <remote-peer-addr> [ negotiation-vc-id <vc-id> ]",
+        "igmp-snooping proxy-uplink-port remote-peer <remote-peer-addr> bgp-ad",
+        "undo igmp-snooping proxy-uplink-port remote-peer <remote-peer-addr> [ negotiation-vc-id <vc-id> ]",
+        "undo igmp-snooping proxy-uplink-port remote-peer <remote-peer-addr> bgp-ad"
+    ],
+    "ParentView": [
+        "VSI-AUTO view",
+        "VSI-BD view",
+        "VSI-DEFAULT view",
+        "VSI-STATIC view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "remote-peer-addr",
+            "Info": "Specifies a remote peer IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "negotiation-vc-id vc-id",
+            "Info": "Specifies a VC ID. A VC ID is used when two VSIs that have different names need to communicate.\nThe value of the vc-id parameter in this command must be different from the VSI ID configured for another local VSI or other VSI IDs specified locally using negotiate-vc-id. That is, the specified VC ID must be an unused one.\nIf negotiate-vc-id is configured on the local end, the value of negotiate-vc-id or vsi-id configured on the peer must be the same as the value of negotiate-vc-id configured on the local end.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "bgp-ad",
+            "Info": "Specifies BGP-AD as the signaling negotiation protocol for VSI PW setup.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi0",
+            "[*HUAWEI-vsi-vsi0] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi0-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-vsi0-ldp] quit",
+            "[*HUAWEI-vsi-vsi0] igmp-snooping proxy-uplink-port remote-peer 10.1.1.9"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the IGMP snooping proxy or querier function is enabled on a Layer 2 device, the Layer 2 device broadcasts IGMP Query messages to all interfaces (including router interfaces) in a VLAN/VSI/BD periodically, which may trigger IGMP querier reelection. To prevent IGMP querier reelection, run the igmp-snooping proxy-uplink-port command on the router interface to disable the Layer 2 device from sending IGMP Query messages to the router interface in a VSI.\nPrerequisites\nIGMP snooping proxy has been enabled using the igmp-snooping proxy in the VLAN/VSI/BD view, or IGMP snooping querier has been enabled using the igmp-snooping querier enable command in the VSI view.\nPrecautions\nOnly one IGMP snooping proxy unlink interface can be configured in a VSI.\nFor a VSI, the igmp-snooping proxy-uplink-port command can be only used on a VSI in LDP mode or the leaf node of a VSI in BGPAD mode."
+}

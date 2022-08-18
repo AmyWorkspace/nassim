@@ -1,0 +1,54 @@
+{
+    "PageTitle": "mld robust-count",
+    "FuncDef": "The mld robust-count command sets a robustness variable for a Multicast Listener Discovery (MLD) querier.\nThe undo mld robust-count command restores the default value.\nBy default, the robustness variable of an MLD querier is 2.",
+    "CLIs": [
+        "mld robust-count <robust-value>",
+        "undo mld robust-count"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "robust-value",
+            "Info": "Specifies the robustness variable of an MLD querier.\nThe value is an integer ranging from 2 to 5."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld robust-count 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA robustness variable is used to define the following values:\nNumber of times for sending general query messages when the MLD querier startsNumber of times for sending group-specific query messages when the MLD querier receives a Report message\nIf a host running MLD needs to leave a group, the host sends an MLD Done message. If the MLD querier receives this message, it sends MLD last-listener query messages for the number of \"robustness variable\" times and at an interval which is set by using the mld lastlistener-queryinterval command. If the sending interval is not set, the default value is one second.\nIf another host receives the MLD last-listener query message from the MLD querier and wants to join the group, this host sends an MLD Report message within the maximum response time. If the MLD querier receives the MLD Report message from the host within the period (interval x robustness variable), the MLD querier continues to maintain the memberships for the group. If the MLD querier does not receive any Report message, the MLD querier considers that this group times out and stops maintaining the membership for the group.\nIf the robustness variable is set in both the interface view and the MLD view, the system prefers the value set in the interface view."
+}

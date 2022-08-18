@@ -1,0 +1,52 @@
+{
+    "PageTitle": "dhcp snooping check enable (VLAN view)",
+    "FuncDef": "The dhcp snooping check enable command enables DHCP check for a VLAN.\nThe undo dhcp snooping check enable command disables DHCP check for a VLAN.\nThe dhcp snooping trusted interface command configures an interface in a VLAN as a trusted interface.\nThe undo dhcp snooping trusted interface command restores the default configuration.\nBy default, the function of DHCP check is disabled, after DHCP snooping is enabled, all interfaces are untrusted interfaces.",
+    "CLIs": [
+        "dhcp { snooping { check { dhcp-request | ip | arp } enable | trusted } | check chaddr enable }",
+        "undo dhcp { snooping { check { dhcp-request | ip | arp } enable | trusted } | check chaddr enable }"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dhcp-request",
+            "Info": "Indicates that DHCP request packets are matched against the binding table.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Indicates that IP packets are matched against the binding table.\n-"
+        },
+        {
+            "Parameters": "arp",
+            "Info": "Indicates that ARP packets are matched against the binding table.\n-"
+        },
+        {
+            "Parameters": "chaddr",
+            "Info": "Indicates that the client hardware address (CHADDR) field value is matched against the MAC address in the Ethernet frame header.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] port default vlan 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] dhcp snooping enable",
+            "[*HUAWEI-vlan100] dhcp snooping trusted interface GigabitEthernet 1/0/0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] dhcp snooping enable",
+            "[*HUAWEI-vlan10] dhcp snooping check arp enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can configure the following check functions in DHCP snooping applications:\nWhen the man-in-the-middle attack or IP/MAC address spoofing occurs, you can configure ARP or IP check to determine whether the source IP and MAC addresses in the ARP or IP packets match those in the DHCP snooping binding table.When attacks using packets to request lease renewal occur, you can configure DHCP check to determine whether a DHCP request or release packet matches the binding table.For a DHCP request packet:Check whether the destination MAC address in the packet contains all Fs. If yes, the system considers the packet as a DHCP request packet broadcasted by a user at the first login and allows the packet to pass. If not, the system considers the packet as a packet requesting lease renewal and checks the packet against the binding table.Check whether the CHADDR field value in the packet matches the binding table. If not, the system allows the packet to pass. If yes, check whether the VLAN, IP address, and interface information in the packet matches the binding table. If such information matches the binding table, the system allows the packet to pass. If such information mismatches the binding table, the system drops the packet.\nFor a DHCP release packet, check whether the VLAN, IP address, MAC address, and interface information matches the binding table. If yes, the system allows the packet to pass. If not, the system drops the packet.\n\n\nPrerequisites\nDHCP snooping has been enabled globally by running the dhcp snooping enable command.\nPrecautions\nAfter DHCP snooping is enabled, all interfaces are untrusted by default.\nWhen DHCP snooping is disabled, all interfaces are trusted by default.\nIf an interface is changed from untrusted to trusted, the dynamic DHCP snooping binding table is deleted from the interface."
+}

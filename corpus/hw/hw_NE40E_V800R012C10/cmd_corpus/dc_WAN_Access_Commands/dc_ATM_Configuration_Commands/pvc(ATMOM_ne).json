@@ -1,0 +1,36 @@
+{
+    "PageTitle": "pvc",
+    "FuncDef": "The pvc command creates a PVC with a specified VPI/VCI and displays the PVC view.\nThe undo pvc command deletes a PVC.\nBy default, no PVC is created.",
+    "CLIs": [
+        "pvc <pvcName> [ <pvcBeg> ]",
+        "undo pvc <pvcName> [ <pvcBeg> ]"
+    ],
+    "ParentView": [
+        "Global IMA-group sub-interface view",
+        "IMA-group sub-interface view",
+        "Serial sub-interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pvcName",
+            "Info": "Specifies a PVC name.\nThe value is created using the pvc command. The value of vpi/vci for each PVC must be unique on an ATM interface (including its sub-interfaces).\nNotice: The PVC name cannot be valid VPI/VCI values. For example, it cannot be 1/20.\nThe value is a string of 1 to 16 case-insensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "pvcBeg",
+            "Info": "Specifies a virtual path identifier (VPI) / virtual channel identifier (VCI).\nThe PVC identified by pvcBeg must have been created.\nVPI: The value is an integer, and its range varies with the interface type.\nUNI interface: The value ranges from 0 to 255.NNI interface: The value ranges from 0 to 4095.\nVCI: The value is an integer ranging from 0 to 2 and 5 to 65535.\nThe VCI values 0 to 31 are reserved for special use."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface serial 1/0/0:0",
+            "[~HUAWEI-Serial1/0/0:0] link-protocol atm",
+            "[*HUAWEI-Serial1/0/0:0] quit",
+            "[*HUAWEI] interface serial 1/0/0:0.1",
+            "[*HUAWEI-Serial1/0/0:0.1] pvc 3/33",
+            "[*HUAWEI-Serial1/0/0:0.1-pvc-3/33]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nATM is connection-oriented. ATM connections are logical connections, called VCs. A virtual channel connection (VCC) consists of multiple VPs, and a VP consists of multiple VCs. Each VC is identified by a VPI/VCI.\nVPI: identifies a VP.VCI: identifies a VC.\nA VPI/VCI is of local significance for a link between ATM devices and is translated on the ATM devices. When a VC connection is released, the VPI/VCI value for the connection is also reclaimed and can be used by another connection.\nWhen you create a PVC, you can specify vpi/vci or pvc-name. If you specify pvc-name, you must also specify vpi/vci. If a PVC has a name, you can run the pvc pvc-name command to enter the PVC view.If you want to delete a PVC, you can specify pvc-name or vpi/vci in the undo pvc command.\n\nPrerequisites\nA sub-interface has been created on a serial interface whose link layer protocol is configured as ATM.\nConfiguration Impact\nIf the number of PVCs on an interface reaches the maximum number configured using the pvc max-number command, no more PVCs can be created.\nPrecautions\nThe value of vpi/vci for each PVC must be unique on an ATM interface (including its sub-interfaces).\nThe VCI values 3, 4 are reserved.\nThe VPI and VCI values cannot be both 0s.\nThe value of VPI/VCI cannot be 255/65535."
+}

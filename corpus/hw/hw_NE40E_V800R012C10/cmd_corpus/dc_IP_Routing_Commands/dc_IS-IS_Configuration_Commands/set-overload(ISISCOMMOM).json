@@ -1,0 +1,78 @@
+{
+    "PageTitle": "set-overload",
+    "FuncDef": "The set-overload command sets the overload bit for non-pseudonode LSPs.\nThe undo set-overload command clears the set overload bit.\nBy default, the overload bit is not set.",
+    "CLIs": [
+        "set-overload",
+        "set-overload { allow { interlevel | external } * }",
+        "set-overload { on-startup [ <timeout1> | start-from-nbr <system-id> [ <timeout1> [ <timeout2> ] ] | wait-for-bgp [ <timeout1> ] ] [ route-delay-distribute <timeout4> ] [ send-sa-bit [ <timeout3> ] ] }",
+        "set-overload { on-startup [ <timeout1> | start-from-nbr <system-id> [ <timeout1> [ <timeout2> ] ] | wait-for-bgp [ <timeout1> ] ] [ route-delay-distribute <timeout4> ] [ send-sa-bit [ <timeout3> ] ] } { allow { interlevel | external } * }",
+        "undo set-overload"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "allow",
+            "Info": "Enables the device to advertise IP prefixes. By default, IP prefixes are not advertised when the system enters the Overload state.\n-"
+        },
+        {
+            "Parameters": "interlevel",
+            "Info": "Enables the device to advertise the IP prefixes learned from IS-IS of different levels when allow is configured.\n-"
+        },
+        {
+            "Parameters": "external",
+            "Info": "Enables the device to advertise the IP prefixes learned from other protocols when allow is configured.\n-"
+        },
+        {
+            "Parameters": "on-startup",
+            "Info": "Sets the overload bit within the specified period when a device is restarted or faulty.\n-"
+        },
+        {
+            "Parameters": "timeout1",
+            "Info": "Specifies the period during which the overload bit remains set after the system is started.\nThe value is an integer ranging from 5 to 86400, in seconds. The default value is 600 seconds."
+        },
+        {
+            "Parameters": "start-from-nbr system-id",
+            "Info": "Sets the overload bit based on the status of the neighbor with the specified system ID.\n-"
+        },
+        {
+            "Parameters": "timeout2",
+            "Info": "Specifies the period during which the overload bit remains set based on the neighbor status.If the specified neighbor does not go Up within timeout2, the overload bit of the system remains set over a period specified by timeout2.If the specified neighbor goes Up within timeout2, the overload bit of the system remains set over a period specified by timeout1.\nThe value is an integer ranging from 5 to 86400, in seconds. The default value is 1200 seconds."
+        },
+        {
+            "Parameters": "wait-for-bgp",
+            "Info": "Sets the length of the overload flag bit to wait for BGP to complete convergence. The specific setting time should be adjusted according to the BGP convergence time in the device.\n-"
+        },
+        {
+            "Parameters": "route-delay-distribute timeout4",
+            "Info": "Indicates delayed route advertisement.After the device is restarted, in order to prevent other devices from using the old LSP to calculate the route to the restart device, traffic is introduced to the restart device. This parameter needs to be configured together with the send-sa-bit parameter. When used alone, there may be residual LSPs in the network, which may not achieve the purpose of avoiding traffic to restart the device here.\nThe value is an integer ranging from 5 to min (timeout1, 1000), in seconds."
+        },
+        {
+            "Parameters": "send-sa-bit",
+            "Info": "Enables the device to send the Hello packets carrying the overload bit after the device is started. When the neighboring device receives a HELLO message with the SA Bit set to TRUE sent by this device, its LSP will no longer carry this adjacency information, thus achieving the effect of avoiding the flow of traffic to the restarting node.\n-"
+        },
+        {
+            "Parameters": "timeout3",
+            "Info": "Specifies the period during which the overload bit remains in Hello packets after the device is started.\nThe value is an integer ranging from 5 to 600, in seconds. The default value is 30 seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] set-overload"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] set-overload on-startup start-from-nbr 0000.0000.0002 300 1000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] set-overload on-startup allow interlevel"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the system cannot store new LSPs or synchronize the LSDB normally because of memory shortage, the routes calculated by this system are incorrect. In this case, the system automatically enters the Overload state, regardless of whether the set-overload command is run.\nAfter the set-overload command is run, an IS-IS process enters the Overload state when it is started or restarted and instructs other devices not to use it for traffic forwarding.\nOn a BGP network, if a device is newly added to the network or a device is restarted, and the device is used as a forwarding node, traffic loss occurs because IS-IS route convergence is faster than BGP route convergence. To prevent this problem, run the set-overload command with the wait-for-bgp parameter specified and configure a timer for the parameter. In this way, the device notifies other devices that it is in the Overload state and instructs them not to use it as a forwarding node until the overload (OL) bit in LSPs is cleared when the timer expires.\nTo prevent the local device that is started for the first time or becomes faulty from participating the SPF calculation performed by other devices, run the set-overload command on the local device without on-startup specified. In this manner, the system immediately sets the overload bit in the LSP to be sent. To clear the overload bit, run the undo set-overload command.\nTo prevent the local device that is restarted from participating the SPF calculation performed by other devices, run the set-overload command with on-startup specified on the local device.\nWith on-startup specified, you can configure route-delay-distribute timeout4 to control delayed route advertisement. After route-delay-distribute timeout4 is configured and the device is restarted, route advertisement is delayed until timeout4 expires or the overload bit is cleared. After the device is restarted, if routes need to be advertised when timeout4 has not yet expired, use any of the following methods:\nPerform a master/slave main control board switchover.Run the command again, without route-delay-distribute specified.Run the reset isis all command.\nRunning this command may cause a temporary link flapping. Therefore, exercise caution when running the command.\n\nPrerequisites\nAn IS-IS process has been created.\nConfiguration Impact\nAfter the set-overload command is run:\nIf on-startup is specified, the LSPs with the overload bit set are flooded on the network only when the IS-IS process is restarted.If on-startup is not specified, the system immediately sets the overload bit in the LSPs to be sent. After the overload bit is set, other devices do not consider the local device during SPF calculation, but the direct routes to the local device are not ignored.\n\nPrecautions\nWhen a device is experiencing a memory shortage, the system automatically sets the overload bit in the LSP to be sent, regardless of whether the set-overload command is run.\nAfter the device is restarted, if you change the value of timeout4 when it has not yet expired, the current value is still used until the timer expires.\nUsing the delayed route advertisement function only when a backup path is available is recommended.\nIf a TE LSP uses the local device as a transit node before the set-overload command is run, the TE LSP is not torn down and re-established and still uses the local device as a transit node after the set-overload command is run; if the local device is restarted after the command is run and fast convergence is not configured on the ingress of the RSVP-LSP, TE LSP forwarding fails, and services are affected. Therefore, the mpls te path-selection overload command needs to be run on the ingress of the RSVP-LSP before the device is restarted."
+}

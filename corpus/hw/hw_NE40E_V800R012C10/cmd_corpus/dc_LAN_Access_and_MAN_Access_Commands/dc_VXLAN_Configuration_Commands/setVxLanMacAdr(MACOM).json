@@ -1,0 +1,68 @@
+{
+    "PageTitle": "mac-address static bridge-domain (System view)",
+    "FuncDef": "The mac-address static bridge-domain command configures a static MAC address entry for a VXLAN tunnel.\nThe undo mac-address static bridge-domain command deletes a static MAC address entry of a VXLAN tunnel.\nBy default, no static MAC address entry is configured for any VXLAN tunnel.",
+    "CLIs": [
+        "mac-address static mac-address bridge-domain <bd-id> source <source-ip-address> peer <peer-ip> vni <vni-id>",
+        "mac-address static mac-address bridge-domain <bd-id> source-ipv6 <sourceIpv6> peer-ipv6 <peerIPv6> vni <vni-id>",
+        "undo mac-address static mac-address bridge-domain <bd-id> [ [ source <source-ip-address> ] [ peer <peer-ip> ] [ vni <vni-id> ] ]",
+        "undo mac-address static mac-address bridge-domain <bd-id> [ [ source-ipv6 <sourceIpv6> ] [ peer-ipv6 <peerIPv6> ] [ vni <vni-id> ] ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies a destination MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0. The MAC address cannot be set to FFFF-FFFF-FFFF or a multicast address starting with 01."
+        },
+        {
+            "Parameters": "bd-id",
+            "Info": "Specifies a BD to which a VNI is to be mapped.\nThe value is an integer ranging from 1 to 16777215."
+        },
+        {
+            "Parameters": "source source-ip-address",
+            "Info": "Specifies the IP address of a local VTEP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "peer peer-ip",
+            "Info": "Specifies an IP address for a remote VTEP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vni vni-id",
+            "Info": "Specifies a VNI ID.\nThe value is an unsigned integer. The value range is adjusted based on hardware configuration, and the default maximum range is 0 to 4294967295."
+        },
+        {
+            "Parameters": "source-ipv6 sourceIpv6",
+            "Info": "Specifies an IPv6 address for a local VTEP.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "peer-ipv6 peerIPv6",
+            "Info": "Specifies an IPv6 address for a remote VTEP.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] vxlan vni 5000",
+            "[*HUAWEI-bd10] quit",
+            "[*HUAWEI] interface nve 1",
+            "[*HUAWEI-Nve1] source 1.1.1.1",
+            "[*HUAWEI-Nve1] vni 5000 head-end peer-list 2.2.2.2",
+            "[*HUAWEI-Nve1] quit",
+            "[*HUAWEI] mac-address static aa-fcc-12 bridge-domain 10 source 1.1.1.1 peer 2.2.2.2 vni 5000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] vxlan vni 5000",
+            "[*HUAWEI-bd10] quit",
+            "[*HUAWEI] interface nve 1",
+            "[*HUAWEI-Nve1] source 2001:db8:1::1",
+            "[*HUAWEI-Nve1] vni 5000 head-end peer-list 2001:db8:1::2",
+            "[*HUAWEI-Nve1] quit",
+            "[*HUAWEI] mac-address static aa-fcc-12 bridge-domain 10 source-ipv6 2001:db8:1::1 peer-ipv6 2001:db8:1::2 vni 5000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nter the source NVE on a VXLAN tunnel receives broadcast, unknown unicast, and multicast (BUM) packets, the local VTEP sends a copy of the BUM packets to every VTEP in the ingress replication list with the same VNI. To reduce the volume of broadcast traffic, run the mac-address static bridge-domain command to configure a static MAC entry for forwarding traffic. This configuration also prevents unauthorized data access, enhancing network security."
+}

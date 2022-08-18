@@ -1,0 +1,46 @@
+{
+    "PageTitle": "service-class track bfd-session",
+    "FuncDef": "The service-class track bfd-session command configures the function of re-marking matching packets' CoS and color based on the status of the specified BFD session.\nThe undo service-class track bfd-session command cancels the function of re-marking matching packets' CoS and color based on the status of the specified BFD session.\nBy default, the function of re-marking matching packets' CoS and color based on the status of the specified BFD session is not configured.",
+    "CLIs": [
+        "service-class <service-class> color <color> track { master | slave } bfd-session session-name <bfd-session-name>",
+        "undo service-class track { master | slave } bfd-session",
+        "undo service-class <service-class> color <color> track { master | slave } bfd-session session-name <bfd-session-name>"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "service-class",
+            "Info": "Specifies the CoS of packets.\nThe value is an enumerated type and can be case-insensitive EF, AF1, AF2, AF3, AF4, BE, CS6, or CS7."
+        },
+        {
+            "Parameters": "color color",
+            "Info": "Specifies the packet color.\nThe value is an enumerated type and can be case-insensitive green, yellow, or red."
+        },
+        {
+            "Parameters": "master",
+            "Info": "Indicates the active BFD session.\n-"
+        },
+        {
+            "Parameters": "slave",
+            "Info": "Indicates the standby BFD session.\n-"
+        },
+        {
+            "Parameters": "bfd-session-name",
+            "Info": "Specifies the name of a BFD session.The value can be only the name of a configured BFD session.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[~HUAWEI-bfd] quit",
+            "[~HUAWEI] bfd b1 bind peer-ip 1.1.1.1",
+            "[*HUAWEI-bfd-session-b1] quit",
+            "[*HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] service-class af1 color green track master bfd-session session-name b1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen multiple forwarding paths exist on a link, you can run this command to dynamically mark the service class and color of packets matching the traffic policy based on the specified BFD session status.\nThe status of a BFD session reflects the connectivity of the forwarding path monitored by BFD. You can specify both active and standby BFD sessions or specify only one BFD session.\nWhen the active BFD session is Up, the matching packets are marked the service-class and color corresponding to the active BFD session.When the active BFD session is Down or no active BFD session is specified.If the standby BFD session is Up, the matching packets are marked the service-class and color corresponding to the standby BFD session.If the standby BFD session is Down, the matching packets are not marked a new CoS or color.\n\nPrerequisites\nBFD sessions are configured.A traffic behavior is configured.\n\nPrecautions\nIf the specified BFD session does not exist, this command cannot be configured.On a board not equipped with an eTM subcard, this command marks the outgoing packets' CoS and color, which can be mapped to the 802.1p or DSCP value using the PHB function, without packets being placed in queues.For the LPUF-50/LPUF-50-L/LPUI-21-L/LPUI-51-L/LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101: If the service-class track bfd-session command is configured in the traffic behavior of a traffic policy, the traffic policy fails to be applied to the board."
+}

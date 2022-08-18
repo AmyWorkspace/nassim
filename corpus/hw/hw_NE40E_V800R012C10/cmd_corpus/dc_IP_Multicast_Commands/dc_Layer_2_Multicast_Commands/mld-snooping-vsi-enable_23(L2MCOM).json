@@ -1,0 +1,37 @@
+{
+    "PageTitle": "mld-snooping query-ip-policy (VSI view)",
+    "FuncDef": "The mld-snooping query-ip-policy command configures an MLD Query message filtering policy for a VLAN/VSI.\nThe undo mld-snooping query-ip-policy command restores the default configuration.\nBy default, no MLD Query message filtering policy is configured in a VLAN/VSI. With this default setting, all hosts in the VLAN/VSI to join multicast groups.",
+    "CLIs": [
+        "mld-snooping query-ip-policy { <acl-number> | acl6-name <acl6-name> }",
+        "undo mld-snooping query-ip-policy"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL6. The ACL6 defines source addresses based on which MLD Query messages in a VLAN/VSI are permitted or denied.\nThe value is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named ACL6.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 2000",
+            "[*HUAWEI-acl6-basic-2000] rule deny source 100::1 64",
+            "[*HUAWEI-acl6-basic-2000] rule permit source any",
+            "[*HUAWEI-acl6-basic-2000] quit",
+            "[*HUAWEI] mld-snooping enable",
+            "[*HUAWEI] vlan 11",
+            "[*HUAWEI-vlan11] mld-snooping query-ip-policy 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo enable a device to filter out specific MLD Query messages, run the mld-snooping query-ip-policy command to configure an MLD Query message filtering policy, improving the multicast service security. This command takes effect only for MLD Query messages."
+}

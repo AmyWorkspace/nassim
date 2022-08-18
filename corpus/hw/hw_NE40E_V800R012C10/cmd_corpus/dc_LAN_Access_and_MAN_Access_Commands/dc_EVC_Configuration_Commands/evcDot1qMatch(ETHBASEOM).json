@@ -1,0 +1,35 @@
+{
+    "PageTitle": "encapsulation dot1q",
+    "FuncDef": "The encapsulation dot1q vid command is used to configure a Layer 2 sub-interface to access packets with a specified 802.1Q Tag.\nThe undo encapsulation dot1q vid command is used to cancel the access of a specified Layer 2 sub-interface to a specified 802.1Q Tag.\nBy default, no encapsulation type is specified on an EVC Layer 2 sub-interface.",
+    "CLIs": [
+        "encapsulation dot1q [ vid <low-pe-vid> [ to <high-pe-vid> ] ]",
+        "undo encapsulation dot1q [ vid <low-pe-vid> [ to <high-pe-vid> ] ]"
+    ],
+    "ParentView": [
+        "400GE Layer 2 sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "Global-VE layer2 subinterface view",
+        "VE layer2 subinterface view",
+        "Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vid low-pe-vid",
+            "Info": "Specifies a range of VLAN IDs for single-tagged packets to be received by an EVC Layer 2 sub-interface. The parameters are as follows:\npevid1: specifies the start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to high-pe-vid",
+            "Info": "Specifies a range of VLAN IDs for single-tagged packets to be received by an EVC Layer 2 sub-interface. The parameters are as follows:\npevid2: specifies the end VLAN ID. pevid2 must be greater than or equal to pevid1. pevid2 and pevid1 define a range of VLAN IDs.\nIf you do not specify to pevid2, pevid1 specifies the single VLAN ID carried in packets.\nIf the pevid1 [ to pevid2 ] parameters are run more than once, all configurations take effect.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.2 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] encapsulation dot1q vid 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a Layer 2 Ethernet network, packets may not carry VLAN Tags or carry one or two VLAN Tags. To enable different packets to be forwarded through different EVC Layer 2 sub-interfaces, run this command to configure different flow encapsulation modes for the EV Layer 2 sub-interface. The encapsulation dot1q vid command enables a Layer 2 sub-interface to access packets with VLAN encapsulation by default.\nPrecautions\nOnly a single encapsulation type can be specified on each EVC Layer 2 sub-interface. Before changing an encapsulation type, run the undo encapsulation command to delete the existing encapsulation type and run the encapsulation to specify an encapsulation type.\nIn a data transparent transmission scenario, dot1q or QinQ encapsulation is configured on an EVC Layer 2 sub-interface, and a range of VLAN IDs is specified for VLAN tags carried in packets. In this situation, traffic may be returned or dropped if the undo encapsulation dot1q vid low-pe-vid or undo encapsulation qinq vid pe-vid ce-vid low-ce-vid command is run to delete the existing encapsulation type with the smallest VLAN ID specified. To prevent problems, perform the following operations:\nRun the shutdown command on the EVC Layer 2 sub-interface.Run the commit command to commit configuration.Run the undo encapsulation dot1q vid command to delete the minimum VLAN.Run the undo shutdown command on the EVC Layer 2 sub-interface.Run the commit command to commit configuration."
+}

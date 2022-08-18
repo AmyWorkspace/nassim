@@ -1,0 +1,37 @@
+{
+    "PageTitle": "apply qos-local-id",
+    "FuncDef": "The apply behavior command configures a QoS traffic behavior for routes.\nThe undo apply behavior command cancels the configuration.\nThe apply ip precedence command sets the QoS parameter ip-precedence for routes.\nThe undo apply ip-precedence command cancels the configuration.\nThe apply qos-local-id command sets the QoS local ID.\nThe undo apply qos-local-id command cancels the configuration.\nBy default, no QoS traffic behavior is configured, ip-precedence is not set, and no QoS local ID is set.",
+    "CLIs": [
+        "apply behavior <behavior-name>",
+        "apply ip-precedence <ip-precedence>",
+        "apply qos-local-id <qos-local-id>",
+        "undo apply { qos-local-id | behavior | ip-precedence }"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "behavior-name",
+            "Info": "Specifies the name of a QoS traffic behavior.\nThe value is a string of 1 to 127 characters."
+        },
+        {
+            "Parameters": "ip-precedence",
+            "Info": "Specifies the IP precedence. Traffic can be identified after packets are classified based on the IP precedence.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "qos-local-id",
+            "Info": "Specifies the QoS local ID.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic behavior example",
+            "[*HUAWEI-behavior-example] quit",
+            "[*HUAWEI] route-policy test permit node 10",
+            "[*HUAWEI-route-policy] apply behavior example"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nRun the route-policy command to enter the Route-policy view.\nA route-policy may consist of multiple nodes. The relationship between the nodes is \"OR\". The system matches a route against the nodes in sequence. If the route matches a node, the route matches the route-policy, and the system no longer matches it against other nodes.\nEach node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.\nThe QoS local ID is a local identifier of QoS. You can run the apply qos-local-id command to set the QoS local ID in the route-policy. The QoS local ID set in the route-policy is delivered to the FIB. During packet forwarding, the system obtains the QoS local ID from the FIB and applies the related QoS policy according to the QoS local ID.\nPrerequisites\nThe behavior name specified in the apply behavior behavior-name command has been configured in the system view.\nFiltering conditions have been configured to classify routes based on the AS_Path, community attribute, IP prefix list, or route cost.\nA route-policy has been configured using the route-policy command.\nImplementation Procedure\nOn large and complex networks, traffic flows of different types, such as voice, video, and data, need to be managed separately, and different bandwidth resources and delays need to be assigned to them. In this case, class-based QoS needs to be configured and multi-field classification needs to be performed. Constant network topology changes will increase configuration workload and complicate implementation.\nTherefore, the QoS Policy Propagation Through the Border Gateway Protocol (QPPB) was introduced. With the QPPB technology, the BGP route sender can classify routes in advance by setting BGP attributes, which simplifies the policy modification on the route receiver. To meet the requirements, you only need to configure a BGP route-policy.\nThe apply behavior command is used to apply a specific traffic behavior to the routes that match the filtering conditions.\nThe apply ip precedence command applies to QPPB, in which the IP precedence can be set. After receiving routes, a BGP route receiver matches their attributes based on the import policy, sets the IP precedence, delivers the BGP routes together with the associated QoS parameters, and applies QoS traffic policies to the classified data. In this case, the BGP route receiver can apply QoS policies to the data sent to the destination network segment based on the IP precedence.\nConfiguration Impact\nThe apply behavior is mutually exclusive with the apply qos-local-id and apply ip-precedence commands.\nPrecautions\nTo set a QoS local ID for the routes to be imported, you can configure one in a route-policy using the apply qos-local-id command and then set the route-policy as an import policy. Alternatively, you can configure a QoS local ID using the qos-local-id command. If different QoS local IDs are configured using the two methods, the one configured using the first method takes effect.\nThe apply qos-local-id command is mutually exclusive with the apply behavior command."
+}

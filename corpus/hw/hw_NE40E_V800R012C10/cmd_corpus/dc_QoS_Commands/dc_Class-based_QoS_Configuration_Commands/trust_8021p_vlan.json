@@ -1,0 +1,58 @@
+{
+    "PageTitle": "trust 8021p vlan",
+    "FuncDef": "The trust 8021p vlan command enables 802.1p priority-based simple traffic classification on a Layer 2 interface.\nThe undo trust 8021p vlan command cancels the configuration.\nBy default, 802.1p-based BA classification is not configured on a Layer 2 interface.",
+    "CLIs": [
+        "trust { 8021p | inner-8021p | outer-8021p } [ inbound | outbound ] vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10>",
+        "undo trust { 8021p | inner-8021p | outer-8021p } [ inbound | outbound ] vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10>"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "Eth-Trunk interface view",
+        "FlexE interface view",
+        "Layer 2 GE interface view",
+        "GE optical interface view",
+        "Port extension Layer 2 interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "8021p",
+            "Info": "Specifies the 802.1p field of packets which is need to map to the internal priorities.\n-"
+        },
+        {
+            "Parameters": "inner-8021p",
+            "Info": "Specifies the inner-8021p field of packets which is need to map to the internal priorities.\n-"
+        },
+        {
+            "Parameters": "outer-8021p",
+            "Info": "Specifies the outer-8021p field of packets which is need to map to the internal priorities.\n-"
+        },
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies a start VLAN ID.\nThe value is an integer in the range 1 to 4094."
+        },
+        {
+            "Parameters": "to",
+            "Info": "Specifies a VLAN ID range.\n-"
+        },
+        {
+            "Parameters": "vlan-id2",
+            "Info": "Specifies an end VLAN ID.\nThe value is an integer in the range 1 to 4094. vlan-id2 must be greater than vlan-id1."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] diffserv domain ds1",
+            "[*HUAWEI-dsdomain-ds1] quit",
+            "[*HUAWEI] interface GigabitEthernet4/0/0",
+            "[*HUAWEI-GigabitEthernet4/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet4/0/0] port trunk allow-pass vlan 1 to 10",
+            "[*HUAWEI-GigabitEthernet4/0/0] trust upstream ds1 vlan 1 to 10",
+            "[*HUAWEI-GigabitEthernet4/0/0] trust 8021p vlan 1 to 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe trust 8021p vlan command is used to configure a simple traffic classification-based QoS policy on a Layer 2 interface.\nFor the inbound interface traffic, the command is executed when the 802.1p field of packets is need to map to the internal priorities. For the outbound interface traffic, the command is executed when 802.1p field of packets is need to modify.\nIf the inbound and outbound parameters are not specified. the command takes effect on both inbound and outbound interface traffic.\nPrecautions\nThe trust inner-8021p inbound command is mutually exclusive with the qos default-service-class command.\nBefore running the trust 8021p vlan command on an interface, use the trust upstream vlan command to bind a DS domain to the interface. Otherwise, the trust 8021p vlan configuration does not take effect."
+}

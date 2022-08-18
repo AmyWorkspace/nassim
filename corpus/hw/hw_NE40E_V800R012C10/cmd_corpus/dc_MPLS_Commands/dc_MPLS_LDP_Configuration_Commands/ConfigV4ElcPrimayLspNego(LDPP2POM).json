@@ -1,0 +1,28 @@
+{
+    "PageTitle": "entropy-label negotiate primary-lsp-only",
+    "FuncDef": "The entropy-label negotiate primary-lsp-only command configures LDP to negotiate the entropy label capability only based on the primary LSP.\nThe undo entropy-label negotiate primary-lsp-only command restores the default configuration.\nBy default, LDP negotiates the entropy label capability based on the primary and backup LSPs of a tunnel. That is, a tunnel is considered to have the entropy label capability only when both the primary and backup LSPs of the tunnel have the entropy label capability.",
+    "CLIs": [
+        "entropy-label negotiate primary-lsp-only",
+        "entropy-label negotiate primary-lsp-only ip-prefix <ip-prefix-name>",
+        "undo entropy-label negotiate primary-lsp-only [ ip-prefix <ip-prefix-name> ]"
+    ],
+    "ParentView": [
+        "MPLS-LDP-IPv4 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "Enter system view, return user view with return command.",
+            "[~HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] ipv4-family",
+            "[*HUAWEI-mpls-ldp-ipv4] entropy-label negotiate primary-lsp-only"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf this command is not run, when a transit node sends a Label Mapping message to an upstream node, the transit node needs to transparently transmit the entropy label capability of the downstream nodes. If the tunnel has primary and backup LSPs, the transit node can send a Label Mapping message carrying the entropy label capability only if the downstream nodes of both the primary and backup LSPs have sent the entropy label capability TLV. In addition, an ingress node needs to determine whether to add an entropy label to the traffic to be forwarded. If a tunnel has primary and backup LSPs, the ingress node adds an entropy label only if the downstream nodes of both the primary and backup LSPs have sent the entropy label capability TLV.\nAfter this command is run, entropy label capability calculation focuses only on whether the downstream nodes of the primary LSP have sent the entropy label capability TLV, without considering the backup LSP.\nPrecautions\nIf the egress nodes of the primary and backup paths of an LDP tunnel are different and the egress node of the primary path has the entropy label capability but the egress node of the backup path does not have the entropy label capability, the tunnel is considered to have the entropy label capability after this command is run. If the primary path fails, traffic is quickly switched to the backup path through FRR and sent to the egress node of the backup path. The egress node discards traffic because it does not have the entropy label capability. In this scenario, do not run this command."
+}

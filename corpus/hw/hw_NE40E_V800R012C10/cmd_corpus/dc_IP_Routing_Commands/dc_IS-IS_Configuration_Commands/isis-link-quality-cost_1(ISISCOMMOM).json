@@ -1,0 +1,60 @@
+{
+    "PageTitle": "isis ipv6 link-quality low incr-cost",
+    "FuncDef": "The isis ipv6 link-quality low incr-cost command enables the function to adjust the link cost of an interface when its link quality is low.\nThe undo isis ipv6 link-quality low incr-cost command disables the function.\nBy default, the function is enabled.",
+    "CLIs": [
+        "isis ipv6 link-quality low incr-cost { <cost-value> | max-reachable }",
+        "isis process-id <process-id-value> ipv6 link-quality low incr-cost { <cost-value> | max-reachable }",
+        "undo isis ipv6 link-quality low incr-cost [ { <cost-value> | max-reachable } ]",
+        "undo isis process-id <process-id-value> ipv6 link-quality low incr-cost [ { <cost-value> | max-reachable } ]"
+    ],
+    "ParentView": [
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cost-value",
+            "Info": "Specifies a link cost adjustment value.After this parameter is specified:\nWhen the link quality becomes low, the actual link cost of the interface equals the original link cost plus the specified adjustment value.When the link quality reverts, the actual link cost of the interface equals the original link cost.\nThe value is an integer ranging from 1 to 16777213."
+        },
+        {
+            "Parameters": "max-reachable",
+            "Info": "Adjusts the link cost to the maximum link cost.\nThe maximum link cost is 63 if the cost type is narrow, narrow-compatible, or compatible.The maximum link cost is 16777214 if the cost type is wide or wide-compatible.\n-"
+        },
+        {
+            "Parameters": "process-id process-id-value",
+            "Info": "Specifies the IS-IS multi-instance process ID when multi-instance is enabled under the relevant process.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "low",
+            "Info": "Indicates that the link cost of an interface is adjusted when its link quality is low.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] ipv6 enable topology ipv6",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis ipv6 enable 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis ipv6 link-quality low incr-cost max-reachable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA bit error indicates the deviation between a bit that is sent and the bit that is received. Bit errors caused by optical fiber aging or optical signal jitter are inevitable on carrier networks. During data transmission, a high bit error rate will degrade or even interrupt services in extreme cases.\nTo ensure network reliability, run the isis ipv6 link-quality low incr-cost command to enable the device to adjust the link cost of an IS-IS interface when its link quality is low. If the IS-IS interface detects that its link quality is low, the device increases the link cost of the interface, so that this link, which has a higher bit error rate, is not selected as the optimal link. After the link quality reverts, the device automatically restores the link cost of the IS-IS interface.\nPrerequisites\nBefore running this command, run the ipv6 enable topology ipv6 command in the IS-IS process to enable the IPv6 function for the process. In the interface view, run the ipv6 enable command to enable the IPv6 function on the interface. Then, run the isis ipv6 enable command to enable the IS-IS function on the interface.\nConfiguration Impact\nIf the isis ipv6 link-quality low incr-cost command is run more than once in the same view, the latest configuration overrides the previous one."
+}

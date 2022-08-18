@@ -1,0 +1,29 @@
+{
+    "PageTitle": "nas logic-sysname (BAS interface view)",
+    "FuncDef": "The nas logic-sysname command configures the logical host name.\nThe undo nas logic-sysname command deletes the logical host name.\nBy default, no logical host name is configured.",
+    "CLIs": [
+        "nas logic-sysname <host-name>",
+        "undo nas logic-sysname"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "host-name",
+            "Info": "Specifies the logical host name.\nThe value is a string of 1 to 30 case-sensitive characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] bas",
+            "[*HUAWEI-GigabitEthernet1/0/1-bas] access-type layer2-subscriber",
+            "[*HUAWEI-GigabitEthernet1/0/1-bas] nas logic-sysname word"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe nas logic-port and nas logic-sysname commands are applied to the remote backup of user information. Through these commands, the NAS-Port, NAS-Port-ID, and Option82 information in the packets that the primary and secondary devices send to the RADIUS and DHCP servers are identical.\nConfigure the same logical host name and logical interface on the BAS interfaces that back up each other. The NAS-Port, NAS-Port-ID, and Option 82 information in the packets that the primary and secondary devices send to the RADIUS and DHCP servers are identical.\nPrerequisites\nBefore configuring the logical host name for a BAS interface, you must set the access type of the BAS interface to layer2-subscriber or layer3-subscriber.\nConfiguration Impact\nAfter the logical host name and logical port are configured for the BAS interface, note the following:\nThe user name of an IPoX user using pre-authentication or binding authentication contains the logical port number.When the system needs to generate the Option 82 field (if the user packet does not carry the Option 82 field), or when the system needs to change the Option 82 field (if the NE40E is configured not to trust the Option 82 field in the user packet), the Option 82 field contains the logical host name and logical port number.The NAS-Port and NAS-Port-ID attributes for the users' RADIUS authentication contain the logical host name and logical port number. If the logical host name cannot be obtained, these attributes contain only the logical port number.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nWhen the nas logic-sysname command is used in both the profile view and the BAS interface view, the one configured in the profile view takes effect.\nIf the nas logic-sysname command is used on a trunk interface, the configuration takes effect on the trunk interface and its sub-interfaces.\nIf the nas logic-sysname command is used in the profile, Eth-Trunk interface, and BAS interface views, the configuration in the profile view takes effect.\nIf the nas logic-sysname command is used in the Eth-Trunk interface and BAS interface views, the configuration in the BAS interface view takes effect.\nIf the nas logic-sysname command is used in the Eth-Trunk interface view, the interface type can only be Eth-Trunk.\nIf the nas logic-sysname command is not used in the profile, Eth-Trunk interface, and BAS interface views, the configuration in the AAA view takes effect. In the AAA view, the logical host name is only used to check packet validity when the device sends the NAS-Identifier attribute of the RADIUS server or the RADIUS server delivers COA or DM packets and cannot be used to generate the user Accounting-session-ID, Accounting-Multi-session-ID, local Option82 information, default PPP and DHCP user names, NAS-Port-ID and Calling-Station-ID attributes sent to the RADIUS server."
+}

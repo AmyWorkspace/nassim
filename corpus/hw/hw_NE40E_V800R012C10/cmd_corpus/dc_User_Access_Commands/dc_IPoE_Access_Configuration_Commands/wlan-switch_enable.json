@@ -1,0 +1,28 @@
+{
+    "PageTitle": "wlan-switch enable",
+    "FuncDef": "The wlan-switch enable command enables WLAN user roaming switchover on a BAS interface.\nThe undo wlan-switch enable command disables WLAN user roaming switchover on a BAS interface.\nBy default, WLAN user roaming switchover is disabled on a BAS interface.",
+    "CLIs": [
+        "wlan-switch enable [ switch-group <switch-group-name> ]",
+        "undo wlan-switch enable"
+    ],
+    "ParentView": [
+        "BAS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "switch-group switch-group-name",
+            "Info": "Specifies the name of a switching group.\nThe value is a string of 1 to 15 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet3/0/0.1",
+            "[~HUAWEI-GigabitEthernet1/0/0.1] commit",
+            "[~HUAWEI-GigabitEthernet3/0/0.1] bas",
+            "[~HUAWEI-GigabitEthernet3/0/0.1-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet3/0/0.1-bas] wlan-switch enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, when a WLAN user roams between different APs, the user needs to be re-authenticated for login after being logged out, which causes services to be interrupted. To prevent a service interruption, run the wlan-switch enable command to enable WLAN user roaming switchover on a BAS interface. The NE40E then updates user access information and keeps users online upon receiving packets sent by the WLAN users to trigger roaming procedures.\nAfter WLAN user roaming switchover is enabled on a BAS interface, you need to configure the interface to use received user packets to trigger roaming procedures for WLAN users. Perform the following configurations based on the actual roaming scenarios:\nIf users do not pass through Wi-Fi blind spots when roaming between different APs, run either the ip-trigger or arp-trigger command or both to configure the interface to trigger roaming procedures for the WLAN users based on the received IP or ARP packets, or run the ipv6?trigger command to configure the interface to trigger roaming procedures for Layer 2 IPv6 users based on the received IPv6 packets.If users pass through Wi-Fi blind spots when roaming between different APs, run the dhcp session-mismatch action roam { ipv4 | ipv6 | nd } * command to configure the interface to allow users to send DHCPv4 Discover or Request messages or DHCPv6 Solicit messages or ND RS messagesto re-log in.The dhcp session-mismatch action roam { ipv4 | ipv6 | nd } * and dhcp session-mismatch action offline commands override one another. If the two commands are run on the same interface, the command run later takes effect.The dhcp session-mismatch action roam { ipv4 | ipv6 } * command can be configured together with the ip-trigger, the arp-trigger and the ipv6-trigger commands.\nTo control the range of interfaces for roaming switchover, you can specify a switching group after enabling WLAN user switchover on a BAS interface, so that WLAN user roaming switchover is performed between interfaces of the specified roaming switchover group.\n\nPrecautions\nThis command is supported only on the admin VS.\nThe wlan-switch enable command cannot be run together with the access session-group-template or remote-backup-profile command on the same interface.\nWLAN user roaming switchover and one-to-many mappings between one MAC address and multiple sessions are mutually exclusive and therefore cannot be configured on the same interface.\nThe same MAC address must be configured for the BAS main interface (including GE main interface and Eth-Trunk main interface) before and after the switchover. If different MAC addresses are configured, the IP/ARP packet to trigger WLAN roaming cannot be received on the BAS interface after the switchover is performed, which means that roaming cannot be triggered.\nUsers roaming between different interfaces can be IPoE users (excluding static users with proactive detection, static users with the same MAC address but different IP addresses, and all leased line users).\nThe wlan-switch enable and dhcp lease-proxy commands are mutually exclusive.\nIf the parameter switch-group-name is specified, the parameter settings on different BRAS interfaces must be the same for handovers during WLAN user roaming. If they are consistent, handovers during WLAN user roaming are not allowed.\nRoaming between different types of interfaces is not allowed.\nThe roaming function applies only to GE and Trunk interfaces, but not VE interfaces or PW-VE interfaces."
+}

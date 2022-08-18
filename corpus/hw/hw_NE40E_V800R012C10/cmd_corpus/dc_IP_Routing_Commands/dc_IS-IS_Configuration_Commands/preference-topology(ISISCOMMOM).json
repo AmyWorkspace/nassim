@@ -1,0 +1,36 @@
+{
+    "PageTitle": "preference (IS-IS topology view)",
+    "FuncDef": "The preference command sets a priority for IS-IS.\nThe undo preference command restores the default value.\nBy default, the priority of IS-IS is 15.",
+    "CLIs": [
+        "preference { { route-policy <route-policy-name> | route-filter <route-filter-name> } | preference } *",
+        "undo preference"
+    ],
+    "ParentView": [
+        "IS-IS topology view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of route filter policy.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "preference",
+            "Info": "Specifies the route priority.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip topology red",
+            "[*HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] cost-style wide",
+            "[*HUAWEI-isis-1] topology red topology-id 10",
+            "[*HUAWEI-isis-1-topology-red] preference 25"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMultiple dynamic routing protocols may be run on a Router, and routes discovered by various routing protocols to the same destination may exist. In this case, you can use the preference command to set a default priority for each routing protocol. If different protocols have routes to the same destination, the protocol with the highest priority is selected for IP packet forwarding.\nThe preference command sets a priority for IS-IS or some IS-IS routes. The preference command is used in the following three ways:\nThe preference command sets a priority for all IS-IS routes.The preference preference route-policy route-policy-name, preference preference route-filter route-filter-name, preference route-filter route-filter-name preference or preference route-policy route-policy-name preference command sets different priorities for matched and unmatched routes.The preference route-policy route-policy-name or preference route-filter route-filter-name command sets a priority only for matched routes.\n\nPrerequisites\nAn IS-IS process has been created and the IS-IS view has been displayed using the isis command.\nPrecautions\nIf an apply clause is configured for a route-policy using the apply preference command, the priorities are used as follows:\nMatched routes: The priority set using the apply preference command is used.Unmatched routes: The priority set using the preference command is used.\nIn the following example, the priority of the routes that match the route-policy named abc is set to 50, and the priority of the routes that fail to match the route-policy named abc is set to 30.\n#\nroute-policy abc permit node 1\nif-match cost 20\napply preference 50\n#\nisis 1\npreference 30 route-policy abc\nIf the apply preference 50 command is not run for the route-policy named abc, the priority of all routes is set to 30.\nSeveral dynamic protocols can run on a device. In this case, set a priority for each protocol. When routes to the same destination learned from different protocols are available, the one with the highest priority is selected."
+}

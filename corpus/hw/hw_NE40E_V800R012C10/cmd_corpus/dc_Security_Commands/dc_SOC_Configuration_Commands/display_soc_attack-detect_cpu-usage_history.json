@@ -1,0 +1,62 @@
+{
+    "PageTitle": "display soc attack-detect cpu-usage",
+    "FuncDef": "The display soc attack-detect cpu-usage command displays historical CPU usage statistics.",
+    "CLIs": [
+        "display soc attack-detect cpu-usage slot <slot-id> history { 15-minutes | 60-minutes | 72-hours }"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "history",
+            "Info": "Historical statistics.\n-"
+        },
+        {
+            "Parameters": "15-minutes",
+            "Info": "Displays statistics about the CPU usage within the last 15 minutes.\n-"
+        },
+        {
+            "Parameters": "60-minutes",
+            "Info": "Displays statistics about the CPU usage within the last 1 hour.\n-"
+        },
+        {
+            "Parameters": "72-hours",
+            "Info": "Displays statistics about the CPU usage within the last 72 hours.\n-"
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Specifies the slot ID of a board.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display soc attack-detect cpu-usage slot 1 history 15-minutes",
+            "------------------------------------------------------------------------------",
+            "  The Cpu Usage In 15 Minutes ( Per Minute )",
+            "  Time     1   2   3   4   5   6   7   8   9  10  11  12  13  14  15",
+            "  CPU(%)  19  19  19  19  19  19  19  19  19  19  18  19  19  19  19",
+            "  ------------------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display soc attack-detect cpu-usage slot 1 history 72-hours",
+            "The Cpu Usage In 72 hours ( Per Hour )",
+            "      ^ CPU(%)",
+            "  100 |",
+            "   90 |",
+            "   80 |                *                *                *",
+            "   70 |",
+            "   60 |       *                *                *                          ",
+            "   50 |                                                                   ",
+            "   40 |                                                                   ",
+            "   30 |                                                                   ",
+            "   20 |                                                                   ",
+            "   10 |                                                                   ",
+            "       ------------------------------------------------------------->time(h)",
+            "       1       12      24      36       48      60     72",
+            "  ------------------------------------------------------------------------------",
+            "  ------------------------------------------------------------------------------"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can view the CPU usage to locate faults if any of the following cases occurs:\nThe device has a slow response.User access is abnormal.Routes are abnormal.The NMS, logs, or alarms display attack events.\nThe display cpu-usage command displays only the average CPU usage within the latest period (usually 60 seconds) and cannot display the trend of CPU usage changes within different periods. When an attack event occurs only once, it may have already ended when it is discovered on the NMS. If this occurs, while the historical CPU usage cannot be queried, maintenance personnel cannot identify whether the network is being attacked.\nIf the SOC's attack detection function is enabled, the SOC saves the historical CPU usage statistics. Then, you can run the display soc attack-detect cpu-usage command to view the trend of CPU usage changes within different periods, which helps locate faults.\nHigh CPU usage displayed in historical CPU usage statistics does not necessarily indicate attacks. High CPU usage may also be caused by the system overload or complex computation. Therefore, you can run the following commands to further locate the fault:\nRun the display soc attack-detect statistics car command to identify the CPCAR with the highest packet loss rate and the period during which the packet loss rate is the highest. If the CPU usage is also high within this period, the attack is caused by the protocol packets associated with the CPCAR.Run the display soc attack-detect statistics application command to identify the protocol module with the highest packet loss rate and the period during which the packet loss rate is the highest. If the CPU usage is also high within this period, the attack has occurred on the protocol module.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

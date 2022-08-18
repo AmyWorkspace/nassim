@@ -1,0 +1,31 @@
+{
+    "PageTitle": "if-match acl",
+    "FuncDef": "The if-match acl command sets an ACL-based filtering rule.\nThe undo if-match acl command cancels the configuration.\nBy default, no ACL-based filtering rule is set.",
+    "CLIs": [
+        "if-match acl { <acl-number> | <acl-name> }",
+        "undo if-match acl { <acl-number> | <acl-name> }"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 2000",
+            "[*HUAWEI-acl4-basic-2000] quit",
+            "[*HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] if-match acl 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set an ACL-based filtering rule, run the if-match acl command.\nRun the route-policy command to enter the Route-policy view.A route-policy may consist of multiple nodes. The relationship between the nodes is \"OR\". The system matches a route against the nodes in sequence. If the route matches a node, the route matches the route-policy, and the system no longer matches it against other nodes.Each node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.\n\nPrerequisites\nAn acl has been created using the acl command and a route-policy has been configured using the route-policy command.\nPrecautions\nAn ACL name is a character string that starts with a letter. For example, \"2a\" is an invalid ACL name.\nThe if-match acl command and the if-match ip-prefix command are mutually exclusive. If you run the if-match ip-prefix command after running the if-match acl command, the configuration of the if-match ip-prefix command overrides the configuration of the if-match acl command.\nFor a named ACL, when the rule command is used to configure a filtering rule, only the source address range specified in source takes effect on the filtering rule.\nThe if-match acl command is generally used to match traffic and is not recommended for route matching. To use a route-policy to implement precise route matching, you are advised to configure filtering rules that are based on IP prefix lists in the route-policy."
+}

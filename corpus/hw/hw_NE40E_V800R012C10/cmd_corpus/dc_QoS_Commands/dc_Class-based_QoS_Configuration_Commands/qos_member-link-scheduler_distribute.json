@@ -1,0 +1,73 @@
+{
+    "PageTitle": "qos member-link-scheduler distribute",
+    "FuncDef": "The qos member-link-scheduler distribute command configures weight-based bandwidth allocation for a trunk's member interfaces.\nThe undo qos member-link-scheduler distribute command cancels weight-based bandwidth allocation for a trunk's member interfaces.\nBy default, bandwidth allocation is not implemented for trunk member interfaces based on weights.",
+    "CLIs": [
+        "qos { traffic-car | qos-car | port-shaping | user-queue | profile-car | hqos-outbound } member-link-scheduler distribute",
+        "qos user-queue member-link-scheduler distribute outbound",
+        "undo qos { traffic-car | qos-car | port-shaping | user-queue | profile-car | hqos-outbound } member-link-scheduler distribute",
+        "undo qos user-queue member-link-scheduler distribute outbound"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view",
+        "IP-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "traffic-car",
+            "Info": "Configures weight-based bandwidth allocation for a trunk's member interfaces when CAR in a traffic policy is applied to the trunk interface.\n-"
+        },
+        {
+            "Parameters": "qos-car",
+            "Info": "Configures weight-based bandwidth allocation for a trunk's member interfaces when port CAR is applied to the trunk interface.\n-"
+        },
+        {
+            "Parameters": "port-shaping",
+            "Info": "Configures weight-based bandwidth allocation for a trunk's member interfaces when port shaping is applied to the trunk interface.\n-"
+        },
+        {
+            "Parameters": "user-queue",
+            "Info": "Configures weight-based bandwidth allocation for a trunk's member interfaces when user queue in a QoS profile is applied to the trunk interface.\n-"
+        },
+        {
+            "Parameters": "profile-car",
+            "Info": "Configures weight-based bandwidth allocation for a trunk's member interfaces when CAR in a QoS profile is applied to the trunk interface.\n-"
+        },
+        {
+            "Parameters": "hqos-outbound",
+            "Info": "Configures weight-based bandwidth allocation for all outgoing HQoS services (excluding port-queue) on a trunk's member interfaces.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Configures weight-based bandwidth allocation for a trunk's member interfaces when user queue in a QoS profile is applied to outgoing traffic on a port extension trunk interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 1",
+            "[~HUAWEI-Eth-Trunk1] qos traffic-car member-link-scheduler distribute"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 1",
+            "[~HUAWEI-Eth-Trunk1] qos qos-car member-link-scheduler distribute"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 1",
+            "[~HUAWEI-Eth-Trunk1] qos port-shaping member-link-scheduler distribute"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 1",
+            "[~HUAWEI-Eth-Trunk1] qos user-queue member-link-scheduler distribute"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 1",
+            "[~HUAWEI-Eth-Trunk1] qos schedule-tree distribute-mode outbound",
+            "[~HUAWEI-Eth-Trunk1] qos hqos-outbound member-link-scheduler distribute"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, when CAR action, port CAR action, qos-profile car action, port shaping or HQoS in a traffic policy is applied to a trunk interface, if all trunk member interfaces are on the same network processor (NP) of the same board, the trunk member interfaces share the bandwidth configured on the trunk interface. Otherwise, the rate limit of each trunk member interface is the one configured on the trunk interface. In this case, the traffic rate on the trunk interface multiplies, and rate limiting fails.\nAfter the qos traffic-car member-link-scheduler distribute command is configured, the maximum rate of traffic on a trunk interface is equal to the CAR bandwidth configured in the traffic policy, and bandwidth is allocated to the trunk's member interfaces based on the weight.After the qos qos-car member-link-scheduler distribute command is configured, the maximum rate of traffic on a trunk interface is equal to the configured port CAR bandwidth, and bandwidth is allocated to the trunk's member interfaces based on the weight.After the qos profile-car member-link-scheduler distribute command is configured, the maximum rate of traffic on a trunk interface is equal to the CAR bandwidth configured in the QoS profile, and bandwidth is allocated to the trunk's member interfaces based on the weight.After the qos port-shaping member-link-scheduler distribute command is configured, trunk member interfaces share the bandwidth configured on the trunk interface.After the qos user-queue member-link-scheduler distribute command is configured, the maximum rate of traffic on a trunk interface is equal to the user-queue bandwidth configured on the trunk interface, and bandwidth is allocated to the trunk's member interfaces based on the weight. If the value is smaller than the configured minimum value, the configured minimum value takes effect. This command is mutually exclusive with the user-queue command on a trunk member interface.\nThe weight of the trunk's member interfaces is specified using the distribute-weight command.\n\nPrerequisites\nThe qos schedule-tree distribute-mode outbound command must be configured before the qos hqos-outbound member-link-scheduler distribute command is configured.\nThe qos hqos-outbound member-link-scheduler distribute command is mutually exclusive with the qos port-shaping member-link-scheduler distribute or qos user-queue member-link-scheduler distribute command.\nPrecautions\nThe qos traffic-car member-link-scheduler distribute command does not support shared traffic policies.\nThe qos user-queue member-link-scheduler distribute command is not supported on port extension trunk interfaces.\nThe qos user-queue member-link-scheduler distribute outbound command is supported only on port extension trunk interfaces.\nThe qos { traffic-car | qos-car | profile-car | hqos-outbound } member-link-scheduler distribute command is not supported on port extension trunk interfaces.\nIn multi-VS scenarios, after the qos { traffic-car | qos-car | port-shaping | user-queue | profile-car | hqos-outbound } member-link-scheduler distribute command is configured on a trunk main interface, the command configuration is also effective for the trunk sub-interfaces that reside in other VSs.\nAfter the HQoS scheduling tree split function is enabled on a trunk interface, the rate limit of each trunk member interface is the bandwidth configured on the trunk interface by default. In this case, the traffic rate on the trunk interface multiplies. After the qos hqos-outbound member-link-scheduler distribute command is configured, weight-based bandwidth allocation is implemented for outgoing HQoS services on a trunk's member interfaces."
+}

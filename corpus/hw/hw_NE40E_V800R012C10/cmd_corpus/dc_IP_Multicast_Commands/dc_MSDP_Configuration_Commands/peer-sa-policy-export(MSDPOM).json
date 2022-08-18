@@ -1,0 +1,40 @@
+{
+    "PageTitle": "peer sa-policy export",
+    "FuncDef": "The peer sa-policy export command configures a policy for filtering (S, G) information in source active (SA) messages to be forwarded to a specified Multicast Source Discovery Protocol (MSDP) peer.\nThe undo peer sa-policy export command restores the default configuration.\nBy default, (S, G) information in SA messages is not filtered, so that all (S, G) entry information can be forwarded to an MSDP peer.",
+    "CLIs": [
+        "peer <peer-address> sa-policy export acl { <advanced-acl-number> | <acl-name> }",
+        "peer <peer-address> sa-policy export",
+        "undo peer <peer-address> sa-policy export"
+    ],
+    "ParentView": [
+        "VPN instance MSDP view",
+        "MSDP view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the address of an MSDP peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "advanced-acl-number",
+            "Info": "Specifies the number of an advanced ACL.\nThe value is an integer ranging from 3000 to 3999. If the ACL is not specified, all SA messages carrying (S, G) information are filtered."
+        },
+        {
+            "Parameters": "acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 3100",
+            "[*HUAWEI-acl4-advance-3100] rule permit ip source 10.15.0.0 0.0.255.255 destination 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-advance-3100] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] msdp",
+            "[*HUAWEI-msdp] peer 10.10.7.6 connect-interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-msdp] peer 10.10.7.6 sa-policy export acl 3100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo filter (S, G) information in SA messages to be forwarded to a specified MSDP peer, run the peer sa-policy export command, implementing control over the receiving or sending of multicast source information.\nIn addition, you can run the import-source command on an MSDP peer to specify (S, G) information that can be advertised by SA messages.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nMSDP peers have been configured.\nConfiguration Impact\nIf the peer sa-policy export command is run more than once, the latest configuration overrides the previous one.\nBefore forwarding an SA message to a specified peer, the peer sa-policy export acl command filters the SA message based on the export policy to determine whether to forward the SA message.\nIf acl is not set, the Router does not forward any (S, G) information in the SA message to a specified MSDP peer.If acl is set, the Router forwards only the (S, G) information that matches the permit clause in an ACL rule."
+}

@@ -1,0 +1,39 @@
+{
+    "PageTitle": "peer validation-disable (BGP-Flow VPN instance IPv6 address family view)",
+    "FuncDef": "The peer validation-disable command disables a device from authenticating BGP (IPv6) Flow Specification or BGP VPN Flow Specification routes received from a specified BGP (IPv6) Flow Specification or BGP VPN Flow Specification peer.\nThe undo peer validation-disable command restores the default setting.\nBy default, BGP (IPv6) Flow Specification or BGP VPN Flow Specification routes received from peers are authenticated.",
+    "CLIs": [
+        "peer { <ipv4-address> | <ipv6-address> } validation-disable",
+        "undo peer { <ipv4-address> | <ipv6-address> } validation-disable"
+    ],
+    "ParentView": [
+        "BGP-Flow VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a peer.\nThe address is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[~HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[~HUAWEI-vpn-instance-vpna] route-distinguisher 200:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-vpna] peer 1.1.1.1 as-number 100",
+            "[*HUAWEI-bgp-instance-vpna] quit",
+            "[*HUAWEI-bgp] ipv6-flow vpn-instance vpna",
+            "[*HUAWEI-bgp-flow-6-vpna] peer 1.1.1.1 enable",
+            "[*HUAWEI-bgp-flow-6-vpna] peer 1.1.1.1 validation-disable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen receiving a BGP (IPv6) Flow Specification or BGP VPN Flow Specification route with the filtering rule of a destination address, a BGP (IPv6) Flow Specification or BGP VPN Flow Specification peer must check the validity of the route. The route is considered valid only if it complies with the authentication rule.\nThe authentication rule defines that when a BGP (IPv6) Flow Specification or BGP VPN Flow Specification peer receives a BGP (IPv6) Flow Specification or BGP VPN Flow Specification route with the filtering rule of a destination address, the peer searches its IP routing table for an optimal unicast route based on the destination address. If the unicast route is a BGP (IPv6) or VPN route and the initiators of the unicast route and the BGP (IPv6) Flow Specification or BGP VPN Flow Specification route are the same, the BGP (IPv6) Flow Specification or BGP VPN Flow Specification route is authenticated.\nIf you determine to control traffic destined for a specified address and BGP (IPv6) Flow Specification or BGP VPN Flow Specification routes carrying the traffic control rule fail to pass authentication, the peer validation-disable command can be used to disable the corresponding device from authenticating the BGP (IPv6) Flow Specification or BGP VPN Flow Specification routes.\nPrerequisites\nA BGP (IPv6) Flow Specification or BGP VPN Flow Specification peer relationships have been configured.\nConfiguration Impact\nAfter the peer validation-disable command is run on a BGP (IPv6) Flow Specification or BGP VPN Flow Specification peer, the BGP (IPv6) Flow Specification or BGP VPN Flow Specification peer will not authenticate any received BGP (IPv6) Flow Specification or BGP VPN Flow Specification route. Exercise caution when running this command."
+}

@@ -1,0 +1,43 @@
+{
+    "PageTitle": "isis timer lsp-retransmit",
+    "FuncDef": "The isis timer lsp-retransmit command configures the LSP retransmission interval over a P2P link.\nThe undo isis timer lsp-retransmit command restores the default value.\nBy default, the LSP retransmission interval over a P2P link is 5 seconds.",
+    "CLIs": [
+        "isis timer lsp-retransmit <retransmit-interval>",
+        "undo isis timer lsp-retransmit"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "VBDIF interface view",
+        "Cellular channel interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE electrical interface view",
+        "Loopback interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "retransmit-interval",
+            "Info": "Specifies an LSP retransmission interval.\nThe value is an integer ranging from 1 to 300 seconds. The default value is 5."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface LoopBack 1",
+            "[*HUAWEI-LoopBack1] isis enable",
+            "[*HUAWEI-LoopBack1] isis timer lsp-retransmit 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a point-to-point network, devices at both ends of a link synchronize LSDBs with each other by flooding LSPs. The device at one end of the link sends an LSP. If the device at the other end receives this LSP, it replies with a PSNP. If the device that has sent an LSP does not receive a PSNP from the other end in a period of time, the device will retransmit the LSP.\nThe isis timer lsp-retransmit command is used to set an LSP retransmission interval. Only the devices on a point-to-point network send PSNPs. Therefore, the isis timer lsp-retransmit command will take effect only when it is run on point-to-point interfaces.\nConfiguration Impact\nAfter the isis timer lsp-retransmit command is run on a device, the device starts a timer for retransmit-interval after sending an LSP. If the device receives a PSNP from the other end within the timer, the device will not retransmit the LSP. Otherwise, the device will retransmit the LSP.\nIf the value of retransmit-interval is set too small, an LSP will be retransmitted even though it is not necessary, causing high CPU, memory, and network bandwidth usage.\nPrecautions\nIf a broadcast interface is emulated as a P2P interface using the isis circuit-type command or a P2P interface is restored to a broadcast interface using the undo isis circuit-type command, the LSP retransmission interval on a P2P link is restored to the default value."
+}

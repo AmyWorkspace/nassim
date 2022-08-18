@@ -1,0 +1,40 @@
+{
+    "PageTitle": "protocol-tunnel track nqa(up)",
+    "FuncDef": "The protocol-tunnel track nqa command configures the NQA function on the vBRAS-UP to detect VXLAN tunnel faults.\nThe undo protocol-tunnel track nqa command cancels the configuration.\nBy default, the NQA function is not configured on the vBRAS-UP to detect VXLAN tunnel faults.",
+    "CLIs": [
+        "protocol-tunnel track nqa [ counter <count> ] [ interval <interval> ] [ timeout <timeout> ] udp-port <destport>",
+        "undo protocol-tunnel track nqa"
+    ],
+    "ParentView": [
+        "CU-agent view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "counter count",
+            "Info": "Specifies the number of VXLAN Echo Request packets to be sent.\nThe value is an integer ranging from 0 to 4294967295. The default value is 3."
+        },
+        {
+            "Parameters": "interval interval",
+            "Info": "Specifies the time to wait before the next VXLAN Echo Request packet can be sent.\nThe value is an integer ranging from 1 to 10000, in milliseconds."
+        },
+        {
+            "Parameters": "timeout timeout",
+            "Info": "Specifies the time to wait for a VXLAN Echo Reply packet.\nThe value is an integer ranging from 1 to 65535, in minutes. The default value is 1."
+        },
+        {
+            "Parameters": "udp-port destport",
+            "Info": "Destation Port.\nThe value is an integer that ranges from 1 to 65535 ."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cu-agent",
+            "[~HUAWEI-cu-agent] protocol-tunnel track nqa -c 5 -m 500 -t 2000 udp-port 5000",
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cu-agent",
+            "[~HUAWEI-cu-agent] protocol-tunnel track nqa counter 5 interval 500 timeout 2000 udp-port 5000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo detect VXLAN tunnel faults through NQA, run the protocol-tunnel track nqa command, so that you can learn VXLAN fault information through alarms and troubleshoot faults in time.\nAfter the protocol-tunnel track nqa command is run, the device uses VXLAN Echo Request and VXLAN Echo Reply packets to learn the connection status of VXLAN tunnels. The packets are transmitted in UDP format through a UDP port, and the port number can be specified. The receiver distinguishes VXLAN Echo Request and VXLAN Echo Reply packets based on the port number. A VXLAN Echo Request packet carries FEC information that is sent along the same VXLAN tunnel as common packets with the same FEC information to detect the connectivity of the VXLAN tunnel. VXLAN Echo Request packets are transmitted to the destination based on the VXLAN information, whereas VXLAN Echo Reply packets are transmitted to the source based on the IP address information.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

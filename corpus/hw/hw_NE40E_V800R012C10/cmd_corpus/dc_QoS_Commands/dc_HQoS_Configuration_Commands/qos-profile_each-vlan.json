@@ -1,0 +1,42 @@
+{
+    "PageTitle": "qos-profile each-vlan",
+    "FuncDef": "The qos-profile each-vlan command applies a QoS profile to the traffic of a VLAN.\nThe undo qos-profile command cancels the QoS profile that is applied to the traffic of a VLAN.\nBy default, no QoS profile is applied to the traffic of a VLAN.",
+    "CLIs": [
+        "qos-profile <qos-profile-name> [ each-vlan ] { inbound | outbound }",
+        "undo qos-profile { inbound | outbound }"
+    ],
+    "ParentView": [
+        "User VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "qos-profile-name",
+            "Info": "Specifies the name of a QoS profile.\nThe value is a string of 1 to 63 characters."
+        },
+        {
+            "Parameters": "each-vlan",
+            "Info": "Indicates that the QoS profile takes effect on the traffic of each VLAN separately. If each-vlan is not specified, the QoS takes effect on all the traffic of all VLANs in the user VLAN view. That is, the scheduling parameters in the QoS profile are applied to all VLANs.\n-"
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Applies the QoS profile to the incoming traffic of a VLAN.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Applies the QoS profile to the outgoing traffic of a VLAN.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile test",
+            "[*HUAWEI-qos-profile-test] car cir 1000 pir 6000 inbound",
+            "[*HUAWEI-qos-profile-test] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/7.1",
+            "[*HUAWEI-GigabitEthernet1/0/7.1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/7.1] user-vlan 1 100",
+            "[~HUAWEI-GigabitEthernet1/0/7.1-vlan-1-100] qos-profile test each-vlan inbound"
+        ]
+    ],
+    "ExtraInfo": "After this command is run to apply a QoS profile to a VLAN, only the CAR parameters in the QoS profile take effect with the VLAN.\nBefore running this command to apply a QoS profile to a VLAN, make sure that the qos-profile each-vlan command is already run in the system view to create the QoS profile.\nWhen each-vlan is used to specify the QoS profile to take effect for each VLAN, if multiple users are connected to this VLAN, these users share the scheduling parameters configured in the QoS profile."
+}

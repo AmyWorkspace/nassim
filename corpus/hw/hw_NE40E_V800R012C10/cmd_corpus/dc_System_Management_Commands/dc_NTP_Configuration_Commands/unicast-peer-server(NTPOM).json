@@ -1,0 +1,85 @@
+{
+    "PageTitle": "ntp-service unicast-peer unicast-server",
+    "FuncDef": "The ntp-service unicast-peer command configures an NTP peer for a local device.\nThe undo ntp-service unicast-peer command deletes the NTP peer mode.\nThe ntp-service unicast-server command configures an NTP server on a local device.\nThe undo ntp-service unicast-server command deletes the NTP server configuration.\n\nBy default, no NTP peer is set.\n\n\nBy default, no NTP server is set.",
+    "CLIs": [
+        "ntp-service unicast-peer { <ipv4Addr> [ version <number> | port <port-number> | authentication-keyid <key-id> | source-interface { <interface-name> | <interface-type> <interface-number> } | vpn-instance <vpn-instance-name> | preference | maxpoll <max-number> | minpoll <min-number> | preempt ] * | ipv6 <ipv6Addr> [ authentication-keyid <key-id> | port <port-number> | source-interface { <interface-name> | <interface-type> <interface-number> } | vpn-instance <vpn-instance-name> | preference | maxpoll <max-number> | minpoll <min-number> | preempt ] * }",
+        "ntp-service unicast-server { <ipv4Addr> [ version <number> | port <port-number> | authentication-keyid <key-id> | source-interface { <interface-name> | <interface-type> <interface-number> } | vpn-instance <vpn-instance-name> | preference | maxpoll <max-number> | minpoll <min-number> | burst | iburst | preempt ] * | ipv6 <ipv6Addr> [ authentication-keyid <key-id> | port <port-number> | source-interface { <interface-name> | <interface-type> <interface-number> } | vpn-instance <vpn-instance-name> | preference | maxpoll <max-number> | minpoll <min-number> | burst | iburst | preempt ] * }",
+        "undo ntp-service unicast-peer { <ipv4Addr> | ipv6 <ipv6Addr> } [ vpn-instance <vpn-instance-name> ]",
+        "undo ntp-service unicast-server { <ipv4Addr> | ipv6 <ipv6Addr> } [ vpn-instance <vpn-instance-name> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4Addr",
+            "Info": "Specifies the IPv4 address of a remote server.\nThe value is an IPv4 address in dotted decimal notation."
+        },
+        {
+            "Parameters": "version number",
+            "Info": "Specifies an NTP version number.\nThe value is an integer ranging from 1 to 4. The default value is 3."
+        },
+        {
+            "Parameters": "port port-number",
+            "Info": "Specifies the destination port number to transmit NTP unicast packets.\nThe number is an integer that can be 123, or ranges from 1025 to 65535. The default value is 123."
+        },
+        {
+            "Parameters": "authentication-keyid key-id",
+            "Info": "Specifies an authentication key number used when messages are transmitted to a remote server.\nThe value is an integer and ranges as follows:\n1 to 4294967295 (version 1 to 3)1 to 65535 (version 4)"
+        },
+        {
+            "Parameters": "source-interface interface-type",
+            "Info": "Specifies the source interface number.\n-"
+        },
+        {
+            "Parameters": "source-interface interface-number",
+            "Info": "Specifies the source interface type.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "preference",
+            "Info": "Specifies the remote server as a preferred one. By default, the remote server is not preferred.\n-"
+        },
+        {
+            "Parameters": "maxpoll max-number",
+            "Info": "Specifies an NTP maximum poll interval. The poll interval is implemented as power of 2. For example, if you enter the maxpoll as 11, then the maximum poll interval will be 2048 seconds.\nThe value is an integer ranges from 10 to 17, in seconds. The default value is 10."
+        },
+        {
+            "Parameters": "minpoll min-number",
+            "Info": "Specifies an NTP minimum poll interval. The poll interval is implemented as power of 2. For example, if you enter the minpoll as 5, then the minimum poll interval will be 32 seconds.\nThe value is an integer ranges from 3 to 6, in seconds. The default value is 6."
+        },
+        {
+            "Parameters": "preempt",
+            "Info": "Enables the preemption mode for the server. The specified server is marked unavailable for selection if any error (authentication failure) is detected on a connection between the local device and reference clock. The server is marked available for selection if no other connections are available and no error is detected on the connection between the local device and reference clock.\n-"
+        },
+        {
+            "Parameters": "ipv6 ipv6Addr",
+            "Info": "Specifies the IPv6 address of a remote server. The ipv6-address is a host address and cannot be a multicast address, loopback address, or IP address of a reference clock.\nThe address is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "burst",
+            "Info": "Specifies that a burst of packets will be sent at every poll interval. This is useful to accurately measure a jitter with long poll intervals.\n-"
+        },
+        {
+            "Parameters": "iburst",
+            "Info": "Specifies that a burst of packets will be sent when an unreachable server sends a reply. This is useful to rapidly synchronize the clock.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ntp-service unicast-peer 10.10.1.1 version 3"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface 10GE 1/0/0",
+            "[~HUAWEI-10GE1/0/0] ipv6 enable",
+            "[*HUAWEI-10GE1/0/0] quit",
+            "[*HUAWEI] ntp-service unicast-peer ipv6 2001:db8::1 source-interface 10GE 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA remote node with a specified IP address or NEID can be configured as the peer of a local device. The local device runs in the symmetric active mode. The local and remote devices can be synchronized to each other.\nIn VS mode, this command is supported only by the admin VS.\nConfiguration Impact\nIf a key ID is configured using NTPv1, authentication may fail because of non-standard NTPv1 authentication.\nPrecautions\nPrecautions:\nIf this command is the first NTP configuration command, the system automatically adds the ntp-service [ ipv6 ] server disable command in the configuration file to disable the NTP service. To enable the NTP service, run the undo ntp-service [ ipv6 ] server disable command. If this command is the last NTP configuration command to be deleted, the system automatically deletes the ntp-service [ ipv6 ] server disable command from the configuration file.If a VPN instance is specified for the NTP server, the instance must have been created using the ip vpn-instance command, and the corresponding address family must have been enabled using the ipv4-family (VPN instance view) or ipv6-family (VPN instance view) command based on the IPv4 or IPv6 service configured for the NTP server. Otherwise, this command fails to be executed.If a source interface is specified for the NTP server, the interface must exist. Otherwise, this command fails to be executed.If an NTP IPv6 server is configured and a source interface is specified, IPv6 must be enabled on the interface. Otherwise, this command fails to be executed.If both the VPN instance and source interface are specified, the source interface must be bound to the VPN instance. Otherwise, this command fails to be executed.If the VPN instance or source interface specified in the command is deleted, the corresponding NTP server is also deleted.If the IPv4 or IPv6 address family of the VPN instance specified in the command is disabled, the corresponding NTP server is deleted.If a source interface is specified for the NTP IPv6 server and the IPv6 function is disabled on the source interface, the corresponding NTP server is deleted."
+}

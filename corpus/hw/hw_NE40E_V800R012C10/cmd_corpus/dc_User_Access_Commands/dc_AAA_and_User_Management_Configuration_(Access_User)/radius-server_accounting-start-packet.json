@@ -1,0 +1,31 @@
+{
+    "PageTitle": "radius-server resend",
+    "FuncDef": "The radius-server accounting-stop-packet resend command sets the number of times that the accounting server in a RADIUS server group retransmits accounting stop packets.\nThe undo radius-server accounting-stop-packet resend command cancels the retransmission of accounting stop packets.\nThe radius-server accounting-start-packet resend command configures the number of times that cached accounting-start packets are retransmitted to the RADIUS accounting server in a RADIUS server group.\nThe undo radius-server accounting-start-packet resend command disables accounting-start packets from being cached to a queue for retransmission.\nBy default, accounting-start packets are disabled from being cached to a queue for retransmission and the number of retransmission times is 0. That is, the accounting server does not retransmit accounting stop packets.",
+    "CLIs": [
+        "radius-server { accounting-start-packet | accounting-stop-packet } resend [ <resend-times> ]"
+    ],
+    "ParentView": [
+        "RADIUS server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "resend-times",
+            "Info": "Specifies the number of times that the accounting server in a RADIUS server group retransmits accounting packets.\nThe value is an integer ranging from 1 to 65535. The default value is 50."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group huawei",
+            "[*HUAWEI-radius-huawei] commit",
+            "[~HUAWEI-radius-huawei] radius-server accounting-stop-packet resend 60"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group huawei",
+            "[*HUAWEI-radius-huawei] commit",
+            "[~HUAWEI-radius-huawei] radius-server accounting-start-packet resend 60"
+        ]
+    ],
+    "ExtraInfo": "If the device sends accounting-start packets to a RADIUS accounting server in the Down state, the device is required to cache accounting-start packets before the RADIUS accounting server goes Up.\nAfter the radius-server accounting-start-packet resend command is run, the device caches accounting-start packets to a queue if the device fails to transmit accounting-start packets to the RADIUS accounting server. the device attempts to retransmit the cached accounting-start packets to the RADIUS accounting server every 10s. When the number of retransmission failures reaches the configured number of times that accounting-start packets are retransmitted to the RADIUS accounting server, the device discards the packets.\nIn some cases, when the device sends accounting stop packets, a RADIUS server is in the Down state. If you want the device to cache accounting stop packets that fail to be sent and retransmit them, run the radius-server accounting-stop-packet resend command.\nAfter the radius-server accounting-stop-packet resend command is run, the device caches each accounting stop packet that fails to be sent to the RADIUS accounting server, and retransmits it at an interval of 10s. When the number of retransmission failures reaches the specified number of retransmission times, the device discards the cached accounting stop packet."
+}

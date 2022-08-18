@@ -1,0 +1,48 @@
+{
+    "PageTitle": "qinq 8021p-mode",
+    "FuncDef": "The qinq 8021p-mode command configures a mapping mode of 802.1p values on a sub-interface for QinQ VLAN tag termination.\nThe undo qinq 8021p-mode command deletes the mapping mode of 802.1p values configured on a sub-interface for QinQ VLAN tag termination.\nBy default, a sub-interface for QinQ VLAN tag termination trusts the 802.1p priority in the outer VLAN tag of packets. The sub-interface for QinQ VLAN tag termination deploys QoS policies based on the 802.1p priority in the outer VLAN tag of received packets.",
+    "CLIs": [
+        "qinq 8021p-mode { trust { ce-vid-8021p | pe-vid-8021p } | <precedence-value> }",
+        "undo qinq 8021p-mode"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "trust",
+            "Info": "Specifies that a sub-interface for QinQ VLAN tag termination trusts the 802.1p priority in the outer VLAN tag.\n-"
+        },
+        {
+            "Parameters": "ce-vid-8021p",
+            "Info": "Specifies that the 802.1p value in the inner VLAN tag is mapped to the DSCP field in IP packets or EXP field in MPLS packets.\n-"
+        },
+        {
+            "Parameters": "pe-vid-8021p",
+            "Info": "Specifies that the 802.1p value in the outer VLAN tag is mapped to the DSCP field in IP packets or EXP field in MPLS packets.\n-"
+        },
+        {
+            "Parameters": "precedence-value",
+            "Info": "Specifies the value of the 802.1p priority.\nThe larger the value, the higher the priority.\nThe value is an integer ranging from 0 to 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] encapsulation qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq termination pe-vid 100 ce-vid 500 to 600",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] qinq 8021p-mode trust pe-vid-8021p"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAccording to relevant standards, six bits of the Type of Service (ToS) field in an IPv4 packet header serve as the DiffServ Code Point (DSCP), which provides reference for differentiated services (DiffServ) and is used to implement QoS guarantee on an IP network. The operation of the traffic controller on the gateway depends on the DSCP field.\nAfter QinQ termination is configured, packets are sent to carrier IP networks. To ensure that the QoS information in user packets is not lost, run the qinq 8021p-mode command to map the 802.1p value in QinQ packets to the DSCP field.\nThe EXP field in an MPLS packet is used for Class of Service (CoS). The operation of the traffic controller on the gateway depends on the EXP field.\nAfter QinQ termination is configured, packets are sent to carrier MPLS networks. To ensure that the QoS information in user packets is not lost, run the qinq 8021p-mode command to map the 802.1p value in QinQ packets to the EXP field.\nPrerequisites\nQinQ termination has been configured on the sub-interface using the encapsulation qinq-termination command.The encapsulation qinq-termination command is replaced by the control-vid vid qinq-termination command.VLAN tag termination has been enabled for double-tagged packets using the qinq termination pe-vid ce-vid command in the sub-interface view."
+}

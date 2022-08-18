@@ -1,0 +1,52 @@
+{
+    "PageTitle": "dhcp-server algorithm",
+    "FuncDef": "The dhcp-server algorithm command is used to configure the algorithm for the DHCP server.\nThe undo dhcp-server algorithm command is used to restore the default configuration.\nBy default, the DHCPv4 server adopts the master/backup algorithm.",
+    "CLIs": [
+        "dhcp-server algorithm { master-backup | loading-share | polling [ check-loose ] }",
+        "undo dhcp-server algorithm [ polling check-loose ]"
+    ],
+    "ParentView": [
+        "DHCP group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "master-backup",
+            "Info": "Master backup algorithm.\n-"
+        },
+        {
+            "Parameters": "loading-share",
+            "Info": "Load balancing algorithm.\n-"
+        },
+        {
+            "Parameters": "polling",
+            "Info": "Polling algorithm.\n-"
+        },
+        {
+            "Parameters": "check-loose",
+            "Info": "In the polling scenario, if the keyword check-loose is specified, the server Identify (option54) in the DHCP OFFER is different from any dhcp-server in the dhcp-server group bound to the address pool selected when the user goes online. If the source IP address of the packet is the same as any dhcp-server in the dhcp-server group, the polling algorithm still takes effect. If the check-loose keyword is not specified or undo dhcp-server algorithm polling check-loose is configured, it indicates that the strict check is performed. When the serverIdentifyer is different from any dhcp-server in the dhcp-server group bound to the address pool selected when the user goes online, the polling algorithm does not take effect.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp-server group aa",
+            "[~HUAWEI-dhcp-server-group-aa] dhcp-server algorithm loading-share"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp-server group aa",
+            "[~HUAWEI-dhcp-server-group-aa] dhcp-server algorithm master-backup"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp-server group aa",
+            "[~HUAWEI-dhcp-server-group-aa] dhcp-server algorithm polling"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp-server group aa",
+            "[~HUAWEI-dhcp-server-group-aa] dhcp-server algorithm polling check-loose"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf loading-share is specified, you must also configure weights for DHCPv4 servers using the weight command. Otherwise, the dhcp-server algorithm loading-share command fails to take effect. If more than one DHCPv4 server is configured for a DHCPv4 server group, run the dhcp-server algorithm loading command to specify one of the following algorithms:\nLoad balancing: The device balances the load among DHCPv4 servers based on the weights of the servers.\nMaster/backup: The first configured DHCPv4 server functions as the master server, and the other servers are backup servers.\nPolling: The device sends DHCPv4 Request messages to all DHCPv4 servers and selects the server that first responds with an ACK message. Subsequent packets are sent only to the selected server, except the Request messages generated during SELECTING state and Discover messages.\nIf check-loose is specified, loose checks are performed. If the IP address carried in the Option 54 (server identifier) field of a DHCPv4 Offer message differs from that of any DHCPv4 server in the DHCPv4 server group bound to the address pool used for address assignment for user login but the source IP address carried in the Offer message is the IP address of any DHCPv4 server in the server group, the polling algorithm still takes effect. If check-loose is not specified or the undo dhcp-server algorithm polling check-loose command is run, strict checks are performed. The polling algorithm does not take effect if the IP address carried in the Option 54 (server identifier) field of a DHCPv4 Offer message differs from that of any DHCPv4 server in the DHCPv4 server group bound to the address pool used for address assignment for user login.\nPrecautions\nIf the IP address of the gateway route is used as the source IP address and the DHCP server is configured with the polling mode:\n When a server is configured in the DHCP server group, regardless of whether the polling mode is configured, only the configured server sends packets. Information about only this server, such as the IP address and VPN information, is saved in the user table. If multiple DHCP servers are configured in the DHCP server group and both the DHCP server with the same VPN information as the user and the DHCP server with different VPN information from the user exist, the response packets sent by the DHCP servers to the BRAS contain the VPN information about the user. Therefore, the user considers the DHCP server with the same VPN information as the user a reachable one and records the VPN information in the DHCP server information of the user table. If the BRAS receives renew packets, the DHCP server information saved in user entries is sent to the servers through packets. If the DHCP server is unreachable, lease renewal fails, and rebind packets need to be sent to renew the lease. If multiple servers are configured in the DHCP server group and the VPN information about the servers is different from that of the user, the response packets sent by the servers to the BRAS contain the user's VPN information and the BRAS matches the user's VPN information and the server's VPN information. If the match fails, the user fails to go online. In this case, you need to run the dhcp-server algorithm polling check-loose command to ignore VPN check and ensure that the same IP address is not used in different VPNs."
+}

@@ -1,0 +1,49 @@
+{
+    "PageTitle": "dhcpv6 relay access-limit pevlan cevlan",
+    "FuncDef": "The dhcpv6 relay access-limit pevlan cevlan command configures the maximum number of DHCPv6 clients that send double-tagged packets to go online through a DHCPv6 relay interface.\nThe undo dhcpv6 relay access-limit pevlan cevlan command deletes the maximum number of access DHCPv6 clients on a DHCPv6 relay interface.\nBy default, the maximum number of access DHCPv6 clients is not limited on DHCPv6 relay interfaces. Only the maximum number of DHCPv6 clients on the entire device is limited.",
+    "CLIs": [
+        "dhcpv6 relay access-limit <limit-number> pevlan <pevlan-id> cevlan <cevlan-id> [ <end-cevlan-id> ]",
+        "undo dhcpv6 relay access-limit [ <limit-number> ] pevlan <pevlan-id> cevlan <cevlan-id> [ <end-cevlan-id> ]"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "limit-number",
+            "Info": "Specifies the maximum number of access DHCPv6 clients on a DHCPv6 relay interface.\nThe value is an integer ranging from 0 to 65536."
+        },
+        {
+            "Parameters": "pevlan-id",
+            "Info": "Specifies the outer VLAN ID of DHCPv6 clients that send double-tagged packets to go online.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "cevlan-id",
+            "Info": "Specifies the start inner VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "end-cevlan-id",
+            "Info": "Specifies the end inner VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.2",
+            "[~HUAWEI-GigabitEthernet1/0/0.2] encapsulation qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] dhcpv6 relay access-limit 2 pevlan 200 cevlan 100 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] dhcpv6 relay access-limit 3 pevlan 200 cevlan 300 400",
+            "[*HUAWEI-GigabitEthernet1/0/0.2] dhcpv6 relay access-limit 1 vlan any"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo limit the maximum number of access DHCPv6 clients during network planning or service adjustment, run the dhcpv6 relay access-limit command.\nThe dhcpv6 relay access-limit limit-number pevlan pevlan-id { cevlan cevlan-id [ end-cevlan-id ] | any } command configures the maximum number of DHCPv6 clients that send double-tagged packets to go online through a DHCPv6 relay interface. Each relay interface supports 16 VLAN ranges. If you configure any for cevlan, the maximum number of DHCPv6 clients whose packets carry the outer VLAN ID specified by pevlan-id and any inner VLAN ID not in the CE-VLAN range is limited. This configuration is counted in the 16 VLAN ranges allowed. For example, if both the dhcpv6 relay access-limit 1 pevlan 2 cevlan 1 100 and dhcpv6 relay access-limit 2 pevlan 2 cevlan any commands are run on GE 1/0/1.1, one DHCPv6 client whose packets carry PE-VLAN 2 and any CE-VLAN ID in the range 1-100 is allowed to go online, and two DHCPv6 clients whose packets carry PE-VLAN 2 and any CE-VLAN ID in the range 101-4094 are allowed to go online.\nConfiguration Impact\nThis command takes effect for subsequent DHCPv6 clients that go online. The maximum number of online DHCPv6 clients is not limited.\nPrecautions\nIf the dhcpv6 relay access-limit command is run with a VLAN range specified, and then the undo dhcpv6 relay access-limit command is run with a smaller VLAN range specified, the first VLAN range is divided into two parts. After the VLAN range specified in the dhcpv6 relay access-limit command is divided into 16 parts, the undo dhcpv6 relay access-limit command can no longer be run."
+}

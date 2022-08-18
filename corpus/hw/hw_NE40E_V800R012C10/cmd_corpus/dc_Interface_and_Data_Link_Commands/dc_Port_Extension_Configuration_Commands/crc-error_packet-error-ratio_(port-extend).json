@@ -1,0 +1,49 @@
+{
+    "PageTitle": "crc-error packet-error-ratio (Port extension interface view)",
+    "FuncDef": "The crc-error packet-error-ratio algorithm-parameter command configures the parameters used in the algorithm to calculate CRC error packet ratio.\nThe crc-error packet-error-ratio algorithm-parameter realtime-factor command specifies the number of the template for factors affecting the algorithm used to calculate the CRC error packet ratio.\nThe undo crc-error packet-error-ratio algorithm-parameter command restores the default parameters used in the algorithm to calculate CRC error packet ratio.\nBy default, the value of sample-window-factor is 50, the value of child-window-max-number is 50, the value of child-window-alarm-number is 5, the value of child-window-resume-number is 30, the value of template-number is 5.",
+    "CLIs": [
+        "crc-error packet-error-ratio algorithm-parameter <sample-window-factor> <child-window-max-number> <child-window-alarm-number> <child-window-resume-number>",
+        "crc-error packet-error-ratio algorithm-parameter realtime-factor <template-number>",
+        "undo crc-error packet-error-ratio algorithm-parameter",
+        "undo crc-error packet-error-ratio algorithm-parameter realtime-factor"
+    ],
+    "ParentView": [
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "child-window-max-number",
+            "Info": "Maximum number of child windows.\nThe value is an integer in the range 10 to 100. By default, the value is 50."
+        },
+        {
+            "Parameters": "child-window-alarm-number",
+            "Info": "Minimum number of child windows to generate an alarm.\nThe value is an integer in the range 1 to 100. By default, the value is 5."
+        },
+        {
+            "Parameters": "child-window-resume-number",
+            "Info": "Minimum number of child windows to clear an alarm.\nThe value is an integer in the range 1 to 100. By default, the value is 30."
+        },
+        {
+            "Parameters": "algorithm-parameter sample-window-factor",
+            "Info": "Sample window factor.\nThe value is an integer in the range 10 to 100. By default, the value is 50."
+        },
+        {
+            "Parameters": "realtime-factor template-number",
+            "Info": "Number of the template for factors affecting the algorithm used to calculate the CRC error packet ratio.\nThe value is an integer ranging from 0 to 10. The default value is 5."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/1/0/0",
+            "[~HUAWEI-GigabitEthernet1/1/0/0] trap-threshold crc-error packet-error-ratio alarm-threshold 1 3 resume-threshold 1 4 trigger-lsp",
+            "[*HUAWEI-GigabitEthernet1/1/0/0] commit",
+            "[~HUAWEI-GigabitEthernet1/1/0/0] crc-error packet-error-ratio algorithm-parameter 50 50 5 20",
+            "Warning: The implementation of this command will affect the CRC-PER detection. Please ensure that all parameters are confirmed by HUAWEI engineers. Continue? [Y/N]:Y",
+            "[*HUAWEI-GigabitEthernet1/1/0/0] commit",
+            "[~HUAWEI-GigabitEthernet1/1/0/0] crc-error packet-error-ratio algorithm-parameter realtime-factor 5",
+            "Warning: The implementation of this command will affect the CRC-PER detection. Please ensure that all parameters are confirmed by HUAWEI engineers. Continue? [Y/N]:Y"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter you run the trap-threshold crc-error packet-error-ratio command to set the alarm thresholds for the CRC error packet ratio, the system calculates the CRC error packet ratio based on an algorithm. To adjust this algorithm so that the result is more accurate, run the crc-error packet-error-ratio algorithm-parameter command to configure the parameters of this algorithm.\nThe crc-error packet-error-ratio algorithm-parameter realtime-factor command specifies the number of the template for factors affecting the algorithm used to calculate the CRC error packet ratio. This template contains factors such as the time attenuation coefficient and interval for CRC error packet ratio calculation. A larger template number indicates higher reliability and slower CRC error packet ratio calculation.\nPrerequisites\nBefore running this command, you must run the trap-threshold crc-error packet-error-ratio command in the interface view. Otherwise, an error message is displayed.\nThe undo trap-threshold crc-error command is run in the interface view.\nConfiguration Impact\nThe detection algorithm for CRC-PER alarms is affected. Ensure that these parameters are confirmed by Huawei engineers before configuring this command.\nPrecautions\nThe trap-threshold crc-error packet-error-ratio command must be run before the crc-error packet-error-ratio algorithm-parameter command is configured.The trap-threshold crc-error packet-error-ratio and crc-error packet-error-ratio algorithm-parameter commands must be run before the crc-error packet-error-ratio algorithm-parameter realtime-factor command is configured.If the undo trap-threshold crc-error packet-error-ratio command is run to cancel the CRC error packet rate detection function, the crc-error packet-error-ratio algorithm-parameter and crc-error packet-error-ratio algorithm-parameter realtime-factor commands are also canceled.\nIt is recommended that you use the default parameter settings when running the crc-error packet-error-ratio algorithm-parameter realtime-factor command."
+}

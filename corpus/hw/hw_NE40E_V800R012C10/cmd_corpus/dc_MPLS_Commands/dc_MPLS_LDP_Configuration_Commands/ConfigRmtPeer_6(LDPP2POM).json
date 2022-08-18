@@ -1,0 +1,37 @@
+{
+    "PageTitle": "mpls ldp local-lsr-id (Remote MPLS LDP peer view)",
+    "FuncDef": "The mpls ldp local-lsr-id command configures the primary IP address of a specified interface as a local LSR ID of the existing LDP session.\nThe undo mpls ldp local-lsr-id command restores the default primary IP address.\nBy default, the current LDP session uses the LSR ID of an LDP instance as a local LSR ID.",
+    "CLIs": [
+        "mpls ldp local-lsr-id { <interface-type> <interface-number> | <interface-name> }",
+        "undo mpls ldp local-lsr-id"
+    ],
+    "ParentView": [
+        "Remote MPLS LDP peer view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] quit",
+            "[*HUAWEI] mpls ldp remote-peer rta",
+            "[*HUAWEI-mpls-ldp-remote-rta] mpls ldp local-lsr-id GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLDP sessions that establish LDP LSPs to transmit VPN services share the LSR ID of an LDP instance. Sharing the LSR ID may cause the LDP LSPs to fail to isolate different VPN services. To address this problem, run the mpls ldp local-lsr-id command to specify an LSR ID for each LDP session.\nIf both the local and remote LDP sessions are to be established between an LSR pair, LSR IDs configured for the two sessions must be the same. Otherwise, only the LDP session that finds the adjacency first can be established.If multiple links directly connect an LSR pair, the LSR ID configured on the interface of each link must be the same. Otherwise, the LDP session uses the LSR ID of the link that finds the adjacency first while other links with different LSR IDs cannot be bound to the LDP session. LDP LSP fails to be established on these links.There must be a primary IP address on the specified interface. Otherwise, LDP will use 0.0.0.0 as Local LSR ID.\n\nPrerequisites\nA remote LDP peer has been configured using the mpls ldp remote-peer command before the mpls ldp local-lsr-id command is run in the remote MPLS LDP peer view.\nConfiguration Impact\nRunning the mpls ldp local-lsr-id command in a remote MPLS LDP peer view resets the remote LDP session.\nPrecautions\nIf the mpls ldp local-lsr-id command is run more than once, the last configuration overrides the previous one."
+}

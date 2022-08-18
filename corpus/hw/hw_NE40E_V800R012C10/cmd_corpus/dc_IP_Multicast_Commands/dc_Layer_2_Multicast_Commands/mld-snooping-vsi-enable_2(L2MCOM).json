@@ -1,0 +1,29 @@
+{
+    "PageTitle": "mld-snooping max-response-time (VSI view)",
+    "FuncDef": "The mld-snooping max-response-time command sets the maximum time for a querier to wait for responses from downstream hosts.\nThe undo mld-snooping max-response-time restores the default value.\nBy default, the maximum time for a querier to wait for responses from downstream hosts is 10s.",
+    "CLIs": [
+        "mld-snooping max-response-time <QueryRspIntValue>",
+        "undo mld-snooping max-response-time"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "QueryRspIntValue",
+            "Info": "Sets the maximum time for a querier to wait for responses from downstream hosts.\nThe value is an integer ranging from 1 to 3741, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mld-snooping enable",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] mld-snooping max-response-time 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThis command has two functions:\nSets the maximum response time to control the deadline for hosts to send IGMP Report messages. If the querier function is enabled and you want hosts to rapidly respond to the querier, you can set the maximum response time to a smaller value. To prevent traffic congestion caused by a large number of hosts sending response packets at the same time, you can set the maximum response time to a larger value. Ensure that the interval for the querier to send General Query messages is greater than the maximum response time of MLD Query messages. Otherwise, the device may incorrectly delete member entries.Adjusts the aging time of a member. When the device receives a Report message from a downstream host, it sets the aging time of the member to the following value: Aging time of a member = Number of times group-specific query messages are sent x Interval at which General Query messages are sent + Maximum time for a downstream host to respond to a querierNumber of times that the sends group-specific Query messages x Interval for sending General Query messages + Maximum response time for MLD Query messages. By default, the aging time is 130 seconds. This command is used to set the maximum response time in the preceding formula. You can run the mld-snooping robust-count command to set the number of times group-specific query messages are sent. The interval at which General Query messages are sent can be set using the mld-snooping query-interval command.\n\nPrerequisites\nMLD snooping has been enabled using the mld-snooping enable command.\nConfiguration Impact\nIf the mld-snooping max-response-time command is run more than once in the same view, the latest configuration overrides the previous one.\nPrecautions\nTo use the mld-snooping max-response-time configuration as a factor of adjusting the member interface aging time, set the same maximum wait time as that specified on its upstream device. Otherwise, multicast data transmission will be interrupted between the Layer 2 and Layer 3 devices.\nThe maximum time for a downstream host to respond to a querier fails to be set in a VLAN in any of the following situations:\nThe VLAN is bound to a VSI.\nThe\nmld-snooping max-response-time command fails to be run in a VSI view in the following condition:\nThe VSI is bound to a BD."
+}

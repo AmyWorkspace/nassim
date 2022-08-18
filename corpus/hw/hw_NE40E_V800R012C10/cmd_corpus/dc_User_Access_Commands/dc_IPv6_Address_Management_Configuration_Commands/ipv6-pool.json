@@ -1,0 +1,31 @@
+{
+    "PageTitle": "ipv6-pool",
+    "FuncDef": "The ipv6-pool command binds an IPv6 address pool to an AAA domain.\nThe undo ipv6-pool command deletes the binding between IPv6 address pools and a domain. If no parameter is specified, the binding between all IPv6 address pools and the domain is deleted.\nBy default, no IPv6 address pool is bound to a domain.",
+    "CLIs": [
+        "ipv6-pool <pool-name>",
+        "undo ipv6-pool <pool-name>",
+        "undo ipv6-pool"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pool-name",
+            "Info": "IPv6 address pool name.\nThe value is a string of 1 to 32  case-insensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI-ipv6-prefix-prefix1] ipv6 pool pool1 bas local",
+            "[~HUAWEI-ipv6-pool-pool1] prefix prefix1",
+            "[~HUAWEI-ipv6-pool-pool1] quit",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[~HUAWEI-aaa-domain-huawei] ipv6-pool pool1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo limit the range of IPv6 addresses available to clients in a domain, you can bind IPv6 address pools to the domain by running the ipv6-pool command.\nPrerequisites\nBefore using the ipv6-pool command, ensure that the IPv6 address pools to be bound to a domain exist and are bound to prefix pools.\nConfiguration Impact\nThe system selects an IPv6 address pool for address assignment in accordance with the following rules:\nIf a local or delegation IPv6 address pool and a remote IPv6 address pool are bound to the domain, the system preferentially selects the local or delegation IPv6 address pool.If the IPv6 address pools bound to the domain are of the same type (delegation address pools are considered as local address pools), the system checks whether a prefix assignment mode is configured (using the pd-unshare-only, slaac-unshare-only, dhcpv6-unshare-only, or dhcpv6-only command) in the prefix pools bound to the address pools. If a prefix assignment mode is configured in one prefix pool but not in others bound to the domain address pools, the system preferentially selects the IPv6 address pool to which this prefix pool is bound. If different prefix assignment modes are configured in the prefix pools bound to the domain IPv6 address pools, the system selects IPv6 address pools in accordance with the sequence in which they are configured.If the same or no prefix assignment mode is configured in the prefix pools bound to the domain IPv6 address pools, the system preferentially selects the IPv6 address pool with a larger preference value."
+}

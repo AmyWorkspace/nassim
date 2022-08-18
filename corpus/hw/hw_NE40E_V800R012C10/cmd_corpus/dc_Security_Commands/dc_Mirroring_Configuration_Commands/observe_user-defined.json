@@ -1,0 +1,39 @@
+{
+    "PageTitle": "observe user-defined-filter",
+    "FuncDef": "The observe user-defined-filter command configures a user-defined any byte matching rule for mirroring.\nThe undo observe user-defined-filter command cancels the configuration.\nBy default, there are no user-defined any byte matching rules for mirroring on the Device.",
+    "CLIs": [
+        "observe user-defined-filter <id> { offset <offset-value> value <value> <value-mask> } &<1-4>",
+        "undo observe user-defined-filter <id>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "id",
+            "Info": "Specifies a rule ID.\nThe value is an integer ranging from 1 to 8."
+        },
+        {
+            "Parameters": "offset offset-value",
+            "Info": "Specifies a packet offset.\nThe value is an integer ranging from 0 to 114."
+        },
+        {
+            "Parameters": "value value",
+            "Info": "Specifies a packet matching value.\nThe value is a hexadecimal integer ranging from 0 to 0xffffffff."
+        },
+        {
+            "Parameters": "value-mask",
+            "Info": "Specifies a packet matching mask value.\nThe value is a hexadecimal integer ranging from 0 to 0xffffffff."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] observe user-defined-filter 1 offset 114 value abcdabcd ffffffff",
+            "[*HUAWEI] interface GigabitEthernet1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] port-mirroring inbound user-defined-filter 1",
+            "Error: The offset of user-defined-filter template can not exceed the limit(66)."
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo mirror packets with specific characteristics, run the observe user-defined command to configure a user-defined any byte matching rule for mirroring. After that, packets matching the rule can be mirrored to the observing port.\nWhen a user-defined offset rule is delivered, an AND operation is performed for the packet value and mask value, which are both 32 bits or automatically considered added to 32 bits if not. When a packet is matched against the rule, an AND operation is performed for the 32-bit packet content that is obtained based on the offset value and the configured mask value, and the operation result is matched against the delivered matching rule. If they match, the packet matches the rule and can be mirrored. If they do not match, the packet is dropped.\nPrecautions\nOnly boards using LPUF-50/LPUF-50-L/LPUI-21-L/LPUI-51-L/LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101 boards not support the user-defined mirroring offset rule.\nIn VS mode, this command is supported only by the admin VS.\nThe value range of offset-value varies according to the board type. The maximum value supported is subject to the information returned by the device when it is applied to the mirrored port."
+}

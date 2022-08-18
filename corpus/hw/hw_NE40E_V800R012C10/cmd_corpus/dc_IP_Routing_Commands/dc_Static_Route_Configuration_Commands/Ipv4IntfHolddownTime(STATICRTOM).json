@@ -1,0 +1,43 @@
+{
+    "PageTitle": "static-route timer ldp-sync hold-down",
+    "FuncDef": "The static-route timer ldp-sync hold-down command sets the time during which a static route remains inactive and waits for an LDP session to be established.\nThe undo static-route timer ldp-sync hold-down command restores the default setting.\nBy default, the time during which a static route remains inactive and waits for an LDP session to be established is 10 seconds.",
+    "CLIs": [
+        "static-route timer ldp-sync hold-down { timer | infinite }",
+        "undo static-route timer ldp-sync hold-down"
+    ],
+    "ParentView": [
+        "FlexE interface view",
+        "XGE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "50GE interface view",
+        "GMPLS-UNI interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "timer",
+            "Info": "Specifies the time during which a static route remains inactive and waits for an LDP session to be established.\nAn integer ranging from 0 to 65535, in seconds"
+        },
+        {
+            "Parameters": "infinite",
+            "Info": "Indicates that the Hold-down timer never expires. A static route becomes active only after an LDP session is established.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/3",
+            "[~HUAWEI-GigabitEthernet1/0/3] static-route timer ldp-sync hold-down 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an MPLS network with primary and backup links, LSRs establish LSPs based on static routes. When the LDP session of the primary link becomes faulty (the fault is not caused by a link failure) or the primary link recovers, configuring synchronization between LDP and static routes minimizes traffic loss during traffic switchover and switchback. After synchronization between LDP and static routes is enabled, and the static-route timer ldp-sync hold-down command is run, the recovered static route becomes temporarily inactive. It waits for an LDP session to be established before the Hold-down timer expires, which synchronizes LDP and the static route.\nIf the Hold-down timer expires, the static route becomes active regardless of whether an LDP session has been established.\nIf the Hold-down timer is set to 0 seconds, synchronization between LDP and static routes is disabled on an interface.If the Hold-down timer is set to infinite, the timer never expires. In this case, the static route becomes active and MPLS traffic is switched only after an LDP session is established.\n\nPrecautions\nThe command cannot be run on loopback interfaces or the Null0 interface."
+}

@@ -1,0 +1,62 @@
+{
+    "PageTitle": "multicast-domain switch-group-pool",
+    "FuncDef": "The multicast-domain switch-group-pool command specifies the range of the switch-multicast distribution tree (MDT) switch-group-pool and switchover conditions.\nThe undo multicast-domain switch-group-pool command restores the default configuration.\nBy default, no switch-group-pool is specified, and no switchover is performed from the share-MDT to the switch-MDT.",
+    "CLIs": [
+        "multicast-domain switch-group-pool <switch-group-pool> { <network-mask> | <network-mask-length> } [ acl { <acl-name> | <advanced-acl-number> } | threshold <threshold-value> ] *",
+        "undo multicast-domain switch-group-pool"
+    ],
+    "ParentView": [
+        "VPN instance view",
+        "VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "switch-group-pool",
+            "Info": "Specifies a start address of the switch-group-pool.\nThe value ranges from 224.0.1.0 to 239.255.255.255, in dotted decimal notation."
+        },
+        {
+            "Parameters": "network-mask",
+            "Info": "Specifies a mask of the switch-group-pool address.\nThe value ranges from 255.255.255.0 to 255.255.255.255, in dotted decimal notation."
+        },
+        {
+            "Parameters": "network-mask-length",
+            "Info": "Specifies a mask length of the switch-group-pool address.\nThe value is an integer ranging from 24 to 32; the number of group addresses in the switch-MDT switch-group-pool ranges from 0 to 255."
+        },
+        {
+            "Parameters": "acl acl-name",
+            "Info": "Specifies the (S, G) entry on which the switch-group-pool takes effect.advanced-acl-number specifies the advanced ACL number.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "advanced-acl-number",
+            "Info": "Specifies the (S, G) entry on which the switch-group-pool takes effect. advanced-acl-number specifies the advanced ACL number.\nIf no ACL is specified, the switch-group-pool takes effect on all (S, G) entries. The value is an integer ranging from 3000 to 3999."
+        },
+        {
+            "Parameters": "threshold threshold-value",
+            "Info": "Specifies a threshold that triggers a switchover between the share-MDT and the switch-MDT.\nIf the multicast data forwarding rate of a VPN exceeds threshold-value, the system performs a switchover from the share-MDT to the switch-MDT, but the system starts to use the switch-MDT for data forwarding after a delay (the delay can be specified using the multicast-domain switch-delay command).If the multicast data forwarding rate of a VPN falls below threshold-value, the system performs a switchback from the switch-MDT to the share-MDT, but the system starts to use the share-MDT for data forwarding after a delay (the delay can be specified using the multicast-domain holddown-time command).\nThe value is an integer ranging from 0 to 4194304, in kbit/s. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance mytest",
+            "[*HUAWEI-vpn-instance-mytest] ipv4-family",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain share-group 224.1.1.1 binding mtunnel 10",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain switch-group-pool 225.2.2.1 28"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl name myacl",
+            "[*HUAWEI-acl4-advance-myacl] rule permit ip source 1.1.1.1 0 destination 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-advance-myacl] quit",
+            "[*HUAWEI] ip vpn-instance mytest",
+            "[*HUAWEI-vpn-instance-mytest] ipv4-family",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain share-group 224.1.1.1 binding mtunnel 10",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain switch-group-pool 225.2.2.1 28 acl myacl"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBetween the VPN multicast receiver provider edge (PE) and VPN multicast source PE, a special switch-MDT is set up for the high-speed VPN multicast data packets flowing to the public network. The multicast data flow can be multicast on demand after it is switched from the share-MDT to the switch-MDT, preventing the share-MDT from flooding VPN multicast packets over the public network.\nPrerequisites\nThe multicast-domain share-group command has been configured in the VPN.\nConfiguration Impact\nIn some cases, the forwarding rate of VPN multicast data fluctuates around the switchover threshold. If the rate remains higher than the switchover threshold, data packets are switched to the switch-MDT. Otherwise, the packets are still forwarded along the share-MDT.\nIf you run the command multiple times, the last configuration overrides the previous ones.\nPrecautions\nThe configuration rules of the named ACL and advanced ACL are the same, filtering both source addresses and multicast group addresses. The time range specified by time-range takes effect on the configuration rules.\nFrom the time when data forwarding rate changes to the time when the system starts the switch-delay timer, there is a delay of 1 to 30 seconds because of necessary traffic calculation and protocol processing. In the actual switchover process, the delay is longer than the switch-delay period by 1 to 30 seconds."
+}

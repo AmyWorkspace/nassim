@@ -1,0 +1,47 @@
+{
+    "PageTitle": "host",
+    "FuncDef": "This command creates a static host for the SAP. Applications within the system that make use of static host entries include anti-spoof, and source MAC population into the VPLS forwarding database.",
+    "CLIs": [
+        "[ no ] host { [ ip <ip-address> [ mac <ieee-address> ] ] } [ subscriber <sub-ident-string> ] [ sub-profile <sub-profile-name> ] [ sla-profile <sla-profile-name> ]",
+        "no host { [ ip <ip-address> ] [ mac <ieee-address> ] }"
+    ],
+    "ParentView": [
+        "config>service>vprn>if>sap"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "anti-spoof",
+            "Info": "When enabled, this feature uses static and dynamic host information to populate entries into an anti-spoof filter table. The anti-spoof filter entries generated will be of the same type as specified in the anti-spoof type parameter. If the SAP anti-spoof filter is defined as mac, each static host definition must specify a MAC address. If the SAP anti-spoof filter is defined as ip, each static host definition must specify an IP address. If the SAP anti-spoof filter is defined as ip-mac, each static host definition must specify both an IP address and MAC address. If definition of a static host is attempted without the appropriate addresses specified for the enabled anti-spoof filter, the static host definition fails."
+        },
+        {
+            "Parameters": "arp-populate",
+            "Info": "When enabled, this feature uses static and dynamic host information to populate entries into the system s ARP cache. This is only available on the VPRN service SAPs. Both a MAC address and IP address are required to populate an ARP entry in the system. If definition of a static host is attempted without both a MAC and IP address specified when arp -populate is enabled, the static host definition fails."
+        },
+        {
+            "Parameters": "fdb-populate",
+            "Info": "This is an implicit feature that uses the static host definition as a static MAC in the VPLS forwarding database. It cannot be enabled or disabled and has no effect on the ability to create static hosts without a MAC address specified. When a MAC address is specified for a static host, it will automatically be populated into the VPLS forwarding database associated with the SAP on which the host is created. The static host MAC address will override any static MAC entries using the same MAC and prevent dynamic learning of the MAC on another interface. Existing static MAC entries with the same MAC address as a static host are marked as inactive but not deleted. If all static hosts are removed from the SAP, the static MAC may be populated. New static MAC definitions for the VPLS instance may be created while a static host exists associated with the static MAC address."
+        },
+        {
+            "Parameters": "ip ip-address",
+            "Info": "Specifies this optional parameter when defining a static host. The IP address must be specified for anti-spoof ip and anti-spoof ip-mac commands. Only one static host can be configured on the SAP with a given IP address."
+        },
+        {
+            "Parameters": "mac mac-address",
+            "Info": "Specifies this optional parameter when defining a static host. The MAC address must be specified for anti-spoof mac, and anti-spoof ip-mac. Multiple static hosts may be configured with the same MAC address given that each definition is distinguished by a unique IP address. The following rules apply to configuring static hosts using a MAC address:. Values-8k static and dynamic hosts per 10G forwarding complex. 64k8k per system.."
+        },
+        {
+            "Parameters": "subscriber sub-ident-string",
+            "Info": "This optional parameter specifies an existing subscriber identification profile to be associated with the static subscriber host. The subscriber identification profile is configured in the config>subscr-mgmt>sub-ident-policy context. The subscriber information is used by the VPRN SAP arp-reply-agent to determine the proper handling of received ARP requests from subscribers."
+        },
+        {
+            "Parameters": "sub-profile sub-profile-name",
+            "Info": "Specifies this optional parameter to specify an existing subscriber profile name to be associated with the static subscriber host. The subscriber profile is configured in the config>subscr-mgmt>sub-profile context."
+        },
+        {
+            "Parameters": "sla-profile sla-profile-name",
+            "Info": "Specifies this optional parameter to specify an existing SLA profile name to be associated with the static subscriber host. The SLA profile is configured in the config>subscr-mgmt>sla-profile context."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: There are no default static entries."
+}

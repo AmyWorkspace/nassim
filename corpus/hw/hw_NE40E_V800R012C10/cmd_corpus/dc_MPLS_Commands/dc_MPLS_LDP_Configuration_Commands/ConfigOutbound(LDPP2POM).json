@@ -1,0 +1,62 @@
+{
+    "PageTitle": "outbound peer (MPLS-LDP view)",
+    "FuncDef": "The outbound peer command configures an outbound policy to allow an LSR to send Label Mapping messages for specific routes to a specified peer.\nThe undo outbound peer command deletes the configured outbound policy.\nBy default, no outbound policy is configured.",
+    "CLIs": [
+        "undo outbound peer all"
+    ],
+    "ParentView": [
+        "MPLS-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-id",
+            "Info": "Specifies the ID of an LDP peer. By default, the peer ID is specified by the mpls lsr-id command. If the lsr-id command is also run, the peer ID specified in the lsr-id command is used.\nExpressed in dotted decimal notation"
+        },
+        {
+            "Parameters": "peer-group peer-group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "bgp-label-route",
+            "Info": "Configures an outbound policy which allows an LSR to send Label Mapping messages for labeled BGP routes only to a specified peer.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "Filters out all Label Mapping messages. If this parameter is configured on an LSR, the LSR does not send Label Mapping messages for IGP routes to a specified peer.\n-"
+        },
+        {
+            "Parameters": "host",
+            "Info": "Allows only Label Mapping messages for host routes. If this parameter is configured on an LSR, the LSR sends only Label Mapping messages for host routes to a specified peer.\n-"
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Allows only Label Mapping messages for IGP routes that are defined in an IP prefix list. If this parameter is configured on an LSR, the LSR sends only Label Mapping messages for IGP routes that are defined in an IP prefix list to a specified peer. The parameter is specified by the ip ip-prefix command.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates all LDP peers.\n-"
+        },
+        {
+            "Parameters": "fec",
+            "Info": "Filters out Label Mapping messages with the specified FEC.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] outbound peer 1.1.1.1 fec host"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix1 permit 0.0.0.0 0 greater-equal 17 less-equal 18",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] outbound peer all bgp-label-route ip-prefix prefix1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, an LSR sends Label Mapping messages to both upstream and downstream LDP peers to speed up the convergence of LDP LSPs. This results in the establishment of a large number of LSPs, wasting resources. An outbound policy can be configured to prevent LDP LSPs with routing information failing to pass the policy from being established. This policy helps reduce the number of LDP LSPs to be established and saving memory.\nThe outbound peer fec command can be used to specify the peer ID and FEC (to which a specified route is mapped) to allow Label Mapping messages for specific routes to be sent to a specified peer. This setting prevents unwanted Label Mapping messages from being sent.\nTo apply a policy associated with a single FEC range to an LDP peer group or all LDP peers that send Label Mapping messages, configure either the peer-group or all parameter in the command.\nPrecautions\nIf multiple outbound policies are configured for a specified LDP peer, the first configured one takes effect. For example, the following two outbound policies are configured:\noutbound peer 2.2.2.2 fec host\noutbound peer peer-group group1 fec none\nAs group1 also contains an LDP peer with address of 2.2.2.2, the following outbound policy takes effect:\noutbound peer 2.2.2.2 fec host\nIf two outbound policies are configured in sequence and the peer parameters in the two commands are the same, the second command overrides the first one. For example, the following two outbound policies are configured:\noutbound peer 2.2.2.2 fec host\noutbound peer 2.2.2.2 fec none\nThe second configuration overrides the first one. This means that the following outbound policy takes effect on an LDP peer with address of 2.2.2.2:\noutbound peer 2.2.2.2 fec none\nIf outbound peer all fec { none | host | ip-prefix } is configured, it overrides all previous configured outbound policies for routes.\nTo delete all outbound policies in batches, run the undo outbound peer all command."
+}

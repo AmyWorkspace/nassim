@@ -1,0 +1,26 @@
+{
+    "PageTitle": "direct-route track ipsec-instance",
+    "FuncDef": "The direct-route track ipsec-instance command associates the cost of IPv4 direct routes on an IP security (IPsec) tunnel interface with the IPsec instance status.\nThe undo direct-route track ipsec-instance command disables such association.\nBy default, the cost of IPv4 direct routes on an IPsec tunnel interface is not associated with the IPsec instance status.",
+    "CLIs": [
+        "direct-route track ipsec-instance degrade-cost <cost>",
+        "undo direct-route track ipsec-instance"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "degrade-cost cost",
+            "Info": "Specifies the cost for IPv4 direct routes on a specified IPsec tunnel interface.\nThe value is an integer ranging from 1 to 4294967295. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface  Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol ipsec",
+            "[*HUAWEI-Tunnel10] direct-route track ipsec-instance degrade-cost 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an IP radio access network (IPRAN) scenario, some services require high security. To meet such requirements, cell site gateways encrypt data of these services using IPsec. After the data flows to RSGs (IPsec gateways) through an IPsec tunnel, the RSGs decrypt the data. In most cases, carriers deploy master and backup RSGs and configure the same IP address for the IPsec tunnel interfaces of the master and backup RSGs to improve network reliability.\nIf the direct-route track ipsec-instance command is not run, IPv4 direct routes with the same prefix generated on the IPsec tunnel interfaces of the master and backup RSGs share the same default cost (0). As a result, after receiving these routes from the master and backup RSGs, CSGs cannot select an optimal one based on the cost.\nAfter the association between the cost of IPv4 direct routes on an IPsec tunnel interface and the IPsec instance status is enabled using the direct-route track ipsec-instance command:\nIf the IPsec instance status is master on an IPsec tunnel interface, the cost of the IPv4 direct routes generated on the interface is 0.If the IPsec instance status is backup on an IPsec tunnel interface or the system cannot detect the IPsec instance status, the cost of the IPv4 direct routes generated on the interface is the cost configured on the interface.\nAfter receiving the IPv4 direct routes with the same prefix from the master and backup RSGs, CSGs can select an optimal one based on the cost. Therefore, the CSGs can transmit data encrypted using IPsec to the correct RSG.\n\nPrerequisites\nThe encapsulation protocol has been set to IPsec on the tunnel interface using the tunnel-protocol ipsec command, and an IPsec policy has been applied to the tunnel interface.\nPrecautions\nIf the IPsec tunnel interface uses the IP address of another interface, the association between the cost of IPv4 direct routes and the IPsec instance status cannot be configured on this IPsec tunnel interface.\nThe cost of local IPv4 direct routes that are not to be advertised cannot be associated with the IPsec instance status."
+}

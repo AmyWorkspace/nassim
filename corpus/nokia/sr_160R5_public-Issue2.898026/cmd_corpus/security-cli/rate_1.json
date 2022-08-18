@@ -1,0 +1,46 @@
+{
+    "PageTitle": "rate",
+    "FuncDef": "This command configures the rate and burst tolerance for the policer in either a packet rate or a bit rate.",
+    "CLIs": [
+        "rate kbps { <kilobits-per-second> | max } [ mbs <size> ] [ bytes | kilobytes ]",
+        "rate packets { <ppi> | max } within <seconds> [ initial-delay packets ]",
+        "no rate"
+    ],
+    "ParentView": [
+        "config>sys>security>dist-cpu-protection>policy>static-policer",
+        "config>sys>security>dist-cpu-protection>policy>local-monitoring-policer",
+        "config>sys>security>dist-cpu-protection>policy>protocol>dynamic-parameters"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "packets | kbps",
+            "Info": "specifies that the rate is either in units of packets per interval or in units of kilobits per second. The packets option would typically be used for lower rates (for example, for per subscriber DHCP rate limiting) while the kbps option would typically be used for higher rates (for example, per interface BGP rate limiting)."
+        },
+        {
+            "Parameters": "ppi",
+            "Info": "Specifies packets per interval. 0..255 or max (0 = all packets are nonconforming)."
+        },
+        {
+            "Parameters": "seconds",
+            "Info": "Specifies the length of the ppi rate measurement interval. Values-1 to 32767."
+        },
+        {
+            "Parameters": "packets",
+            "Info": "The number of packets allowed (even at line rate) in an initial burst (or a burst after the policer bucket has drained to zero) in addition to the normal \"ppi\". This would typically be set to a value that is equal to the number of received packets in several full handshakes/negotiations of the particular protocol. Values-1 to 255."
+        },
+        {
+            "Parameters": "kilobits-per-second",
+            "Info": "Specifies the kilobits per second. Values-1 to 20000000 | max   max = This effectively disables the policer (always conforming).."
+        },
+        {
+            "Parameters": "mbs",
+            "Info": "The tolerance for the kbps rate. Values-0 to 4194304. A configured mbs of 0 will cause all packets to be considered nonconforming.. ParamDefault: Default- The default mbs sets the mbs to 10 ms of the kbps."
+        },
+        {
+            "Parameters": "bytes | kilobytes",
+            "Info": "Specifies that the units of the mbs size parameter are either in bytes or kilobytes."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: rate packets max within 1 initial delay 0"
+}

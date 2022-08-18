@@ -1,0 +1,33 @@
+{
+    "PageTitle": "static-route if-match null tag(Remote backup service view)",
+    "FuncDef": "The static-route if-match null tag command binds a static route tag to the remote backup service (RBS) and configures a cost for the static route.\nThe undo static-route if-match null tag command restores the default configuration.\nBy default, no static route tag is bound to the RBS.",
+    "CLIs": [
+        "static-route if-match null <interface-number> tag <tag-num> [ metric <metric-num> ] [ rui-slave ]",
+        "undo static-route if-match null <interface-number> tag <tag-num> [ metric <metric-num> ] [ rui-slave ]"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tag tag-num",
+            "Info": "Specifies the static route tag to be bound to the RBS.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "metric metric-num",
+            "Info": "Specifies a cost for the static route.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "rui-slave",
+            "Info": "Configures the static route tag and cost for the backup device.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service huawei",
+            "[*HUAWEI-rm-backup-srv-huawei] static-route if-match NULL 0 tag 10 metric 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a dual-device hot backup scenario, if IP addresses are allocated using a RADIUS server instead of an address pool, run the static-route if-match command to bind a static route tag to the RBS and specify a cost for the static route. If an NNI on the master device fails, the outbound interface of the static route can be directed to the protection tunnel to switch traffic to the backup device. This reduces the impact of the fault on user services.\nConfiguration Impact\nThis command must be run on both the master and backup devices. In addition, rui-slave must be configured on the backup device. Otherwise, traffic flaps between the two devices.\nIf metric is not configured, the default cost of the static route is used. If rui-slave is not configured, the cost is 10. If rui-slave is configured, the cost is 20.\nIf metric is configured, the cost configured on the master device must be less than that configured on the backup device, so that the route on the master device is preferentially selected.\nIf an NNI fails, 65535 is advertised as the cost of the static route.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe static route tag to be bound to the RBS has been configured by running the ip route-static or ipv6 route-static command in the system view."
+}

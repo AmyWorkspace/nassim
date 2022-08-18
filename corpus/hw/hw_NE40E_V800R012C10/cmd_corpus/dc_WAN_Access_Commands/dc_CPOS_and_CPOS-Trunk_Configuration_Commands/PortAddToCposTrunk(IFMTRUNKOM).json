@@ -1,0 +1,25 @@
+{
+    "PageTitle": "cpos-trunk",
+    "FuncDef": "The cpos-trunk command adds a CPOS interface to a CPOS-Trunk interface.\nThe undo cpos-trunk command deletes a CPOS interface from a CPOS-Trunk interface.\nBy default, CPOS-Trunk interfaces do not have any CPOS interfaces.",
+    "CLIs": [
+        "cpos-trunk <trunk-id>",
+        "undo cpos-trunk"
+    ],
+    "ParentView": [
+        "CPOS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "trunk-id",
+            "Info": "Specifies the ID of a CPOS-Trunk interface.\nThe value is an integer ranging from 0 to 127."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] controller cpos 1/0/0",
+            "[~HUAWEI-Cpos1/0/0] cpos-trunk 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo increase bandwidth, improve reliability, and implement load balancing, run the cpos-trunk command to add a CPOS interface to a CPOS-Trunk interface.\nPrerequisites\nThe CPOS-Trunk interface to which the CPOS interface is to be added has been created using the interface cpos-trunk command in the system view.\nNo other configurations exist on the CPOS interface except physical attribute-related configurations. Otherwise, the CPOS interface cannot be added to the CPOS-Trunk interface.\nBefore adding a CPOS interface to a CPOS-Trunk interface, run the aps group command on the CPOS interface to add it to an LMSP group.\nConfiguration Impact\nAfter a CPOS interface is added to a CPOS-Trunk interface:\nBandwidth is increased: The bandwidth of the CPOS-Trunk interface totals the bandwidths of its member interfaces.Reliability is improved: When a member link fails, traffic automatically switches to other available member links.\nIf services have been configured on a CPOS-Trunk interface, they are carried over member interfaces.\n\nPrecautions\nA CPOS interface can be added only to one CPOS-Trunk interface. Before adding it to another CPOS-Trunk interface, remove it from the current CPOS-Trunk interface.\nIf a CPOS interface and a CPOS-Trunk interface reside on different types of boards, the CPOS interface cannot be added to the CPOS-Trunk interface.\nshutdown command on a CPOS-Trunk interface, the physical status of both the CPOS-Trunk interface and its member interfaces becomes Administratively DOWN, and the shutdown command configuration is automatically generated for the member interfaces in the configuration file.\nundo shutdown command on a CPOS-Trunk interface, the undo shutdown command configuration is automatically generated for the member interfaces in the configuration file.\nWhen the undo cpos-trunk command is run, check whether the CPOS interface in active status needs to be deleted from a CPOS-Trunk interface to prevent misoperation.\nThe configurations of IMA-Group/MP-group and CPOS-Trunk on the following CPOS subcards are mutually exclusive:\nFor the CR5D00C2CF70/CR5D00C4CF70 subcard:\na, When the CPOS interface numbered 0 is added to the CPOS-Trunk, IMA-group and MP-group interfaces are not supported on the subcard.\nb, When IMA-group and MP-group interfaces are configured on the subcard, the CPOS interface numbered 0 cannot be added to the CPOS-Trunk.\nFor the CR5D00C8CF71 subcard:\na, When both CPOS interfaces numbered 0 and 4 are added to the CPOS-Trunk, MP-group and IMA-group interfaces cannot be configured on the subcard.\nb, If only the CPOS interface numbered 0 is added to the CPOS-Trunk, IMA-group interfaces numbered from 257 to 512 and MP-group interfaces numbered from 129 to 256 cannot be configured on the subcard.\nc, If only the CPOS interface numbered 4 is added to the CPOS-Trunk, IMA-group interfaces numbered from 1 to 256 and MP-group interfaces numbered from 1 to 128 cannot be configured on the subcard."
+}

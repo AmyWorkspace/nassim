@@ -1,0 +1,53 @@
+{
+    "PageTitle": "mpls mtu",
+    "FuncDef": "The mpls mtu command configures the maximum transmission unit (MTU) value for MPLS packets on an interface.\nThe undo mpls mtu command restores the default MTU value.\nBy default, the MPLS MTU is equal to the interface MTU.",
+    "CLIs": [
+        "mpls mtu <mtu>",
+        "undo mpls mtu"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Eth-Trunk sub-interface view",
+        "GMPLS-UNI interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "POS sub-interface view",
+        "GE sub-interface view",
+        "XGE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "XGE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mtu",
+            "Info": "Specifies the MPLS MTU of an interface.\nThe value range of the MPLS MTU is consistent with that of the interface MTU. For details, see the command mtu."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls mtu 1500"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn MTU value determines the maximum number of bytes of a packet each time a sender can send without fragmenting the packet. If the size of packets exceeds the MTU supported by a transit node or a receiver, the transit node or receiver fragments the packets or even discards them, aggravating the network transmission load. MTU values must be correctly negotiated between LSRs to allow packets to successfully reach the receiver. LDP LSP-based forwarding and IP-based forwarding are different in terms of implementation, but are similar in terms of MTU calculation. If MTU values are correctly negotiated between LSRs before packet transmission, packets can successfully reach the receiver without fragmentation and reassembly.\nTo calculate the MPLS MTU, an LSR on the path to a specified FEC compares all MTUs advertised by downstream devices with the interface MTU of its own, and adds the smaller MTU (the MPLS MTU) to the MTU TLV field in the Label Mapping message, and send the Label Mapping message upstream.\nIf an MTU value changes (such as when the local outbound interface or its configuration changes), an LSR recalculates the MTU value and sends a Label Mapping message carrying the new MTU value to all upstream devices.\nThe relationships between the MPLS MTU and the interface MTU are as follows:\nIf an interface MTU, not an MPLS MTU, is configured on an interface, the interface MTU is used.If both an MPLS MTU and an interface MTU are configured on an interface, the smaller value between the two MTUs is used.\n\nPrerequisites\nMPLS has been enabled on the interface using the mpls command.\nConfiguration Impact\nAfter the mpls mtu command is run, LDP compares the MPLS MTU and the interface MTU, and uses the smaller value between the two MTUs.\nPrecautions\nBy default, when determining the length of an MPLS packet to be forwarded by an interface, a device calculates only the length of the IP packet encapsulated in the MPLS packet. If the interface-mtu check-mode command is run on the device with check-mode being label-contained-length, the device also counts in the length of the MPLS label."
+}

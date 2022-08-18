@@ -1,0 +1,21 @@
+{
+    "PageTitle": "reflect change-path-attribute (BGP IPv6 SR-Policy address family view)",
+    "FuncDef": "The reflect change-path-attribute command enables an RR to modify route attributes of BGP routes through an export policy.\nThe undo reflect change-path-attribute command disables an RR from modifying route attributes of BGP routes through an export policy.\nBy default, an RR is disabled from modifying route attributes of BGP routes through an export policy.",
+    "CLIs": [
+        "reflect change-path-attribute",
+        "undo reflect change-path-attribute"
+    ],
+    "ParentView": [
+        "BGP IPv6 SR-Policy address family view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family sr-policy",
+            "[*HUAWEI-bgp-af-ipv6-srpolicy] reflect change-path-attribute"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAccording to standard protocols, RRs are disabled from modifying route attributes through an export policy; otherwise, routing loops may occur. Therefore, by default, an export policy cannot be configured on an RR to modify route attributes.\nTo enable an RR to modify route attributes of BGP routes through an export policy, run the reflect change-path-attribute command. The route attributes that can be modified are as follows:\nThe apply as-path command modifies the AS_Path attribute of BGP routes.The apply comm-filter delete command deletes a community attribute from BGP routes.The apply community command modifies a community attribute of BGP routes.The apply cost command modifies the MED of BGP routes.The apply ip-address next-hop command modifies the next hop of BGP routes.The apply ipv6 next-hop command modifies the next hop of BGP4+ routes.The apply local-preference command modifies the Local_Pref of BGP routes.The apply origin command modifies the origin attribute of BGP routes.The apply extcommunity command modifies the VPN-Target extcommunity attribute of BGP routes.The apply extcommunity soo command modifies the SoO extcommunity attribute of BGP routes.\nIf the undo reflect change-path-attribute command is run, the preceding configurations on the RR do not take effect.\n\nPrecautions\nIf an export policy is configured on an RR, the configuration does not take effect unless the reflect change-path-attribute command is run. If an export policy and the reflect change-path-attribute command are configured on an RR, the BGP route selection may be affected. Therefore, exercise caution when using the command.\nFor example, Router A (with IPv6 address 1::1) and Router B (with IPv6 address 1::2) are IBGP peers, and Router A functions as an RR. If the following configurations exist on Router A:\n[*HUAWEI] route-policy aa permit node 10\n[*HUAWEI-route-policy] apply ipv6 next-hop 2::2\n[*HUAWEI-route-policy] quit\n[*HUAWEI] bgp 65001\n[*HUAWEI-bgp] peer 1::2 route-policy aa export\nIf the reflect change-path-attribute command is not run, Device A reflects routes advertised by other IBGP peers to Device B without changing the next hops of these routes.If the reflect change-path-attribute command is run, Device A changes the next hops of the routes advertised by other IBGP peers to 2::2 before reflecting these routes to Device B."
+}

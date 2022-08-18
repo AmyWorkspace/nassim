@@ -1,0 +1,41 @@
+{
+    "PageTitle": "ip-pool include",
+    "FuncDef": "The ip-pool include command configures IP address pool name mapping in a backup policy.\nThe undo ip-pool include command removes IP address pool name mapping in a backup policy.\nBy default, no IP address pool mapping is configured in a backup policy.",
+    "CLIs": [
+        "ip-pool [ pool-group ] <source-name> include [ pool-group ] <destination-name> [ node <node-id> ]",
+        "undo ip-pool [ pool-group ] <source-name> include [ pool-group ] <destination-name>"
+    ],
+    "ParentView": [
+        "Remote backup profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pool-group",
+            "Info": "Address pool group.\n-"
+        },
+        {
+            "Parameters": "source-name",
+            "Info": "Specifies the name of a source IP address pool.\nThe value is a string of 1 to 128 case-insensitive characters."
+        },
+        {
+            "Parameters": "include destination-name",
+            "Info": "Specifies the name of the destination IP address pool.\nThe value is a string of 1 to 128 case-insensitive characters."
+        },
+        {
+            "Parameters": "node node-id",
+            "Info": "Specifies the number of an IP address pool. If node-id is not specified, the system automatically assigns node-id according to the configuration sequence. The number is a multiple of 5. That is, the first node-id is 5, the second node-id is 10. The node-id in the same source IP address pool are assigned based on the preceding rule. The IP address pools mapped to different source IP address pools have independent node-ids and do not affect each other.\nThe value is an integer ranging from 1 to 65534."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool HSI-bak bas remote",
+            "[~HUAWEI-ip-pool-hsi-bak] quit",
+            "[~HUAWEI] remote-backup-profile rbs",
+            "[*HUAWEI-rm-backup-prf-rbs] service-type bras",
+            "[*HUAWEI-rm-backup-prf-rbs] commit",
+            "[~HUAWEI-rm-backup-prf-rbs] ip-pool pool1 include HSI-bak node 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the ip-pool command is configured in the backup policy, when a user gets online through the interface bound to the backup policy and the authorized address pool is a mapped source address pool (address pool group), the source address pool (address pool group) will be replaced with the destination address pool (address pool group). In this case, the destination address pool (address pool group) is used to assign an IP address to the user.\nThe address pool (address pool group) can be actually not existing on the local end. The address pool (address pool group) must be configured. A source address pool (address pool group) can be mapped to multiple destination address pools (address pool groups) that are selected in ascending order by . That is, a destination address pool (address pool group) with the smallest is selected first.\nThe destination address pool (address pool group) must belong to the same VPN as the user domain. If the source address pool (address pool group) is configured, the destination address pool (address pool group) and the source address pool (address pool group) must belong to the same VPN.\nThe address pool (address pool group) to be configured for a user can be only a BAS address pool rather than a server address pool.\nAn address pool (address pool group) can be mapped to a maximum of 128 address pools (address pool groups).\nA maximum of 512 mappings can be configured for a backup policy.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

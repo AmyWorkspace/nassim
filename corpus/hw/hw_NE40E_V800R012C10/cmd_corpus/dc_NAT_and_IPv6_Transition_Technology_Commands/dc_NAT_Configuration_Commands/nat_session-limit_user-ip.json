@@ -1,0 +1,44 @@
+{
+    "PageTitle": "nat session-limit user-ip",
+    "FuncDef": "The nat session-limit user-ip command sets the maximum number of sessions for each user based on the user IP address and VPN information.\nThe undo nat session-limit user-ip command deletes the maximum number of sessions for each user based on the user IP address and VPN information.\nBy default, the maximum number of sessions for each user based on the user IP address and VPN information is not set.",
+    "CLIs": [
+        "nat session-limit <limit-value> user-ip <user-ip> mask <mask-length> [ vpn-instance <vpn-instance-name> ]",
+        "undo nat session-limit <limit-value> user-ip <user-ip> mask <mask-length> [ vpn-instance <vpn-instance-name> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "limit-value",
+            "Info": "Sets the maximum number of sessions that can be established for each user.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "user-ip user-ip",
+            "Info": "Specifies a user IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask mask-length",
+            "Info": "Specifies the mask length of a specified IP address.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to which a user belongs.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 200:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 101:101 export-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 101:101 import-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-vpn1] quit",
+            "[~HUAWEI] nat session-limit 2000 user-ip 1.1.1.1 mask 32 vpn-instance vpn1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSome unauthorized users may consume a lot of session resources. For example, some network-side devices establish many sessions to attack devices. If the attack sessions reach the upper limit, no session can be used by authorized users for NAT processing.\nThe nat session-limit and nat reverse-session-limit commands can be run in the NAT instance view to set the upper limits of the forward and reverse NAT sessions that can be established, respectively. To limit the number of user-specific sessions based on the user IP addresses and VPN information, run the nat session-limit user-ip command in the system view.\nConfiguration Impact\nThe nat session-limit user-ip command in the system view takes precedence over the session limit commands in the NAT instance view.\nIf this command and the nat port-limit command are both run, the smaller value takes effect.\nPrecautions\nThe nat session-limit user-ip command takes effect on both forward and reverse sessions. The limit on the number of sessions in opposite directions must be set separately.\nThe nat session-limit user-ip command takes effect only on the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S."
+}

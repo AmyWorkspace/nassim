@@ -1,0 +1,70 @@
+{
+    "PageTitle": "neighbor",
+    "FuncDef": "To configure a Border Gateway Protocol (BGP) neighbor (router or VRF) and enter the neighbor configuration mode, use the neighbor command. To remove an entry, use the no form of this command.",
+    "CLIs": [
+        "neighbor { <ip-addr> | <ip-prefix> / <length> } [ remote-as { <as-num> [ . <as-num> ] | route-map <name> }",
+        "no neighbor { <ip-addr> | <ip-prefix> / <length> } [ remote-as { <as-num> [ . <as-num> ] | route-map <name> }]"
+    ],
+    "ParentView": [
+        "neighbor address family configuration mode",
+        "router bgp configuration mode"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-addr",
+            "Info": "IP address of the neighbor in this format: A.B.C.D."
+        },
+        {
+            "Parameters": "ip-prefix / length",
+            "Info": "IP prefix and the length of the IP prefix. The format is x.x.x.x/ length . The length range is from 1 to 32."
+        },
+        {
+            "Parameters": "remote-as",
+            "Info": "(Optional) Specifies the autonomous system (AS) number of the neighbor."
+        },
+        {
+            "Parameters": "as-num",
+            "Info": "Number of an AS that identifies the router to other BGP routers and tags the routing information passed along. The range is from 1 to 65535."
+        },
+        {
+            "Parameters": ". as-num",
+            "Info": "(Optional) Number of an AS that identifies the router to other BGP routers and tags the routing information passed along. The range is from 1 to 65535."
+        },
+        {
+            "Parameters": "route-map name",
+            "Info": "(Optional) Specifies a route map that matches the BGP peer AS number against a list of AS numbers or a regular expression. The name can be any case-sensitive, alphanumeric string up to 63 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "switch(config)# interface loopback 1",
+            "switch(config-if)# ip address 10.0.0.100 255.255.255",
+            "switch(config-if)# exit",
+            "switch(config)# router bgp 64497",
+            "switch(config-router)# neighbor 192.168.0.200 remote-as 64496",
+            "switch(config-router-neighbor)# update-source loopback 2",
+            "switch(config-router-neighbor)# disable-connected-check",
+            "switch(config-router-neighbor)#",
+            "switch(config)# interface loopback 2",
+            "switch(config-if)# ip address 192.168.0.200 255.255.255",
+            "switch(config-if)# exit",
+            "switch(config)# router bgp 64496",
+            "switch(config-router)# neighbor 10.0.0.100 remote-as 64497",
+            "switch(config-router-neighbor)# update-source loopback 1",
+            "switch(config-router-neighbor)# disable-connected-check",
+            "switch(config-router-neighbor)#"
+        ],
+        [
+            "switch(config)# router bgp 64496",
+            "switch(config-router)# neighbor 172.16.0.0 remote-as 64496",
+            "switch(config-router-neighbor)# update-source Loopback0",
+            "switch(config-router-neighbor)#"
+        ]
+    ],
+    "ExtraInfo": "From the BGP neighbor configuration mode, you can perform the following actions:- address-family -Configures an address-family (router, neighbor, VRF). See the address-family (BGP) command for information.- description description - Describes the neighbor. You can enter up to 80 characters including spaces.- disable-connected-check -Disables the connection verification for the directly connected peer. Use the disable-connected-check command to disable a check for an exterior Border Gateway Protocol (eBGP) peer that is directly connected to the local router. BGP triggers a connection check automatically for all eBGP peers that are known to be a single hop away, unless you disable this check with the disable-connected-check command. BGP does not bring up sessions if the check fails. BGP considers an EBGP peer as a single hop away if the eBGP peer does does not have the ebgp-multihop command configured (that is, the time-to-live (TTL) value is one).This command is ignored if the route-map keyword is used in the neighbor command.- dont-capability-negotiate -Turns off the negotiate capability with this neighbor.- dynamic-capability -Enables the dynamic capability.- ebgp-multihop -Accepts and attempts BGP connections to external peers that reside on networks that are not directly connected. This command is ignored if the route-map keyword is used in the neighbor command.Note You should enter this command under the guidance of Cisco technical support staff only.- exit -Exits from the current command mode.- inherit peer-session session-name -Configures a peer to inherit the configuration from another peer-session template. To remove an inherit statement from a peer-session template, use the no form of this command.- no -Negates a command or sets its defaults.- transport connection-mode passive -Allows a passive connection setup only. To remove the restriction, use the no form of this command.- remove-private-as -Removes the private AS number from the outbound updates.- shutdown -Administratively shuts down this neighbor.- timers keepalive-time -Configures keepalive and hold timers in seconds. The range is from 0 to 3600. The default is 60.- update-source { ethernet mod / port | loopback virtual-interface | port-channel number [ . sub-interface ]} -Specifies the source of the BGP session and updates. The range for virtual-interface is from 0 to 1023. The range for number is from 0 to 4096. The range for sub-interface is from 1 to 4093.The Cisco NX-OS software allows BGP sessions to use any operational interface for TCP connections when you enter the update-source command in neighbor configuration mode. To restore the interface assignment to the closest interface, which is called the best local address, use the no form of this command.This command requires the LAN Enterprise Services license.\nCommand Default:None",
+    "HTMLPage": "data/manuals/cisco/cisco_nexus5500/n5500-ucast-cr_n5k-bgp_cmds_n.html",
+    "ori_path": "data/cmdcorpus/cisco/cisco_nexus5500/cmd_corpus/n5500-ucast-cr_n5k-bgp_cmds_n/n5500-ucast-cr_n5k-bgp_cmds_n_neighbor.json",
+    "msg": [
+        "Error CLI:neighbor { <ip-addr> | <ip-prefix> / <length> } [ remote-as { <as-num> [ . <as-num> ] | route-map <name> }"
+    ]
+}

@@ -1,0 +1,35 @@
+{
+    "PageTitle": "igmp-snooping robust-count (VSI E-Tree view)",
+    "FuncDef": "The igmp-snooping robust-count command sets a robustness variable that determines the number of times a querier sends group-specific query messages.\nThe undo igmp-snooping robust-count command restores the default setting.\nBy default, the robustness variable is 2.",
+    "CLIs": [
+        "igmp-snooping robust-count <robust-count-value>",
+        "undo igmp-snooping robust-count"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "robust-count robust-count-value",
+            "Info": "Specifies the number of times a querier sends group-specific query messages.\nThe value is an integer ranging from 2 to 5."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] igmp-snooping robust-count 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe igmp-snooping robust-count command has the following functions:\nDefines the number of times a querier sends group-specific query messages, preventing packet loss on a network.\nWhen a device receives an IGMP Leave message for a multicast group, it sends group-specific query messages for the number of times defined by to check whether there are any other members in this group. The interval at which group-specific query messages are sent is set using the igmp-snooping lastmember-queryinterval command.\nChanges the aging time of member ports.\nAfter receiving a Report message from a downstream device, a device sets the aging time of the corresponding member port based on the following formula: Aging time of a member port = Number of times group-specific query messages are sent x Interval at which general query messages are sent + Maximum time for a downstream host to respond to a querier. The default aging time is 130 seconds. The interval at which general query messages are sent is set using the igmp-snooping query-interval command. The maximum time for a downstream host to respond to a querier is set using the igmp-snooping max-response-time command.\nAfter receiving an IGMP Leave message from a host, a device sets the aging time of the corresponding member port based on the following formula: Aging time of a member port = Interval at which group-specific query messages are sent x Number of times group-specific query messages are sent. By default, the aging time is re-set to 2 seconds. The igmp-snooping robust-count command is used to set the number of times group-specific query messages are sent in the preceding formula. The interval at which group-specific query messages are sent is set using the igmp-snooping lastmember-queryinterval command.\nIf the querier receives a Report message for the multicast group from another host within the robust-value x lastmember-queryinterval period, it continues to maintain the memberships for the group. Otherwise, the querier considers that there is no member of the group on the network segment, and does not maintain the memberships for the group.\n\nPrerequisites\nIGMP snooping has been configured using the igmp-snooping enable command.\nConfiguration Impact\nIf the igmp-snooping robust-count command is run in the same view several times, the latest configuration overrides the previous one.\nPrecautions\nWhen the igmp-snooping robust-count command is used to set the aging time for member ports, the settings of parameters in this command must be consistent on a Layer 2 device and its upstream Layer 3 device; otherwise, multicast data transmission between Layer 2 and Layer 3 networks will be interrupted."
+}

@@ -1,0 +1,80 @@
+{
+    "PageTitle": "igmp ip-source-policy",
+    "FuncDef": "The igmp ip-source-policy command configures a policy for filtering Internet Group Management Protocol (IGMP) Report or Leave messages based on source addresses.\nThe undo igmp ip-source-policy command restores the default configuration.\n\nBy default, no policy is configured for filtering IGMP Report or Leave messages based on source addresses.",
+    "CLIs": [
+        "igmp ip-source-policy",
+        "igmp ip-source-policy { <basic-acl-number> | acl-name <acl-name> }",
+        "undo igmp ip-source-policy"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "Tunnel interface view",
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basic-acl-number",
+            "Info": "Specifies the number of a basic ACL, which defines the range of source addresses.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp ip-source-policy"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] acl number 2001",
+            "[*HUAWEI-acl4-basic-2001] rule permit source 10.10.1.2 0",
+            "[*HUAWEI-acl4-basic-2001] rule deny source 10.10.1.1 0",
+            "[*HUAWEI-acl4-basic-2001] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp ip-source-policy 2001"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] acl name myacl basic",
+            "[*HUAWEI-acl4-basic-myacl] rule permit source 10.10.1.2 0",
+            "[*HUAWEI-acl4-basic-myacl] rule deny source 10.10.1.1 0",
+            "[*HUAWEI-acl4-basic-myacl] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp ip-source-policy acl-name myacl"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nTo protect a multicast device against attacks from user hosts, source address-based IGMP message filtering enables a multicast device's interface to filter IGMP messages. To ensure the precision in multicast traffic sending, run the igmp ip-source-policy command on the multicast device's interface connecting to a user host to enable the multicast device to filter out IGMP messages whose source addresses do not match the permit action in a specified ACL rule.\nIf you have not specified an ACL rule, the rules for filtering IGMP messages based on source addresses are as follows:\n\nIGMP Report or Leave message are processed if the source addresses in the IP headers are 0.0.0.0 or are on the same network segment as the addresses of the inbound interfaces of the IGMP Report messages.\nIGMP Report or Leave messages are discarded if the source addresses in the IP headers are on different network segments than the addresses of the inbound interfaces of the IGMP Report messages.\n\nIf you have specified an ACL rule, the interface filters out the IGMP Report, Leave, and Query messages whose source addresses do not match the ACL rule.\n\nPrerequisites\n\nThe multicast routing function has been enabled using the multicast routing-enable command.\n\nConfiguration Impact\n\nIf the igmp ip-source-policy command is run more than once, the latest configuration overrides the previous one.\n\nPrecautions\n\nThe igmp ip-source-policy command requires an ACL configured using the acl command. In the basic ACL view, specify the source parameter in the rule command to configure an ACL rule."
+}

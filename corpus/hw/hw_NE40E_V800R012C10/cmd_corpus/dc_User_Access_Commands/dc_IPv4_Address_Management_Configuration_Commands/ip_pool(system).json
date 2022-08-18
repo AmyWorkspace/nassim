@@ -1,0 +1,53 @@
+{
+    "PageTitle": "ip pool(System view)",
+    "FuncDef": "The ip pool command creates an IP address pool.\nThe undo ip pool command removes an IP address pool.\nBy default, no address pool is created.",
+    "CLIs": [
+        "ip pool <ip-pool-name> [ bas { local | remote | dynamic } ]",
+        "ip pool <ip-pool-name> bas { local | remote } rui-slave",
+        "undo ip pool <ip-pool-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-pool-name",
+            "Info": "Specifies the name of the IP address pool. It can contain the following characters:\nLetters A-Z or a-z.Digits 0-9..- or _.\nThe name of the IP address pool includes only the character of - or - - is not supported.\nThe value is a string of 1 to 128 case-insensitive characters."
+        },
+        {
+            "Parameters": "bas",
+            "Info": "Indicates an IP address pool that is used for access users.\n-"
+        },
+        {
+            "Parameters": "local",
+            "Info": "Indicates a local address pool that assigns IP addresses to local Layer 2 DHCPv4 users and PPPoE users.\n-"
+        },
+        {
+            "Parameters": "remote",
+            "Info": "Indicates a remote address pool that assigns IP addresses to remote Layer 2 DHCPv4 users and PPPoE users.\n-"
+        },
+        {
+            "Parameters": "dynamic",
+            "Info": "Indicates a dynamic address pool.\n-"
+        },
+        {
+            "Parameters": "rui-slave",
+            "Info": "Indicates RUI-slave address pools.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei bas local"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei bas remote"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei bas dynamic"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a device is deployed to assign IP addresses to users, run the ip pool command to create an address pool.\nConfiguration Impact\nWhen creating an address pool, specify the address type. After the address pool view is displayed, you do not need to enter the keyword of the specified address type.\nThe hybrid IP address pool specified by local rui-slave can be only used to assign IP addresses for RUI users. The hybrid IP address pool can be used as both a local IP address pool and a remote IP address pool. IP addresses in the remote IP address pool are preferentially assigned. The remote server must have an IP address pool the same as the local IP address pool to function as the primary IP address pool.\nIf remote is specified, IP addresses can be assigned from the address pool in remote mode only.\nIf dynamic is specified, address segments in the address pool can be dynamically applied for and released. You need to configure a DAP resource pool on the device and specify the DAP resource pool for the dynamic address pool.\nPrecautions\nSwitching the address pool type is mainly used to change the preference of gateway routes for an address pool that it is bound to an RBS.  An address pool type (remote or RUI slave) can be switched by using this command to create the address pool. After the address pool type is switched, unbind the address pool from the RBS and reconfigure the binding relationship. Without these operations, the preference of gateway routes will not change."
+}

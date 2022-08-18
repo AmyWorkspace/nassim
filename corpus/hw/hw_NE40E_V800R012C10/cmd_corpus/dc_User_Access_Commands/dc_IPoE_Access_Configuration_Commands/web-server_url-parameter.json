@@ -1,0 +1,37 @@
+{
+    "PageTitle": "web-server url-parameter",
+    "FuncDef": "The web-server url-parameter command configures the specified keywords carried in the URL of a web page pushed by the portal server.\nThe undo web-server url-parameter command restores the keywords carried in the URL of a web page pushed by the portal server to the default setting.\nBy default, the mandatory web server is not configured.",
+    "CLIs": [
+        "web-server url-parameter [ shared-key [ shared-key ] | shared-key-cipher [ shared-key-cipher ] ]",
+        "undo web-server url-parameter",
+        "undo web-server url-parameter [ shared-key <shared-key> | shared-key-cipher <shared-key-cipher> ]"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "shared-key shared-key",
+            "Info": "Specifies the keyword for generating ciphertext user MAC address or AP MAC address to be displayed. After the web-server redirect-key command with cipher aes128 configured is run, shared-key-cipher generates ciphertext user MAC address or AP MAC address to be displayed.Specifies the empty shared-key when only shared-key, instead of <shared-key>, is configured.\nThe value is a string of 1 to 16 characters."
+        },
+        {
+            "Parameters": "shared-key-cipher shared-key-cipher",
+            "Info": "Specifies the keyword for generating ciphertext user MAC address or AP MAC address to be displayed. After the web-server redirect-key command with cipher aes128 configured is run, shared-key-cipher generates ciphertext user MAC address or AP MAC address to be displayed.Specifies the empty shared-key when only shared-key-cipher, instead of <shared-key-cipher>, is configured.\nThe value is a string of 1 to 16 or 1 to 128 characters. You can set a character string with 1 to 16 characters. If you enter the ciphertext shared-key-cipher displayed in the configuration file, the value can be a string of 1 to 128 characters."
+        },
+        {
+            "Parameters": "url-parameter",
+            "Info": "Indicates the keywords carried in the URL of a web page pushed by the portal server.The keywords are user-ip and ac-name nas-serial.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[*HUAWEI-aaa-domain-huawei] web-server redirect-key ap-mac-address ap-mac-add cipher aes128",
+            "[*HUAWEI-aaa-domain-huawei] web-server url-parameter shared-key aaa"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMandatory web authentication is a function that enables the to redirect the access request of a user to the web server when a user accesses an unauthorized address before being authenticated, facilitating user authentication.\nIf homepage popup is configured and the web server support this function, when the user passes the web authentication, the web server refreshes the web page being browsing by the user to the homepage requested by the user before authentication. The user does not need to type this homepage again. If homepage popup is configured, when the user passes the web authentication, the user is forcibly redirected to the Portal page. To access the requested homepage, the user needs to type this homepage again.\nPrecautions\nThis command is supported only on the admin VS.\nWhen you run the web-server command in the AAA domain view, check whether the web authentication server to which the active/standby server in IP mode is the same as that in URL mode. If they are different, you cannot run the web-server command.The active web server must be different from the standby Web server.To delete the web authentication server, you must remove the binding of the web authentication server.You must bind the web authentication server in the system view; otherwise, the binding fails.If the web-auth-server source interface command is not run in the system view, run the web-server redirect-key mscg-ip command and the web-server command in the AAA domain view. In this way, a source interface's route can be used as a customized parameter of this source interface when an IPv6 user switches between the authentication domain and pre-authentication domain.\nWhen users are forcibly redirected to the web server, if you do not want the actual user MAC address or AP MAC address to be displayed, run the web-server redirect-key command with cipher aes128 configured. Then the user MAC address or AP MAC address is displayed in ciphertext. The command web-server url-parameter { shared-key | shared-key-cipher } is used to generate the ciphertext user MAC address or AP MAC address to be displayed.In IPv6 forcible redirection scenarios, you must run the web-server identical-url command. This configuration allows IPv4 and IPv6 users to use identical URL and the IPv6 redirection web page to be pushed to users."
+}

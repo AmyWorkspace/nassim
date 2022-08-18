@@ -1,0 +1,88 @@
+{
+    "PageTitle": "rewrite (Layer 2 sub-interface view)",
+    "FuncDef": "The rewrite push command sets a traffic behavior to \"push\" for packets that an EVC Layer 2 sub-interface receives.\nThe undo rewrite command deletes a traffic behavior configured on an EVC Layer 2 sub-interface.\nThe rewrite pop command sets the traffic behavior to \"pop\" so that an EVC Layer 2 sub-interface removes VLAN tags from received packets.\nThe undo rewrite command deletes a traffic behavior configured on an EVC Layer 2 sub-interface.\nThe rewrite swap command sets the traffic behavior to \"swap\" so that an EVC Layer 2 sub-interface swaps inner and outer VLAN tags in received packets.\nThe undo rewrite command deletes a traffic behavior configured on an EVC Layer 2 sub-interface.\nBy default, no traffic behavior is configured on an EVC Layer 2 sub-interface. The EVC Layer 2 sub-interface transparently forwards all received packets without processing them.",
+    "CLIs": [
+        "rewrite pop { single | double }",
+        "rewrite push { vid <vid> [ ce-vid <ce-vid> ] }",
+        "rewrite push { vid <vid> 8021p <8021p-value> [ ce-vid <ce-vid> [ ce-8021p <ce-8021p-value> ] ] }",
+        "rewrite push { vid <vid> 8021p <8021p-value> [ ce-vid <ce-vid> ce-8021p <ce-8021p-value> ] }",
+        "rewrite push { vid <vid> [ 8021p <8021p-value> ] ce-vid <ce-vid> ce-8021p <ce-8021p-value> }",
+        "rewrite swap"
+    ],
+    "ParentView": [
+        "400GE Layer 2 sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "Global-VE layer2 subinterface view",
+        "VE layer2 subinterface view",
+        "Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "single",
+            "Info": "Enables an EVC Layer 2 sub-interface to remove outer tags from single-tagged packets after receiving them.\n-"
+        },
+        {
+            "Parameters": "double",
+            "Info": "Enables an EVC Layer 2 sub-interface to remove double tags from packets after receiving them.\n-"
+        },
+        {
+            "Parameters": "double",
+            "Info": "Push one or more specified VLAN tags.\n-"
+        },
+        {
+            "Parameters": "vid vid",
+            "Info": "Enables an EVC Layer 2 sub-interface to add a tag with a specified VLAN ID to received packets.\nIf an EVC Layer 2 sub-interface receives single-tagged packets, vid vid specifies the VLAN ID in the outer tag to be added to the packets.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid ce-vid",
+            "Info": "Enables an EVC Layer 2 sub-interface to add an inner tag with a specified VLAN ID to received packets.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "8021p 8021p-value",
+            "Info": "Enables the EVC Layer 2 sub-interface to change 802.1p priorities in received packets to a specified priority value.\nIf an EVC Layer 2 sub-interface receives single-tagged packets, 8021p 8021p-value specifies the 802.1p value in the outer tag to be added to the packets.\n802.1p is represented by a 3-bit PRI (priority) field in an 802.1q frame. If traffic is congested on a device, the device forwards frames in descending order by priority values.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "ce-8021p ce-8021p-value",
+            "Info": "Enables the EVC Layer 2 sub-interface to change 802.1p priorities in inner tags of received packets to a specified priority value.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "swap",
+            "Info": "Swap the inner VLAN tag with the outer VLAN tag.\n-"
+        },
+        {
+            "Parameters": "pop",
+            "Info": "Remove one or more specified VLAN tags.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] rewrite pop double"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.2 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] rewrite pop single"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] rewrite push vid 10 8021p 3"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.2 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] rewrite push vid 20 ce-vid 100 ce-8021p 4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] encapsulation qinq vid 10 ce-vid 100 to 200",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] rewrite swap"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nrewrite pop:\nInter-VLAN communication\nVLANs are widely used because they can isolate Layer 2 user packets. Each VLAN logically isolates a broadcast domain from other broadcast domains in a physical LAN. Hosts in each VLAN can communicate with each other, but not hosts in other VLANs. Layer 3 routing techniques must be used to enable inter-VLAN communication.\nTraditional Layer 3 Ethernet interfaces consider VLAN-tagged packets invalid and discard them and do not transmit them over routes. To implement inter-VLAN communication, run the interface interface-type interface-number.subnum mode l2 command to create an EVC Layer 2 sub-interface on a Layer 3 Ethernet interface and run the rewrite pop command to set a traffic behavior to pop on the EVC Layer 2 sub-interface. Then the EVC Layer 2 sub-interface can remove VLAN tags after receiving VLAN-tagged packets and implement inter-VLAN communication.\nLAN and WAN interconnection\nA majority of LAN packets carry VLAN tags, whereas WAN protocols, cannot identify VLAN-tagged packets. In this situation, to forward VLAN-tagged packets from a LAN to a WAN, a device needs to record the VLAN information, remove VLAN tags from packets, and forward them.\nrewrite push:\nOn a metro Ethernet network, user and service packets are identified using VLANs. A 12-bit VLAN tag defined in IEEE 802.1Q identifies a maximum of only 4096 VLANs, which is insufficient for a great number of users in the metro Ethernet. The 802.1Q in 802.1Q (QinQ) technology increases the number of VLAN tags.\nThe rewrite push command supports the following functions:\nAdds one or double tags to each untagged packet.Adds an outer tag or double tags to each single-tagged packet.Adds another tag to each double-tagged packet.\nrewrite swap:\nOn Huawei devices, outer tags in QinQ packets identify services, and inner tags must identify users. On some networks, outer tags in QinQ packets identify users, and inner tags identify services. To enable Huawei devices to properly forward QinQ packets to such networks, run the rewrite swap command to swap the inner and outer tags in QinQ packets so that the outer tags identify services, and the inner tags identify users.\n\nPrerequisites\nBefore run the command rewrite pop,you should check as follows:\nAn EVC Layer 2 sub-interface has been created using the interface interface-type interface-number.subnum mode l2 command in the system view. The EVC Layer 2 sub-interface is not added to a bridge domain. If the EVC Layer 2 sub-interface has been added to a bridge domain, run the undo bridge-domain bd-id command to remove the EVC Layer 2 sub-interface from the bridge domain.\nBefore run the command rewrite push,you should check as follows:\nAn EVC Layer 2 sub-interface has been created using the interface interface-type interface-number.subnum mode l2 command in the system view.The EVC Layer 2 sub-interface is not added to a bridge domain. If the EVC Layer 2 sub-interface has been added to a bridge domain, run the undo bridge-domain bd-id command to remove the EVC Layer 2 sub-interface from the bridge domain.\nBefore run the command rewrite swap,you should check as follows:\nAn EVC Layer 2 sub-interface has been created using the interface interface-type interface-number.subnum mode l2 command in the system view.The EVC Layer 2 sub-interface is not added to a bridge domain. If the EVC Layer 2 sub-interface has been added to a bridge domain, run the undo bridge-domain bd-id command to remove the EVC Layer 2 sub-interface from the bridge domain. QinQ encapsulation has been enabled using the encapsulation qinq command in the EVC Layer 2 sub-interface view.\n\nConfiguration Impact\nAfter the rewrite pop command is run, a device processes packets as follows:\nThe device removes tags from received packets before forwarding them at Layer 2. The outbound interface on the device determines whether to tag the forwarded packets.The device adds VLAN information into packets before forwarding them at Layer 2.\n\nPrecautions\nA maximum of one traffic behavior can be specified on each EVC Layer 2 sub-interface. If a traffic behavior has been configured on an EVC Layer 2 sub-interface, perform the following operations:\nRun the undo rewrite command to delete the existing traffic behavior.Run the undo bridge-domain command to remove the EVC Layer 2 sub-interface from the existing bridge domain."
+}

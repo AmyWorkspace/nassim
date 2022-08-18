@@ -1,0 +1,63 @@
+{
+    "PageTitle": "qos phb disable",
+    "FuncDef": "The qos phb disable command priority mapping is disabled on the outbound interface.\nThe undo qos phb disable command priority mapping is restored on the outbound interface.\nBy default, the priority mapping is disabled on the outbound interface.",
+    "CLIs": [
+        "qos phb [ inner-8021p | outer-8021p | dscp | mpls-exp ] disable",
+        "undo qos phb [ inner-8021p | outer-8021p | dscp | mpls-exp ] disable"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "EVC view of a 10GE interface",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "AAA domain view",
+        "BAS interface view (FE)",
+        "EVC view",
+        "Eth-Trunk interface view",
+        "FlexE interface view",
+        "GE optical interface view",
+        "Global-VE layer2 subinterface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "PW-VE sub-interface view",
+        "PW-VE interface view",
+        "VE layer2 subinterface view",
+        "Serial interface view",
+        "EVC view of an Eth-Trunk interface",
+        "EVC view of an Ethernet interface",
+        "EVC view of a GE interface",
+        "Bridge domain view",
+        "Port extension sub-interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "inner-8021p",
+            "Info": "Indicates that an interface does not check the PHB table for the inner 802.1p value of outgoing packets.\n-"
+        },
+        {
+            "Parameters": "outer-8021p",
+            "Info": "Indicates that an interface does not check the PHB table for the outer 802.1p value of outgoing packets.\n-"
+        },
+        {
+            "Parameters": "dscp",
+            "Info": "Indicates that an interface does not check the PHB table for the DSCP value of outgoing packets.\n-"
+        },
+        {
+            "Parameters": "mpls-exp",
+            "Info": "Indicates that an interface does not check the PHB table for the EXP value of outgoing packets.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] qos phb disable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSimple traffic classification involves two procedures. For upstream packets, the system searches the behavior aggregate (BA) table, mapping external service priorities to internal service priorities. For downstream packets, the system searches the Per-Hop Behavior (PHB) table and maps internal service priorities to external service priorities. The CoS and color information of packets are sorted in the PHB table. When downstream packets where the simple traffic classification is to be performed are forwarded, the system searches the PHB table to identify the service priorities of the packets. Then, internal priorities are mapped to external priorities according to the mappings in the DS domain. After the trust upstream command is configured, The board takes PHB action for outbound packets. You can configure the qos phb disable command to disable the function of checking the PHB during the forwarding of downstream traffic\nIf the system does not check the PHB during packet forwarding on a downstream interface, the priority fields (such as 8021p, dscp, and exp) of the packets are not modified. To modify some priority fields without modifying other ones, run the qos phb disable command to specify an external priority type (inner-8021p, outer-8021p, dscp, or mpls-exp). For example, if only inner-8021p is specified, the system does not modify the inner-8021p field but modifies other fields during packet forwarding on a downstream interface.\nIn BAS interface view, only command qos phb disable can be configured.\nIf a user attempts to run the qos phb disable command after running the qos phb enable command, a configuration conflict message is displayed to instruct the user to delete the old configuration before applying the new configuration.\nPrecautions\nThe qos phb disable command is mutually exclusive with the qos phb enable command.\nThe inner-8021p | outer-8021p | dscp | mpls-exp parameters are not supported on global-VE interfaces."
+}

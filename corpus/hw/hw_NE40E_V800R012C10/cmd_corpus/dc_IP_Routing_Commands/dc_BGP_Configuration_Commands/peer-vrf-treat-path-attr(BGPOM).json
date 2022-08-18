@@ -1,0 +1,51 @@
+{
+    "PageTitle": "peer path-attribute-treat (BGP-VPN instance IPv4 address family view)",
+    "FuncDef": "The peer path-attribute-treat command configures a mode in which a device processes specified path attributes in received BGP Update messages.\nThe undo peer path-attribute-treat command cancels the configuration.\nBy default, BGP path attributes are processed according to a standard protocol.",
+    "CLIs": [
+        "peer <peerIpv4Addr> path-attribute-treat attribute-id { <id> [ to <id2> ] } &<1-255> { discard | withdraw | treat-as-unknown }",
+        "undo peer <peerIpv4Addr> path-attribute-treat attribute-id { <id> [ to <id2> ] } &<1-255> [ discard | withdraw | treat-as-unknown ]"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerIpv4Addr",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is an IPv4 address, in dotted decimal notation."
+        },
+        {
+            "Parameters": "attribute-id id",
+            "Info": "Specifies an attribute ID.\nThe value is an integer, which can be:\n0: Reserved\n11: DPA\n12: ADVERTISER\n13: RCID_PATH / CLUSTER_ID\n16: Extended Communities\n19: SAFI Specific Attribute (SSA)\n20: Connector Attribute\n21: AS_PATHLIMIT\n22: PMSI_TUNNEL\n23: Tunnel Encapsulation Attribute\n24: Traffic Engineering\n25: IPv6 Address Specific Extended Community\n26: AIGP\n27: PE Distinguisher Labels\n28: ELC\n29: LS_TYPE\n30: REMOTE_NEXTHOP\n32: LARGE_COMMUNITY\n40: PREFIX_SID\n128: ATTR_SET\n129: WIDE_COMMUNITY\n255: Reserved for development\n31, 33-39, 41-127, and 130-254: Unassigned"
+        },
+        {
+            "Parameters": "to id2",
+            "Info": "Specifies an attribute ID.\nThe value is an integer, which can be:\n0: Reserved\n11: DPA\n12: ADVERTISER\n13: RCID_PATH / CLUSTER_ID\n16: Extended Communities\n19: SAFI Specific Attribute (SSA)\n20: Connector Attribute\n21: AS_PATHLIMIT\n22: PMSI_TUNNEL\n23: Tunnel Encapsulation Attribute\n24: Traffic Engineering\n25: IPv6 Address Specific Extended Community\n26: AIGP\n27: PE Distinguisher Labels\n28: ELC\n29: LS_TYPE\n30: REMOTE_NEXTHOP\n32: LARGE_COMMUNITY\n40: PREFIX_SID\n128: ATTR_SET\n129: WIDE_COMMUNITY\n255: Reserved for development\n31, 33-39, 41-127, and 130-254: Unassigned"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "Discards specified path attributes.\n-"
+        },
+        {
+            "Parameters": "withdraw",
+            "Info": "Withdraws BGP routes with specified path attributes.\n-"
+        },
+        {
+            "Parameters": "treat-as-unknown",
+            "Info": "Processes the specified attributes as unknown attributes. If a specified attribute is optional transitive, the BGP device accepts this attribute and advertises it to other peers; if the specified attribute is of any other type, the BGP device discards this attribute.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance a",
+            "[*HUAWEI-vpn-instance-a] ipv4-family",
+            "[*HUAWEI-vpn-instance-a-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-a] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance a",
+            "[*HUAWEI-bgp-a] peer 10.1.1.1 as-number 100",
+            "[*HUAWEI-bgp-a] peer 10.1.1.1 path-attribute-treat attribute-id 19 to 21 discard"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA BGP Update message contains various path attributes. If a local device receives Update messages containing malformed path attributes, the involved BGP sessions may flap. To enhance reliability, run the peer path-attribute-treat command to configure a special mode in which a device processes specified path attributes in received BGP Update messages. Special modes indicate those that are not defined in the standard protocol and include the following:\ndiscard: discards specified path attributes.withdraw: withdraws BGP routes with specified path attributes.treat-as-unknown: performs unknown processing on specified path attributes.\n\nPrecautions\nThis command may cause the specified path attributes to be discarded or routes carrying the path attributes to be withdrawn. Therefore, exercise caution when you run this command.\nThe command configuration takes effect immediately for the routes received after the command is run. However, for the routes received before the command is run, the configuration can take effect only after the refresh bgp command is run."
+}

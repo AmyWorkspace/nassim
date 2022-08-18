@@ -1,0 +1,36 @@
+{
+    "PageTitle": "ip extcommunity-list soo advanced",
+    "FuncDef": "The ip extcommunity-list soo advanced command configures an advanced Source of Origin (SoO) extended community filter.\nThe undo ip extcommunity-list soo advanced command deletes a specified advanced SoO extended community filter.\nBy default, no advanced SoO extended community filter is configured.",
+    "CLIs": [
+        "ip extcommunity-list soo advanced <advanced-extcomm-filter-name> [ index <index-number> ] <matchMode> <regular-expression>",
+        "undo ip extcommunity-list soo advanced <advanced-extcomm-filter-name> [ index <index-number> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "index index-number",
+            "Info": "Specifies the sequence number of an SoO extended community filter.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "matchMode",
+            "Info": "Sets the matching mode of the SoO extended community filter.\nThe value is an enumerated type:\npermit: Sets the matching mode of the SoO extended community filter to permit.deny: Sets the matching mode of the SoO extended community filter to deny."
+        },
+        {
+            "Parameters": "regular-expression",
+            "Info": "Specifies an SoO extended community-based regular expression.\nThe value is a string of 1 to 1024 characters, spaces supported."
+        },
+        {
+            "Parameters": "advanced advanced-extcomm-filter-name",
+            "Info": "Specifies the name of the advanced SoO extended community filter.\nThe name is a string of 1 to 51 case-sensitive characters, spaces not supported. The string cannot be all digits."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip extcommunity-list soo advanced aaa permit ^2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSoO records the BGP route originator. To configure an SoO extended community filter so that BGP routes carrying SoO can be filtered, run the ip extcommunity-list soo command.\nAn SoO extended community filter can be used as a matching condition of a route-policy using a command, such as the if-match extcommunity-list soo aaa command.\nThe undo ip extcommunity-list soo command deletes a specified SoO extended community filter.\nThe display ip extcommunity-list soo command displays detailed configurations of the SoO extended community filter.\nPrecautions\nThe extended community attributes of a route include VPN-target and SoO. The ip extcommunity-list soo command adds an SoO extended community filter.\nBy default, Source of Origin (SoO) extended community filters work in deny mode. If all matching rules in a filter are configured to work in deny mode, all routes are denied by the filter; to prevent this problem, configure one matching rule in permit mode after one or multiple matching rules in deny mode so that the routes except for those denied by preceding matching rules are permitted by the filter.\nFor an advanced SoO extended community filter, if the SoO attribute is set to be in the format of 4-byte AS number:2-byte user-defined number, the filtering rule that uses the SoO-based regular expression is affected by the as-notation plain command:\nIf the as-notation plain command is run, route matching can succeed only after the regular expression is set to be in the format of integral 4-byte AS number:2-byte user-defined number.If the as-notation plain command is not run, route matching can succeed only after the regular expression is set to be in the format of 4-byte AS number in dotted notation:2-byte user-defined number.If the as-notation plain command is run after the regular expression is configured, you need to reconfigure the RD value using the rdStr parameter; otherwise, route matching may fail against an import or export route-policy, causing a network fault."
+}

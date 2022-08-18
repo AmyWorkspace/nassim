@@ -1,0 +1,56 @@
+{
+    "PageTitle": "abr-summary",
+    "FuncDef": "The abr-summary command configures route summarization on an area border router (ABR).\nThe undo abr-summary command disables route summarization from an ABR.\nBy default, route summarization is not configured on ABRs.",
+    "CLIs": [
+        "abr-summary <ip-address> <mask> [ [ advertise | [ cost { <cost-value> | inherit-minimum } ] | [ hold-max-cost <hours> ] | [ generate-null0-route ] ] * | [ not-advertise | [ cost { <cost-value> | inherit-minimum } ] | [ hold-max-cost <hours> ] ] * | [ generate-null0-route | [ advertise ] | [ cost { <cost-value> | inherit-minimum } ] | [ hold-max-cost <hours> ] ] * ]",
+        "undo abr-summary <ip-address> <mask>"
+    ],
+    "ParentView": [
+        "OSPF area view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of a summary route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the IP address mask of the summary route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "advertise",
+            "Info": "Advertises the summary route.\nBy default, the summary route is advertised.\n-"
+        },
+        {
+            "Parameters": "cost cost-value",
+            "Info": "Specifies the cost of the summary route.\nThe value is an integer ranging from 0 to 16777214.\nBy default, the largest cost of the specific routes for summarization is used as the cost of the summary route."
+        },
+        {
+            "Parameters": "inherit-minimum",
+            "Info": "Indicates that the smallest cost of the specific routes for summarization is used as the cost of the summary route.\n-"
+        },
+        {
+            "Parameters": "hold-max-cost hours",
+            "Info": "Specifies the interval at which the maximum cost is advertised in the summary route.\nThe value is an integer ranging from 10 to 1800, in seconds."
+        },
+        {
+            "Parameters": "generate-null0-route",
+            "Info": "Generates a black-hole route in the RM module to prevent routing loops.\n-"
+        },
+        {
+            "Parameters": "not-advertise",
+            "Info": "Prevents the summary route from being advertised.\nBy default, the summary route is advertised.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] area 1",
+            "[*HUAWEI-ospf-100-area-0.0.0.1] network 10.42.10.0 0.0.0.255",
+            "[*HUAWEI-ospf-100-area-0.0.0.1] network 10.42.110.0 0.0.0.255",
+            "[*HUAWEI-ospf-100-area-0.0.0.1] abr-summary 10.42.0.0 255.255.0.0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a large-scale OSPF network, route lookup may slow down because of the large size of the routing table. To reduce the size of the routing table and simplify management, configure route summarization.\nThis command enables routes with the same IP prefix to be summarized into one route. If a link connected to a device within an IP address range that has been summarized alternates between Up and Down, the link status change is not advertised to the devices beyond the IP address range. This prevents route flapping and improves network stability.\nThe abr-summary command configures route summarization on an ABR. When an ABR transmits routing information to other areas, it originates Type 3 Link Status Advertisements (LSAs) per network segment. If contiguous segments exist in this area, run the abr-summary command to summarize these segments into one segment so that the ABR sends only one summary LSA. The summarization reduces the routing table size and improves performance of the Router.\nPrerequisites\nThe segments that need to be summarized have been specified using the network command.\nPrecautions\nThis command applies only to ABRs. To configure route summarization on an AS boundary router (ASBR), run the asbr-summary command.Route summarization cannot be configured for different areas in the same process."
+}

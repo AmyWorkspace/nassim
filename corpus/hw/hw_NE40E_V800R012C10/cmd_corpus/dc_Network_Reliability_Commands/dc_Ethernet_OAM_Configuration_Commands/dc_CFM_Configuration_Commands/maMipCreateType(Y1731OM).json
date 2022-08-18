@@ -1,0 +1,39 @@
+{
+    "PageTitle": "mip create-type (MA view)",
+    "FuncDef": "The mip create-type command configures a Maintenance Association Intermediate Point (MIP) creation rule in a Maintenance Association (MA).\nThe undo mip create-type command restores the default MIP creation rule in an MA.\nBy default, the defer MIP creation rule is used in an MA. MIPs in an MA are created using the rule configured in a Maintenance Domain (MD).",
+    "CLIs": [
+        "mip create-type { default | explicit | none | defer }",
+        "undo mip create-type [ default | explicit | none | defer ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "default",
+            "Info": "Indicates the default MIP creation rule in an MA. A MIP can be created on an interface in an MA if no MEPs with higher or lower levels are configured on the interface. Using the default MIP creation rule, an interface can create a MIP even though no MEP is configured on this interface.\n-"
+        },
+        {
+            "Parameters": "explicit",
+            "Info": "Indicates the explicit MIP creation rule in an MA. MIPs can be created on an interface with a lower level MEP but without a higher level MEP or a lower level MIP. Using the explicit MIP creation rule, an interface can create MIPs only after a MEP of a lower level is configured on the interface.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "Disables an interface from automatically creating MIPs.\n-"
+        },
+        {
+            "Parameters": "defer",
+            "Info": "Indicates the defer MIP creation rule in an MA. MIPs in an MA are created using the rule configured in an MD.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1 level 1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] mip create-type none"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMIPs are located on a link between two Maintenance Association End Point (MEP) within an MD, facilitating management. The more MIPs there are, the easier it is to manage and control the network. Carriers set up more MIPs for important services than for regular services.\nThe mip create-type command sets the MIP creation rule in the MA. The created MIPs can respond to Loopback Messages (LBMs) or Linktrace Messages (LTMs) sent by a non-MEP in the same MA. A device uses the configured rules to automatically create MIPs.\nAfter a generation rule is configured in a specific MA, all interfaces in the MA use the rule to create MIPs.\nPrerequisites\nCFM has been enabled globally using the cfm enable command run in the system view.\nAn MA has been created using the ma command.\nPrecautions\nOnly a device with IEEE Std 802.1ag-2007 enabled supports the mip create-type command in the MA view."
+}

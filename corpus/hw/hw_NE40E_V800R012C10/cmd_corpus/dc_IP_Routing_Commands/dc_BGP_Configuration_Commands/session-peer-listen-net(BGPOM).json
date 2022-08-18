@@ -1,0 +1,45 @@
+{
+    "PageTitle": "peer listen-net (BGP-VPN instance view)",
+    "FuncDef": "The peer listen-net command specifies a network segment from which a dynamic BGP peer group listens for BGP connection requests.\nThe undo peer listen-net command deletes the specified network segment from which a dynamic BGP peer group listens for BGP connection requests.\nBy default, no network segment from which a dynamic BGP peer group listens for BGP connection requests is specified.",
+    "CLIs": [
+        "peer <group-name> listen-net <ipv4-address> [ <mask-length> | <mask> ]",
+        "undo peer <group-name> listen-net <ipv4-address> [ <mask-length> | <mask> ]"
+    ],
+    "ParentView": [
+        "BGP-VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a dynamic BGP peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the mask of the preceding IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies a mask length. The 1s in each 32-bit mask must be consecutive. Therefore, a mask in dotted decimal notation can be presented by a mask length.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the mask of the preceding IP address.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpn1",
+            "[*HUAWEI-bgp-instance-vpn1] group ex listen external",
+            "[*HUAWEI-bgp-instance-vpn1] peer ex listen-as 200",
+            "[*HUAWEI-bgp-instance-vpn1] peer ex listen-net 10.10.10.0 24"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo advertise the BGP origin AS validation result (Valid, NotFound, or Invalid) to a specified BGP peer or peer group so that the BGP peer or peer group can apply the result to route selection, run the peer advertise origin-as-validation command.\nPrerequisites\nA dynamic BGP peer group has been configured using the group listen [ internal | external ] command. In the case of a dynamic EBGP peer group, a peer AS from which the peer group listens for BGP connection requests must also have been specified using the peer listen-as command."
+}

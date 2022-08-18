@@ -1,0 +1,92 @@
+{
+    "PageTitle": "filter-policy (RIP view)",
+    "FuncDef": "The filter-policy export command configures a global, protocol, or interface export policy so that only the routes that match the export policy can be added to the routing table and advertised through update packets.\nThe undo filter-policy export command disables route filtering.\nThe filter-policy import command filters the routes that are received in RIP update packets.\nThe undo filter-policy import command disables route filtering.\nBy default, no export policy is configured.",
+    "CLIs": [
+        "filter-policy { acl-name <acl-name> | <acl-number> | ip-prefix <ip-prefix-name> } export [ static | direct | bgp | unr | { rip | ospf | isis } [ <process-id> ] | <interface-type> <interface-number> | <protocol> ]",
+        "filter-policy { acl-name <acl-name> | <acl-number> } import [ <interface-type> <interface-number> | <protocol> ]",
+        "filter-policy ip-prefix <ip-prefix-name> [ gateway <ip-prefix-name> ] import [ <interface-type> <interface-number> | <protocol> ]",
+        "filter-policy gateway <ip-prefix-name> import",
+        "undo filter-policy export [ static | direct | bgp | unr | { rip | ospf | isis } [ <process-id> ] | <interface-type> <interface-number> | <protocol> ]",
+        "undo filter-policy import [ <interface-type> <interface-number> | <protocol> ]",
+        "undo filter-policy { acl-name <acl-name> | <acl-number> | ip-prefix <ip-prefix-name> } export [ static | direct | bgp | unr | { rip | ospf | isis } [ <process-id> ] | <interface-type> <interface-number> | <protocol> ]",
+        "undo filter-policy { acl-name <acl-name> | <acl-number> } import [ <interface-type> <interface-number> | <protocol> ]",
+        "undo filter-policy ip-prefix <ip-prefix-name> [ gateway <ip-prefix-name> ] import [ <interface-type> <interface-number> | <protocol> ]",
+        "undo filter-policy gateway <ip-prefix-name> import"
+    ],
+    "ParentView": [
+        "RIP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL that is used to filter routes based on the destination address.\nThe value is an integer and ranges from 2000 to 2999."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list that is used to filter routes based on the destination address.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "static",
+            "Info": "Filters static routes.\n-"
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Filters direct routes.\n-"
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Filters BGP routes.\n-"
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Filters UNR routes.\n-"
+        },
+        {
+            "Parameters": "rip",
+            "Info": "Filters RIP routes.\n-"
+        },
+        {
+            "Parameters": "ospf",
+            "Info": "Filters OSPF routes.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Filters IS-IS routes.\n-"
+        },
+        {
+            "Parameters": "process-id",
+            "Info": "Specifies the process ID. process-id is required when the protocol is RIP, OSPF, or IS-IS.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        },
+        {
+            "Parameters": "gateway ip-prefix-name",
+            "Info": "Filters routes based on the distributing gateway.\nThe value is case-sensitive."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix abc deny 1.1.1.1 24",
+            "[*HUAWEI] rip 1",
+            "[*HUAWEI-rip-1] filter-policy ip-prefix abc export static"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix abc deny 1.1.1.1 24",
+            "[*HUAWEI] rip 1",
+            "[*HUAWEI-rip-1] filter-policy ip-prefix abc import"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf you want to delete an interface-based export policy, specify interface-type interface-number. Export policies can be deleted from only one interface each time. The command is configured in the RIP process. If you want to filter routes based on an interface or a protocol, you can configure only one export policy for the interface or protocol. If no interface or protocol is specified, the configured export policy takes effect globally. You can configure only one export policy each time.\nConfiguration Impact\nIf the command is run more than once, the latest configuration overrides the previous one."
+}

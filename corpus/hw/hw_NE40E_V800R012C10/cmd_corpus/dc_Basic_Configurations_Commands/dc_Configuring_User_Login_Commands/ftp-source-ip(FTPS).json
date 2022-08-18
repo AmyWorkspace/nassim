@@ -1,0 +1,85 @@
+{
+    "PageTitle": "ftp server-source",
+    "FuncDef": "The ftp server-source command sets the specific source IP address of the FTP server to establish the connection, including the source IP address and source interface.\nThe undo ftp server-source command cancels the configuration of FTP server source configuration.\nThe ftp server-source physic-isolate command configures the isolation source interface of the FTP server.\nThe ftp server-source physic-isolate command cancels the isolation source interface of the FTP server.\nBy default, the IPv4 source address of packet sent by the FTP server is 0.0.0.0 . The IPv6 source address of packet sent by the FTP server is ::.",
+    "CLIs": [
+        "ftp server-source { -a { <ip-address> } | -i { <interface-type> <interface-number> | <interface-name> } }",
+        "ftp ipv6 server-source -a <ipv6-address> [ -vpn-instance <vpn-instance-name> ]",
+        "ftp ipv6 server-source all-interface",
+        "ftp server-source all-interface",
+        "ftp ipv6 server-source physic-isolate -i { <interface-type> <interface-number> | <interface-name> } -a { <ipv6-address> }",
+        "ftp server-source physic-isolate -i { <interface-type> <interface-number> | <interface-name> } -a { <ip-address> }",
+        "undo ftp server-source { -a { <ip-address> } | -i { <interface-type> <interface-number> | <interface-name> } }",
+        "undo ftp ipv6 server-source -a <ipv6-address> [ -vpn-instance <vpn-instance-name> ]",
+        "undo ftp server-source all-interface",
+        "undo ftp ipv6 server-source all-interface",
+        "undo ftp ipv6 server-source physic-isolate -i { <interface-type> <interface-number> | <interface-name> } -a { <ipv6-address> }",
+        "undo ftp server-source physic-isolate -i { <interface-type> <interface-number> | <interface-name> } -a { <ip-address> }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a ip-address",
+            "Info": "Specifies the source IP address.\nThe value is in the decimal format."
+        },
+        {
+            "Parameters": "-i interface-name",
+            "Info": "Specifies the source interface name of an FTP server.\n-"
+        },
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the source interface type and interface number of an FTP server.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Specifies the FTP IPv6 server.\n-"
+        },
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the source IPv6 address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-vpn-instance vpn-instance-name",
+            "Info": "Specifies the VPN.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "all-interface",
+            "Info": "Indicates that any interface having an IP address configured can be used as the source interface of an FTP server.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ftp server-source -a 10.1.1.1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack 0",
+            "[~HUAWEI-LoopBack0] ip address 10.1.1.1 16",
+            "[*HUAWEI-LoopBack0] quit",
+            "[*HUAWEI] ftp server-source -i loopback 0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ftp server-source all-interface"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ftp ipv6 server-source all-interface"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ftp server-source physic-isolate -i GigabitEthernet 1/0/0 -a 10.1.1.1",
+            "Warning: FTP server source configuration will take effect in the next login. Do you want to continue? [Y/N]:y",
+            "Info: Succeeded in setting Succeeded in setting the source interface of the FTP server to GigabitEthernet1/0/0."
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ftp ipv6 server-source physic-isolate -i GigabitEthernet 1/0/0 -a 2001:db8::1",
+            "Warning: FTP server source configuration will take effect in the next login. Do you want to continue? [Y/N]:y",
+            "Info: Succeeded in setting Succeeded in setting the source interface of the FTP server to GigabitEthernet1/0/0."
+        ]
+    ],
+    "ExtraInfo": "Prerequisites\nA loopback interface has been created if you want to specify it as the source interface for an FTP server. Otherwise, the command cannot be executed.\nA VPN instance has been created before you specify it for an FTP server. Otherwise, the command cannot be executed.\nConfiguration Impact\nIf a source interface or source IPv6 address is specified for an FTP server, FTP users can log in only through the specified source interface or source IPv6 address.\nPrecautions\nAfter the ftp server-source command is run, users can log in to the FTP server only through the specified interface or IPv6 address of the FTP server.If the interface to which the specified source IPv6 address belongs has been bound to a VPN instance, specify the -vpn-instance parameter when specifying the IPv6 address for the client.If the specified source interface has been bound to the VPN instance vpn1 and the VPN instance vpn2 has been configured using the ftp ipv6 server-source -a ipv6-address -vpn-instance command, the VPN instance vpn1 bound to the specified source interface takes effect for IPv4 users and the VPN instance vpn2 configured using the ftp ipv6 server-source command takes effect for IPv6 users. This parameter prevails.After the bound VPN instance is deleted, the VPN configuration in this command is not deleted, but the function does not take effect. In this case, the FTP server selects the public network and reconfigures the VPN instance with the same name. The VPN function is restored.After the specified source interface is deleted, the interface configuration in this command is not deleted, but the function does not take effect. If the source interface with the same name is reconfigured, the function is restored.For an IPv6 FTP server, run the ftp ipv6 server-source -a ipv6-address [-vpn-instance vpn-instance-name] command to configure a user to log in to the server with a specified source IPv6 address.After the ftp server-source all-interface command is run, the IPv4 source interface of the FTP server is not specified. Users can log in to the FTP server through all valid interfaces, which increases system security risks. Therefore, you are advised to cancel the command.After the ftp ipv6 server-source all-interface command is run, the source IPv6 address of the FTP server is not specified. Users can log in to the FTP server through all valid IPv6 interfaces, which increases system security risks. Therefore, you are advised to cancel this command.If both the ftp server-source -i and ftp server-source all-interface commands are configured, the interface specified by the ftp server-source -i command is preferentially selected as the source interface of the FTP server. If the specified source interface fails to log in, the device selects an IP address from another valid interface for login.The ftp server-source -i interface-type interface-number and ftp server-source all-interface commands take effect only for IPv4.If both the ftp ipv6 server-source -a and ftp ipv6 server-source all-interface commands are run, the IP address specified by the ftp ipv6 server-source -a command is preferentially used as the source IP address of the FTP server. If the specified source address cannot be used for login, the system selects another valid address for login.The ftp ipv6 server-source -a interface-type interface-number and ftp ipv6 server-source all-interface commands take effect only for IPv6.In the interface unnumbered scenario, if the source interface and common source interface (not isolated) are configured and the same IP address and VPN are listened to, the common source interface takes effect. That is, the non-isolation configuration takes effect.Both all-zero listening and interface isolation are configured on the source interface. If the isolation configuration is matched, the isolation configuration takes effect. If the isolation configuration is not matched, the all-zero listening configuration takes effect.The specified IP address is decoupled from the corresponding interface IP address when you configure the isolation source interface. The IP address does not need to be on the specified interface."
+}

@@ -1,0 +1,29 @@
+{
+    "PageTitle": "display gvrp state interface vlan",
+    "FuncDef": "The display gvrp state interface vlan command displays information about GVRP state machines.",
+    "CLIs": [
+        "display gvrp state interface { <interface-name> | <interface-type> <interface-number> } vlan <vlan-id>"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Displays information about GVRP state machines of a specific VLAN.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Displays information about GVRP state machines on a specific interface:\n<ifType> specifies the type of the interface.<ifNum> specifies the number of the interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display gvrp state interface GigabitEthernet3/0/1 vlan 100",
+            "    GVRP state of VLAN 100 on port GigabitEthernet3/0/1",
+            "         Applicant state machine :    VP",
+            "         Registrar state machine :    MT"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGVRP defines two state machines: Applicant and Registrar.\nAn Applicant declares attributes by sending messages. If no message is lost during transmission, an applicant can ensure that all registrars have registered an attribute by sending only one Join message or receiving one JoinIn message. In practice, to ensure that all registrars have registered an attribute, an applicant has to send two Join messages or send one Join message and receive one JoinIn message. The applicant introduces a counter. The counter starts from 0 and is incremented by one each time the applicant sends a Join message or receives a JoinIn message. The maximum value of the counter is 2. If the applicant receives a JoinEmpty, Empty, Leave, or LeaveAll message, the counter is reset to 0. The applicant can send messages only when the value of the counter is smaller than 2.\nThe Join timer controls the interval at which Join messages are sent. Not every attribute has its own Join timer. A GVRP participant uses one Join timer for all attributes. The value of the Join timer must be large enough, so that all attributes can be packaged in one declaration.\nApplicants\nDepending on the value of the applicant counter, an applicant may be in any of the following states:V (very anxious): The value of the counter is 0, indicating that the applicant does not send any Join message or receive a JoinIn message.A (anxious): The value of the counter is 1, indicating that all registrars have registered the attribute if no message is lost.Q (quiet): The value of the counter is 2, indicating that the applicant does not need to send Join messages.Members and observers\n\nThe preceding states apply to normal situations. In special situations, for example, when some terminals do not need to send registration messages and only need to retain all the GVRP state machines, these terminals must be separated from other entities. The concepts of member and observer are introduced. A member is an entity that tries to declare or retain an attribute value or an entity that has not sent a Leave message yet. An observer is an entity that cares only the states of attributes but does not declare attributes.\nMultiple entities may actively join or leave the same attribute. To minimize the number of Join or Leave messages, members are classified into active members and passive members. Therefore, the following states are introduced:A: Active memberP: Passive memberO: Observer\n\nIn addition, when an active member must send a Leave message to cancel a declaration, the active member enters the leaving state. Considering all these states, an applicant state machine has multiple state combinations, as shown in the following table.\n\nState Combination\n\nVery Anxious\n\nAnxious\n\nQuiet\n\nLeaving\n\n\n\nActive Member\n\nVA\n\nAA\n\nQA\n\nLA\n\n\nPassive Member\n\nVP\n\nAP\n\nQP\n\n-\n\n\nObserver\n\nVO\n\nAO\n\nQO\n\nLO\n\n\n\n\n\nWhen a passive member wants to cancel a declaration, it can switch to the observer state. Therefore, the leaving passive member state does not exist.- registrar\nA registrar has a Leave timer and three states: IN (attribute registered), MTR (attribute deregistered), and LV (attribute being deregistered). If a registrar in the LV state does not receive the declaration of an attribute before the Leave timer expires, the registrar enters the MTR state.\nA registrar changes to different states depending on the received messages:\nWhen receiving a Join message, the registrar changes to the IN state.When receiving a Leave or LeaveAll message, the registrar changes from the IN state to the LV state and starts the Leave timer. If the registrar is not in the IN state, it does not change its state after receiving a Leave or LeaveAll message.The registrar does not change its state after receiving an Empty message."
+}

@@ -1,0 +1,70 @@
+{
+    "PageTitle": "bfd bind peer-ip (System view)",
+    "FuncDef": "The bfd bind peer-ip command creates the binding between a BFD session and a peer IP address and displays the BFD session view.\nThe bfd bind peer-ip source-ip auto command creates a static BFD session with automatically negotiated discriminators.\nBy default, the binding between a BFD session and a peer address is not created.",
+    "CLIs": [
+        "bfd <session-name> bind peer-ip <peer-ip> [ vpn-instance <vpn-name> ] [ [ interface { <interface-name> | <interface-type> <interface-number> } ] [ source-ip <source-ip> ] | [ [ select-board <slot-id1> [ <slot-id2> ] ] [ source-ip <source-ip> ] | [ source-ip <source-ip> ] [ select-board <slot-id1> [ <slot-id2> ] ] ] ]",
+        "bfd <session-name> bind peer-ip <peer-ip> [ vpn-instance <vpn-name> ] { [ interface { <interface-name> | <interface-type> <interface-number> } ] source-ip <source-ip> | { [ select-board <slot-id1> [ <slot-id2> ] ] source-ip <source-ip> | source-ip <source-ip> [ select-board <slot-id1> [ <slot-id2> ] ] } } auto"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "session-name",
+            "Info": "Specifies the name of a BFD session.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string.\nWhen the name of a BFD session is configured, the uppercase and lowercase letters in the name must be the same as what you enter.BFD session names are case-insensitive. For example, ABC and abc are regarded as the same BFD session. If you have configured ABC as the name of a BFD session, the ABC BFD session view is directly displayed when you configure abc."
+        },
+        {
+            "Parameters": "peer-ip peer-ip",
+            "Info": "Specifies the peer IP address bound to a BFD session.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-name",
+            "Info": "Specifies the name of a VPN instance bound to a BFD session.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the local Layer 3 interface to which a BFD session is bound.\n-"
+        },
+        {
+            "Parameters": "source-ip source-ip",
+            "Info": "Specifies the source IPv4 address carried in BFD packets.\nIf this parameter is not specified, the system searches the local routing table for the IP address of an outbound interface connected to the remote end and uses the IP address as the source IP address before sending BFD packets. This parameter usually does not need to be specified.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "select-board slot-id1",
+            "Info": "Specifies the board that a BFD session state machine forcibly selects.\nIf both slot-id1 and slot-id2 are specified, only one board is selected. The board specified by slot-id1 is preferentially selected. If this board fails to be selected, the board specified by slot-id2 is then selected. If both the boards fail to be selected, the BFD session state machine no longer selects boards.\nslot-id1: specifies the slot ID of a board.slot-id2: specifies the slot ID of another board.\nThe value is a string of 1 to 19 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "slot-id2",
+            "Info": "Specifies the board that a BFD session state machine forcibly selects.\nIf both slot-id1 and slot-id2 are specified, only one board is selected. The board specified by slot-id1 is preferentially selected. If this board fails to be selected, the board specified by slot-id2 is then selected. If both the boards fail to be selected, the BFD session state machine no longer selects boards.\nslot-id1: specifies the slot ID of a board.slot-id2: specifies the slot ID of another board.\nThe value is a string of 1 to 19 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ip address 10.2.2.2 24",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] bfd atob bind peer-ip 10.2.2.1 interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-bfd-session-atob]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd session bind peer-ip 10.10.20.2",
+            "[*HUAWEI-bfd-session-session]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ip address 10.1.1.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] bfd atob bind peer-ip 10.1.1.2 interface GigabitEthernet 1/0/0 source-ip 10.1.1.1 auto"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo rapidly detect link faults on a network, create a BFD session.\nWhen creating the binding between a BFD session and a peer IP address:\nIf only the peer IP address is specified, BFD detects faults in a multi-hop link.If both the peer IP address and local interface are specified, BFD detects faults in a single-hop link. That is, BFD monitors a fixed route whose outbound interface is this interface and the next-hop address is the peer IP address.If both the peer IP address and the VPN instance are specified, BFD detects faults in the multi-hop link for a specified VPN instance.If the peer IP address, the VPN instance, and the local interface are specified, BFD detects faults in the single-hop link for a specified VPN instance.\nA BFD session is established to rapidly detect faults in links on a network. A device needs to establish a BFD session with a remote device on which a dynamic BFD session is established to detect faults in static routes. In this case, the bfd bind peer-ip source-ip auto command is used to create a BFD session with automatically negotiated discriminators.\nWhen creating a static BFD session with automatically negotiated discriminators:\nIf only the peer IP address is specified, BFD detects faults in a multi-hop link.If both the peer IP address and local interface are specified, BFD detects faults in a single-hop link. That is, BFD monitors a fixed route whose outbound interface is this interface and the next-hop address is the peer IP address.If the source IP address is specified for the interface whose physical status is to be monitored by BFD, BFD packets are correctly forwarded after URPF has been enabled. The source-ip parameter must be configured correctly because the system checks only the validity of the source IP address. A multicast or broadcast address is an invalid source IP address.If both the peer IP address and the VPN instance are specified, BFD detects faults in the multi-hop link for a specified VPN instance.If the peer IP address, the VPN instance, and the local interface are specified, BFD detects faults in the single-hop link for a specified VPN instance.\nOne-arm BFD echo is used when two devices are directly connected and only one of them supports BFD. A one-arm BFD echo session can be established on the device that supports BFD. After receiving a one-arm BFD echo session packet, the device that does not support BFD immediately loops back the packet, implementing quick link failure detection.\nWhen a one-arm BFD echo session is created:\nIf the source IP address is specified and URPF is enabled, BFD packets can be correctly forwarded. The source IP address must be configured correctly because the system checks only the validity of the source IP address format. A multicast or broadcast address is invalid.If a VPN instance is specified, a single-hop link for VPN routes is monitored.If the source IP address is specified, the device searches the routing table for the outbound interface address based on the value of peer-ip, and uses the address as the destination address in BFD packets. The device uses the value of source-ip as the source address.If no source address is specified, the device searches the routing table for the outbound interface address based on the value of peer-ip, and uses the address as the source and destination addresses in BFD packets.\n\nPrerequisites\nBFD has been globally enabled using the bfd command in the system view.\nConfiguration Impact\nYou can run the bfd bind peer-ip command to create the binding between a static BFD session and a peer IP address.\nFollow-up Procedure\nAfter the binding is created, you must perform the following operations to create the BFD session:\nRun the discriminator command to set the local and remote discriminators for the BFD session.Run the commit command to commit the configuration.\nAfter the binding is created, the following optional configurations can be performed in the BFD session view:\nRun the description command to configure a description for the BFD session.Run the min-tx-interval command to set a desired minimum interval at which BFD packets are sent.Run the min-rx-interval command to set a desired minimum interval at which BFD packets are received.Run the detect-multiplier command to set a local detection multiplier for the BFD session.Run the process-pst command to enable BFD to modify the PST if BFD detects a fault.Run the wtr command to set a WTR time for the BFD session.\nAfter a static BFD session with automatically negotiated discriminators is created and the BFD session view is displayed:\nRun the description command to configure a description for the BFD session.Run the min-tx-interval command to set a desired minimum interval at which BFD packets are sent.Run the min-rx-interval command to set a desired minimum interval at which BFD packets are received.Run the detect-multiplier command to set a local detection multiplier for the BFD session.Run the process-pst command to enable BFD to modify the PST if BFD detects a fault.Run the wtr command to set a WTR time for the BFD session.\nAfter creating binding information for a BFD session and entering the BFD session view, you must perform the following operations:\nRun the discriminator command to configure a local discriminator for the BFD session.Run the commit command to commit the configuration.\nAfter creating a one-arm BFD echo session, you can perform any of the following operations:\nRun the min-echo-rx-interval command to set a desired minimum interval at which BFD packets are received.Run the detect-multiplier command to set a local detection multiplier for the BFD session.Run the description command to configure a description for the BFD session.Run the process-pst command to enable a device to modify the PST if the BFD session detects a fault.Run the wtr command to set a WTR time for the BFD session.\n\nPrecautions\nIf the source IP address is configured for the interface whose physical status is to be monitored by BFD, BFD packets are correctly forwarded after URPF has been enabled. The source-ip parameter must be configured correctly because the system checks only the validity of the source IP address. A multicast or broadcast address is an invalid source IP address.The bfd bind peer-ip command must be run on both ends of a link because BFD detects faults in a bidirectional link.A BFD for link-bundle session bound to the Eth-Trunk interface and IP address cannot be configured together with a BFD for peer-IP auto session bound to the same Eth-Trunk interface and IP address.If the IP address of the outbound interface is changed after a BFD session has been created, either of the following situations occurs: During negotiation, the source IP address to be carried in BFD packets is updated. During detection, the source IP address carried in BFD packets is not updated."
+}

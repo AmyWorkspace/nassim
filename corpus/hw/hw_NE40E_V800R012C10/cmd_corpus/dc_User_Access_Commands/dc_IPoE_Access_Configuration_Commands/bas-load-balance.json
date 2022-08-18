@@ -1,0 +1,33 @@
+{
+    "PageTitle": "bas-load-balance",
+    "FuncDef": "The bas-load-balance command configures Eth-Trunk interfaces in load-balancing mode, and configures load balancing based on traffic volume, the actual traffic volume, and the number of access users.\nBy default, an Eth-Trunk interface whose member interfaces are located on different boards implements load balancing based on users.",
+    "CLIs": [
+        "bas-load-balance { user-mode | flow-mode | real-flow-mode }"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-mode",
+            "Info": "Indicates load balancing based on the number of access users.\n-"
+        },
+        {
+            "Parameters": "flow-mode",
+            "Info": "Indicates that load balancing is performed based on the allocated bandwidth.\n-"
+        },
+        {
+            "Parameters": "real-flow-mode",
+            "Info": "Indicates load balancing based on the actual traffic volume.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] commit",
+            "[*HUAWEI-Eth-Trunk1] bas-load-balance flow-mode"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen user gets online, the access control plane selects outbound interfaces for downstream traffic from different users based on HQoS and the status of online users and distributes traffic among Eth-Trunk member interfaces to implement load balancing.\nThe principles for selecting outbound interfaces are as follows:\nflow-mode: The member interface with the lowest bandwidth is selected as the outbound interface.\nIn the scenario where outbound interfaces can be selected among Eth-Trunk member interfaces, if unified rate limiting is configured, such as unified rate limiting for home users and that for a user group queue in a user VLAN, the same outbound member interface is selected for all users with the same unified rate limiting. If multiple levels of unified rate limiting are configured, outbound interface selection is based on the most coarse granularity.\nuser-mode: The member interface with the fewest access users is selected as the outbound interface.real-flow-mode: The member interface with the smallest actual traffic volume is selected as the outbound interface.\nBandwidth is disproportionately allocated to users on an Eth-Trunk interface. For example, if a large amount of bandwidth is allocated to some users with light traffic, and the Eth-Trunk member interfaces cannot be configured to work in user-mode or flow-mode, you need to configure the Eth-Trunk member interfaces to work in real-flow-mode to implement load balancing.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

@@ -1,0 +1,28 @@
+{
+    "PageTitle": "error-down auto-recovery",
+    "FuncDef": "The error-down auto-recovery command configures the auto recovery function on a port to enable the port in the error-down state to automatically go Up, and sets the delay for the transition from Down to Up.\nThe undo error-down auto-recovery command disables the auto recovery function on the port.\nBy default, the auto recovery function is disabled on a port.",
+    "CLIs": [
+        "error-down auto-recovery cause <error-down-type> interval <interval-value>",
+        "undo error-down auto-recovery cause <error-down-type>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval interval-value",
+            "Info": "Specifies the delay time for the status transition from Down to Up.\nAn integer ranging from 30 to 86400, in seconds."
+        },
+        {
+            "Parameters": "cause error-down-type",
+            "Info": "Specifies the cause of the error-down event.\nCurrently, one of the following events may cause the Down event:\nbpdu-protection.l2-loop-occurred.\nThe value is a string. You can enter a question mark (?) and select a value from the displayed value range."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] error-down auto-recovery cause bpdu-protection interval 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nbpdu-protection:On a network running the Spanning Tree Protocol (STP), after BPDU protection is configured on an edge port, if attackers send pseudo BPDUs to attack a switching device, the switching device automatically makes the edge port go Down immediately after the edge port receives BPDUs. As a result, all services on the edge port are interrupted.\nBy default, the port in the Down state can communicate with other ports only after the administrator manually turns it Up. If you expect the Down port to go Up automatically, run the error-down auto-recovery command to enable the auto recovery function on the port and set the delay time for the status transition from Down to Up.\nAfter a port goes Up, if it receives BPDUs again or the link is considered unavailable within a specific period, the port goes Down again.\nl2-loop-occured:If the l2-loop-detect action shutdown command is run, a Layer 2 interface is automatically shut down when it encounters a loop. To allow the Layer 2 interface to automatically go up, run this command to enable the function of automatically changing the interface state to up.\n\n\nConfiguration Impact\nAfter the error-down auto-recovery command is run, the port goes from Down to Up after the delay expires.\nPrecautions\nThere is no default value for the recovery time. Therefore, you must specify a delay when configuring this command.\nIf you run the error-down auto-recovery command to modify the auto-recovery delay, the modification will not take effect on the interface that has been in the error-down state due to a specific cause. The modification only takes effect on the interface that has gone Up from the error-down state.\nA port enters the error-down state after being shut down due to an error."
+}

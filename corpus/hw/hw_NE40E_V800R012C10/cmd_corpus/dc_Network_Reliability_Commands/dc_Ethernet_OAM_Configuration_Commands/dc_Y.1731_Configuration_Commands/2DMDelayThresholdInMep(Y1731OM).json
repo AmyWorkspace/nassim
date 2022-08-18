@@ -1,0 +1,54 @@
+{
+    "PageTitle": "delay-measure two-way delay-threshold",
+    "FuncDef": "The delay-measure two-way delay-threshold command sets alarm thresholds for two-way frame delay in proactive two-way frame delay measurement.\nThe undo delay-measure two-way delay-threshold command deletes the alarm thresholds of two-way frame delay in proactive two-way frame delay measurement.\nBy default, no alarm thresholds are set for two-way frame delay in proactive two-way frame delay measurement.",
+    "CLIs": [
+        "delay-measure two-way delay-threshold mep <mep-id> upper-limit <upper-limit> lower-limit <lower-limit> [ 8021p <8021p-value> ]",
+        "delay-measure two-way delay-threshold test-id <test-id-value> upper-limit <upper-limit> lower-limit <lower-limit>",
+        "undo delay-measure two-way delay-threshold mep <mep-id> [ upper-limit <upper-limit> lower-limit <lower-limit> ] [ 8021p <8021p-value> ]",
+        "undo delay-measure two-way delay-threshold test-id <test-id-value> [ upper-limit <upper-limit> lower-limit <lower-limit> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "upper-limit upper-limit",
+            "Info": "Specifies the upper threshold of two-way frame delay.\nThe value is an integer ranging from 0 to 4294967295, in microseconds."
+        },
+        {
+            "Parameters": "lower-limit lower-limit",
+            "Info": "Specifies the lower threshold of two-way frame delay.\nThe value is an integer ranging from 0 to 4294967295, in microseconds. The lower threshold must be less than or equal to the upper threshold."
+        },
+        {
+            "Parameters": "8021p 8021p-value",
+            "Info": "Specifies a priority of frames in proactive two-way frame delay measurement. This parameter applies to VLL scenarios.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "test-id test-id-value",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "mep mep-id",
+            "Info": "Specifies the ID of a MEP.\nThe value is an integer ranging from 1 to 8191."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn",
+            "[*HUAWEI-evpn] quit",
+            "[*HUAWEI] evpn vpn-instance evrf",
+            "[*HUAWEI-evpn-instance-evrf] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] evpn binding vpn-instance evrf",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map evpn vpn-instance evrf",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet 1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] delay-measure two-way delay-threshold mep 1 upper-limit 400 lower-limit 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen proactive two-way frame delay measurement is used to measure the delay and evaluate the quality of links between MEPs, run the delay-measure two-way delay-threshold command to set the upper and lower threshold for delay statistics. If thresholds are set on a specified MEP and the link delay exceeds the upper threshold, an alarm is generated to alert a network administrator to adjust links to ensure service quality. If thresholds are set in a specified instance, the link delay exceeds the upper threshold or is lower than the lower threshold, the number of threshold-crossing events is counted. The display y1731 period-data command displays the number of threshold-crossing times.\nPrerequisites\nThe cfm md command has been executed to configure an MD. The ma command has been executed to configure an MA.\nPrecautions\nThis command applies to VLAN, VSI, and VLL scenarios."
+}

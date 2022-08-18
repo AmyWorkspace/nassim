@@ -1,0 +1,49 @@
+{
+    "PageTitle": "unknown-unicast-suppression(Traffic behavior view)",
+    "FuncDef": "The unknown-unicast-suppression command restricts the rate at which unknown unicast packets are transmitted.\nThe undo unknown-unicast-suppression command cancels the configuration.\nBy default, the rate at which unknown unicast packets are transmitted is not restricted in the traffic behavior view.",
+    "CLIs": [
+        "unknown-unicast-suppression { cir <cir-value> } [ cbs <cbs-value> ] [ green { discard | pass [ service-class <class> color { green | yellow | red } ] } | red { discard | pass [ service-class <class> color { green | yellow | red } ] } ] *",
+        "undo unknown-unicast-suppression [ { cir <cir-value> } [ cbs <cbs-value> ] [ green { discard | pass [ service-class <class> color { green | yellow | red } ] } | red { discard | pass [ service-class <class> color { green | yellow | red } ] } ] * ]"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the Committed Information Rate (CIR).\nThe value is an integer ranging from 0 to 4294967295, in kbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the Committed Burst Size (CBS).\nThe value is an integer ranging from 0 to 4294967295, in bytes.\nThe CBS value must be larger than the CIR value.\nThe default CBS value is calculated in the format of cbs-value = cir-value*187.\nIf cir-value < 100000 kbit/s, the CBS value is calculated in the format of cbs-value = cir-value*187, in bytes.If cir-value >= 100000 kbit/s, the CBS value is calculated in the format of cbs-value = 100000*187, in bytes."
+        },
+        {
+            "Parameters": "green",
+            "Info": "Specifies the action to be taken on the unknown unicast traffic whose rate conforms to CIR. The default action is pass.\n-"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "Specifies action to be taken on packets of a color (green and red) is discard.\n-"
+        },
+        {
+            "Parameters": "pass",
+            "Info": "Specifies action to be taken on packets of a color (green and red) is pass.\n-"
+        },
+        {
+            "Parameters": "service-class class",
+            "Info": "Specifies the CoS that the packets are to be re-marked.\nThe value can be CS7, CS6, EF, AF4, AF3, AF2, AF1, and BE."
+        },
+        {
+            "Parameters": "red",
+            "Info": "Specifies the action to be taken on the unknown unicast traffic whose rate exceeds the PIR. The default action is discard.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] unknown-unicast-suppression cir 1000 green pass service-class af1 color green red discard"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf unknown unicast traffic mounts on networks, the traffic consumes a great amount of network bandwidth, which degrades network performance.\nYou can run the unknown-unicast-suppression command to set thresholds for unknown unicast traffic that is allowed to pass through an interface. If the unknown unicast traffic volume exceeds the value set using the unknown-unicast-suppression command, the system drops the excessive unicast traffic.\nPrecautions\nTo achieve an exact packet suppression, you should specify a value for the CBS that is 10 times the length of the packet.\nIf the unknown-unicast-suppression command is run for multiple times, the latest configuration overrides the previous ones.\nThe command is valid only for unknown unicast traffic.\nThe unknown unicast suppression does not take effected in VLL scenario."
+}

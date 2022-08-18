@@ -1,0 +1,55 @@
+{
+    "PageTitle": "destination remote-discriminator",
+    "FuncDef": "The destination remote-discriminator command configures the mapping between the IP/IPv6 address and discriminator of an SBFD reflector.\nThe undo destination remote-discriminator command deletes the mapping between the IP/IPv6 address and discriminator of an SBFD reflector.\nBy default, no mapping between the IP address and discriminator of an SBFD reflector is configured.",
+    "CLIs": [
+        "destination { ipv4 <ip-address> | ipv6 <ipv6-address> } remote-discriminator <discriminator-value>",
+        "destination ipv6 <ipv6-address> remote-discriminator <discr-ip-address>",
+        "undo destination { ipv4 <ip-address> | ipv6 <ipv6-address> } remote-discriminator <discriminator-value>",
+        "undo destination ipv6 <ipv6-address> remote-discriminator <discr-ip-address>"
+    ],
+    "ParentView": [
+        "SBFD view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4 ip-address",
+            "Info": "Specifies the IP address of a reflector.\nThe value is a unicast address in dotted decimal notation."
+        },
+        {
+            "Parameters": "ipv6 ipv6-address",
+            "Info": "Specifies the IPv6 address of a reflector.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "discriminator-value",
+            "Info": "Specifies the discriminator of the reflector.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "discr-ip-address",
+            "Info": "SBFD remote discriminators' mapping IPv4 addresses.\nThe value is a unicast address in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] sbfd",
+            "[*HUAWEI-sbfd] destination ipv4 10.10.20.2 remote-discriminator 16777216"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] sbfd",
+            "[*HUAWEI-sbfd] destination ipv6 100::100 remote-discriminator 16777216"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] sbfd",
+            "[*HUAWEI-sbfd] destination ipv6 100::100 remote-discriminator 1.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe initiator uses the configured discriminator to negotiate with the reflector to establish an SBFD session. If no discriminator is configured, the initiator uses the default discriminator (peer ip address) to negotiate with the reflector to establish an SBFD session.\nYou can configure a 32-bit integer-type discriminator or an IP-address-type discriminator. A device converts the discriminators into a uniform form for management, ensuring that each discriminator is globally unique in a domain.\nWhen a device functions as the SBFD initiator, if the destination ipv6 remote-discriminator command has been run to configure the mapping between the IPv6 address and discriminator of the SBFD reflector, the initiator uses the configured discriminator to negotiate with the reflector for SBFD session setup.\nWhen a device functions as the SBFD initiator, if the destination ipv6 remote-discriminator command has been run to configure the mapping between the IPv6 address and the IPv4 address mapped to the discriminator of the SBFD reflector, the initiator uses the configured IPv4 address to negotiate with the reflector for SBFD session setup.\nIf neither the destination ipv6 remote-discriminator command nor the destination ipv6 remote-discriminator commands is run, the SBFD session cannot go up through negotiation and state is AdminDown.\nPrerequisites\nSBFD has been enabled using the sbfd command."
+}

@@ -1,0 +1,50 @@
+{
+    "PageTitle": "import-rib vpn-instance protocol isis",
+    "FuncDef": "The ip import-rib vpn-instance protocol isis command imports routes in a VPN instance routing table to the public network routing table.\nThe undo ip import-rib vpn-instance protocol isis command restores the default configuration.\nThe ipv6 import-rib vpn-instance protocol isis command enables a device to import IPv6 routes from a VPN instance to the public network instance's IPv6 routing table.\nThe undo ipv6 import-rib vpn-instance protocol isis command disables a device from importing IPv6 routes from a VPN instance to the public network instance's IPv6 routing table.\n\nBy default, routes in VPN instance routing tables are not imported to the public network routing table.\n\n\nBy default, a device does not import IPv6 routes from a VPN instance to the public network instance's IPv6 routing table.",
+    "CLIs": [
+        "{ ip | ipv6 } import-rib vpn-instance <vpn-instance-name> protocol isis <process-id> [ valid-route ] [ route-policy <route-policy-name> | route-filter <route-filter-name> ]",
+        "undo { ip | ipv6 } import-rib vpn-instance <vpn-instance-name> protocol isis <process-id> [ valid-route ] [ route-policy <route-policy-name> | route-filter <route-filter-name> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "protocol",
+            "Info": "Specifies the type of routes to be imported.\n-"
+        },
+        {
+            "Parameters": "isis process-id",
+            "Info": "Imports IS-IS routes of an IS-IS process with the specified ID.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "valid-route",
+            "Info": "Imports only the valid routes of the specified route type.\n-"
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vrf1",
+            "[*HUAWEI-vpn-instance-vrf1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vrf1] quit",
+            "[*HUAWEI] ip import-rib vpn-instance vrf1 protocol isis 1 valid-route"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the VPN scenario, one VPN can communicate with another VPN if they have matching VPN targets, but VPNs cannot communicate with the public network. To enable a VPN to communicate with the public network, you have to ensure that the VPN and public network can obtain routes to each other. To import the VPN instance routes to public network, run the ip import-rib vpn-instance command.\nIn an intelligent traffic control scenario, traffic of different users are distributed to different VPNs. To enable public-network traffic to reach the VPNs, run the ip import-rib vpn-instance command to import routes in each VPN instance routing table to the public network routing table.\nTraffic forwarding relies on direct routes (Vlink direct routes) generated based on user entries. When VLAN tag termination sub-interfaces are used for route import between VPN and public network, Vlink direct routes cannot be imported. As a result, traffic forwarding is interrupted. To solve this problem, route import between VPN and public network newly supports import of Vlink direct routes.\nIn the IPv6 VPN networking, IPv6 users of two VPNs with matching VPN targets can communicate, but IPv6 VPN users cannot communicate with IPv6 public network users. To enable IPv6 VPN users to communicate with IPv6 public network users, you must configure IPv6 route import between VPN and public network instances. To enable a device to import IPv6 routes from a VPN instance to the public network instance, run the ipv6 import-rib vpn-instance command.\nTraffic forwarding relies on direct routes (Vlink direct routes) generated based on user entries. When VLAN tag termination sub-interfaces are used for route import between VPN and public network, Vlink direct routes cannot be imported. As a result, traffic forwarding is interrupted. To solve this problem, route import between VPN and public network newly supports import of Vlink direct routes.\nPrecautions\nIf you run the ip import-rib vpn-instance command on a device without adding the valid-route, the device will import the optimal IP route of the specified type from the specified VPN instance to the public network instance's corresponding routing table. If the imported route is preferred in this routing table, the device will advertise the route to other devices and deliver the route to the IP routing table to guide traffic forwarding.\nIf you run the ip import-rib vpn-instance command with only the valid-route keyword added, the device will import the valid IP routes of the specified type from the specified VPN instance to the public network instance's corresponding routing table. If the imported routes are preferred in this routing table, the device will advertise these routes to other devices and deliver these routes to the IP routing table to guide traffic forwarding.\nIf you run the ipv6 import-rib vpn-instance command on a device without adding the valid-route keyword, the device will import the optimal IPv6 route of the specified type from the specified VPN instance to the public network instance's corresponding routing table. If the imported route is preferred in this routing table, the device will advertise the route to other devices and deliver the route to the IPv6 routing table to guide traffic forwarding.\nIf you run the ipv6 import-rib vpn-instance command with only the valid-route keyword added, the device will import the valid IPv6 routes of the specified type from the specified VPN instance to the public network instance's corresponding routing table. If the imported routes are preferred in this routing table, the device will advertise these routes to other devices and deliver these routes to the IPv6 routing table to guide traffic forwarding."
+}

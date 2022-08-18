@@ -1,0 +1,56 @@
+{
+    "PageTitle": "mpls ccc (ATM interface view)",
+    "FuncDef": "The mpls ccc command enables an AC interface on a PE to establish a circuit cross connect (CCC) connection with another AC interface on the same PE.\nThe undo mpls ccc command removes a local CCC connection.\nBy default, no local CCC connection is created on an AC interface of a PE.",
+    "CLIs": [
+        "mpls ccc instance-name <instance-name-value> out-interface { <interface-name> | <interface-type> <interface-number> } [ [ ip-interworking | ip-layer2 ] | max-atm-cells <cells-value> | atm-pack-overtime <time-value> ] *",
+        "mpls ccc out-interface { <interface-name> | <interface-type> <interface-number> } [ [ ip-interworking | ip-layer2 ] | max-atm-cells <cells-value> | atm-pack-overtime <time-value> | secondary ] *",
+        "undo mpls ccc [ instance-name <instance-name-value> ]",
+        "undo mpls ccc [ [ out-interface { <interface-name> | <interface-type> <interface-number> } [ [ ip-interworking | ip-layer2 ] | max-atm-cells <cells-value> | atm-pack-overtime <time-value> ] * ] ] secondary"
+    ],
+    "ParentView": [
+        "Global IMA-group sub-interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "out-interface interface-type interface-number",
+            "Info": "Specifies the type and number of the outbound interface of a CCC connection.\n-"
+        },
+        {
+            "Parameters": "ip-interworking",
+            "Info": "Enables heterogeneous media IP interworking between Huawei devices.\n-"
+        },
+        {
+            "Parameters": "ip-layer2",
+            "Info": "Enables heterogeneous media IP interworking between a Huawei device and a non-Huawei device.\n-"
+        },
+        {
+            "Parameters": "max-atm-cells cells-value",
+            "Info": "Specifies the maximum number of cells that are encapsulated into a packet for transmission.\nThe value is an integer ranging from 1 to 28. The default value is 28."
+        },
+        {
+            "Parameters": "atm-pack-overtime time-value",
+            "Info": "Specifies a delay for packing ATM cells.\nThe value is an integer ranging from 100 to 10000, in microseconds. The default value is 1000 microseconds."
+        },
+        {
+            "Parameters": "secondary",
+            "Info": "Configures a CCC as a secondary CCC. If this keyword is not specified, the created CCC will be a primary CCC. Note that this parameter can be specified only if a primary VC exists locally.\n-"
+        },
+        {
+            "Parameters": "instance-name instance-name-value",
+            "Info": "Specifies the name of an L2VPN service. This parameter uniquely identifies an L2VPN service on a PE.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.The character string can contain spaces if it is enclosed with double quotation marks (\" \")."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls ccc out-interface GigabitEthernet 2/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the scenario where an LDP VC is configured to protect a CCC VC, CE1 and CE2 are connected to the same PE through a local CCC VC. If CE2 serves as a BRAS and needs to authenticate CE1, in case that CE2 or the AC2 interface on CE2 fails, CE1 cannot be authenticated. If the PE is connected to another BRAS through an LDP VC, you can run the mpls ccc command to configure the PW as the backup for the AC2 link. If CE2 or the AC2 interface on CE2 fails, CE1 can access the other BRAS for authentication.\nSpecifying the raw or tagged parameter in the mpls ccc command takes effect only when a CCC connection is established on Ethernet links and heterogeneous IP interworking is not configured.\nSpecifying the max-atm-cells and atm-pack-overtime parameters takes effect only on ATM-capable interfaces.\nSpecifying the access-port parameter takes effect only on Ethernet interfaces.\nPrerequisites\nMPLS L2VPN has been enabled using the mpls l2vpn command.\nPrecautions\nIf a PW is configured on an AC interface, the Layer 3 features of the interface, such as the IP address and routing protocol, stop taking effect. An interface cannot serve as both a PW AC interface and an L3VPN AC interface. If an interface is bound to both a PW and an L3VPN, only the PW configuration takes effect on the interface. After the PW is deleted, the L3VPN configuration takes effect on the interface.If a sub-interface is bound to a PW:The sub-interface can be deleted only after the binding configuration is removed.The encapsulation protocol type of the main interface cannot be changed."
+}

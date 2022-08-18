@@ -1,0 +1,70 @@
+{
+    "PageTitle": "vlan-type dot1q (sub-interface view)",
+    "FuncDef": "The vlan-type dot1q command configures a matching policy on a common Dot1q sub-interface. After this matching policy is configured, VLAN services access the corresponding L2VPN or L3VPN based on the VLAN ID+802.1p value/DSCP value/EthType.\nThe undo vlan-type dot1q 8021p command deletes the matching policy on the common dot1q sub-interface.\nBy default, no matching policy is configured on the common Dot1q sub-interface.",
+    "CLIs": [
+        "vlan-type dot1q <vlanid> { 8021p { <8021p-value1> [ to <8021p-value2> ] } &<1-8> | dscp { <dasp-value1> [ to <dasp-value2> ] } &<1-10> | eth-type PPPoE | default }",
+        "undo vlan-type dot1q <vlanid> { 8021p { <8021p-value1> [ to <8021p-value2> ] } &<1-8> | dscp { <dasp-value1> [ to <dasp-value2> ] } &<1-10> | eth-type PPPoE | default }"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "PW-VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlanid",
+            "Info": "Specifies the VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "8021p-value1",
+            "Info": "Specifies the minimum priority of a VLAN frame.\nThe value ranges from 0 to 7. The greater the value, the higher the priority."
+        },
+        {
+            "Parameters": "8021p-value2",
+            "Info": "Specifies the maximum priority of a VLAN frame.\nThe value ranges from 0 to 7. The greater the value, the higher the priority."
+        },
+        {
+            "Parameters": "dasp-value1",
+            "Info": "Specifies the minimum DSCP (DiffServ Code Point) value of user packets.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "dasp-value2",
+            "Info": "Specifies the maximum DSCP (DiffServ Code Point) value of user packets.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "default",
+            "Info": "Specifies a sub-interface to match VLAN services that are not matched by other sub-interfaces.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] vlan-type dot1q 1 8021p 1 3 to 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.2",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] vlan-type dot1q 2 default"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.3",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] vlan-type dot1q 3 dscp 1 to 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.4",
+            "[*HUAWEI-GigabitEthernet1/0/1.4] vlan-type dot1q 4 eth-type pppoe"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a Layer 2 network, users and services are identified using a single or double tags. In some scenarios, the access device uses a single tag to identify multiple service or does not support QinQ. In this case, the access device may map service access information to packets' 802.1p/DSCP field. Therefore, it is required that the edge device of the Layer 2 network use the 802.1p/DSCP value to identify access users, differentiate the accesses to different VPNs, and set up different QoS scheduling policies to classify traffic. After a matching policy is configured using the vlan-type dot1q 8021p command, VLAN services access the L2VPNs or L3VPNs based on the VLAN ID+802.1p value/DSCP value/EtherType.\nDifferent combinations of parameters in the vlan-type dot1q 8021p command are applied to the following scenarios:\nL2VPN or L3VPN access based on the VLAN ID+802.1p valueL2VPN or L3VPN access based on the VLAN ID+DSCP valueL2VPN access based on the VLAN ID+EthType\n\nPrecautions\nIf the same VLAN ID is encapsulated on different sub-interfaces of an interface, the sub-interfaces must use matching policies of the same type (802.1p value/DSCP value/EthType).\nOne VLAN ID can be encapsulated on a maximum of eight sub-interfaces.\nIf you specify default in the command, all services of any VLAN within the VLAN range, except that those matching the matching policy are processed by the corresponding sub-interface, are processed by the default sub-interface.\nIf you specify the VLAN ID+802.1p value/DSCP value/EthType in the undo vlan-type dot1q 8021p command, the command deletes only the specified matching policy. The undo vlan-type dot1q vlanid command deletes all matching policies within the VLAN range on the sub-interface.\nAmong all types of VE sub-interfaces, the vlan-type dot1q 8021p command and undo form are supported only by L3 access VE sub-interfaces. To configure an L3 access VE sub-interface, run the ve-group ve-group-id command.\nIn the L3 access VE sub-interface view, the vlan-type dot1q 8021p command and its undo form cannot coexist with IPv6 and multicast services.\nThe EthType matching policy cannot be configured in the VE or global VE sub-interface view."
+}

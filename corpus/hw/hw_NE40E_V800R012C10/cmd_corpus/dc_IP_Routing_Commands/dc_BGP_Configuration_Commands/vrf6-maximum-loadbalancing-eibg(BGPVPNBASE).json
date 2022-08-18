@@ -1,0 +1,45 @@
+{
+    "PageTitle": "maximum load-balancing eibgp (BGP-VPN instance IPv6 address family view)",
+    "FuncDef": "The maximum load-balancing eibgp command configures the maximum number of EBGP and IBGP routes for load balancing.\nThe undo maximum load-balancing eibgp command deletes the configured maximum number of EBGP and IBGP routes for load balancing.\nBy default, the maximum number of EBGP and IBGP routes for load balancing is 1, and load balancing is not implemented.",
+    "CLIs": [
+        "maximum load-balancing eibgp <number>",
+        "maximum load-balancing eibgp <number> ecmp-nexthop-changed",
+        "undo maximum load-balancing eibgp"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "number",
+            "Info": "Specifies the maximum number of equal-cost EBGP and IBGP routes.\nThe value is an integer ranging from 1 to 128."
+        },
+        {
+            "Parameters": "ecmp-nexthop-changed",
+            "Info": "Configures a BGP device to change the next hop addresses of routes for load balancing to its address only when the device advertises these routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] maximum load-balancing eibgp 3"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] maximum load-balancing eibgp 3 ecmp-nexthop-changed"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe maximum load-balancing eibgp command is used in a VPN where a CE is dual-homed to PEs. When the CE shares one AS with only one of the CEs, you can set the number of EBGP and IBGP routes for load balancing. This allows VPN traffic to be balanced among EBGP and IBGP routes.\nIf you run the maximum load-balancing eibgp command, the device changes the next hop addresses of the routes to be advertised to a local address no matter whether the routes are used for load balancing. However, in RR or BGP confederation scenarios, the device does not change the next hop addresses of non-local routes to be advertised to a local address.\nIf you run the maximum load-balancing eibgp ecmp-nexthop-changed command, the device does not change the next hop addresses of the routes to be advertised to a local address no matter whether the routes are used for load balancing.\nAfter BGP load balancing is configured, BGP routes that meet the following conditions and have the same AS_Path attribute are equal-cost routes and implement load balancing:\nPrefVal values are the same.Local_Pref attributes are the same.All BGP routes are summarized or non-summarized routes.AS_path lengths are the same.Origin types (IGP, EGP, or Incomplete) are the same.Multi_Exit Discriminator (MED) values are the same.AS_Path attributes are the same.\nConfiguring BGP load balancing better utilizes network resources.\n\nConfiguration Impact\nIf the maximum load-balancing eibgp command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nThe maximum load-balancing eibgp command takes precedence over the maximum load-balancing (BGP) command.\nLoad balancing cannot be implemented between leaked and non-leaked routes."
+}

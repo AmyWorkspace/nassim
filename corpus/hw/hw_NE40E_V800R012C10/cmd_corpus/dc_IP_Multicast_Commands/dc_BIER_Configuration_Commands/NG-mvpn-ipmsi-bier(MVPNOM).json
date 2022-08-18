@@ -1,0 +1,40 @@
+{
+    "PageTitle": "bier (MVPN-IPMSI view)",
+    "FuncDef": "The bier command configures a BIER I-PMSI tunnel.\nThe undo bier command restores the default configuration.\nBy default, no BIER I-PMSI tunnel is configured.",
+    "CLIs": [
+        "bier [ sub-domain <sub-domain-val> ] [ bsl { 64 | 128 | 256 } ]",
+        "undo bier [ sub-domain <sub-domain-val> ] [ bsl { 64 | 128 | 256 } ]"
+    ],
+    "ParentView": [
+        "MVPN-IPMSI view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sub-domain sub-domain-val",
+            "Info": "Specifies the ID of a BIER subdomain.\nThe value is an integer ranging from 0 to 255."
+        },
+        {
+            "Parameters": "bsl",
+            "Info": "Specifies a BSL in BIER encapsulation.\nThe value can be 64, 128, or 256."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bier",
+            "[*HUAWEI-bier] sub-domain 0",
+            "[*HUAWEI-bier-sub-domain-0] encapsulation-type mpls bsl 256 max-si 0",
+            "[*HUAWEI-bier-sub-domain-0] quit",
+            "[*HUAWEI-bier] quit",
+            "[*HUAWEI] ip vpn-instance mcast1",
+            "[*HUAWEI-vpn-instance-mcast1] ipv4-family",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv4] route-distinguisher 100:100",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv4] multicast mvpn 2.2.2.2",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv4] mvpn",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv4-mvpn] ipmsi-tunnel",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv4-mvpn-ipmsi] bier"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nI-PMSI tunnels are the logical tunnels used by the public network to transmit VPN multicast data, and P-tunnels are the actual tunnels used by the public network to transmit VPN multicast data. A sender PE uses I-PMSI tunnels to send specific VPN multicast data to receiver PEs. The receiver PEs determine whether to accept the VPN multicast traffic based on I-PMSI tunnel information. I-PMSI tunnels can be created using P2MP TE, mLDP, or BIER. To configure a BIER I-PMSI tunnel, run the bier command."
+}

@@ -1,0 +1,30 @@
+{
+    "PageTitle": "client-duid",
+    "FuncDef": "The client-duid command binds a specified IPv6 prefix in the delegation prefix pool to a client DUID.\nThe undo client-duid command unbinds a specified IPv6 prefix from a client DUID.\nBy default, no IPv6 prefix in the delegation prefix pool is bound to a client DUID.",
+    "CLIs": [
+        "client-duid <client-duid> bind prefix <prefix-address>",
+        "undo client-duid <client-duid>"
+    ],
+    "ParentView": [
+        "IPv6 prefix pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "client-duid",
+            "Info": "Specifies the DUID of a DHCPv6 client. The client DUID is used by a DHCPv6 server to uniquely identify a DHCPv6 client. The value is in the format of hexadecimal notation.\nThe value is a string of 8 to 28 case-insensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "prefix prefix-address",
+            "Info": "Specifies an assignable IPv6 prefix.\nThe value is a 32-bit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 prefix wx delegation",
+            "[~HUAWEI-ipv6-prefix-wx] prefix 2001:db8::/64",
+            "[~HUAWEI-ipv6-prefix-wx] client-duid 00000000 bind prefix 2001:db8:1::1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe client-duid command is applicable to only the delegation prefix pool.\nThe already assigned IPv6 prefixes cannot be bound to any client DUID. Each IPv6 prefix is bound to only one client DUID.\nAfter an IPv6 prefix is bound to a client DUID, the IPv6 prefix is reserved for the client with this DUID and cannot be assigned to another client.\nPrerequisites\nA delegation prefix pool has been configured, and an IPv6 prefix has been bound to the delegation prefix pool. The mask length of the prefix to be bound to a client DUID must be the same as that of the prefix bound to the delegation prefix pool.\nConfiguration Impact\nA prefixA prefix  can be unbound from a client DUID only if the prefix pool to which the prefix is bound is unbound from the IPv6 address pool. After a prefix is bound to a client DUID, the mask length of the prefix bound to the prefix pool cannot be modified. After a prefix is bound to a client DUID, the prefix is reserved for the associated user and cannot be dynamically assigned to other users.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf the dhcpv6-unshare-only command has been run, the client-duid bind prefix command cannot be run.The length of the DUID character string must be an even number.After a prefix is bound to a client DUID using the client-duid bind prefix command, the valid bits of the prefix are subject to the mask length of the prefix bound to the prefix pool. Only the valid bits of the prefix are carried in options. If the valid bits of two prefixes specified by prefix-address are the same, the following error message is displayed: Error: The prefix address or client duid has been bound. For example, if the IPv6 prefix specified by prefix-address is 2001:db8:1:: (but the mask length of the prefix bound to the prefix pool is 64), the effective prefix is 2001:db8:1::1. The prefix carried in Options of DHCPv6 messages is 2001:db8:1::1. When you bind the prefix 2001:db8:2:: to a client DUID, the following message is displayed: Error: The prefix address or client duid has been bound.The client-duid bind prefix command takes precedence over the slaac-unshare-only and dhcpv6-unshare-only commands. After both the client-duid bind prefix and slaac-unshare-only or dhcpv6-unshare-only commands are run in the IPv6 prefix pool view, if the client DUID of a PD user (configured using the dhcpv6 duid command) is the same as that specified by client-duid in the client-duid bind prefix command, the IPv6 prefix to which the client DUID is bound can be assigned to the PD user.\nThe maximum matching length of the statically bound DUID is 14 bytes. If the length of the DUID carried in a user access request exceeds 14 bytes and the first 14 bytes of the DUID are consistent with those of the statically bound DUID, a statically bound address will be assigned to this user."
+}

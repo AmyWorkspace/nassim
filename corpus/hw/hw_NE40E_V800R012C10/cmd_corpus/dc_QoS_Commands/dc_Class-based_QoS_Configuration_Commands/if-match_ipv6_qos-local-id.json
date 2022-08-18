@@ -1,0 +1,25 @@
+{
+    "PageTitle": "if-match ipv6 qos-local-id",
+    "FuncDef": "The if-match ipv6 qos-local-id command configures a matching rule based on the IPv6 QoS policy ID.\nThe undo if-match ipv6 qos-local-id command deletes a matching rule based on the IPv6 QoS policy ID.\nBy default, no matching rule based on the IPv6 QoS policy ID is configured in a traffic classifier.",
+    "CLIs": [
+        "if-match ipv6 qos-local-id <qos-local-id>",
+        "undo if-match ipv6 qos-local-id <qos-local-id>"
+    ],
+    "ParentView": [
+        "Traffic classifier view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "qos-local-id",
+            "Info": "Specifies a QoS policy ID.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic classifier c1",
+            "[*HUAWEI-classifier-c1] if-match ipv6 qos-local-id 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can set different qos-local-id values for routes based on the IPv6 BGP route attributes. If traffic classification must be implemented based on qos-local-id values of IPv6 routes, run the if-match ipv6 qos-local-id command to configure a matching rule based on the IPv6 QoS policy ID.\nPrerequisites\nThe association between BGP routes and QoS local routes has been defined in the route-policy, and QPPB has been enabled on the interface.\nConfiguration Impact\nThe configured traffic behavior is applied to packets that match the traffic classifier.\nPrecautions\nWhen the ipv6 qos-local-id matching mode is enabled in a traffic policy, after it is configured, if the policy is applied to unsupported scenarios, the following messages are displayed (including boards using LPUF-50/LPUF-50-L/LPUI-21-L/LPUI-51-L/LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101 boards, in the global or bd view, on not supported interfaces, VSIs, VPNs, and behaviors). For unsupported boards:Error:The policy with match-type ipv6 qos-local-id enable is not supported on slot .\nWhen the ipv6 qos-local-id matching mode is enabled in a traffic policy:\nIt cannot be enabled if the policy contains a C-B pair, and the following message is displayed:Error:Please remove this classifier from the policy first..After it is configured, the policy does not support priority-based (dscp, tos, precedence) rules, and the following message is displayed: Error:The ipv6 dscp,tos and precedence rules are not supported on the policy with match-type ipv6 qos-local-id enable.When the ipv6 qos-local-id matching mode is not configured for the policy, the ipv6 qos-local-id rule cannot be applied, and the following message is displayed: Error:The ipv6 qos-local-id rule is not supported on the policy without match-type ipv6 qos-local-id enable.After it is configured, if the policy is applied to unsupported scenarios, the following messages are displayed (including in the global or bd view, on not supported interfaces, VSIs, VPNs, and behaviors):\na, For unsupported interfaces:Error:The policy cannot be configured on the interface with match-type ipv6 qos-local-id enable.\nb, In the global view:Error:Global ACL and UCL cannot be applied with match-type ipv6 qos-local-id enable.\nc, In the behavior view:Error:The policy with match-type ipv6 qos-local-id enable does not support the traffic-policy behavior.\nd, In the bd view:Error:The policy cannot be configured on Bridge-Domain with the match-type ipv6 qos-local-id enable.\ne, In the VSI view:Error:The policy cannot be configured on vsi with match-type ipv6 qos-local-id enable.\nf, In the VPN view:Error:The policy cannot be configured on vpn-instance with match-type ipv6 qos-local-id enable.\nWhen both QPPB and the traffic classifier are configured and matched, if their actions are both CAR, the configured lower bandwidth takes effect.If another same action (actions other than deny or redirect) is configured, the action specified for QPPB takes effect for incoming traffic, and the action specified in the traffic policy takes effect for outgoing traffic.If different actions (actions other than deny or redirect) are configured for QPPB and the traffic policy, both actions take effect.If a redirection or deny action is configured in an inbound interface ACL, the QPPB action does not take effect. If the action deny is configured for outbound QPPB, the interface ACL does not take effect.The ipv6 qos-local-id rule cannot be configured in a common policy profile. It can be configured only in a policy profile for which the ipv6 qos-local-id matching mode has been enabled.If the traffic matches both the ACL for a traffic policy and QPPB ACL and the forwarding action in the traffic behavior is redirect/deny/permit, the redirect and deny actions in the QPPB action table do not take effect.If outgoing traffic on an interface matches both a traffic policy and a QPPB policy and the traffic policy is implemented based on the qos-local-id, only the QPPB policy takes effect."
+}

@@ -1,0 +1,55 @@
+{
+    "PageTitle": "ipfpm tlp (interface view)",
+    "FuncDef": "The ipfpm tlp command binds a Target Logical Port (TLP) to an interface.\nThe undo ipfpm tlp command unbinds a TLP from an interface.\nBy default, a TLP is not bound to any interface.",
+    "CLIs": [
+        "ipfpm tlp <tlp-id> { ce-default-vlan | vlan-id <vlan-id> }",
+        "undo ipfpm tlp { <tlp-id> | all }"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10GE interface view",
+        "40GE interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "Global VE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tlp-id",
+            "Info": "Specifies a TLP ID.\nThe value is an integer ranging from 1 to 16777215."
+        },
+        {
+            "Parameters": "ce-default-vlan",
+            "Info": "Indicates the default CE-VLAN ID.\n-"
+        },
+        {
+            "Parameters": "vlan-id vlan-id",
+            "Info": "Specifies a VLAN ID. vlan-id must be unique on Layer 2 interfaces.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Unbinds TLP from all interfaces in the IP FPM statistical system.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] quit",
+            "[*HUAWEI] vlan 200",
+            "[*HUAWEI-vlan200] quit",
+            "[*HUAWEI] interface vlanif100",
+            "[*HUAWEI-Vlanif100] quit",
+            "[*HUAWEI] interface vlanif200",
+            "[*HUAWEI-Vlanif200] quit",
+            "[*HUAWEI] interface GigabitEthernet3/0/0",
+            "[*HUAWEI-GigabitEthernet3/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet3/0/0] port default vlan 100",
+            "[*HUAWEI-GigabitEthernet3/0/0] port trunk allow-pass vlan 200",
+            "[*HUAWEI-GigabitEthernet3/0/0] ipfpm tlp 1 vlan-id 100",
+            "[*HUAWEI-GigabitEthernet3/0/0] ipfpm tlp 2 vlan-id 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBefore implementing IP Flow Performance Monitor (IP FPM) for multicast performance statistics, run the ipfpm tlp command to bind TLPs to interfaces.\nPrerequisites\nThe portswitch command has been run in the interface view to switch an interface to Layer 2 mode.\nPrecautions\nIn an L2VPN accessing L3VPN scenario, a VE/GVE sub-interface and an interface/sub-interface of another type configured in the same test instance cannot both be configured as ingress TLPs or egress TLPs.\nA TLP can only be bound to one interface on the DCPs associated with an MCP. A Layer 2 interface can be bound to multiple TLPs."
+}

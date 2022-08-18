@@ -1,0 +1,37 @@
+{
+    "PageTitle": "broadcast-suppression",
+    "FuncDef": "The broadcast-suppression command configures the broadcast suppression in the QoS profile.\nThe undo broadcast-suppression command cancels the broadcast suppression in the QoS profile.\nBy default, broadcast suppression is not configured in the QoS profile view.",
+    "CLIs": [
+        "broadcast-suppression cir <cir-value> [ cbs <cbs-value> ] [ inbound | outbound ]",
+        "undo broadcast-suppression [ inbound | outbound ]"
+    ],
+    "ParentView": [
+        "QoS profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the committed burst size (CBS), that is, the depth of the first token bucket (which is presumed to be the C bucket).\nThe value ranges from 0 bytes to 4,294,967,295 bytes.\nThe recommended value is 187 times the cir-value. The default value varies with the value of cir-value: cbs-value = cir-value *187.\nIf cir-value<100000 kbit/s, the default value of cbs-value equals cir-value *187 (in bytes).If cir-value >=100000 kbit/s, the default value of cbs-value equals 100000*187 (in bytes)."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies the inbound direction.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the outbound direction.\n-"
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the committed information rate (CIR).\nThe value is an integer that ranges from 0 kbit/s to 4,294,967,295 kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile test",
+            "[*HUAWEI-qos-profile-test] broadcast-suppression cir 38400"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen broadcast packets grow on a network, resources consumed by broadcast packets increase accordingly, affecting running services on the network.\nTo prevent broadcast storms, you can run the broadcast-suppression command to configure a threshold for broadcast packets in a QoS profile. When the number of broadcast packets exceeds the configured threshold, the system drops excess broadcast packets so that the broadcast traffic volume can be restricted within a proper range.\nPrecautions\nThe broadcast suppression in the QoS profile does not take effected in VLL scenario.\nTo implement precise traffic suppression, you should specify a value for the CBS that is over 10 times the packet length.\nDirection-oriented and directionless broadcast suppression cannot be configured at the same time. If direction-oriented broadcast suppression is configured on an interface, the configuration takes effect only when the direction to which the QoS profile applies is the same as the direction configured for broadcast suppression.\nCAR on a trunk interface:\nIf member interfaces of a trunk interface reside on different forwarding or traffic management modules, the effective CIR or PIR for CAR or user-queue can be a multiple of the configured one."
+}

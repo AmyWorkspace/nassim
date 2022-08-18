@@ -1,0 +1,50 @@
+{
+    "PageTitle": "c-rp (IPv6)",
+    "FuncDef": "The c-rp command configures a candidate-rendezvous point (C-RP) on a Router, so that the Router can announce itself as a C-RP to the bootstrap router (BSR).\nThe undo c-rp command deletes a C-RP.\nBy default, no C-RP is configured.",
+    "CLIs": [
+        "c-rp <ipv6-address> [ group-policy { <basic-acl6-number> | acl6-name <acl6-name> } | priority <priority> | holdtime <hold-interval> | advertisement-interval <adv-interval> ] *",
+        "undo c-rp <ipv6-address>"
+    ],
+    "ParentView": [
+        "IPv6 PIM view",
+        "VPN instance IPv6 PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies a IPv6 address.\n-"
+        },
+        {
+            "Parameters": "group-policy basic-acl6-number",
+            "Info": "Specifies the range of multicast groups that a C-RP serves. You can define the range of multicast groups by creating an IPv6 ACL. groupPolicyNum specifies the number of a basic IPv6 ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named basic IPv6 ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "priority priority",
+            "Info": "Specifies a priority value for a C-RP. A larger value indicates a lower C-RP priority.\nThe value is an integer ranging from 0 to 255. The default value is 192."
+        },
+        {
+            "Parameters": "holdtime hold-interval",
+            "Info": "Specifies a timeout period during which a BSR waits to receive an Advertisement message from a C-RP.\nThe value is an integer ranging from 1 to 65535, in seconds. The default value is 150."
+        },
+        {
+            "Parameters": "advertisement-interval adv-interval",
+            "Info": "Specifies an interval at which a C-RP sends Advertisement messages.\nThe value is an integer ranging from 1 to 65535, in seconds. The default value is 60."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] acl ipv6 2069",
+            "[*HUAWEI-acl6-basic-2069] rule permit source ff02:0:1391:: 96",
+            "[*HUAWEI-acl6-basic-2069] quit",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] c-rp 2001::1 group-policy 2069 priority 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn RP is the core of a PIM-SM domain, and thus a C-RP must be able to communicate with the other devices in the PIM-SM domain. Configuring a C-RP on the Router on the backbone network and reserving enough bandwidth between the Router and each of the other devices in the PIM-SM domain are recommended.\nAn RP is elected from C-RPs based on the following rules:\nThe C-RP wins if it serves the group address that users join has the longest mask.If group addresses that users join and are served by C-RPs have the same mask length, the priorities of the C-RPs are compared. The C-RP with the highest priority wins (a larger priority value indicates a lower priority).In case of the same priority, hash functions are operated. The C-RP that has the greatest calculated value wins.If all the preceding factors are the same, the C-RP that has the highest address wins.\n\nPrerequisites\nThe IPv6 PIM view has been displayed using the pim-ipv6 command.IPv6 PIM-SM has been enabled on the interface on which a C-RP is to be configured.If groupPolicyNum is specified in the c-rp command, ensure that the corresponding ACL6 rule has been configured.\n\nConfiguration Impact\nIf the c-rp command is run more than once, the latest configuration overrides the previous one.As an interface is specified in the c-rp command, the values of group-policy, priority, holdtime, and advertisement-interval specified in this command override the values of the global parameters inherited by the interface from the PIM view. If this command is run on the same interface more than once, the latest configuration overrides the previous one.\nPrecautions\ngroupPolicyNum specifies a group range. All permitted group ranges will be advertised as the ranges of groups that the RP serves. If no group range is specified for a C-RP or a C-RP is configured to serve all addresses, the C-RP serves all multicast groups.\nIf the router functioning as a C-RP is required to serve multiple group address ranges, configure multiple rules for an IPv6 ACL used by a group policy, with a group address range defined in each rule."
+}

@@ -1,0 +1,80 @@
+{
+    "PageTitle": "filter-policy (RIPng view)",
+    "FuncDef": "The filter-policy export command specifies the filtering policy for the sent routes. Only the routes that match the filtering policy can be advertised through Update packets.\nThe undo filter-policy export command cancels the configuration.\nThe filter-policy import command specifies the filtering policy for the received route Update packets. Only the route Update packets that match the filtering policy can be received.\nThe undo filter-policy import command cancels the configuration.\nBy default, the filtering function is disabled.",
+    "CLIs": [
+        "filter-policy { ipv6-prefix <ipv6-prefix-name> | <acl6-number> | acl6-name <acl6-name> | route-policy <route-policy-name> } export [ direct | static | bgp | unr | { ospfv3 | isis | ripng } [ <process-id> ] ]",
+        "filter-policy { ipv6-prefix <ipv6-prefix-name> | <acl6-number> | acl6-name <acl6-name> | route-policy <route-policy-name> } import",
+        "undo filter-policy export [ direct | static | bgp | unr | { ospfv3 | isis | ripng } [ <process-id> ] ]",
+        "undo filter-policy { ipv6-prefix <ipv6-prefix-name> | <acl6-number> | acl6-name <acl6-name> | route-policy <route-policy-name> } export [ direct | static | bgp | unr | { ospfv3 | isis | ripng } [ <process-id> ] ]",
+        "undo filter-policy import",
+        "undo filter-policy { ipv6-prefix <ipv6-prefix-name> | <acl6-number> | acl6-name <acl6-name> | route-policy <route-policy-name> } import"
+    ],
+    "ParentView": [
+        "RIPng view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-prefix ipv6-prefix-name",
+            "Info": "Specifies the name of the IPv6 prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "acl6-number",
+            "Info": "Specifies the number of a basic IPv6 ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named basic ACL6.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of the routing policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Specifies direct routes.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Specifies static routes.\n-"
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Specifies BGP routes.\n-"
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Specifies UNR routes.\n-"
+        },
+        {
+            "Parameters": "ospfv3",
+            "Info": "Specifies OSPFv3 routes.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Specifies IS-IS routes.\n-"
+        },
+        {
+            "Parameters": "ripng",
+            "Info": "Specifies RIPng routes.\n-"
+        },
+        {
+            "Parameters": "process-id",
+            "Info": "Specifies the process ID.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ipv6-prefix filter1 deny 2001:db8::1 64",
+            "[*HUAWEI] ripng 1",
+            "[*HUAWEI-ripng-1] filter-policy ipv6-prefix filter1 import"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ipv6-prefix filter2 deny 2001:db8::1 64",
+            "[*HUAWEI] ripng 100",
+            "[*HUAWEI-ripng-100] filter-policy ipv6-prefix filter2 export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFor a named IPv6 ACL, when the rule command is used to configure a filtering rule, the filtering rule is effective only with the source address range that is specified by the source parameter and with the time period that is specified by the time-range parameter.\nOnly the routes that match the filtering policy can be added to the RIPng routing table."
+}

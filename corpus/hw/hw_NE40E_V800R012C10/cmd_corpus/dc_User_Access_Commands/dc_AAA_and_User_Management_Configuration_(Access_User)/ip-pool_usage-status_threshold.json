@@ -1,0 +1,33 @@
+{
+    "PageTitle": "ip-pool usage-status threshold",
+    "FuncDef": "The ip-pool usage-status threshold command sets upper and lower thresholds for public IP address pool usage in an AAA domain to calculate the public IP address pool status, which is sent to a RADIUS server.\nThe undo ip-pool usage-status threshold command deletes the configured upper and lower thresholds for public IP address pool usage in an AAA domain.\nBy default, the public IP address pool status is not sent to a RADIUS server.",
+    "CLIs": [
+        "ip-pool usage-status threshold low <low-value> high <high-value>",
+        "ip-pool usage-status threshold low <low-value> high <high-value> all",
+        "undo ip-pool usage-status threshold",
+        "undo ip-pool usage-status threshold low <low-value> high <high-value> all"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "high high-value",
+            "Info": "Sets an upper threshold for public IP address pool usage in an AAA domain.\nThe value is an integer that ranges from 1 to 100, in percentage."
+        },
+        {
+            "Parameters": "low low-value",
+            "Info": "Sets a lower threshold for public IP address pool usage in an AAA domain.\nThe value is an integer that ranges from 0 to 99, in percentage."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain isp1",
+            "[*HUAWEI-domain-isp1] commit",
+            "[~HUAWEI-domain-isp1] ip-pool usage-status threshold low 50 high 80"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a scenario in which a BRAS sends public IP address pool status to a RADIUS server, configure the upper and lower thresholds for public IP address pool usage in the domain to calculate the public IP address pool status.\nIf no IP address pool or IP address pool group is bound to a domain, obtain the number of idle IP addresses and the number of IP addresses of all IP address pools and IP address pool groups that have ip-attribute public configured on the BRAS. If a domain has IP address pools or IP address pool groups bound to it, use the number of idle IP addresses and the number of IP addresses of all IP address pools and IP address pool groups that have ip-attribute public configured in the domain. If the number of IP addresses is 0, the public IP address pool status is 0. If the number of IP addresses is not 0, use the following equation to calculate the IP address pool usage: IP address pool usage = (the number of IP addresses ? the number of idle IP addresses)/the number of IP addresses. Compare the calculated IP address pool usage with the configured upper and lower threshold for public IP address pool usage, figure out the public IP address pool status, and send the public IP address pool status to a RADIUS server.\nPublic IP address pool status can be 0, 1, or 2:\nIf the all parameter is not specified, the status value of a public IP address pool is obtained as follows:\nThe value is 0 (safe) in one of the following conditions: a. No NAT instance is bound to an AAA domain. b. The NAT instance bound to an AAA domain does not take effect. c. The public IP address pool usage is less than or equal to the lower threshold.If the public IP address pool usage is greater than the lower threshold and less than the upper threshold, the value is 1 (warning).If the public IP address pool usage is greater than or equal to the upper threshold, the value is 2 (danger).\nIf the all parameter is specified, the status value of a public IP address pool is obtained as follows:\nIf the public IP address pool usage is less than or equal to the lower threshold, the value is 0 (safe).If the public IP address pool usage is greater than the lower threshold and less than the upper threshold, the value is 1 (warning).If the public IP address pool usage is greater than or equal to the upper threshold, the value is 2 (danger).\n\nConfiguration Impact\nAfter you configure the ip-pool usage-status threshold command, the BRAS calculates the current public IP address pool status when a user goes online, encapsulates it into a RADIUS authentication request packet, and sends the packet to the RADIUS server.\nPrecautions\nConfigure the ip-attribute public command too to specify IP address pools and IP address pool groups whose status is to be calculated.\nIn VS mode, this command is supported only by the admin VS."
+}

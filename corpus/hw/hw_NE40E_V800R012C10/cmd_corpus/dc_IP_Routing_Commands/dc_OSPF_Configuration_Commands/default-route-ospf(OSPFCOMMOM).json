@@ -1,0 +1,63 @@
+{
+    "PageTitle": "default-route-advertise (OSPF view)",
+    "FuncDef": "The default-route-advertise command advertises default routes to a common OSPF area.\nThe undo default-route-advertise command disables advertisement of default routes to a common OSPF area.\nBy default, the OSPF devices in common OSPFv3 areas do not generate default routes.",
+    "CLIs": [
+        "default-route-advertise [ [ always | permit-calculate-other ] | cost <costvalue> | type <typevalue> | { route-policy <route-policy-name> | route-filter <route-filter-name> } | distribute-delay <delaytimer> | tag <tagvalue> ] *",
+        "default-route-advertise summary cost <costvalue>",
+        "default-route-advertise [ permit-calculate-other | cost <costvalue> | type <typevalue> | { route-policy <route-policy-name> | route-filter <route-filter-name> } | distribute-delay <delaytimer> | permit-ibgp ] *",
+        "undo default-route-advertise"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "always",
+            "Info": "Generates and advertises an LSA that describes a default route, regardless of whether the local device has active default routes from processes other than the local OSPF process.\n-"
+        },
+        {
+            "Parameters": "permit-calculate-other",
+            "Info": "Generates and advertises an ASE LSA that describes the default route only when there is an active default route of another OSPF process in the local routing table. The Router still calculates the default routes from other Routers.\nIf neither always nor permit-calculate-other is configured,\nIf the local device has active default routes from processes other than the local OSPF process, the device no longer calculates the default routes from other devices.If the local device does not have active default routes from processes other than the local OSPF process, the device still calculates the default routes from other devices.\n-"
+        },
+        {
+            "Parameters": "cost costvalue",
+            "Info": "Specifies the cost of external routes.\nCost of a Type 1 external route = Cost of the route from the Router to the related ASBR + Cost of the route from the ASBR to the destination.Cost of a Type 2 external route = Cost of the route from the ASBR to the destination.\nThe value is an integer ranging from 0 to 16777214. The default value is 1."
+        },
+        {
+            "Parameters": "type typevalue",
+            "Info": "Specifies the type of the external routes.\nThe value is 1 or 2.\n1: Type 1 external route2: Type 2 external route\nThe default value is 2."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy. When a device's routing table contains matching default routes that are generated from processes other than the local OSPF process, a device advertises the default routes based on the route-policy configuration.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of route filter policy.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "distribute-delay delaytimer",
+            "Info": "Specifies the delay timer for advertising the default route.\nThe value is an integer ranging from 1 to 65535, in seconds."
+        },
+        {
+            "Parameters": "tag tagvalue",
+            "Info": "Specifies the tag value of the imported VPN routes.\nThe value is an integer ranging from 0 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "summary",
+            "Info": "Advertises the Type 3 summary LSA of the specified default route. Before specifying this parameter, ensure that VPN is enabled. Otherwise, routes cannot be advertised.\n-"
+        },
+        {
+            "Parameters": "permit-ibgp",
+            "Info": "Imports IBGP routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] default-route-advertise always"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe import-route (OSPF) command cannot be used to import a default route from another AS. Running the default-route-advertise command on an ASBR can advertise a non-OSPF default route in a common OSPF area.\nIf the ASBR has a default route, the default-route-advertise command enables the ASBR to advertise the default route 0.0.0.0 to the OSPF area.\nIf the ASBR has no default route, the default-route-advertise always command or the default-route-advertise command can be used:\nWith always configured: The ASBR can advertise the default route 0.0.0.0 even if there is no default route. This allows the default route to retain in the routing table and prevents the ASBR from using a default route sent by another device.Without always configured: The ASBR generates an LSA that describes a default route only when the local routing table contains an active default routes from processes other than the local OSPF process (excluding BGP).\nIf the local routing table contains an active default BGP route, the default route can be added to the OSPF routing table based on the following rules:Whether both the ospf vpn-instance and the vpn-instance-capability simple commands are run:If both the commands are run, to add an active default EBGP route to the OSPF routing table, run the default-route-advertise command. However, this command cannot add an active default IBGP route to the OSPF routing table. To add an active default IBGP route to the OSPF routing table, run the default-route-advertise permit-ibgp command.If only the ospf vpn-instance command is run, to add an active default EBGP or IBGP route to the OSPF routing table, run the default-route-advertise command.\nIf the ospf vpn-instance command is not run, to add an active default EBGP route to the OSPF routing table, run the default-route-advertise command. To add an active default IBGP route to the OSPF routing table, run the default-route-advertise permit-ibgp command.\n\nAdding an IBGP route to the OSPF routing table may cause a routing loop. Therefore, exercise caution when using this command.\nIn a scenario with primary and backup routes, packets may get lost after traffic switches back to the primary path from the backup path. The severity of packet loss is proportional to the number of routes stored on PE. To solve this problem, run the default-route-advertise distribute-delay command on PE to configure a delay for sending OSPF default route. An appropriate delay ensures that traffic switches back to the primary path after PE1 completes refreshing forwarding entries.\n\nPrerequisites\nBefore advertising a default route, OSPF compares the priorities of default routes in an OSPF area and then advertises a default route with the highest priority. If a static default route is configured on an OSPF device, ensure that the priority of the static default route is lower than that of the default route to be advertised by OSPF. This ensures that the default route advertised by OSPF will be added to the routing table of the OSPF device.\nConfiguration Impact\nAfter the default-route-advertise command is configured on the ASBR, the ASBR will generate a Type 5 ASE LSA with link state ID 0.0.0.0 and mask 0.0.0.0. In addition, it will advertise the ASE LSA in an entire OSPF area.\nIf a route-policy is configured, default routes are advertised based on the following principles:\nIf a default route matches the route-policy, a new default route is generated on an OSPF device based on the parameters configured in the route-policy. Parameters such as cost, tag, and type can be configured in the route-policy.If the default route does not match the route-policy, and always is configured, the default route is still advertised.If always is not configured, the OSPF device will not advertise the default route.If always is configured, OSPF devices will advertise the default route. In addition, only always configured in the default-route-advertise command takes effect on advertisement of default routes.\n\n\nPrecautions\nIn different OSPF areas, OSPF advertises default routes using different modes. This default-route-advertise command can be used to advertise default routes in a common OSPF area. In the Stub, Totally Stub, or Totally NSSA, default routes are advertised automatically. In an NSSA, the nssa default-route-advertise command is used to advertise default routes."
+}

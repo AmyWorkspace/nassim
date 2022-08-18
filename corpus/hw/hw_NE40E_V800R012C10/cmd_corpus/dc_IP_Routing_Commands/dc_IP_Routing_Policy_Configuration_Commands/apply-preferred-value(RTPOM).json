@@ -1,0 +1,25 @@
+{
+    "PageTitle": "apply preferred-value",
+    "FuncDef": "The apply preferred-value command sets the preferred value for BGP routes.\nThe undo apply preferred-value command cancels the configuration.\nBy default, the preferred value of BGP routes is not set.",
+    "CLIs": [
+        "apply preferred-value <preferredVal>",
+        "undo apply preferred-value"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "preferredVal",
+            "Info": "Specifies the preferred value of BGP routes. In route selection, the BGP route with the largest preferred value is preferred.\nThe value is an integer ranging from 0 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] apply preferred-value 66"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe preferred value is a proprietary attribute of BGP. You can use the apply preferred-value command to set the preferred value for a BGP route in the import policy.\nRun the route-policy command to enter the Route-policy view.A route-policy may consist of multiple nodes. The relationship between the nodes is \"OR\". The system matches a route against the nodes in sequence. If the route matches a node, the route matches the route-policy, and the system no longer matches it against other nodes.Each node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nConfiguration Impact\nAfter a BGP route matches a route-policy, the preferred value for the BGP route is set.\nPrecautions\nThe preferred value of a route indicates its weight in BGP routing. It has only local significance and is not a standard protocols-defined attribute. The preferred value is inapplicable to export policies of BGP."
+}

@@ -1,0 +1,40 @@
+{
+    "PageTitle": "if-match ip group-address",
+    "FuncDef": "The if-match ip group-address command configures a filtering rule that is based on multicast group addresses.\nThe undo if-match ip group-address command cancels the configuration.\nBy default, no filtering rule based on multicast group addresses is configured.",
+    "CLIs": [
+        "if-match ip group-address acl { <acl-number> | <acl-name> }",
+        "if-match ip group-address ip-prefix <ip-prefix-name>",
+        "undo if-match ip group-address acl { <acl-number> | <acl-name> }",
+        "undo if-match ip group-address [ ip-prefix <ip-prefix-name> ]"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer that ranges from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of the IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "acl",
+            "Info": "Specifies the ACL for route filtering.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix p1 permit 10.0.192.0 8 greater-equal 17 less-equal 18",
+            "[*HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] if-match ip group-address ip-prefix p1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe if-match ip command is widely applied. The filtering rule configured using this command takes effect only after an IP prefix or an ACL is configured. For example:\nIf the if-match ip next-hop ip-prefix aa command is used but the IP prefix aa is not configured, all routes are permitted. This is the same case when the ACL is used.If the if-match ip next-hop ip-prefix aa command is used after the ip ip-prefix aa permit 1.1.1.1 32 command is used, the routes with the next hop address 1.1.1.1 are permitted. This is the same case when the ACL is used.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nAn ACL has been configured using the acl command or an IP prefix has been configured using the ip ip-prefix command.\nConfiguration Impact\nWhen you filter routes based on the multicast group address, the routes that match the filtering rule are permitted and the route that do not match the filtering rule are denied."
+}

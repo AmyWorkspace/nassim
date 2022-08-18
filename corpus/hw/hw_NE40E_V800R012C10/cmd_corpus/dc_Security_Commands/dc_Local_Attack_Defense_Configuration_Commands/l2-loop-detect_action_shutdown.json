@@ -1,0 +1,33 @@
+{
+    "PageTitle": "l2-loop-detect action shutdown",
+    "FuncDef": "The l2-loop-detect action shutdown command enables the system to shut down the interface on which a Layer 2 loop is detected.\nThe undo l2-loop-detect action shutdown command disables the system from shutting down the interface on which a Layer 2 loop is detected.\nBy default, the system will not shut down the interface on which a Layer 2 loop is detected.",
+    "CLIs": [
+        "l2-loop-detect action shutdown [ up-times <up-times> | up-interval <up-interval> ] *",
+        "undo l2-loop-detect action shutdown"
+    ],
+    "ParentView": [
+        "Slot view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "up-times up-times",
+            "Info": "Configures the maximum number of consecutive times that the system allows the Down interface to go Up in an interval. After the maximum number of consecutive times, the system will not automatically allow the Down interface to go Up. If you want the interface to go Up, you must manually reset the board where the interface resides.\nThe value is an integer in the range 1 to 10. The default value is 5."
+        },
+        {
+            "Parameters": "up-interval up-interval",
+            "Info": "Configure the initial interval between when the interface shuts down and when it goes to the Up state.\nEach interval between when the interface shuts down and when it goes to the Up state is twice as long as the previous interval.\nThe value is an integer in the range 1 to 10, in minutes. The default value is 5 minutes."
+        },
+        {
+            "Parameters": "shutdown",
+            "Info": "Enables the system to shut down the interface on which a Layer 2 loop is detected.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] slot 1",
+            "[*HUAWEI-slot-1] l2-loop-detect action shutdown"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe CPU determines whether to enable or disable Layer 2 loop detection based on packet loss caused by the CAR. After Layer 2 loop detection is enabled, the CPU will take the configured action in response to Layer 2 loops after the system detects an existing or a potential loop on an interface.\nThe system can be configured to take one of the following actions in response to an existing or possible Layer 2 loop on an interface:\nShut down the interface: The system will shut down the interface only after detecting an existing Layer 2 loop on the interface. This action stops the interface from sending numerous packets to the CPU.Send a trap: The system will send a trap after detecting an existing or a potential Layer 2 loop. The trap message can help a user locate the interface where the Layer 2 loop has occurred or may occur.Send a trap and shut down the interface: The system will send a trap and shut down the interface after detecting an existing Layer 2 loop on the interface.Ignore Layer 2 loops: The system will generate a log, but not shut down the interface or send a trap.\nTo enable the system to shut down the interface on which a Layer 2 loop is detected, run the l2-loop-detect action shutdown.\n\nPrecautions\nWhether the preceding actions are configured, the system will generate a log after detecting an existing or a potential Layer 2 loop.\nIn VS mode, this command is supported only by the admin VS."
+}

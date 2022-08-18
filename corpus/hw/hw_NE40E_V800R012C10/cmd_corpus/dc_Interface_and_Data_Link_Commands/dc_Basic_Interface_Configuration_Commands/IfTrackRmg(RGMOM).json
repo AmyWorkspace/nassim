@@ -1,0 +1,64 @@
+{
+    "PageTitle": "track route-monitor-group",
+    "FuncDef": "The track route-monitor-group command associates an interface with a route monitoring group.\nThe undo track route-monitor-group command restores the default configuration.\n\nBy default, an interface is not associated with any route monitoring group.",
+    "CLIs": [
+        "track route-monitor-group <groupName> [ trigger-down-weight <trigger-down-weight-value> ]",
+        "undo track route-monitor-group [ <groupName> [ trigger-down-weight <trigger-down-weight-value> ] ]"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "100GE-Trunk member Layer 2 interface view",
+        "40GE interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Layer 2 10GE interface view",
+        "XGE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "10GE interface view",
+        "400GE interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "Layer 2 100GE interface view",
+        "40GE-Trunk member interface view",
+        "Global VE interface view",
+        "25GE-L2 view",
+        "GE sub-interface view",
+        "10G WAN interface view",
+        "100GE-Trunk member interface view",
+        "EVC view of a 10GE interface",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "50GE interface view",
+        "10G LAN interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "40GE-Trunk member Layer 2 interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "groupName",
+            "Info": "Specifies the name of a route monitoring group.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. The character string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "trigger-down-weight trigger-down-weight-value",
+            "Info": "Specifies a weight value for the associated interface to automatically go Down.\nThe value is an integer ranging from 1 to 1000."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip route-monitor-group group1",
+            "[*HUAWEI-route-monitor-group-group1] track ip route 10.1.1.0 24 down-weight 100",
+            "[*HUAWEI-route-monitor-group-group1] track ip route 10.1.2.0 24 down-weight 100",
+            "[*HUAWEI-route-monitor-group-group1] monitor enable",
+            "[*HUAWEI-route-monitor-group-group1] commit",
+            "[~HUAWEI-route-monitor-group-group1] quit",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] track route-monitor-group group1 trigger-down-weight 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nYou can create a route monitoring group and add routes to it. If the route monitoring group is required to trigger the status of a user-side interface to change, run the track route-monitor-group command to associate the interface with the route monitoring group. When the fault weight of the route monitoring group reaches the value specified by downWeight, the interface goes Down. This event triggers traffic to be switched to the secondary link. When the fault weight of the route monitoring group falls below the value specified by downWeight, the interface goes Up. This event triggers traffic to be switched to the primary link. This process enables the interface to promptly detect route faults on the network side, ensuring service reliability on the user side.\n\nPrerequisites\n\nA route monitoring group has been created using the ip route-monitor-group command.\n\nPrecautions\n\n\nEach interface can be associated with only one route monitoring group.\nRoutes&middot;in&middot;a&middot;route&middot;monitoring&middot;group&middot;cannot&middot;be&middot;those&middot;generated&middot;by&middot;the&middot;IP&middot;address&middot;of&middot;an&middot;interface&middot;that&middot;has&middot;been&middot;associated&middot;with&middot;the&middot;route&middot;monitoring&middot;group.\nIf trigger-down-weight is not specified when an interface is associated with a route monitoring group, the interface goes down only if all the routes in the monitoring group are unavailable."
+}

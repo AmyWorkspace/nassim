@@ -1,0 +1,47 @@
+{
+    "PageTitle": "hierarchical-car enable",
+    "FuncDef": "The hierarchical-car enable command enables hierarchical CAR in a cascaded traffic policy.\nThe undo hierarchical-car enable command disables hierarchical CAR in a cascaded traffic policy.\nBy default, hierarchical CAR is disabled in a cascaded traffic policy.",
+    "CLIs": [
+        "hierarchical-car enable",
+        "undo hierarchical-car enable"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic classifier A",
+            "[*HUAWEI-classifier-A] if-match ip-precedence 1",
+            "[*HUAWEI-classifier-A] quit",
+            "[*HUAWEI] traffic classifier B",
+            "[*HUAWEI-classifier-B] if-match ip-precedence 2",
+            "[*HUAWEI-classifier-B] quit",
+            "[*HUAWEI] traffic classifier C",
+            "[*HUAWEI-classifier-C] if-match ip-precedence 3",
+            "[*HUAWEI-classifier-C] quit",
+            "[*HUAWEI] traffic behavior A",
+            "[*HUAWEI-behavior-A] car cir 1000",
+            "[*HUAWEI-behavior-A] quit",
+            "[*HUAWEI] traffic behavior C",
+            "[*HUAWEI-behavior-C] car cir 2000",
+            "[*HUAWEI-behavior-C] quit",
+            "[*HUAWEI] traffic policy p2",
+            "[*HUAWEI-trafficpolicy-p2] classifier C behavior C",
+            "[*HUAWEI-trafficpolicy-p2] quit",
+            "[*HUAWEI] traffic behavior B",
+            "[*HUAWEI-behavior-B] traffic-policy p2",
+            "[*HUAWEI-behavior-B] quit",
+            "[*HUAWEI] traffic policy p1",
+            "[*HUAWEI-trafficpolicy-p1] classifier A behavior A",
+            "[*HUAWEI-trafficpolicy-p1] classifier B behavior B",
+            "[*HUAWEI-trafficpolicy-p1] quit",
+            "[*HUAWEI] traffic behavior B",
+            "[*HUAWEI-behavior-B] hierarchical-car enable",
+            "Warning: This configuration will cause other CAR functions to become invalid. [Y/N]:Y",
+            "[*HUAWEI-behavior-B]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a two-level traffic policy instance is created and the actions of both traffic behaviors are CAR, only the CAR configuration in the child policy takes effect by default. After the hierarchical-car enable command is run, CAR configurations in both the parent and child policies take effect. In addition, the CAR configuration in the child policy is implemented before that in the parent policy.\nPrecautions\nTo configure hierarchical CAR, configure a traffic policy first. Otherwise, an error message is displayed. Hierarchical CAR is mutually exclusive with interface CAR, QoS-profile car, and qppb car, and a warning message is displayed for users.\nHierarchical CAR is mutually exclusive with port QoS CAR and CAR in a qos-profile. If both functions exist on the same interface, hierarchical CAR takes effect and interface QoS CAR or CAR in a qos-profile does not take effect. However, if hierarchical CAR is enabled and MF classification contains only level-1 CAR (first-level ACL or second-level ACL is not configured with CAR), Interface QoS CAR and CAR in a qos-profile take effect.\nWhen hierarchical CAR and QoS CAR or QoS profile CAR are configured on an interface and level-2 CAR is configured for hierarchical CAR, QoS CAR or QoS profile CAR does not take effect.When hierarchical CAR and QoS CAR or QoS profile CAR are configured on an interface and level-1 CAR or no CAR is configured for hierarchical CAR, QoS CAR or QoS profile CAR takes effect."
+}

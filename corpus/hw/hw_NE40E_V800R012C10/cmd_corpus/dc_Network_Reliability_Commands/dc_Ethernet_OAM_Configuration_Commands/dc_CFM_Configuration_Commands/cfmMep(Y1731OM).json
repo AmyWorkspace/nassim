@@ -1,0 +1,78 @@
+{
+    "PageTitle": "mep mep-id (MA view)",
+    "FuncDef": "The mep mep-id command creates a maintenance association end point (MEP).\nThe undo mep mep-id command deletes a MEP.\nBy default, no MEP is created on a device.",
+    "CLIs": [
+        "mep mep-id <mep-id> { vlan | { interface { <interface-name> | <interface-type> <interface-number> } [ vlan <vlan-id> | pe-vid <pe-vid-value> ce-vid <ce-vid-value> ] { inward | outward } } | { peer-ip <peer-address> [ vc-id <vc-id> ] [ mac <group-mac> ] { inward | outward } } }",
+        "undo mep mep-id <mep-id> [ vlan | { interface { <interface-name> | <interface-type> <interface-number> } [ vlan <vlan-id> | pe-vid <pe-vid-value> ce-vid <ce-vid-value> ] { inward | outward } } | { peer-ip <peer-address> [ vc-id <vc-id> ] [ mac <group-mac> ] { inward | outward } } ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mep-id",
+            "Info": "Specifies the ID of a MEP. The ID identifies a MEP.\nThe value is an integer ranging from 1 to 8191"
+        },
+        {
+            "Parameters": "vlan",
+            "Info": "Indicates a VLAN-based MEP.\n-"
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies a VLAN to which an interface belongs.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of an interface.\n-"
+        },
+        {
+            "Parameters": "pe-vid pe-vid-value",
+            "Info": "Specifies the VLAN ID of a provider edge (PE).\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid ce-vid-value",
+            "Info": "Specifies the VLAN ID of a customer edge (CE).\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "inward",
+            "Info": "Indicates an inward-facing MEP.\n-"
+        },
+        {
+            "Parameters": "outward",
+            "Info": "Indicates an outward-facing MEP.\n-"
+        },
+        {
+            "Parameters": "peer-ip peer-address",
+            "Info": "Specifies a peer IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vc-id vc-id",
+            "Info": "Specifies a VC ID.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "mac group-mac",
+            "Info": "Specifies a MAC address.\nThe value is a non-all-zero unicast MAC address, in the format of H-H-H."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 10",
+            "[*HUAWEI-vsi-vsi1-ldp] peer 2.2.2.2",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map vsi vsi1",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 peer-ip 2.2.2.2 inward"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe mep mep-id command can be used to create MEPs that define a connectivity fault management (CFM) area. CFM supports continuity check (CC), loopback (LB), and link trace (LT) functions on end-to-end (E2E) links between MEPs.\nMEPs are classified into the following types:\nInward-facing MEP: sends packets to other interfaces on the same device.Outward-facing MEP: sends packets out of the interface on which the MEP is configured.\n\nPrerequisites\nAn MD and an MA have been configured using the cfm md and ma commands, respectively.\nThe MA has been bound to a virtual leased line (VLL) or Virtual Private Lan Service (VPLS) using the map command.\nA QinQ VLAN tag termination sub-interface has been configured using the qinq termination pe-vid command in the case of QinQ VLAN tag termination sub-interface access.\nFollow-up Procedure\nRun the mep ccm-send enable command to enable the MEP in the MA to send continuity check messages (CCMs).\nPrecautions\nSpecifications of MEPs to be created in an MA are as follows:\nVLAN-based and interface-based MEPs are mutually exclusive. Common inward-based and outward-facing MEPs are mutually exclusive.A single outward-facing interface-based MEP can be created. Multiple inward-facing interface-based MEPs can be created on a device. An interface supports only one inward-facing interface-based MEP.Only one VLAN-based MEP can be created.\nThe maximum number of MEPs that can be created varies according to interface board types and router models. For details about specifications, see the specification description of a specific interface board or router.\nPrecautions for creating a MEP in an MA are as follows:\nAn MA in which an inward-facing interface-based MEP is to be created must have been associated with a service (for example, a VLAN, L2VC, or VSI), and the service must have been configured on the interface on which the MEP is to be created.An MA does not need to be associated with a service if an outward-facing interface-based MEP is to be created in the MA. If the MA has been associated with a service, the service must be configured on the interface on which the MEP is to be created.The MA must be associated with a VLAN if a VLAN-based MEP is to be created in the MA.An MA in which a PW-based MEP is to be created must have been associated with a service (for example, a VSI), and the specified PW must belong to the service."
+}

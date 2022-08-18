@@ -1,0 +1,48 @@
+{
+    "PageTitle": "idle-cut",
+    "FuncDef": "The idle-cut command configures idle-cut parameters for a domain. If a user in the domain meets the conditions, the connection of the user is torn down.\nThe undo idle-cut command cancels the idle-cut function.\nBy default, the idle-cut function is disabled in a domain.",
+    "CLIs": [
+        "idle-cut <idle-time> { <idle-data> | zero-rate } [ inbound | outbound ]",
+        "undo idle-cut"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "idle-time",
+            "Info": "Specifies the period after which the user connection is torn down.\nThe value is an integer that ranges from 0 to 2880."
+        },
+        {
+            "Parameters": "idle-data",
+            "Info": "Specifies the amount of user traffic rate. If the user traffic rate is less than the amount, the user is considered idle.\nThe value is an integer ranging from 0 to 76800000 in kbyte/min. If the value is 0, the system does not disconnect the idle user."
+        },
+        {
+            "Parameters": "zero-rate",
+            "Info": "Indicates that if the time when the user traffic rate is less than 1Kbyte/min reaches the idle-time value, the system will disconnect the idle user.\n-"
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates that the parameter idle takes effect only on the upstream traffic.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates that the parameter idle takes effect only on the downstream traffic.\nIf you do not specify the inbound parameter or the outbound parameter, the idle-cut function takes effect on both upstream and downstream traffic.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] idle-cut 60 500"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] idle-cut 10 1000 inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nUsers consume bandwidth if they do not have any network access traffic after going online for a long time, causing a waste of resources. To prevent this problem, run the idle-cut command so that users whose traffic is lower than the specified traffic threshold during the idle-cut time are logged out.\nPrecautions\nFor Layer 2 DHCPv4 and DHCPv6 users whose IP addresses are not assigned by the BRAS (for example, they are assigned by a remote DHCP server), configuring idle-cut is not recommended. If idle-cut is configured and the users are logged out, the DHCP server will reclaim the IP addresses so that the users can no longer be triggered to go online.For Layer 2 DHCPv4 and DHCPv6 users whose IP addresses are assigned by the BRAS, idle-cut can be configured.If Layer 2 DHCPv4 users are logged out and need to be triggered to go online again, they must send ARP or IP packets to go online. Some STBs cannot send ARP packets to go online. You can run the arp-trigger command in the BAS interface view to enable users to send ARP packets to go online or run the ip-trigger command in the BAS interface view to enable users to send IP packets to go online. By default, the device does not allow users to send ARP or IP packets to go online. In addition, IP address reservation based on leases or MAC addresses must be configured using the reserved ip-address { lease | mac } command in the IP address pool view of the BRAS. If this function is not configured, the IP addresses used by users to go online may be allocated to other users, so that the users will fail to go online again.If Layer 2 DHCPv6 users are logged out and need to be triggered to go online again, they must send NS/NA or IPv6 packets to go online. You can run the nd-trigger command in the BAS interface view to enable users to send NS/NA packets to go online or run the ipv6-trigger command in the BAS interface view to enable users to send IPv6 packets to go online. By default, the device does not allow users to send NS/NA or IPv6 packets to go online. In addition, IPv6 address reservation based on DUIDs or MAC addresses must be configured using the reserved ipv6-address { duid | mac } [ lease ] command in the IPv6 prefix pool view of the BRAS. If PD prefixes must be allocated, you must also run the reserved prefix { duid | mac } [ lease ] command in the IP prefix pool view to configure prefix reservation. If these functions are not configured, the IPv6 addresses and prefixes used by users to go online may be allocated to other users, so that the users will fail to go online again.\nDo not configure idle-cut for Layer 3 DHCPv4 and DHCPv6 users because they cannot be triggered to go online.Idle-cut cannot be configured or leased lines or leased line users.It is not recommended that PPPoE users use the idle cut function.Idle-cut takes effect only for users who go online after idle-cut is configured."
+}

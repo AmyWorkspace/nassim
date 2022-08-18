@@ -1,0 +1,52 @@
+{
+    "PageTitle": "nexthop recursive-lookup bit-error-detection (BGP-EVPN address family view)",
+    "FuncDef": "The nexthop recursive-lookup bit-error-detection command associates bit error events with the adjustment of EVPN route local preference or MED values.\nThe undo nexthop recursive-lookup bit-error-detection command deletes the association between bit error events and the adjustment of EVPN route local preference or MED values.\nBy default, bit error events are not associated with the adjustment of EVPN route local preference or MED values.",
+    "CLIs": [
+        "nexthop recursive-lookup bit-error-detection { med + <med-adjust-value> | local-preference - <localpref-adjust-value> } * [ route-policy <route-policy-name> ]",
+        "undo nexthop recursive-lookup bit-error-detection"
+    ],
+    "ParentView": [
+        "BGP-EVPN address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "med",
+            "Info": "Indicates changing the MED of BGP routes.\n-"
+        },
+        {
+            "Parameters": "+",
+            "Info": "Indicates adding the MED.\n-"
+        },
+        {
+            "Parameters": "med-adjust-value",
+            "Info": "Specifies the MED value adjustment for a BGP route.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "local-preference",
+            "Info": "Indicates changing the Local_Pref of BGP routes.\n-"
+        },
+        {
+            "Parameters": "-",
+            "Info": "Indicates reducing the Local_Pref.\n-"
+        },
+        {
+            "Parameters": "localpref-adjust-value",
+            "Info": "Specifies the local preference adjustment for a BGP route.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy nhp-biterr permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] l2vpn-family evpn",
+            "[*HUAWEI-bgp-af-evpn] nexthop recursive-lookup bit-error-detection med + 50 local-preference - 100 route-policy nhp-biterr"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter you configure the association between bit error events and the adjustment of EVPN route local preference or MED values, PE can detect the bit error event encountered by the tunnel between itself and the peer and reduces the local preference or increases the MED values of the BGP EVPN routes that it advertises to the peer. As a result, the peer preferentially selects the routes advertised by another PE and switches traffic to the backup path. After the bit error event is over, PE restores the local preference or MED values of the routes advertised to the peer. Consequently, the peer preferentially selects the routes advertised by PE and switches traffic back to the primary path.\nConfiguration Impact\nIf a bit error event has occurred before you configure the association between bit error events and EVPN route local preference or MED values, the PE may select a backup path to transmit traffic after you configure the nexthop recursive-lookup bit-error-detection command.\nPrecautions\nAfter you configure the association between bit error events and the adjustment of EVPN route local preference or MED values, the local preference or MED value of the route changes if the tunnel to which the route recurses encounters a bit error event. However, only routes meeting the routing policy can be advertised with adjusted local preference or MED values. Pay special attention to routing policy configuration when configuring the association between bit error events and the adjustment of EVPN route local preference or MED values. If the routing policy is not appropriately configured, routes may fail to be advertised after having their local preference or MED values changed."
+}

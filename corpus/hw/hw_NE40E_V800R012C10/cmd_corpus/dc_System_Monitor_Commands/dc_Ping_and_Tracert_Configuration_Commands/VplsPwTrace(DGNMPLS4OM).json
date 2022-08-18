@@ -1,0 +1,128 @@
+{
+    "PageTitle": "tracert vpls",
+    "FuncDef": "The tracert vpls command locates a faulty forwarding node on a VPLS network.",
+    "CLIs": [
+        "tracert vpls [ -exp <exp-value> | -f <first-ttl> | -m <max-ttl> | -r <reply-mode> | -t <timeout-value> | -g ] * vsi <vsi-name> peer <peer-address> [ negotiate-vc-id <vc-id> ] [ full-lsp-path ] [ control-word ] [ pipe | uniform ] [ detail ] [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]",
+        "tracert vpls [ -exp <exp-value> | -f <first-ttl> | -m <max-ttl> | -r <reply-mode> | -t <timeout-value> | -g ] * vsi <vsi-name> <local-site-id> <remote-site-id> [ full-lsp-path ] [ detail ] [ bypass -si { <interface-name> | <interface-type> <interface-number> } ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-exp exp-value",
+            "Info": "Specifies the value of the EXP field in the outer label of an Echo Request packet.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "-f first-ttl",
+            "Info": "Specifies the initial TTL value.\nThe value is an integer ranging from 1 to 255. The value must be less than max-ttl. The default value is 1."
+        },
+        {
+            "Parameters": "-m max-ttl",
+            "Info": "Specifies the maximum value of the TTL.\nThe value is an integer ranging from 1 to 255. The value must be greater than first-ttl. The default value is 30."
+        },
+        {
+            "Parameters": "-r reply-mode",
+            "Info": "Specifies the mode of sending an Echo Reply packet. The meaning of each value is as follows:\nThe value is an integer ranging from 1 to 4.The default value is 2.\n1: no reply.2: reply with an IPv4 or IPv6 UDP packet.3: reply with an IPv4 or IPv6 UDP packet carrying the router-alert option.4: reply through the control channel of the application plane."
+        },
+        {
+            "Parameters": "-t timeout-value",
+            "Info": "Specifies the timeout period of sending Echo Reply packets.\nThe value is a decimal integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-g",
+            "Info": "Performs the test using MPLS fragments.\n-"
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies a VPN name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "peer peer-address",
+            "Info": "Specifies the IP address of a peer PE.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "negotiate-vc-id vc-id",
+            "Info": "Specifies the ID of the local PW.\nThe value is a decimal integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "full-lsp-path",
+            "Info": "Displays information about responses from all nodes to the Echo Request packets along an LSP. If this parameter is not specified, only the responses from the PW nodes along the LSP are displayed.\n-"
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Indicates that the control word is encapsulated into a packet.\nWhen detecting an MS-PW, you can specify control-word that supports MS-PW detection only in LDP mode on a VPLS network.\n-"
+        },
+        {
+            "Parameters": "pipe",
+            "Info": "Specifies the pipe mode. In this mode, when a probe packet passes through an MPLS domain, the IP TTL value is decreased by 1 only on the ingress and egress nodes. The MPLS domain is considered a hop.\n-"
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Specifies the uniform mode. In this mode, the IP TTL value is decreased by 1 each time a probe packet passes through one hop in the MPLS domain.\n-"
+        },
+        {
+            "Parameters": "detail",
+            "Info": "Displays details carried in MPLS Echo Reply packets.\n-"
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Forwards packets through a specified public backup LSP of a VPLS PW.\nIf this parameter is specified on the ingress interface, packets sent from the initiator are forwarded through the public backup LSP.\nIn a hybrid load balancing scenario, if multiple backup LSPs exist, packets are forwarded through a randomly selected LSP rather than any specified backup LSP.\nIf reply packets are transmitted through an application-plane control channel, the PEs at both ends of a PW must have protection paths configured. Otherwise, when the peer PE does not have any public backup LSP, PW tracert reply packets cannot be returned.\n-"
+        },
+        {
+            "Parameters": "-si interface-name",
+            "Info": "Specifies the name of an inbound interface for MPLS Echo Request packets. You can simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an inbound interface for MPLS Echo Request packets. You can simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an inbound interface for MPLS Echo Request packets. You can simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "local-site-id",
+            "Info": "Specifies the ID of the local CE.\nThe value is a decimal integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "remote-site-id",
+            "Info": "Specifies the ID of the remote CE.\nThe value is a decimal integer ranging from 0 to 65534."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> tracert vpls vsi test 10 10 full-lsp-path",
+            " PW Trace Route FEC: L2 VPN ENDPOINT. Sender VEID = 10, Remote VEID = 20, press CTRL_C to break",
+            "TTL    Replier            Time    Type      Downstream",
+            "0                                 Ingress   10.1.1.2/[294929 32894 32888 ]",
+            "1      10.1.1.2           93 ms   Transit   10.2.1.2/[32925 3 ]",
+            "2      10.2.1.2           1 ms    Transit   10.3.1.2/[32881 ]",
+            "3      4.4.4.4            2 ms    Egress"
+        ],
+        [
+            "<HUAWEI> tracert vpls vsi v1 10 10",
+            "  PW Trace Route FEC: L2 VPN ENDPOINT. Sender VEID = 10, Remote VEID = 20, press CTRL_C to break",
+            "TTL    Replier            Time    Type      Downstream",
+            "0                                 Ingress   10.1.1.2/[294929 32894 32888 ]",
+            "3      4.4.4.4            4 ms    Egress"
+        ],
+        [
+            "<HUAWEI> tracert vpls vsi v1 1 2 full-lsp-path bypass -si GigabitEthernet1/0/1",
+            "  PW Trace Route FEC: L2 VPN ENDPOINT. Sender VEID = 1, Remote VEID = 2, press CTRL_C to break",
+            "TTL    Replier            Time    Type      Downstream",
+            "0                                 Ingress   10.1.1.2/[32980 1 368641 ]",
+            "1      10.1.1.2           9 ms    Transit   10.2.1.1/[3 ]",
+            "2      4.4.4.4            6 ms    Egress"
+        ],
+        [
+            "<HUAWEI> tracert vpls vsi v1 peer 4.4.4.4 full-lsp-path bypass -si GigabitEthernet1/0/1",
+            "  PW Trace Route : FEC 128 PSEUDOWIRE (NEW). Type = vlan, ID = 1, press CTRL_C to break",
+            "TTL    Replier            Time    Type      Downstream",
+            "0                                 Ingress   10.1.1.2/[300 1 32803 ]",
+            "1      10.1.1.2           2 ms    Transit   10.2.1.2/[200 ]",
+            "2      4.4.4.4            3 ms    Egress"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter VPLS configurations are complete, run the tracert vpls command to locate a faulty forwarding node along the PW.\nPrerequisites\nBasic VPLS configurations are complete.\nPrecautions\nThis command can be run only in label alert mode.To terminate the running tracert vpls command, press Ctrl+C."
+}

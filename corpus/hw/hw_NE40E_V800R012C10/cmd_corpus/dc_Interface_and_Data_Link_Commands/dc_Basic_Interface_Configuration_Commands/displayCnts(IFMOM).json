@@ -1,0 +1,118 @@
+{
+    "PageTitle": "display counters",
+    "FuncDef": "The display counters command displays traffic statistics on interfaces.\nThe display counters rate command displays traffic rates on interfaces.",
+    "CLIs": [
+        "display counters [ bit ] [ rate ] [ inbound | outbound ] [ interface { <interface-name> | <interface-type> [ <interface-number> ] } ]",
+        "display counters [ bit ] [ rate ] [ inbound | outbound ] [ interface <interface-type> ] slot <slot-id>"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "bit",
+            "Info": "Displays traffic rates by bits/s. The traffic statistics can be displayed only on Ethernet interfaces, Ethernet sub-interfaces, Eth-Trunk interfaces, and Eth-Trunk sub-interfaces, not on remote Eth-Trunk interfaces.\n-"
+        },
+        {
+            "Parameters": "rate",
+            "Info": "Indicates the packet rate, which is calculated based on interface counters. If the packet rate is not specified, interface counters of specified interfaces will be listed.\n-"
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates statistics and traffic rate about incoming traffic.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates statistics and traffic rate about outgoing traffic.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of an interface.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Specifies the slot ID of an interface board.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display counters",
+            "Inbound",
+            "Interface           Octets(bytes) Unicast(pkts) Multicast(pkts) Broadcast(pkts)",
+            "Eth-Trunk2                      0             0               0               0",
+            "GE1/0/0                         0          6860           39961         2697089",
+            "Loop1                           0             0               0               0",
+            "NULL0                           0             0               0               0",
+            "Outbound",
+            "Interface           Octets(bytes) Unicast(pkts) Multicast(pkts) Broadcast(pkts)",
+            "Eth-Trunk2                      0             0               0               0",
+            "GE1/0/0                         0         44910               0             702",
+            "Loop1                           0             0               0               0",
+            "NULL0                           0             0               0               0"
+        ],
+        [
+            "<HUAWEI> display counters interface gigabitethernet 1/0/0",
+            "Inbound",
+            "Interface           Octets(bytes) Unicast(pkts) Multicast(pkts) Broadcast(pkts)",
+            "GE1/0/0                         0          7629           41914         2768376",
+            "Outbound",
+            "Interface           Octets(bytes) Unicast(pkts) Multicast(pkts) Broadcast(pkts)",
+            "GE1/0/0                         0         46800               0             712"
+        ],
+        [
+            "<HUAWEI> display counters bit",
+            "Inbound",
+            "Interface           Unicast(bits) Multicast(bits) Broadcast(bits)",
+            "GE1/0/0                         0               0               0",
+            "GE1/0/1                         0           66168               0",
+            "GE1/0/2                   2168736            4552           52784 ",
+            "GE1/0/3                         0               0               0",
+            "Outbound        ",
+            "Interface           Unicast(bits) Multicast(bits) Broadcast(bits)",
+            "GE1/0/0                         0               0               0",
+            "GE1/0/1                         0               0               0",
+            "GE1/0/2                3821688246             432             768",
+            "GE1/0/3                         0               0               0"
+        ],
+        [
+            "<HUAWEI> display counters rate",
+            "Inbound",
+            "Interface   Octets(bytes/s) Unicast(pkts/s) Multicast(pkts/s) Broadcast(pkts/s)",
+            "Eth-Trunk2                0               0                 0                 0",
+            "GE1/0/0                   0               0                 0                 0",
+            "Loop1                     0               0                 0                 0",
+            "NULL0                     0               0                 0                 0",
+            "Outbound",
+            "Interface   Octets(bytes/s) Unicast(pkts/s) Multicast(pkts/s) Broadcast(pkts/s)",
+            "Eth-Trunk2                0               0                 0                 0",
+            "GE1/0/0                   0               0                 0                 0",
+            "Loop1                     0               0                 0                 0",
+            "NULL0                     0               0                 0                 0"
+        ],
+        [
+            "<HUAWEI> display counters rate interface gigabitethernet 1/0/0",
+            "Inbound",
+            "Interface   Octets(bytes/s) Unicast(pkts/s) Multicast(pkts/s) Broadcast(pkts/s)",
+            "GE1/0/0                   0               0                 0                 0",
+            "Outbound",
+            "Interface   Octets(bytes/s) Unicast(pkts/s) Multicast(pkts/s) Broadcast(pkts/s)",
+            "GE1/0/0                   0               0                 0                 0"
+        ],
+        [
+            "<HUAWEI> display counters bit rate",
+            "Inbound",
+            "Interface   Unicast(bits/s) Multicast(bits/s) Broadcast(bits/s)",
+            "Eth-Trunk2                0             52784                 0",
+            "GE                  2168736              4552           2168736",
+            "Outbound",
+            "Interface   Unicast(bits/s) Multicast(bits/s) Broadcast(bits/s)",
+            "Eth-Trunk2       3821688246               432              9968",
+            "GE                 18569246                 0                 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo check statistics about traffic sent or received by an interface, run the display counters command with an interface type or slot ID specified. The command output helps you locate and rectify a fault.\nIf you want to check traffic statistics about an interface within a specified period, run the reset counters interface command to delete existing statistics on the interface. Then, you can re-collect traffic statistics about the interface.\nTo view incoming or outgoing traffic rates on an interface, run the display counters rate command with an interface type or slot ID specified. The command output helps you locate and rectify a fault.\nIf you want to check traffic rates on an interface within a specified period, run the reset counters interface command to delete existing statistics on the interface. Then, you can recalculate traffic rates on the interface.\nPrecautions\nIf a large number of interfaces exist on the device, specify an interface number or a slot ID in the display counters command to view traffic statistics on a specified interface. Otherwise, excessive output information may cause the following problems:\nThe output information is repeatedly refreshed, and then required information cannot be obtained.The system does not respond because of long-time information traversing and searching."
+}

@@ -1,0 +1,35 @@
+{
+    "PageTitle": "l2-multicast pw-fast-control",
+    "FuncDef": "The l2-multicast pw-fast-control command disables or delays the deletion of Layer 2 multicast forwarding entries of PW outbound interfaces when PWs go Down, so that the services can be restored rapidly when the PWs go Up.\nThe undo l2-multicast pw-fast-control command restores the default configuration.\nBy default, the device deletes Layer 2 multicast forwarding entries of PW outbound interfaces when PWs go Down.",
+    "CLIs": [
+        "l2-multicast pw-fast-control [ holdtime <interval> ]",
+        "undo l2-multicast pw-fast-control [ holdtime <interval> ]"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "holdtime interval",
+            "Info": "Specifies the holdtime for Layer 2 multicast forwarding entries of PW outbound interfaces when PWs go Down.\nThe value is an integer ranging from 5 to 120, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vsi v1",
+            "[~HUAWEI-vsi-v1] pwsignal ldp",
+            "[*HUAWEI-vsi-v1-ldp] vsi-id 1",
+            "[*HUAWEI-vsi-v1-ldp] quit",
+            "[*HUAWEI-vsi-v1] l2-multicast pw-fast-control holdtime 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGenerally, all Layer 2 multicast forwarding entries of a PW outbound interface are deleted after the PW goes Down. The services can be restored only after the PW goes Up and the entries are re-created. To ensure that services are not interrupted or are interrupted for less than 50 ms during PW re-establishment, run the l2-multicast pw-fast-control command to disable or delay the deletion of Layer 2 multicast forwarding entries of PW outbound interfaces when PWs go Down.\nPrecautions\nIf the holdtime parameter is specified, the device delays the deletion of Layer 2 multicast forwarding entries as follows:\nIf a Layer 2 multicast forwarding entry is dynamically created, the device deletes it only after holdtime expires, so that the Layer 2 multicast service can be restored rapidly if the corresponding PW goes Up before holdtime expires.If a Layer 2 multicast forwarding entry is statically configured, the device deletes it only after holdtime expires, so that the Layer 2 multicast service can be restored rapidly if the corresponding PW goes Up before holdtime expires.\nIf the holdtime parameter is not specified, the device performs the deletion of Layer 2 multicast forwarding entries as follows:\nIf a Layer 2 multicast forwarding entry is dynamically created, the device does not proactively delete it when the PW goes Down, but waits for the entry to be aged out.If a Layer 2 multicast forwarding entry is statically configured, the device waits 120s after the PW goes Down. If the PW goes Up within 120s, the device does not delete the entry; otherwise, the device deletes it."
+}

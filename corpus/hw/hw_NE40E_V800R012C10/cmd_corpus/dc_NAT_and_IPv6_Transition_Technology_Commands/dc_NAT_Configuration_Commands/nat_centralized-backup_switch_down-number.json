@@ -1,0 +1,26 @@
+{
+    "PageTitle": "nat centralized-backup switch down-number",
+    "FuncDef": "The nat centralized-backup switch down-number command configures the maximum number of allowable CPU faults in centralized backup of distributed NAT.\nThe undo nat centralized-backup switch down-number command restores the default configuration.\nBy default, only one CPU fault is allowed in centralized backup of distributed NAT.",
+    "CLIs": [
+        "nat centralized-backup switch down-number <down-number>",
+        "undo nat centralized-backup switch down-number <down-number>"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "down-number",
+            "Info": "Specifies the maximum number of allowable CPU faults in centralized backup of distributed NAT.\nWhen the number of CPU faults on the current service board in the NAT instance is greater than or equal to the threshold, user traffic automatically switches to centralized devices for NAT implementation.\nThe value is an integer ranging from 1 to 16. The default value is 1."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat centralized-backup enable",
+            "[*HUAWEI-nat-instance-cpe1] nat centralized-backup switch down-number 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn normal cases, when the NAT service board on a BRAS becomes faulty, user traffic is distributed to centralized devices for NAT implementation. To control user traffic distribution from distributed devices to centralized devices based on the number of CPU faults, run the nat centralized-backup switch down-number command to configure the maximum number of allowable CPU faults in centralized backup of distributed NAT.\nWhen the number of CPU faults on the current service board in the NAT instance is greater than or equal to the value of down-number, user traffic automatically switches to centralized devices for NAT implementation.When the value of down-number is greater than the number of CPUs on the current service board in the NAT instance, all CPUs in the NAT instance become faulty and user traffic automatically switches to the centralized devices for NAT implementation.\n\nPrerequisites\nCentralized backup of distributed NAT has been enabled using the nat centralized-backup enable command.\nConfiguration Impact\nWhen the value of down-number is not greater than the number of CPUs on the service board bound to the NAT instance, the nat centralized-backup switch down-number command has the following impacts:\nWhen the number of CPU faults on the current service board in the NAT instance is greater than or equal to the value of down-number, user traffic automatically switches to centralized devices for NAT implementation.When the number of CPU faults on the current service board in the NAT instance is less than the value of down-number, user traffic can be manually switched back to distributed devices for NAT implementation. During traffic switchback, CPUs on the service board in the NAT instance are not completely restored, which may cause users to go offline.When no CPU fault occurs on the current service board in the NAT instance, user traffic can be automatically switched back to distributed devices for NAT implementation.\nWhen the value of down-number is greater than the number of CPUs on the service board bound to the NAT instance, the nat centralized-backup switch down-number command has the following impacts:\nWhen the maximum number of allowable CPUs on the current service board in the NAT instance is greater than the value of down-number, all CPUs on the service board are faulty and user traffic automatically switches to the centralized devices for NAT implementation.At least one CPU on the current service board bound to the NAT instance is available, and user traffic can be manually switched back to distributed devices for NAT implementation.\n\nPrecautions\nThis command is applicable only to the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S."
+}

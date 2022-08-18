@@ -1,0 +1,33 @@
+{
+    "PageTitle": "unicast-route recursive-lookup tunnel (BGP-VPN instance IPv4 address family view)",
+    "FuncDef": "The unicast-route recursive-lookup tunnel command allows non-labeled private BGP routes to recurse to LSPs.\nThe undo unicast-route recursive-lookup tunnel command restores the default configuration.\nBy default, non-labeled private BGP routes cannot recurse to LSPs.",
+    "CLIs": [
+        "unicast-route recursive-lookup tunnel [ tunnel-selector <tunnel-selector-name> ]",
+        "undo unicast-route recursive-lookup tunnel [ tunnel-selector <tunnel-selector-name> ]"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tunnel-selector tunnel-selector-name",
+            "Info": "Specifies the name of a tunnel policy selector.\nThe value is a string of 1 to 40 case-sensitive characters, spaces not supported. The character string can contain spaces if it is enclosed with double quotation marks (\") when being entered."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] tunnel-selector test permit node 10",
+            "[*HUAWEI-tunnel-selector] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-vpna] unicast-route recursive-lookup tunnel tunnel-selector test"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, non-labeled private BGP routes can recurse to outbound interfaces and next hops, but not to LSPs. To allow non-labeled private BGP routes to preferentially recurse to LSPs, run the unicast-route recursive-lookup tunnel command. If no LSPs are available after the command is run, non-labeled private BGP routes recurse to outbound interfaces and next hops.If tunnel-selector is specified in the command, non-labeled private BGP routes recurse to the LSPs that match the specified tunnel policy selector.\nPrecautions\nIf the unicast-route recursive-lookup tunnel command is run more than once, the latest configuration overrides the previous one.\nThe SRv6 TE Policy or SRv6 TE Policy Group of tunnel is not supported in a tunnel selector specified in the command."
+}

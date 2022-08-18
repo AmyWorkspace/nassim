@@ -1,0 +1,46 @@
+{
+    "PageTitle": "if-match acl",
+    "FuncDef": "The if-match acl command configures a matching rule for complex traffic classification based on an IPv4 or IPv6 ACL.\nThe undo if-match acl command cancels the configuration.\nBy default, the matching rule for complex traffic classification based on an IPv4 or IPv6 ACL is not configured in traffic classifier view.",
+    "CLIs": [
+        "if-match ipv6 acl { <acl-number> | name <acl-name> }",
+        "if-match acl { <acl-number> | name <acl-name> }",
+        "undo if-match ipv6 acl { <acl-number> | name <acl-name> }",
+        "undo if-match acl { <acl-number> | name <acl-name> }"
+    ],
+    "ParentView": [
+        "Traffic classifier view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of an ACL.\nFor IPv4 ACL, the value is an integer ranging from 2000 to 4999, 6000 to 10999.The number of a basic ACL ranges from 2000 to 2999.The number of an advanced ACL ranges from 3000 to 3999.The number of a Layer 2 ACL ranges from 4000 to 4999.The number of a user-defined ACL ranges from 6000 to 9999.The number of an MPLS-based ACL ranges from 10000 to 10999.\n\nFor IPv6 ACL, The value is an integer ranging from 2000 to 3999, 6000 to 9999. The number of a basic ACL6 ranges from 2000 to 2999.The number of an advanced ACL6 ranges from 3000 to 3999.The number of a user-defined ACL6 ranges from 6000 to 9999."
+        },
+        {
+            "Parameters": "name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces."
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Specifies the ACL6.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 3101",
+            "[*HUAWEI-acl4-advance-3101] rule deny ip source 10.1.1.1 0 destination 10.2.1.1 0",
+            "[*HUAWEI-acl4-advance-3101] quit",
+            "[*HUAWEI] traffic classifier class1",
+            "[*HUAWEI-classifier-class1] if-match acl 3101"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 number 2999",
+            "[*HUAWEI-acl6-basic-2999] rule permit source 2001:0db8::9050/64",
+            "[*HUAWEI-acl6-basic-2999] quit",
+            "[*HUAWEI] traffic classifier class1",
+            "[*HUAWEI-classifier-class1] if-match ipv6 acl 2999"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo classify packets according to the interface where the packets are received, source IP address, destination IP address, IP bearer protocol type, TCP source port and destination port, ICMP message type, code, source MAC address, and destination MAC address, source ip address group, destination ip address group, you need to define an ACL. That is, you need to define the ACL and configure ACL rules before running this command to configure a matching rule for complex traffic classification in the traffic classifier.\nPrerequisites\nThe ACL is defined and the rules are configured.\nA traffic classifier is configured in the system view and the traffic classifier view is displayed.\nConfiguration Impact\nPackets are classified according to the matched ACL rule and different traffic behaviors are performed for packets in different traffic classifiers.\nFollow-up Procedure\nYou need to configure the traffic behavior and traffic policy for the traffic classifier matching the rules and apply the traffic policy to interfaces.\nPrecautions\nYou can configure more than one ACL number for a traffic classifier to match packets of different types. One traffic classifier can match a maximum of 16 if-match rules."
+}

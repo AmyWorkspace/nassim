@@ -1,0 +1,55 @@
+{
+    "PageTitle": "c-rp",
+    "FuncDef": "The c-rp command configures a candidate-rendezvous point (C-RP) on a Router, so that the Router can announce itself as a C-RP to the bootstrap router (BSR).\nThe undo c-rp command deletes a C-RP.\nBy default, no C-RP is configured.",
+    "CLIs": [
+        "c-rp { <interface-type> <interface-number> | <port-name> } [ group-policy { <basic-acl-number> | acl-name <acl-name> } | priority <priority> | holdtime <hold-interval> | advertisement-interval <adv-interval> ] *",
+        "undo c-rp { <interface-type> <interface-number> | <port-name> }"
+    ],
+    "ParentView": [
+        "VPN instance PIM view",
+        "PIM view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type and number of an interface. The IP address of the specified interface is advertised as the C-RP address.\nTo avoid frequent protocol changes caused by interface flapping, using loopback interfaces is recommended.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the type and number of an interface. The IP address of the specified interface is advertised as the C-RP address.\nTo avoid frequent protocol changes caused by interface flapping, using loopback interfaces is recommended.\n-"
+        },
+        {
+            "Parameters": "group-policy basic-acl-number",
+            "Info": "Specifies the range of multicast groups served by a C-RP. The range is restricted to the multicast groups permitted by a specified ACL. basic-acl-number specifies the number of a basic ACL that defines the service range of the advertised RP.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "priority priority",
+            "Info": "Specifies a priority value for a C-RP. A larger value indicates a lower C-RP priority.\nThe value is an integer ranging from 0 to 255. The default value is 0."
+        },
+        {
+            "Parameters": "holdtime hold-interval",
+            "Info": "Specifies a timeout period during which the BSR waits to receive an Advertisement message from a C-RP.\nThe value is an integer ranging from 1 to 65535, in seconds. The default value is 150 seconds."
+        },
+        {
+            "Parameters": "advertisement-interval adv-interval",
+            "Info": "Specifies an interval at which a C-RP sends Advertisement messages.\nThe value is an integer ranging from 1 to 65535, in seconds. The default value is 60 seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] acl number 2069",
+            "[*HUAWEI-acl4-basic-2069] rule permit source 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-basic-2069] rule permit source 226.2.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-basic-2069] quit",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] c-rp GigabitEthernet 1/0/0 group-policy 2069 priority 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn RP is the core of a PIM-SM network, and thus a C-RP must be able to communicate with the other devices. Configuring a C-RP on the Router on the backbone network and reserving enough bandwidth between the Router and each of the other devices are recommended. To configure a C-RP on a Router, run the c-rp command.\nAn RP is elected from C-RPs based on the following rules:\nThe C-RP wins if it serves the group address that has the longest mask.If group addresses served by all C-RPs have the same mask length, the C-RP with the highest priority wins (a larger priority value indicates a lower priority).If the C-RPs have the same priority, the hash function is started. The C-RP with the greatest calculated value wins.If all the preceding factors are the same, the C-RP with the largest address wins.\n\nPrerequisites\nPIM has been enabled and the public network PIM instance view has been displayed using the pim command.\nPIM-SM has been enabled on the interface on which a C-RP is to be configured.\nTo use the groupPolicyValue the parameter, an ACL rule has been configured.\nConfiguration Impact\nIf the c-rp command is run more than once, the latest configuration overrides the previous one.\nIf address borrowing is configured, configuring a C-RP on interfaces that have the same addresses is not recommended. If the priorities of such interfaces are different, the BSR considers that the C-RP configuration is repeatedly modified."
+}

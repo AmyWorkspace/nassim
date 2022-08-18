@@ -1,0 +1,100 @@
+{
+    "PageTitle": "start (NQA view)",
+    "FuncDef": "The start command sets the start mode and end mode for an NQA test instance.\nThe undo start command stops the running NQA test instance. If the start at or start delay command is run but does not take effect, running the undo start command will delete the previous configuration. The undo start command functions the same as the stop command.\nBy default, the test stops automatically after test packets are sent.",
+    "CLIs": [
+        "start now",
+        "start now end at [ <yyyy/mm/dd> ] <hh:mm:ss>",
+        "start now end delay { seconds <second> | <hh:mm:ss> }",
+        "start now end lifetime { seconds <second> | <hh:mm:ss> }",
+        "start at [ <yyyy/mm/dd> ] <hh:mm:ss>",
+        "start at [ <yyyy/mm/dd> ] <hh:mm:ss> end at [ <yyyy/mm/dd> ] <hh:mm:ss>",
+        "start at [ <yyyy/mm/dd> ] <hh:mm:ss> end delay { seconds <second> | <hh:mm:ss> }",
+        "start at [ <yyyy/mm/dd> ] <hh:mm:ss> end lifetime { seconds <second> | <hh:mm:ss> }",
+        "start delay { seconds <second> | <hh:mm:ss> }",
+        "start delay { seconds <second> | <hh:mm:ss> } end at [ <yyyy/mm/dd> ] <hh:mm:ss>",
+        "start delay { seconds <second> | <hh:mm:ss> } end delay { seconds <second> | <hh:mm:ss> }",
+        "start delay { seconds <second> | <hh:mm:ss> } end lifetime { seconds <second> | <hh:mm:ss> }",
+        "start daily <hh:mm:ss> to <hh:mm:ss> [ begin { <yyyy/mm/dd> | <yyyy/mm/dd> } ] [ end { <yyyy/mm/dd> | <yyyy/mm/dd> } ]",
+        "undo start"
+    ],
+    "ParentView": [
+        "NQA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "now",
+            "Info": "Performs the test immediately.\n-"
+        },
+        {
+            "Parameters": "end",
+            "Info": "End a test.\n-"
+        },
+        {
+            "Parameters": "at",
+            "Info": "Start or end test at a time.\n-"
+        },
+        {
+            "Parameters": "yyyy/mm/dd",
+            "Info": "The date of test start or test end.\nyyyy specifies the yea, which is an integer ranging from 1970 to 9999. mm specifies the month, which is an integer ranging from 1 to 12. dd specifies the day, which is an integer ranging from 1 to 31."
+        },
+        {
+            "Parameters": "hh:mm:ss",
+            "Info": "Set the test start time, test end time, life time or delay time.\nhh specifies the hour, which is an integer ranging from 0 to 23. mm specifies the minute, which is an integer ranging from 0 to 59. ss specifies the second, which is an integer ranging from 0 to 59."
+        },
+        {
+            "Parameters": "delay",
+            "Info": "Start or end delay time.\n-"
+        },
+        {
+            "Parameters": "seconds second",
+            "Info": "The life time or delay time, in seconds.\nThe value is an integer ranging from 6 to 86399."
+        },
+        {
+            "Parameters": "lifetime",
+            "Info": "Set the test lifetime.\n-"
+        },
+        {
+            "Parameters": "daily",
+            "Info": "Start test daily.\n-"
+        },
+        {
+            "Parameters": "to",
+            "Info": "Range connector.\n-"
+        },
+        {
+            "Parameters": "begin",
+            "Info": "Begin a test.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance user test",
+            "[*HUAWEI-nqa-user-test] test-type icmp",
+            "[*HUAWEI-nqa-user-test] destination-address ipv4 10.1.1.1",
+            "[*HUAWEI-nqa-user-test] start now"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance user test",
+            "[*HUAWEI-nqa-user-test] test-type icmp",
+            "[*HUAWEI-nqa-user-test] destination-address ipv4 10.1.1.1",
+            "[*HUAWEI-nqa-user-test] start delay 10:00:00"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance user test",
+            "[*HUAWEI-nqa-user-test] test-type icmp",
+            "[*HUAWEI-nqa-user-test] destination-address ipv4 10.1.1.1",
+            "[*HUAWEI-nqa-user-test] start daily 12:00:00 to 13:00:00 begin 2009/10/19 end 2010/10/20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance user test",
+            "[*HUAWEI-nqa-user-test] test-type icmp",
+            "[*HUAWEI-nqa-user-test] destination-address ipv4 10.1.1.1",
+            "[*HUAWEI-nqa-user-test] start at 2009/10/19 12:12:12"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the start and end mode for an NQA test instance, run the start command.\nThe start command applies to the following scenarios:\nStarting or stopping a test instance at a specific time: Run the start at yyyy/mm/dd hh:mm:ss end at yyyy/mm/dd hh:mm:ss command.Starting a test instance at a specific time and stopping the test instance after a specified delay: Run the start at yyyy/mm/dd hh:mm:ss lifetime seconds second command.Starting a test instance after a specified delay and stopping the test instance at a specific time: Run the start delay seconds second end at yyyy/mm/dd hh:mm:ss command.Starting a test instance immediately and stopping the test instance after a specified delay: Run the start now lifetime seconds second command.Starting or stopping a test instance both at a fixed time every day: Run the start daily hh:mm:ss to hh:mm:ss command.\nUse a proper start mode of a test instance as needed.\n\nConfiguration Impact\nIf the start daily command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nIf the number of the running test instances reaches the maximum value defined by the system, the start command is invalid.\nFor the same test instance, the start now command can be used again only after the previous test is complete.\nIf a large number of test instances are running in a non-periodic test, wait for a period before starting new test instances."
+}

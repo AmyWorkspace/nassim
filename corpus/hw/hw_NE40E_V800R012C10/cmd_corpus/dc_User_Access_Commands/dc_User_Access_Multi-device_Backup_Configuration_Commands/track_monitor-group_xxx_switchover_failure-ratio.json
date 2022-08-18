@@ -1,0 +1,43 @@
+{
+    "PageTitle": "track monitor-group",
+    "FuncDef": "The track monitor-group command configures the remote backup service to track the interface monitoring group.\nThe undo track monitor-group command disables the tracking.\nBy default, the remote backup service does not track the interface monitoring group.",
+    "CLIs": [
+        "track monitor-group <group-name> switchover failure-ratio <percent>",
+        "undo track monitor-group <group-name> [ switchover failure-ratio <percent> ]"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of an interface monitoring group.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "switchover",
+            "Info": "Indicates a master/slave switchover.\n-"
+        },
+        {
+            "Parameters": "failure-ratio",
+            "Info": "Specifies a link bandwidth fault threshold.\n-"
+        },
+        {
+            "Parameters": "failure-ratio percent",
+            "Info": "Specifies a link bandwidth fault threshold percentage.\nThe value is an integer ranging from 1 to 100."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] monitor-group group1",
+            "[*HUAWEI-monitor-group-group1] binding interface GigabitEthernet 1/0/0 down-weight 20",
+            "[*HUAWEI-monitor-group-group1] binding interface GigabitEthernet 1/0/1 down-weight 40",
+            "[*HUAWEI-monitor-group-group1] binding interface GigabitEthernet 1/0/2 down-weight 60",
+            "[*HUAWEI-monitor-group-group1] quit",
+            "[*HUAWEI] remote-backup-service rbs",
+            "[*HUAWEI-rm-backup-service-rbs] commit",
+            "[~HUAWEI-rm-backup-service-rbs] track monitor-group IMG1 failure-ratio 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure the remote backup service to track the monitor group status so that the TCP connection failure or failure rectification can be detected, run the track monitor-group command.\nWhen the link on the network-side device fails, terminals cannot access the network. Therefore, when hot backup is deployed, a device must monitor the status of the link on the network side. If the link fails, a master/slave switchover is triggered on the access side, ensuring that terminals can properly access the network.\nGenerally, multiple links are deployed on the network side. If some links fail, downstream traffic may be congested. In this situation, a master/slave switchover must also be promptly triggered on the access side.\nConfiguration Impact\nAfter you run the track interface-group command in the remote backup service view in which the track interface command has been run, the device automatically deletes the track interface and switchover uplink configurations and then controls service switchover based on the track interface-group configuration.\nAfter you run the track interface-group command in the remote backup service view, you can no longer run the track interface or switchover uplink command.\nAn RBS can be configured to track two interface groups. When an interface in an interface group fails and conditions for a master/slave switchover are met (that is, the link bandwidth fault threshold percentage reaches the value specified by failure-ratio):\nA master/slave switchover is triggered for all RBP protocol groups associated with the RBS. You can run the backup-idremote-backup-service command in the remote backup profile view to view the association between the RBP and RBS. The RBP with the backup ID specified by is associated with the RBS with the name specified by .The network segment route selection of the IPv4/IPv6 address pool bound to the RBS is affected. During a master/slave switchover, a device automatically withdraws the network routes in the master address pool or changes the cost value of the network segment route in the master address pool to the maximum so that downstream traffic cannot reach the device. The device does not advertise address pool routes until the fault is rectified and traffic is switched back. (You can run the peer-backup route-cost advertising command in the system view to change the cost value to the maximum. If you do not perform configurations, the device withdraws network routes in the address pool by default.)\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nAn interface monitoring group has been created using the monitor-group command."
+}

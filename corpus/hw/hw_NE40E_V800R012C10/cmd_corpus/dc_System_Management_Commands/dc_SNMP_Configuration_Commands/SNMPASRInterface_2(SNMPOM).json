@@ -1,0 +1,42 @@
+{
+    "PageTitle": "snmp-agent protocol",
+    "FuncDef": "The snmp-agent protocol command configures SNMP to receive and respond to NMS IPv4 or IPv6 request packets through VPN instances or the public network.\nThe undo snmp-agent protocol command restores the default configuration.\nBy default, SNMP receives and responds to NMS IPv4 or IPv6 request packets through all VPN instances or the public network.",
+    "CLIs": [
+        "snmp-agent protocol [ ipv6 ] { vpn-instance <vpn-instance-name> | public-net }",
+        "undo snmp-agent protocol [ ipv6 ] { vpn-instance | public-net }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6",
+            "Info": "Configures SNMP to receive and respond to NMS IPv6 request packets through a VPN instance or the public network.\nIf the ipv6 parameter is not specified, SNMP receives and responds to NMS IPv4 request packets through a VPN instance or the public network.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance through which SNMP receives and responds to NMS request packets.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "public-net",
+            "Info": "Configures SNMP to receive and respond to NMS request packets through the public network.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance abc",
+            "[*HUAWEI-vpn-instance-abc] quit",
+            "[*HUAWEI] snmp-agent protocol vpn-instance abc"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent protocol public-net"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent protocol ipv6 public-net"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, SNMP receives and responds to NMS IPv4 or IPv6 request packets through all VPN instances or the public network, which has security risks. To reduce the risks and narrow down the attack scope, run the snmp-agent protocol [ ipv6 ] vpn-instance command to bind SNMP to a specified VPN instance so that only this VPN instance is listened to. If network management through the public network is required, run the snmp-agent protocol [ ipv6 ] public-net command to enable SNMP to listen to the public network to prevent security risks.\nConfiguration Impact\nAfter the snmp-agent protocol [ ipv6 ] vpn-instance command is run, the device can communicate with the NMS only through the SNMP Agent protocol bound to the specified VPN instance."
+}

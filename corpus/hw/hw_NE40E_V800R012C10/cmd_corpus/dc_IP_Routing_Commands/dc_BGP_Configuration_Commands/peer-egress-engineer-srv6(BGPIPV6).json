@@ -1,0 +1,63 @@
+{
+    "PageTitle": "peer egress-engineering srv6",
+    "FuncDef": "The peer egress-engineering srv6 command enables BGP egress peer engineering (EPE).\nThe undo peer egress-engineering srv6 command disables BGP EPE.\nBy default, the BGP EPE function is disabled.",
+    "CLIs": [
+        "peer <ipv6-address> egress-engineering srv6",
+        "peer <ipv6-address> egress-engineering srv6 locator <locator-name>",
+        "peer <ipv6-address> egress-engineering srv6 static-sid { psp <psp-sid> | no-psp-usp <no-psp-usp-sid> } *",
+        "undo peer <ipv6-address> egress-engineering srv6",
+        "undo peer <ipv6-address> egress-engineering srv6 locator <locator-name>",
+        "undo peer <ipv6-address> egress-engineering srv6 static-sid { psp <psp-sid> | no-psp-usp <no-psp-usp-sid> } *"
+    ],
+    "ParentView": [
+        "BGP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a peer.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "locator locator-name",
+            "Info": "Specifies the name of a SID node route locator, which was configured through the locator command.\nThe value is a string of 1 to 31 case-sensitive characters."
+        },
+        {
+            "Parameters": "static-sid",
+            "Info": "static SID.\n-"
+        },
+        {
+            "Parameters": "psp psp-sid",
+            "Info": "Specifies a static End.X SID (PSP).\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X. The value range is equal to the static SID range used with the locator specified in the segment-routing ipv6 egress-engineering locator command."
+        },
+        {
+            "Parameters": "no-psp-usp no-psp-usp-sid",
+            "Info": "Specifies a static End.X SID (no PSP, no USP).\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X. The value range is equal to the static SID range used with the locator specified in the segment-routing ipv6 egress-engineering locator command."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 1::1 as-number 200",
+            "[*HUAWEI-bgp] peer 1::1 egress-engineering srv6"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[~HUAWEI-segment-routing-ipv6] locator test ipv6-prefix 30::1 64 static 32",
+            "[~HUAWEI-segment-routing-ipv6-locator] bgp 100",
+            "[~HUAWEI-bgp] peer 1::1 as-number 200",
+            "[*HUAWEI-bgp] peer 1::1 egress-engineering srv6 locator test"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[~HUAWEI-segment-routing-ipv6] locator test ipv6-prefix 30::1 64 static 32",
+            "[~HUAWEI-segment-routing-ipv6-locator] bgp 100",
+            "[~HUAWEI-bgp] segment-routing ipv6 egress-engineering locator test",
+            "[*HUAWEI-bgp] peer 1::1 as-number 200",
+            "[*HUAWEI-bgp] peer 1::1 egress-engineering srv6 static-sid psp 30::1 no-psp-usp 30::2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe Border Gateway Protocol (BGP) is a dynamic routing protocol used between autonomous systems (ASs). BGP EPE is a BGP extension to segment routing and is used to implement source routing between ASs.\nBGP EPE allocates BGP peer SIDs to inter-AS paths. BGP-LS advertises the BGP peer SIDs to the network controller. The controller properly orchestrates IGP SIDs and BGP peer SIDs to implement inter-AS optimal path forwarding.\nAfter the peer egress-engineering srv6 command is run, a local device can assign peer node segment (peer-node SID) and peer adjacency segment (peer-Adj SID) values.\nA peer-node SID identifies a node on which a peer is configured.A peer-Adj SID identifies an adjacency to a peer.\n\nPrecautions\nBGP EPE takes effect only after BGP-LS is enabled using the link-state-family unicast command and SRv6 is enabled using the segment-routing ipv6 command.\nIf a locator is specified in the peer egress-engineering srv6 locator command, BGP EPE allocates SIDs from this locator to peers. If no locator is specified in the peer egress-engineering srv6 command, BGP EPE uses the locator specified in the segment-routing ipv6 egress-engineering locator command for allocation.\nA locator and a static SID cannot both be specified when you enable BGP EPE for a specified peer. If both of them are configured, the latter configuration overrides the previous one. If you want to specify a static SID, ensure that the value is in the static SID value range of the locator specified in the segment-routing ipv6 egress-engineering locator command and the SID value must be globally unique."
+}

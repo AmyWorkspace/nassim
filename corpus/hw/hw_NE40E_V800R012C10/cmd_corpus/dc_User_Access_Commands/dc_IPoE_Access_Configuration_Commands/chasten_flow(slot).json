@@ -1,0 +1,41 @@
+{
+    "PageTitle": "chasten flow(slot)",
+    "FuncDef": "The chasten flow(slot) command restricts the number of HTTPS flows that can be established on board in a specified slot.\nThe undo chasten flow(slot) command cancels the restriction on the number of HTTPS flows that can be established on the board in a specified slot.\nBy default, the global configuration is used. If no global configuration is available, the maximum number of HTTPS flow tables established on a device is 300, the period for establishing HTTPS flow tables is 30 seceonds, the period in which an HTTPS flow blocked is 30 seconds, and one TCP SYN packet is processed per second in the block state.",
+    "CLIs": [
+        "chasten flow <connection-sessions> <connection-period> <blocking-period> <blocking-rate> slot <slotid>",
+        "undo chasten flow <connection-sessions> <connection-period> <blocking-period> <blocking-rate> slot <slotid>"
+    ],
+    "ParentView": [
+        "HTTPS redirect view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "slot slotid",
+            "Info": "Specifies the slot ID.\nThe value is a string of 1 to 16 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "flow connection-sessions",
+            "Info": "Specifies the number of HTTPS flow tables to be created.\nThe value is an integer ranging from 1 to 10000."
+        },
+        {
+            "Parameters": "flow connection-period",
+            "Info": "Specifies the time for creating the HTTPS flow table.\nThe value is an integer ranging from 1 to 3600, in seconds."
+        },
+        {
+            "Parameters": "flow blocking-period",
+            "Info": "Specifies the block time for HTTPS flow setup.\nThe value is an integer ranging from 1 to 3600, in seconds."
+        },
+        {
+            "Parameters": "flow blocking-rate",
+            "Info": "Specifies the HTTPS SYN packet processing rate in blocking state.\nThe value is an integer ranging from 1 to 10, in packets/second."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] access https-redirect",
+            "[~HUAWEI-access-https-redirect] chasten flow 9000 3000 3000 1 slot 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo prevent some users from using HTTPS TCP SYN packets with changing destination IP addresses to attack the device so that the HTTPS redirection function is not affected for other users, you need to restrict the rate at which HTTPS flows are established on the board in a specified slot. You can run the chasten flow(slot) command to configure the number of seconds during which a device is frozen if the number of HTTPS flows established on the device within a specified period exceeds the preset threshold. Within this freezing period, the device discards the extra HTTPS TCP SYN packets sent by the user.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf both the chasten flow(slot) and chasten flow commands are run, the chasten flow(slot) command configuration takes effect."
+}

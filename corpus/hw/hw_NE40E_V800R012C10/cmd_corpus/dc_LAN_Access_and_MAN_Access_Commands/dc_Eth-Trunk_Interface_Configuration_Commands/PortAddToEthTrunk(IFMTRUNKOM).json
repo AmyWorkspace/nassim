@@ -1,0 +1,57 @@
+{
+    "PageTitle": "eth-trunk",
+    "FuncDef": "The eth-trunk command adds an Ethernet interface to an Eth-Trunk interface.\nThe undo eth-trunk command deletes an Ethernet interface from an Eth-Trunk interface.\nBy default, no Ethernet interface is added to an Eth-Trunk interface.",
+    "CLIs": [
+        "eth-trunk <trunk-id> [ mode { passive | active } ]",
+        "undo eth-trunk"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "40GE interface view",
+        "GE interface view",
+        "Layer 2 50GE interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "50GE interface view",
+        "Layer 2 GE interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "Layer 2 100GE interface view",
+        "25GE interface view",
+        "Layer 2 50|100GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "trunk-id",
+            "Info": "Specifies the ID of an Eth-Trunk interface.\nThe Eth-Trunk ID is an integer ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "mode",
+            "Info": "Indicates a mode in which the member interface of an Eth-Trunk interface in static LACP mode sends LACPDUs.\nThis parameter can be specified only for Eth-Trunk interfaces in static LACP mode.\nIf this parameter is not specified, member interfaces of an Eth-Trunk interface in static LACP mode send LACPDUs in active mode.\n-"
+        },
+        {
+            "Parameters": "passive",
+            "Info": "Indicates the passive mode in which the member interface of an Eth-Trunk interface in static LACP mode sends LACPDUs.\nMember interfaces in passive mode respond to LACPDUs only when receiving LACPDUs from the peer end that works in active mode.\n-"
+        },
+        {
+            "Parameters": "active",
+            "Info": "Indicates the active mode in which the member interface of an Eth-Trunk interface in static LACP mode sends LACPDUs.\nMember interfaces in active mode proactively send LACPDUs to the peer end for negotiation.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] eth-trunk 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run the eth-trunk command to add physical interfaces to an Eth-Trunk interface to increase the bandwidth, improve reliability, and perform load balancing.\nYou can run the undo eth-trunk command in the view of a member interface to delete the member interface from the Eth-Trunk interface. You can also run the undo trunkport command in the Eth-Trunk interface view to delete a member interface from an Eth-Trunk interface.\nPrerequisites\nThe Eth-Trunk interface to which Ethernet interfaces will be added has been successfully created.\nEthernet interfaces are not configured with any service. For example:\nLayer 3 configurations such as IP addresses\nStatic MAC entries\nConfiguration Impact\nAfter physical interfaces are added to an Eth-Trunk interface:\nBandwidth is increased: The bandwidth of an Eth-Trunk interface is the total bandwidth of all member interfaces.Reliability is improved: When a member link fails, traffic automatically switches to other available member links. This ensures reliability of Eth-Trunk.\nIf an Eth-Trunk interface is configured with services, interfaces added to the Eth-Trunk interface take over the services.\n\nPrecautions\nEth-Trunk consists of only Ethernet links.\nEth-Trunk interfaces cannot be added to Eth-Trunk interfaces.\nAn Ethernet interface can be added to only one Eth-Trunk interface. Before adding an Ethernet interface to another Eth-Trunk interface, you must delete it from the original Eth-Trunk interface.\nEthernet interfaces with different rates can be added to the same Eth-Trunk interface. If no weight is configured for any member interface through the distribute-weight command, the weight of each member interface is the same. In this case, the lowest forwarding capability among all member interfaces is adopted and applied to each member interface. Therefore, it is not recommended that you bundle interfaces with different forwarding capacities into an Eth-Trunk interface.\nEthernet interfaces on different interface boards can be added to the same Eth-Trunk interface.\nIf a member interface of an Eth-Trunk interface is connected to the peer, the directly connected interface on the peer must also be a member interface of an Eth-Trunk interface; otherwise, the devices cannot communicate with each other.\nIn a port extension scenario, a member interface must be shut down before it is added to an internal communication Eth-Trunk interface. Otherwise, services may be compromised.\n\nEach Eth-Trunk interface can contain up to 64 member interfaces."
+}

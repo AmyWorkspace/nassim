@@ -1,0 +1,34 @@
+{
+    "PageTitle": "pim holdtime assert(Mtunnel View)",
+    "FuncDef": "The pim holdtime assert command sets a timeout period during which a PIM interface waits to receive Assert messages from the forwarder.\nThe undo pim holdtime assert command restores the default timeout period.\nBy default, the timeout period of an interface is 180 seconds.",
+    "CLIs": [
+        "pim holdtime assert <interval>",
+        "undo pim holdtime assert"
+    ],
+    "ParentView": [
+        "MTI interface view",
+        "Mtunnel view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies a timeout period during which a PIM interface waits to receive Assert messages from the forwarder.\nThe value is an integer ranging from 7 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance mytest",
+            "[*HUAWEI-vpn-instance-mytest] ipv4-family",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain share-group 224.1.1.1 binding mtunnel 10",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-mytest-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-mytest] quit",
+            "[~HUAWEI] interface Mtunnel 10",
+            "[~HUAWEI-MTunnel10] pim holdtime assert 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo prevent redundant traffic, a shared network segment should have only one forwarder. Therefore, each router sends an Assert message immediately after its forwarding interface receives the same multicast packet on a shared network segment, which indicates that more than one forwarder exists. Then, the routers elect a unique forwarder, called the assert winner. The assert winner periodically sends Assert messages to maintain its winner state. The router that fails in the election disable its downstream interfaces from forwarding multicast data within a specified timeout period, but restore the pruned interfaces to forward packets if they do not receive any Assert messages from the assert winner after the timeout period expires. To set such a timeout period, run the pim holdtime assert command.\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nConfiguration Impact\nIf the pim holdtime assert command is run more than once, the latest configuration overrides the previous one."
+}

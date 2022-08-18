@@ -1,0 +1,49 @@
+{
+    "PageTitle": "fec",
+    "FuncDef": "The fec command configures a forward error correction (FEC) mode for an Ethernet interface.\nThe undo fec command restores the default FEC mode of an Ethernet interface.\nBy default, the standard FEC mode of the ethernet interface is enabled.",
+    "CLIs": [
+        "fec { standard | enhanced-i-4 | enhanced-i-7 | none | enhanced | lhaul-sd }",
+        "fec { standard | none }",
+        "undo fec"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "40GE interface view",
+        "WDM interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "standard",
+            "Info": "Indicates the standard G.709 FEC mode.\n-"
+        },
+        {
+            "Parameters": "enhanced-i-4",
+            "Info": "Indicates the enhanced G.9751.1 I/4 mode.\nThis mode is supported only on the 10G OTN subcard or board.\n-"
+        },
+        {
+            "Parameters": "enhanced-i-7",
+            "Info": "Indicates the enhanced G.9751.1 I/7 mode.\nThis mode is supported only on the 10G OTN subcard or board.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "Cancels the FEC mode.\n-"
+        },
+        {
+            "Parameters": "enhanced",
+            "Info": "Indicates the enhanced FEC mode.\nThis mode is supported only on the CR5D00D2NT70 card and the interface on which the 100Gbps CFP2 DWDM optical module is installed.\n-"
+        },
+        {
+            "Parameters": "lhaul-sd",
+            "Info": "Indicates the SD FEC mode of a WDM interface.\nThis mode is supported only on the interface with the 100Gbps CFP2 DWDM optical module installed.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] fec standard"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen an interface works in OTN mode, you can run the fec command to configure the FEC mode of the interface. When the interface works in LAN mode, the fec command cannot be configured.\nThe preceding FEC modes have different internal error correction algorithms. Different vendors support different FEC modes. The same FEC mode must be configured on interconnected devices. Otherwise, FEC bit errors may occur. If FEC bit errors occur, check the remote device's FEC mode and run the fec command to change the local device's FEC mode to be the same as that of the remote device.\nConfiguration Impact\nThe FEC mode configuration causes the threshold configured using the otn prefec-tca command to be changed to the following:\nIf the FEC mode is configured as none or standard, the associated FEC bit error alarm threshold is 1E-6 with a detection interval of 3s, and the clear alarm threshold is 1E-7 with a detection interval of 30s.If the FEC mode is configured as enhanced-i-4 or enhanced-i-7, the associated FEC bit error alarm threshold is 5E-5 with a detection interval of 3s, and the clear alarm threshold is 5E-6 with a detection interval of 30s.\n\nPrecautions\nYou must set the same FEC mode for two connected WDM interfaces.An FEC mode must be set for a 100GE OTU4 interface according to the G.709 protocol requirement. Otherwise, an error is reported, or packet loss occurs.When you run the fec command, note that the enhanced, enhanced-i-4, and enhanced-i-7 modes cannot be configured for different interfaces on the same subcard.If an FEC mode is configured on an interface with a 100 Gbit/s CFP2 DWDM optical module inserted, the FEC mode configuration takes a maximum of 190s to take effect. To check whether the configuration takes effect, run the display this interface command. (The model of the optical module is OSNB00C02, 118Gbps(4*25.78/4*27.95)-CFP2-SMF-192.1-196.05THz-1200km-commercial.)After the fec lhaul-sd configuration is complete, set the signal-coding dqpsk tx value based on the optical module type. For details about the parameter value, see the optical module description in the product documentation. Hardware Description-Optical Module-100Gbps CFP2 Optical DWDM Module.\n6.In VS mode, this command is supported only by the admin VS."
+}

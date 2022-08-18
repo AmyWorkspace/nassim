@@ -1,0 +1,52 @@
+{
+    "PageTitle": "preference (RIPng view)",
+    "FuncDef": "The preference command specifies a priority for RIPng routes. Alternatively, you can set a priority for a specific route using a route-policy.\nThe undo preference command restores the default setting.\nBy default, the priority of RIPng routes is 100.",
+    "CLIs": [
+        "preference { { route-policy <route-policy-name> | route-filter <route-filter-name> } | <value> } *",
+        "undo preference"
+    ],
+    "ParentView": [
+        "RIPng view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy, using which the priority of the routes meeting matching conditions can be set.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter, using which the priority of the routes meeting matching conditions can be set.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "value",
+            "Info": "Specifies the priority of RIPng routes.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ripng 100",
+            "[*HUAWEI-ripng-100] preference 120"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy1 permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] ripng 100",
+            "[*HUAWEI-ripng-100] preference route-policy policy1 60"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ripng 100",
+            "[*HUAWEI-ripng-100] undo preference"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy filter1 permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] ripng 100",
+            "[*HUAWEI-ripng-100] preference route-filter filter1(10,11,12,13,14,15,16,17) 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe smaller the priority value, the higher the priority. To enable RIPng routes to have a higher priority than the routes learned from other IGPs, set a smaller priority value for the RIP routes. The priority determines which algorithm is used to calculate the optimal route among the routes in the IP routing table.\nPrerequisites\nA route-policy has been configured using the route-policy command.\nConfiguration Impact\nIf the preference command is run more than once, the latest configuration overrides the previous one."
+}

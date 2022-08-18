@@ -1,0 +1,92 @@
+{
+    "PageTitle": "mld static-group(mld)",
+    "FuncDef": "The mld static-group command adds a sub-interface to an IPv6 multicast group statically.\nThe undo mld static-group command deletes the IPv6 multicast group to which an interface is statically added.\nBy default, an interface is not added to any IPv6 multicast group statically.",
+    "CLIs": [
+        "mld static-group <ipv6-group-address> [ inc-step-mask <ipv6-group-mask-length> number <group-number> ] [ source <ipv6-source-address> ]",
+        "undo mld static-group { all | <ipv6-group-address> inc-step-mask <ipv6-group-mask-length> number <group-number> [ source <ipv6-source-address> ] }",
+        "undo mld static-group <ipv6-group-address> [ source <ipv6-source-address> ]"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-group-address",
+            "Info": "Specifies the IP address of the IPv6 multicast group to which an interface is statically added. In batch configuration mode, this parameter specifies the initial address of the multicast group range.\nThe value is in the hexadecimal notation and in the format of FFxA:xxxx:xxxx::xxxx, among which x ranges from 0 to F and A ranges from 3 to F or can be 0."
+        },
+        {
+            "Parameters": "inc-step-mask ipv6-group-mask-length",
+            "Info": "Specifies the incremental mask step in batch configuration mode.\nThe value is an integer ranging from 9 to 128."
+        },
+        {
+            "Parameters": "number group-number",
+            "Info": "Specifies the number of IPv6 group addresses in batch configuration mode.\nThe value is an integer ranging from 2 to 512."
+        },
+        {
+            "Parameters": "source ipv6-source-address",
+            "Info": "Specifies the IPv6 address of a multicast source. source-address specifies a multicast source address.\nThe address is in hexadecimal notation."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates that the interface is statically added to all IPv6 multicast groups.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld static-group ff03::101"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld static-group ff04::202 source 2001:DB8::101"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld static-group ff25::1 inc-step-mask 24 number 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld static-group ff33::1 inc-step-mask 24 number 2 source 2001:DB8::101"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf user hosts want to receive IPv6 multicast data for a Multicast Listener Discovery (MLD) group stably for a long time or to ensure that MLD group memberships on the user network segment are stable, run the mld static-group command to add the interface connected to user hosts to MLD groups statically. In this manner, the interface can fast respond to users' requests, thereby reducing the channel switch time.\nIf user hosts want to receive IPv6 multicast data for an MLD group from a specific multicast source for a long time, set the source SourceAddr parameter in the mld static-group command to specify the IPv6 multicast source address.\nThe mld static-group command is run on the interface connected to user hosts. The interface can be added to a single IPv6 multicast group or source/group, or be added to multiple IPv6 multicast groups or source/groups in batches.\nPrerequisites\nThe multicast ipv6 routing-enable command is run in the public network instance view.\nFollow-up Procedure\nIf user hosts no longer want to receive IPv6 multicast data for a group, manually delete the configurations of static MLD groups from the interface connected with user hosts.\nPrecautions\nYou are allowed to configure overlapped multicast group addresses in different batch configurations.\nAfter batch static multicast groups are configured on an interface, you cannot perform the deletion operation before the system completes the batch join processing.\nThe command fails to be run in the VLANIF interface view in the following condition:\nVLAN aggregation is enabled in the corresponding VLAN."
+}

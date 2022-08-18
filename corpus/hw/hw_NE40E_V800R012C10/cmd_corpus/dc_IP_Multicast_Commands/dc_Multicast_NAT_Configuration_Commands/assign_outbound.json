@@ -1,0 +1,66 @@
+{
+    "PageTitle": "assign outbound",
+    "FuncDef": "The assign outbound command adds an output multicast stream to a multicast NAT outbound group.\nThe undo assign outbound command deletes an output multicast stream from a multicast NAT outbound group.\nBy default, no output multicast stream exists in a multicast NAT outbound group.",
+    "CLIs": [
+        "assign outbound id <outbound-id> [ name <outbound-name> ] part <part-id> [ type { video-stream | audio-stream | ancillary-data } ]",
+        "undo assign outbound id <outbound-id> [ name <outbound-name> ] part <part-id> [ type { video-stream | audio-stream | ancillary-data } ]"
+    ],
+    "ParentView": [
+        "multicast-nat-outbound-group"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "name outbound-name",
+            "Info": "Specifies the name of an output multicast stream.\nThe value is a string of 1 to 127 case-sensitive characters. It cannot contain spaces."
+        },
+        {
+            "Parameters": "part part-id",
+            "Info": "Specifies the sequence number of an output multicast stream in a multicast NAT outbound group.\nThe value is an integer ranging from 1 to 16."
+        },
+        {
+            "Parameters": "type",
+            "Info": "Specifies the type of media streams.\n-"
+        },
+        {
+            "Parameters": "video-stream",
+            "Info": "Sets the type of media streams to video stream when an output multicast stream is added to a multicast NAT outbound group.\n-"
+        },
+        {
+            "Parameters": "audio-stream",
+            "Info": "Sets the type of media streams to audio stream when an output multicast stream is added to a multicast NAT outbound group.\n-"
+        },
+        {
+            "Parameters": "ancillary-data",
+            "Info": "Sets the type of media streams to ancillary data when an output multicast stream is added to a multicast NAT outbound group.\n-"
+        },
+        {
+            "Parameters": "id outbound-id",
+            "Info": "Specifies the ID of an output multicast stream.\nThe value is an integer ranging from 1 to 16000."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast-nat enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] multicast-nat outbound id 1 name out1 src-mac auto-translate src-ip 10.0.0.1 dst-ip 225.0.0.1 dst-udp-port 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] multicast-nat outbound id 2 name out2 src-mac auto-translate src-ip 10.0.0.1 dst-ip 225.0.0.2 dst-udp-port 101",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] multicast-nat outbound-group id 1 name group1",
+            "[*HUAWEI-multicast-nat-outbound-group-1] assign outbound id 1 part 1 type video-stream",
+            "[*HUAWEI-multicast-nat-outbound-group-1] assign outbound id 2 part 2 type audio-stream"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast-nat enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] multicast-nat outbound id 1 name out1 src-mac auto-translate src-ip 10.0.0.1 dst-ip 225.0.0.1 dst-udp-port 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] multicast-nat outbound id 2 name out2 src-mac auto-translate src-ip 10.0.0.1 dst-ip 225.0.0.2 dst-udp-port 101",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] multicast-nat outbound-group id 1 name group1",
+            "[*HUAWEI-multicast-nat-outbound-group-1] assign outbound id 1 part 1",
+            "[*HUAWEI-multicast-nat-outbound-group-1] assign outbound id 2 part 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn multicast NAT, to translate an input multicast stream into output multicast streams, create a multicast NAT instance and then associate the input multicast stream with the multicast NAT instance. If there are multiple input multicast streams (that is, multiple multicast NAT instances exist) and you want to place the streams together based on unified rules, you can create a multicast NAT instance group and add those multicast NAT instances to the group. If the multicast input is a multicast NAT instance group, the multicast output must be a multicast NAT outbound group. To add an outbound multicast stream to a multicast NAT outbound group, run the assign outbound command.\nPrerequisites\nMulticast NAT has been globally enabled using the multicast-nat enable command.\nMulticast stream translation has been enabled on an outbound interface and multicast stream translation parameters have been configured using the multicast-nat outbound command.\nA multicast NAT outbound group has been created using the multicast-nat outbound group command.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf none of video-stream, audio-stream, and ancillary-data is specified, the default stream type is retained when an output multicast stream is added to a multicast NAT outbound group.\nBefore adding output multicast streams to a multicast NAT outbound group, you must either specify the type of media streams or retain the default stream type for the multicast NAT outbound group."
+}

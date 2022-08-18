@@ -1,0 +1,35 @@
+{
+    "PageTitle": "user-max-session",
+    "FuncDef": "The user-max-session command sets the maximum number of users that can use the same user account and enable the policing on the total service traffic of all the access users using the same account.\nThe undo user-max-session command cancels the threshold of sessions for a user account.\nBy default, the number of sessions and total number of service traffic for a user account are not configured.",
+    "CLIs": [
+        "user-max-session <max-session-number> [ case-insensitive local-user-name ]",
+        "undo user-max-session"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "max-session-number",
+            "Info": "Specifies the maximum number of users that can use the same user account.\nIt is an integer ranging from 0 to 3145728."
+        },
+        {
+            "Parameters": "case-insensitive",
+            "Info": "Specifies that the user account is case-insensitive.\n-"
+        },
+        {
+            "Parameters": "local-user-name",
+            "Info": "Specifies that the local user account is case-insensitive.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain domain1",
+            "[*HUAWEI-aaa-domain-domian1] commit",
+            "[*HUAWEI-aaa-domain-domian1] user-max-session 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy configuring this command controls the number of sessions set up by users with the same account (user name), thereby restricting the total bandwidth. After the command is configured, the users with the same user name share QoS resources. If there are users already online before this function is configured, the online users are allocated QoS resources separately. Only the users going online after the user-max-session is configured share QoS resources.\nAfter the user-max-session command is run, all the users using the same account share bandwidth.\nIf the case-insensitive local-user-name parameter is specified in the command, the user name is case insensitive when a user is authenticated by the local server. By default, the local user name is case sensitive.\nWhen web authentication is used, identify the method of generating user names in the pre-authentication domain and set an appropriate max-session-number value to prevent users in the pre-authentication domain from logging in. For example, user names in a pre-authentication domain are generated based on interface and VLAN information, and therefore, names of the users logging in from the same interface in the same VLAN are the same. If the user-max-session max-session-number parameter in the pre-authentication domain is set to a small value and a large number of users attempt to log in to the network from the same VLAN, some users fail to log in.\nPrecautions\nThe maximum allowable number of access users can be configured when the number of online users exceeds the configured maximum number of access users.\nIn VS mode, this command is supported only by the admin VS."
+}

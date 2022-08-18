@@ -1,0 +1,27 @@
+{
+    "PageTitle": "dhcpv6 option-37 offset",
+    "FuncDef": "The dhcpv6 option-37 offset command configures an offset value for DHCPv6 Option 37 so that the bytes after the specified offset value is used for user authentication.\nThe undo dhcpv6 option-37 offset command restores the default configuration.\n\nBy default,an offset value of 4 bytes applies to Option 37.so that the system removes the enterprise number from Option 37 if the following conditions are met:\n\n\n The device is disabled from parsing Option 37 of any format in DHCPv6 Solicit or Request messages.\n\n The device is disabled from performing a strict check on DHCPv6 messages.\n\n The length of the remote-id field of Option 37 is 10 or 16 bytes.\n\n\nIf the preceding conditions are not met at the same time and the dhcpv6 option-37 offset offset-value command is not run, an offset value of 0 is applied, indicating that the value carried in Option 37 is used for user authentication without an offset.",
+    "CLIs": [
+        "dhcpv6 option-37 offset <offset-value>",
+        "undo dhcpv6 option-37 offset <offset-value>"
+    ],
+    "ParentView": [
+        "BAS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "offset-value",
+            "Info": "Specifies an offset value for Option 37 so that only the bytes after the specified offset value is used for user authentication.\nThe value is an integer that ranges from 1 to 254 ."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet3/0/0",
+            "[~HUAWEI-GigabitEthernet3/0/0] bas",
+            "[~HUAWEI-GigabitEthernet3/0/0-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet3/0/0-bas] dhcpv6 option-37 offset 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAccording to the protocol, a DHCPv6 remote ID (option37) carries an enterprise code, whereas Option 82 in DHCPv4 packets does not carry an enterprise code. The downstream devices of the BRAS may insert Option fields into the user access packets. Specifically, Option 82 is inserted into DHCPv4 packets, and Option 18 and Option 37 are inserted into DHCPv6 packets. When a dual-stack user attempts to go online, the BRAS processes only the authentication packets of the user on the first stack. Therefore, given that a client trusts both Option 82 and Option 37, the Option 82 information to be used for the authentication of the user when it goes online first from the IPoEv4 stack is different from that of the user when it goes online first from the IPoEv6 stack. To resolve this problem, you can configure the offset length of Option 37.\nThe 4-byte enterprise code can be offset when Option 37 is parsed in the received packets if all of the following conditions are met: 1. The function to parse remote-id of any format is not enabled. 2. Strict check on DHCPv6 packets is not enabled. 3. The Option length of remote-id is 10 or 16.\nThis command applies to both the scenario where a four-byte enterprise code is removed from remote-id and the scenario where a four-byte enterprise code is not removed from remote-id. The parsed remote-id can be offset only when Option 82 is encapsulated and the remaining length of remote-id is greater than the configured offset length. Whether offset is implemented depends on actual network conditions.\nThe offset configured using this command does not take effect when the remaining length of remote-id is less than the configured offset length.\nPrerequisites\nA BAS interface has been created using the bas command in the interface view, and the access type of the BAS interface has been configured using the access-type command.\nConfiguration Impact\nThe dhcpv6 option-37 offset offset-value command takes effect immediately after being run. This command takes effect for subsequent users only."
+}

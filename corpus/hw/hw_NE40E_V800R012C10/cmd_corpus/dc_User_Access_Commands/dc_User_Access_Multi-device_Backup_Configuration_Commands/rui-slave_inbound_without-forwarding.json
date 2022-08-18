@@ -1,0 +1,30 @@
+{
+    "PageTitle": "rui-slave inbound without-forwarding",
+    "FuncDef": "The rui-slave inbound without-forwarding command disables the slave device in a backup group from forwarding backup packets.\nThe undo rui-slave inbound without-forwarding command enables the slave device in a backup group to forward backup packets.\nBy default, the slave device in a backup group is enabled to forward backup packets.",
+    "CLIs": [
+        "rui-slave inbound without-forwarding",
+        "undo rui-slave inbound without-forwarding"
+    ],
+    "ParentView": [
+        "Remote backup profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates the user-to-network direction.\n-"
+        },
+        {
+            "Parameters": "without-forwarding",
+            "Info": "Indicates that current packets are not forwarded.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-profile rui",
+            "[*HUAWEI-rm-backup-prf-rui] commit",
+            "[~HUAWEI-rm-backup-prf-rui] rui-slave inbound without-forwarding"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn hot backup scenarios, when a switch sends a broadcast packet, the packet is copied to the slave device. If the slave device is not required to forward the packet, you can run the rui-slave inbound without-forwarding command to disable the slave device from forwarding the packet.\nConfiguration Impact\nAfter this command is configured in hot backup scenarios, traffic is lost during a master/slave switchover. The switchover time is about 50 ms, and the switchback time is at the second level.\nThe VRRP table of an interface (for example, interface 1/0/0) on a board LPUF-50/LPUF-50-L/LPUI-21-L/LPUI-51-L/LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUI-51-S/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101/LPUF-51-E/LPUI-51-E/LPUI-51-CM/LPUF-120/LPUF-120-B/LPUF-120-E/LPUI-102-E/LPUI-120/LPUI-120-B/LPUI-120-L/LPUI-52-E/LPUI-120-E/LPUI-120-CM/LPUF-240/LPUF-240-B/LPUF-240-E/LPUI-240/LPUI-240-B/LPUI-240-CM/LPUI-240-L/LPUF-480/LPUF-480-B/LPUI-480/LPUI-480-B/LPUI-480-L/LPUF-480-E/LPUI-480-CM/LPUI-200/LPUI-200-L/LPUF-200/LPUF-200-B/LPUI-1T/LPUI-1T-B/LPUI-1T-L/LPUI-1T-CM/LPUI-2T/LPUI-2T-B/LPUI-2T-CM/LPUF-481/LPUF-402-E/LPUI-241/LPUI-241-B/LPUI-241-CM//LPUF-241/LPUF-241-E/LPUF-52/LPUF-1T-E/LPUI-1T-CM/LPUF-1T-L is deleted if the following conditions are met: A VRRP backup group has been configured on the interface and its status is Master. A VRRP backup group with the same VRID as the VRRP backup group configured on the interface is bound to the RBP; The RBP is bound to the interface 1/0/0.x; The rui-slave inbound without-forwarding command is configured in the RBP view. Then, the services related to the VRRP backup group configured on the main interface are affected.\nThe bitmap corresponding to the VRRP table of the main interface is set to 0 on a non-board LPUF-50/LPUF-50-L/LPUI-21-L/LPUI-51-L/LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUI-51-S/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101/LPUF-51-E/LPUI-51-E/LPUI-51-CM/LPUF-120/LPUF-120-B/LPUF-120-E/LPUI-102-E/LPUI-120/LPUI-120-B/LPUI-120-L/LPUI-52-E/LPUI-120-E/LPUI-120-CM/LPUF-240/LPUF-240-B/LPUF-240-E/LPUI-240/LPUI-240-B/LPUI-240-CM/LPUI-240-L/LPUF-480/LPUF-480-B/LPUI-480/LPUI-480-B/LPUI-480-L/LPUF-480-E/LPUI-480-CM/LPUI-200/LPUI-200-L/LPUF-200/LPUF-200-B/LPUI-1T/LPUI-1T-B/LPUI-1T-L/LPUI-1T-CM/LPUI-2T/LPUI-2T-B/LPUI-2T-CM/LPUF-481/LPUF-402-E/LPUI-241/LPUI-241-B/LPUI-241-CM//LPUF-241/LPUF-241-E/LPUF-52/LPUF-1T-E/LPUI-1T-CM/LPUF-1T-L if the following conditions are met: Two VRRP backup groups with the same VRID are configured on different sub-interfaces of a main interface (For example, a VRRP backup group has been configured on the interface 1/0/0.1 and its status is backup, but a VRRP backup group with the same VRID has been configured on the interface 1/0/0.6 and its status is Master); The RBP is bound to the interface 1/0/0.3, and a backup VRRP backup group is configured in the RBP view; The rui-slave inbound without-forwarding command is configured in the RBP view. However, since sub-interface 1/0/0.6 of this main interface is using the VRRP table, the VRRP table of the corresponding interface cannot be set invalid and backup without forwarding will be affected.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe peer-backup virtual command is configured in the view of the RBP because the slave device in a backup group still needs to forward backup packets. When the rui-slave inbound without-forwarding command is run after the peer-backup virtual command has been configured in the RBP view, a message is displayed, indicating that the rui-slave inbound without-forwarding command cannot be run in virtual backup scenarios. In hot backup scenarios, when the peer-backup virtual command is run after the rui-slave inbound without-forwarding command has been configured in the RBP view, a message is displayed, indicating that the peer-backup virtual command cannot be run. To run the peer-backup virtual command, you must delete the rui-slave inbound without-forwarding command configuration.The rui-slave inbound without-forwarding command must be configured on both the master and slave devices. When a master/slave switchover is performed, the rui-slave inbound without-forwarding command configured on the master device takes effect.In a dual-device hot backup scenario, if multiple RBPs are bound to the same VRRP backup group, all slave devices of the RBPs are allowed to forward packets even if packet forwarding is enabled only for some RBPs."
+}

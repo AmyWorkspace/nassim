@@ -1,0 +1,39 @@
+{
+    "PageTitle": "filter-policy acl",
+    "FuncDef": "The filter-policy acl command configures an interface to filter users based on ACL rules.\nThe undo filter-policy acl command restores the default configuration.\nBy default, the BAS interface does not filter users based on ACL rules.",
+    "CLIs": [
+        "filter-policy acl <acl-number> { dhcp | ppp } *",
+        "undo filter-policy acl [ dhcp | ppp ]"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the ACL number.\nThe value is in integer, ranging from 4000 to 4999."
+        },
+        {
+            "Parameters": "dhcp",
+            "Info": "Indicates DHCP users.\n-"
+        },
+        {
+            "Parameters": "ppp",
+            "Info": "Indicates PPP users.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/1.1] bas",
+            "[~HUAWEI-GigabitEthernet1/0/1.1-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet1/0/1.1-bas] filter-policy acl 4000 dhcp",
+            "[~HUAWEI-GigabitEthernet1/0/1.1-bas] filter-policy acl 4200 ppp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen DHCP or PPP users go online from a BAS interface, run the filter-policy acl command to match users' source MAC addresses against ACL rules. The users whose MAC addresses match ACL rules are allowed to log in.\nPrerequisites\nThe access-type command has been run on the BAS interface.\nConfiguration Impact\nIf ACL rules are applied more than once to users of the same type, the latest configuration overrides the previous one.\nPrecautions\nThe command configures the device to filter users based on source MAC addresses, and only rules related to source MAC addresses can be configured in the ACL policy.\nBecause IP addresses are assigned to DHCP users based on the MAC addresses contained in user DHCP packets, if you run the filter-policy acl acl-number dhcp command to filter users, the command the command filters users based on source MAC addresses contained in the DHCP packets, rather than those contained in the Ethernet headers. This command cannot filter out attackers whose MAC addresses contained in Ethernet headers are inconsistent with those contained in DHCP packets. To protect the device from this kind of attack, run the dhcp check chaddr command.\nThe filter-policy acl acl-number ppp command applies to PPPoE and L2TP users."
+}

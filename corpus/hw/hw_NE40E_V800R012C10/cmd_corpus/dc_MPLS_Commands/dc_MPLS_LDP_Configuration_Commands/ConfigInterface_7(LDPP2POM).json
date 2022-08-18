@@ -1,0 +1,54 @@
+{
+    "PageTitle": "mpls ldp local-lsr-id (Interface view)",
+    "FuncDef": "The mpls ldp local-lsr-id command configures the primary IP address of a specified interface as a local LSR ID of the existing LDP session.\nThe undo mpls ldp local-lsr-id command restores the default primary IP address.\nBy default, the current LDP session uses the LSR ID of an LDP instance as a local LSR ID.",
+    "CLIs": [
+        "mpls ldp local-lsr-id { <interface-type> <interface-number> | <interface-name> }",
+        "mpls ldp local-lsr-id interface",
+        "undo mpls ldp local-lsr-id"
+    ],
+    "ParentView": [
+        "FlexE interface view",
+        "XGE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "50GE interface view",
+        "GMPLS-UNI interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Configures the primary IP address of a specified interface as an LSR ID.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the interface name.\n-"
+        },
+        {
+            "Parameters": "interface",
+            "Info": "Indicates the primary IP address of the current interface as an LSR ID.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls ldp",
+            "[*HUAWEI-mpls-ldp] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls ldp",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls ldp local-lsr-id interface"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLDP sessions that establish LDP LSPs to transmit VPN services share the LSR ID of an LDP instance. Sharing the LSR ID may cause the LDP LSPs to fail to isolate different VPN services. To address this problem, run the mpls ldp local-lsr-id command to specify an LSR ID for each LDP session.\nIf multiple links directly connect an LSR pair, the LSR ID configured on the interface of each link must be the same. Otherwise, the LDP session uses the LSR ID of the link that finds the adjacency first while other links with different LSR IDs cannot be bound to the LDP session. LDP LSP fails to be established on these links.If both the local and remote LDP sessions are to be established between an LSR pair, LSR IDs configured for the two sessions must be the same. Otherwise, only the LDP session that finds the adjacency first can be established.There must be a primary IP address on the specified interface. Otherwise, LDP will use 0.0.0.0 as Local LSR ID.\n\nPrerequisites\nMPLS LDP has been enabled using the mpls ldp command in the interface view before the mpls ldp local-lsr-id command is run in the same interface view.\nConfiguration Impact\nRunning this command in an interface view resets LDP adjacencies of corresponding links.\nPrecautions\nIf the mpls ldp local-lsr-id command is run more than once, the last configuration overrides the previous one."
+}

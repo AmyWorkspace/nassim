@@ -1,0 +1,43 @@
+{
+    "PageTitle": "preference (BGP-IPv4 unicast address family view)",
+    "FuncDef": "The preference command sets a priority for EBGP routes, IBGP routes, or local BGP routes. BGP routes are configured with different priorities in different address family views.\nThe undo preference command restores the default setting.\nBy default, the priorities of EBGP routes, IBGP routes, and local BGP routes are all 255.",
+    "CLIs": [
+        "preference { <external> <internal> <local> | route-policy <route-policy-name> }",
+        "preference route-filter <route-filter-name>",
+        "undo preference"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "external",
+            "Info": "Specifies the priority of an EBGP route. An EBGP route is the optimal route learned from a peer outside the local AS.\nThe value is an integer ranging from 1 to 255. The smaller the value is, the higher the priority is."
+        },
+        {
+            "Parameters": "internal",
+            "Info": "Specifies the priority of an IBGP route. An IBGP route is a route learned from a peer inside the AS.\nThe value is an integer ranging from 1 to 255. The smaller the value is, the higher the priority is."
+        },
+        {
+            "Parameters": "local",
+            "Info": "Specifies the priority for summary and leaked routes. This parameter takes effect for the following routes:\nManually summary routes generated using the aggregate (BGP) command.Automatically summary routes generated using the summary automatic command.Routes generated through remote route leaking.Routes generated through local route leaking.For details about these routes, see.Precautions.\nThe value is an integer ranging from 1 to 255. The smaller the value is, the higher the priority is."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] preference 2 2 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nRunning the preference command to set priorities for BGP routes affects route selection among BGP routes and routes of other routing protocols.\nAfter a route-policy or route-filter is configured on a device, the device sets priorities only for the routes received from peers, which meet the matching rules. The routes that do not meet the rules use the default priority.\nThe smaller the priority value, the higher the priority.\nPrerequisites\nCreate the route-policy first if the preference command uses the route-policy to set priorities.\nPerform the following steps when the route-policy is used to set priorities:\nUse the route-policy command to create the route-policy, and enter the route-policy view.Configure the if-match clause to set the matching rules for routes. The relationship between the if-match clauses in a node of a route-policy is \"AND\". A route must match all the rules before the action defined by the apply clause is taken. If no if-match clause is specified, all routes will match the node in the route-policy.Use the apply preference command to set priorities for routes that pass the filtering.\n\nConfiguration Impact\nThe preference route-policy command is mutually exclusive with the preference route-filter command.\nPrecautions\nCurrently, the peer route-policy or peer route-filter command cannot be used to apply a route-policy to setting priorities for BGP routes.\nThe preference command cannot configure a priority for routes imported using the network command or the import-route command. If a route is imported to BGP as a BGP route using the network or import-route command, the BGP route inherits the priority of the imported route.\nIn this command, the local parameter specifies a priority for summary routes and leaked routes. This parameter takes effect for the following routes:\nManually summary routes generated using the aggregate (BGP) command. The Route type field for this type of route displays Aggregated route.Automatically summary routes generated using the summary automatic command. The route type for these routes displays Summary automatic route.Routes generated through remote route leaking. The route type for these routes displays Remote-Cross route.Routes generated through local route leaking. The route type for these routes displays Local-Cross route."
+}

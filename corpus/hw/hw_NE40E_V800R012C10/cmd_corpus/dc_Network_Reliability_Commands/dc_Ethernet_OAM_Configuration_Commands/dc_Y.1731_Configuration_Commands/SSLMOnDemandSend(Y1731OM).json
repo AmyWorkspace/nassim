@@ -1,0 +1,44 @@
+{
+    "PageTitle": "loss-measure single-ended-synthetic send",
+    "FuncDef": "The loss-measure single-ended-synthetic send command enables single-ended on-demand synthetic loss measurement (SLM).\nBy default, this function is disabled.",
+    "CLIs": [
+        "loss-measure single-ended-synthetic send test-id <test-id> interval { 100 | 1000 } [ sending-count <count-value> ] [ time-out <time-out-value> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "test-id test-id",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "interval 100",
+            "Info": "Specifies the interval.\n-"
+        },
+        {
+            "Parameters": "interval 1000",
+            "Info": "Specifies the interval.\n-"
+        },
+        {
+            "Parameters": "sending-count count-value",
+            "Info": "Specifies the times that SLMs are sent within each measurement period.\nThe value is an integer ranging from 1 to 1000. The default value is 10."
+        },
+        {
+            "Parameters": "time-out time-out-value",
+            "Info": "Specifies the timeout period during which the device waits for a reply.\nThe value is an integer ranging from 1 to 10, in seconds. The default value is 5s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 100 tagged",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/0 inward",
+            "[*HUAWEI-md-md1-ma-ma1] loss-measure single-ended-synthetic send test-id 1 interval 1000 sending-count 10 time-out 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen implementing frame loss measurement (LM), Maintenance Association End Points (MEPs) exchange ETH-LM frames. However, single-ended frame LM cannot collect accurate frame loss statistics on a point-to-multipoint or multipoint-to-multipoint network. To resolve this issue, configure single-ended on-demand SLM.\nPrerequisites\nEnsure that the following commands have been run:\nIEEE Standard 802.1ag-2007 of Connectivity Fault Management (CFM) has been specified using the cfm version standard command in the system view.The CFM function has been enabled globally using the cfm enable (system view) command in the system view.A Maintenance Domain (MD) has been created using the cfm md command in the system view.A Maintenance Association (MA) has been created using the ma command in the MD view.An inward-facing MEP has been created using the mep mep-id command.A test instance has been created using the test-id command.\nA Remote Maintenance Association End Point (RMEP) has been created using the remote-mep command in the MA view.\nThe local MEP has been enabled to send CCMs to the RMEP in the MA using the mep ccm-send enable command in the MA view.The local MEP has been enabled to receive Continuity Check Message (CCM) from the remote MEP in the same MA using the remote-mep ccm-receive enable command in the MA view."
+}

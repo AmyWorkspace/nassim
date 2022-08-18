@@ -1,0 +1,36 @@
+{
+    "PageTitle": "vpn-instance-capability simple",
+    "FuncDef": "The vpn-instance-capability simple command enables OSPF to directly calculate routes without conducting the routing loop detection.\nThe undo vpn-instance-capability command detects the DN bit to prevent routing loops.\nThe vpn-instance-capability simple command enables OSPFv3 to directly calculate routes without conducting the routing loop detection.\nThe undo vpn-instance-capability command enables the DN-bit check to prevent routing loops.\nBy default, the routing loop detection is enabled.",
+    "CLIs": [
+        "vpn-instance-capability simple",
+        "undo vpn-instance-capability"
+    ],
+    "ParentView": [
+        "OSPFv3 view",
+        "OSPF view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance huawei",
+            "[*HUAWEI-vpn-instance-huawei] ipv6-family",
+            "[*HUAWEI-vpn-instance-huawei-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-huawei] quit",
+            "[~HUAWEI] ospfv3 100 vpn-instance huawei",
+            "[*HUAWEI-ospfv3-100] vpn-instance-capability simple"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vrf1",
+            "[*HUAWEI-vpn-instance-vrf1] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] vpn-target 3:3 export-extcommunity",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] vpn-target 4:4 import-extcommunity",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vrf1] quit",
+            "[*HUAWEI] ospf 100 vpn-instance vrf1",
+            "[*HUAWEI-ospf-100] vpn-instance-capability simple"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf OSPF/OSPFv3 VPN multi-instance is deployed on a Multi-VPN-Instance CE (MCE), routes cannot be calculated based on Type 3, Type 5, or Type 7 LSAs with the DN bit. Therefore, OSPF/OSPFv3 detects routing loops when calculating routes. In this case, the vpn-instance-capability simple command is used to enable OSPF/OSPFv3 to calculate routes based on received LSAs without checking the DN bit and route tag in the LSAs. The route tag is restored to the default value 1.\nIf a Multi-VPN-Instance CE (MCE) supports VPN multi-instance, routing loop detection needs to be disabled. The vpn-instance-capability simple command takes effect only in the OSPF/OSPFv3 VPN instance.\nPrerequisites\nOSPF/OSPFv3 VPN multi-instance has been deployed on an MCE using the ospf vpn-instance command.\nConfiguration Impact\nIf there is no ABR and the vpn-instance-capability simple command is run on an MCE, the MCE cannot become an ABR.After the vpn-instance-capability simple command is run in an OSPF/OSPFv3 process, the OSPF/OSPFv3 process does not import IBGP routes, which prevents routing loops.After the vpn-instance-capability simple command is run, OSPF/OSPFv3 routes that have been imported by BGP do not carry any OSPF/OSPFv3 domain ID, route tag, or router ID.By default, when BGP imports an OSPF/OSPFv3 route, it uses the cost of the OSPF route plus 1 as the Multi_Exit Discriminator (MED) value. The MED in BGP is similar to the cost in an IGP in terms of functions. After the vpn-instance-capability simple command is run, BGP uses the cost of an OSPF/OSPFv3 route as the MED when it imports the OSPF/OSPFv3 route. Therefore, MED values change after the command is run, which may affect the route selection result.\n\nPrecautions\nThe undo vpn-instance-capability simple command cannot be used to enable OSPF/OSPFv3 routing loop detection in a scenario without MCEs."
+}

@@ -1,0 +1,58 @@
+{
+    "PageTitle": "ssh client peer assign",
+    "FuncDef": "The ssh client peer assign command assigns a public key configured on the SSH client to the SSH server.\nThe undo ssh client peer assign command unbinds the public key from the SSH server.\nBy default, no public key is assigned to the SSH server.",
+    "CLIs": [
+        "ssh client peer <server-name> assign { rsa-key | ecc-key | dsa-key | sm2-key } <key-name>",
+        "undo ssh client peer <server-name> assign { rsa-key | ecc-key | dsa-key | sm2-key }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "server-name",
+            "Info": "Specifies the name of an SSH server.\nThe value is a string of 1 to 255 case-sensitive characters, spaces not supported. The string can contain only letters, digits, and underscores (_)."
+        },
+        {
+            "Parameters": "rsa-key",
+            "Info": "Specifies the RSA public key.\n-"
+        },
+        {
+            "Parameters": "ecc-key",
+            "Info": "Specifies the ECC public key.\n-"
+        },
+        {
+            "Parameters": "dsa-key",
+            "Info": "Specifies the DSA public key.\n-"
+        },
+        {
+            "Parameters": "sm2-key",
+            "Info": "Specifies the SM2 public key.\n-"
+        },
+        {
+            "Parameters": "key-name",
+            "Info": "Specifies the name of public key assigned to an SSH server.\nThe value is a string of 1 to 40 case-insensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] sm2 peer-public-key sm2key001",
+            "Enter \"SM2 public key\" view, return system view with \"peer-public-key end\".",
+            "[*HUAWEI-sm2-public-key] public-key-code begin",
+            "Enter \"SM2 public key\" view, return system view with \"peer-public-key end\".",
+            "[*HUAWEI-sm2-public-key-sm2-key-code] 0474F110 F90F131B B6F6D929 9A23A41E F1AB1666",
+            "[*HUAWEI-sm2-public-key-sm2-key-code] AC4BE4EE EF2CD876 2B633F80 DD5CF42F 147A722F",
+            "[*HUAWEI-sm2-public-key-sm2-key-code] DE527F39 247F3744 C23296BE FE3BE502 EEF7D9EC",
+            "[*HUAWEI-sm2-public-key-sm2-key-code] BC28A576 7E",
+            "[*HUAWEI-sm2-public-key-sm2-key-code] public-key-code end",
+            "[*HUAWEI-sm2-public-key] peer-public-key end",
+            "[*HUAWEI] ssh client peer 10.1.1.1 assign sm2-key sm2key001"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssh client peer 10.1.1.1 assign rsa-key key01"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a device functioning as an SSH client uses the public algorithm for authentication, run the ssh client peer assign command to assign a public key to the SSH server.If the first-time authentication is not enabled on the SSH client, when the SSH client logs in to the SSH server for the first time, the SSH client fails to pass the check on the public key validity and cannot log in to the server.If the public key stored on the SSH client becomes invalid, run the undo ssh client peer assign command to cancel the association between the SSH server and the public key. Then, run the ssh client peer assign command to assign a new public key to the SSH server.You can run the display ssh server-info command to view the binding information on the SSH client."
+}

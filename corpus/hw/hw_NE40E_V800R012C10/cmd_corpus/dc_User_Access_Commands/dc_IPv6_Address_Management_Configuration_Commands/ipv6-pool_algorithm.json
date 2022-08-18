@@ -1,0 +1,46 @@
+{
+    "PageTitle": "ipv6-pool algorithm",
+    "FuncDef": "The ipv6-pool algorithm loading-share remote command allows address assignment from a remote IPv6 address pool based on the configured weight. In multi-device backup scenarios, address assignment from an address pool of the local rui-slave type is also performed based on the configured weight.\nThe undo ipv6-pool algorithm loading-share remote command restores the default configuration for both a remote IPv6 address pool and an address pool of the local rui-slave type.\nThe ipv6-pool algorithm round-robin command configures address assignment from a local IPv6 address pool, an IPv6 delegation address pool, and a remote IPv6 address pool in round-robin mode.\nThe undo ipv6-pool algorithm round-robin command restores the default configuration.\nBy default, addresses are assigned from the local IPv6 address pool, IPv6 delegation address pool, and remote IPv6 address pool in order. In multi-device backup scenarios, IP addresses can be assigned from an address pool of the local rui-slave type in order.",
+    "CLIs": [
+        "ipv6-pool algorithm round-robin { local | remote } *",
+        "ipv6-pool algorithm loading-share remote",
+        "undo ipv6-pool algorithm loading-share [ remote ]",
+        "undo ipv6-pool algorithm round-robin [ local | remote ] *"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "local",
+            "Info": "Configures a local IP pool.\n-"
+        },
+        {
+            "Parameters": "remote",
+            "Info": "Configures a remote IP pool.\n-"
+        },
+        {
+            "Parameters": "loading-share",
+            "Info": "Selects pools according to weight.\n-"
+        },
+        {
+            "Parameters": "round-robin",
+            "Info": "Selects pools according to round-robin algorithm.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6-pool algorithm loading-share remote"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6-pool algorithm round-robin local"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6-pool algorithm round-robin remote"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, the local IPv6 address pool, IPv6 delegation address pool, and remote IPv6 address pool are used for address assignment in order. The implementation principles of address assignment in the three modes are as follows:\nIf address assignment is performed in order, the device assigns an address pool based on the order configured for the same type of address pool. For example, if three address pools of the same type are configured in a domain, the device assigns addresses for online users from the first address pool. After IP addresses are used up in the first address pool, the device assigns addresses for online users from the second address pool.If address assignment is performed based on the weights configured for address pools, the device determines the ratios of selecting each address pool based on the configured weights.If address assignment is performed in round-robin mode, the priority of selecting each address pool for address assignment is the same. For example, if three address pools of the same type are configured in a domain, the device selects the first address pool for the first online user, the second address pool for the second online user, the third address pool for the third online user, the first address pool for the fourth online user, and the second address pool for the fifth online user.\nUsers can perform the configuration based on their actual requirements.\nAfter the ipv6-pool algorithm loading-share remote command is run, a remote IPv6 address pool is used for address assignment based on the configured weight. In a multi-device backup scenario, the address pool of the local rui-slave type is also used for address assignment based on the configured weight.After the ipv6-pool algorithm round-robin local command is run, the local IPv6 address pool and IPv6 delegation address pool are used for address assignment in round-robin mode.After the ipv6-pool algorithm round-robin remote command is run, the remote IPv6 address pools are used for address assignment in round-robin mode.\n\nPrecautions\nIn VS mode, this command applies only to the admin VS.\nIf this command is run more than once, the latest configuration overrides the previous one."
+}

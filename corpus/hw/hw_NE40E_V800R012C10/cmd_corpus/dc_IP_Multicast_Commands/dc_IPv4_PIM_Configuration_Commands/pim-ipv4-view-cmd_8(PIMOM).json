@@ -1,0 +1,43 @@
+{
+    "PageTitle": "ssm-policy",
+    "FuncDef": "The ssm-policy command sets the range of Source-Specific Multicast (SSM) group addresses.\nThe undo ssm-policy command restores the default configuration.\nBy default, the range of SSM group addresses is 232.0.0.0/8.",
+    "CLIs": [
+        "ssm-policy { <basic-acl-number> | acl-name <acl-name> }",
+        "undo ssm-policy"
+    ],
+    "ParentView": [
+        "VPN instance PIM view",
+        "PIM view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basic-acl-number",
+            "Info": "Specifies the number of the basic ACL that defines the range of SSM group addresses.\nThe value ranges from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 2000",
+            "[*HUAWEI-acl4-basic-2000] rule permit source 232.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-basic-2000] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] ssm-policy 2000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl name myacl basic",
+            "[*HUAWEI-acl4-basic-myacl] rule permit source 232.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-basic-myacl] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] ssm-policy acl-name myacl"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run the ssm-policy command to specify the range of SSM group addresses. All interfaces on which PIM-SM is enabled consider that multicast groups that belong to the address range are in SSM mode.\nThe range of SSM group addresses can exceed 232.0.0.0/8. Any-Source Multicast (ASM) is applicable to all multicast groups that are not in the range of SSM group addresses.\nThe conditions for enabling SSM mode are as follows:\nThe address of the multicast group is in the range of SSM group addresses, the network segment where the host resides runs IGMPv3, and the source address is specified in the Report message.The address of the multicast group is in the range of SSM group addresses, the network segment where the host resides runs IGMPv1 or IGMPv2, and the Router is configured with SSM mapping.\n\nPrerequisites\nThe multicast routing-enable command is run in the public network instance view or VPN instance view.\nRelated ACL rules have been defined.\nConfiguration Impact\nIf the ssm-policy command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nThe ssm-policy command and the acl command are used together. In the ACL view, you can set the address range of SSM multicast groups by specifying the source parameter in the rule command."
+}

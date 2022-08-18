@@ -1,0 +1,42 @@
+{
+    "PageTitle": "lsa-arrival-interval (OSPF view)",
+    "FuncDef": "The lsa-arrival-interval command sets the interval at which LSAs are received.\nThe undo lsa-arrival-interval command restores the default configuration.\nBy default, the intelligent timer is enabled. The maximum interval at which LSAs are updated is 1000 milliseconds (ms), the initial interval is 500 ms, and the Holdtime interval is 500 ms.",
+    "CLIs": [
+        "lsa-arrival-interval <interval>",
+        "lsa-arrival-interval intelligent-timer <max-interval> <start-interval> <hold-interval>",
+        "undo lsa-arrival-interval"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the interval at which LSAs are received.\nThe value is an integer ranging from 0 to 10000, in ms."
+        },
+        {
+            "Parameters": "intelligent-timer",
+            "Info": "Enables an intelligent timer to receive LSAs.\n-"
+        },
+        {
+            "Parameters": "max-interval",
+            "Info": "Specifies the maximum interval at which LSAs are received.\nThe value is an integer ranging from 1 to 300000, in ms."
+        },
+        {
+            "Parameters": "start-interval",
+            "Info": "Specifies the initial interval at which LSAs are received.\nThe value is an integer ranging from 0 to 60000, in ms."
+        },
+        {
+            "Parameters": "hold-interval",
+            "Info": "Specifies the Holdtime interval at which LSAs are received.\nThe value is an integer ranging from 1 to 60000, in ms."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] lsa-arrival-interval 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOSPF defines that the interval at which LSAs are received is 1s, which prevents network connections or frequent route flapping from consuming excessive network bandwidth or device resources.\nOn a stable network that requires fast route convergence, you can change the interval at which LSAs are received to 0s. In this manner, the device can fast respond to topology or route changes, which speeds up route convergence.\nOn an unstable network, routes are calculated frequently, which consumes a great number of CPU resources. In addition, LSPs that describe the unstable topology are generated and transmitted on the unstable network. Frequently processing such LSAs affects the rapid and stable operation of the entire network. You can configure an intelligent timer so that the device can dynamically adjust the interval according to the user configuration and the frequency of triggering events (such as route calculation) to speed up network convergence.\nIf there is no special network requirement, default values are recommended.\nImplementation Procedure\nAfter an intelligent timer is enabled, the interval at which LSAs are received is as follows:\nThe initial interval at which LSAs are received is specified by start-interval.The interval at which LSAs are received for the nth (n>=2) time equals x 2(n-2).When the interval specified by hold-interval x 2(n-2) reaches the maximum interval specified by max-interval, OSPF receives LSAs at the maximum interval for three consecutive times. Then, OSPF receives LSAs at the initial interval specified by start-interval.\n\nPrecautions\nSetting the interval in the lsa-arrival-interval command to be a value less than or equal to the Holdtime interval specified in the lsa-originate-interval command is recommended."
+}

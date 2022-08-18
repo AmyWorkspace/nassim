@@ -1,0 +1,56 @@
+{
+    "PageTitle": "connection (MPLS-L2VPN-CE view)",
+    "FuncDef": "The connection command creates a BGP VPWS connection.\nThe undo connection command deletes a BGP VPWS connection.\nBy default, no BGP VPWS connection is created.",
+    "CLIs": [
+        "connection [ ce-offset <ce-offset-id> ] interface { <interface-type> <interface-number> | <interface-name> } [ tunnel-policy <tunnel-policy-name> ] [ raw | tagged ] [ secondary ]",
+        "connection instance-name <instance-name-value> [ ce-offset <ce-offset-id> ] interface { <interface-type> <interface-number> | <interface-name> } [ tunnel-policy <tunnel-policy-name> ] [ raw | tagged ]",
+        "undo connection ce-offset <ce-offset-id>",
+        "undo connection instance-name <instance-name-value> ce-offset <ce-offset-id> interface { <interface-type> <interface-number> | <interface-name> } [ tunnel-policy <tunnel-policy-name> ] [ raw | tagged ]"
+    ],
+    "ParentView": [
+        "MPLS-L2VPN-CE view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ce-offset ce-offset-id",
+            "Info": "Specifies a remote CE ID for an MPLS L2VPN instance.\nIf ce-offset ce-offset-id is not specified:\nBy default, when a local CE establishes a connection with another CE the first time, ce-offset-id equals ce-offset specified in the ce command. If ce-offset equals the current CE ID, ce-offset-id will be equivalent to the current CE ID plus 1.For a connection other than the first one, ce-offset-id equals ce-offset-id of the previous connection plus 1. If ce-offset-id of the previous connection plus 1 equals the current CE ID, ce-offset-id of the current connection will be equivalent to ce-offset-id of the previous connection plus 2.\nThe value is an integer ranging from 0 to 65534.\nce-offset-id must be smaller than or equal to ce-range specified in the ce command.\nFor a remote connection, ce-offset-id must equal the remote CE ID.For a local connection established between two CEs, ce-offset-id of one CE must equal the CE ID of the other CE."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies an AC interface for an MPLS L2VPN instance. The encapsulation type of this interface must be the same as that of the MPLS L2VPN instance. Otherwise, the PW cannot go Up.\n-"
+        },
+        {
+            "Parameters": "tunnel-policy tunnel-policy-name",
+            "Info": "Specifies a tunnel policy for a VC.\nThe value is a string of 1 to 39 case-sensitive characters, spaces not supported.\nThe string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "raw",
+            "Info": "Indicates that user packets do not carry VLAN tags when being transmitted over a PW.\nThis parameter applies only to Ethernet links.\n-"
+        },
+        {
+            "Parameters": "tagged",
+            "Info": "Indicates that user packets carry VLAN tags when being transmitted over a PW.\nThis parameter applies only to Ethernet links.\n-"
+        },
+        {
+            "Parameters": "secondary",
+            "Info": "Configures a VPWS connection as a secondary one.\nIf this keyword is not configured, the created VPWS connection will be a primary one. A secondary VPWS connection can be created only when the primary VPWS connection already exists.\n-"
+        },
+        {
+            "Parameters": "instance-name instance-name-value",
+            "Info": "Specify the L2VPN instance name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] mpls l2vpn vpn1 encapsulation ethernet",
+            "[*HUAWEI-mpls-l2vpn-vpn1] route-distinguisher 100:1",
+            "[*HUAWEI-mpls-l2vpn-vpn1] vpn-target 1:1",
+            "[*HUAWEI-mpls-l2vpn-vpn1] ce ce1 id 1 range 10",
+            "[*HUAWEI-mpls-l2vpn-vpn1-ce1] connection ce-offset 2 interface GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP VPWS uses two layers of labels. The inner label uses BGP signaling to transmit Layer 2 information and VC labels. To configure a BGP VPWS connection, run the connection command.\nPrerequisites\nThe MPLS-L2VPN-CE view has been displayed using the ce command.\nPrecautions\nIf CE IDs are numbered consecutively, in ascending order starting from 1, and BGP VPWS connections use CE IDs in the order in which CE IDs are numbered, most connections can use the default CE offset. This helps simplify configurations.If both a local connection and a remote connection are created on an interface, the local connection takes precedence over the remote connection."
+}

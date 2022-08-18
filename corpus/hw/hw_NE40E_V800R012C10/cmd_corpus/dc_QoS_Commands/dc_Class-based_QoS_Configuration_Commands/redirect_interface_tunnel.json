@@ -1,0 +1,39 @@
+{
+    "PageTitle": "redirect interface tunnel",
+    "FuncDef": "The redirect interface tunnel command redirects packets to a specific tunnel. You can apply the action to a specific tunnel based on a traffic behavior, and redirect the traffic with a matching class.\nThe undo redirect command cancels the configuration.\nBy default, the tunnel is not configured in the traffic behavior view for the next hop for redirection.",
+    "CLIs": [
+        "redirect interface { <interface-name> | <interface-type> <interface-number> } [ route-forward ]",
+        "undo redirect [ interface ]"
+    ],
+    "ParentView": [
+        "Traffic behavior view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\nThe value can only be Tunnel"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\nSpecifies the tunnel interface number, in the format of either x or x/y/z. In the format of x, x is an integer ranging from 0 to 4294967295. In the format of x/y/z, the value is an integer ranging from 0 to 31."
+        },
+        {
+            "Parameters": "route-forward",
+            "Info": "If specified Tunnel was shut down, the parameter route-forward can be configured to return packets to the original forwarding process.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] redirect interface tunnel 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTraffic can be forwarded to a specified next hop instead of being forwarded based on the route on a network. If this case occurs, redirection must be deployed on the network.\nWhen users transmit P2MP services, traffic must be redirected to an P2MP/TE tunnel.\nIf policy and route-forward are configured and the tunnel(RSVP-TE/SR-MPLS TE) is Down, packets are forwarded based on the FIB entry information obtained through the destination IP address of the packets."
+}

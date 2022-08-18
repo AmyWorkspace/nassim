@@ -1,0 +1,36 @@
+{
+    "PageTitle": "segment-routing ipv6 locator (BGP-VPN instance IPv4 address family view)",
+    "FuncDef": "The segment-routing ipv6 locator command enables a device to add SIDs into private network routes.\nThe undo segment-routing ipv6 locator command disables a device from adding SIDs into private network routes.\nBy default, the private network routes do not have SIDs.",
+    "CLIs": [
+        "segment-routing ipv6 locator <locator-name> [ auto-sid-disable ]",
+        "undo segment-routing ipv6 locator [ [ <locator-name> ] | [ <locator-name> auto-sid-disable ] ]"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "locator-name",
+            "Info": "Specifies the name of a SID node route locator, which was configured through the locator command.\nThe value is a string of 1 to 31 case-sensitive characters. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "auto-sid-disable",
+            "Info": "Specifies to disable the dynamic SID allocation function.\nIf the auto-sid-disable parameter is not configured, SIDs can be dynamically assigned. If static SIDs configured by the opcode command exist in locator-name, the static SIDs are used. If no static SIDs exist, dynamically assigned SIDs are used.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 100:1 both",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-vpn1] segment-routing ipv6 locator test"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn SRv6 VPN, private network route information of VPN instance is transferred using BGP. By default, the private network routes do not have SIDs, the segment-routing ipv6 locator command enables a device to add SIDs in private network routes.\nAfter the BGP VPNv4 neighbor is set up and the peer ipv6-address prefix-sid command is enabled, the BGP peers can exchange the private network routing information carrying the SID attributes through the BGP VPNv4 neighbor.\nPrecautions\nThe configuration fails if the operation code-specific END.DT4 VPN of the locator does not match the private network VPN instance or the specified locator does not exist."
+}

@@ -1,0 +1,90 @@
+{
+    "PageTitle": "netstream monitor (Interface view)",
+    "FuncDef": "The ip netstream monitor command deploys an IPv4 NetStream monitoring service in the inbound or outbound direction on an interface.\nThe undo ip netstream monitor command deletes an IPv4 NetStream monitoring service.\nThe ipv6 netstream monitor command deploys an IPv6 NetStream monitoring service in the inbound or outbound direction of an interface.\nThe undo ipv6 netstream monitor command deletes an existing IPv6 NetStream monitoring service.\nBy default, IPv4 NetStream services are not deployed on an interface.",
+    "CLIs": [
+        "ip netstream monitor <monitor-name> { inbound | outbound }",
+        "ipv6 netstream monitor <monitor-name> { inbound | outbound }",
+        "undo ip netstream monitor { inbound | outbound }",
+        "undo ipv6 netstream monitor { inbound | outbound }"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE sub-interface view",
+        "50GE interface view",
+        "50|100GE sub-interface view",
+        "50|100GE interface view",
+        "Eth-Trunk interface view",
+        "FlexE interface view",
+        "GE interface view",
+        "Global VE sub-interface view",
+        "IP-Trunk interface view",
+        "MP-group interface view",
+        "POS interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "VLANIF interface view",
+        "Serial interface view",
+        "Sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "monitor-name",
+            "Info": "Specifies the name of a monitoring service.\nThe name of the monitoring service configured in the system view is used.\nThe name is a string of 1 to 31 case-sensitive characters, spaces not supported and special characters supported."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Deploys a NetStream monitoring service in the inbound direction of the interface.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Deploys a NetStream monitoring service in the outbound direction of the interface.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Indicates the IPv6 netstream feature.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Indicates the IPv4 netstream feature.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip netstream monitor monitora",
+            "[*HUAWEI-monitor-monitora] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ip netstream monitor monitora inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip netstream monitor monitora",
+            "[*HUAWEI-monitor-monitora] quit",
+            "[*HUAWEI] interface virtual-ethernet 1/0/0",
+            "[*HUAWEI-Virtual-Ethernet1/0/0] ve-group 1 l3-access",
+            "[*HUAWEI-Virtual-Ethernet1/0/0] quit",
+            "[*HUAWEI] interface virtual-ethernet 1/0/0.1",
+            "[*HUAWEI-Virtual-Ethernet1/0/0.1] ip netstream monitor monitora inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 netstream monitor monitora",
+            "[*HUAWEI-monitor6-monitora] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 netstream monitor monitora inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 netstream monitor monitora",
+            "[*HUAWEI-monitor6-monitora] quit",
+            "[*HUAWEI] interface virtual-ethernet 1/0/0",
+            "[*HUAWEI-Virtual-Ethernet1/0/0] ve-group 1 l3-access",
+            "[*HUAWEI-Virtual-Ethernet1/0/0] quit",
+            "[*HUAWEI] interface virtual-ethernet 1/0/0.1",
+            "[*HUAWEI-Virtual-Ethernet1/0/0.1] ipv6 netstream monitor monitora inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nNetStream monitoring services configured on an NDE allow the NDE to send traffic statistics collected on specified interfaces to specified NSCs for analysis and management, achieving more delicate service monitoring based on interfaces. Traffic statistics can be load-balanced among these NSCs.\nIf a NetStream monitoring view has been created globally, apply the NetStream monitoring service to the specified interface to validate the corresponding configuration. For example, if a destination IP address is configured in the NetStream monitoring view for NetStream statistics but the NetStream monitoring service is not deployed in the inbound or outbound direction of the specified interface, the destination IP address does not take effect and NetStream statistics are output to the IP address specified in the system view.\nPrerequisites\nBefore applying the NetStream monitoring service to an interface, ensure that a monitoring service view has been created by running the ip netstream monitor command or ipv6 netstream monitor command in the system view.\nConfiguration Impact\nIf NetStream monitoring services have been configured on the interface, statistics about original flows are sent to the destination IP address specified in the NetStream monitoring service view, not the system view.\nPrecautions\nNetStream monitoring services are available only for original flows, not aggregated flows.\nAfter this command is run, you also need to run the netstream command so that the NetStream function takes effect.\nInterfaces and sub-interfaces, both of which are configured with BAS services, still support Netstream sampling configurations."
+}

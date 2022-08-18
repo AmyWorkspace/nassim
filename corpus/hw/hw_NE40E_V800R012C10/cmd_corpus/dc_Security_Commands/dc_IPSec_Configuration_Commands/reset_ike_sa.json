@@ -1,0 +1,47 @@
+{
+    "PageTitle": "reset ike sa",
+    "FuncDef": "The reset ike sa command deletes the SA set up by IKE.",
+    "CLIs": [
+        "reset ike sa [ slot <slotnumber> ] [ speed <speed> ]",
+        "reset ike sa <connid> [ slot <slotnumber> ]",
+        "reset ike sa remote <remoteaddr> [ slot <slotnumber> ]",
+        "reset ike sa [ slot <slotnumber> [ engine <engine-id> | card <card-id> ] ] [ speed <speed> ]",
+        "reset ike sa <connid> [ slot <slotnumber> [ engine <engine-id> | card <card-id> ] ]",
+        "reset ike sa remote <remoteaddr> [ slot <slotnumber> [ engine <engine-id> | card <card-id> ] ]"
+    ],
+    "ParentView": [
+        "User view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "slot slotnumber",
+            "Info": "Deletes the IKE SA in a specified slot.\nThe value is an integer that ranges from 0 to 32."
+        },
+        {
+            "Parameters": "speed speed",
+            "Info": "Set delete speed.\nIt is an interger that ranges from 1 to 200 (per sencond)."
+        },
+        {
+            "Parameters": "connid",
+            "Info": "Deletes the IKE SA by connection ID.\nIt is an integer and ranges from 1 to 65535."
+        },
+        {
+            "Parameters": "remote remoteaddr",
+            "Info": "Deletes the IKE SA by remote address.\nThe value is in dotted decimal notation"
+        },
+        {
+            "Parameters": "engine engine-id",
+            "Info": "Indicates the engine ID.\nThe value is an integer that ranges from 0 to 1."
+        },
+        {
+            "Parameters": "card card-id",
+            "Info": "Indicates the card ID.\nThe value is an integer that ranges from 0 to 1."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> reset ike sa"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo re-configure the IPSec policy, you can clear IKE SAs. There are two types of IKE SAs established by IKE negotiation: IKE SAs in phase 1 and IKE SAs in phase 2. IKE SAs in phase 1 are used for IKE negotiation. Under the protection of these IKE SAs, IKE SAs in phase 2 are used to establish IPSec SAs that protect data flows.\nIf the specified connection-id parameter corresponds to an IKE SA in phase 1, no automatic negotiation can be performed after this IKE SA is cleared. The negotiation is re-performed to establish an IKE SA in phase 1 only when data flows match ACL rules in the IPSec policy again.If the specified connection-id parameter corresponds to an IKE SA in phase 2, an automatic negotiation is performed under the protection of the IKE SA in phase 1, after the IKE SA in phase 2 is cleared. - In this manner, another IKE SA in phase 2 is established.If the connection-id parameter is not specified, all IKE SAs in phase 1 are cleared, like the first case.\nWhen the reset ike sa command is run during rekey or re-authentication, new SAs generated during rekey or re-authentication may not be deleted.\nIf a device housing multiple VSUs is connected to a device housing one VSU and the reset ike sa command is run on one of the VSUs on the device, not all the SAs on the peer device are deleted.\nengine and card options are supported only on the VSU board."
+}

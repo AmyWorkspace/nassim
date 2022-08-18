@@ -1,0 +1,29 @@
+{
+    "PageTitle": "xpl extcommunity-list rt",
+    "FuncDef": "The xpl extcommunity-list rt command creates a route target set and displays the route target set view.\nThe undo xpl extcommunity-list rt command deletes a specified route target set.\nBy default, no route target sets are configured.",
+    "CLIs": [
+        "xpl extcommunity-list rt <rt-list-name>",
+        "undo xpl extcommunity-list rt <rt-list-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "rt-list-name",
+            "Info": "Specifies the name of a route target set.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. The string can contain letters, digits, underscores (_), hyphens (-), and dots (.). It must start with a letter or digit."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system",
+            "[~HUAWEI] xpl extcommunity-list rt rt1",
+            "[~HUAWEI-xpl-ext-rt] 2:1,",
+            "[~HUAWEI-xpl-ext-rt] 2:12,",
+            "[~HUAWEI-xpl-ext-rt] 192.168.122.15:1,",
+            "[~HUAWEI-xpl-ext-rt] regular ^10:3",
+            "[~HUAWEI-xpl-ext-rt] end-list"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA route target set is a group of data related to the route target (RT) extended community attribute and can be used by route-filters to filter VPN routes. The xpl extcommunity-list rt command creates a route target set and displays the route target set view.\nFollow-up Procedure\n Configure elements for the set and separate every two neighboring elements with a comma (,). The elements can be configured in any of the following formats:2-byte AS number:4-byte user-defined number, for example, 1:3. The AS number is an integer ranging from 0 to 65535, and the user-defined number is an integer ranging from 0 to 4294967295.IPv4 address:2-byte user-defined number, for example, 192.168.122.15:1. The IPv4 address ranges from 0.0.0.0 to 255.255.255.255, and the user-defined number is an integer ranging from 0 to 65535.Integral 4-byte AS number:2-byte user-defined number, for example, 0:3 or 65537:3. The integral 4-byte AS number ranges from 65536 to 4294967295, and the user-defined number is an integer ranging from 0 to 65535.4-byte AS number in dotted notation (x.y):2-byte user-defined number, for example, 0.0:3 or 0.1:0. The x, y, and user-defined number are integers ranging from 0 to 65535.In the preceding elements, either value around a colon (:) can be replaced by an asterisk (*) to match any value.\nregular regular-expression: matches VPN routes with RTs in the specified regular expression. For detailed description about regular expressions, see Configuration Guide - Basic Configuration.Regular expression processing is computing-intensive. When a large number of regular expressions are configured in an XPL policy to match a BGP route attribute and the length of the route attribute is long, the processing performance of the XPL policy deteriorates. To improve the processing performance of the routing policy, decrease the number of regular expressions or use a non-regular expression matching command.\nIt is recommended that a maximum of 100 regular expressions be configured for each policy.\n\n Run the end-list command in the route target set view to conclude the configuration of the route target set.\n\nPrecautions\nA route target set is only a group of data used as matching rules and does not have the permit or deny function. Therefore, a route target set can be used to filter routes only after it is referenced by a route-filter.\nTo exit from the route target set view, run the abort command in the route target set view.\nIf the VPN-Target attribute is set to be in the format of 4-byte AS number:2-byte user-defined number, the filtering rule that uses the VPN-Target-based regular expression is affected by the as-notation plain command:\nIf the as-notation plain command is run, route matching can succeed only after the regular expression is set to be in the format of integral 4-byte AS number:2-byte user-defined number.If the as-notation plain command is not run, route matching can succeed only after the regular expression is set to be in the format of 4-byte AS number in dotted notation:2-byte user-defined number.If the as-notation plain command is run after the regular expression is configured, you need to reconfigure the regular expression; otherwise, route matching may fail against an import or export route-policy, causing a network fault."
+}

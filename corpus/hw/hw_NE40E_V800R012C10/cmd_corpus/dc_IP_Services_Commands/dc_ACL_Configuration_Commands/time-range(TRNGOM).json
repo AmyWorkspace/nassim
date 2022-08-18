@@ -1,0 +1,56 @@
+{
+    "PageTitle": "time-range",
+    "FuncDef": "The time-range command sets a time range to describe a certain period of time.\nThe undo time-range command deletes a time range.\nBy default, no time range is configured.",
+    "CLIs": [
+        "time-range <time-name> [ { <time1> to <time2> { <days> } &<1-7> | from <time1> <date1> [ to <time2> <date2> ] } ]",
+        "undo time-range <time-name> [ <time1> to <time2> { <days> } &<1-7> | from <time1> <date1> [ to <time2> <date2> ] ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time-name",
+            "Info": "Specifies a time range name.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported. The name must start with an uppercase or lowercase letter. In addition, the word all cannot be specified as a time range name."
+        },
+        {
+            "Parameters": "time1",
+            "Info": "Specifies the start time of a time range.\nThe value is in the format of hh:mm. hh stands for hour, and the value of hh ranges from 0 to 23. mm stands for minute, and the value of mm ranges from 0 to 59.If the parameter is configured more than once, all configurations take effect."
+        },
+        {
+            "Parameters": "to time2",
+            "Info": "Specifies the end time of a time range.\nThe value is in the format of hh:mm. hh stands for hour, and the value of hh ranges from 0 to 23. mm stands for minute, and the value of mm ranges from 0 to 59.If the parameter is configured more than once, all configurations take effect."
+        },
+        {
+            "Parameters": "to time2 date2",
+            "Info": "Specifies a time on a day when a time range ends.The end time must be later than the start time.\nThe value of time-date1 is in the format of hh:mm. hh stands for hour, and the value of hh ranges from 0 to 23. mm stands for minute, and the value of mm ranges from 0 to 59. time-date2 is in the format of YYYY/MM/DD. DD stands for day, and its value is an integer ranging from 1 to 31. MM stands for month, and its value is an integer ranging from 1 to 12. YYYY stands for year, and its value is an integer ranging from 2000 to 2037.If the parameter is configured more than once, all configurations take effect.If the end time is not specified, the system uses the allowed maximum value."
+        },
+        {
+            "Parameters": "days",
+            "Info": "Specifies the days in a week when a time range takes effect.\nThe value can be set to any of the following:\n0 to 6Any day in a weekWorkdays: any day from Monday to FridayWeekend: Sunday or SaturdayDaily: all days in a week"
+        },
+        {
+            "Parameters": "from time1 date1",
+            "Info": "Specifies a time on a day when a time range starts.\nThe value of time-date1 is in the format of hh:mm. hh stands for hour, and the value of hh ranges from 0 to 23. mm stands for minute, and the value of mm ranges from 0 to 59. time-date2 is in the format of YYYY/MM/DD. DD stands for day, and its value is an integer ranging from 1 to 31. MM stands for month, and its value is an integer ranging from 1 to 12. YYYY stands for year, and its value is an integer ranging from 2000 to 2037.If the parameter is configured more than once, all configurations take effect."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] time-range test from 0:0 2009/1/1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] time-range test from 08:30 2013/1/1 to 18:00 2013/12/31"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] time-range test 8:00 to 18:00 working-day"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] time-range test 14:00 to 18:00 off-day"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen certain services or functions need to take effect at a specified time or during a specified period, run the time range command to set a time range as required.\nA maximum of 256 time ranges can be configured. A maximum of 32 relative time ranges and 12 absolute time ranges can share one time range name.\nA relative time range, also called a cyclic time range, is cyclic and the cycle is one week. A cyclic time range is defined by start-time and end-time. days specifies the day in a week when a cyclic time range takes effect.An absolute time range is defined by from and to. Absolute time ranges are not cyclic.\nUsually, absolute and relative time ranges are used together. An absolute time range defines a time range, and a relative time range specifies the day in a week when the defined time range takes effect.\n\nFollow-up Procedure\nRun the rule command with time-range configured to set a validity period for an ACL.\nPrecautions\nMultiple time ranges that share one name can be set to specify a time range. Time ranges under the same name can be set based on the following principles:\nThe combination of time ranges is used if there are only absolute or relative time ranges. If the current time of the device matches a relative or absolute time range, the matched time range takes effect. For example, Monday and Wednesday are two relative time ranges. The time range takes effect both every Monday and Wednesday.When both absolute and relative time ranges exist, the intersection of the combination of absolute time ranges and the combination of relative time ranges is used. If the current time of the device matches both a relative time range and an absolute time range, the overlapping part of the matched time ranges takes effect. For example, January 2009 is an absolute time range, and each Monday is a relative time range. In this case, the time range takes effect only on each Monday of January 2009.\nThe configured time range cannot be earlier than the current time. Otherwise, the time range does not take effect.\nYou can configure a time range instance without specifying a relative or absolute time range. For example, you can configure a time range instance aa using the time-range aa command. If a relative or absolute time range that needs to be deleted is the last record of a time range instance, the time range instance is deleted synchronously. For example, when you delete a time range record using the undo time-range aa 12:00 to 18:00 daily command, the time range instance aa is deleted synchronously if the time range to be deleted is the last record of the instance."
+}

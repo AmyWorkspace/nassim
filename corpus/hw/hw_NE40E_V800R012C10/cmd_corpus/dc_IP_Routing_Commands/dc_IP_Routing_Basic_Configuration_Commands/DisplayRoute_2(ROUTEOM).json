@@ -1,0 +1,85 @@
+{
+    "PageTitle": "display ip routing-table ip-prefix",
+    "FuncDef": "The display mbgp routing-table command displays Multicast BGP (MBGP) routes.\nThe display ip routing-table ip-prefix command displays information about routes with a specified IP prefix list.",
+    "CLIs": [
+        "display ip routing-table [ vpn-instance <vpn-instance-name> ] ip-prefix <ip-prefix-name> [ verbose ]",
+        "display mbgp routing-table [ <ipv4-address> [ [ <mask> ] | [ <mask-length> ] ] [ longer-match ] ] [ verbose ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Displays information about the routing table of an IPv4 address family-enabled VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Displays information about routes with a specified IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "verbose",
+            "Info": "Displays detailed information about active and inactive routes. If the parameter verbose is not specified, brief information about active routes is displayed.\n-"
+        },
+        {
+            "Parameters": "mbgp",
+            "Info": "Indicates a multicast BGP routing table. (When topology topology-name is specified, the MBGP routing table cannot be displayed.).\n-"
+        },
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the destination IP address in dotted decimal notation.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies mask in dotted decimal notation.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies mask-length.\nThe value is an integer that ranges from 0 to 32."
+        },
+        {
+            "Parameters": "longer-match",
+            "Info": "Displays only the routes that match the specified network or prefix.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display mbgp routing-table",
+            "Route Flags: R - relay, D - download to fib, T - to vpn-instance, B - black hole route",
+            "------------------------------------------------------------------------------",
+            "Routing Table: MBGP",
+            "         Destinations : 1        Routes : 1",
+            " ",
+            "Destination/Mask  Proto  Pre  Cost  Flags  NextHop  Interface",
+            " ",
+            "  5.5.5.1/32     MBGP  255     0     R    1.1.1.1   GigabitEthernet1/0/0"
+        ],
+        [
+            "<HUAWEI> display mbgp routing-table 5.5.5.1 verbose",
+            "Routing Table : MBGP",
+            "Summary Count : 1",
+            "",
+            "  Destination: 5.5.5.1/32",
+            "     Protocol: MBGP              Process ID: 0",
+            "   Preference: 255                     Cost: 0",
+            "      NextHop: 1.1.1.1            Neighbour: 0.0.0.0",
+            "        State: Active Adv GotQ          Age: 00h43m25s",
+            "          Tag: 0                   Priority: 0",
+            "        Label: NULL                 QoSInfo: 0x0",
+            " RelayNextHop: 0.0.0.0            Interface: GigabitEthernet2/0/0",
+            "     TunnelID: 0x0                    Flags: R"
+        ],
+        [
+            "<HUAWEI> display ip routing-table ip-prefix aa",
+            "Route Flags: R - relay, D - download to fib, T - to vpn-instance, B - black hole route",
+            "------------------------------------------------------------------------------",
+            "Routes Matched by Prefix-list aa:",
+            "         Destinations : 1        Routes : 1        ",
+            "",
+            "Destination/Mask    Proto  Pre  Cost        Flags NextHop         Interface",
+            "",
+            "       1.1.1.0/24   Static 22   0             D  0.0.0.0         NULL0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the verbose parameter is not specified, information about only one route is displayed in each line. The contents include the destination address, mask length, protocol, priority, route cost, route flag, next hop, and outbound interface. This command displays only the preferred routes.\nPrecautions\nAfter learning the ARP entry of a peer end, VLANIF interfaces, QinQ interfaces and Dot1q VLAN Tag Termination Sub-Interfaces generate a 32-bit ARP Vlink direct route, and the route is displayed in the command output. Regular physical interfaces do not generate a 32-bit ARP Vlink direct route in this case."
+}

@@ -1,0 +1,51 @@
+{
+    "PageTitle": "delay-measure two-way continual send",
+    "FuncDef": "The delay-measure two-way continual send command configures proactive two-way frame delay measurement.\nThe undo delay-measure two-way continual send command cancels the configuration.\nBy default, proactive two-way frame delay measurement is not configured in an MA.",
+    "CLIs": [
+        "delay-measure two-way continual send test-id <test-id-value> interval { <interval-value> | <interval-value> | <interval-value> | <interval-value> } [ period <period> ]",
+        "undo delay-measure two-way continual send [ test-id <test-id-value> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies an interval at which DMMs are sent.\nThe value can be 60000, 30000, 10000, or 1000, in milliseconds."
+        },
+        {
+            "Parameters": "period period",
+            "Info": "Specifies the interval at which statistics are collected.\nThe value is an integer ranging from 1 to 65535, in seconds. The default value is 900."
+        },
+        {
+            "Parameters": "test-id test-id-value",
+            "Info": "Specifies the test ID.\nThe value is a string of 1 to 4294967295 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 mac 00e0-fc12-7890",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send mep-id 1 enable",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 2",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep ccm-receive mep-id 2 enable",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 remote-mep 2",
+            "[*HUAWEI-md-md1-ma-ma1] commit",
+            "[~HUAWEI-md-md1-ma-ma1] delay-measure two-way continual send test-id 1 interval 30000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nProactive OAM refers to OAM actions which are carried out continuously to permit proactive reporting of faults or performance results.\nTwo-way frame delay measurement is commonly performed on end-to-end MEPs. A MEP receives a DMM and returns a DMR to carry out two-way frame delay measurements. After two-way frame delay measurement is configured, a MEP periodically sends DMMs with the TxTimeStampf value (timestamp at the time of sending the DM frame). After receiving a DMM frame, the remote MEP adds the RxTimeStampf value (timestamp at the time of receiving the DMM frame) to the DMM frame, generates a DMR frame with the TxTimeStampb value (timestamp at the time of sending the DMR frame), and sends the message to the requesting MEP. Every field in the DMM frame is copied to the DMR frame except that the source and destination MAC addresses are swapped and the message type is changed from DMM to DMR. Upon receiving the DMR frame, the requesting MEP calculates the two-way frame delay based on the following formula: Frame delay = (RxTimeb - TxTimeStampf) - (TxTimeStampb - RxTimeStampf)\nWhen the clocks of the MEPs at both ends of a link cannot be synchronized, you can run the delay-measure two-way continual command to implement continual two-way frame delay measurement for a PW.\n802.1p priorities carried by packets on a network are used to differentiate services, and therefore different policies can be deployed for services. Frame delay measurement based on a specified 802.1p priority can be performed to prevent inaccurate frame delay statistics caused by different priorities of packets. If 8021p-value parameter is not specified, frame delay measurement based on all priorities is performed for the PW.\nTo implement proactive two-way frame delay measurement, you need to specify the remote MEP ID or the destination MAC address and the interval at which DMMs are sent.\nIf the local MEP has not learned the MAC address of the remote MEP, you must specify the destination MAC address for two-way frame delay measurement.If the local MEP has learned the MAC address of the remote MEP, you can specify the remote MEP ID for two-way frame delay measurement.\n\nPrerequisites\nIEEE Standard 802.1ag-2007 has been specified for CFM using the cfm version standard command in the system view.CFM has been globally enabled using the cfm enable command in the system view.An MD has been created using the cfm md command in the system view.An MA has been created using the ma command in the MD view.The MA has been bound to a specified L2VC using the map mpls l2vc command in the MA view.An inward-facing MEP has been created using the mep mep-id command in the MA view.A remote MEP has been created using the remote-mep command in the MA view.The local MEP in the MA has been enabled to send CCMs using the mep ccm-send enable command in the MA view.The local MEP has been enabled to receive CCMs from the remote MEP in the same MA using the remote-mep ccm-receive enable command in the MA view.A test instance has been created using the test-id command in the MA view.\n\nConfiguration Impact\nAfter the configuration is complete, proactive two-way frame delay measurement is implemented for links."
+}

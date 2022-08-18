@@ -1,0 +1,40 @@
+{
+    "PageTitle": "dhcp upgrade",
+    "FuncDef": "The dhcp upgrade command configures leases of all DHCPv4 users on a BRAS.\nThe undo dhcp upgrade command deletes the configuration.\nBy default, the dhcp upgrade command is not configured.",
+    "CLIs": [
+        "dhcp upgrade lease <days> [ <hours> [ <minutes> ] ] [ renewal-time <days> [ <hours> [ <minutes> ] ] ] [ rebinding-time <days> [ <hours> [ <minutes> ] ] ]",
+        "undo dhcp upgrade"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "hours",
+            "Info": "Specifies the hours.\nThe value is an integer ranging from 0 to 23."
+        },
+        {
+            "Parameters": "minutes",
+            "Info": "Specifies the minutes.\nThe value is an integer ranging from 0 to 59."
+        },
+        {
+            "Parameters": "renewal-time days",
+            "Info": "Configure the renewal time value of the ip address.\nThe value is an integer that ranges from 0 to 999. The default value is 3 days."
+        },
+        {
+            "Parameters": "rebinding-time days",
+            "Info": "Configure the rebinding time value of the ip address.\nThe value is an integer that ranges from 0 to 999. The default value is 3 days."
+        },
+        {
+            "Parameters": "lease days",
+            "Info": "Specifies the days.\nThe value is an integer ranging from 0 to 999."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp upgrade lease 0 0 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nUnlike PPP users, DHCPv4 users are unware of link Down events and cannot dial up again during the upgrade of DHCPv4 users must restart their terminals to trigger the IP address request process before they can get online again. The current solution is to reduce the address pool lease at a specified time before the BRAS upgrade, so that terminals can send renewal packets immediately after the device is upgraded, enabling DHCPv4 users to get online again. For example, if the address pool renewal time is 1.5 days, then you can change the address pool lease to 30 minutes and renewal time to 15 minutes 1.5 days before the upgrade.\nHowever, there are still two problems:\nModification of an address pool lease applies to only DHCP users using addresses assigned from the address pool. The lease of addresses delivered by the RADIUS server remains unchanged. As a result, users with addresses delivered by the RADIUS server need to wait a long time before they can get online again, unless these users restart their terminals.The lease of a user address pool is configured in the address pool view. Manually modifying the leases of all address pools requires a lot of work.\nTo solve the preceding problems, run the dhcp upgrade command in the system view to modify the leases of all DHCPv4 user addresses.\n\nConfiguration Impact\nAfter the dhcp upgrade command is run, all DHCP users use the globally configured lease, no matter whether their IP addresses are delivered by the RADIUS server or assigned from local address pools.\nAfter the dhcp upgrade command is run, you can run the display dhcp upgrade command to view the configuration result and calculate the restart time of the BRAS based on the previous lease.\nThis command applies to Layer 2 DHCPv4 users, Layer 3 DHCPv4 users, and leased line Layer 2 DHCPv4 users.\nThis command cannot be saved into the configuration file and is automatically deleted after the device is upgraded.\nPrecautions\nIf a short lease is configured, CPU usage will rise when many DHCP users send renewal messages at the same time. In a non-BRAS-upgrade scenario, do not configure a short lease."
+}

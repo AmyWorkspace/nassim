@@ -1,0 +1,60 @@
+{
+    "PageTitle": "radius-server authorization",
+    "FuncDef": "The radius-server authorization command sets the IP address and shared key of the RADIUS authorization server.\nThe undo radius-server authorization command deletes the RADIUS authorization server.\nBy default, no RADIUS authorization server is configured.",
+    "CLIs": [
+        "radius-server authorization <ip-address> [ vpn-instance <string> ] [ destination-ip <destination-ip-addr> ] [ destination-port <destination-port-id> ] { { shared-key <key> | shared-key-cipher { <key2> | <key3> } } | server-group <groupname> } * [ ack-reserved-interval <interval> ]",
+        "undo radius-server authorization <ip-address> [ vpn-instance <string> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of a RADIUS authorization server, expressed in dotted decimal notation.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance string",
+            "Info": "Indicates the VPN instance to which the RADIUS authorization server belongs.\nThe value is a string of 1 to 31 characters and must be the name of a configured VPN instance."
+        },
+        {
+            "Parameters": "destination-ip destination-ip-addr",
+            "Info": "Specifies the IP address of CoA packets.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "destination-port destination-port-id",
+            "Info": "Specifies the port number of CoA packets.\nThe value is an integer ranging from 0 to 65535.\nCommonly used port numbers include 1812, 1813, 1645, 1646, 3799, and those defined by users. Incorrectly configured port numbers cause CoA packets to be discarded."
+        },
+        {
+            "Parameters": "shared-key key",
+            "Info": "Specifies the shared key for the RADIUS server in simple text.\nThe value is a string of 1 to 128 characters."
+        },
+        {
+            "Parameters": "shared-key-cipher key2",
+            "Info": "Indicates the shared cipher key configured for the RADIUS server.\nIn the case of a simple text password, the value is a string of 1 to 128 case-sensitive characters, without spaces."
+        },
+        {
+            "Parameters": "shared-key-cipher key3",
+            "Info": "Indicates the shared cipher key configured for the RADIUS server.\nIn the case of a cipher text password, the value is a string of 1 to 268 case-sensitive characters, without spaces."
+        },
+        {
+            "Parameters": "server-group groupname",
+            "Info": "Specifies the name of the RADIUS server group corresponding to the RADIUS authorization server.\nThe value is a string of 1 to 32 characters and must be the name of a configured RADIUS server group."
+        },
+        {
+            "Parameters": "ack-reserved-interval interval",
+            "Info": "Specifies the period when the authorization acknowledgment packets are saved.\nThe value ranges from 0 to 300, in seconds. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server authorization 10.10.10.1 shared-key-cipher Root@123"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server authorization 10.3.150.3 destination-port 3799 shared-key-cipher Root@123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThis command is used to configure the global RADIUS authorization server. It is used for service authorization when users choose services dynamically. You can configure multiple RADIUS authorization servers.\nTo keep the RADIUS authorization response packet for the packets retransmitted by the RADIUS authorization, you need to set the duration for keeping the authorization response packet when you configure the RADIUS authorization server. To disable this function, you can run this command to set the duration for keeping the authorization response packet to 0.\nIf you set the duration for keeping authorization response packet, the system keeps the authorization response packets of users to respond to the retransmitted packets; however, if many operators use the Disconnect message (DM) to disconnect users or use the Change of Authorization (CoA) packet to change the user attributes, a large amount of memory is occupied.\nIf either or both of the destination-ip dest-ip and destination-port dest-port parameters are specified, the device checks either or both of the destination IP address and destination port number carried in a CoA packet sent by a user before sending the packet to the RADIUS server. The device discards the packet if either or both of the destination IP address and destination port number differ from those specified. By default, the function to check the destination IP address and destination port number in a CoA packet is disabled.\nIf server-group groupname is configured, the RADIUS authorization server selects the RADIUS server group specified by groupname as the corresponding RADIUS server group. If server-group groupname is not configured, the RADIUS authorization server selects the RADIUS server group with an index of 0 (usually the RADIUS server group configured first) as the corresponding RADIUS server group. If the RADIUS server group with an index of 0 does not exist, no corresponding RADIUS server group is available for the RADIUS authorization server.\nPrecautions\nYou are advised to configure a shared-key that has no less than 16 bytes and consists of at least two types of the following characters: lowercase letters, uppercase letters, numerals, and special characters.\nIf a customized port number needs to be configured, run the radius-server extended-source-ports command first to configure the extended source port used for sending and receiving RADIUS packets."
+}

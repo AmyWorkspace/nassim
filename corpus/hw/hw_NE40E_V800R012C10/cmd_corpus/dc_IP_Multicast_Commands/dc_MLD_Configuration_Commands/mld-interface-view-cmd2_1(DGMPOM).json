@@ -1,0 +1,69 @@
+{
+    "PageTitle": "mld prompt-leave",
+    "FuncDef": "The mld prompt-leave command enables prompt leave on an interface. When the interface receives a Multicast Listener Discovery (MLD) Done message for a specific multicast group, the interface immediately deletes entries of this group without sending a last-listener query message.\nThe undo mld prompt-leave command restores the default configuration.\nBy default, the device sends a last-listener query message after receiving an MLD Done message for a specific multicast group.",
+    "CLIs": [
+        "mld prompt-leave",
+        "mld prompt-leave group-policy { <basic-acl6-number> | acl6-name <acl6-name> }",
+        "undo mld prompt-leave"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "basic-acl6-number",
+            "Info": "Specifies the number of a basic IPv6 ACL. This list specifies the range of a multicast group.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named basic IPv6 ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld prompt-leave"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] acl ipv6 name myacl6",
+            "[*HUAWEI-acl6-advance-myacl6] rule permit ipv6 destination ff03::101 128",
+            "[*HUAWEI-acl6-advance-myacl6] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] mld prompt-leave group-policy acl6-name myacl6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn most cases, after receiving a Leave message of a multicast group, an interface sends a last member Query message to check whether this multicast group has other members. To minimize the response delay and save network bandwidth, configure prompt leave on the interface. If prompt leave is configured on an interface, after receiving a Leave message of a multicast group, the interface immediately deletes the corresponding multicast group records, without sending a last member Query message.\nPrerequisites\nMulticast routing has been enabled using the multicast ipv6 routing-enable command.\nPrecautions\nThis command is applicable to MLDv1 but not MLDv2. That is, the prompt leave function takes effect only after the interface receives MLDv1 Done messages.If no group policy is specified, the prompt leave function is applicable to all multicast groups.The mld prompt-leave command needs to be used together with the acl ipv6 command. In the IPv6 ACL view, you can set the address of the multicast group that the host is to leave by specifying the source parameter in the rule command.If the mld prompt-leave command is run several times, the latest configuration overrides the previous one."
+}

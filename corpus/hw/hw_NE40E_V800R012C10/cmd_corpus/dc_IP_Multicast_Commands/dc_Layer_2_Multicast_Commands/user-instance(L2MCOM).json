@@ -1,0 +1,58 @@
+{
+    "PageTitle": "user-instance",
+    "FuncDef": "The user-instance command configures VLANs/VSIs as the user instances of a Layer 2 multicast instance.\nThe undo user-instance command deletes the VLANs/VSIs that are configured as the user instances of a Layer 2 multicast instance.\nBy default, no VLANs/VSIs are configured as the user instances of a Layer 2 multicast instance.",
+    "CLIs": [
+        "user-instance vlan { <vlan-id> [ to <vlan-id> ] } &<1-10>",
+        "user-instance vsi <vsi-name>",
+        "undo user-instance vlan { <vlan-id> [ to <vlan-id> ] } &<1-10>",
+        "undo user-instance vsi <vsi-name>"
+    ],
+    "ParentView": [
+        "Layer 2 multicast instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "to vlan-id",
+            "Info": "Specifies the end ID of a VLAN started with to be configured as a user instance.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies the name of a VSI to be configured as a user instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies the start ID of a VLAN to be configured as a user instance.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan batch 2 to 100",
+            "[*HUAWEI] l2-multicast instance 1",
+            "[*HUAWEI-l2-minst1] user-instance vlan 2 to 100"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi utv1",
+            "[*HUAWEI-vsi-utv1] pwsignal ldp",
+            "[*HUAWEI-vsi-utv1-ldp] vsi-id 100",
+            "[*HUAWEI-vsi-utv1] quit",
+            "[*HUAWEI] quit",
+            "[*HUAWEI] vsi utv2",
+            "[*HUAWEI-vsi-utv2] pwsignal ldp",
+            "[*HUAWEI-vsi-utv2-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-utv2] quit",
+            "[*HUAWEI-vsi-utv2] quit",
+            "[*HUAWEI] l2-multicast instance 1",
+            "[*HUAWEI-l2-minst1] user-instance vsi utv1",
+            "[*HUAWEI-l2-minst1] user-instance vsi utv2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a Layer 2 multicast instance is configured on a Layer 2 device, run the user-instance command to specify user instances, so that the Layer 2 device can determine the target VLANs/VSIs of a multicast data flow.\nA user instance can be a VLAN or VSI.\nPrerequisites\nA Layer 2 multicast instance has been created using the l2-multicast instance command, and a VLAN/VSI has been specified as the multicast instance of the Layer 2 multicast instance using the multicast-instance command.\nConfiguration Impact\nAfter user instances are configured for a Layer 2 multicast instance, the device does not directly replicate multicast flows for the user instances. Instead, the Router creates a forwarding entry for the IGMP Report message received from a user and replicates multicast flows for this user.\nIf the user-instance command is run more than once, all configurations take effect."
+}

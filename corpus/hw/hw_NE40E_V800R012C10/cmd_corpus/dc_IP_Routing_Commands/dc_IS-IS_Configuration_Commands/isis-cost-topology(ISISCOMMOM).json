@@ -1,0 +1,63 @@
+{
+    "PageTitle": "isis cost",
+    "FuncDef": "The isis cost command sets a link cost for an IS-IS interface.\nThe undo isis cost command restores the default link cost.\nBy default, the link cost of IS-IS interfaces is 10.",
+    "CLIs": [
+        "isis topology <topology-name> cost <cost> [ level-1 | level-2 ]",
+        "undo isis topology <topology-name> cost [ cost ] [ level-1 | level-2 ]"
+    ],
+    "ParentView": [
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Loopback interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cost cost",
+            "Info": "Specifies a link cost for the SPF calculation.\nThe value is an integer and varies with the cost type.When the cost type is narrow, narrow-compatible, or compatible, the value ranges from 1 to 63When the cost type is wide or wide-compatible, the value ranges from 1 to 16777214.The value is maximum: Sets the link cost of an interface to 16777215.\nThe maximum parameter can be configured only when the cost-style of IS-IS is wide or wide-compatible. The neighbor TLV generated after the cost of an interface is set to 16777215 is used for TE information transmission, not for route calculation.\nThe cost type can be configured using the cost-style command."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Sets the link cost value for the Level-1 interface.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Sets the link cost value for the Level-2 interface.\nIf Level-1 or Level-2 is not specified in the command, the link cost is set for Level-1 and Level-2 interfaces by default.\n-"
+        },
+        {
+            "Parameters": "topology topology-name",
+            "Info": "Specifies the name of an IPv4 topology instance. If this parameter is not configured, the link cost is set for the IPv4 base topology.\nThe value is a string of 1 to 31 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive) and can contain numbers, hyphens (-), or underlines (_). When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip topology red",
+            "[*HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] cost-style wide",
+            "[*HUAWEI-isis-1] topology red topology-id 10",
+            "[*HUAWEI-isis-1-topology-red] quit",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ip topology red enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis topology red",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis topology red cost 5 level-2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a large-scale network, there are multiple valid routes destined for the same destination in most cases. IS-IS calculates an optimal route based on the SPF algorithm and transmits traffic over it. This feature may cause the following problems:\nAll traffic is transmitted over the optimal route, causing load imbalance.If the optimal route fails, traffic transmitted over it will be discarded.\nTo address this problem, run the isis cost command to configure different link costs for different interfaces so that traffic can be transmitted over different physical links.\n\nPrerequisites\nIS-IS has been enabled on the interface using the isis enable command in the interface view.\nConfiguration Impact\nIf the link cost is changed, routes of the entire network are recalculated, and the traffic forwarding path changes accordingly.\nPrecautions\nFor the IGP shortcut-capable TE tunnel interfaces, the link cost is the value set using the mpls te igp metric command.\nIf the isis cost and circuit-cost commands are both run, the value set using the isis cost command takes effect."
+}

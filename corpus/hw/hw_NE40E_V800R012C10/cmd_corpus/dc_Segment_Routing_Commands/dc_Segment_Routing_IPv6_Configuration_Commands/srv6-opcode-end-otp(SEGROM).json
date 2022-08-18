@@ -1,0 +1,26 @@
+{
+    "PageTitle": "opcode end-op",
+    "FuncDef": "The opcode end-op command configures a static SRv6 End.OP SID operation code (Opcode).\nThe undo opcode end-op command deletes a static SRv6 End.OP SID operation code.\nBy default, no static SRv6 End.OP SID operation code is configured.",
+    "CLIs": [
+        "opcode <func-opcode> end-op",
+        "undo opcode <func-opcode> end-op"
+    ],
+    "ParentView": [
+        "Segment routing IPv6 locator view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "func-opcode",
+            "Info": "Specifies a static SRv6 End.OP SID operation code.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] locator test1 ipv6-prefix 100:: 64 static 32",
+            "[*HUAWEI-segment-routing-ipv6-locator] opcode ::400 end-op"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn SRv6 SID is a 128-bit IPv6 address expressed in the Locator:Function:Args format. The Function field is also called Opcode, and different operation codes define different functions.\nStatic operation codes must be configured within the static operation code segment. The length of a static operation code segment is configured through the static static-length parameter in the locator command to determine the number of static operation codes that can be configured in a specified locator range.\nAfter you run the opcode command to configure various types of operation codes, the Locator, Opcode, and Args fields form a unique SRv6 SID. The SRv6 SID is then added to the local SID table on the device. In forwarding, the Locator field in the SRv6 SID instructs other nodes to find the SRv6 SID generation node through addressing and forward SRv6 packets to the node; the Opcode field instructs the SRv6 SID generation node to implement corresponding functions.\nThe End.OP SID is generally used in ping and tracert scenarios. If a local device initiates a ping or tracert request, a remote End.OP SID is inserted before the destination IPv6 address field of the request packet, instructing the remote device to process and respond to the request packet. In this case, after receiving the packet and decapsulating the SRH in the packet, the remote device obtains the End.OP SID and then processes and responds to the packet as instructed.\nPrecautions\nTo ensure proper forwarding, configured static SIDs and IPv6 addresses configured on interfaces cannot conflict with each other."
+}

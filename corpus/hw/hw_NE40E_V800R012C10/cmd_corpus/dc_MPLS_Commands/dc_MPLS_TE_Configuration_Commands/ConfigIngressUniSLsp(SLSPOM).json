@@ -1,0 +1,59 @@
+{
+    "PageTitle": "forward (Static bidirectional co-routed ingress view)",
+    "FuncDef": "The forward command configures the forward LSP of a static bidirectional co-routed LSP on the ingress.\nThe undo forward command cancels the configuration.\nBy default, no forward LSP is configured.",
+    "CLIs": [
+        "forward nexthop <next-hop-address> outgoing-interface { <interface-name> | <interface-type> <interface-number> } out-label <out-label-value> [ [ bandwidth ct0 bandwidth ] | [ pir <pir> ] ] *",
+        "forward outgoing-interface { <interface-name> | <interface-type> <interface-number> } nexthop <next-hop-address> out-label <out-label-value> [ [ bandwidth ct0 bandwidth ] | [ pir <pir> ] ] *",
+        "forward nexthop <next-hop-address> out-label <out-label-value> [ [ bandwidth ct0 bandwidth ] | [ pir <pir> ] ] *",
+        "forward outgoing-interface { <interface-name> | { <interface-type> <interface-number> } } out-label <out-label-value> [ [ bandwidth ct0 bandwidth ] | [ pir <pir> ] ] *",
+        "undo forward"
+    ],
+    "ParentView": [
+        "Static bidirectional co-routed ingress view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "nexthop next-hop-address",
+            "Info": "Specifies the next-hop IP address for a static bidirectional co-routed LSP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "outgoing-interface",
+            "Info": "Specifies the type and number of an outbound interface.\nThis parameter is set only for a point-to-point (P2P) link.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an outbound interface.\nThis parameter is set only for a point-to-point (P2P) link.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an outbound interface.\nThis parameter is set only for a point-to-point (P2P) link.\n-"
+        },
+        {
+            "Parameters": "out-label out-label-value",
+            "Info": "Specifies an outgoing label value.\nThe value is an integer ranging from 16 to 1048575."
+        },
+        {
+            "Parameters": "bandwidth",
+            "Info": "Indicates the bandwidth of a static bidirectional co-routed LSP.\n-"
+        },
+        {
+            "Parameters": "ct0 bandwidth",
+            "Info": "Specifies the bandwidth to be reserved.\nThe value is an integer ranging from 0 to 4000000000, in kbit/s."
+        },
+        {
+            "Parameters": "pir pir",
+            "Info": "Specifies the peak information rate (PIR) of the reservable bandwidth. If ct0 bandwidth is not set to 0, the PIR parameter must be set.\nThe value is an integer ranging from 0 to 4000000000, in kbit/s. The value cannot be less than the value of bandwidth."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] bidirectional static-cr-lsp ingress Tunnel1",
+            "[*HUAWEI-bi-static-ingress-Tunnel1] forward nexthop 10.1.2.2 outgoing-interface GigabitEthernet 1/0/0 out-label 16 bandwidth ct0 100 pir 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA static bidirectional co-routed CR-LSP is manually established and consists of two CR-LSPs passing through the same nodes and links and transmitting traffic in opposite directions. You have to configure MPLS forwarding entries in both directions on each node of a path over which the bidirectional CR-LSP is to be established and bind the two CR-LSPs in opposite directions together on both the ingress and egress.\nTo configure a static bidirectional co-routed LSP, perform the following operations to configure MPLS forwarding entries for traffic in opposite directions:\nOn the ingress\nRun the forward (bidirectional static-cr-lsp ingress) command in the static bidirectional ingress LSP view to configure a CR-LSP.\nRun the backward (bidirectional static-cr-lsp ingress) command in the static bidirectional ingress LSP view to configure a reverse CR-LSP.\nOn a transit node\nRun the forward (bidirectional static-cr-lsp transit) command in the static bidirectional transit LSP view to configure a CR-LSP.\nRun the backward (bidirectional static-cr-lsp transit) command in the static bidirectional transit LSP view to configure a reverse CR-LSP.\nOn the egress\nRun the forward (bidirectional static-cr-lsp egress) command in the static bidirectional egress LSP view to configure a CR-LSP.\nRun the backward (bidirectional static-cr-lsp egress) command in the static bidirectional egress LSP view to configure a reverse CR-LSP.\n\nPrecautions\nIf the static bidirectional co-routed LSP has the same outgoing label value, outbound interface, or next-hop IP address as a common static CR-LSP has, and the configuration fails.\nIf a pair of an outbound interface name and an outgoing label or a pair of a next-hop IP address and an outgoing label is assigned to an existing static LSP, a different parameter pair must be specified for the forward LSP of a static bidirectional LSP to be established. If the same parameter pair is configured, an outsegment entry conflict occurs, which results in a service diversion failure."
+}

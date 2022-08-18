@@ -1,0 +1,44 @@
+{
+    "PageTitle": "threshold (UDP jitter test instance)",
+    "FuncDef": "The threshold command sets thresholds for the round-trip delay and one-way transmission delay in an NQA UDP jitter test.\nThe undo threshold command deletes the thresholds.\nBy default, no threshold is configured.",
+    "CLIs": [
+        "threshold owd-ds <thresholdOwdDS>",
+        "threshold owd-sd <thresholdOwdSD>",
+        "threshold rtd <thresholdRtd>",
+        "undo threshold owd-ds",
+        "undo threshold owd-sd",
+        "undo threshold rtd"
+    ],
+    "ParentView": [
+        "NQA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "owd-sd thresholdOwdSD",
+            "Info": "Specifies the threshold for a one-way (from the source to the destination) delay.\nIt is an integer ranging from 1 to 60000. The unit is determined by the timestamp unit configured using the timestamp-unit command."
+        },
+        {
+            "Parameters": "rtd thresholdRtd",
+            "Info": "Specifies the threshold for a round-trip delay.\nThe value is an integer ranging from 1 to 60000. The unit is determined by the timestamp unit configured using the timestamp-unit command."
+        },
+        {
+            "Parameters": "owd-ds thresholdOwdDS",
+            "Info": "Specifies the threshold for a one-way transmission (from the destination to the source) delay.\nThe value is an integer ranging from 1 to 60000. The unit is determined by the timestamp unit configured using the timestamp-unit command."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance user test",
+            "[*HUAWEI-nqa-user-test] test-type jitter",
+            "[*HUAWEI-nqa-user-test] threshold rtd 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance user test",
+            "[*HUAWEI-nqa-user-test] test-type jitter",
+            "[*HUAWEI-nqa-user-test] threshold owd-sd 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set delay thresholds after NQA is configured, run the threshold command.\nThe conditions for alarm generation are as follows:\nIf the one-way delay from the destination to the source exceeds the parameter thresholdOwdDS, the nqaJitterStatsOWDThresholdNotificationDS alarm is generated.If the one-way delay from the destination to the source is less than the parameter thresholdOwdDS, the one-way delay is within an allowable range, and no alarm is generated.If the one-way delay from the source to the destination exceeds the parameter thresholdOwdSD, the nqaJitterStatsOWDThresholdNotificationSD alarm is generated.If the one-way delay from the source to the destination is less than the parameter thresholdOwdSD, the one-way delay is within an allowable range, and no alarm is generated.If the round-trip delay exceeds the parameter thresholdRtd, the nqaJitterStatsRTDThresholdNotification alarm is generated.If the round-trip delay is less than the parameter thresholdRtd, the round-trip delay is within an allowable range, and no alarm is generated.\n\nPrerequisites\nBefore using the send-trap command, run the test-type command to specify a test type.\nPrecautions\nIf parameters need to be changed during the running of the test instance, the system prompts you whether to terminate the test instance. Press \"Y\" or \"N\" as required.\nIf you press \"Y\", the test instance is terminated and parameters changed. The changed parameters take effect after the commit command is run. To restart the test instance, run the start command.If you press \"N\", the test instance keeps running, and the parameters fail to be modified."
+}

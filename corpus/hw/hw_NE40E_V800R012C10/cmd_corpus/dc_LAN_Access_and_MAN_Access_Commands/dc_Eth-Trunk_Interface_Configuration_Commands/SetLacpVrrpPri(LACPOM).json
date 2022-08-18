@@ -1,0 +1,31 @@
+{
+    "PageTitle": "lacp vrrp priority",
+    "FuncDef": "The lacp vrrp priority command sets the LACP system priority of an Eth-Trunk interface when the Eth-Trunk interface works in static LACP mode and is associated with a VRRP backup group.\nThe undo lacp vrrp priority command restores the default system priority of an Eth-Trunk interface when the Eth-Trunk interface works in static LACP mode and is associated with a VRRP backup group.\nBy default, the configured LACP system priority of an Eth-Trunk interface in static LACP mode takes effect.",
+    "CLIs": [
+        "lacp vrrp priority <priority>",
+        "undo lacp vrrp priority",
+        "undo lacp vrrp priority <priority>"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "priority priority",
+            "Info": "Specifies an LACP system priority.\nThe value is an integer ranging from 0 to 65535. The smaller the LACP priority value, the higher the priority."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] admin-vrrp vrid 1",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] mode lacp-static",
+            "[*HUAWEI-Eth-Trunk1] lacp track vrrp vrid 1 interface GigabitEthernet1/0/1",
+            "[*HUAWEI-Eth-Trunk5] lacp vrrp priority 1000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA non-Huawei CE is dual-homed to Huawei UPE1 and UPE2. Eth-Trunk links in static LACP mode are configured between the CE and the UPEs. UPE1 and UPE2 are configured as a VRRP backup group, with UPE1 being Master and UPE2 being Backup. After an Eth-Trunk interface in static LACP mode is associated with a VRRP backup group, the Eth-Trunk link can rapidly detect the status change of the VRRP backup group. When detecting a status change of the VRRP backup group, the Eth-Trunk interface can rapidly switch traffic to an available link. This ensures reliable service transmission.\nTo allow the function of associating an Eth-Trunk interface in static mode with a VRRP backup group to take effect, run the lacp vrrp priority priority command to set the same LACP system priority on the UPE1 and UPE2 Eth-Trunk interfaces associated with the same VRRP backup group.\nPrerequisites\nThe Eth-Trunk interface in static LACP mode has been associated with a VRRP backup group using the lacp track vrrp vrid vrid interface interface-type interface-number command.\nFollow-up Procedure\nWhen a non-Huawei device is dual-homed to two Huawei UPEs:\nRun the lacp system-id mac-address command on the Eth-Trunk interfaces of the UPEs to set the same LACP system ID.Run the lacp port-id-extension enable command to increase the number of each member interface in one of the Eth-Trunk interfaces by 32768."
+}

@@ -1,0 +1,45 @@
+{
+    "PageTitle": "ssh server assign",
+    "FuncDef": "The ssh server assign command assigns an RSA host key, RSA server key, DSA host key, or ECC host key to an SSH server.\nThe undo ssh server assign command deletes the key assigned to an SSH server.\nBy default, no key is assigned to an SSH server.",
+    "CLIs": [
+        "ssh server assign { rsa-host-key <key-name> | dsa-host-key <key-name> | ecc-host-key <key-name> | sm2-host-key <key-name> }",
+        "undo ssh server assign rsa-host-key",
+        "undo ssh server assign dsa-host-key",
+        "undo ssh server assign ecc-host-key",
+        "undo ssh server assign sm2-host-key"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "rsa-host-key key-name",
+            "Info": "Assigns an RSA host key to an SSH server and specifies the name of the RSA host key.\nThe value is a string of 1 to 35 case-insensitive characters and can only contain digits, letters, and underscores (_)."
+        },
+        {
+            "Parameters": "dsa-host-key key-name",
+            "Info": "Assigns an DSA host key to an SSH server and specifies the name of the DSA host key.\nThe value is a string of 1 to 35 case-insensitive characters and can only contain digits, letters, and underscores (_)."
+        },
+        {
+            "Parameters": "ecc-host-key key-name",
+            "Info": "Assigns an ECC host key to an SSH server and specifies the name of the ECC host key.\nThe value is a string of 1 to 35 case-insensitive characters and can only contain digits, letters, and underscores (_)."
+        },
+        {
+            "Parameters": "sm2-host-key key-name",
+            "Info": "Assigns an SM2 host key to an SSH server and specifies the name of the SM2 host key.\nThe value is a string of 1 to 35 case-insensitive characters and can only contain digits, letters, and underscores (_)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ecc key-pair label ecckey",
+            "[*HUAWEI] ssh server assign ecc-host-key ecckey"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] sm2 key-pair label sm2key001",
+            "[*HUAWEI] ssh server assign sm2-host-key sm2key001"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo provide security for an SSH server, run the ssh server assign command to assign an RSA host key, RSA server key, DSA host key, sm2-host-key or ECC host key that has been created to the SSH server.\nYou are advised to use a more secure ECC authentication algorithm for higher security.\nPrerequisites\nA key pair has been created by performing any of the following operations based on the selected key:\nThe rsa key-pair label command creates an RSA key pair with a specified label name.The dsa key-pair label command creates a DSA key pair with a specified label name.The ecc key-pair label command creates an ECC key pair with a specified label name.The sm2 key-pair label command creates an SM2 key pair with a specified label name.\n\nConfiguration Impact\nThe RSA, DSA, or ECC key assigned to an SSH server takes precedence over the RSA, DSA, or ECC key created using the rsa local-key-pair create, dsa local-key-pair create, or ecc local-key-pair create command, respectively. If the ssh server assign command is not run, an SSH server uses the key-pair created using the rsa local-key-pair create, dsa local-key-pair create, or ecc local-key-pair create command.\nPrecautions\nThe RSA host key and server key in a pair must differ in length by 128 bits. Otherwise, SSHv1 clients cannot log in to the server.If an RSA host key and an RSA server key have been assigned to an SSH server, and the RSA host key or server key is changed, or the key length is changed in a local RSA key pair so that the keys do not differ in length by 128 bits, SSHv1 applications are affected.Deleting an RSA, DSA, or ECC key pair also deletes the key assigned to an SSH server.This command takes effect for both ipv4 and ipv6 SSH server."
+}

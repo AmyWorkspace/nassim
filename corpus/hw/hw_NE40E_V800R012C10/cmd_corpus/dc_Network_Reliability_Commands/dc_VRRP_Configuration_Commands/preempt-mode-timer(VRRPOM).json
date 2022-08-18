@@ -1,0 +1,55 @@
+{
+    "PageTitle": "vrrp vrid preempt-mode timer delay",
+    "FuncDef": "The vrrp vrid preempt-mode timer delay command sets a preemption delay for a device in a VRRP backup group.\nThe undo vrrp vrid preempt-mode timer delay command restores the default preemption delay.\n\nThe default preemption delay is 5 seconds for a preemption caused by an interface Up event or 0 seconds (indicating immediate preemption) for a preemption caused by other reasons.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id> preempt-mode timer delay <delay-time>",
+        "undo vrrp vrid <virtual-router-id> preempt-mode timer delay"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay delay-time",
+            "Info": "Specifies the preemption delay time.\nThe value is an integer ranging from 0 to 10800, the default value is 0, in seconds."
+        },
+        {
+            "Parameters": "vrid virtual-router-id",
+            "Info": "Specifies the ID of a VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ip address 10.1.1.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 virtual-ip 10.1.1.111",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 preempt-mode timer delay 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nSet the preemption delay to 0 on the backup device to allow it to become a master device immediately after its priority changes; set the preemption delay to a non-0 value on the master device so that it can preempt the Master state after a specified delay if a master/backup VRRP switchover is performed. After the faulty master device in the VRRP backup group recovers, receives protocol packets, and has a lot of service configurations, the master device slowly delivers the VRRP forwarding table. An immediate traffic switchback leads to packet loss on the master device. To prevent packet loss, properly set a delay time in this situation.\nIn DHCP server dual-device hot backup scenarios, to ensure that the master device can completely back up user session information to the backup device, set a preemption delay to over 600s for the master device. Configure the preemption delay to an even larger value when the address pool contains a large number of IP addresses.\n\nPrerequisites\n\nA VRRP backup group has been configured using the vrrp vrid virtual-ip command.\n\nConfiguration Impact\n\nAfter the vrrp vrid preempt-mode timer delay command is run, the device in the specified VRRP backup group on a specified interface preempts the master device after the preemption delay expires.\n\nPrecautions\n\n\nAfter the IP address owner (which means that a VRRP device uses an actual interface address as the virtual IP address) recovers from a fault, it switches to the Master state immediately irrespective of the preemption delay. The preemption delay refers to the time when a backup device is waiting before switching to the Master state. Therefore, the preemption delay does not take effect on the IP address owner. For the VRRP backup group that needs to support the preemption delay, the master device cannot be configured as the IP address owner.\nTo enable rapid VRRP switchback (vrrp vrid fast-resume) in management VRRP scenarios, you must set the preemption delay to 0 seconds. If you do not set the preemption delay to 0 seconds, rapid VRRP switchback is disabled automatically."
+}

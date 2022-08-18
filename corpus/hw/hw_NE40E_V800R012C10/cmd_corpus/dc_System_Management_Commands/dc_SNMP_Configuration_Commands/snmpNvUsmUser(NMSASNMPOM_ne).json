@@ -1,0 +1,56 @@
+{
+    "PageTitle": "snmp-agent usm-user(Virtual access port-extension view)",
+    "FuncDef": "The snmp-agent usm-user command adds a user to an SNMP user list.\nThe undo snmp-agent usm-user command deletes a user from an SNMP user list.\nBy default, an SNMP user list does not have any user.",
+    "CLIs": [
+        "snmp-agent usm-user v3 <user-name> [ group <group-name> ] *",
+        "snmp-agent usm-user v3 <user-name> authentication-mode <authen-protocol>",
+        "snmp-agent usm-user v3 <user-name> privacy-mode <privacy-protocol>",
+        "snmp-agent usm-user v3 <user-name> authentication-mode <authen-protocol> cipher <authKey>",
+        "snmp-agent usm-user v3 <user-name> privacy-mode <privacy-protocol> cipher <privKey>",
+        "undo snmp-agent usm-user v3 <user-name> [ group | authentication-mode | privacy-mode ]"
+    ],
+    "ParentView": [
+        "Virtual access port-extension view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-name",
+            "Info": "Specifies a user name.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "group group-name",
+            "Info": "Name of the SNMP user list to which a user belongs.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "v3",
+            "Info": "Enables the SNMPv3 security mode.\n-"
+        },
+        {
+            "Parameters": "authentication-mode authen-protocol",
+            "Info": "Specifies the security level as authentication.\nIf this parameter is specified, an SNMP agent or NMS must check whether the received message is sent by an authorized NMS or SNMP agent and whether the message has been changed in transmission. Relevant standards defines Keyed-Hashing for Message Authentication Code (HMAC), an effective tool that uses the security hash function and key to generate a message authentication code. This tool is widely used on the Internet. SNMP uses HMAC-MD5-96,HMAC-SHA-96,HMAC-128-SHA-224,HMAC-192-SHA-256,HMAC-256-SHA-384 or HMAC-384-SHA-512.\nmd5: Enables the Hashed Message Authentication Code for Message Digest 5-96(HMAC-MD5-96).md5: Enables the Hashed Message Authentication Code for Message Digest 5-96(HMAC-MD5-96).sha: Enables the Hashed Message Authentication Code for Secure Hash Algorithm 96(HMAC-SHA-96).sha2-224: Enables the HMAC-SHA2-224sha2-256: Enables the HMAC-SHA2-256sha2-384: Enables the HMAC-SHA2-384sha2-512: Enables the HMAC-SHA2-512sha2-256 and more complex algorithms are safer than sha2-224, sha and md5. It is recommended to use sha2-256 and a more complex algorithm."
+        },
+        {
+            "Parameters": "privacy-mode privacy-protocol",
+            "Info": "Enables encryption.\n3des168: Enables the Triple Data Encryption Standard 168 (3DES168) algorithm.aes128: Enables the Advanced Encryption Standard 128 (AES128) algorithm.aes192: Enables the Advanced Encryption Standard 192 (AES192) algorithm.aes256: Enables the Advanced Encryption Standard 256 (AES256) algorithm.des56: Enables the Data Encryption Standard 56 (DES56) algorithm."
+        },
+        {
+            "Parameters": "cipher authKey",
+            "Info": "Indicates the ciphertext mode. You can enter only a ciphertext password, and the password can be queried in the configuration file.\nThe password is a string of 8 to 255 characters in simple text or a string of 32 to 432 characters in ciphertext."
+        },
+        {
+            "Parameters": "cipher privKey",
+            "Info": "Specifies the password in either simple text or ciphertext.\nThe password is a string of 8 to 255 characters in simple text or a string of 32 to 432 characters in ciphertext."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] virtual-access port-extend",
+            "[*HUAWE-virtual-access-portextend] snmp-agent usm-user v3 John authentication-mode sha2-512",
+            "Please configure the authentication password (8-255) ",
+            "Enter Password: ",
+            "Confirm Password:"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDifferent from SNMPv1 or SNMPv2c, SNMPv3 implements access control, identity authentication, and data encryption using the local processing module and user-based security module. SNMPv3 helps achieve higher security and confidentiality and is applicable to a wider range than SNMPv1 and SNMPv2c.\nThe snmp-agent usm-user command configures a user in an SNMP user group, configures an authentication password and privacy password, and grants this user view-specific access.\nPrecautions\nThe configured SNMP user needs to be added to a valid SNMP user group.\nIn terms of the authentication mode, SHA2-256 and more complex algorithms are safer than SHA2-224, SHA and md5. It is recommended to use SHA2-256 and a more complex algorithm.In terms of the privacy mode, AES128 and other algorithms with higher privacy levels are more secure than DES56 and 3DES168 and are therefore recommended.\nIf a device attempts to authenticate a user based on a ciphertext password before allowing the user to log in, the NMS must provide a ciphertext authentication password. You can perform either of the following operations to configure a ciphertext authentication password:\nIn confirmation mode, run the snmp-agent usm-user v3 user-name authentication-mode { md5 | sha } or snmp-agent usm-user v3 user-name privacy-mode { des56 | 3des168 | aes128 | aes192 | aes256 } command, and then press Enter to input a password. This mode requires you to enter a password twice.In non-confirmation mode, run the snmp-agent usm-user v3 user-name authentication-mode { md5 | sha } [ cipher password ] or snmp-agent usm-user v3 user-name privacy-mode { des56 | 3des168 | aes128 | aes192 | aes256 }[ cipher password ] command. This mode requires you to enter a ciphertext password only once.\nThe non-confirmation mode is usually used in a scenario where you copy the snmp-agent usm-user v3 user-name authentication-mode { md5 | sha } [ cipher password ] or snmp-agent usm-user v3 user-name privacy-mode { des56 | 3des168 | aes128 | aes192 | aes256 } [ cipher password ] command directly.\nTo improve system security, you are advised to configure different authentication and encryption passwords for an SNMP user. In addition, do not configure authentication or encryption passwords in which the same string of characters is repeated, such as Huawei-1234Huawei-1234."
+}

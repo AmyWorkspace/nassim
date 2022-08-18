@@ -1,0 +1,43 @@
+{
+    "PageTitle": "ptp-adaptive unicast-negotiate enable",
+    "FuncDef": "The ptp-adaptive acr unicast-negotiate enable command enables 1588 ACR unicast negotiation on the router and configures the frequency recovery mode to be one-way or two-way.\nThe undo ptp-adaptive acr command disables 1588 ACR unicast negotiation from the router and cancels the configured frequency recovery mode. As a result, the frequency recovery mode is none.\nThe ptp-adaptive atr unicast-negotiate enable command enables the 1588 ATR unicast negotiation function on an router.\nThe undo ptp-adaptive atr command disables the 1588 ATR unicast negotiation function on an router.\n\nBy default, 1588 ACR unicast negotiation is disabled, and therefore the frequency recovery mode is none.\n\n\nBy default, the 1588 ATR unicast negotiation function is disabled.",
+    "CLIs": [
+        "ptp-adaptive { acr [ one-way | two-way ] | atr } unicast-negotiate enable",
+        "undo ptp-adaptive { acr | atr }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "one-way",
+            "Info": "The specified frequency recovery mode is one-way, or the clock frequency is recovered using Sync packets.\n-"
+        },
+        {
+            "Parameters": "two-way",
+            "Info": "The specified frequency recovery mode is two-way, or the clock frequency is recovered using Sync packets, Delay_Request packets, and Delay_Response packets.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback 0",
+            "[*HUAWEI-Loopback0] ip address 2.2.2.2",
+            "[*HUAWEI-Loopback0] quit",
+            "[~HUAWEI] ptp-adaptive enable",
+            "[*HUAWEI] ptp-adaptive device-type client",
+            "[*HUAWEI] ptp-adaptive local-ip 2.2.2.2 ptp-adaptive acr unicast-negotiate enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback 0",
+            "[*HUAWEI-Loopback0] ip address 2.2.2.2",
+            "[*HUAWEI-Loopback0] quit",
+            "[~HUAWEI] ptp-adaptive enable",
+            "[~HUAWEI] ptp-adaptive time profile",
+            "[*HUAWEI] ptp-adaptive device-type server",
+            "[*HUAWEI] ptp-adaptive local-ip 2.2.2.2 ptp-adaptive atr unicast-negotiate enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo ensure the 1588 ACR clock synchronization between the clock server and the client, you need to use this command to configure 1588 ACR unicast negotiation and frequency recovery mode on the two ends.\nTo enable the 1588 ATR unicast negotiation function, run the ptp-adaptive atr unicast-negotiate enable command.\nPrerequisites\nBefore running the ptp-adaptive acr unicast-negotiate enable command, the following configurations have been performed:\n1588 ACR has been enabled using the ptp-adaptive enable command.The device has been configured work as a 1588 ACR server or client using the ptp-adaptive device-type command.The local IP address used to initiate a Layer 3 unicast negotiation request is configured using the ptp-adaptive local-ip command.\nBefore running the ptp-adaptive atr unicast-negotiate enable command, the following configurations have been performed:\n1588 ATR has been enabled using the ptp-adaptive enable command.The device has been enabled to support ITU-T G.8275.2 using the ptp-adaptive time profile command.The device has been configured work as a 1588 ATR server using the ptp-adaptive device-type server command.The local IP address used to initiate a Layer 3 unicast negotiation request is configured using the ptp-adaptive local-ip command.\n\nConfiguration Impact\nAfter 1588 ACR and unicast negotiation have been enabled on the router, the device functioning as a client initiates a request for negotiation and exchanges Layer 3 unicast packets with a clock server to set up a connection. If the connection is successful, the client exchanges 1588v2 packets with the clock server to restore clock information. After 1588 ACR and unicast negotiation have been enabled on the router, the device functioning as a server accepts the connection request sent by a client. If the connection is successful, the server exchanges 1588v2 packets carrying clock information with the client.\nAfter the 1588 ATR unicast negotiation function is enabled on an router, the router can function as a clock server to receive connection requests from clock clients and send 1588 packets carrying clock information to the clock clients.\nFollow-up Procedure\nParameters for unicast negotiation need to be set."
+}

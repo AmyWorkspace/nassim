@@ -1,0 +1,35 @@
+{
+    "PageTitle": "if-match ipv6 next-hop acl",
+    "FuncDef": "The if-match ipv6 next-hop acl command configures a filtering rule that is based on next-hop addresses of IPv6 routes.\nThe undo if-match ipv6 next-hop acl command cancels the configuration.\nBy default, no filtering rule based on next-hop addresses of IPv6 routes is configured.",
+    "CLIs": [
+        "if-match ipv6 next-hop acl { <aclNum> | <aclName> }",
+        "undo if-match ipv6 next-hop acl { <aclNum> | <aclName> }"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "aclNum",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "aclName",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "acl",
+            "Info": "Specifies the ACL for route filtering.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 2000",
+            "[*HUAWEI-acl6-basic-2000] quit",
+            "[*HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] if-match ipv6 next-hop acl 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe filtering rule (based on the destination addresses, next hop addresses, or source addresses of IPv6 routes) configured using this command takes effect only after an IPv6 prefix or an ACL is configured.\nIf the if-match ipv6 next-hop prefix-list aa command is used but the ip ipv6-prefix aa is not configured, all routes are permitted. This is the same case when the ACL is used.If the if-match ipv6 next-hop prefix-list aa command is used after the ip ipv6-prefix aa permit 2001:db8:1::1 128 command is used, the routes with the next hop address 2001:db8:1::1 are permitted. This is the same case when the ACL is used.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nAn ACL has been configured using the acl command.\nConfiguration Impact\nWhen you filter routes based on the next hop addresses of IPv6 routes, the routes that match the filtering rule are permitted and the route that do not match the filtering rule are denied.\nPrecautions\nIf the next hop address or source address of a route to be filtered is 0::0, by default, the system matches the route and considers its mask length as 0.\nIf the next hop address or source address of a route to be filtered is not 0::0, by default, the system matches the route and considers its mask length as 128.\nFor a named ACL, when the rule command is used to configure a filtering rule, only the source address range specified in source and the time period specified in time-range take effect on the filtering rule."
+}

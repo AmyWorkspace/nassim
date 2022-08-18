@@ -1,0 +1,25 @@
+{
+    "PageTitle": "weight(IP address pool view )",
+    "FuncDef": "The weight command configures a weight for an IPv4 address pool.\nThe undo weight command restores the default configuration.\nBy default, the weight of an IPv4 address pool is 5.",
+    "CLIs": [
+        "weight <weight-value>",
+        "undo weight [ <weight-value> ]"
+    ],
+    "ParentView": [
+        "IP address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "weight-value",
+            "Info": "Specifies a weight for an IPv4 address pool.\nThe value is an integer ranging from 0 to 100.\nIf the weight is set to 0, the address pool is not used for address assignment."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool test bas remote",
+            "[~HUAWEI-ip-pool-test] weight 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, IPv4 addresses are assigned in the sequence the address pools are bound to a domain. Specifically, one address pool is used only after addresses in the preceding address pool are used up. This address assignment mode results in unbalanced address pool usage. Moreover, the BRAS is unable to know the number of available addresses in a remote address pool on a DHCPv4 server in real time. As a result, the remote address pool may still have available addresses on the BRAS but actually does not have any assignable addresses on the DHCPv4 server. In this case, clients may fail to obtain IPv4 addresses. To resolve the problems, the algorithm for assigning addresses from address pools has been optimized, so that a device can be configured to assign addresses from IPv4 remote address pools based on weights of the address pools. To configure a weight for an IPv4 remote address pool, run the weight command.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe weight configured for an IPv4 address pool using the weight command takes effect only after the ip-pool algorithm loading-share remote command is run in the system view to configure a device to assign addresses from IPv4 remote address pools based on their weights.The greater the weight, the higher the priority of the address pool. When remote address pools are selected based on their weights, the device reads the list of available address pools and then divides the number of addresses that have been assigned from an address pool by the weight of the address pool to obtain a value for each address pool. Then the device selects the address pool with the smallest value to assign IPv4 addresses. If the address pool with the greatest weight differs from the address pool selected based on the preceding algorithm, the latter is selected as the remote address pool.This function is applicable to IPv4 remote address pools and local rui-slave address pools. For local rui-slave address pools:If the status of the DHCPv4 server to which a local rui-slave address pool is bound is Up, the address pool functions as a remote address pool.If the status of the DHCPv4 server to which a local rui-slave address pool is bound is Down, the address pool functions as a local address pool."
+}

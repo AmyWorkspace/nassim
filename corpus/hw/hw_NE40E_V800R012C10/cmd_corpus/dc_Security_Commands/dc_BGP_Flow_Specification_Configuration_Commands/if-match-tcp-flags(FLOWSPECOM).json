@@ -1,0 +1,46 @@
+{
+    "PageTitle": "if-match tcp-flags",
+    "FuncDef": "The if-match tcp-flags command configures a filtering rule based on the TCP flag value.\nThe undo if-match tcp-flags command deletes the filtering rule based on the TCP flag value.\nBy default, no filtering rule based on the TCP flag value is configured.",
+    "CLIs": [
+        "if-match tcp-flags { not | match | any-match } <tcp-flags-value>",
+        "undo if-match tcp-flags",
+        "undo if-match tcp-flags { not | match | any-match } <tcp-flags-value>"
+    ],
+    "ParentView": [
+        "Flow-Route IPv6 VPN instance view",
+        "Flow-Route VPN instance view",
+        "Flow-Route-IPv6 view",
+        "Flow-Route view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "not",
+            "Info": "If TCP packets match the result of the following AND operation, the matching succeeds: (data & tcp-flags-value) != tcp-flags-value, in which data indicates the TCP flag carried in the TCP packet header.\n-"
+        },
+        {
+            "Parameters": "match",
+            "Info": "If TCP packets match the result of the following AND operation, the matching succeeds: (data & tcp-flags-value) == tcp-flags-value, in which data indicates the TCP flag carried in the TCP packet header.\n-"
+        },
+        {
+            "Parameters": "any-match",
+            "Info": "If TCP packets match the result of the following AND operation, the matching succeeds: (data & tcp-flags-value) == TRUE (non-zero), in which data indicates the TCP flag carried in the TCP packet header.\n-"
+        },
+        {
+            "Parameters": "tcp-flags-value",
+            "Info": "Specifies the TCP flag value.\nThe value is an integer ranging from 0 to 63."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] flow-route Rule1",
+            "[*HUAWEI-flow-route] if-match tcp-flags match 25"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] flow-route Rule1 ipv6",
+            "[*HUAWEI-flow-route-ipv6] if-match tcp-flags any-match 25"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nNetwork attackers may send a large number of invalid TCP packets to attack network devices. To control invalid TCP packets to ensure communication security, configure a filtering rule based on the TCP flag for the BGP (IPv6) Flow Specification route or BGP (IPv6) VPN Flow Specification route using the if-match tcp-flags command. Traffic matching the filtering rule will be controlled with the action specified by the apply clause.\nPrerequisites\nA static BGP (IPv6) Flow Specification route or BGP (IPv6) VPN Flow Specification route has been created using the flow-route command in the system view.\nPrecautions\nIf the values of tcp-flags-value specified in the if-match tcp-flags not, if-match tcp-flags match and if-match tcp-flags any-match commands are the same, the latter command configuration overrides the previous one.\nA maximum of five filtering rules based on the TCP flag can be configured for a BGP Flow Specification route.\nAfter you configure the flow-route ipv6 command, this command cannot be executed and a prompt message is displayed if being manually configured, and this command can be successfully executed if being dynamically delivered. However, this command does not take effect."
+}

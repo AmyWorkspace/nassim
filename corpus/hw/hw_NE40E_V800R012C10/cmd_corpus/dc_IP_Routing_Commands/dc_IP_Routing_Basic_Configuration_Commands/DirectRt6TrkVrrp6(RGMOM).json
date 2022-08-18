@@ -1,0 +1,54 @@
+{
+    "PageTitle": "direct-route ipv6 track vrrp6",
+    "FuncDef": "The direct-route ipv6 track vrrp6 command associates IPv6 direct routes with a Virtual Router Redundancy Protocol for IPv6 (VRRP6) backup group.\nThe undo direct-route ipv6 track vrrp6 command dissociates IPv6 direct routes from a VRRP6 backup group.\n\nBy default, IPv6 direct routes are not associated with any VRRP6 backup group.",
+    "CLIs": [
+        "direct-route ipv6 track vrrp6 vrid <virtual-router-id> degrade-cost <cost-value>",
+        "undo direct-route ipv6 track vrrp6 [ vrid <virtual-router-id> degrade-cost <cost-value> ]"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "50GE sub-interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "degrade-cost cost-value",
+            "Info": "Specifies a cost to be applied to IPv6 direct routes when the associated VRRP6 backup group is in Backup or Initialize status.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "vrid virtual-router-id",
+            "Info": "Specifies the ID of a VRRP6 backup group.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 address 1::1 64",
+            "[*HUAWEI-GigabitEthernet1/0/0] vrrp6 vrid 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] direct-route ipv6 track vrrp6 vrid 1 degrade-cost 300"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nWhen a VRRP6 backup group functions as a gateway, the forwarding path of user-to-network is determined by the state of the VRRP6 backup group, and the forwarding path of network-to-user traffic is selected by a dynamic routing protocol. As a result, user-to-network and network-to-user traffic may be transmitted over different paths. When a firewall needs to be deployed on the VRRP6 backup group to increase security, network-to-user traffic cannot pass through the firewall because of the inconsistent forwarding paths of network-to-user and user-to-network traffic. To address this problem, run the direct-route ipv6 track vrrp6 command to adjust the cost of IPv6 direct routes based on the VRRP6 backup group status, and configure a dynamic routing protocol to import the IPv6 direct routes.\n\nPrerequisites\n\nVRRP6 has been configured on the interface.\n\nConfiguration Impact\n\nAfter the command is run, the cost of IPv6 direct routes is adjusted based on the VRRP6 backup group status, with details as follows:\n\nIf the VRRP6 backup group status is Master, the default value 0 (the highest priority) is used as the cost of the IPv6 direct routes.\nIf the VRRP6 backup group status is Backup or Initialize, the cost-value specified in the command is used as the cost of the IPv6 direct routes.\n\n\nFollow-up Procedure\n\nConfigure a dynamic routing protocol to import the IPv6 direct routes.\n\nPrecautions\n\nThe IPv6 direct routes on an interface can be associated with only one VRRP6 backup group. To change the associated VRRP6 backup group, dissociate the IPv6 direct routes from the original VRRP6 backup group first."
+}

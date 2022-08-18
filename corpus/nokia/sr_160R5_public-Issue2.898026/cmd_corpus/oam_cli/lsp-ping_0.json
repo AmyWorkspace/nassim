@@ -1,0 +1,117 @@
+{
+    "PageTitle": "lsp-ping",
+    "FuncDef": "This command performs in-band LSP connectivity tests.",
+    "CLIs": [
+        "lsp-ping <lsp-name> [ path <path-name> ]",
+        "lsp-ping bgp-label prefix <ip-prefix/length> [ path-destination <ip-address> [ { interface <if-name> | next-hop <ip-address> } ] ]",
+        "lsp-ping prefix <ip-prefix/length> [ path-destination <ip-address> [ { interface <if-name> | next-hop <ip-address> } ] ]",
+        "lsp-ping sr-isis prefix <ip-prefix/prefix-length> [ igp-instance <igp-instance> ] [ path-destination <ip-address> [ interface <if-name> | next-hop <ip-address> ] ]",
+        "lsp-ping sr-ospf prefix <ip-prefix/prefix-length> [ igp-instance <igp-instance> ] [ path-destination <ip-address> [ interface <if-name> | next-hop <ip-address> ] ]",
+        "lsp-ping sr-te <lsp-name> [ path <path-name> ] [ path-destination <ip-address> [ interface <if-name> | next-hop <ip-address> ] ]",
+        "lsp-ping static <lsp-name> [ assoc-channel { ipv4 | non-ip | none } ] [ dest-global-id <global-id> dest-node-id <node-id> ] [ path-type { active | working | protect } ]"
+    ],
+    "ParentView": [
+        "oam",
+        "config>saa>test>type"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lsp-name",
+            "Info": "Name that identifies an LSP to ping. The LSP name can be up to 64 characters long."
+        },
+        {
+            "Parameters": "dest-global-id global-id",
+            "Info": "The MPLS-TP global ID for the far end node of the LSP under test. If this is not entered, then the dest-global-id is taken from the LSP context. Values-0 to 4294967295. ParamDefault: Default- 0"
+        },
+        {
+            "Parameters": "dest-node-id node-id",
+            "Info": "The MPLS-TP global ID for the far end node of the LSP under test. If this is not entered, then the dest-global-id is taken from the LSP context. Values-a.b.c.d | 1 to 4294967295>. ParamDefault: Default- 0"
+        },
+        {
+            "Parameters": "force",
+            "Info": "Allows LSP Ping to test a path that is operationally down, including cases where MPLS-TP BFD CC/V is enabled and has taken a path down. This parameter is only allowed in the OAM context; it is not allowed for a test configured as a part of an SAA. ParamDefault: Default- disabled"
+        },
+        {
+            "Parameters": "path-type {active | working | protect}",
+            "Info": "The LSP path to test. Values-active - The currently active path. If MPLS-TP linear protection is configured on the LSP, then this is the path that is selected by the MPLS-TP PSC protocol for sending user plane traffic. If MPLS-TP linear protection is not configured, then this will be the working path.. ParamDefault: Default- active"
+        },
+        {
+            "Parameters": "path path-name",
+            "Info": "The LSP path name along which to send the LSP ping request. Values-Any path name associated with the LSP.. ParamDefault: Default- The active LSP path."
+        },
+        {
+            "Parameters": "bgp-label-prefix ip-prefix/length",
+            "Info": "Specifies the address prefix and subnet mask of the target BGP IPv4 label route."
+        },
+        {
+            "Parameters": "src-ip-address ip-address",
+            "Info": "Specifies the source IP address. This option is used when an OAM packet must be generated from a different address than the node s system interface address. An example is when the OAM packet is sent over an LDP LSP and the LDP LSR-ID of the corresponding LDP session to the next-hop is set to an address other than the system interface address."
+        },
+        {
+            "Parameters": "sr-isis prefix ip-prefix/length",
+            "Info": "Specifies the address prefix and subnet mask of the target node SID of the SR-ISIS tunnel."
+        },
+        {
+            "Parameters": "sr-ospf prefix ip-prefix/length",
+            "Info": "Specifies the address prefix and subnet mask of the target node SID of the SR-OSPF tunnel."
+        },
+        {
+            "Parameters": "sr-te lsp-name",
+            "Info": "Specifies the name of the target SR-TE LSP, up to 64 characters."
+        },
+        {
+            "Parameters": "fc-name",
+            "Info": "The FC and profile parameters are used to indicate the forwarding class and profile of the MPLS echo request packet. Values-be, l2, af, l1, h2, ef, h1, nc. ParamDefault: Default- be"
+        },
+        {
+            "Parameters": "profile {in | out}",
+            "Info": "The profile state of the MPLS echo request packet. ParamDefault: Default- out"
+        },
+        {
+            "Parameters": "octets",
+            "Info": "The MPLS echo request packet size in octets, expressed as a decimal integer. The request payload is padded with zeros to the specified size. Values-1 to 9198. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "label-ttl",
+            "Info": "The TTL value for the MPLS label, expressed as a decimal integer. Values-1 to 255. ParamDefault: Default- 255"
+        },
+        {
+            "Parameters": "send-count",
+            "Info": "The number of messages to send, expressed as a decimal integer. The send-count parameter is used to override the default number of message requests sent. Each message request must either timeout or receive a reply before the next message request is sent. The message interval value must be expired before the next message request is sent. Values-1 to 100. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "timeout",
+            "Info": "The time-out parameter in seconds, expressed as a decimal integer. This value is used to override the default timeout value and is the amount of time that the router will wait for a message reply after sending the last probe for a specific test. Upon the expiration of timeout, the test will be marked complete and no more packets will be processed for any of those request probes. Values-1 to 10. ParamDefault: Default- 5"
+        },
+        {
+            "Parameters": "interval",
+            "Info": "The interval parameter in seconds, expressed as a decimal integer. This parameter is used to override the default request message send interval and defines the minimum amount of time that must expire before the next message request is sent."
+        },
+        {
+            "Parameters": "path-destination ip-address",
+            "Info": "Specifies the IP address of the path destination from the range 127/8. When the LDP FEC prefix is IPv6, the user must enter a 127/8 IPv4 mapped IPv6 address, that is, in the range ::ffff:127/104."
+        },
+        {
+            "Parameters": "if-name",
+            "Info": "Specifies the name of an IP interface to send the MPLS echo request message to. The name must already exist in the config>router>interface context."
+        },
+        {
+            "Parameters": "next-hop ip-address",
+            "Info": "Specifies the next-hop address to send the MPLS echo request message to."
+        },
+        {
+            "Parameters": "prefix ip-prefix/length",
+            "Info": "Specifies the address prefix and subnet mask of the target LDP FEC."
+        },
+        {
+            "Parameters": "lsp-name",
+            "Info": "Specifies an LSP ping route using the RFC 6426, MPLS On-Demand Connectivity Verification and Route Tracing, Target FEC Stack code point Static LSP."
+        },
+        {
+            "Parameters": "assoc-channel {ipv4 | non-ip | none}",
+            "Info": "Specifies the launched echo request s usage of the Associated Channel (ACH) mechanism, when testing an MPLS-TP LSP. Values-ipv4 - Use an Associated Channel with IP encapsulation, as described in RFC 6426, Section 3.2.."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

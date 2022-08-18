@@ -1,0 +1,39 @@
+{
+    "PageTitle": "holdoff (PW-FPS view)",
+    "FuncDef": "The holdoff command configures the hold time for PW APS switching.\nThe undo holdoff command restores the default hold time for PW APS switching.\nBy default, the hold time for PW APS switching is 0 seconds. When the working path becomes faulty, traffic is switched to the protection path immediately.",
+    "CLIs": [
+        "holdoff <holdoffValue>",
+        "undo holdoff"
+    ],
+    "ParentView": [
+        "PW-APS view",
+        "PW-FPS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "holdoffValue",
+            "Info": "Specifies the hold time for PW APS switching.\nThe value is an integer ranging from 0 to 100, in milliseconds. The step length is 100 milliseconds.\nThe hold time equals interval multiplied by 100. Therefore, the minimum hold time is 0 milliseconds, and the maximum hold time is 10 seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] pw-aps 1",
+            "[*HUAWEI-pw-aps-1] holdoff 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] pw-aps 1 frr",
+            "[*HUAWEI-pw-aps-1] holdoff 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, when the working path is faulty, traffic is switched to the protection path immediately. If the working path intermittently flaps or an error occurs in the detection mechanism, traffic is switched frequently. To prevent the preceding problem, run the\nholdoff command to configure the hold time for traffic switching. If a fault is detected on the working path after the\nholdoff command is configured, traffic still travels along the working path within the specified period:\nIf the fault is rectified within the specified period, the traffic will not be switched to the protection path.If the fault persists after the specified period, the traffic will be switched to the protection path.\n\nPrerequisites\nA PW APS instance has been created using the pw-aps command.\nConfiguration Impact\nIn a scenario in which the holdoff command is configured, if the fault on the working path persists during the hold time, traffic will be interrupted within this period."
+}

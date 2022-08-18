@@ -1,0 +1,26 @@
+{
+    "PageTitle": "local-mac remove all-from-me",
+    "FuncDef": "The local-mac remove all-from-me command enables the function of configuring a VSI to clear the MAC address of only the PW in a received MAC Withdraw message carrying 0x404 TLV but remain the MAC addresses of the other PWs and AC interfaces.\nThe undo local-mac remove all-from-me command restores the default setting.\nBy default, when a VSI receives a MAC Withdraw message carrying 0x404 TLV, it deletes the MAC addresses of all PWs and AC interfaces.",
+    "CLIs": [
+        "local-mac remove all-from-me",
+        "undo local-mac remove all-from-me"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] local-mac remove all-from-me"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the scenario where a CE accesses an L2VPN network, when the AC between the CE and its connected PE becomes faulty frequently, the PE will send a MAC Withdraw message carrying 0x404 TLV to the remote PE to clear the MAC addresses learned by the VSI. In this way, traffic is re-broadcast and re-converged. If an interface flaps frequently, the PE will generate a large number of MAC Withdraw messages. After receiving these messages, the VSI of the remote PE will frequently clear MAC address information. If the VSI has many PWs, traffic will be broadcast for a long period, wasting device bandwidth. To resolve the issue, run the local-mac remove all-from-me command. Then the PE will clear the MAC address of the PW carried in a received MAC Withdraw message.\nPrecautions\nThe command takes effect only when the device receives a MAC Withdraw message carrying 0x404 TLV, but not MAC Withdraw messages carrying other types of TLVs besides 0x404 TLV or MAC Withdraw messages in other formats."
+}

@@ -1,0 +1,34 @@
+{
+    "PageTitle": "instance vlan",
+    "FuncDef": "The instance vlan command maps a VLAN or VLAN range to a Multiple Spanning Tree Instance (MSTI).\nThe undo instance vlan command deletes the mapping between a VLAN or VLAN range and an MSTI.\nBy default, all VLANs are mapped to Common and Internal Spanning Tree (CIST), namely, instance 0.",
+    "CLIs": [
+        "instance <instance-id> vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10>",
+        "undo instance <instance-id> [ vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> ]"
+    ],
+    "ParentView": [
+        "MSTP process region view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "instance-id",
+            "Info": "Specifies the ID of an MSTI.\nThe value is an integer ranging from 0 to 4094, Value 0 indicates CIST.\n<instanceId> specified in the undo instance command cannot be 0, that is, instance 0 cannot be deleted."
+        },
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies the start VLAN ID to be mapped to an MSTI.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to vlan-id2",
+            "Info": "Specifies the end VLAN ID to be mapped to an MSTI.\nThe value is an integer ranging from 1 to 4094. <vlanIdEnd> must be greater than <vlanIdBegin>."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] stp process 1",
+            "[~HUAWEI-mst-process-1] stp region-configuration",
+            "[~HUAWEI-mst-process-1-region] instance 1 vlan 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMSTP divides a switching network into multiple regions, each of which has independent Multiple Spanning Trees. Each spanning tree is called an MSTI, and each region is called a Multiple Spanning Tree (MST) region. Two devices belong to the same MST region only when their following configurations are the same:\nMST region nameMappings between MSTIs and VLANsMST region revision level\nTo map a VLAN or VLAN range to an MSTI, run the instance command.\n\nConfiguration Impact\nWhen using the undo instance command, note the following points:\nAfter the mapping between specified VLANs and a specified MSTI is deleted, these VLANs will be mapped to CIST, namely, instance 0.If no VLAN is specified, all VLANs that have established mappings with an MSTI are mapped to CIST.\nIf the instance command is run more than once, all configurations take effect.\n\nPrecautions\nA VLAN cannot be mapped to different MSTIs. If the instance command is run more than once, the latest configuration overrides the previous one."
+}

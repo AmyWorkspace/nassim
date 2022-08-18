@@ -1,0 +1,26 @@
+{
+    "PageTitle": "igmp-snooping max-response-time",
+    "FuncDef": "The igmp-snooping max-response-time command sets the maximum time for a downstream host to respond to a querier.\nThe undo igmp-snooping max-response-time command restores the default setting.\nBy default, the maximum time for a downstream host to respond to a querier is 10s.",
+    "CLIs": [
+        "igmp-snooping max-response-time <max-response-time>",
+        "undo igmp-snooping max-response-time"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "max-response-time",
+            "Info": "Specifies the maximum time for a downstream host to respond to a querier.\nThe value ranges from 1 to 25."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] igmp-snooping max-response-time 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe igmp-snooping max-response-time command has the following functions:\nSets the maximum response time to control the deadline for hosts to send IGMP Report messages.If the querier function is enabled, set a short maximum response time to enable hosts to rapidly respond to IGMP Query messages, and set a long maximum response time to prevent traffic congestion caused by too many Report or Leave messages sent by hosts on a network.\nCheck that the interval at which IGMP general query messages are sent is greater than the maximum response time for a downstream host to respond to the querier; otherwise, multicast group members may be deleted mistakenly.\nChanges the aging time of member ports.After receiving a Report message from a downstream device, a device sets the aging time of the corresponding member port based on the following formula: Aging time of a member port = Number of times group-specific query messages are sent x Interval at which general query messages are sent + Maximum time for a downstream host to respond to a querier. The default aging time is 130260s. The maximum time for a downstream host to respond to a querier is set using the igmp-snooping max-response-time command. The number of times group-specific group query messages are sent is set using the igmp-snooping robust-count command. The interval at which general query messages are sent is set using the igmp-snooping query-interval command.\n\nPrerequisites\nIGMP snooping has been configured using the igmp-snooping enable command.\nConfiguration Impact\nIf the igmp-snooping max-response-time command is run in the same view several times, the latest configuration overrides the previous one.\nPrecautions\nWhen the igmp-snooping max-response-time command is used to set the aging time of member ports, the settings of parameters in this command must be consistent on a Layer 2 device and its upstream Layer 3 device; otherwise, multicast data transmission between Layer 2 and Layer 3 networks will be interrupted.\nThe maximum time for a downstream host to respond to a querier fails to be set in a VLAN when a Dot1q termination sub-interface has been added to the VLAN."
+}

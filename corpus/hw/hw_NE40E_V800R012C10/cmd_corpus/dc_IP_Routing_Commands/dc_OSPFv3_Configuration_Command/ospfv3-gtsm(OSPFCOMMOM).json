@@ -1,0 +1,28 @@
+{
+    "PageTitle": "ospfv3 valid-ttl-hops",
+    "FuncDef": "The ospfv3 valid-ttl-hops command enables OSPFv3 GTSM and set the TTL value to be checked.\nThe undo ospfv3 valid-ttl-hops command disables OSPFv3 GTSM.\nBy default, OSPFv3 GTSM is disabled.",
+    "CLIs": [
+        "ospfv3 valid-ttl-hops <ttl> [ vpn-instance <vpn-instance-name> ]",
+        "undo ospfv3 valid-ttl-hops [ <ttl> ] [ vpn-instance <vpn-instance-name> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ttl",
+            "Info": "Specifies the TTL value to be checked.\nThe value is an integer that ranges from 1 to 255. If you specify the parameter hops, the valid range of the TTL value in the packet to be checked is [ 255-hops+1, 255 ]."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance. If this parameter is specified, it indicates that only the TTL value of the packets in the specified VPN instance needs to be checked.\nThe value is a string of 1 to 31 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 valid-ttl-hops 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGTSM can improve the security of an OSPFv3 network and protect a device against attacks by checking TTL values.\nThe ospfv3 valid-ttl-hops command has two functions, that is, enabling OSPFv3 GTSM and setting the TTL value to be checked. The parameter vpn-instance is valid only when you need to set the TTL value to be checked.\nIf a VPN instance is specified in the ospfv3 valid-ttl-hops command and the interface is bound to this VPN instance, all the unicast packets sent to this interface are dropped when the configured TTL value is smaller than the actual number of hops in the network.\nIf a virtual link or a sham link is configured, the number of TTL hops needs to be set according to the actual number of hops. That is, the number of Routers that the virtual link or sham link passes through must be counted; otherwise, the packets sent from the peer end of the virtual link or sham-link are dropped.\nRunning the ospfv3 valid-ttl-hops , you can view that OSPFv3 GTSM in the public network is enabled.Running the ospfv3 valid-ttl-hops, you can view that OSPFv3 GTSM is enabled in both the public network and the VPN.Run the ospfv3 valid-ttl-hops 5 vpn-instance vpn1 command. You can view that OSPFv3 GTSM in the public network and in the VPN is enabled, the TTL values of the OSPFv3 packets in VPN 1 are checked, and the default action is taken on the OSPFv3 packets that do not match the GTSM policies in the public network and in other VPN instances.\nIf only the private network policy or the public network policy is configured, it is recommended that you set the default action to be taken on the packets that do not match the GTSM policy to Pass. This prevents the OSPFv3 packets of other instances from being dropped by mistake.\n\nPrecautions\nIf a VPN instance is specified in the ospfv3 valid-ttl-hops command and the interface is bound to the VPN instance, if the configured TTL value is smaller than the actual TTL value on the network, all unicast packets sent to the interface are discarded."
+}

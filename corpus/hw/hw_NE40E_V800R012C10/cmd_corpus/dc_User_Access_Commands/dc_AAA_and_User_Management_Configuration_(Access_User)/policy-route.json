@@ -1,0 +1,31 @@
+{
+    "PageTitle": "policy-route",
+    "FuncDef": "The policy-route command sets the next-hop IP or IPv6 address of the policy-based route for all users in a domain.\nThe undo policy-route command cancels the policy-based route function of all users in a domain.\nBy default, the policy-based route function is not configured in a domain.",
+    "CLIs": [
+        "policy-route { <next-hop-ip-address> | <next-hop-ipv6-address> }",
+        "undo policy-route [ <next-hop-ip-address> | <next-hop-ipv6-address> ]"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "next-hop-ip-address",
+            "Info": "Specifies the next-hop IP address of the policy-based route for all users in a domain.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "next-hop-ipv6-address",
+            "Info": "Specifies the next-hop IPv6 address of the policy-based route for all users in a domain.\nThe address is a 32-digit hexadecimal number in the X:X:X:X:X:X:X:X format."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain isp1",
+            "[*HUAWEI-aaa-domain-isp1] commit",
+            "[~HUAWEI-aaa-domain-isp1] policy-route 10.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf you want to change the forwarding paths for online users in a domain for security or load balancing reasons, run the policy-route command in the domain to configure the next hop address of the policy-based route.\nConfiguration Impact\nAfter you configure the policy-based route for users in a domain, the forwarding paths are determined by the source IP addresses of user packets.\nThe policy-route and undo policy-route commands take effect for users who go online after these commands are configured.\nWhen a user goes online from an IPv6 stack, if the IPv6 policy-based routes are direct routes, the policy-based routes do not take effect for the user. The status of the IPv6 policy-based rout4es is changed from direct to non-direct or from non-direct to direct, which does not affect the IPv6 stack of online users.\n If user 1 goes online from an IPv6 stack and the IPv6 policy-based routes are direct routes, the policy-based routes configured using this command do not take effect for user 1. After the status of the subsequent policy-based routes is changed from direct to non-direct, the configured policy-based routes do not take effect for user 1. If user 2 goes online from an IPv6 stack and the IPv6 policy-based routes are non-direct routes, the policy-based routes configured using this command take effect for user 2. After the status of the subsequent policy-based routes is changed from non-direct to direct, the configured policy-based routes still take effect for user 2 but will cause IPv6 traffic interruptions.\n\nPrecautions\nIf a RADIUS server uses an attribute to deliver policy-based routes, these policy-based routes take precedence.\nThe next hop IP address of the policy-based route configured for users in a domain must be available. If the configured next hop IP address is not available, the policy-based route is unreachable.\nIn the distributed CGN scenario, configuring policy-based routing in a domain or delivering it through RADIUS authentication is not supported. You are advised to configure the redirection IP address in a NAT instance to achieve the effect of policy-based routing.\nIn VS mode, this command is supported only by the admin VS."
+}

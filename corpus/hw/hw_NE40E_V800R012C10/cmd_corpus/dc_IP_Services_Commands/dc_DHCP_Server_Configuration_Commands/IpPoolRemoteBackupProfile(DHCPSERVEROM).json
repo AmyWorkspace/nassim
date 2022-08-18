@@ -1,0 +1,33 @@
+{
+    "PageTitle": "remote-backup-profile",
+    "FuncDef": "The remote-backup-profile command binds an RBP to a server address pool.\nThe undo remote-backup-profile command cancels the binding relationship between an RBP and a server address pool.\nBy default, no binding relationship exists between an RBP and a server address pool.",
+    "CLIs": [
+        "remote-backup-profile <profile-name>",
+        "undo remote-backup-profile [ <profile-name> ]"
+    ],
+    "ParentView": [
+        "IP address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "profile-name",
+            "Info": "Specifies the name of an RBP.\nThe value is a string of 1 to 128 case-insensitive characters, spaces not supported.The RBP name must be the same as the name of the RBP created using the remote-backup-profile command in the system view."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] vrrp vrid 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] remote-backup-profile rpf",
+            "[*HUAWEI-rm-backup-prf-rpf] vrrp-id 1 interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-rm-backup-prf-rpf] service-type dhcp-server",
+            "[*HUAWEI-rm-backup-prf-rpf] quit",
+            "[*HUAWEI] ip pool huawei server",
+            "[*HUAWEI-ip-pool-huawei] commit",
+            "[~HUAWEI-ip-pool-huawei] remote-backup-profile rpf"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter an RBP is created, you must bind the RBP to a server address pool so that the RBP is applied to the server address pool. To bind an RBP to a server address pool, run the remote-backup-profile command.\nPrerequisites\nThe following operations have been performed:\nAn RBP has been created using the remote-backup-profile command in the system view.The RBP has been bound to a VRRP backup group using the vrrp-id command.\n\nPrecautions\nRun the remote-backup-profile command on both the primary and secondary address pools.\nThe DHCP server dual-device hot backup has the following limitations:\nThe configuration of the primary address pool is consistent with that of the secondary address pool.The overlapping of the DHCP server and DHCP snooping is not supported."
+}

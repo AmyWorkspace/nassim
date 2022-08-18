@@ -1,0 +1,45 @@
+{
+    "PageTitle": "port-observing dest-mac",
+    "FuncDef": "The port-observing dest-mac command configures the destination MAC address for mirrored packets on the observing port.\nThe undo port-observing dest-mac command cancels the destination MAC address for mirrored packets on the observing port.\nBy default, no destination MAC address is configured for mirrored packets on the observing port.",
+    "CLIs": [
+        "port-observing dest-mac <dest-mac-address>",
+        "undo port-observing dest-mac <dest-mac-address>"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "100GE interface view",
+        "10GE sub-interface view",
+        "10G LAN interface view",
+        "25GE sub-interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE sub-interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE sub-interface view",
+        "Layer 2 Eth-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dest-mac-address",
+            "Info": "Specifies a destination MAC address.\nThe value is in the format of H-H-H. Each H is a 4-digit hexadecimal number, such as 00e0. If an H contains less than 4 bits, 0s are padded ahead. For example, if an H is e0, it is displayed as 00e0 in the MAC address."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] port-mirroring inbound",
+            "[*HUAWEI-GigabitEthernet1/0/0] port-mirroring without-linklayer-header",
+            "[*HUAWEI-GigabitEthernet1/0/0] commit",
+            "[~HUAWEI-GigabitEthernet1/0/0] quit",
+            "[~HUAWEI] interface GigabitEthernet2/0/0",
+            "[~HUAWEI-GigabitEthernet2/0/0] port-observing observe-index 1",
+            "[*HUAWEI-GigabitEthernet2/0/0] port-observing dest-mac 00e0-fc12-3456"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the SIG mirroring scenario, when the port mirroring function is configured, the SIG imports traffic to the mirrored port and copies the traffic into multiple flows using the port mirroring function. After mirrored packets are sent to the observing port, the observing port removes Layer 2 headers of the original packets and encapsulates the specified destination MAC address into the packets for subsequent forwarding.\nThis command is used to configure the destination MAC address for mirrored packets on the observing port.\nIf this command is required on the observing port, the port-mirroring without-linklayer-header command must be configured on the corresponding mirrored port to configure the mirrored port to remove Layer 2 headers from packets.\nPrerequisites\nAn interface has been configured as the observing port.\nPrecautions\nThe port-observing dest-mac and port-observing pop-label commands are mutually exclusive."
+}

@@ -1,0 +1,27 @@
+{
+    "PageTitle": "apply-label pop-go",
+    "FuncDef": "The apply-label per-route pop-go command configures a device to assign labels to VPNv4 routes sent to its peer, removes such a label in a data packet received from the peer, and forward the data packet through the outbound interface found in the ILM table. With this command configuration, the device uses the per-route label allocation mode, so that it assigns a unique label to each VPNv4 route.\nThe undo apply-label per-route pop-go command restores the default configuration.\nThe apply-label per-nexthop pop-go command configures a device to assign labels to VPNv4 routes sent to its peer, removes such a label in a data packet received from the peer, and forward the data packet through the outbound interface found in the ILM table. With this command configuration, the device uses the per-next-hop label allocation mode, so that it assigns the same label to the VPNv4 routes that have the same next hop.\nThe undo apply-label per-nexthop pop-go command restores the default configuration.\nBy default, after a device receives a labeled data packet, the device removes the label of the data packet and forwards the packet based on a forwarding entry found in its IP forwarding table.",
+    "CLIs": [
+        "apply-label { per-nexthop | per-route } pop-go",
+        "undo apply-label { per-nexthop | per-route } pop-go"
+    ],
+    "ParentView": [
+        "VPN instance view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1] apply-label per-route pop-go"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1] apply-label per-nexthop pop-go"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, after the local device in the BGP/MPLS VPN networking receives a labeled data packet from a VPN instance, the local device removes the label, searches the IP forwarding table for a forwarding entry according to the longest-match rule, and sends the packet based on the found forwarding entry.\nAfter the apply-label per-nexthop pop-go command is run, the local device records in the ILM table the mapping between the label assigned to BGP VPNv4 routes with the same next-hop address and the outbound interface of the route. After the local device receives a labeled data packet from its peer, the local device directly searches the ILM for an outbound interface based on label information carried in the packet and forwards the packet through the found outbound interface after removing its label. This implementation significantly accelerates packet forwarding.\nPrerequisites\nAn RD has been configured for the VPN instance using the route-distinguisher command.\nPrecautions\nThe apply-label pop-go command and apply-label (VPN instance view) command are overwritten. The latest configuration overrides the previous one.\nAfter the apply-label pop-go command is run, the device removes the label, searches the ILM table for the corresponding outbound interface, and forwards the data packet, without querying the IP forwarding table. The apply-label command, however, needs the device to query the IP forwarding table for forwarding."
+}

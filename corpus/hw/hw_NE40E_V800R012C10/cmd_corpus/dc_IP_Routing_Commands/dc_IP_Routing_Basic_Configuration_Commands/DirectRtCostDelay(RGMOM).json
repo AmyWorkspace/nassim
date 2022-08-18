@@ -1,0 +1,42 @@
+{
+    "PageTitle": "direct-route degrade-delay",
+    "FuncDef": "The direct-route degrade-delay command sets the delay time after which the original cost of the IPv4 direct route is restored on a specified interface that changes from Down to Up.\nThe undo direct-route degrade-delay command restores the default configurations.\nBy default, there is no such function on the interface.",
+    "CLIs": [
+        "direct-route degrade-delay <delay-time> degrade-cost <cost>",
+        "undo direct-route degrade-delay"
+    ],
+    "ParentView": [
+        "Eth-Trunk sub-interface view",
+        "Global VE sub-interface view",
+        "Remote-AP interface view",
+        "Vbridge interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay-time",
+            "Info": "Specifies the delay after which the original cost of the IPv4 direct route is restored on a specified interface.\nThe value is an integer ranging from 1 to 3600, in seconds."
+        },
+        {
+            "Parameters": "degrade-cost cost",
+            "Info": "Specifies the cost of the IPv4 direct route on a specified interface.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface virtual-ethernet2/0/0",
+            "[~HUAWEI-Virtual-Ethernet2/0/0] ve-group 2 l3-access",
+            "[*HUAWEI-Virtual-Ethernet2/0/0] interface virtual-ethernet2/0/0.1",
+            "[*HUAWEI-Virtual-Ethernet2/0/0.1] direct-route degrade-delay 10 degrade-cost 30"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface Eth-Trunk 1",
+            "[*HUAWEI-Eth-Trunk1] quit",
+            "[*HUAWEI] interface Eth-Trunk 1.1",
+            "[*HUAWEI-Eth-Trunk1.1] direct-route degrade-delay 20 degrade-cost 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn IP radio access networks, an L2VPN connection is set up between each AGG and the CSG through L2VE interfaces. BGP VPNv4 peer relationships are set up between the AGGs and RSGs. L3VE interfaces are configured on the AGGs, and VPN instances are bound to the L3VE interfaces so that the CSG can access the L3VPN. BGP is configured on the AGGs to import IPv4 direct routes between the CSG and AGGs. The AGGs convert these IPv4 direct routes to BGP VPNv4 routes before advertising them to the RSGs.\nIn most cases, the RSGs select routes advertised by the master AGG, and traffic travels along the active link. If the master AGG or the CSG-AGG link fails, traffic switches over to the backup link. After the master AGG or the CSG-AGG link recovers, the L3VE interface on the master AGG goes from Down to Up, and the master AGG immediately generates an IPv4 direct route destined for the CSG and advertises the route to the RSGs. Downstream traffic then switches over to the active link. However, the master AGG has not learned the MAC address of the NodeB yet. As a result, downstream traffic is lost.\nTo address this problem, run the direct-route degrade-delay command on the L3VE sub-interface of the master AGG to increase the cost of the IPv4 direct route when the sub-interface goes from Down to Up. In this case, the RSG does not select the IPv4 direct routes, and downstream traffic still travels along the backup link. After the configured delay expires, the cost of the IPv4 direct route to the CSG restores to the default value 0. Then, the RSG selects the IPv4 direct routes, and downstream traffic is switched over to the active link. By this time, the master AGG has learned the MAC address of the NodeB, and downstream traffic loss is reduced.\nPrerequisites\nThe main VE interface of the sub-interface has been configured as an L3VE interface.\nPrecautions\nThe direct-route track pw-state, direct-route degrade-delay, and direct-route track vrrp commands cannot all be configured simultaneously. If you run the commands, the latest configuration overrides the previous one."
+}

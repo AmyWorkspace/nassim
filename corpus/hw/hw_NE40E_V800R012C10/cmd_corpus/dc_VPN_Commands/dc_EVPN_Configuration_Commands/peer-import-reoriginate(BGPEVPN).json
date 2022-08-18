@@ -1,0 +1,42 @@
+{
+    "PageTitle": "peer import reoriginate (BGP-EVPN address family view)",
+    "FuncDef": "The peer import reoriginate command enables a device to add a regeneration flag to the routes received from BGP EVPN peers.\nThe undo peer import reoriginate command restores the default configuration.\nBy default, a device does not add a regeneration flag to the routes received from BGP EVPN peers.",
+    "CLIs": [
+        "peer <peerIpv4Addr> import reoriginate",
+        "peer <peerIpv6Addr> import reoriginate",
+        "undo peer <peerIpv4Addr> import reoriginate",
+        "undo peer <peerIpv6Addr> import reoriginate"
+    ],
+    "ParentView": [
+        "BGP-EVPN address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerIpv4Addr",
+            "Info": "Specifies the IPv4 address of a BGP EVPN peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "peerIpv6Addr",
+            "Info": "Specifies the IPv6 address of a BGP EVPN peer. This parameter applies only to the BGP-EVPN address family view.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 1.1.1.1 as-number 100",
+            "[*HUAWEI-bgp] l2vpn-family evpn",
+            "[*HUAWEI-bgp-af-evpn] peer 1.1.1.1 enable",
+            "[*HUAWEI-bgp-af-evpn] peer 1.1.1.1 import reoriginate"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 2001:db8:1::1 as-number 100",
+            "[*HUAWEI-bgp] l2vpn-family evpn",
+            "[*HUAWEI-bgp-af-evpn] peer 2001:db8:1::1 enable",
+            "[*HUAWEI-bgp-af-evpn] peer 2001:db8:1::1 import reoriginate"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the data center interconnect (DCI) solution, DCI-PE adds the regeneration flag to the received EVPN routes before sending the routes to the peer. By default, the function to add the regeneration flag to the routes received from the peer is disabled. Specifically, DCI-PE does not re-encapsulate the routes received from the peer. Therefore, to allow DCI-PE to re-encapsulate the EVPN routes, run the peer import reoriginate command to enable the function to add the regeneration flag to the routes received from the peer.\nIn an EVPN L3VPN over SRv6 splicing with common L3VPN over MPLS scenario, border leaves must be configured with the function to re-originate MPLS-encapsulated VPNv4/VPNv6 routes upon receipt of EVPN routes carrying the SRv6 encapsulation attribute. In this case, the function to re-originate the EVPN routes received by the local device from a BGP EVPN IPv6 peer must be enabled.\nPrerequisites\nRoute exchange with a specified peers has been enabled using the peer enable command."
+}

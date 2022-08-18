@@ -1,0 +1,33 @@
+{
+    "PageTitle": "apply gateway-ip",
+    "FuncDef": "The apply gateway-ip command sets a gateway IP address for routes.\nThe undo apply gateway-ip command cancels the configuration.\nBy default, no gateway IP address is set for routes.",
+    "CLIs": [
+        "apply gateway-ip { origin-nexthop | <address> | none }",
+        "undo apply gateway-ip [ <address> | origin-nexthop | none ]"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "origin-nexthop",
+            "Info": "Sets the next-hop IP address of a route as its gateway IP address.\n-"
+        },
+        {
+            "Parameters": "address",
+            "Info": "Sets a gateway IPv4 address for a route.\nThe value is an IPv4 address, in dotted decimal notation."
+        },
+        {
+            "Parameters": "none",
+            "Info": "Clears a gateway IPv4 address.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] apply gateway-ip origin-nexthop"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure an L3VPN instance on an L2GW/L3GW to advertise only desired VPN static routes that can reach a VNF to an EVPN, you need to create a route-policy to filter routes. To set a gateway IP address for each VPN static route that matches the route-policy, run the apply gateway-ip command to configure an apply clause for the route-policy.\nRun the route-policy command to enter the route-policy view.A route-policy may consist of multiple nodes, and the relationship between these nodes is \"OR\". The system matches routes against the nodes in order of node ID. If a route matches a node in the route-policy, the route is not matched against the next node.Each node comprises a set of if-match and apply clauses. The if-match clauses define matching rules that are used to filter route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. Specifically, a route matches a node only when it meets all the if-match clauses of the node. The relationship among if-match clauses of the same node that are based on the same route attribute is OR; the system matches routes against the if-match clauses in order; if a route matches an if-match clause, the route matches the route-policy, and the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among the if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among the if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.\n\nPrerequisites\nA route-policy has been created using the route-policy command.\nConfiguration Impact\nIf a route matches the route-policy, a gateway IP address is set for the route."
+}

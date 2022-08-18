@@ -1,0 +1,41 @@
+{
+    "PageTitle": "peer load-balancing (BGP-VPN instance IPv6 address family view) (IPv6)",
+    "FuncDef": "The peer load-balancing command enables BGP peer-based load balancing.\nThe undo peer load-balancing command restores the default configuration.\nBy default, BGP load balancing is not enabled.",
+    "CLIs": [
+        "peer <ipv6-address> load-balancing [ as-path-ignore | as-path-relax ]",
+        "undo peer <ipv6-address> load-balancing [ as-path-ignore | as-path-relax ]"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a peer.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "as-path-ignore",
+            "Info": "Prevents the router from comparing AS_Path attributes when selecting routes for load balancing.\n-"
+        },
+        {
+            "Parameters": "as-path-relax",
+            "Info": "Configures the device to ignore comparing the AS_Path attributes of the same length when selecting routes for load balancing.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] peer 2001:DB8:1::1 as-number 100",
+            "[*HUAWEI-bgp-6-vpna] peer 2001:DB8:2::2 as-number 100",
+            "[*HUAWEI-bgp-6-vpna] peer 2001:DB8:1::1 load-balancing as-path-relax",
+            "[*HUAWEI-bgp-6-vpna] peer 2001:DB8:2::2 load-balancing as-path-relax"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn large networks, there may be multiple valid routes to the same destination. BGP, however, advertises only the optimal route to its peers. This may result in unbalanced traffic on different routes. To prevent this problem, configure load balancing.\nAfter the peer load-balancing command is run, BGP peer-based load balancing is implemented only when the following conditions are met:\nThe routes are received from the specified peer.The optimal route and optimal equal-cost routes exist.The AS_Path attribute is the same as that of the optimal route, or as-path-ignore or as-path-relax is specified in the peer load-balancing command.\nIf as-path-ignore is specified, the device ignores comparing AS_Path attributes when selecting routes for load balancing. In this case, routes can participate in load balancing even if their AS_Path attributes are different.If as-path-relax is specified, the device ignores comparing the AS_Path attributes of the same length when selecting routes for load balancing. In this case, routes cannot participate in load balancing if their AS_Path attributes are of different lengths. For example, the AS_Path attribute of route A is 10, and the AS_Path attribute of route B is 10, 20. Because the two AS_Path attributes are of different lengths, the two routes cannot participate in load balancing.\n\nPrecautions\nGlobal load balancing configured using the maximum load-balancing command takes precedence over BGP peer-based load balancing configured using the peer load-balancing command. Specifically, a configured maximum number of routes learned from all BGP peers may participate in load balancing as long as the maximum load-balancing command is run.\nBy default, BGP does not change the next-hop IP addresses of the routes to be advertised to IBGP peers to the local IP address. However, if BGP peer or peer group-based load balancing is enabled, BGP changes the next-hop IP addresses of the routes to be advertised to the peer or peer group to the local IP address.\nIf the peer load-balancing command without as-path-ignore or as-path-relax specified and the load-balancing as-path-ignore or load-balancing as-path-relax command are run, the load-balancing as-path-ignore or load-balancing as-path-relax command takes effect. If the peer load-balancing command with as-path-ignore or as-path-relax specified and the load-balancing as-path-ignore or load-balancing as-path-relax command are run, the peer load-balancing command takes effect."
+}

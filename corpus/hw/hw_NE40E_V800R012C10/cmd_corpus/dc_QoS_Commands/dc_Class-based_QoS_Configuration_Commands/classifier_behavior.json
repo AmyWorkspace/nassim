@@ -1,0 +1,65 @@
+{
+    "PageTitle": "classifier behavior",
+    "FuncDef": "The classifier behavior command specifies the traffic behavior for the traffic classifier in the policy.\nThe undo classifier command cancels the configuration.\nBy default, the traffic behavior is not specified for the traffic classifier in the traffic policy.",
+    "CLIs": [
+        "classifier <classifier-name> { source | destination } { user-group <user-group-name> | service-group <service-group-name> } behavior <behavior-name> [ precedence <precedence-value> ]",
+        "undo classifier <classifier-name> { source | destination } { user-group <user-group-name> | service-group <service-group-name> }"
+    ],
+    "ParentView": [
+        "Traffic policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "classifier-name",
+            "Info": "Specifies the name of a predefined traffic classifier and is defined by the system or users through the traffic classifier command.\nThe value is a string of 1 to 127 case-sensitive characters."
+        },
+        {
+            "Parameters": "source",
+            "Info": "Indicates the user-to-network traffic.\n-"
+        },
+        {
+            "Parameters": "destination",
+            "Info": "Indicates the network-to-user traffic.\n-"
+        },
+        {
+            "Parameters": "user-group user-group-name",
+            "Info": "Specifies a user group.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "service-group service-group-name",
+            "Info": "Specifies a service group.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "behavior-name",
+            "Info": "Specifies the name of a predefined traffic behavior and is defined by the system or users through the traffic behavior command.\nThe value is a string of 1 to 127 case-sensitive characters with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "precedence precedence-value",
+            "Info": "Specifies the precedence of a classifier. That is, the action of the classifier is preferentially performed. You can change the step between policies through the step command to add new policies. If precedence is not configured, the default precedence is used. The earlier the value is configured, the smaller the value is and the higher the precedence is.\nThe value is an integer ranging from 1 to 5119."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic classifier c1",
+            "[*HUAWEI-classifier-c1] quit",
+            "[~HUAWEI] traffic behavior b1",
+            "[*HUAWEI-classifier-b1] quit",
+            "[~HUAWEI] traffic policy p1",
+            "[*HUAWEI-trafficpolicy-p1] classifier c1 behavior b1 precedence 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] traffic classifier c1",
+            "[*HUAWEI-classifier-c1] quit",
+            "[~HUAWEI] traffic behavior b1",
+            "[*HUAWEI-classifier-b1] quit",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] user-group u1",
+            "[~HUAWEI] traffic policy p1",
+            "[*HUAWEI-trafficpolicy-p1] undo share-mode",
+            "[*HUAWEI-trafficpolicy-p1] classifier c1 source user-group u1 behavior b1 precedence 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo perform a specific traffic behavior for the traffic that matches a certain rule on an interface, you need to apply traffic policies on the interface. Before traffic policies are applied, you must run the classifier behavior command in the traffic policy view to bind the traffic classifier to the traffic behavior.\nAfter a traffic policy is applied to the NE40E, the NE40E implements a specific traffic behavior for matching traffic. Before applying a traffic policy to the NE40E, you must associate a traffic classifier and a traffic behavior in the traffic policy.\nWhen only a few service groups correspond to access user groups or access users and uniform ACL rules are required, perform the following operations to configure the traffic policy (common mode for short):\n Configure a user ACL, specify a rule in the ACL, and configure user-group or service-group in the rule command. Configure a traffic classifier and specify the user ACL in the traffic classifier. Configure a traffic behavior. Configure a traffic policy and run the classifier behavior command to specify the traffic behavior for the traffic classifier.\nIn common mode, if multiple user groups or service groups require the same ACL rule, repeat the preceding configuration for each user group or service group. To simplify the configuration, you can specify a user group or service group in the classifier behavior command in V800R009C00 or later (simplified mode for short). The simplified configuration is as follows:\n Configure a user ACL, specify a rule in the ACL, and do not configure user-group or service-group in the rule command. Configure a traffic classifier and specify the user ACL in the traffic classifier. Configure a traffic behavior. Configure a traffic policy and specify the traffic behavior for the traffic classifier in the traffic policy. Configure user-group or service-group in the classifier behavior command.\nThe traffic behavior takes effect for the traffic that matches the traffic classifier configured for a specific user or service group.\nThe traffic policy configured in this manner can be only applied globally but not on an interface.\n\nPrerequisites\nThe traffic classifier, traffic behavior, and traffic policy are created in the system view.Create the user or service group in the system view before specifying the user-group or service-group parameter in the classifier behavior command.\nThe traffic policy must be unshared if user-group or service-group is required in the classifier behavior command.\nPrecautions\nIf a new model C-B pair is required in a traffic policy:\nThe unshared mode must have been configured (undo share-mode).If a user is specified in the if-match rule in a traffic classifier, no user group can be specified for the C-B pair, and vice versa.If a traffic policy contains CB+group configuration, the global ACL cannot be enabled.If a traffic policy contains CB+group configuration, the policy cannot be bound to an interface.If a traffic policy is bound to an interface, the CB+group configuration cannot be added to the traffic policy.If an old model policy UCL is globally enabled, the new model policy cannot be enabled.If a new model policy UCL is globally enabled, the old model policy cannot be enabled.The new and old C-B pairs cannot coexist in a traffic policy.\nThe undo classifier command cannot be used to delete the system-defined classifier. In the traffic policy view, one traffic classifier can be associated with only one traffic behavior, and you can configure the classifier-and-behavior-association for a maximum of 255 traffic classifiers.In the traffic behavior view, you can configure multiple actions. You, however, must ensure that these actions do not conflict.\nWhen the traffic policy in which traffic classifiers and traffic behaviors are bound is applied to an interface, you can modify the rules in traffic classifiers, actions in traffic behaviors, and binding relationships between traffic classifiers and traffic behaviors. The later configurations automatically overrides the previous ones. Therefore, you do not need to cancel the application of the traffic policy before modifying it.\nA traffic policy configured with redirection is applied to only the inbound direction of an interface.\nWhen multiple classifier-behavior pairs are configured in a traffic policy, only one pair can be matched for the same traffic. After the matching, other pairs do not take effect."
+}

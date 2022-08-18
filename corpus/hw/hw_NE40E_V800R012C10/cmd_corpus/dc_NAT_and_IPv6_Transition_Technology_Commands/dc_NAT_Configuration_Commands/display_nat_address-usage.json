@@ -1,0 +1,65 @@
+{
+    "PageTitle": "display nat address-usage",
+    "FuncDef": "The display nat address-usage command displays the usage of public network ports in a NAT address pool.",
+    "CLIs": [
+        "display nat address-usage [ by-session ] instance <instance-name> address-group <group-name> [ slot <slot-id> { engine <cpu-id> | card <card-id> } ] [ verbose ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "by-session",
+            "Info": "Indicates the public port usage of a NAT address pool based on sessions. This parameter can only be configured on a VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S.\n-"
+        },
+        {
+            "Parameters": "instance instance-name",
+            "Info": "NAT instance name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "address-group group-name",
+            "Info": "Name of an IP address pool.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Specifies the slot ID of a service board.\nThe value is a string of 1 to 15 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "engine cpu-id",
+            "Info": "Specifies the CPU ID of a service board. This parameter can only be configured on a VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S.\nThe value can be 0 to 3."
+        },
+        {
+            "Parameters": "card card-id",
+            "Info": "Specifies the CPU ID of a subcard. This parameter takes effect only on a VSUF-80/VSUF-160/VSUI-160-E.\nThe value is an integer that ranges from 0 to 1."
+        },
+        {
+            "Parameters": "verbose",
+            "Info": "Displays detailed address usage.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display nat address-usage instance cpe1 address-group group1 slot 1 engine 0",
+            "This operation will take a few minutes. Press 'Ctrl+C' to break ...",
+            "Slot: 1 Engine: 0",
+            "---------------------------------------------------------------------------",
+            "PoolID : 1",
+            "Total Usage : 3%",
+            "---------------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display nat address-usage by-session instance cpe1 address-group group1 slot 1 engine 0 verbose",
+            "This operation will take a few minutes. Press 'Ctrl+C' to break ...",
+            "Slot: 1 Engine: 0",
+            " ---------------------------------------------------------------------------",
+            "  PoolID                                :  1",
+            "  Total Usage                           :  100%  ",
+            "  Port usage of session table           :  50%",
+            "  Usage of single IP address            :",
+            "  10.1.1.1                              :  100%(Port usage of session table :50%)",
+            "  10.1.1.2                              :  100%(Port usage of session table :50%)",
+            "---------------------------------------------------------------------------"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo view the public network port usage of an address pool in a specified NAT instance, run the display nat address-usage command. If the current address pool usage exceeds a defined threshold, such an address pool usage may be mistakenly considered the port usage. Actually, all of these ports have been allocated. In this case, you need to add the by-session parameter to the command to view the port usage of the public address pool.\nPrecautions\nIn the query and alarm function of address pool usage in a NAT instance, the address pool usage is the proportion of the number of allocated ports to the total number of available ports.When the maximum number of access users each with a single IP address is set or the address pool lock function is configured in an instance, address usage may be lower than 100%. In this case, private network users fail to get online after failing to apply for public network resources.\nThis command is applicable only to the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S."
+}

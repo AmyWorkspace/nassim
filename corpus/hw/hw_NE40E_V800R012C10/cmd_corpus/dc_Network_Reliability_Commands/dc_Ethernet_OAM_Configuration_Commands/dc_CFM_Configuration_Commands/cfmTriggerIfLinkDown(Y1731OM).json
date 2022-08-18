@@ -1,0 +1,79 @@
+{
+    "PageTitle": "cfm trigger if-link-down",
+    "FuncDef": "The cfm trigger if-link-down command associates Ethernet CFM with an interface's protocol Down.\nThe undo cfm trigger if-link-down command restores the default configuration.\n\nBy default, Ethernet CFM is not associated with an interface's link layer.",
+    "CLIs": [
+        "cfm md <md-name> ma <ma-name> remote-mep mep-id <mep-id> trigger if-link-down",
+        "undo cfm md <md-name> ma <ma-name> remote-mep mep-id <mep-id> trigger if-link-down"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "50GE Layer 2 sub-interface view",
+        "40GE interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Port extension Layer 2 interface view",
+        "VE layer2 subinterface view",
+        "Global-VE layer2 subinterface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "Layer 2 50GE interface view",
+        "100GE interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "400GE Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ma ma-name",
+            "Info": "Specifies the name of an MA. Different MAs in an MD cannot have the same name.\nThe value is a string of 1 to 43 case-sensitive characters, hyphens (-), and question marks (?) not supported. The total length of the MA and MD names must be less than 44 characters. The character string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "remote-mep",
+            "Info": "Specifies the ID of an RMEP.\n-"
+        },
+        {
+            "Parameters": "mep-id mep-id",
+            "Info": "Specifies the ID of an RMEP.\nThe value is an integer ranging from 1 to 8191."
+        },
+        {
+            "Parameters": "md md-name",
+            "Info": "Specifies the name of an MD.\nEach MD on a device must have a unique name.The value is a string of 1 to 43 case-sensitive characters, hyphens (-) and question marks (?) not supported. The character string can contain spaces if it is enclosed in double quotation marks (\")."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 3 interface GigabitEthernet1/0/3 outward",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send enable",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 4",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep ccm-receive enable",
+            "[*HUAWEI-md-md1-ma-ma1] commit",
+            "[~HUAWEI-md-md1-ma-ma1] quit",
+            "[~HUAWEI-md-md1] quit",
+            "[~HUAWEI] interface GigabitEthernet1/0/3",
+            "[~HUAWEI-GigabitEthernet1/0/3] cfm md md1 ma ma1 remote-mep mep-id 4 trigger if-link-down"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nAfter the cfm trigger if-link-down command is run to associate Ethernet CFM with an interface's Down, the OAM module disables the interface's link layer if the MEP in a specified MA detects a fault between itself and the RMEP. This triggers a rapid service traffic switchover.\nIf CFM goes Down, the associated member interface goes Down and service traffic except CFM traffic is blocked. CFM detection continues. If the link is restored, the member interface state changes to Up.\n\nPrerequisites\n\nCFM has been enabled globally using the cfm enable command.\n\nPrecautions\n\n\nWhen you run the cfm trigger if-link-down command to associate Ethernet CFM with an interface's link layer, an outward-facing MEP must have been created in the specified MA, and the interface where the MEP resides is the current interface.\nEach interface can be bound only to a single RMEP. To modify the binding between an interface and RMEP, delete the original binding and reconfigure a binding.\nThe cfm trigger if-link-down and cfm trigger if-down commands are mutually exclusive in the same interface view."
+}

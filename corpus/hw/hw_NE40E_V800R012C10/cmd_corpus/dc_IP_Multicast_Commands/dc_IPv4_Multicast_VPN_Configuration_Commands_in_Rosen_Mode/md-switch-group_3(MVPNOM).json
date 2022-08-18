@@ -1,0 +1,30 @@
+{
+    "PageTitle": "multicast-domain switch-delay",
+    "FuncDef": "The multicast-domain switch-delay command specifies the delay for the switchover from the Share-multicast distribution tree (MDT) to the Switch-MDT.\nThe undo multicast-domain switch-delay command restores the default setting.\nBy default, the delay for the switchover from the Share-MDT to the Switch-MDT is 5 seconds.",
+    "CLIs": [
+        "multicast-domain switch-delay <switch-delay>",
+        "undo multicast-domain switch-delay"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "switch-delay",
+            "Info": "Specifies the delay for the switchover from the Share-MDT to the Switch-MDT.\nThe value is an integer ranging from 3 to 60, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance mytest",
+            "[*HUAWEI-vpn-instance-mytest] ipv4-family",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain share-group 224.1.1.1 binding mtunnel 10",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain switch-delay 20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a downstream Provider Edge (PE) joins the Switch-Group, setting up the Switch-MDT on the public network takes time. Therefore, the switching delay needs to be configured. The upstream PE sends a switching packet. After the delay expires, the PE device system uses the Switch-Group to encapsulate data, and data is switched from the Share-MDT to the Switch-MDT. Before the switch-delay timer expires, the system continues to detect the data forwarding rate. If the rate remains higher than the switchover threshold, data packets are switched to the Switch-MDT. Otherwise, the packets are still forwarded along the Share-MDT.\nPrerequisites\nThe multicast-domain share-group command has been configured in the VPN.\nConfiguration Impact\nIf you run the command multiple times, the last configuration overrides the previous ones.\nPrecautions\nIn the actual switchover process, there is a delay about 1 to 30 seconds before the device detects changes in data forwarding rate. The delay means that the PE device system starts the switch-delay timer about 1 to 30 seconds after the data forwarding rate changes. The delay is not included in switch-delay. Therefore, the total delay from the time when the data forwarding rate changes to the time when the system completes the switchover is longer than switch-delay by 1 to 30 seconds."
+}

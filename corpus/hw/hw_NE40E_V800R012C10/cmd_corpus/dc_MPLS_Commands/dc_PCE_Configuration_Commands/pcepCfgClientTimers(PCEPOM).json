@@ -1,0 +1,40 @@
+{
+    "PageTitle": "timer (PCE client view)",
+    "FuncDef": "The timer command sets the Hold, Keepalive, Delegate-hold timer, and LSP state timeout timer values.\nThe undo timer command restores the default timer values.\nBy default, the Hold timer is 30s, the Keepalive timer is 120s, the Delegate-hold timer is 30s, and the LSP state timeout timer is 30s.",
+    "CLIs": [
+        "timer { keepalive <keepalive-value> | hold <hold-time> | delegate-hold <delegate-value> | state-timeout <state-timeout-value> }",
+        "undo timer keepalive",
+        "undo timer hold",
+        "undo timer delegate-hold",
+        "undo timer state-timeout"
+    ],
+    "ParentView": [
+        "PCE client view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "keepalive keepalive-value",
+            "Info": "Specifies the Keepalive timer value.If the value of the Keepalive timer is 0, Keepalive messages are sent only once.\nThe value is an integer ranging from 0 to 255, in seconds."
+        },
+        {
+            "Parameters": "hold hold-time",
+            "Info": "Specifies the Hold timer value.If the value of the hold timer is 0, the PCEP session is not interrupted when the timer expires.\nThe value is an integer ranging from 0 to 255, in seconds."
+        },
+        {
+            "Parameters": "delegate-hold delegate-value",
+            "Info": "Specifies the Delegate-hold timer value.\nThe value is an integer ranging from 30 to 255, in seconds."
+        },
+        {
+            "Parameters": "state-timeout state-timeout-value",
+            "Info": "Specifies the value of the LSP state timeout timer.\nThe value is an integer ranging from 0 to 1800, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] pce-client",
+            "[*HUAWEI-pce-client] timer keepalive 33"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPCEP defines the Hold and Keepalive timers to maintain PCEP sessions. Both ends of a PCEP session start these two timers. Each time the Keepalive timer expires, a local end resends a Keepalive message. If no Keepalive message arrives after the Hold timer expires, a local end considers the PCEP session disconnected.\nHold timer value = 4 x Keepalive timer value\nAfter the Keepalive timer is set, the Hold timer value is automatically updated. However, there are restrictions:\nThe Hold timer value must be greater than or equal to the Keepalive timer value.Although setting a Keepalive timer value changes a Hold timer value, setting a Hold timer value cannot change a Keepalive timer value.If the Keepalive time is set larger than 63, the Hold timer remains 255.\nKeepalive and Hold timers on both ends of a PCEP session are independent and can be assigned different values. The two ends do not negotiate on a consistent value.\nIf a PCEP connection goes Down, a PCE client starts an LSP Delegate-hold timer. Before the LSP Delegate-hold timer expires, the PCE client attempts to restore the PCEP connection to the existing PCE server. After the LSP Delegate-hold timer expires, the PCE client attempts to select another available PCE server to establish a PCEP session. The PCE client also starts an LSP state timeout timer. Before this timeout timer expires, the delegated LSP status remains. After the timeout timer expires, the PCE client is allowed to change the delegated LSP status in the following situations:\nIf the mpls te pce cleanup lsp-state command is run on the PCE client, the client deletes the delegate LSP status and automatically uses a local path calculation function to reestablish an LSP.If the mpls te pce cleanup lsp-state command is not run on the PCE client, the client keeps attempting to establish a session with a PCE server.\n\nPrerequisites\nA PCE client has been configured using the pce-client command.\nConfiguration Impact\nThe settings of the Keepalive and Hold timers take effect only on new established PCEP sessions."
+}

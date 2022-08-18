@@ -1,0 +1,52 @@
+{
+    "PageTitle": "authentication-mode(Authentication scheme view)",
+    "FuncDef": "The authentication-mode command sets the authentication mode of an authentication scheme.\nThe default authentication mode is radius authentication.",
+    "CLIs": [
+        "authentication-mode { local | hwtacacs | radius } * [ none ]",
+        "authentication-mode radius-proxy",
+        "authentication-mode none",
+        "undo authentication-mode { local | hwtacacs | radius } * [ none ]",
+        "undo authentication-mode radius-proxy",
+        "undo authentication-mode none"
+    ],
+    "ParentView": [
+        "Authentication scheme view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "local",
+            "Info": "Authenticates users locally.\nIf local is involved in the authentication method, you should configure a local user.\n-"
+        },
+        {
+            "Parameters": "hwtacacs",
+            "Info": "Authenticates users through an HWTACACS server.\n-"
+        },
+        {
+            "Parameters": "radius",
+            "Info": "Authenticates users through a RADIUS server.\nIn VS mode, this parameter is supported only by the admin VS.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "Allows users' access without authentication.\nIf none authentication is configured for the administrator, the administrator cannot log in to the device.\n-"
+        },
+        {
+            "Parameters": "radius-proxy",
+            "Info": "Authenticates users through a RADIUS proxy server.\nIn VS mode, this parameter is supported only by the admin VS.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] authentication-scheme scheme1",
+            "[*HUAWEI-aaa-authen-scheme1] authentication-mode local"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] authentication-scheme scheme2",
+            "[*HUAWEI-aaa-authen-scheme2] authentication-mode radius local hwtacacs"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the process of upgrading user levels, if several authentication modes are used in an authentication scheme, these authentication modes take effect in the sequence of their configurations.\nIn the sequence of local authentication and then remote authentication:\nIf a login account is locally unavailable, the authentication mode is changed from local authentication to remote authentication.\nIf a login account is available both locally and on the remote server, the authentication mode is not changed to remote authentication when local authentication fails because of an incorrect password.\nIn the sequence of remote authentication and then local authentication:\nIf a login account is available locally but unavailable on the remote server, the authentication mode is not changed from remote authentication to local authentication. Instead, it is considered that this account fails the authentication.\nThe authentication mode is changed from remote authentication to local authentication only when the remote server goes down.\nIf the current authentication mode does not respond, the system goes to the next authentication mode. If the current authentication fails or succeeds, the system does not go to next authentication mode."
+}

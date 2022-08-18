@@ -1,0 +1,36 @@
+{
+    "PageTitle": "arp broadcast-send maximum (interface view)",
+    "FuncDef": "The arp broadcast-send maximum command configures a rate at which ARP broadcast packets are sent.\nThe undo arp broadcast-send maximum command restores the default configuration.\n\nBy default, the rate of sending ARP broadcast packets that is configured in the system view is used as the rate of sending ARP broadcast packets on a sub-interface.",
+    "CLIs": [
+        "arp broadcast-send maximum <maximum-value>",
+        "undo arp broadcast-send maximum [ <maximum-value> ]"
+    ],
+    "ParentView": [
+        "GE sub-interface view",
+        "PW-VE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "Global VE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "100ge sub-interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "maximum-value",
+            "Info": "Specifies the number of ARP broadcast packets sent per second.\nThe value is an integer ranging from 0 to 500.A larger value results in a higher rate of sending ARP packets. This may cause high CPU usage and affect services. If this parameter is set to 0, the rate of sending ARP broadcast packets that is configured in the system view is used as the rate of sending ARP broadcast packets on a sub-interface."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] encapsulation qinq-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] arp broadcast-send maximum 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nARP broadcast packets from a sub-interface are replicated to all VLANs. If the number of VLANs is 100 and the number of ARP broadcast packets sent per second is 50, the number of ARP broadcast packets replicated is 5000 (100 x 50). This may cause the peer device to be overloaded with ARP packets. As a result, the downstream device becomes abnormal. When replicating a large number of ARP broadcast packets, the local device may fail to send ARP packets promptly, causing ARP learning failures. In this case, you can configure a proper rate for sending ARP broadcast packets to reduce CPU usage.\n\nPrerequisites\n\nAn encapsulation type has been configured for a sub-interface using the encapsulation dot1q-termination or encapsulation qinq-termination command.\n\nPrecautions\n\nIf a rate for sending ARP broadcast packets is configured in both the system and interface views, the smaller value between the two rates is used."
+}

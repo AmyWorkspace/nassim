@@ -1,0 +1,31 @@
+{
+    "PageTitle": "aps timers",
+    "FuncDef": "The aps timers command configures an interval at which the local end sends MC-LMSP negotiation messages and the hold time of an MC-LMSP connection on a protection interface.\nThe undo aps timers command restores the default values of the interval and hold time configured on a protection interface.\nBy default, the interval at which a local end sends MC-LMSP negotiation messages is 1 second, and the hold time of the MC-LMSP connection is 180 seconds.",
+    "CLIs": [
+        "aps timers <keep-alive-time> <hold-time>",
+        "undo aps timers"
+    ],
+    "ParentView": [
+        "CPOS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "keep-alive-time",
+            "Info": "Specifies the interval at which a local end sends MC-LMSP negotiation messages.\nThe value is an integer ranging from 1 to 60, in seconds."
+        },
+        {
+            "Parameters": "hold-time",
+            "Info": "Specifies the hold time of the MC-LMSP connection.\nThe value is an integer ranging from 3 to 300, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] controller cpos 1/0/0",
+            "[~HUAWEI-cCpos1/0/0] aps group 1",
+            "[*HUAWEI-Cpos1/0/0] aps protect",
+            "[*HUAWEI-Cpos0/1/0] aps timers 2 6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo check that an MC-LMSP connection exists, on the protection interface in the LMSP group, configure an interval at which the local end sends MC-LMSP negotiation messages. In addition, to ensure the stability of the MC-LMSP connection, configure the hold time of the MC-LMSP connection.\nPrerequisites\nBefore you configure an interface as the protection interface of an LMSP group, add the interface to the LMSP group.\nConfiguration Impact\nTo set the interval at which a local end sends MC-LMSP negotiation messages and the hold time of an MC-LMSP connection, run the aps timers command.\nAfter the interval at which MC-LMSP negotiation messages are sent is set, the Router periodically sends negotiation messages to its peer to confirm the existence of the MC-LMSP connection.After the hold time of the MC-LMSP connection is set, the Router remains its MC-LMSP connection with the peer even though it does not receive the negotiation message within the hold time. If the Router does not receive the negotiation message after the hold time elapses, it considers the MC-LMSP connection to its peer disconnected.\n\nPrecautions\nYou can run the aps timers command only during the MC-LMSP configuration.\nThe hold time of the MC-LMSP connection must be greater than or equal to three times the interval at which MC-LMSP negotiation messages are sent.\nIf the number of configured PW services exceeds 3000, set the hold time of the MC-LMSP connection to 300 seconds. If the hold time of the MC-LMSP connection is not set to 300 seconds, PGP may expire when the device restarts. As a result, packet loss occurs."
+}

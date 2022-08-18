@@ -1,0 +1,29 @@
+{
+    "PageTitle": "jitter-buffer depth",
+    "FuncDef": "The jitter-buffer depth command sets the depth of the jitter buffer in the application of TDMoPSN.\nThe undo jitter-buffer depth command restores the default maximum depth of the TDM jitter buffer.\nBy default, the depth of the jitter buffer is 4 ms.",
+    "CLIs": [
+        "jitter-buffer depth <depth>",
+        "undo jitter-buffer depth"
+    ],
+    "ParentView": [
+        "PW template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "depth depth",
+            "Info": "Specifies the depth of the jitter buffer, that is, the allowed maximum jitter delay.\nThe value is an integer ranging from 1 to 64, in milliseconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] pw-template tdmpw",
+            "[*HUAWEI-pw-template-tdmpw] jitter-buffer depth 8"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA jitter buffer is designed to smooth the transmission jitter. The jitter buffer receives time division multiplexing (TDM) services at different rates, buffers TDM frames, and then sends the frames to the next hop at a certain rate. In this manner, the transmission jitter is smoothed. The jitter-buffer depth command can be run on TDM AC interfaces such as E1, CE1, T1, and CT1 interfaces only.\nThe number of TDM frames encapsulated in a packet (which is set using the tdm-encapsulation-number command) and the depth of the jitter buffer comply with the following rule: Depth of the jitter buffer >=Number of TDM frames encapsulated in a packet*8. The shallower the jitter buffer is, the weaker the anti-jitter capabilities are. The deeper the jitter buffer is, the stronger the anti-jitter capabilities are, but a long transmission delay will be introduced when data flows are reconstructed. Therefore, a too large or too small jitter buffer is not conducive to high-quality transmission of services.\nDuring the configuration, you need to select a proper depth for the jitter buffer by considering the network bandwidth, jitter, and sensitivity of various services to the delay.\nAn 8 ms-deep jitter buffer is recommended for voice services because they are quite sensitive to the delay. The depth can be increased for video and data services.If the network topology is complex and the jitter of line transmission is great, you can increase the depth of the jitter buffer. If the network topology is simple and the jitter of line transmission is small, you can decrease the depth of the jitter buffer.If the initial wait delay is long, you can decrease the depth of the jitter buffer.\nFor a PSN, you need to pre-set the depth of the jitter buffer. More importantly, you need to monitor the effects of the jitter buffer with different depths on the prevention against jitter. In this manner, you can adjust the depth of the jitter buffer and determine the depth of the jitter buffer based on services.\n\nPrerequisites\nA PW template has been created using the pw-template command and the PW template view is displayed.\nFollow-up Procedure\nAfter running the jitter-buffer depth command, run the reset pw command to allow the attributes in the PW template to take effect on the PW. To check whether the jitter buffer depth configuration has taken effect on the PW, run the display mpls l2vc command to view the Jitter-Buffer field.\nPrecautions\nThe mpls l2vc command can also be used to configure the jitter buffer depth if jitter-buffer is specified in the command. If both the mpls l2vc command and jitter-buffer depth (in the PW template view) command are used to configure the jitter buffer depth, the mpls l2vc command takes precedence over the jitter-buffer depth command."
+}

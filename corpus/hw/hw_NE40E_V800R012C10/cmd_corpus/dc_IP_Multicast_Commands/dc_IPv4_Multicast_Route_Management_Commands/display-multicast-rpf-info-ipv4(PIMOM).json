@@ -1,0 +1,112 @@
+{
+    "PageTitle": "display multicast rpf-info",
+    "FuncDef": "The display multicast rpf-info command displays the Reverse Path Forwarding (RPF) routes of a specified multicast source or source/group, including currently used topology name and information about all routes.",
+    "CLIs": [
+        "display multicast { vpn-instance <vpn-instance-name> | all-instance } rpf-info <source-address> [ <group-address> ] [ rpt | spt ] [ verbose ]",
+        "display multicast rpf-info <source-address> [ <group-address> ] [ rpt | spt ] [ verbose ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "all-instance",
+            "Info": "Specifies all instances.\n-"
+        },
+        {
+            "Parameters": "source-address",
+            "Info": "Specifies the address of a multicast source, used to display the information of RPF routing corresponding to the source.\nThe address is in dotted decimal notation."
+        },
+        {
+            "Parameters": "group-address",
+            "Info": "Specifies the multicast group address, used to display the information of RPF routing corresponding to the source/group.\nThe address is in dotted decimal notation and ranges from 224.0.0.0 to 239.255.255.255."
+        },
+        {
+            "Parameters": "rpt",
+            "Info": "Display the information of rendezvous point tree (RPT).\n-"
+        },
+        {
+            "Parameters": "spt",
+            "Info": "Display the information of shortest path tree (SPT).\n-"
+        },
+        {
+            "Parameters": "verbose",
+            "Info": "Displays detailed RPF information.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display multicast rpf-info 172.16.0.1",
+            "VPN-Instance: public net",
+            " RPF information about source: 172.16.0.1",
+            "     RPF interface: GigabitEthernet1/0/0, RPF neighbor: 10.1.5.2",
+            "     Referenced route/mask: 172.16.0.0/24",
+            "     Referenced route type: unicast",
+            "     Route selection rule: preference-preferred",
+            "     Load splitting rule: disable"
+        ],
+        [
+            "<HUAWEI> display multicast vpn-instance VPNA rpf-info 10.1.3.2",
+            " VPN-Instance: VPNA",
+            " RPF information about source: 10.1.3.2, frr is enabled",
+            "     RPF interface: pseudo, RPF neighbor: 2.2.2.2",
+            "     Referenced route/mask: 10.1.3.0/30",
+            "     Referenced route type: unicast",
+            "     Route selection rule: preference-preferred",
+            "     Load splitting rule: disable",
+            "     VRF Route Import Extended Community : 2.2.2.2:1",
+            "     Source AS Extended Community : 100",
+            "     Backup RPF interface: pseudo, backup RPF neighbor: 3.3.3.3",
+            "     Backup VRF Route Import Extended Community : 3.3.3.3:1",
+            "     Backup Source AS Extended Community : 100"
+        ],
+        [
+            "<HUAWEI> display multicast vpn-instance RED rpf-info 10.1.1.2 228.0.0.1",
+            " VPN-Instance: RED",
+            " RPF information about source 10.1.1.2 and group 228.0.0.1",
+            "     RPF interface: MCAST_Extranet",
+            "     RPF Source VPN-Instance: BLUE",
+            "     Referenced route/mask: 10.1.1.0/24",
+            "     Referenced route type: unicast",
+            "     Route selection rule: preference-preferred",
+            "     Load splitting rule: disable"
+        ],
+        [
+            "<HUAWEI> display multicast rpf-info 8.8.8.8",
+            " VPN-Instance: public net",
+            " RPF information about source: 8.8.8.8",
+            "     RPF interface: GigabitEthernet1/0/1, RPF neighbor: 3.3.3.2",
+            "     Referenced route/mask: 8.8.8.0/24",
+            "     Referenced route type: unicast",
+            "     Route selection rule: preference-preferred",
+            "     Load splitting rule: disable",
+            "     Backup RPF interface: GigabitEthernet1/0/2, backup RPF neighbor: 2.2.2.2"
+        ],
+        [
+            "<HUAWEI> display multicast rpf-info 8.8.8.8 verbose",
+            " VPN-Instance: public net",
+            " RPF information about source: 8.8.8.8",
+            "     RPF used topology: default",
+            "     RPF interface: GigabitEthernet1/0/1, RPF neighbor: 3.3.3.2",
+            "     Referenced route/mask: 8.8.8.0/24",
+            "     Referenced route type: unicast",
+            "     Route selection rule: preference-preferred",
+            "     Load splitting rule: disable",
+            "     Backup RPF interface: GigabitEthernet1/0/2, backup RPF neighbor: 2.2.2.2",
+            " Total route information about source 8.8.8.8",
+            " 1  .Referenced interface: GigabitEthernet1/0/1",
+            "     Referenced route/mask: 8.8.8.0/24",
+            "     Referenced route type: unicast",
+            "     Referenced route preference: 15",
+            "     Referenced route cost: 20",
+            "     Referenced route nexthop: 3.3.3.2",
+            "     Backup referenced route interface: GigabitEthernet1/0/2",
+            "     Backup referenced route nexthop: 2.2.2.2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe RPF route with the source-address as the destination address is an optimal route selected from unicast routes and multicast static routes.\nThe display multicast rpf-info command can be used to display the information about the RPF route to a specified multicast source, such as the information about the multicast source, status of the RPF interface, RPF neighbor, and route.\nPrecautions\nIf vpn-instance or all-instance is not specified, only information about the public network instance is displayed."
+}

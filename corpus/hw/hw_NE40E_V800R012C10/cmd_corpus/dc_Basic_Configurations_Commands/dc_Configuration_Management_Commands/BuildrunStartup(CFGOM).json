@@ -1,0 +1,113 @@
+{
+    "PageTitle": "display configuration commit",
+    "FuncDef": "The display configuration commit command displays all configurations at a specified configuration rollback point.\nThe display configuration command displays information about a specified configuration file.\nThe display saved-configuration command displays the configuration file used after the device is restarted.",
+    "CLIs": [
+        "display { saved-configuration [ last ] | configuration <configuration-file> }",
+        "display configuration commit at <commit-id>"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "last",
+            "Info": "Displays the system configurations saved last time.\n-"
+        },
+        {
+            "Parameters": "configuration",
+            "Info": "Display parameter information about the configuration of the autosave function.\n-"
+        },
+        {
+            "Parameters": "configuration-file",
+            "Info": "Specifies the name of a configuration file. The file must have been created.\nThe name is a string of 5 to 64 characters in the format of *.zip, *.cfg or *.dat."
+        },
+        {
+            "Parameters": "at commit-id",
+            "Info": "Displays configuration changes at a configuration rollback point.\nThe value is an integer that is generated automatically and ranging from 1000000001 to 1999999999."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display saved-configuration",
+            "#                                                                               ",
+            "info-center loghost source LoopBack0                                            ",
+            "info-center loghost 10.1.1.1                                                    ",
+            "info-center loghost 10.1.1.2                                                    ",
+            "#",
+            "sysname HUAWEI",
+            "#",
+            "user-interface maximum-vty 15                                                   ",
+            "#                                                                               ",
+            "efm enable                                                                      ",
+            "#                                                                               ",
+            "aaa                                                                             ",
+            " local-user ftp password cipher $1c$k4:o79a_DJ$dkxW!,\\@7Cjr*k+Q}gb'{g{x)#wS1GjQST'EZ]/F$                        ",
+            " local-user ftp ftp-directory cfcard:/                                          ",
+            " local-user ftp service-type ftp                                                ",
+            "#",
+            "interface GigabitEthernet1/0/2                                                     ",
+            " description Don't Shutdown! It's Management Port!                              ",
+            " undo shutdown                                                                  ",
+            " ip address 10.2.2.2 255.255.255.0                                           ",
+            "#                                                                               ",
+            "interface LoopBack0                                                             ",
+            " ip address 1.1.1.1 255.255.255.255                                             ",
+            "#                                                                               ",
+            "",
+            "user-interface con 0                                                            ",
+            " set authentication password cipher $1c$k4:o79a_DJ$dkxW!,\\@7Cjr*k+Q}gb'{g{x)#wS1GjQST'EZ]/F$                    ",
+            " history-command max-size 30                                                    ",
+            "#                                                                               ",
+            "user-interface vty 0 14                                                         ",
+            " user privilege level 3                                                         ",
+            " idle-timeout 0 0                                                               ",
+            "#                                                                               ",
+            "return"
+        ],
+        [
+            "<HUAWEI> display saved-configuration configuration",
+            "Auto save configuration status                    : Enable",
+            " Auto save configuration interval                  : 60 minutes ",
+            " Save delay after configuration changed            : 10 minutes ",
+            " The threshold of the CPU usage permited when save : 50%(default)"
+        ],
+        [
+            "<HUAWEI> display configuration vrpcfg.cfg",
+            "#                                                                               ",
+            "info-center loghost source LoopBack0                                            ",
+            "info-center loghost 10.1.1.1                                                    ",
+            "info-center loghost 10.1.1.2                                                    ",
+            "#",
+            "sysname HUAWEI",
+            "#",
+            "user-interface maximum-vty 15                                                   ",
+            "#                                                                               ",
+            "efm enable                                                                      ",
+            "#                                                                               ",
+            "aaa                                                                             ",
+            " local-user ftp password cipher $1c$k4:o79a_DJ$dkxW!,\\@7Cjr*k+Q}gb'{g{x)#wS1GjQST'EZ]/F$   ",
+            " local-user ftp ftp-directory cfcard:/                                          ",
+            " local-user ftp service-type ftp                                                ",
+            "#",
+            "interface GigabitEthernet1/0/0  ",
+            " description Don't Shutdown! It's Management Port!                              ",
+            " undo shutdown                                                                  ",
+            " ip address 2.2.2.2 255.255.255.0                                           ",
+            "#                                                                               ",
+            "interface LoopBack0                                                             ",
+            " ip address 1.1.1.1 255.255.255.255                                             ",
+            "#                                                                               ",
+            "",
+            "user-interface con 0                                                            ",
+            " set authentication password cipher $1c$k4:o79a_DJ$dkxW!,\\@7Cjr*k+Q}gb'{g{x)#wS1GjQST'EZ]/F$     ",
+            " history-command max-size 30                                                    ",
+            "#                                                                               ",
+            "user-interface vty 0 14                                                         ",
+            " user privilege level 3       ",
+            " idle-timeout 0 0                                                               ",
+            "#                                                                               ",
+            "return"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEach time the commit command is run, the system generates a configuration rollback point to record the configuration change and all configurations at this point. To check all configurations at a specified configuration rollback point, run the display configuration commit command. If a system failure occurs, you can run the rollback configuration command to roll the system back to a desired configuration rollback point.The save configuration-file command save configurations as the .cfg, .zip, or .dat file. A .cfg file is a text file in which the contents can be viewed by running either the more or display configuration command. However, the more command is incapable of displaying contents in a .zip or .dat file. Therefore, if you want to view contents in a .zip or .dat file, run the display configuration command.If the device works improperly after it is powered on and the system software is started, you can run the display saved-configuration command to view the configuration file used after the next startup.To check the configuration information saved last time, run the display saved-configuration last command.\n\nPrerequisites\nA configuration rollback point has been selected from the list displayed using the display configuration commit list command.The specified configuration file has been created."
+}

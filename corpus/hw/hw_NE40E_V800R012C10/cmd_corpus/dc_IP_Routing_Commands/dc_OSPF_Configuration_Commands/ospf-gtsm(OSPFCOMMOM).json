@@ -1,0 +1,32 @@
+{
+    "PageTitle": "ospf valid-ttl-hops",
+    "FuncDef": "The ospf valid-ttl-hops command enables OSPF GTSM and set the TTL value to be checked.\nThe undo ospf valid-ttl-hops command disables OSPF GTSM.\nBy default, OSPF GTSM is disabled.",
+    "CLIs": [
+        "ospf valid-ttl-hops <ttl> [ nonstandard-multicast ] [ vpn-instance <vpn-instance-name> ]",
+        "undo ospf valid-ttl-hops [ <ttl> ] [ nonstandard-multicast ] [ vpn-instance <vpn-instance-name> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ttl",
+            "Info": "Specifies the TTL value to be checked.\nThe value is an integer that ranges from 1 to 255. If you specify the parameter hops, the valid range of the TTL value in the packet to be checked is [ 255-hops+1, 255 ]."
+        },
+        {
+            "Parameters": "nonstandard-multicast",
+            "Info": "Specifies the GTSM configuration is also valid for multicast packets.When the.\nnonstandard-multicast parameter is configured:\nThe TTL values of the multicast packets which will be sent are set to 255.Received multicast packets are not checked.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance. If this parameter is specified, it indicates that only the TTL value of the packets in the specified VPN instance needs to be checked.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf valid-ttl-hops 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGTSM can be used to improve the security of an OSPF network and protect a device against attacks by checking TTL values.\nIf an attacker sends OSPF unicast packets to a device, the interface board that receives the packets does not verify these packets and directly sends them to the control plane, causing the control plane to be busy in processing these packets and the CPU usage to increase. After GTSM is enabled on a device, the device checks whether the TTL values in IP packets fall within a specific range and drops those out of the range.\nThe ospf valid-ttl-hops command enables OSPF GTSM. To check the TTL values in packets matching the GTSM rule, configure the vpn-instance parameter.\nFor example, run the ospf valid-ttl-hops command to enable OSPF GTSM on both the public and private networks. Run the ospf valid-ttl-hops 5 vpn-instance vpn1 command to enable OSPF GTSM on the public network and in the VPN, configure the TTL values of the OSPF packets in VPN 1 to be checked, and apply the default action to the OSPF packets that do not match the GTSM policies on the public network and in other VPN instances.\nIf a VPN instance is specified in the ospf valid-ttl-hops command and an interface is bound to this VPN instance, all the unicast packets sent to this interface are dropped when the configured TTL value is less than the actual number of hops on the network.\nIf a virtual link or a sham link is configured, the number of TTL hops needs to be set according to the actual number of hops. That is, the number of Routers that the virtual link or sham link passes through must be counted; otherwise, the packets sent from the peer end of the virtual link or sham-link are dropped.\nPrecautions\nIf a VPN instance is specified in the ospf valid-ttl-hops command and the interface is bound to the VPN instance, if the configured TTL value is less than the actual TTL value on the network, all unicast packets sent to the interface are discarded.If a virtual link or sham link is configured, the configured TTL value must be the same as the actual TTL value, that is, the number of routers that the virtual link and the pseudo connection pass through. Otherwise, packets from the virtual link or the neighbor of the pseudo connection will be discarded.The default TTL value of a sent OSPF packet is 1, and the TTL value changes to 255 after the ospf valid-ttl-hops command is run. If the command is run on a device but not on its neighbor, unicast OSPF packets may fail to be transmitted. If this is the case, existing OSPF neighbor relationships are not affected, but new OSPF neighbor relationships cannot be established.After the ospf valid-ttl-hops hops command is run, a received OSPF packet is considered valid only if its TTL value is in the range of [255 - configured number of hops +1, 255]. For example, if the number of hops is set to 5, a received OSPF packet is considered valid only if its TTL value is in the range of 251 to 255."
+}

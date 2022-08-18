@@ -1,0 +1,42 @@
+{
+    "PageTitle": "user detect",
+    "FuncDef": "The user detect command sets an interval and the number of times for detecting users.\nThe undo user detect command restores the default setting of user detection.\nThe user detect adjustment system-state command configures the device to delay user detection based on the system status and to send a detection packet at two detection intervals.\nThe undo user detect adjustment system-state command disables the device from delaying user detection based on the system status.\nBy default, user detection can be performed for 5 times and the detection interval is 30 seconds. If IPoE users send traffic to the device, the device sends ARP or ND probe packets to the IPoE users.",
+    "CLIs": [
+        "user detect retransmit <num> interval <time> [ datacheck ]",
+        "user detect datacheck",
+        "user detect adjustment system-state",
+        "undo user detect",
+        "undo user detect datacheck",
+        "undo user detect adjustment system-state"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval time",
+            "Info": "Specifies the interval for detecting users by sending ARP or ND probe packets.If the value is set to 0, users are not detected using ARP or ND probe packets.\nIf no user probe failures are recorded in ND packet-based probe, the system doubles the probe interval.\nThe value is 0, or ranges from 20 to 1800, in seconds. The default value is 30 seconds. When the value is 0, it indicates that no detection is performed."
+        },
+        {
+            "Parameters": "datacheck",
+            "Info": "Indicates that ARP or ND probe packets are not sent when there is IPoE user traffic. If datacheck is not configured, ARP or ND probe packets are sent when there is IPoE user traffic.\n-"
+        },
+        {
+            "Parameters": "retransmit num",
+            "Info": "Specifies the number of times for detecting users by sending ARP or ND probe packets.\nThe value ranges from 2 to 120. The default value is 5."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.3",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] commit",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] bas",
+            "[*HUAWEI-GigabitEthernet1/0/1.3-bas] access-type layer2-subscriber",
+            "[*HUAWEI-GigabitEthernet1/0/1.3-bas] user detect retransmit 10 interval 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo detect whether IPoE users are online normally, the device periodically sends ARP or ND probe packets to the IPoE users. If the device does not receive any response from the IPoE users after the configured interval, the device resends the ARP or ND probe packets. If the IPoE users do not respond after the device resends the ARP or ND probe packets for the configured number of times, the device determines that the IPoE users are in abnormal state and logs them out.IPv6 ND probing and IPv4 ARP probing for an IPoE dual-stack user can also be controlled using the user detect command.\nPrerequisites\nBefore running this command, set the access type of the IPoE users using the access-type command.\nConfiguration Impact\nIf you specify as zero in the user detect retransmit interval command, the device does not send ARP or ND probe packets to IPoE users no matter whether the IPoE users send traffic to the device. If you <time-value> specify as non-zero in the command, the device sends ARP probe packets to IPoE users when the IPoE users send traffic to the device, and the device sends ARP or ND probe packets to IPoE users when the IPoE users do not send traffic to the device. If the IPoE users do not respond after the device resends the ARP or ND probe packets for the configured number of times, the device determines that the IPoE users are in abnormal state and logs them out.After you run the user detect retransmit interval datacheck command, the device does not send ARP or ND probe packets to IPoE users no matter whether the IPoE users send traffic to the device.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf the number of retransmissions is less than 5, users may be logged out due to detection failures.\nIf the retransmission interval is less than 30 seconds, users may be logged out due to detection failures.\nIf the number of retransmissions is less than 5, the retransmission interval is less than 30 seconds, users may be logged out due to detection failures."
+}

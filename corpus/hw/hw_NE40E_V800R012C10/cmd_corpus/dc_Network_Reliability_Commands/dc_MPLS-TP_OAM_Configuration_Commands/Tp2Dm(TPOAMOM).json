@@ -1,0 +1,43 @@
+{
+    "PageTitle": "delay-measure two-way proactive",
+    "FuncDef": "The delay-measure two-way proactive command enables proactive two-way frame delay measurement (DM).\nThe undo delay-measure two-way proactive command disables proactive two-way frame DM.\nBy default, proactive two-way frame DM is disabled.",
+    "CLIs": [
+        "delay-measure two-way proactive [ interval { 1000 | 10000 } | exp <exp-value> | two-time-stamp ] *",
+        "undo delay-measure two-way proactive"
+    ],
+    "ParentView": [
+        "Maintenance entity group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Sets the interval at which DMMs are sent.\nThe value is either 1000 or 10000, in milliseconds. The default value is 1000."
+        },
+        {
+            "Parameters": "exp exp-value",
+            "Info": "Specifies a priority for DMMs.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7."
+        },
+        {
+            "Parameters": "two-time-stamp",
+            "Info": "Indicates that the calculation mode is two-timestamp.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] mpls static-l2vc destination 4.4.4.4 400 transmit-vpn-label 100 receive-vpn-label 200",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] quit",
+            "[*HUAWEI] mpls-tp meg test",
+            "[*HUAWEI-mpls-tp-meg-test] me l2vc peer-ip 4.4.4.4 vc-id 400 vc-type vlan mep-id 1 remote-mep-id 2",
+            "[*HUAWEI-mpls-tp-meg-test] delay-measure two-way proactive interval 1000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDM is an MPLS-TP performance monitoring function. Four frame DM modes are supported.\nTo enable on-demand one-way frame DM, run the delay-measure one-way command. For details, see the description of the delay-measure one-way command.To enable proactive one-way frame DM, run the delay-measure one-way proactive command. For details, see the description of the delay-measure one-way proactive command.To enable on-demand two-way frame DM and display statistics in real time, run the delay-measure two-way command. For details, see the description of the delay-measure two-way command.To enable proactive two-way frame DM, run the delay-measure two-way proactive command.\nproactive two-way frame DM is performed by a local MEP to send a DMM to its RMEP and then receive a delay measurement reply (DMR) from the RMEP. After two-way frame DM is configured, a MEP sends a DMM with the TxTimeStampf value (the time when the DMM was sent) at specified intervals. After receiving the DMM, the RMEP replies with a DMR. This reply carries RxTimeStampf (the time when the DMM was received) and TxTimeStampb (the time when the DMR was sent). The value in every field of the DMM is copied to the DMR, with the exception that the source and destination MAC addresses are interchanged. Upon receipt of the DMR, the MEP calculates the two-way frame delay using the following equation:\nFrame delay = (RxTimeb - TxTimeStampf) - (TxTimeStampb - RxTimeStampf)\n\nPrerequisites\nThe ME of the MEG has been bound to a tunnel."
+}

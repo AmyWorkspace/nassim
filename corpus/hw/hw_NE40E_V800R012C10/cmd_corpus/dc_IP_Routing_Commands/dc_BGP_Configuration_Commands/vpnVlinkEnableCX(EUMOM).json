@@ -1,0 +1,35 @@
+{
+    "PageTitle": "arp vlink-direct-route advertise (VPN instance IPv4 address family view)",
+    "FuncDef": "The arp vlink-direct-route advertise command advertises Address Resolution Protocol (ARP) Vlink direct routes in a VPN.\nThe undo arp vlink-direct-route advertise command restores the default setting.\nBy default, ARP Vlink direct routes are not advertised in a VPN.",
+    "CLIs": [
+        "arp vlink-direct-route advertise [ route-policy <route-policy-name> | route-filter <route-filter-name> ]",
+        "undo arp vlink-direct-route advertise"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy that is used to filter ARP Vlink direct routes in a VPN.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string. It must be a unique value."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter used to filter VPN ARP Vlink direct routes.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix-a index 10 permit 172.17.1.0 24",
+            "[*HUAWEI] route-policy rp1 permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] arp vlink-direct-route advertise route-policy rp1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, ARP Vlink direct routes are only used for packet forwarding in the same VLAN and cannot be imported to dynamic routing protocols. This is because importing Vlink direct routes to dynamic routing protocols will increase the number of routing entries and affect routing table stability. In some cases, some operations need to be performed based on Vlink direct routes of VLAN users. For example, different VLAN users use different route exporting policies to guide traffic from the remote device. In this scenario, ARP Vlink direct routes are needed to be imported by a dynamic routing protocol and advertised to the remote device. After advertisement of ARP Vlink direct routes is enabled, these direct routes can be imported by a dynamic routing protocol (IGP or BGP) and advertised to the remote device.\nIn a VPN, a local provider edge (PE) connects to multiple customer edges (CEs) using VLANIF interfaces. Based on ARP, the local PE learns IP addresses of these CEs and advertises ARP Vlink direct routes.\nIf ARP Vlink direct routes to a few CEs have to be advertised, you can configure the arp vlink-direct-route advertise command with route-policy-name or route-filter-name specified. This configuration ensures that only the ARP Vlink direct routes that match the route-policy are advertised, reducing the routing table size and ensuring the security of other CEs.\nConfiguration Impact\nAfter route-policy-name or route-filter-name is specified in the arp vlink-direct-route advertise command, only the ARP Vlink direct routes that match the route-policy are advertised.\nFollow-up Procedure\nImport ARP Vlink direct routes to the routing table of each dynamic routing protocol on the Router so that the ARP Vlink direct routes can be advertised by each dynamic routing protocol.\nPrecautions\nRoute-policies and route-filters can filter ARP Vlink direct routes only based on IPv4 or IPv6 route prefixes.\nroute-policy-name must be specified in the arp vlink-direct-route advertise command. If the parameter is not specified, ARP Vlink direct routes cannot be filtered.\nThe specified route-filter must have been configured; otherwise, it cannot be used to filter ARP Vlink direct routes.\nVLANIF interfaces, VBDIF interfaces, QinQ VLAN tag termination sub-interfaces, dot1q VLAN tag termination sub-interfaces, L3VE interfaces, and vBridge interfaces support the import of ARP Vlink direct routes to a VPN instance."
+}

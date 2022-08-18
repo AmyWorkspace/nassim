@@ -1,0 +1,50 @@
+{
+    "PageTitle": "accounting-start-delay",
+    "FuncDef": "The accounting-start-delay command enables a device to send an accounting-start packet about a dual-stack user after a specified delay.\nThe undo accounting-start-delay command restores the default configuration.\nBy default, a device sends an accounting-start packet about a dual-stack user immediately after the user obtains the first IP address.",
+    "CLIs": [
+        "accounting-start-delay <delay-time> online user-type { ppp | ipoe | l2tp | static } *",
+        "accounting-start-delay <delay-time> offline [ user-type { ppp | ipoe | l2tp | static } * ]",
+        "undo accounting-start-delay",
+        "undo accounting-start-delay <delay-time> online user-type { ppp | ipoe | l2tp | static } *",
+        "undo accounting-start-delay <delay-time> offline [ user-type { ppp | ipoe | l2tp | static } * ]"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay-time",
+            "Info": "Specifies a delay in sending accounting-start packets.\nThe value is an integer ranging from 1 to 300, in seconds."
+        },
+        {
+            "Parameters": "user-type",
+            "Info": "Specifies a user type.\n-"
+        },
+        {
+            "Parameters": "ppp",
+            "Info": "Specifies a PPP user.\n-"
+        },
+        {
+            "Parameters": "ipoe",
+            "Info": "Specifies an IPoE user.\n-"
+        },
+        {
+            "Parameters": "l2tp",
+            "Info": "Specifies an L2TP user.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Specifies a static user.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain domain1",
+            "[*HUAWEI-aaa-domain-domain1] commit",
+            "[~HUAWEI-aaa-domain-domain1] accounting-start-delay 10 offline"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA dual-stack PPP, IPoE, L2TP, or static user may be assigned two IP addresses. By default, a device sends an accounting-start packet immediately after a dual-stack user obtains the first IP address. The device then sends a real-time accounting packet after the dual-stack user obtains the other IP address. If you do not want the device to send accounting packets repeatedly, run the accounting-start-delay command to delay the sending of accounting-start packets, allowing the device to send only one accounting-start packet after both IP addresses are assigned to a user.\nAfter the command is run, traffic is blocked when only one stack's address is obtained. After all dual-stack addresses are obtained, the traffic is unblocked, and accounting-start packets carrying dual-stack addresses are sent.\nIf the user-type parameter is not specified, the accounting-start-delay  offline command takes effect only for PPPoE and PPPoLNS users. If a user does not obtain both IP addresses before the specified delay expires, the user is forcibly logged out.\nIf the user-type parameter is specified, the device takes an action based on the offline or online configuration for the specified type of user who does not obtain both IP addresses before the specified delay expires. If offline is specified, the device forcibly logs out the user after the specified delay expires. If online is specified, the user stays online and the device sends an accounting-start packet after the specified delay expires.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

@@ -1,0 +1,30 @@
+{
+    "PageTitle": "lacp negotiate delay",
+    "FuncDef": "The lacp negotiate delay command configures an LACP negotiation delay for an Eth-Trunk interface.\nThe undo lacp preempt delay command restores the default setting.\nBy default, the LACP negotiation delay of an Eth-Trunk interface is 0 seconds.",
+    "CLIs": [
+        "lacp negotiate delay <delay-value>",
+        "undo lacp negotiate delay",
+        "undo lacp negotiate delay <delay-value>"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay delay-value",
+            "Info": "Specifies an LACP negotiation delay for an Eth-Trunk interface.\nThe value is an integer ranging from 0 to 1800, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] e-trunk 4",
+            "[*HUAWEI-e-trunk-1] quit",
+            "[*HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] mode lacp-static",
+            "[*HUAWEI-Eth-Trunk1] e-trunk 4",
+            "[*HUAWEI-Eth-Trunk1] lacp negotiate delay 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an active-active E-Trunk scenario, a CE is dual-homed to PE1 and PE2 through an Eth-Trunk interface in LACP mode. Traffic is forwarded in load balancing mode. If either PE1 or PE2 restarts due to a fault, service traffic is switched back. Suppose PE1 restarts. The Eth-Trunk member interface on PE1 detects the link Up state after PE1 restarts, and the LACP negotiation between PE1 and the CE succeeds immediately. When the Eth-Trunk interface goes Up, entries of the Eth-Trunk member interface on PE1 starts to be delivered. The large number of entries take a long time to be delivered, causing CE-to-PE1 traffic to be discarded before the entry delivery is complete. To resolve this issue, run the lacp negotiate delay command on PE1 to configure an LACP negotiation delay for the Eth-Trunk interface.\nAfter the configuration is complete, the LACP negotiation between the CE and PE1 is performed after all the entries of the Eth-Trunk member interface on PE1 are delivered. Then traffic is forwarded after the LACP negotiation succeeds.\nPrerequisites\nEnsure that the following conditions have been met:\nAn Eth-Trunk interface has been configured to work in LACP mode using the mode command in the Eth-Trunk interface view.The Eth-Trunk interfaces on PE1 and PE2 have been added to an E-Trunk.\n\nPrecautions\nSetting the LACP negotiation delay to be greater than 60s is recommended if an Eth-Trunk sub-interface carries 8K services and greater than 120s if an Eth-Trunk sub-interface carries 16K services."
+}

@@ -1,0 +1,29 @@
+{
+    "PageTitle": "jitter-buffer-cep depth",
+    "FuncDef": "The jitter-buffer-cep depth command configures a CEP jitter buffer depth.\nThe undo jitter-buffer-cep depth command restores the default CEP jitter buffer depth.\nBy default, the CEP jitter buffer depth is 1000 microseconds.",
+    "CLIs": [
+        "jitter-buffer-cep depth <depthValue>",
+        "undo jitter-buffer-cep depth"
+    ],
+    "ParentView": [
+        "PW template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "depthValue",
+            "Info": "Specifies the CEP jitter buffer depth, specifically, the maximum jitter allowed.\nThe value is an integer ranging from 125 to 16000, in microseconds. The step is 125. Using a value greater than or equal to 375 is recommended."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] pw-template tdmpw",
+            "[*HUAWEI-pw-template-tdmpw] jitter-buffer-cep depth 1125"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe CEP jitter buffer is designed to smooth link transmission jitter. After receiving TDM frames transmitted at different rates, the CEP jitter buffer buffers these frames and sends these frames to the next hop at a fixed rate, smoothing transmission jitter. The jitter-buffer-cep depth command applies only to TDM AC interfaces, such as serial and trunk serial interfaces.\nA deeper CEP jitter buffer means a stronger anti-jitter capability, but a long transmission delay will be introduced when data flows are reconstructed. The CEP jitter buffer depth must be neither too large nor too small. Otherwise, service transmission will be affected. When configuring a CEP jitter buffer depth, take into account network bandwidth, network jitter, and sensitivity of services to the delay:\nA 1000-microsecond-deep CEP jitter buffer is recommended for voice services, because they are quite sensitive to delay. For video and data services, set the CEP jitter buffer depth to a relatively larger value.If the network topology is complex and the link transmission jitter is large, increase the CEP jitter buffer depth.If the network delay is large, reduce the CEP jitter buffer depth.\nThough a PSN has CEP jitter buffers with preconfigured depths, you must monitor the anti-jitter effects of these buffers and determine appropriate depths for these buffers based on service types.\n\nConfiguration Impact\nIf the jitter-buffer-cep depth command is run more than once, the latest configuration overrides the previous one.\nFollow-up Procedure\nRun the reset pw command to allow attributes in the PW template to take effect on the PW.\nPrecautions\nThe mpls static-l2vc or mpls l2vc command can also be used to configure a CEP jitter buffer depth if jitter-buffer-cep is specified in the command and the jitter-buffer-cep depth command are run to configure the CEP jitter buffer depth, the mpls static-l2vc or mpls l2vc command takes precedence over the jitter-buffer-cep depth command."
+}

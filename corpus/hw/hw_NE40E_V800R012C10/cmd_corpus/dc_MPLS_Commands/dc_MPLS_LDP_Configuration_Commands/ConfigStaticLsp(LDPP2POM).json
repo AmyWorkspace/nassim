@@ -1,0 +1,65 @@
+{
+    "PageTitle": "static-lsp ingress",
+    "FuncDef": "The static-lsp ingress command configures the ingress of a static LSP.\nThe undo static-lsp ingress command deletes the configuration.\nBy default, no ingress of a static CR-LSP is configured.",
+    "CLIs": [
+        "static-lsp ingress <lsp-name> destination <ip-address> { <mask> | <mask-length> } { { outgoing-interface { <out-interface-name> | { <out-interface-type> <out-interface-number> } } } { nexthop <next-hop-address> } } out-label <out-label>",
+        "static-lsp ingress <lsp-name> destination <ip-address> { <mask> | <mask-length> } { { nexthop <next-hop-address> } { outgoing-interface { <out-interface-name> | { <out-interface-type> <out-interface-number> } } } } out-label <out-label>",
+        "static-lsp ingress <lsp-name> destination <ip-address> { <mask> | <mask-length> } { outgoing-interface { <out-interface-name> | { <out-interface-type> <out-interface-number> } } } out-label <out-label>",
+        "static-lsp ingress <lsp-name> destination <ip-address> { <mask> | <mask-length> } nexthop <next-hop-address> out-label <out-label>",
+        "undo static-lsp ingress <lsp-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lsp-name",
+            "Info": "Specifies the name of a static LSP.\nThe value is a string of 1 to 19 case-sensitive characters. It cannot contain spaces. The string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "destination ip-address",
+            "Info": "Specifies the destination address of a static LSP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the mask of IP addresses.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length of a specified IP address.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "outgoing-interface",
+            "Info": "Indicates an inbound interface.\n-"
+        },
+        {
+            "Parameters": "out-interface-name",
+            "Info": "Specifies the name of an outbound interface.\n-"
+        },
+        {
+            "Parameters": "out-interface-type",
+            "Info": "Specifies the type of an outbound interface.\n-"
+        },
+        {
+            "Parameters": "out-interface-number",
+            "Info": "Specifies the number of an outbound interface.\n-"
+        },
+        {
+            "Parameters": "nexthop next-hop-address",
+            "Info": "Specifies a next-hop IP address.\nThe value is in dotted decimal notation.\nNo local IP address can be configured as a next-hop IP address."
+        },
+        {
+            "Parameters": "out-label out-label",
+            "Info": "Specifies the value of an outgoing label.\nThe value is an integer ranging from 16 to 1048575."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] static-lsp ingress bj-sh destination 10.1.1.9 32 nexthop 10.1.1.2 out-label 237"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe establishment of static LSPs does not require a label distribution protocol or any control packets. The static LSPs consume a few resources and are applicable to small-scale networks with simple and stable topology. To configure the ingress of a static LSP, run the static-lsp ingress command.\nTo modify the destination address, next-hop IP address, outbound interface name, or outgoing label value, run the static-lsp ingress command to set a new value, but there is no need to run the undo static-lsp ingress command before changing a setting.\nPrecautions\nIf an outbound interface name is configured but no next-hop IP address is specified, a forwarding failure occurs on an Ethernet network.\nNote the following conditions when you configure a static LSP:\nIf a next-hop IP address is specified for a static LSP, a next-hop IP address must be also specified for a static IP route to be configured, which prevents a failure to establish the static LSP.\nip route-static 10.10.0.0 32 1.1.1.2\nstatic-lsp ingress staticlsp1 destination 10.10.0.0 32 nexthop 10.1.1.2 out-label 100\nIf LSRs run a dynamic routing protocol to implement connectivity, specify the same next-hop IP address of the LSP as that in the routing table.If a static LSP and an LDP LSP with the same destination IP address exist on the ingress, the ingress transmits traffic only along the LDP LSP because the LDP LSP has a higher priority than the static LSP."
+}

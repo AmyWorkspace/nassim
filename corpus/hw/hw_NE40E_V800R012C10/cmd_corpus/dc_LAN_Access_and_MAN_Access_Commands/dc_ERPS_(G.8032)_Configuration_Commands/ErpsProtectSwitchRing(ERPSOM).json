@@ -1,0 +1,43 @@
+{
+    "PageTitle": "port protect-switch",
+    "FuncDef": "The port protect-switch command configures a manual blocking mode for an ERPS port.\nBy default, no port is blocked.",
+    "CLIs": [
+        "port { <interface-name> | <interface-type> <interface-number> } protect-switch { force | manual }"
+    ],
+    "ParentView": [
+        "ERPS ring view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the name of an interface.\n-"
+        },
+        {
+            "Parameters": "force",
+            "Info": "Indicates the forced switch (FS) mode for blocking an ERPS port.\n-"
+        },
+        {
+            "Parameters": "manual",
+            "Info": "Indicates the manual switch (MS) mode for blocking an ERPS port.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] erps ring 5",
+            "[*HUAWEI-erps-ring5] version v2",
+            "[*HUAWEI-erps-ring5] control-vlan 100",
+            "[*HUAWEI-erps-ring5] protected-instance all",
+            "[*HUAWEI-erps-ring5] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] stp disable",
+            "[*HUAWEI-GigabitEthernet1/0/1] erps ring 5",
+            "[*HUAWEI-GigabitEthernet1/0/1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/1] quit",
+            "[~HUAWEI] erps ring 5",
+            "[*HUAWEI-erps-ring5] port GigabitEthernet 1/0/1 protect-switch force"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn case the ring protection link (RPL) has high bandwidth, blocking a link with low bandwidth and unblocking the RPL allow traffic to use the RPL and have more bandwidth. ERPSv2 supports both FS and MS modes for blocking an ERPS port.\nFS: forcibly blocks a port immediately after FS is configured, irrespective of whether link failures have occurred.MS: forcibly blocks a port on which MS is configured when link failures and FS conditions are absent.\nFS takes precedence over MS.\n\nPrerequisites\nThe erps ring or port (ERPS ring view) command has been run to add the port to an ERPS ring.\nThe version v2 command has been run to specify ERPSv2.\nConfiguration Impact\nAfter an ERPS port is blocked by using FS or MS mode, the node on which the ERPS port resides sends R-APS (FS) or R-APS (MS) messages to the other nodes on the ERPS ring. ERPS recalculates the paths and finally unblocks the RPL owner port.\nPrecautions\nThe ERPS ring specified by ring-id must be the one to which the port belongs; otherwise, the command does not take effect.The port protect-switch command run in the ERPS ring view has the same effect as the erps ring protect-switch command run in the interface view.If the current port blocking mode is MS and you want to change it to FS, run the port interface-type interface-number protect-switch force command to set the FS mode. If the current port blocking mode is FS and you want to change it to MS, run the clear command in the ERPS ring view to clear the FS mode, and then run the port interface-type interface-number protect-switch manual command to set the MS mode.You can clear the manual port blocking mode only by using the clear command in the ERPS ring view.The erps ring protect-switch command is not saved in the configuration file."
+}

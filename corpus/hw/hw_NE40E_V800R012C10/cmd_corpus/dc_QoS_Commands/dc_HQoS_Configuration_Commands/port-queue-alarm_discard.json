@@ -1,0 +1,50 @@
+{
+    "PageTitle": "port-queue-alarm discard",
+    "FuncDef": "The port-queue-alarm discard command enables the packet loss alarm function for port queues.\nThe undo port-queue-alarm discard command disables the packet loss alarm function for port queues.\nBy default, the packet loss alarm function is disabled for port queues.",
+    "CLIs": [
+        "port-queue-alarm <cos-value> { discard-packet <discard-packet-number> | discard-byte <discard-byte-number> | discard-packet-ratio <discard-packet-coefficient> <discard-packet-exponent> } [ interval <interval-time> ]",
+        "undo port-queue-alarm <cos-value> { discard-packet <discard-packet-number> | discard-byte <discard-byte-number> | discard-packet-ratio <discard-packet-coefficient> <discard-packet-exponent> } [ interval <interval-time> ]"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "25GE interface view",
+        "40GE interface view",
+        "Eth-Trunk interface view",
+        "GE electrical interface view",
+        "Slot view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cos-value",
+            "Info": "Specifies the service class of a port queue.\nThe value can be cs7, cs6, ef, af4, af3, af2, af1, and be."
+        },
+        {
+            "Parameters": "discard-packet discard-packet-number",
+            "Info": "Specifies the alarm threshold for the number of dropped packets.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "discard-byte discard-byte-number",
+            "Info": "Specifies the alarm threshold for the number of dropped bytes.\nThe value is an integer ranging from 1 to 4294967295, in bytes."
+        },
+        {
+            "Parameters": "discard-packet-ratio discard-packet-exponent",
+            "Info": "Specifies the packet loss exponent.\nThe value is an integer ranging from 1 to 5."
+        },
+        {
+            "Parameters": "discard-packet-ratio discard-packet-coefficient",
+            "Info": "Specifies the packet loss coefficient.\nThe value is an integer ranging from 1 to 9."
+        },
+        {
+            "Parameters": "interval interval-time",
+            "Info": "Specifies the interval at which the packet loss information is checked.\nThe value is an integer ranging from 15 to 3600, in seconds. The default value is 30s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] port-queue-alarm af1 discard-packet 5000 interval 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo enable the packet loss alarm function for port queues, run the port-queue-alarm discard command. After the packet loss alarm function is enabled, the system checks the packet loss information at an interval of . If the number of dropped packets or bytes or the packet loss rate is greater than or equal to the configured threshold, an alarm is generated; if the number of dropped packets or bytes or the packet loss rate is less than the configured threshold, the alarm is cleared.\nConfiguration Impact\nIf the number of dropped packets or bytes or the packet loss rate is greater than or equal to the configured threshold, an alarm is generated. In this case, logging in to the device to check the traffic and network status is recommended.\nIf the number of dropped packets or bytes or the packet loss rate is less than the configured threshold, the alarm is cleared.\nPrecautions\nYou can configure for a port queue on an interface only one of the alarm thresholds for the number of dropped packets, number of dropped bytes, and packet loss rate.\nIn multi-VS scenarios, after this command is configured on a trunk main interface, the command configuration is also effective for the trunk sub-interfaces that reside in other VSs."
+}

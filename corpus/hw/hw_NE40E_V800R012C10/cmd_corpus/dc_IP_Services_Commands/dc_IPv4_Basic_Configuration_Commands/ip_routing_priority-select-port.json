@@ -1,0 +1,35 @@
+{
+    "PageTitle": "ip routing priority-select-port",
+    "FuncDef": "The ip routing priority-select-port command selects a member interface of a VLANIF interface as the outbound interface to forward traffic.\nThe undo ip routing priority-select-port command cancels the configuration.\nBy default, no member interface of a VLANIF interface is used as the outbound interface of a route.",
+    "CLIs": [
+        "ip routing priority-select-port { <interface-type> <interface-num> | <interface-name> }",
+        "undo ip routing priority-select-port"
+    ],
+    "ParentView": [
+        "VLANIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type interface-num",
+            "Info": "Specifies the type and number of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 1",
+            "[~HUAWEI-vlan1] quit",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] port default vlan 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[~HUAWEI] interface vlanif1",
+            "[~HUAWEI-Vlanif1] ip routing priority-select-port GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a VLANIF interface on a device has multiple physical member interfaces, the ip routing priority-select-port command can be used to select one member interface as an outbound interface of a route. This is to prevent traffic from being sent out from an incorrect outbound interface.\nOn the IP RAN network, the NodeB is single-homed to the CE, which is connected to UPE1 and UPE2. VPN FRR is configured between the CE and UPE1 and between the CE and UPE2. The RNC is dual-homed to UPE1 and UPE2 through Layer 2 interfaces. VRRP is configured on UPE1 and UPE2. Interfaces connecting PE1 and UPE2 are used to forward VRRP heartbeat packets. UPE1's interfaces for connecting UPE2 and the RNC and UPE2's interfaces for connecting UPE1 and the RNC belong to VLANIF1.\nIn normal situations, the traffic from the NodeB to the RNC is forwarded along the path NodeB->CE->UPE1->RNC.\nIf UPE1 fails, VPN FRR enables the traffic on the CE to be switched from UPE1 to UPE2. UPE2's interfaces belong to VLANIF1. By default, the traffic on VLANIF1 is sent out from one of the interfaces. If the interface that is directly connected to UPE1 is selected as an outbound interface, traffic is interrupted due to the UPE1 failure, triggering VLANIF1 on UPE2 to learn ARP entries. If a large number of L2VPN services are deployed on UPE2, ARP entry learning on UPE2 is delayed, which causes ARP entries on UPE2 to fail to be promptly updated. As a result, services from the NodeB to the RNC are interrupted for a long time, and users have poor experience.\nTo resolve this issue, run the ip routing priority-select-port command on UPE2's VLANIF1 to select the interface that is directly connected to the RNC as an outbound interface. After this command is run, the traffic from UPE2 to the RNC is sent out from this interface. The interface that is directly connected to UPE1 only forwards VRRP heartbeat packets but not data packets.\nIf UPE2 fails, this issue also occur on UPE1's interfaces. Therefore, you must also run the ip routing priority-select-port command on UPE1's VLANIF1."
+}

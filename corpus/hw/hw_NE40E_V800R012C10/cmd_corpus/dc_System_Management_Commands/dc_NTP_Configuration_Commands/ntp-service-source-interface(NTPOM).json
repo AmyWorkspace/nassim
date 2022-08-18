@@ -1,0 +1,43 @@
+{
+    "PageTitle": "ntp-service source-interface",
+    "FuncDef": "The ntp-service source-interface command enables an IPv4 interface to send NTP messages.\nThe undo ntp-service source-interface command disables an IPv4 interface from sending NTP messages.\nBy default, no interface is specified for sending NTP messages.",
+    "CLIs": [
+        "ntp-service [ ipv6 ] source-interface { <interface-name> | <interface_type> <interface_num> } [ vpn-instance <vpnName> ]",
+        "undo ntp-service [ ipv6 ] source-interface [ vpn-instance <vpnName> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6",
+            "Info": "Indicates the NTP IPv6 service.\n-"
+        },
+        {
+            "Parameters": "interface_type",
+            "Info": "Specifies the type and number of a local interface that sends NTP packets.\n-"
+        },
+        {
+            "Parameters": "interface_num",
+            "Info": "Specifies the type and number of a local interface that sends NTP packets.\nThe value is a string of 1 to 47 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "vpn-instance vpnName",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ntp-service source-interface 10GE 1/0/0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface 10GE 1/0/0",
+            "[~HUAWEI-10GE1/0/0] ipv6 enable",
+            "[~HUAWEI-10GE1/0/0] quit",
+            "[~HUAWEI] ntp-service ipv6 source-interface 10GE 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the unicast mode, if you want only one IP address to send the NTP request or response packets, specify the interface of which an IP address is used as a source interface.\nIn VS mode, this command is supported only by the admin VS.\nPrecautions\nIn the broadcast and multicast modes, the ntp-service source-interface command is invalid. This is because the NTP service is enabled on the specified interface that is actually the source interface.If you have specified vpn-instance when configuring a source IP address with this command, the source IP address can be used only by the NTP client mapping the specified VPN instance instead of other VPN instances or NTP clients that do not have VPN instances specified.If this command is the first NTP configuration command, the system automatically adds the ntp-service [ ipv6 ] server disable command in the configuration file to disable the NTP service. To enable the NTP service, run the undo ntp [ ipv6 ] server disable command. If this command is the last NTP configuration command to be deleted, the system automatically deletes the ntp-service [ ipv6 ] server disable command from the configuration file.If a VPN instance is specified, the instance must have been created using the ip vpn-instance vpn-instance-name command, and the corresponding address family must have been enabled using the ipv4-family (VPN instance view) or ipv6-family (VPN instance view) command based on the IPv4 or IPv6 service configured for the NTP server. Otherwise, this command fails to be executed.If you run the ntp-service source-interface command on a server, the source address in packets is set to the destination IP address sent from the original client, not the IP address of the source interface. If you run the ntp-service source-interface command on a client, the client address in packets is set to the IP address of the source interface."
+}

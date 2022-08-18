@@ -1,0 +1,152 @@
+{
+    "PageTitle": "bfd bind mpls-te",
+    "FuncDef": "The bfd bind mpls-te command configures BFD to detect faults in a TE tunnel or a primary or backup LSP bound to the TE tunnel.\nThe bfd bind mpls-te auto command configures a static BFD session with automatically negotiated discriminators to detect a TE tunnel or the primary or backup LSP bound to a TE tunnel.\nBy default, no BFD sessions are configured for TE tunnels.",
+    "CLIs": [
+        "bfd <sessname-value> bind mpls-te interface { <tunnel-type> <tunnel-num> | <tunnel-name> } te-lsp [ backup ]",
+        "bfd <sessname-value> bind mpls-te interface { <tunnel-type> <tunnel-num> | <tunnel-name> } te-lsp [ backup ] reverse-te lsr-id <lsr-id> tunnel-id <tunnel-id> auto",
+        "bfd <sessname-value> bind mpls-te interface { <tunnel-type> <tunnel-num> | <tunnel-name> } te-lsp [ backup ] one-arm-echo",
+        "bfd <sessname-value> bind mpls-te interface { <tunnel-type> <tunnel-num> | <tunnel-name> } select-board <slot-id>",
+        "bfd <sessname-value> bind mpls-te interface { <tunnel-type> <tunnel-num> | <tunnel-name> } one-arm-echo",
+        "bfd <sessname-value> bind mpls-te interface { <tunnel-type> <tunnel-num> | <tunnel-name> } select-board <slot-id> one-arm-echo",
+        "bfd <sessname-value> bind mpls-te interface { <tunnel-type> <tunnel-num> | <tunnel-name> } one-arm-echo select-board <slot-id>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sessname-value",
+            "Info": "Specifies the name of a BFD session.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string.\nWhen the name of a BFD session is configured, the uppercase and lowercase letters in the name must be the same as what you enter.BFD session names are case-insensitive. For example, ABC and abc are regarded as the same BFD session. If you have configured ABC as the name of a BFD session, the ABC BFD session view is directly displayed when you configure abc."
+        },
+        {
+            "Parameters": "interface tunnel-type tunnel-num",
+            "Info": "Specifies the name of a tunnel interface to be bound to a BFD session.\nThe tunnel-type value can only be tunnel."
+        },
+        {
+            "Parameters": "te-lsp",
+            "Info": "Configures BFD to detect the primary LSP bound to a tunnel.\n-"
+        },
+        {
+            "Parameters": "backup",
+            "Info": "Configures BFD to detect the backup LSP bound to a tunnel.\n-"
+        },
+        {
+            "Parameters": "reverse-te",
+            "Info": "Configures reverse TE tunnel information.\n-"
+        },
+        {
+            "Parameters": "lsr-id lsr-id",
+            "Info": "Specifies a reverse MPLS LSR ID.\nThe value is an integer in the range 0 to 4294967295."
+        },
+        {
+            "Parameters": "tunnel-id tunnel-id",
+            "Info": "Specifies a reverse tunnel ID.\nThe value is an integer in the range 1 to 4294967295."
+        },
+        {
+            "Parameters": "auto",
+            "Info": "Enables the auto-negotiation function for discriminators.\n-"
+        },
+        {
+            "Parameters": "one-arm-echo",
+            "Info": "Indicates a one-arm BFD echo session.\n-"
+        },
+        {
+            "Parameters": "select-board slot-id",
+            "Info": "Specifies the slot number of a board on which BFD monitors a TE tunnel.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] ip address 2.2.2.2 24",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] mpls te tunnel-id 2",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd lsptope2 bind mpls-te interface Tunnel10 te-lsp reverse-te lsr-id 1.1.1.1 tunnel-id 1 auto",
+            "[*HUAWEI-bfd-lsp-session-lsptope2]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] bfd 1to4tunnel bind mpls-te interface Tunnel10",
+            "[*HUAWEI-bfd-lsp-session-1to4tunnel]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] bfd 1to4rsvp bind mpls-te interface Tunnel10 te-lsp",
+            "[*HUAWEI-bfd-lsp-session-1to4rsvp]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] bfd 1to4backup bind mpls-te interface Tunnel10 te-lsp backup",
+            "[*HUAWEI-bfd-lsp-session-1to4backup]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] bfd 1to4backup bind mpls-te interface Tunnel10 te-lsp backup one-arm-echo",
+            "[*HUAWEI-bfd-lsp-session-1to4backup]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] bfd 1to4backup bind mpls-te interface Tunnel10 te-lsp one-arm-echo"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] bfd 1to4backup bind mpls-te interface Tunnel10 one-arm-echo"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run the bfd bind mpls-te command to configure static BFD for a TE tunnel between devices. However, before running the command, you must configure static BFD for TE on both ends of the TE tunnel and manually plan session discriminators for both ends through the discriminator command.\nTo configure a static BFD session with automatically negotiated discriminators to detect a TE tunnel or the primary or backup LSP bound to a TE tunnel, run the bfd bind mpls-te auto command. After a reverse TE tunnel is specified, BFD sessions at both ends can be associated with each other through tunnel information. If the command is run, the BFD sessions at both ends can dynamically negotiate discriminators. Therefore, you do not need to manually plan or configure discriminators.\nBFD detects faults in a TE tunnel or a primary or backup LSP bound to the TE tunnel.\nMultiple LSPs may be bound to a TE tunnel. If BFD is configured to detect faults in a TE tunnel, a BFD session will go Down only if all LSPs bound to the TE tunnel fail.\nOne-arm BFD echo is used when two devices are directly connected and only one of them supports BFD. A one-arm BFD echo session can be established on the device that supports BFD. After receiving a one-arm BFD echo session packet, the device that does not support BFD immediately loops back the packet, implementing quick link failure detection.\nWhen you create a one-arm BFD echo session, only the tunnel test is supported for SR-MPLS TE, and the LSP cannot be tested.\nPrerequisites\nBFD has been enabled using the bfd command.The tunnel interface to which the specified BFD session is to be bound has been configured.\n\nPrecautions\nOnly one of multiple BFD sessions bound to an interface supports association with the interface status.\nIf the primary or backup LSP bound to a tunnel and detected by BFD is Down, a BFD session can be established but cannot go Up.\nIf the TE tunnel detected by BFD is Down, a BFD session can be established but cannot go Up.\nYou can run the undo bfd session-name command to delete a specified BFD session and its binding information."
+}

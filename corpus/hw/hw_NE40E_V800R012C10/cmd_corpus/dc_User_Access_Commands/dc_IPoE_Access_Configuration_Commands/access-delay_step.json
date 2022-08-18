@@ -1,0 +1,37 @@
+{
+    "PageTitle": "access-delay (AAA view)",
+    "FuncDef": "The access-delay step command enables the access response delay function globally, and set the maximum and minimum access response delays.\nThe undo access-delay step command disables the access response delay function globally.\nBy default, the access response delay function is disabled globally.",
+    "CLIs": [
+        "access-delay step <step-value> minimum <minimum-time> maximum <maximum-time> [ slot <slot-id> ]",
+        "undo access-delay [ slot <slot-id> ]"
+    ],
+    "ParentView": [
+        "AAA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "minimum minimum-time",
+            "Info": "Indicates the minimum response delay for access users on the device.\nThe value is an integer that ranges from 0 to 2550, in 10 milliseconds."
+        },
+        {
+            "Parameters": "maximum maximum-time",
+            "Info": "Indicates the maximum response delay for access users on the device.\nThe value is an integer that ranges from 1 to 2550, in 10 milliseconds."
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Indicates the access response delay function for access users on the specified board.\n-"
+        },
+        {
+            "Parameters": "step step-value",
+            "Info": "Indicates the step of the number of access users. Each time the number of access users on the device increases by the number specified by step-value, the response delay is prolonged. The response delay for the access users within the step range is the same.\nstep-value is an integer that ranges from 1 to 262144."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] access-delay step 100 minimum 20 maximum 500"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe access response delay depends on the number of access users, and the configured parameters including the step, maximum access response delay, and minimum access response delay.\nIf the value obtained by dividing the number of access users by the step and then adding the integer part of the result to the minimum access response delay is smaller than or equal to the maximum access response delay, you can obtain the access response delay for the users by multiplying this final value with 10 ms.If the value obtained by dividing the number of access users by the step and then adding the integer part of the result to the minimum access response delay is greater than the maximum access response delay, you can obtain the access response delay for the users by multiplying maximum access response delay with 10 ms.\nAssume that the step is 3000, the maximum access response delay is 7, and the minimum access response delay is 3. Then, the delay for access users numbered 0 to 2999 is 3 x 10 ms; the delay for access users numbered 3000 to 5999 is 4 x 10 ms; the delay for access users numbered 6000 to 8999 is 5 x 10 ms; the delay for access users numbered 9000 to 11999 is 6 x 10 ms; the delay for access users numbered after 12000 is 7 x 10 ms.\nIf the access response delay function is configured globally and on a BAS interface, the configuration on the interface rather than the global configuration takes effect.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

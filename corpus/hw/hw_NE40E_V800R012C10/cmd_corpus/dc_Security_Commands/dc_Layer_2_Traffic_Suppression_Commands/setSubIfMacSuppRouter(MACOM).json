@@ -1,0 +1,93 @@
+{
+    "PageTitle": "{ unknown-unicast-suppression | broadcast-suppression | multicast-suppression | unicast-suppression } cir (Layer 2 sub-interface view)",
+    "FuncDef": "The broadcast-suppression cir command configures the maximum volume of broadcast traffic that a sub-interface forwards.\nThe undo broadcast-suppression command restores the default configuration.\nThe multicast-suppression cir command configures the maximum volume of multicast traffic that a sub-interface forwards.\nThe undo multicast-suppression command restores the default configuration.\nThe unknown-unicast-suppression cir command configures the maximum volume of unknown unicast traffic that a sub-interface forwards.\nThe undo unknown-unicast-suppression command restores the default configuration.\nThe unicast-suppression command configures the maximum volume of unicast traffic that a sub-interface forwards.\nBy default, unknown unicast, broadcast, unicast, and multicast traffic are not suppressed on sub-interfaces.",
+    "CLIs": [
+        "{ unknown-unicast-suppression | broadcast-suppression | multicast-suppression } cir <cirVal> [ cbs <cbsVal> ] { inbound | outbound }",
+        "unicast-suppression cir <cirVal> [ cbs <cbsVal> ] { inbound | outbound }",
+        "undo { unknown-unicast-suppression | broadcast-suppression | multicast-suppression } { inbound | outbound }"
+    ],
+    "ParentView": [
+        "400GE Layer 2 sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "PW-VE sub-interface view",
+        "Layer 2 sub-interface view",
+        "Sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cir cirVal",
+            "Info": "Specifies the committed information rate (CIR), namely, maximum rate at which multicast traffic is forwarded.\nThe value is an integer ranging from 0 to 4294967295, in kbit/s."
+        },
+        {
+            "Parameters": "cbs cbsVal",
+            "Info": "Specifies the Committed Burst Size (CBS), which is the depth of the first token bucket.\nThe value is an integer ranging from 0 to 4294967295, in bytes.\nThe default value is determined by cir-value:\nIf cir-value is less than 100000 kbit/s, the default value of cbs-value equals cir-value x (1500/8), in bytes.If cir-value is greater than or equal to 100000 kbit/s, the default value of cbs-value equals 100000 x (1500/8), in bytes."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Indicates that the upstream traffic is suppressed.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Indicates that the downstream traffic is suppressed.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi 1 static",
+            "[*HUAWEI-vsi-1] pwsignal ldp",
+            "[*HUAWEI-vsi-1-ldp] vsi-id 100",
+            "[*HUAWEI-vsi-1-ldp] quit",
+            "[*HUAWEI-vsi-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 100",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] l2 binding vsi 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] unknown-unicast-suppression cir 100 cbs 18800 inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi 1 static",
+            "[*HUAWEI-vsi-1] pwsignal ldp",
+            "[*HUAWEI-vsi-1-ldp] vsi-id 100",
+            "[*HUAWEI-vsi-1-ldp] quit",
+            "[*HUAWEI-vsi-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 100",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] l2 binding vsi 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] broadcast-suppression cir 100 cbs 18800 inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi 1 static",
+            "[*HUAWEI-vsi-1] pwsignal ldp",
+            "[*HUAWEI-vsi-1-ldp] vsi-id 100",
+            "[*HUAWEI-vsi-1-ldp] quit",
+            "[*HUAWEI-vsi-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] vlan-type dot1q 100",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] l2 binding vsi 1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] multicast-suppression cir 100 cbs 18800 inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.1 mode l2",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] bridge-domain 100",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] multicast-suppression cir 100 cbs 18800 inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf unknown unicast, broadcast, unicast, or multicast traffic mounts on a network, the traffic consumes a great amount of network bandwidth, deteriorating network performance.\nTo prevent an unknown unicast, broadcast, unicast, or multicast traffic storm, run the { unknown-unicast-suppression | broadcast-suppression | unicast-suppression | multicast-suppression } cir command to suppress unknown unicast, broadcast, unicast, or multicast traffic on a sub-interface. If the unknown unicast, broadcast, unicast, or multicast traffic volume exceeds the cirVal, the system discards the excessive unknown unicast, broadcast, unicast, or multicast traffic."
+}

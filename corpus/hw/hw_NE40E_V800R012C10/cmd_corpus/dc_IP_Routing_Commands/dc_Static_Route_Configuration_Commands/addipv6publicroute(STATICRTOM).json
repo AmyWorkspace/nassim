@@ -1,0 +1,113 @@
+{
+    "PageTitle": "ipv6 route-static",
+    "FuncDef": "The ipv6 route-static command configures IPv6 static routes.\nThe undo ipv6 route-static command deletes configured IPv6 static routes.\nBy default, no IPv6 static routes are configured.",
+    "CLIs": [
+        "ipv6 route-static <dest-ipv6-address> <prefix-length> vpn-instance <vpn-instance-name> <nexthop-ipv6-address> [ recursive-lookup host-route ] [ preference <preference> | tag <tag> ] * [ bfd enable | track { bfd-session <cfg-name> | nqa <admin-name> <test-name> } | permanent ] [ no-advertise | no-install ] [ inter-protocol-ecmp ] [ description <text> ]",
+        "ipv6 route-static <dest-ipv6-address> <prefix-length> <nexthop-ipv6-address> [ recursive-lookup host-route ] [ preference <preference> | tag <tag> ] * [ bfd enable | track { bfd-session <cfg-name> | nqa <admin-name> <test-name> } | permanent ] [ no-advertise | no-install ] [ inter-protocol-ecmp ] [ description <text> ]",
+        "ipv6 route-static <dest-ipv6-address> <prefix-length> { <interface-name> | <interface-type> <interface-number> } [ <nexthop-ipv6-address> ] [ preference <preference> | tag <tag> ] * [ bfd enable | track { bfd-session <cfg-name> | nqa <admin-name> <test-name> } | permanent ] [ no-advertise | no-install ] [ inter-protocol-ecmp ] [ description <text> ]",
+        "ipv6 route-static <dest-ipv6-address> <prefix-length> [ vpn-instance <vpn-instance-name> ] <nexthop-ipv6-address> [ recursive-lookup host-route ] [ preference <preference> | tag <tag> ] * inherit-cost [ inter-protocol-ecmp ] [ description <text> ]",
+        "ipv6 route-static <dest-ipv6-address> <prefix-length> vpn-instance <vpn-instance-name> [ preference <preference> | tag <tag> ] * [ no-advertise | no-install ] [ description <text> ]",
+        "undo ipv6 route-static <dest-ipv6-address> <prefix-length> vpn-instance <vpn-instance-name> <nexthop-ipv6-address>",
+        "undo ipv6 route-static <dest-ipv6-address> <prefix-length> vpn-instance <vpn-instance-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dest-ipv6-address",
+            "Info": "Specifies a destination IPv6 address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the length of an IPv6 prefix.\nIt is an integer ranging from 0 to 128."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of an IPv6 address family-enabled VPN instance. If the name of a VPN instance is specified, the outbound interface of a static route can be found in the routing table of the VPN instance based on the configured nexthop-ipv6-address. If the nexthop-ipv6-address parameter is not configured, that is, the Next-Table function is configured. In this case, after receiving packets, the device searches the public network forwarding table for a forwarding entry with the destination VPN instance. Then, the device searches the forwarding table of the destination VPN instance for the corresponding forwarding entry.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "nexthop-ipv6-address",
+            "Info": "Specifies the next hop IPv6 address of a static route.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "recursive-lookup",
+            "Info": "Recursive route lookup policy.\n-"
+        },
+        {
+            "Parameters": "host-route",
+            "Info": "Recurses the static route to a 128-bit host route.\n-"
+        },
+        {
+            "Parameters": "preference preference",
+            "Info": "Specifies the route priority.\nThe value is an integer ranging from 1 to 255. The default value is 60. The smaller the value, the higher the priority."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies the tag attribute value of a static route. To implement different route management policies, you can configure different tag attribute values to classify static routes. For example, other protocols can import the static routes with specified tag attribute values based on a routing policy.\nThe value is an integer ranging from 1 to 4294967295. The default value is 0."
+        },
+        {
+            "Parameters": "bfd",
+            "Info": "Associates a dynamic BFD session with the static route to fast detect faults.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Associates a dynamic BFD session with the static route to fast detect faults.\n-"
+        },
+        {
+            "Parameters": "track",
+            "Info": "Specify a track object.\n-"
+        },
+        {
+            "Parameters": "bfd-session cfg-name",
+            "Info": "Associates a static BFD session with the static route to fast detect faults.\nThe undo ip route-static [ track bfd-session ] all command with track bfd-session cfg-name specified dissociates the static route from the current BFD session only without deleting the static route.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "nqa admin-name",
+            "Info": "Associates the static route with an NQA test instance to fast detect faults so that the system determines whether to activate the static route based on the NQA link detection result to control route advertisement and guide remote traffic.\nCurrently, only ICMP NQA test instances can be bound to static routes to implement fast fault detection.\nThe value is a string of 1 to 32 case-sensitive characters."
+        },
+        {
+            "Parameters": "test-name",
+            "Info": "Associates the static route with an NQA test instance to fast detect faults so that the system determines whether to activate the static route based on the NQA link detection result to control route advertisement and guide remote traffic.\nCurrently, only ICMP NQA test instances can be bound to static routes to implement fast fault detection.\nThe value is a string of 1 to 32 case-sensitive characters."
+        },
+        {
+            "Parameters": "permanent",
+            "Info": "Configures permanent advertisement of the static route.\nIf service traffic needs to be forwarded along a specified path, regardless of the link status. you can specify permanent to configure permanent advertisement of static routes.\n-"
+        },
+        {
+            "Parameters": "no-advertise",
+            "Info": "Prevents the static route from being advertised.\nIn network maintenance scenarios, static routes are required to verify services. If you do not want these static routes to be imported by other protocols, specify no-advertise to prevent these static routes from being advertised.\nno-advertise takes effect only when it is configured for all the active static routes with the same destination address and mask.\nAfter this function is enabled, the static route can be imported to the BGP routing table but is not advertised to BGP peers.\n-"
+        },
+        {
+            "Parameters": "no-install",
+            "Info": "Prevents the static route from being delivered to the FIB. If multiple static routes with the same prefix and mask length are configured using the command repeatedly, all the static routes can be delivered to the FIB as long as no-install is not specified in the command when configuring one of the static routes.\nThe no-install and no-advertise parameters are mutually exclusive.\n-"
+        },
+        {
+            "Parameters": "inter-protocol-ecmp",
+            "Info": "If a static route is the optimal or suboptimal route and the optimal and suboptimal routes share the same priority, the static route and the routes of dynamic routing protocols can participate in inter-protocol load balancing.\nIf inter-protocol load balancing among static routes and the routes of dynamic routing protocols is enabled for any static route in the routing table, the other static routes in the routing table that have the same prefix as that of this static route can also participate in inter-protocol load balancing with the routes of dynamic routing protocols.\nIntra-protocol and inter-process load balancing and inter-protocol load balancing are mutually exclusive. If you configure them both, the former takes effect.\nInter-protocol load balancing does not take effect in the following cases:\nAmong routes imported using the import-rib command and other routes.Among black-hole routes and non-black-hole routes.Among Vlink routes and non-Vlink routes.\n-"
+        },
+        {
+            "Parameters": "description text",
+            "Info": "Specifies the description of a static route.\nTo check the configured description, run the display this or display current-configuration command in the system view.\nThe description parameter cannot be followed by other parameters, such as bfd and preference. Otherwise, the configuration will be used only as the description. For example, if ipv6 route-static 2001:db8::1 128 NULL0 description aa preference 10 is run, aa preference 10 is used as the description.\nThe value is a string of 1 to 150 characters, spaces supported."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "inherit-cost",
+            "Info": "Enables a static route to inherit the cost of recursive routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 route-static 2001:db8:1::1 64 2001:db8:2::1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a simple network or when the Router cannot use a dynamic routing protocol to establish a route to a destination, you can configure static routes.\nIf you specify a VPN instance for a static route, a router searches the routing table of the VPN instance for an outbound interface of the static route and adds the static route to the public routing table. To configure a static route in a VPN instance, run the ipv6 route-static vpn-instance command.\nPrerequisites\nBFD has been enabled so that static routes can be associated with the BFD session.\nAn NQA test instance has been created so that static routes can be associated with the NQA test instance.\nPrecautions\nWhen configuring unicast static routes, note the following rules:\nIf no priority is set for a static route, the static route uses the default priority (60).If the destination address and mask of a static route are all 0s, the static route is a default route.If two static routes with the same destination address are configured, one of the static routes has a next-hop IPv6 address or outbound interface specified, and the other static route has a VPN instance (without an outbound interface or next-hop IPv6 address, that is, the Next-Table function is configured) specified for the next hop, the latest configuration overrides the previous one.After the static route configuration is saved and the device is restarted in CFG mode, the configuration sequence in the configuration file may be different from that before the restart."
+}

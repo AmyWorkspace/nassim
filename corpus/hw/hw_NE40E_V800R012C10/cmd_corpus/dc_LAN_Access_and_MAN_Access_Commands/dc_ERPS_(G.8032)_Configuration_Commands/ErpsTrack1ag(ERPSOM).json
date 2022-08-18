@@ -1,0 +1,64 @@
+{
+    "PageTitle": "erps ring track cfm",
+    "FuncDef": "The erps ring track cfm command associates ERPS with Ethernet Connectivity Fault Management (CFM) to promptly detect link failures.\nThe undo erps ring track cfm command deletes the association between ERPS and Ethernet CFM.\nBy default, ERPS is not associated with Ethernet CFM.",
+    "CLIs": [
+        "erps ring <ring-id> track cfm md <md-name> ma <ma-name> mep <mep-id> remote-mep <rmep-id>",
+        "undo erps ring <ring-id> track cfm"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Eth-Trunk interface view",
+        "Layer 2 50GE interface view",
+        "Port extension Layer 2 interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "md md-name",
+            "Info": "Specifies the name of a maintenance domain (MD).\nThe value is a string of 1 to 43 case-sensitive characters, spaces, hyphens (-), and question marks (?) not supported. Different MDs on a device cannot have the same name."
+        },
+        {
+            "Parameters": "ma ma-name",
+            "Info": "Specifies the name of a maintenance association (MA).\nThe value is a string of 1 to 43 case-sensitive characters, spaces, hyphens (-), and question marks (?) not supported. The total length of the MA and MD names cannot exceed 44 characters."
+        },
+        {
+            "Parameters": "mep mep-id",
+            "Info": "Specifies the ID of a maintenance association end point (MEP).\nThe value is an integer ranging from 1 to 8191."
+        },
+        {
+            "Parameters": "remote-mep rmep-id",
+            "Info": "Specifies the ID of a remote maintenance association end point (RMEP).\nThe value is an integer ranging from 1 to 8191."
+        },
+        {
+            "Parameters": "ring ring-id",
+            "Info": "Specifies the ID of an ERPS ring.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet 1/0/1 outward",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 2",
+            "[*HUAWEI-md-md1-ma-ma1] quit",
+            "[*HUAWEI-md-md1] quit",
+            "[*HUAWEI] erps ring 5",
+            "[*HUAWEI-erps-ring5] protected-instance all",
+            "[*HUAWEI-erps-ring5] control-vlan 10",
+            "[*HUAWEI-erps-ring5] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] stp disable",
+            "[*HUAWEI-GigabitEthernet1/0/1] erps ring 5",
+            "[*HUAWEI-GigabitEthernet1/0/1] erps ring 5 track cfm md md1 ma ma1 mep 1 remote-mep 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo promptly detect failures, converge topologies, and shorten the traffic interruption time, associate ERPS with Ethernet CFM on an ERPS ring port.\nPrerequisites\nBefore associating ERPS with Ethernet CFM on an ERPS ring port, ensure that:\nSpanning Tree Protocol (STP) is not enabled on the port. If the port has STP enabled, run the stp disable command in the interface view to disable STP.The port is not a Layer 3 port. If the port is a Layer 3 port, run the portswitch command to switch the port to the Layer 2 mode.The ERPS ring specified by ring ring-id must be the one to which the port belongs.Ethernet CFM has not been applied to other ports on the ring, and CFM entities have been created.\n\nPrecautions\nThis command is supported in both ERPSv1 and ERPSv2.Currently, ERPS can be associated only with outward-facing MEPs.The association between ERPS and CFM takes effect only when the interface has ERPS associated with CFM and has an interface-based MEP created using the mep mep-id command.If the undo erps track cfm command is run on an ERPS ring port that associates ERPS with CFM and is in the Forwarding state, the port's status will switch to Discarding to ensure ERPS ring proper forwarding. If the ERPS ring is in switchback mode, the WTR timer starts, and the status of the port switches back before the timer expires.After the erps track cfm command is run, to ensure traffic forwarding, run the alarm occur time time and alarm finish time time commands, respectively, to set the alarm generation anti-jitter time and alarm clearing anti-jitter time to 0."
+}

@@ -1,0 +1,112 @@
+{
+    "PageTitle": "display xpl route-filter",
+    "FuncDef": "The display xpl route-filter command displays the configuration and reference information about XPL route-filters.",
+    "CLIs": [
+        "display xpl route-filter state [ attached | unattached ]",
+        "display xpl route-filter",
+        "display xpl route-filter name <xpl-name> { attachpoints | uses | detail }"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "attached",
+            "Info": "Displays information about the route-filters that are referenced.\n-"
+        },
+        {
+            "Parameters": "unattached",
+            "Info": "Displays information about the route-filters that are not referenced.\n-"
+        },
+        {
+            "Parameters": "name xpl-name",
+            "Info": "Specifies the name of the route-filters.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. The string can contain letters, digits, underscores (_), hyphens (-), and dots (.). It must start with a letter or digit."
+        },
+        {
+            "Parameters": "attachpoints",
+            "Info": "Displays information about points of attachment.\n-"
+        },
+        {
+            "Parameters": "uses",
+            "Info": "Displays information about route-filters or sets that are referenced.\n-"
+        },
+        {
+            "Parameters": "detail",
+            "Info": "Displays detailed information about route-filters or sets that are referenced.\n-"
+        },
+        {
+            "Parameters": "state",
+            "Info": "Displays information about route-filter configurations and references.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display xpl route-filter state",
+            "Attached: Applied by at least one attach point",
+            "Unattached: Not applied by any attach point",
+            "",
+            "Attached",
+            "---------------------------------------------------------------",
+            "r1",
+            "",
+            "Unattached",
+            "---------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display xpl route-filter name r1 attachpoints",
+            "Service   attachPoint         ReferCnt      BoundBy",
+            "bgp       bgpPeerExport       1             r1"
+        ],
+        [
+            "<HUAWEI> display xpl route-filter name rtf1 uses",
+            "route filter used:",
+            "----------------------------------------------------------",
+            "rtf2    ",
+            "ip-prefix list used:",
+            "------------------------------------",
+            "ipf1",
+            "as-path list used:",
+            "------------------------------------",
+            "ipf1",
+            "community list used:",
+            "------------------------------------",
+            "cl1"
+        ],
+        [
+            "<HUAWEI> display xpl route-filter name rtf1 detail",
+            " permit: 1, deny: 0",
+            " xpl route-filter rtf1",
+            " if ip route-destination in ipf1 then",
+            "  apply tag 9",
+            " endif",
+            " if as-path in ap1 then",
+            "  apply tag 10",
+            " endif",
+            " if community matches-any cl1 then",
+            "  apply tag 11",
+            " endif",
+            " call route-filter rf2(40)",
+            " end-filter",
+            " #",
+            " xpl ip-prefix-list ipf1",
+            " 2.2.2.2 32,",
+            " 2.2.2.3 32",
+            " end-list",
+            " #",
+            " xpl as-path-list ap1",
+            " regular 8$",
+            " end-list",
+            "#",
+            " xpl community-list cl1",
+            " 1,",
+            " 2,",
+            " 3",
+            " end-list",
+            " #",
+            " xpl route-filter rtf2($med1)",
+            "  apply med $med1",
+            " end-filter"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo view information about XPL route-filter and route attribute set configurations and references, run the display xpl command. If a large amount of information is output, you can specify attached or unattached to filter the information. Route attribute set reference indicates that a route attribute set is referenced by a route-filter, and route-filter reference indicates that a route-filter is referenced by a routing protocol. To check the configuration and reference information about XPL route-filters, run the display xpl route-filter command."
+}

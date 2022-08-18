@@ -1,0 +1,46 @@
+{
+    "PageTitle": "peer next-hop-local (BGP-VPN instance IPv4 address family view) (group)",
+    "FuncDef": "The peer next-hop-local command configures a BGP device to set its IP address as the next hop of routes when the BGP device advertises routes to an IBGP peer group.\nThe undo peer next-hop-local command restores the default setting.\n\nBy default:\n\n\nA BGP router sets IP address of the local interface connected to the peer as the next-hop address of routes when advertising these routes to an EBGP peer.\n\nA BGP router does not change the next-hop address of non-labeled routes if the routes are from an EBGP peer and are to be sent to an IBGP peer. The router sets IP address of the local interface connected to the peer as the next-hop address of labeled routes if the routes are from an EBGP peer and are to be sent to an IBGP peer.\n\nA BGP router does not change the next-hop address of routes if the routes are from an IBGP peer and are to be sent to an IBGP peer.\n\nA BGP router sets the IP address of the local interface connected to the peer as the next-hop address of the locally originated routes to be advertised to an IBGP peer.",
+    "CLIs": [
+        "peer <group-name> next-hop-local",
+        "undo peer <group-name> next-hop-local"
+    ],
+    "ParentView": [
+        "BGP-labeled VPN instance IPv4 address family view",
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-vpna] group test",
+            "[*HUAWEI-bgp-instance-vpna] quit",
+            "[*HUAWEI-bgp] ipv4-labeled-unicast vpn-instance vpna",
+            "[*HUAWEI-bgp-labeled-vpna] peer test enable",
+            "[*HUAWEI-bgp-labeled-vpna] peer test next-hop-local",
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-vpna] group test",
+            "[*HUAWEI-bgp-vpna] peer test next-hop-local"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer next-hop-local command is usually run on an ASBR. By default, when an ASBR forwards a route learned from an EBGP peer to its IBGP peers, the ASBR does not change the Next_Hop of the route. Therefore, the Next_Hop address of the route remains the EBGP peer IP address. After being forwarded to the IBGP peers, the route cannot become active because of the unreachable Next_Hop. The peer next-hop-local command needs to be run to configure the ASBR to modify the Next_Hop of the route to the local IP address before advertising the route to IBGP peers. After being forwarded to the IBGP peers, the route can be active because the Next_Hop is reachable (an IGP is configured in the AS).\nConfiguration Impact\nIf the peer next-hop-local command is run more than once, the latest configuration overrides the previous one.\nAfter the peer next-hop-local command is configured on a device, the device sets its IP address as the next hop of routes when the BGP device advertises the routes to its IBGP peer group.\nPrecautions\nThe peer next-hop-local command is applicable to IBGP peers.\nWhen the BGP device advertises routes to an IBGP peer group, the peer next-hop-local command and the peer next-hop-invariable command are mutually exclusive.\nIf the peer next-hop-local command is run on a route reflector, the command takes effect for BGP labeled routes, VPNv4 routes, and VPNv6 routes.\nIf the peer next-hop-local command is run on a route reflector or confederation peer, the command takes effect only for BGP labeled routes, VPNv4 routes, and VPNv6 routes over the public network and does not take effect for the other types of routes."
+}

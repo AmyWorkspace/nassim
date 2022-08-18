@@ -1,0 +1,37 @@
+{
+    "PageTitle": "es track evpn-peer (Bridge domain view)",
+    "FuncDef": "The es track evpn-peer command enables BGP EVPN peer status tracking.\nThe undo es track evpn-peer command disables BGP EVPN peer status tracking.\nBy default, BGP EVPN peer status tracking is disabled.",
+    "CLIs": [
+        "es track evpn-peer <peer-address>",
+        "undo es track evpn-peer <peer-address>"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the source IP address of a BGP EVPN peer.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn vpn-instance evrf1 bd-mode",
+            "[*HUAWEI-evpn-instance-evrf1] route-distinguisher 100:1",
+            "[*HUAWEI-evpn-instance-evrf1] vpn-target 1:1",
+            "[*HUAWEI-evpn-instance-evrf1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 1.1.1.1 as-number 100",
+            "[*HUAWEI-bgp] l2vpn-family evpn",
+            "[*HUAWEI-bgp-af-evpn] peer 1.1.1.1 enable",
+            "[*HUAWEI-bgp-af-evpn] quit",
+            "[*HUAWEI-bgp] quit",
+            "[*HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] vxlan vni 100 split-horizon-mode",
+            "[*HUAWEI-bd10] evpn binding vpn-instance evrf1",
+            "[*HUAWEI-bd10] es track evpn-peer 1.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a CE is multi-homed to several PEs, All-Active mode is configured only on some of the PEs, and one of the PEs fails, traffic loss may occur. To address this problem, run the es track evpn-peer command in the BD view that CE join in. After the command is run, if PE recovers, PE starts the delay timer for sending Ethernet segment routes. After the timer expires, PE starts the delay timer for receiving Ethernet segment routes. PE does not participate in DF election until the latter timer expires.\nConfiguration Impact\nThe DF election delay timer expires after the es track evpn-peer command is run."
+}

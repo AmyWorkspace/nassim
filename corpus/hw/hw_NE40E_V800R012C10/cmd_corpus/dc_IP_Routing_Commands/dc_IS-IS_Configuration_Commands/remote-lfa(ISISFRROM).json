@@ -1,0 +1,47 @@
+{
+    "PageTitle": "remote-lfa (IS-IS FRR view)",
+    "FuncDef": "The remote-lfa command enables IS-IS Remote loop-free alternate (LFA).\nThe undo remote-lfa command disables IS-IS Remote LFA.\nBy default, IS-IS Remote LFA is disabled.",
+    "CLIs": [
+        "remote-lfa tunnel ldp [ maximum-reachable-cost <cost-value> ] [ level-1 | level-2 | level-1-2 ]",
+        "undo remote-lfa tunnel ldp [ maximum-reachable-cost <cost-value> ] [ level-1 | level-2 | level-1-2 ]"
+    ],
+    "ParentView": [
+        "IS-IS FRR view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "maximum-reachable-cost cost-value",
+            "Info": "Specifies the maximum cost for remote nodes.\nThe value is an integer ranging from 1 to 4261412864. The default value is 4261412864."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Enables IS-IS Level-1 Remote LFA.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Enables IS-IS Level-2 Remote LFA.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Enables both Level-1 and Level-2 Remote LFA.\nIf no level is specified in the command, both Level-1 and Level-2 Remote LFA is enabled.\n-"
+        },
+        {
+            "Parameters": "tunnel",
+            "Info": "Enables the device to establish tunnels.\n-"
+        },
+        {
+            "Parameters": "ldp",
+            "Info": "Enables the device to establish Label Distribution Protocol (LDP) tunnels.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] frr",
+            "[*HUAWEI-isis-1-frr] loop-free-alternate level-2",
+            "[*HUAWEI-isis-1-frr] remote-lfa tunnel ldp level-2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nReal-time service transmission requires fast link switch if an IS-IS fault occurs. To meet the requirement, you can run the remote-lfa command to enable IS-IS Remote LFA. IS-IS Remote LFA selects a PQ node and establishes a tunnel to the PQ node. If the primary link fails, traffic can be switched to the tunnel and forwarded to the PQ node before routes converge on the control plane. After receiving the traffic, the PQ node searches the IP routing table to forward the traffic to the destination. Remote LFA ensures uninterrupted traffic forwarding.\nPrerequisites\nFRR and IS-IS LFA have been enabled in order. To enable FRR, run the frr command. To enable IS-IS LFA, run the loop-free-alternate command.\nPrecautions\nThe level specified in the remote-lfa command must be the same as that specified in the loop-free-alternate command; otherwise, the level specified in the remote-lfa command does not take effect."
+}

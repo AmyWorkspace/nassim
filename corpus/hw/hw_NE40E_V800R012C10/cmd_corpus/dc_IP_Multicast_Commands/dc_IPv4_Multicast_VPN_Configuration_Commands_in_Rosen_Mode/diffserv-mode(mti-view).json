@@ -1,0 +1,45 @@
+{
+    "PageTitle": "diffserv-mode(MTI interface view)",
+    "FuncDef": "The diffserv-mode command configures a differentiated service (Diff-Serv) mode for forwarding multicast packets on an MTunnel interface (MTI).\nThe undo diffserv-mode command restores the default Diff-Serv mode for forwarding multicast packets on an MTunnel interface.\nBy default, the Uniform Diff-Serv mode is adopted for forwarding multicast packets on an MTunnel interface.",
+    "CLIs": [
+        "diffserv-mode { pipe <service-class> <color> | uniform }",
+        "undo diffserv-mode"
+    ],
+    "ParentView": [
+        "MTI interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pipe",
+            "Info": "Indicates that the Pipe Diff-Serv mode is adopted.\n-"
+        },
+        {
+            "Parameters": "service-class",
+            "Info": "Specifies the service type when a multicast packet enters the public network from the private network.\nThe value can be:\naf1af2af3af4becs6cs7ef"
+        },
+        {
+            "Parameters": "color",
+            "Info": "Specifies the color of a multicast packet transferred from a private network to a public network. The color marks the discarding priorities of the packet.\nThe value can be:\ngreenredyellow"
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Indicates that the Uniform Diff-Serv mode is adopted.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance mytest",
+            "[*HUAWEI-vpn-instance-mytest] ipv4-family",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain share-group 224.1.1.1 binding mtunnel 1",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-mytest-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-mytest] quit",
+            "[~HUAWEI] interface MTunnel1",
+            "[*HUAWEI-MTunnel1] diffserv-mode pipe af1 green"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe command is applicable only to the ingress PE. When you configure a Diff-Serv mode, note the following:\nTo enable the MTunnel interface to differentiate service priorities when forwarding multicast packets, set the Diff-Serv mode to Uniform.To disable the MTunnel interface from differentiating service priorities when forwarding multicast packets, set the Diff-Serv mode to Pipe.\n\nConfiguration Impact\nThe service types for a multicast packet transferred from a private network to a public network are configured as follows:\nTo transmit the signaling protocol, set the service type to cs7 or cs6.To ensure the low latency, set the service type to ef.To ensure the bandwidth key data, set the service type to af4, af3, af2, or af1.To ensure the best effort delivery without strict QoS guarantee, set the service type to be.\nThe preceding service types are listed by the sending priority in a descending order.\nFor the colors of the packets sent from private network to the public network, they are arranged by the discard priority in an ascending order, that is, green, yellow, and red."
+}

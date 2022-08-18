@@ -1,0 +1,38 @@
+{
+    "PageTitle": "nexthop recursive-lookup delay (BGP-VPN instance IPv6 address family view)",
+    "FuncDef": "The nexthop recursive-lookup delay command enables a device to respond to BGP recursion changes after a specified delay time.\nThe undo nexthop recursive-lookup delay command restores the default setting.\nBy default, a device immediately responds to BGP recursion changes.",
+    "CLIs": [
+        "nexthop recursive-lookup delay [ <delay-time> ]",
+        "nexthop recursive-lookup non-critical-event delay [ <delay-time> ]",
+        "undo nexthop recursive-lookup delay",
+        "undo nexthop recursive-lookup non-critical-event delay"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay-time",
+            "Info": "Specify the delay in responding to the next hop change, in seconds(default value: 5s).\nThe value is an integer in the range of 1 to 100, in seconds. The default value is 5 seconds."
+        },
+        {
+            "Parameters": "non-critical-event",
+            "Info": "Indicates the delay in responding to non-critical recursion changes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vrf1",
+            "[*HUAWEI-bgp-6-vrf1] nexthop recursive-lookup non-critical-event delay 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf repeated recursion causes the BGP next hop to frequently change on a device, the device frequently selects and advertises routes. To prevent unwanted re-routing and route advertisement, run the nexthop recursive-lookup delay command to enable the device to respond to BGP recursion changes after a specified delay time. The recursion results are as follows:\nCritical recursion result change: The recursive next hop is changed, and BGP route reachability is also changed. For example, if a fault occurs on a network, a device finds no next-hop route or tunnel to which a BGP route recurses. As a result, traffic is interrupted.Non-critical recursion result change: The recursive next hop is changed, and BGP route reachability is not affected. For example, after the interface or type of a tunnel to which the next hop of a BGP route recurses is changed, traffic keeps traveling over the BGP route.\n\nPrecautions\nThe delay time specified in the nexthop recursive-lookup non-critical-event delay command must be greater than or equal to that specified in the nexthop recursive-lookup delay command if both commands are run.\nThe BGP next hop delayed response applies to a scenario where the next hop has multiple links to reach the same destination. If there is only one link between the next hop and the destination, configuring the BGP next hop delayed response may cause heavier traffic loss when the link fails because link switching is impossible."
+}

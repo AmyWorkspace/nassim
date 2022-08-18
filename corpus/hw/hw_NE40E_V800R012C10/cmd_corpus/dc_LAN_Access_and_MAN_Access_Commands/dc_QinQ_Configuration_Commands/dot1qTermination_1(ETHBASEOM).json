@@ -1,0 +1,77 @@
+{
+    "PageTitle": "dot1q termination vid (sub-interface view)",
+    "FuncDef": "The dot1q termination vid command configures a sub-interface to terminate VLAN tags of single-tagged packets and a matching policy for the termination.\nThe undo dot1q termination vid command deletes a matching policy configured on a sub-interface for Dot1q VLAN tag termination.\nBy default, no matching policy is configured on a sub-interface for Dot1q VLAN tag termination.",
+    "CLIs": [
+        "dot1q termination vid <low-pe-vid> [ to <high-pe-vid> ] { 8021p { <val8021p1> [ to <val8021p2> ] } &<1-8> | dscp { <valdscp1> [ to <valdscp2> ] } &<1-10> | eth-type PPPoE | default } [ vlan-group <group-id> ]",
+        "undo dot1q termination vid <low-pe-vid> [ to <high-pe-vid> ] { 8021p { <val8021p1> [ to <val8021p2> ] } &<1-8> | dscp { <valdscp1> [ to <valdscp2> ] } &<1-10> | eth-type PPPoE | default } [ vlan-group <group-id> ]"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "low-pe-vid",
+            "Info": "Specifies the start VLAN ID in user packets.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "high-pe-vid",
+            "Info": "Specifies the end VLAN ID in user packets.\nThe high-pe-vid value must be greater than the low-pe-vid value.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "8021p val8021p1 to val8021p2",
+            "Info": "Specifies the 802.1p priority in packets.\nval8021p1: specifies the lowest priority.val8021p2: specifies the highest priority. val8021p2 must be greater than or equal to val8021p1. val8021p1 and val8021p2 specify a priority range.If you do not specify to val8021p2, val8021p1 specifies the 802.1p priority in packets.\nIn one dot1q termination vid 8021p command, a maximum of eight 802.1p priority ranges can be specified using to.802.1p is represented by a 3-bit PRI (priority) field in an 802.1Q frame. If traffic is congested on a device, the device forwards high-priority frames first.\nThe value is an integer ranging from 0 to 7. The larger the value, the higher the priority."
+        },
+        {
+            "Parameters": "dscp valdscp1 to valdscp2",
+            "Info": "Specifies the DSCP value in packets.\nvaldscp1: specifies the minimum DSCP value.valdscp2: specifies the maximum DSCP value. valdscp2 must be greater than or equal to valdscp1. valdscp1 and valdscp2 specify a DSCP value range.If you do not specify to valdscp2, valdscp1 specifies the DSCP value in packets.\nIn one dot1q termination vid 8021p command, a maximum of 10 DSCP value ranges can be specified using to.According to relevant standards, six bits in Type of Service (ToS) field in an IPv4 packet header serve as the DSCP, which provides reference for differentiated services (DiffServ) and is used to implement Quality of Service (QoS) guarantee on an IP network. The operation of the traffic controller on the gateway depends on the DSCP field.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "eth-type PPPoE",
+            "Info": "Specifies the EthType in packets.\nThe value can be only PPPoE."
+        },
+        {
+            "Parameters": "default",
+            "Info": "Specifies a sub-interface to match VLAN services that are not matched by other sub-interfaces.\n-"
+        },
+        {
+            "Parameters": "vlan-group group-id",
+            "Info": "Specifies the number of a VLAN group.\nThe value is an integer ranging from 1 to 16."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] control-vid 1 dot1q-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] dot1q termination vid 1 to 10 8021p 1 3 to 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.2",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] control-vid 2 dot1q-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.2] dot1q termination vid 1 to 10 default"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.3",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] control-vid 3 dot1q-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.3] dot1q termination vid 20 to 30 dscp 1 3 to 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.4",
+            "[*HUAWEI-GigabitEthernet1/0/1.4] control-vid 4 dot1q-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.4] dot1q termination vid 40 to 50 eth-type pppoe"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn Layer 2 networks, packets carry one or two VLAN tags to identify users and services. If an access device does not support QinQ or one VLAN ID is used by multiple services, the access device may add service access information to the 802.1p/DSCP field. In this situation, edge devices on the network need to use the 802.1p/DSCP value to identify access users, bound the users to different VPNs, and apply different QoS scheduling policies. After a matching policy is configured using the dot1q termination vid 8021p command, VLAN services access the L2VPNs or L3VPNs based on the VLAN ID+802.1p value/DSCP value/EtherType.\nThe combinations of parameters in the dot1q termination vid 8021p command apply to the following scenarios:\nAccess to the L2VPN or L3VPN based on the VLAN range+802.1p value.Access to the L2VPN or L3VPN based on the VLAN range+DSCP value.Access to the L2VPN based on the VLAN range+EtherType.\n\nPrerequisites\nThe encapsulation type of the sub-interface has been configured as Dot1q termination using the encapsulation dot1q-termination command in the sub-interface view.\nThe encapsulation dot1q-termination command is replaced by the control-vid vid dot1q-termination command.\nConfiguration Impact\nIf the dot1q termination vid 8021p command is run more than once, all configurations take effect.\nPrecautions\nIf the same VLAN ID is encapsulated on different sub-interfaces of an interface, the sub-interfaces must use matching policies of the same type (802.1p value/DSCP value/EthType).\nOne VLAN ID can be encapsulated on a maximum of eight sub-interfaces.\nIf you specify default in the command, all services of any VLAN within the VLAN range, except that those matching the matching policy are processed by the corresponding sub-interface, are processed by the default sub-interface.If you specify the VLAN ID+802.1p value/DSCP value/EthType in the undo dot1q termination vid command, the command deletes only the specified matching policy. The undo dot1q termination vid low-pe-vid [ to high-pe-vid ] command deletes all matching policies within the VLAN range on the sub-interface.\nThe EthType matching policy cannot be configured in the VE or global VE sub-interface view."
+}

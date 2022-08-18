@@ -1,0 +1,75 @@
+{
+    "PageTitle": "cfm trigger if-down",
+    "FuncDef": "The cfm trigger if-down command associates Ethernet CFM with an interface's flapping.\nThe undo cfm trigger if-down command restores the default configuration.\n\nBy default, Ethernet CFM is not associated with an interface.",
+    "CLIs": [
+        "cfm md <md-name> ma <ma-name> remote-mep mep-id <mep-id> trigger if-down",
+        "undo cfm md <md-name> ma <ma-name> remote-mep mep-id <mep-id> trigger if-down"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "40GE interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "25GE sub-interface view",
+        "Layer 2 50GE interface view",
+        "100GE interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "400GE Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ma ma-name",
+            "Info": "Specifies the name of an MA.\nThe value is a string of 1 to 43 characters.Question marks (?), hyphens (-) are not supported. The total length of the MA and MD names must be no greater than 44 characters."
+        },
+        {
+            "Parameters": "remote-mep",
+            "Info": "Specifies ID of an RMEP.\n-"
+        },
+        {
+            "Parameters": "mep-id mep-id",
+            "Info": "Specifies ID of an RMEP.\nThe value is an integer ranging from 1 to 8191"
+        },
+        {
+            "Parameters": "md md-name",
+            "Info": "Specifies the name of an MD in an MA.\nThe value is a string of 1 to 43 characters. Question marks (?), hyphens (-) are not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 3 interface GigabitEthernet1/0/1 outward",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send enable",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 4",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep ccm-receive enable",
+            "[*HUAWEI-md-md1-ma-ma1] commit",
+            "[~HUAWEI-md-md1-ma-ma1] quit",
+            "[~HUAWEI-md-md1] quit",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] cfm md md1 ma ma1 remote-mep mep-id 4 trigger if-down"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nAfter the cfm trigger if-down command is run, when a MEP in a specified MA detects a connectivity fault on the network between the MEP and the specified RMEP, the OAM management module shuts down and then turns on the interface. If CFM detects a link fault in active and standby links, the CFM module instructs the OAM management module to run the shutdown command and 7 seconds later run the undo shutdown command automatically on the interface associated with the CFM module to allow services to be restored.\nWhen active and standby links are used, CFM detects link faults and the interface associated with CFM alternates between up and down, which facilitates rapid service convergence.\n\nPrerequisites\n\n\nCFM has been enabled globally using the cfm enable command.\nRun cfm md, creates an MD.\nRun ma, creates an MA.\nRun mep mep-id, configure a MEP.\nRun remote-mep mep-id, specifies an RMEP.\n\n\nPrecautions\n\nEach interface can be bound only to a single RMEP. To modify the binding between an interface and RMEP, delete the original binding and reconfigure a binding."
+}

@@ -1,0 +1,55 @@
+{
+    "PageTitle": "peer default-route-advertise (BGP-IPv6 unicast address family view) (IPv6)",
+    "FuncDef": "The peer default-route-advertise command configures a BGP device to advertise a default route to its peer.\nThe undo peer default-route-advertise command cancels the configuration.\nBy default, a BGP device does not advertise any default route to its peer.",
+    "CLIs": [
+        "peer <peerIpv6Addr> default-route-advertise [ route-policy <route-policy-name> ]",
+        "peer <peerIpv6Addr> default-route-advertise route-filter <route-filter-name>",
+        "peer <peerIpv6Addr> default-route-advertise [ route-policy <route-policy-name> ] { conditional-route-match-all | conditional-route-match-any } { <ipv6-address> <mask-length> } &<1-4>",
+        "peer <peerIpv6Addr> default-route-advertise route-filter <route-filter-name> { conditional-route-match-all | conditional-route-match-any } { <ipv6-address> <mask-length> } &<1-4>",
+        "undo peer <peerIpv6Addr> default-route-advertise"
+    ],
+    "ParentView": [
+        "BGP-IPv6 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerIpv6Addr",
+            "Info": "Specifies the IPv6 address of a BGP peer.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "conditional-route-match-all",
+            "Info": "The default routes are sent to the peer or peer group only when all the conditional routes are matched.\n-"
+        },
+        {
+            "Parameters": "conditional-route-match-any",
+            "Info": "The default routes are sent to the peer or peer group if any conditional route is matched.\n-"
+        },
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of the conditional routes.\nThe value is in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length of the conditional routes.\nIt is an integer ranging from 0 to 32."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 2001:DB8:1::1 as-number 200",
+            "[*HUAWEI-bgp] ipv6-family unicast",
+            "[*HUAWEI-bgp-af-ipv6] peer 2001:DB8:1::1 enable",
+            "[*HUAWEI-bgp-af-ipv6] peer 2001:DB8:1::1 default-route-advertise"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDefault routes are usually used in a network with the following characteristics:\nEach device has multiple EBGP peers and receives full Internet routes from each EBGP peer.There are multiple RRs, and each RR receives full Internet routes.\nIf load balancing is not performed on the network, a BGP peer receives at most one copy of active full Internet routes. If load balancing is performed on the network, the number of active routes received by a BGP peer is doubled, which causes the number of routes on the network to sharply increase. On such a network, you can configure a BGP device to advertise only default routes to its BGP peer and use default routes for traffic load balancing, which can greatly reduce the number of routes on the network.\n\nConfiguration Impact\nWhen this command is run, the default route with the next hop as the local device is unconditionally sent to its peer regardless of whether default routes exist in the routing table.\nPrecautions\nTo configure 6PE, specify the address of the peer as an IPv4 unicast address in the IPv6 unicast address family view."
+}

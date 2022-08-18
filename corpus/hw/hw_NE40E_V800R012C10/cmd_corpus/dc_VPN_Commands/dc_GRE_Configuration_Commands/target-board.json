@@ -1,0 +1,39 @@
+{
+    "PageTitle": "target-board",
+    "FuncDef": "The target-board command configures the mapping between a Layer 3 interface and a GRE service board.\nThe undo target-board command deletes the mapping.\nBy default, no mapping from a Layer 3 interface to a GRE service board is configured.",
+    "CLIs": [
+        "target-board <slot-number> [ backup <slave-slot-number> ]",
+        "undo target-board"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "Layer 3 GE interface view",
+        "GE sub-interface view",
+        "Loopback interface view",
+        "VLANIF interface view",
+        "Port extension sub-interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "slot-number",
+            "Info": "Specifies the number of the slot where a GRE service board resides.\n-"
+        },
+        {
+            "Parameters": "backup slave-slot-number",
+            "Info": "Specifies the number of the slot where the slave GRE service board resides.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] target-board 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAs a Layer 3 tunnel protocol for VPNs, GRE uses the tunneling technology. A tunnel is a virtual P2P connection and can be regarded as a virtual interface supporting only P2P connections. This virtual interface provides a channel for encapsulated data packets.\nThe following types of GRE tunnels are supported\nGRE tunnel with the one-dimensional tunnel interface: also called distributed GRE tunnel. The tunnel interface is one-dimensional (named only by the interface number). GRE packets are encapsulated and decapsulated directly on the inbound interface board. If the multi-field classification and CAR services are configured simultaneously, bandwidth that services consume may double.GRE tunnel with the three-dimensional tunnel interface: also called integrated GRE tunnel. The tunnel interface is three-dimensional (named by the slot ID, subcard ID, and interface number). GRE packets are encapsulated and decapsulated directly on a service processing board.\nFor an integrated GRE tunnel, whose tunnel interface must be three-dimensional (named by the slot ID, subcard ID, and interface number), the target-board command must be run before GRE is bound to the interface using the binding tunnel gre command. After the configuration is complete, the GRE tunnel sends packets received from the source tunnel interface to the corresponding GRE service boards for processing. If the target-board command is not run, the GRE tunnel interface must be one-dimensional.\nIf multiple tunnel service boards are configured on a device, the backup parameter can be run to specify a slave GRE tunnel service board for 1:1 protection, enhancing GRE service reliability. After 1:1 protection is configured, configure two GRE tunnels with the same source and destination on the master and slave GRE tunnel service boards. If the GRE tunnel on the master GRE tunnel service board works, the GRE tunnel on the slave GRE tunnel service board does not work. If the GRE tunnel on the master GRE tunnel service board fails, services are switched to the slave GRE tunnel service board.\nThe target-board [ backup ] applies only to the integrated GRE mode.\nIn integrated GRE mode, you can run the binding tunnel gre command to bind GRE to a source tunnel interface only after running the target-board [ backup ] command. specified in the target-board command must be the same as x of interface x/y/z bound to a tunnel.\nAfter the interface is bound to LMP, the target-board command can still be configured but does not take effect for any service.\n\nPrecautions\nThe device working in 1:1 mode does not support the integrated GRE mode.\nThe target-board [ backup ] applies only to the integrated GRE mode.\nIn integrated GRE mode, you can run the binding tunnel gre command to bind GRE to a source tunnel interface only after running the target-board [ backup ] command. specified in the target-board command must be the same as x of interface x/y/z bound to a tunnel.\nAfter the interface is bound to LMP, the target-board command can still be configured but does not take effect for any service."
+}

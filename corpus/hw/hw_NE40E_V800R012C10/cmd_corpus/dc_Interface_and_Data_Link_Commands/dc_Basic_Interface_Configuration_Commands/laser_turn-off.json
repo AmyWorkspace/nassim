@@ -1,0 +1,50 @@
+{
+    "PageTitle": "laser turn-on",
+    "FuncDef": "The laser turn-on command enables the optical module laser.\nThe laser turn-off command disables the optical module laser.\nBy default, the optical module laser is enabled.",
+    "CLIs": [
+        "laser turn-on [ duration <duration> ]",
+        "laser turn-off"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "CPOS interface view",
+        "FlexE-100G interface view",
+        "FlexE-50G interface view",
+        "FlexE-50|100G interface view",
+        "GE optical interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "duration duration",
+            "Info": "Specifies a duration for which the optical module laser is enabled temporarily. duration takes effect only if the laser autoshutdown enable command has been run.\nThe value is an integer ranging from 200 to 30000, in 10 ms. The default value is 9000."
+        },
+        {
+            "Parameters": "turn-off",
+            "Info": "Set the laser off.\n-"
+        },
+        {
+            "Parameters": "turn-on",
+            "Info": "Set the laser on.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] laser turn-off"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] laser turn-on"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBefore locating or troubleshooting a link failure, maintenance engineers can run the laser turn-off command to disable the optical module laser manually to protect themselves from the laser.The laser The turn on command can be run in the following scenarios:\nWhen a link failure occurs and the laser autoshutdown enable command has been run, the optical module disables the laser automatically. When the link failure is cleared by maintenance engineers, it takes some time for the optical module to recover. The period is determined by opentime-interval and closetime-interval configured in the laser atuo-shutdown-interval command. However, maintenance engineers can enable the optical module laser manually to check whether services have recovered. During this period, maintenance engineers can run the laser turn-on command to enable the optical module laser manually so that the optical module can recover immediately if it confirms that the link failure has been cleared.When a link failure occurs, the laser turn-off command is run to disable the optical module laser manually. After clearing the link failure, maintenance engineers can run the laser turn-on command to enable the optical module laser manually so that the optical module can recover immediately if it confirms that the link failure has been cleared.\n\nPrerequisites\nThe optical module has been installed, and the interface has been Up.\nConfiguration Impact\nIf maintenance engineers run the laser autoshutdown enable command first and then the laser turn-on command after the link failure is cleared, the optical module laser is enabled temporarily for the configured duration, and the system checks whether the link failure is cleared during opentime-interval and closetime-interval configured in the laser atuo-shutdown-interval command.\nduration: The duration timer starts when the optical module laser is enabled, and the optical module laser remain enabled during duration. After the duration timer expires, the system checks whether the LOS alarm is cleared to determine to start the opentime-interval or closetime-interval timer.\nclosetime-interval: If an LOS alarm is generated on the interface, the optical module disables the laser automatically, and an alarm is generated, indicating that the optical module laser has been disabled. During closetime-interval, the system checks whether the LOS alarm persists.If the LOS alarm is cleared, the optical module enables the laser automatically, and the opentime-interval timer starts.If the LOS alarm persists, the optical module laser remains disabled.\nopentime-interval: When the closetime-interval timer expires or the LOS alarm is cleared during closetime-interval, the optical module enables the laser automatically, and the opentime-interval timer starts. During opentime-interval, the system keeps checking whether new LOS alarms are generated.If no new LOS alarms are generated, the optical module considers that the link failure has been cleared and goes back to the normal working state, and a clear alarm is generated, indicating that the optical module has recovered.If new LOS alarms are generated, the optical module disables the laser automatically, and the opentime-interval timer starts over.\nIf the laser turn-off command is run to disable the optical module laser and the laser turn-on command is run to enable the optical module laser after the link failure is cleared, the optical module laser remains enabled even when a new link failure occurs.\n\nFollow-up Procedure\nRun the laser turn-on command to enable the optical module laser manually so that it can go back to the normal working state.\nPrecautions\nRunning the laser turn-off command interrupts services on the interface. Therefore, do not run the command when the interface is working properly.\nduration configured in the laser turn-on duration duration command takes effect only once. In addition, it takes effect only after the laser autoshutdown enable command is run.\nIf the device or the board on which the optical module resides is restarted, the laser turn-off command no longer takes effect."
+}

@@ -1,0 +1,29 @@
+{
+    "PageTitle": "flooding-control",
+    "FuncDef": "The flooding-control command restricts the flooding of OSPF update LSAs.\nThe undo flooding-control command restores the default configuration.\nBy default, the flooding of update LSAs is not restricted.",
+    "CLIs": [
+        "flooding-control [ number <number-value> | timer-interval <timer-interval-value> ] *",
+        "undo flooding-control [ number <number-value> | timer-interval <timer-interval-value> ] *"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "number number-value",
+            "Info": "Sets the maximum number of Update packets that can be sent at each interval during update LSA flooding.\nThe value is an integer ranging from 1 to 1000. The default value is 50."
+        },
+        {
+            "Parameters": "timer-interval timer-interval-value",
+            "Info": "Sets the interval at which Update packets are sent during update LSA flooding.\nThe value is an integer ranging from 30 to 100000, in milliseconds. The default value is 30."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] flooding-control number 100 timer-interval 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn OSPF neighbor receives a large number of Update packets at a short time if the device has multiple neighbors or a large number of update LSAs are flooded by a local device. In this case, the neighbor is busy with processing burst Update packets and discards the Hello packets for maintaining neighbor relationships. As a result, the OSPF neighbor relationships will be torn down unexpectedly. If such a problem occurs, the neighbors will exchange many packets to reestablish neighbor relationships, deteriorating system performance.\nTo resolve the problem, run the flooding-control command on the local device to set the maximum number of Update packets that can be sent at each interval during update LSA flooding.\nPrecautions\nBy default, the Router needs 50 ms to complete update LSA flooding. If some update LSAs are not flooded within 50 ms, the Router waits the period specified by , and then floods those remaining update LSAs."
+}

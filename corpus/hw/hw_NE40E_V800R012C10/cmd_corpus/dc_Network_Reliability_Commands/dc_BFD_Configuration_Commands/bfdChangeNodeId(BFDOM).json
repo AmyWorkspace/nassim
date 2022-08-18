@@ -1,0 +1,36 @@
+{
+    "PageTitle": "change bfd session select-board",
+    "FuncDef": "The change bfd session select-board command migrates a BFD session to a specified board.",
+    "CLIs": [
+        "change bfd session <discr-value> select-board <slot-id>"
+    ],
+    "ParentView": [
+        "BFD view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "discr-value",
+            "Info": "Specifies the discriminator of a BFD session.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "slot-id",
+            "Info": "Specifies a slot ID.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[~HUAWEI-bfd] quit",
+            "[*HUAWEI] bfd bfd1 bind peer-ip 10.1.1.2",
+            "[*HUAWEI-bfd-session-bfd1] discriminator local 1",
+            "[*HUAWEI-bfd-session-bfd1] discriminator remote 2",
+            "[*HUAWEI-bfd-session-bfd1] quit",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] bfd",
+            "[~HUAWEI-bfd] change bfd session 1 select-board 1",
+            "Warning: The BFD session status will be set to AdminDown and renegotiation will be performed. Are you sure you want to continue? [Y/N]:Y"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBFD detects a large number of services, and the board selection logic is complex. In some special scenarios, the board where a BFD session resides is different from the board where the detected service is located. In this case, when the service is configured with a protection link and the board where the BFD session resides is faulty, even if the service link is normal, the BFD session goes Down, which may cause service association and incorrect service migration.\nTo solve this problem, you can run this command to manually migrate the BFD session to the board where the service resides.\nPrerequisites\nA BFD session has been established.\nPrecautions\nAfter the BFD session is migrated to another board, the BFD session status changes to AdminDown. After the BFD session goes Up through negotiation, services can be detected.\nThis command takes effect immediately after being executed. You do not need to run the commit command."
+}

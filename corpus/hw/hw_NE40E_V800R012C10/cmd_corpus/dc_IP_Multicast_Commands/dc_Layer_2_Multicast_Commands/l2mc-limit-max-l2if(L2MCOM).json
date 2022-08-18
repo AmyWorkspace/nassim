@@ -1,0 +1,74 @@
+{
+    "PageTitle": "l2-multicast limit max-entry (Layer 2 Ethernet interface view)",
+    "FuncDef": "The l2-multicast limit max-entry command sets a multicast group number limit. An ACL rule in which the action is permitted can be used to prevent groups from being counted against the limit.\nThe undo l2-multicast limit max-entry command cancels the configuration.\nBy default, the number of multicast groups is not limited.",
+    "CLIs": [
+        "l2-multicast limit max-entry <count> [ vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> ] [ except { <acl-number> | acl-name <acl-name> } ]",
+        "undo l2-multicast limit max-entry [ vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> ]",
+        "undo l2-multicast limit max-entry <count> [ vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> ] [ except { <acl-number> | acl-name <acl-name> } ]"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Eth-Trunk interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan vlan-id1",
+            "Info": "Specifies the ID of a VLAN where the multicast group number needs to be limited.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "except acl-number",
+            "Info": "Specifies the number of an ACL used to prevent groups from being counted against the limit.\nThe value is an integer ranging from 2000 to 3999."
+        },
+        {
+            "Parameters": "except acl-name acl-name",
+            "Info": "Specifies the name of an ACL used to prevent groups from being counted against the limit.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "max-entry count",
+            "Info": "Specifies a multicast group number limit.\nThe value is an integer ranging from 1 to 16384."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2-multicast limit max-entry 1000 vlan 10 to 20 30"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] l2-multicast limit max-entry 1000 vlan 10 to 20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] l2-multicast limit max-entry 100"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-vsi1-ldp] l2-multicast limit max-entry 100 except 2000 remote-peer 1.1.1.1 negotiation-vc-id 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf multicast packets are used to attack the network, devices on the network will be busy processing attack packets and cannot respond to normal network requests. To ensure the multicast service quality, you can configure a multicast group number limit to control generated multicast forwarding entries.\nTable 1 lists the principles for command parameter selection.\nConfiguration Impact\nIf the l2-multicast limit max-entry command is run more than once, all configurations take effect.\nPrecautions\nWhen using ACL rules for filtering, note the following points:\nBasic ACL: (*, G) entry-based filtering rules are used. The source address specified in an ACL is G (multicast group address) in a (*, G) entry.Advanced ACL:In the Any-Source Multicast (ASM) model, (*, G) entry-based filtering rules are used. The source address specified in an ACL is G (multicast group address) in a (*, G) entry.In the Source Specific Multicast Mapping (SSM) model, (S, G) entry-based filtering rules are used. The source address specified in an ACL is S (multicast source address) in an (S, G) entry and the destination address specified in the ACL is G (multicast group address) in the (S, G) entry."
+}

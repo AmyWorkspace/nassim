@@ -1,0 +1,39 @@
+{
+    "PageTitle": "aps authenticate",
+    "FuncDef": "The aps authenticate command configures an authentication string for Protection Group Protocol (PGP) messages.\nThe undo aps authenticate command removes the authentication string for PGP messages.\nBy default, no authentication string is configured for PGP messages exchange between member interfaces in an LMSP group.",
+    "CLIs": [
+        "aps authenticate { <simple-key> | { cipher <cipher-key> [ sha2 | hmac ] | simple <simple-key> } }",
+        "undo aps authenticate"
+    ],
+    "ParentView": [
+        "CPOS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cipher cipher-key",
+            "Info": "Configures an authentication string for PGP messages. An authentication string is displayed in ciphertext when you use the display command. Enables the MD5 abstract algorithm by default.\nTo ensure high security, do not use the MD5 algorithm.\nThe value is a string of 1 to 16 unencrypted characters or 32 ciphertext characters or 48 ciphertext characters. It is case sensitive, excluding special command line characters, such as spaces and question marks."
+        },
+        {
+            "Parameters": "sha2",
+            "Info": "Enables the SHA2 abstract algorithm.\n-"
+        },
+        {
+            "Parameters": "hmac",
+            "Info": "Enables the HMAC abstract algorithm.\n-"
+        },
+        {
+            "Parameters": "simple simple-key",
+            "Info": "Configures an authentication string for PGP messages. An authentication string is displayed in ciphertext when you use the display command.The new password is at least eight characters long and contains at least two of upper-case letters, lower-case letters, digits, and special characters.\nWhen configuring an authentication password, select the ciphertext mode because the password is saved in configuration files in simple text if you select simple text mode, which has a high risk. To ensure device security, change the password periodically.\nThe value is a string of 1 to 16 unencrypted characters. It is case sensitive, excluding special command line characters, such as spaces and question marks."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] controller cpos 1/0/0",
+            "[~HUAWEI-Cpos1/0/0] aps group 1",
+            "[*HUAWEI-Cpos1/0/0] aps working 1.1.1.1 2.2.2.2",
+            "[*HUAWEI-Cpos1/0/0] aps authenticate cipher Huawei_123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMC-LMSP devices exchange PGP messages carrying control information. Negotiation and authentication parameters can be configured on these devices so that they can implement dual-system functions more easily and securely. PGP is a UDP-based Layer 3 protocol whose non-encrypted messages are attack-prone. In this case, an authentication string is added to PGP messages to implement PGP security. Two Devices with MC-LMSP configured use the authentication string to authenticate PGP messages.\nThe authentication string for PGP messages can only be configured during the MC-LMSP configuration.\nWhen the cipher text mode is used, enable the HMAC abstract algorithm to obtain a higher security level. Ensure that the configurations on the two devices must be consistent.\nPrerequisites\nBefore configuring the authentication string for PGP messages on an interface, you must configure an interface as a working or protection interface of an LMSP group.\nConfiguration Impact\nA normal PGP negotiation connection can be established only when the authentication strings on both ends are identical. An authentication string inconsistency causes a negotiation failure."
+}

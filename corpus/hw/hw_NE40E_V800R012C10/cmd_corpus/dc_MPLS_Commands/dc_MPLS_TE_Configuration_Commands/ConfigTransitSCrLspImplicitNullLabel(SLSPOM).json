@@ -1,0 +1,70 @@
+{
+    "PageTitle": "static-cr-lsp transit incoming-interface",
+    "FuncDef": "The static-cr-lsp transit incoming-interface command configures a static CR-LSP on a transit LSR.\nBy default, no static CR-LSP on a transit LSR is configured.",
+    "CLIs": [
+        "static-cr-lsp transit <lsp-name> incoming-interface { <incoming-interfacename> | { <incoming-interfacetype> <incoming-interfacenum> } } in-label <in-label> outgoing-interface { <outgoing-interfacename> | { <outgoing-interfacetype> <outgoing-interfacenum> } } nexthop <next-hop-address> out-label <out-label> [ bandwidth { [ ct0 ] bandwidth } ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lsp-name",
+            "Info": "Specifies LSP name.\nThe value is a string of 1 to 19 case-sensitive characters It cannot contain spaces.\nThe string can contain spaces if it is enclosed with double quotation marks (\")."
+        },
+        {
+            "Parameters": "incoming-interface incoming-interfacename",
+            "Info": "Specifies the incoming interface name.\n-"
+        },
+        {
+            "Parameters": "incoming-interfacetype",
+            "Info": "Specifies the incoming interface type.\n-"
+        },
+        {
+            "Parameters": "incoming-interfacenum",
+            "Info": "Specifies the incoming interface number.\n-"
+        },
+        {
+            "Parameters": "in-label in-label",
+            "Info": "Specifies an incoming label value.\nThe value is an integer and the value ranges from 16 to 32783."
+        },
+        {
+            "Parameters": "outgoing-interface outgoing-interfacename",
+            "Info": "Specifies the outgoing interface name.\n-"
+        },
+        {
+            "Parameters": "outgoing-interfacetype",
+            "Info": "Specifies the outgoing interface type.\n-"
+        },
+        {
+            "Parameters": "outgoing-interfacenum",
+            "Info": "Specifies the outgoing interface number.\n-"
+        },
+        {
+            "Parameters": "nexthop next-hop-address",
+            "Info": "nexthop address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "out-label out-label",
+            "Info": "Specifies an outgoing label value.\nThe value is an integer ranging from 16 to 1048575."
+        },
+        {
+            "Parameters": "bandwidth",
+            "Info": "Bandwidth configuration.\n-"
+        },
+        {
+            "Parameters": "ct0 bandwidth",
+            "Info": "Specifies the bandwidth to be reserved for CT0.\nThe value is an integer ranging from 0 to 4000000000, in kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] static-cr-lsp transit tunnel34 incoming-interface GigabitEthernet2/0/0 in-label 123 outgoing-interface GigabitEthernet1/0/0 nexthop 10.2.0.2 out-label 253 bandwidth ct0 20 pir 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn devices with low routing and processing performance, a static CR-LSP can be established to implement MPLS TE functions. Labels for a static CR-LSP are assigned manually. Static CR-LSP configuration involves the operations on the following types of nodes:\nIngress: configured using the static-cr-lsp ingress command.Transit node: configured using the static-cr-lsp transit command.Egress: configured using the static-cr-lsp egress command.\nTo modify the incoming-interface, in-label, nexthop, outgoing-interface, or out-label, run the static-cr-lsp transit command to set a new value. There is no need to run the undo static-cr-lsp transit command before changing a configured value.\n\nPrerequisites\nMPLS TE has been enabled globally using the mpls te command.\nPrecautions\nIf an Ethernet interface is used as an outbound interface, the nexthop nexthopAddr parameter must be configured.\nIf a pair of an outbound interface name and an outgoing label or a pair of a next-hop IP address and an outgoing label is assigned to an existing static LSP, a different parameter pair must be specified for a static bidirectional CR-LSP to be established. If the same parameter pair is configured, an outsegment entry conflict occurs, which results in a service diversion failure."
+}

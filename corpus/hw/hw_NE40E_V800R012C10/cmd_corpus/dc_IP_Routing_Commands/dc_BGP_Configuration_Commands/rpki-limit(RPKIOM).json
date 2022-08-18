@@ -1,0 +1,38 @@
+{
+    "PageTitle": "rpki-limit",
+    "FuncDef": "The rpki-limit command configures the maximum number of Route Origination Authorization (ROA) entries that the device is allowed to receive from an RPKI session.\nThe undo rpki-limit command restores the default configuration.\nBy default, no such limit is configured on the Router.",
+    "CLIs": [
+        "rpki-limit <limit> [ alert-only | idle-forever | idle-timeout <times> ]",
+        "undo rpki-limit"
+    ],
+    "ParentView": [
+        "RPKI-session view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "limit",
+            "Info": "Specifies the maximum number of ROA entries that the device is allowed to receive from an RPKI session. If the number of received ROA entries exceeds the configured limit, the system terminates the connection, starts a timer, and automatically attempts to re-establish the connection in 30s.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "alert-only",
+            "Info": "Indicates that only a trap is generated and the device no longer receives ROA entries after the number of ROA entries that the device receives from an RPKI session exceeds the configured limit.\n-"
+        },
+        {
+            "Parameters": "idle-forever",
+            "Info": "Indicates that the system does not automatically attempt to re-establish the connection after the connection is terminated because the number of received ROA entries exceeds the configured limit. To enable the system to automatically attempt to re-establish the connection, run the reset rpki session command.\n-"
+        },
+        {
+            "Parameters": "idle-timeout times",
+            "Info": "Specifies the timer for the system to automatically attempt to re-establish the connection after the connection is terminated because the number of received ROA entries exceeds the configured limit. Before the timer expires, you can run the reset rpki session command to enable the system to automatically attempt to re-establish the connection immediately.\nThe value is an integer ranging from 1 to 1200, in minutes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] rpki",
+            "[*HUAWEI-rpki] session 10.1.1.1",
+            "[*HUAWEI-rpki-session] rpki-limit 2 alert-only"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn most cases, a large number of ROA entries are saved on an RPKI server. If the device receives a large number of ROA entries from the RPKI server, excessive system resources will be consumed. In this situation, run the rpki-limit command to configure the maximum number of ROA entries that the device is allowed to receive from an RPKI session.\nConfiguration Impact\nIf the rpki-limit command is run on the Router that has established a BGP peer relationship with another device, the configuration impact is as follows:\nIf the number of ROA entries received by the Router exceeds the configured limit after you run the rpki-limit command for the first time or run the command to reduce the configured limit:If alert-only is specified in the rpki-limit command, the Router does not terminate the peer connection or delete received ROA entries but no longer receives ROA entries.If idle-forever is specified in the rpki-limit command, the Router terminates the peer connection. To enable the Router to re-establish the peer connection, run the reset rpki session command.If idle-timeout is specified in the rpki-limit command, the Router terminates the peer connection and starts the timer for automatic connection re-establishment. Before the timer expires, you can run the reset rpki session command to enable the system to automatically attempt to re-establish the connection immediately.If the configured limit remains unchanged, but alert-only is replaced with another parameter, the Router re-establishes the peer connection after the connection is terminated because the number of received ROA entries exceeds the configured limit.If the limit configured using the rpki-limit command is increased to a value greater than the number of received ROA entries, the Router sends Reset Query packets to receive the ROA entries from scratch.\nIf the rpki-limit command is run on a device that has established a BGP peer relationship in Idle status with another device, the configuration impact is as follows:\nIf the connection is terminated because of idle-forever and idle-timeout configurations, you can run the reset rpki session command to enable the Router to re-establish the connection.\nIf alert-only, idle-forever, or idle-timeout is not specified in the rpki-limit command and the number of received ROA entries exceeds the configured limit, the Router terminates the connection, starts a timer, and automatically attempts to re-establish the connection in 30s."
+}

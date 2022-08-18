@@ -1,0 +1,28 @@
+{
+    "PageTitle": "peer keep-all-routes (BGP multi-instance VPNv4 address family view) (group)",
+    "FuncDef": "The peer keep-all-routes command saves all the BGP routing updates from the specified peer or the peer group after the BGP connection is set up, even though those routes do not pass the configured ingress policy.\nThe undo peer keep-all-routes command disables this function.\nBy default, only the BGP routing updates received from the peer group and passing the configured ingress policy are saved.",
+    "CLIs": [
+        "peer <group-name> keep-all-routes",
+        "undo peer <group-name> keep-all-routes"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100 instance p1",
+            "[~HUAWEI-bgp-instance-p1] group a internal",
+            "[~HUAWEI-bgp-instance-p1] ipv4-family vpnv4",
+            "[~HUAWEI-bgp-instance-p1-af-vpnv4] peer a enable",
+            "[~HUAWEI-bgp-instance-p1-af-vpnv4] peer a keep-all-routes"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter changing a BGP import policy, you can reset BGP connections for the new import policy to take effect immediately, interrupting these BGP connections temporarily. If a device's peer does not support route-refresh, the peer keep-all-routes command can be used on the device to remain all routing updates received from the peer so that the device can refresh its routing table without closing the connection with the peer.\nImplementation Procedure\nIf the peer keep-all-routes command is run but no peer exists, a message is displayed, indicating that the peer does not exist.\nPrecautions\nIf the router does not support the route-refresh capability, the peer keep-all-routes command needs to be run on the router and its peer. If the peer keep-all-routes command is run on a device for the first time, the sessions between the device and its peers will be re-established.\nIf the router supports the route-refresh capability, running this command does not result in re-establishment of the sessions between the router and its peers. After the refresh bgp command is run on the router, however, the router does not refresh its routing table.\nAfter the keep-all-routes command is run, the undo peer keep-all-routes command becomes ineffective. To have the undo peer keep-all-routes command become effective, run the undo keep-all-routes command and then the peer keep-all-routes command."
+}

@@ -1,0 +1,34 @@
+{
+    "PageTitle": "dhcp option82 vendor-specific format",
+    "FuncDef": "The dhcp option82 vendor-specific format command configures a format for the Option 82 suboption 9 carried in a DHCP packet.\nThe undo dhcp option82 vendor-specific format command cancels the configuration.\nBy default, no format is configured for the Option 82 suboption 9.",
+    "CLIs": [
+        "dhcp option82 vendor-specific format vendor-sub-option <sub-option-num> source-ip-address <ip-address>",
+        "undo dhcp option82 vendor-specific format vendor-sub-option <sub-option-num> source-ip-address <ip-address>"
+    ],
+    "ParentView": [
+        "Global VE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "source-ip-address ip-address",
+            "Info": "Specifies an IP address to be inserted into the Vendor-Specific suboption (suboption 9).\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vendor-sub-option sub-option-num",
+            "Info": "Specifies a value for the Vendor-Specific suboption (suboption 9).\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[*HUAWEI-bd10] quit",
+            "[*HUAWEI] interface vbdif 10",
+            "[*HUAWEI-Vbdif10] dhcp option82 vendor-specific insert enable",
+            "[*HUAWEI-Vbdif10] dhcp option82 vendor-specific format vendor-sub-option 10 source-ip-address 10.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn EVPN active-active scenarios, DHCP users obtain IP addresses from DHCP servers in different subnets through DHCP relay-enabled gateways. Users in a subnet use the same gateway address. If the gateway address is carried as the destination IP address in a response packet from the DHCP server, the packet may not be sent to the gateway of the user. As a result, the user fails to go online. To resolve this problem, run the dhcp option82 vendor-specific insert enable command to enable a DHCP relay-enabled gateway to insert the Vendor-Specific suboption (suboption 9) of Option 82 into a DHCP packet. Then, run the dhcp option82 vendor-specific format command to configure a format for the Option 82 suboption 9 and encapsulate the IP address that uniquely identifies the gateway location into a DHCP request packet to be sent to the DHCP server. The DHCP server that supports the Option 82 reserves this suboption in the response packet. If the response packet is sent to a wrong gateway, the DHCP relay-enabled gateway forwards the packet to the correct gateway based on the IP address carried in the suboption 9.\nPrerequisites\nThe interface has been enabled to insert the Vendor-Specific suboption (suboption 9) of Option 82 into a DHCP packet using the dhcp option82 vendor-specific insert enable command.\nPrecautions\nIf the Vendor-Specific suboption (suboption 9) is configured in both the system view and interface view, the configuration in the interface view takes effect.\nThe length of the Option 82 suboption 9 is subject to the configuration in the interface view and that in the system view. If the Option 82 field is too long after the suboption 9 is inserted, the suboption 9 will not be carried in the Option 82 field.\nWhen this command is run to deploy gateways functioning as a DHCP relay, set the sub-option-num parameter to the same value for different gateways and set the ip-address parameter to the VTEP address of a specified gateway."
+}

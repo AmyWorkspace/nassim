@@ -1,0 +1,19 @@
+{
+    "PageTitle": "ntp-service kod-enable",
+    "FuncDef": "The ntp-service kod-enable command enables a device to send kiss codes on appropriate conditions.\nThe undo ntp-service kod-enable command disables a device from sending kiss codes.\nBy default, KoD is not enabled.",
+    "CLIs": [
+        "ntp-service kod-enable",
+        "undo ntp-service kod-enable"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ntp-service kod-enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe ntp-service kod-enable command is used on the server. After this command is run, the server sends two types of kiss codes (RATE and DENY) to the client in specific scenarios.\nWhen the server sends the kiss code DENY to the client:\nIf the access authority of the NTP ACL configured on the server is set to peer, server, synchronization, and query and the source IP address in the NTP packets received by the server matches the deny rule or does not match any ACL rule, the server sends the kiss code DENY to the client. After receiving the kiss code DENY, the client should disconnect all NTP sessions with the server and stops sending NTP request packets.\nWhen the server sends the kiss code RATE to clients:\nIf the access authority of the NTP ACL configured on the server is set to limited, the source IP address of the NTP packets received by the server matches the permit rule, and the client's polling interval for sending NTP packets is less than the server's minimum interval for sending NTP packets, the server sends the kiss code RATE to the client. After receiving the kiss code RATE, the client decreases the polling interval for sending NTP request packets to the server. The client should decrease such a pooling interval each time it receives the kiss code RATE.\nYou can run the ntp-service discard command to configure the minimum and average interval for sending NTP packets.\nIn VS mode, this command is supported only by the admin VS.\nPrecautions\nThis command is only valid on version 4.\nIf this command is the first NTP configuration command, the system automatically adds the ntp-service [ ipv6 ] server disable command in the configuration file to disable the NTP service. To enable the NTP service, run the undo ntp-service [ ipv6 ] server disable command. If this command is the last NTP configuration command to be deleted, the system automatically deletes the ntp-service [ ipv6 ] server disable command from the configuration file."
+}

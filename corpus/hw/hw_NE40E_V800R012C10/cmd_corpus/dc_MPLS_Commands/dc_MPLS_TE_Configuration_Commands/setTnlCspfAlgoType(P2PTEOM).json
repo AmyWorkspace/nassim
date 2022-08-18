@@ -1,0 +1,36 @@
+{
+    "PageTitle": "mpls te cspf (Tunnel interface view)",
+    "FuncDef": "The mpls te cspf disjoint command enables the disjoint algorithm.\nThe undo mpls te cspf disjoint command disables the disjoint algorithm.\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.\nBy default, the disjoint algorithm is disabled.",
+    "CLIs": [
+        "mpls te cspf { disable | disjoint }",
+        "undo mpls te cspf { disable | disjoint }"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "disable",
+            "Info": "Setting up LSPs without CSPF.\n-"
+        },
+        {
+            "Parameters": "disjoint",
+            "Info": "Calculate fully disjoint path for main and hot-standby.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls te cspf",
+            "[*HUAWEI-mpls] mpls rsvp-te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] mpls te backup hot-standby",
+            "[*HUAWEI-Tunnel10] mpls te cspf disjoint"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMost IP RANs use ring topologies and have the access ring separated from the aggregation ring. To improve the end-to-end and inter-ring LSP reliability, IPRAN carriers require isolated primary and hot-standby LSPs. The CSPF algorithm does not meet this reliability requirement because CSPF is a metric-based path computing algorithm that may compute two intersecting LSPs.\nSpecifying explicit paths can resolve this problem. However, this method does not adapt to topology changes.\nNow you can run the mpls te cspf disjoint command to enable isolated LSP computation. After this command is run, the device uses both the disjoint and CSPF algorithms to compute isolated primary and hot-standby LSPs.\nPrerequisites\nBefore executing this command, you need to meet the following conditions:\nThe mpls te cspf command has been run in the MPLS view to enable the CSPF algorithm.The CR-LSP hot-standby feature has been enabled and the primary and hot-standby LSPs have the same bandwidth constraint.\n\nConfiguration Impact\nAfter you run this command, the device does not allow you to configure the following features:\nExplicit pathHop limit property\nAfter you enable the disjoint algorithm, the SRLG feature, if configured, becomes ineffective.\n\nPrecautions\nThe mpls te cspf disjoint command configuration takes effect in new LSP computation tasks, but does not on existing LSPs.\nWhen an affinity is configured, the disjoint algorithm takes effect only when affinities of the primary and backup LSPs are the same or no affinities are configured for the primary and backup LSPs."
+}

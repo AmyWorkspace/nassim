@@ -1,0 +1,38 @@
+{
+    "PageTitle": "delay-measure one-way continual receive",
+    "FuncDef": "The delay-measure one-way continual receive command configures a remote device to receive DMMs to implement proactive one-way frame delay measurement.\nThe undo delay-measure one-way continual receive command cancels the configuration.\nBy default, a remote device enabled with proactive one-way frame delay measurement in an MA is not configured to receive DMMs.",
+    "CLIs": [
+        "delay-measure one-way continual receive test-id <test-id-value>",
+        "undo delay-measure one-way continual receive [ test-id <test-id-value> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "test-id test-id-value",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md2",
+            "[*HUAWEI-md-md2] ma ma2",
+            "[*HUAWEI-md-md2-ma-ma2] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md2-ma-ma2] mep mep-id 2 interface GigabitEthernet1/0/0 inward",
+            "[*HUAWEI-md-md2-ma-ma2] test-id 1 mep 2 mac 00e0-fc12-7890",
+            "[*HUAWEI-md-md2-ma-ma2] delay-measure one-way continual receive test-id 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe delay-measure one-way continual receive command is used in VLL scenarios to configure a remote device to receive DMMs to implement proactive one-way frame delay measurement.\nIf 8021p-value is specified, frame delay measurement based on a specified priority value is performed on the receiving device of a PW. If 8021p-value parameter is not specified, frame delay measurement based on all priorities is performed on the receiving device.\nPrerequisites\nIEEE Standard 802.1ag-2007 has been specified for CFM using the cfm version standard command in the system view.The CFM function has been globally enabled using the cfm enable command in the system view.An MD has been created using the cfm md command in the system view.An MA has been created using the ma command in the MD view.An inward-facing MEP has been created using the mep mep-id command in the MA view.A test instance has been created using the test-id command in the MA view.\n\nConfiguration Impact\nAfter the delay-measure one-way continual receive command is run, the remote device can receive DMMs to implement proactive one-way frame delay measurement."
+}

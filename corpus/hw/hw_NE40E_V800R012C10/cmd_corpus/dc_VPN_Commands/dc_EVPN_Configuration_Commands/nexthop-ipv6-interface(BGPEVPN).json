@@ -1,0 +1,45 @@
+{
+    "PageTitle": "nexthop interface (sid-np-evpn IPv6)",
+    "FuncDef": "The nexthop interface command configures a device to allocate SIDs to BGP VPN IPv6 routes based on specified next hops.\nThe undo nexthop interface command restores the default configuration.\nBy default, a device is not configured to allocate SIDs to BGP VPN IPv6 routes based on next hops.",
+    "CLIs": [
+        "nexthop <nexthop-address> interface { <interface-name> | <interfaceType> <interfaceNum> }",
+        "undo nexthop <nexthop-address> interface { <interface-name> | <interfaceType> <interfaceNum> }"
+    ],
+    "ParentView": [
+        "sid-np-evpn view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "nexthop-address",
+            "Info": "Allocates SIDs based on the IPv6 address of a specified next hop.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies an interface name.\n-"
+        },
+        {
+            "Parameters": "interfaceType",
+            "Info": "Specifies an interface type.\n-"
+        },
+        {
+            "Parameters": "interfaceNum",
+            "Info": "Specifies an interface number.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance v",
+            "[*HUAWEI-vpn-instance-v] ipv6-family",
+            "[*HUAWEI-vpn-instance-v-af-ipv6] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-v-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-v] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance v",
+            "[*HUAWEI-bgp-6-v] segment-routing ipv6 locator 1 evpn",
+            "[*HUAWEI-bgp-6-v] segment-routing ipv6 apply-sid specify-nexthop evpn",
+            "[*HUAWEI-bgp-6-v-sid-np-evpn] nexthop 3::3 interface GigabitEthernet 1/0/1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an EVPN L3VPNv6 over SRv6 BE/SRv6 TE Policy scenario, to properly use network resources and reduce network congestion, run the nexthop interface command to allocate SIDs to BGP VPN IPv6 routes based on specified next hops. This configuration helps implement SID-based load balancing.\nPrecautions\nThe outbound interface specified by the nexthop interface command must be the same as the actual forwarding outbound interface. If they are different, the outbound interface specified by the command is used for service forwarding, which may cause a forwarding failure.If the nexthop interface command and the opcode end-dx6 vpn-instance evpn command specify the same next-hop address but different outbound interfaces, the outbound interface specified by the opcode end-dx6 vpn-instance evpn command is used for service forwarding.If dynamic SIDs cannot be allocated to BGP VPN IPv6 routes based on next hops due to the insufficiency of configured dynamic SID resources, SIDs are allocated to routes based on instances, leading to a failure of SID-based load balancing."
+}

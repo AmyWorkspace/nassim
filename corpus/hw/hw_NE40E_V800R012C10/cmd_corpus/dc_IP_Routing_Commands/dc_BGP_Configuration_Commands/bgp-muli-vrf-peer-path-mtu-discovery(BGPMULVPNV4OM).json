@@ -1,0 +1,34 @@
+{
+    "PageTitle": "peer path-mtu auto-discovery (BGP multi-instance VPN instance IPv4 address family view)",
+    "FuncDef": "The peer path-mtu auto-discovery command enables path MTU discovery.\nThe undo peer path-mtu auto-discovery command disables path MTU discovery.\nBy default, path MTU discovery is disabled.",
+    "CLIs": [
+        "peer <ipv4-address> path-mtu auto-discovery",
+        "undo peer <ipv4-address> path-mtu auto-discovery"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-instance-vpn1] quit",
+            "[~HUAWEI] bgp 100 instance aa",
+            "[~HUAWEI-bgp-instance-aa] ipv4-family vpn-instance vpn1",
+            "[~HUAWEI-bgp-instance-aa-vpn1] peer 10.2.2.2 as-number 200",
+            "[~HUAWEI-bgp-instance-aa-vpn1] peer 10.2.2.2 enable",
+            "[~HUAWEI-bgp-instance-aa-vpn1] peer 10.2.2.2 path-mtu auto-discovery"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen hosts on the same network communicate, the MTU of the network is important to both communication ends. When hosts need to communicate across multiple networks, the smallest MTU on the communication path is most important to both ends. This is because different networks along the communication path have different link-layer MTUs. The minimum MTU on the communication path is called the path MTU.\nThe path MTU has the following characteristics:\nUncertainty: During communication, the path MTU of hosts depends on the selected path and thus may change.Inconsistency: The path MTUs in the inbound and outbound directions may be inconsistent because the path from the sender to the receiver may be different from the path from the receiver to the sender.\n\nConfiguration Impact\nAfter the peer path-mtu-discovery command is run, peers learn the number of bytes of the maximum data packet on a transmission path to prevent packet fragmentation.\nThe path MTU auto discovery function affects TCP MSS calculation.\nIf path MTU auto discovery is not enabled:On the sending end, the calculation formula of TCP MSS is as follows: MSS = MIN { CFGMSS, MTU-40 }.On the receive end:If the device supports SYNCOOKIE, the calculation formula of MSS is as follows: MSS = MIN { MIN { CFGMSS, MTU-40 } , internally-defined MSS value }.\nIf the device does not support SYNCOOKIE, the calculation formula of MSS is as follows: MSS = MIN { CFGMSS, MTU-40 }.\n\nAfter path MTU auto discovery is enabled:On the sending end, the local MSS value is updated only when the device sends packets in which the MSS value is greater than the path MTU. The calculation formula of TCP MSS is as follows: MSS = MIN { MIN { CFGMSS, MTU-40 }, PMTU-40 }.On the receive end:If the device supports SYNCOOKIE, the calculation formula of TCP MSS is as follows: MSS = MIN { MIN { MIN { CFGMSS, MTU-40 }, internally-defined MSS value }, PMTU-40 }.\nIf the device does not support SYNCOOKIE, the calculation formula of TCO MSS is as follows: MSS = MIN { MIN { CFGMSS, MTU-40 }, PMTU-40 }.\n\n\nThe parameters in the calculation formula are described as follows:\nCFGMSS: MIN { APPMSS, CLICFGMSS }APPMSS: Specifies the MSS configured using the peer tcp-mss command.CLICFGMSS: Specifies the maximum MSS configured using the tcp max-mss command.\nMTU-40: Specifies the interface MTU minus 40.PMTU-40: Specifies the path MTU minus 40.internally-defined MSS value: Specifies an internally-defined MSS value, which can be 216, 460, 952, 1400, 2900, 4900, 7900, or 9500. Upon receipt of a packet, the receive-end device uses the internally-defined MSS which is smaller than but close to the MSS of the received packet.\n\nPrecautions\nBy default, path MTU discovery is disabled on a peer because enabling path MTU discovery by default requires the additional cost. If the MTU is known during network planning, path MTU discovery does not need to be enabled."
+}

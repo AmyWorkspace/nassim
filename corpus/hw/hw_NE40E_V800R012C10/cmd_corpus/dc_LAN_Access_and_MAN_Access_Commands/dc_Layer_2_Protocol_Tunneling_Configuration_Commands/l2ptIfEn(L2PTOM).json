@@ -1,0 +1,72 @@
+{
+    "PageTitle": "l2protocol-tunnel enable (Layer 2 Ethernet interface view)",
+    "FuncDef": "The l2protocol-tunnel enable command enables Layer 2 protocol tunneling on an interface.\nThe undo l2protocol-tunnel enable command disables Layer 2 protocol tunneling on an interface.\nThe l2protocol-tunnel reverse command enables reverse Layer 2 protocol tunneling on an interface.\nThe undo l2protocol-tunnel reverse command cancels reverse Layer 2 protocol tunneling on an interface.\nBy default, Layer 2 protocol tunneling and reverse Layer 2 protocol tunneling are disabled on interfaces.",
+    "CLIs": [
+        "l2protocol-tunnel { all | { <protocol> } &<1-19> } { enable | reverse }",
+        "undo l2protocol-tunnel { all | { <protocol> } &<1-19> } { enable | reverse }"
+    ],
+    "ParentView": [
+        "Layer 2 100GE interface view",
+        "100GE interface view",
+        "Layer 2 10GE interface view",
+        "10GE interface view",
+        "25GE-L2 view",
+        "25GE interface view",
+        "400GE Layer 2 sub-interface view",
+        "400GE-L2 view",
+        "400GE interface view",
+        "Layer 2 40GE interface view",
+        "40GE interface view",
+        "50GE Layer 2 sub-interface view",
+        "Layer 2 50GE interface view",
+        "50GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "Layer 2 Eth-Trunk interface view",
+        "Eth-Trunk interface view",
+        "GE Layer 2 sub-interface view",
+        "Layer 2 GE interface view",
+        "GE optical interface view",
+        "GE interface view",
+        "GE electrical interface view",
+        "Layer 2 sub-interface view",
+        "Sub-interface view",
+        "Port extension Layer 2 interface view",
+        "Port extension interface view",
+        "Interface group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "all",
+            "Info": "Enables or disables Layer 2 protocol tunneling of all Layer 2 protocols.\n-"
+        },
+        {
+            "Parameters": "protocol",
+            "Info": "Enables or disables Layer 2 protocol tunneling for a specified Layer 2 protocol.\nThe protocol as follows:\nstplacpdtpgmrpgvrplldpvtpudldpagpcdpeoam3ahdldpmvrpmmrpe-lmisstp\nOne or up to all of the preceding Layer 2 protocols can be specified."
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Enables Layer 2 protocol tunneling function.\n-"
+        },
+        {
+            "Parameters": "reverse",
+            "Info": "Enable reverse Layer 2 protocol tunneling.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] l2protocol-tunnel stp enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2protocol-tunnel stp group-mac 0100-5e00-0011",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] l2protocol-tunnel stp reverse"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSome Layer 2 protocols running between user networks, such as Multiple Spanning Tree Protocol (MSTP) and Link Aggregation Control Protocol (LACP), must traverse a backbone network to perform Layer 2 protocol calculation.\nTo allow Layer 2 PDUs from user networks to be transparently transmitted over a backbone network, run the l2protocol-tunnel enable command to configure Layer 2 protocol tunneling. Layer 2 PDUs from the user networks then travel through different Layer 2 tunnels to reach the destinations to perform Layer 2 protocol calculation.\nPrerequisites\nEdge devices on a backbone network have been configured to replace the multicast destination MAC addresses of Layer 2 PDUs with a specified multicast MAC address using the l2protocol-tunnel group-mac command.The multicast destination MAC addresses in Layer 2 PDUs have been replaced with a specified multicast MAC address using the l2protocol-tunnel group-mac command run on an edge device of a backbone network.\n\nConfiguration Impact\nIf the l2protocol-tunnel reverse command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nLayer 2 protocol tunneling cannot be enabled on Layer 3 interfaces that are not bound to VSIs, VLLs, BDs, or do not have the portswitch command run.\nThe l2protocol-tunnel reverse and l2protocol-tunnel reverse vlan commands cannot be run on the same interface.\nl2protocol-tunnel cannot be configured on the LPUF-50/LPUF-50-L/LPUI-21-L/LPUI-51-L/LPUF-51/LPUF-51-B/LPUI-51/LPUI-51-B/LPUS-51/LPUF-101/LPUF-101-B/LPUI-101/LPUI-101-B/LPUS-101. If a trunk member interface resides in the preceding boards, the l2protocol-tunnel cannot be configured on the interface. Interfaces on the preceding boards cannot be added to the interfaces where l2protocol-tunnel is configured. When the configuration is restored, and the board is replaced, the configuration successes, but does not take effect. The system notifies users through events."
+}

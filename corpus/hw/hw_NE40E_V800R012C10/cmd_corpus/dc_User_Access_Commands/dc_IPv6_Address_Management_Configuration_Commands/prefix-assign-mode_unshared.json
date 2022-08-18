@@ -1,0 +1,22 @@
+{
+    "PageTitle": "prefix-assign-mode",
+    "FuncDef": "The prefix-assign-mode command configures the IPv6 prefix allocation mode to be the unshared mode. That is, IPv6 users do not share the same IP prefix.\nThe undo prefix-assign-mode command restores the default configuration.\nBy default, the IP prefix allocation mode is the shared mode.",
+    "CLIs": [
+        "prefix-assign-mode unshared",
+        "undo prefix-assign-mode"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[~HUAWEI-aaa-domain-huawei] prefix-assign-mode unshared"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn shared ND address allocation mode, RS packets sent by clients to a device server will carry interface IDs. The device server allocates only IPv6 prefixes to clients. The device server generates UNR routes based on the IPv6 prefixes and interface IDs. If the interface IDs change automatically, the NE40E server cannot obtain correct UNR routes. As a result, users cannot go online. In unshared ND address allocation mode, the device server generates UNR routes based only on IPv6 prefixes. Therefore, if the interface IDs change automatically, you must run the prefix-assign-mode unshared command to configure the IPv6 prefix allocation mode to be the unshared mode.\nIn DHCPv6 address allocation mode, clients obtain complete IPv6 addresses which do not change. The device server generates UNR routes based on the IPv6 addresses. Therefore, this command does not take effect for DHCPv6 users.\nIn ND address allocation mode, interface IDs in the global unicast IP addresses of PCs running Windows7 operating system may change automatically. In DHCPv6 address allocation mode, interface IDs in the global unicast IP addresses of PCs do not change.\nPrecautions\nIn VS mode, this command is supported only on the admin VS.\nIn ND address assignment mode, only unshared prefix assignment (a prefix per user) is supported. You must run the prefix-assign-mode unshared command in the AAA domain view and use a delegation address pool for address assignment.If a user goes online using a prefix assigned through ND, the user cannot go online again by sending an NS/NA/IPv6 packet after going offline unexpectedly.\nIn unshared mode, the domain must be bound to the delegation IP address pool, and the IP prefix to be allocated must be 64 bits. Otherwise, users cannot obtain IPv6 addresses."
+}

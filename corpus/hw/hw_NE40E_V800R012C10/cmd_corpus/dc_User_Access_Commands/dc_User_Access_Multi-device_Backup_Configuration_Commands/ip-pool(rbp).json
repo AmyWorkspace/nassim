@@ -1,0 +1,31 @@
+{
+    "PageTitle": "ip-pool(Remote backup profile view)",
+    "FuncDef": "The ip-pool command binds an IP address pool to a remote backup profile.\nThe undo ip-pool command unbinds an IP address pool from a remote backup profile.\nBy default, no IP address pool is bound to a remote backup profile.",
+    "CLIs": [
+        "ip-pool <pool-name>",
+        "undo ip-pool <pool-name>"
+    ],
+    "ParentView": [
+        "Remote backup profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pool-name",
+            "Info": "Specifies an IP address pool name.\nThe value is a string of 1 to 128 case-insensitive characters. The IP address pool to be bound must have been configured. You can configure an IP address pool by using the ip pool command in the system view."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool pool1 bas remote",
+            "[~HUAWEI-ip-pool-pool1] gateway 10.10.110.1 255.255.0.0",
+            "[~HUAWEI-ip-pool-pool1] commit",
+            "[~HUAWEI-ip-pool-pool1] quit",
+            "[~HUAWEI] remote-backup-profile kouqi",
+            "[*HUAWEI-rm-backup-prf-kouqi] service-type bras",
+            "[*HUAWEI-rm-backup-prf-kouqi] commit",
+            "[~HUAWEI-rm-backup-prf-kouqi] ip-pool pool1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA remote backup profile supports a maximum of 4096 IP address pools, whereas an IP address pool can be bound only to one remote backup profile or one remote backup service. The IP address pool must have been configured, which can be a local or remote IP address pool.\nPrerequisites\nBRAS user backup services are started in the RBP view to run the ip-pool command.\nConfiguration Impact\nAfter running the ip-pool command to bind an IP address pool to a remote backup profile, the master/backup status of the remote backup profile controls advertisement of the routes in the network segment of the IP address pool:\nAdvertise the routes in the network segment of the IP address pool when the remote backup profile is in the master state.Delete the routes in the network segment of the IP address pool when the remote backup profile is not in the master state.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nAfter the IP address pool is bound to the remote backup profile, you need to remove the binding before deleting the IP address pool."
+}

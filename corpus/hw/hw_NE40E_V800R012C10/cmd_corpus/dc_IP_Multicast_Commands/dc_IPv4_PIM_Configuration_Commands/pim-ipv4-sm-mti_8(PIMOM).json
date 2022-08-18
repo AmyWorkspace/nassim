@@ -1,0 +1,34 @@
+{
+    "PageTitle": "pim hello-option lan-delay (Mtunnel view)",
+    "FuncDef": "The pim hello-option lan-delay command sets the delay in transmitting Prune messages on a shared network segment.\nThe undo pim hello-option lan-delay command restores the default setting.\nBy default, a PIM interface delays sending Prune messages on the shared network segment for 500 milliseconds.",
+    "CLIs": [
+        "pim hello-option lan-delay <interval>",
+        "undo pim hello-option lan-delay"
+    ],
+    "ParentView": [
+        "MTI interface view",
+        "Mtunnel view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the delay in sending Prune messages on the shared network segment.\nThe value is an integer that ranges from 1 to 32767, in milliseconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance mytest",
+            "[*HUAWEI-vpn-instance-mytest] ipv4-family",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] multicast-domain share-group 224.1.1.1 binding mtunnel 10",
+            "[*HUAWEI-vpn-instance-mytest-af-ipv4] commit",
+            "[~HUAWEI-vpn-instance-mytest-af-ipv4] quit",
+            "[~HUAWEI-vpn-instance-mytest] quit",
+            "[~HUAWEI] interface Mtunnel 10",
+            "[~HUAWEI-MTunnel10] pim hello-option lan-delay 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nHello messages sent by routers carry lan-delay and override-interval. lan-delay indicates the delay in transmitting messages in the LAN. When the values of lan-delay on all routers on the same link are different, the maximum value of these values is used.\nIf a router receives a Prune message from the upstream interface, it indicates that other downstream routers still exist in the LAN. If the router still needs to receive multicast data, it must send a Join message to the upstream interface in the override-interval period.\nWhen receiving a Prune message from a downstream interface, the router does not perform the prune action immediately until the Prune-Pending Timer (PPT) times out. The PPT equals the value of the lan-delay plus the override-interval. If the router receives a Join message from the downstream interface in PPT, the router cancels the prune action.\nPrerequisites\nThe multicast routing-enable command is run in the public network instance view or VPN instance view.\nConfiguration Impact\nIf the pim hello-option lan-delay command is run more than once, the latest configuration overrides the previous one."
+}

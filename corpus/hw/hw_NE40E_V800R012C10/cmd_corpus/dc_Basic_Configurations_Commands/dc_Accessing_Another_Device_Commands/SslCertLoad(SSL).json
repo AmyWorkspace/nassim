@@ -1,0 +1,73 @@
+{
+    "PageTitle": "certificate load",
+    "FuncDef": "The certificate load command loads a certificate to an Secure Sockets Layer (SSL) policy.\nThe undo certificate load command unloads a certificate from an SSL policy.\nBy default, no certificates are loaded to SSL policies.",
+    "CLIs": [
+        "certificate load { pem-cert | pem-chain } <certFile> key-pair <keyType> key-file <keyFile> auth-code [ cipher <authCode> ]",
+        "certificate load pfx-cert <certFile> key-pair <keyType> key-file <keyFile> auth-code [ cipher <authCode> ]",
+        "certificate load pfx-cert <certFile> key-pair <keyType> mac [ cipher <mac-code> auth-code cipher <authCode> ]",
+        "undo certificate load"
+    ],
+    "ParentView": [
+        "SSL policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pem-cert",
+            "Info": "Loads a PEM certificate to an SSL policy.\nThe PEM format is most commonly used.\nThe PEM format is applicable to text files transmitted between systems.\n-"
+        },
+        {
+            "Parameters": "pem-chain",
+            "Info": "Loads a PEM certificate chain to an SSL policy.\n-"
+        },
+        {
+            "Parameters": "certFile",
+            "Info": "Specifies the name of a certificate file.\nThis file must be saved in the security sub-directory of the system directory.\nThe value is a string of 1 to 64 characters.\nThe specified file name must be consistent with the name of the uploaded file.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "key-pair keyType",
+            "Info": "Indicates the key pair type.\nThe value is an enumerated type, which can be:\nDSA: Sets the key pair type to Digital Signature Algorithm (DSA).RSA: Sets the key pair type to Revest-Shamir-Adleman Algorithm (RSA).\nTo ensure high security, do not use the RSA key pair whose length is less than 2048 digits."
+        },
+        {
+            "Parameters": "key-file keyFile",
+            "Info": "Specifies the name of a key pair file.\nThis file must be saved in the security sub-directory of the system directory.\nThe value is a string of 1 to 64 characters.\nThe specified file name must be consistent with the name of the uploaded file.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "auth-code",
+            "Info": "Specifies a PFX trusted-CA file.\n-"
+        },
+        {
+            "Parameters": "cipher authCode",
+            "Info": "Specifies the authentication code of the key pair file.\nThe authentication code is used for identity authentication, ensuring that only authorized users can log in to a server.\nThe value is a string of case-sensitive characters that can be letters or digits. The password can be a string of 1 to 31 characters in simple text or a string of 32 to 168 characters in encrypted text.\nExcept the question mark (?) and space. However, when quotation marks (\") are used around the password, spaces are allowed in the password."
+        },
+        {
+            "Parameters": "cipher mac-code",
+            "Info": "Specifies the message authentication code.\nThe value is a string of case-sensitive characters that can be letters or digits. The password can be a string of 1 to 31 characters in simple text or a string of 32 to 168 characters in encrypted text."
+        },
+        {
+            "Parameters": "pfx-cert",
+            "Info": "Loads a PFX certificate to an SSL policy.\nThe PFX format is a universal digital certificate format. The file name extension of a PFX digital certificate is .pfx.\nThe PFX format is a binary format that can be converted into the PEM format.\n-"
+        },
+        {
+            "Parameters": "mac",
+            "Info": "Specifies the message authentication code.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssl policy policy1",
+            "[*HUAWEI-ssl-policy-policy1] certificate load pem-cert servercert.pem key-pair dsa key-file serverkey.pem auth-code cipher huawei-123456"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssl policy policy1",
+            "[*HUAWEI-ssl-policy-policy1] certificate load pfx-cert servercert.pfx key-pair rsa key-file serverkey.pfx auth-code cipher huawei-123456"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ssl policy policy1",
+            "[*HUAWEI-ssl-policy-policy1] certificate load pem-chain chain-servercert.pem key-pair rsa key-file chain-servercertkey.pem auth-code cipher huawei-123456"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSSL provides the following security mechanisms:\nData transmission privacy: Data to be transmitted is encrypted using symmetric cryptography.Message integrity: A MAC algorithm is used to verify message integrity during data transmission.Identify authentication: Digital-signed certificates are used for identity authentication.\nA digital certificate in the PEM or PFX format is issued by a Certificate Authority (CA). The digital certificate describes the identity of a digital user, helping establish a trusted relationship with the peer to meet high security requirements.\nThe digital certificate includes information such as the name of a person or an organization that applies for the certificate, public key, digital-signed signature of the CA that issues the digital certificate, and validity period of the digital certificate. A CA can issue a certificate chain along with a digital certificate. After receiving a certificate chain, the receiver owns all the certificates on the chain.\n\nPrerequisites\nThe ssl policy command has been used in the system view to create an SSL policy.\nPrecautions\nOnly one certificate or certificate chain can be loaded to an SSL policy. If a certificate or certificate chain has been loaded, unload the certificate or certificate chain before loading a new certificate or certificate chain.\nAfter a certificate is successfully loaded, the corresponding key pair file will be deleted to improve security.\nIf the PEM certificate loaded to an SSL policy is not in X.509v3 format, the system displays a message indicating risks and recommending X.509v3 digital certificates. You can also run the display security risk feature ssl command to view the risk message.\nFor TLS1.3, load the RSA certificate with the SHA-256 or later hash algorithm signature\nThe SSL policy specifies the SSL version to be associated with the cipher suite list.\n The cipher suite list specified in the SSL policy cannot be empty. At least one cipher suite must be included. If the cipher suite list specified in the SSL policy does not contain the TLS1.3 cipher suite, set the latest SSL version to TLS1.2, that is, disable the TLS1.3 function. If the cipher suite list bound to the SSL policy does not contain TLS1.1 or TLS1.2, set the minimum SSL version to TLS1.3, that is, disable TLS1.1 and TLS1.2.\nTLS1.3 is incompatible with the DSA certificate. After the certificate is loaded, the TLS1.3 feature is disabled.\nTLS1.3 is incompatible with the certificate whose signature algorithm is SHA1. After the certificate is loaded, TLS1.3 is disabled.\nTo use TLS1.3 properly, load an RSA certificate with an SHA-256 or later hash algorithm signature.\nIf an RSA certificate is loaded to the SSL server, the certificate verification algorithm configured on the client is the DSS algorithm suite, which does not take effect.\nIf a DSA certificate is loaded to the SSL server, the certificate verification algorithm RSA configured on the client does not take effect.\nTo reduce security risks, you are advised to load the offically applied certificates and key pairs."
+}

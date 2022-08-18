@@ -1,0 +1,38 @@
+{
+    "PageTitle": "l2 binding (Bridge domain view)",
+    "FuncDef": "The l2 binding command binds a VSI to a BD.\nThe undo l2 binding command unbinds a VSI from a BD.\nBy default, a BD is not bound to any VSI.",
+    "CLIs": [
+        "l2 binding vsi <vsi-name> [ pw-tag <pw-tag-value> ]",
+        "undo l2 binding vsi <vsi-name>"
+    ],
+    "ParentView": [
+        "Bridge domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "pw-tag pw-tag-value",
+            "Info": "Specifies the PW tag used when binding a VSI to a BD.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies the name of the VSI to be bound to a BD.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi v1 bd-mode",
+            "[*HUAWEI-vsi-v1] pwsignal ldp",
+            "[*HUAWEI-vsi-v1-ldp] vsi-id 111",
+            "[*HUAWEI-vsi-v1-ldp] quit",
+            "[*HUAWEI-vsi-v1] quit",
+            "[*HUAWEI] bridge-domain 1",
+            "[*HUAWEI-bd1] l2 binding vsi v1 pw-tag 123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn VPLS scenarios in which a CE connects to a PE through a Layer 2 sub-interface that belongs to a BD, run the l2 binding (BD view) command to bind the BD to the VSI and specify a PW tag.\nIn Ethernet virtual connection (EVC) applications, a bridge domain (BD) can access a VPLS network in either of the following modes:\nVSI pipe service mode: A VSI functions as a network-side pipe to carry traffic from multiple BDs. The ingress PE adds a specified PW tag to the traffic that enters the PW from a BD. The egress PE searches for a BD based on the PW tag and forwards the traffic to the corresponding BD. The PW tags configured for the BDs accessing the same VSI cannot overlap, and all BDs accessing the same VSI must have a PW tag configured. The PWs in the VSI must work in tagged mode, with the VSI encapsulation type being VLAN.The ingress PE adds a PW tag to packets that enter a PW only after the PW tag has been specified in the l2 binding vsi vsi-name pw-tag pw-tag-value command and the PW works in tagged mode.The egress PE does not verify the PW tag of packets that leave the PW. If the PW works in raw mode, the egress PE directly forwards the packets to the corresponding BD. If the PW works in tagged mode, the egress PE removes the outer tag before forwarding the packets to the corresponding BD."
+}

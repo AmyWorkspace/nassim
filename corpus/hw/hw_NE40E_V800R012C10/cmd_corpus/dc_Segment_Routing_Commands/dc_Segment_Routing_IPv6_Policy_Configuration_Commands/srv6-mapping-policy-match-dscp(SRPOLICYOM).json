@@ -1,0 +1,47 @@
+{
+    "PageTitle": "color match dscp (SRv6 mapping policy view)",
+    "FuncDef": "The color match dscp command configures mappings between the color values of SRv6 TE Policies in an SRv6 TE Policy group and the DSCP values of packets to be steered into the SRv6 TE Policies.\nThe undo color match dscp command deletes the mappings configured.\nBy default, mappings between the color values of SRv6 TE Policies in an SRv6 TE Policy group and the DSCP values of packets to be steered into the SRv6 TE Policies are not configured.",
+    "CLIs": [
+        "color <color-value> match dscp { ipv4 | ipv6 } { default | { <dscpBegin> [ to <dscpEnd> ] } &<1-10> }",
+        "undo color <color-value> match dscp { ipv4 | ipv6 } [ default | { <dscpBegin> [ to <dscpEnd> ] } &<1-10> ]"
+    ],
+    "ParentView": [
+        "SRv6 mapping policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "color-value",
+            "Info": "Specifies the color value of an SRv6 TE Policy.\nThe value is an integer that ranges from 0 to 4294967295."
+        },
+        {
+            "Parameters": "ipv4",
+            "Info": "Maps color values to the DSCP values of IPv4 packets to be steered into SRv6 TE Policies.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Maps color values to the DSCP values of IPv6 packets to be steered into SRv6 TE Policies.\n-"
+        },
+        {
+            "Parameters": "default",
+            "Info": "Steers packets whose DSCP values are out of the specified range into the default SRv6 TE Policy.\n-"
+        },
+        {
+            "Parameters": "dscpBegin",
+            "Info": "Specifies a begin DSCP value.\nThe value is an integer that ranges from 0 to 63."
+        },
+        {
+            "Parameters": "to dscpEnd",
+            "Info": "Specifies an end DSCP value.\nThe value is an integer that ranges from 0 to 63."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] mapping-policy color 200",
+            "[*HUAWEI-segment-routing-ipv6-mapping-policy-200] match-type srv6-te-policy dscp",
+            "[*HUAWEI-segment-routing-ipv6-mapping-policy-200] color 100 match dscp ipv6 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEach SRv6 TE Policy in an SRv6 TE Policy group has its own color attribute. To configure mappings between the color values of SRv6 TE Policies in an SRv6 TE Policy group and the DSCP values of packets to be steered into the SRv6 TE Policies, run the color match dscp command. In this way, DSCP values, color values, and SRv6 TE Policies are associated within the SRv6 TE Policy group. Based on the association, packets with the specified DSCP values can be steered into SRv6 TE Policies with the mapping color values.\nPrecautions\nIn the SRv6 mapping policy view, you can configure mappings between the color values of SRv6 TE Policies in an SRv6 TE Policy group and the DSCP values of packets to be steered into the SRv6 TE Policies for IPv4 and IPv6 address families separately. In the same address family (IPv4 or IPv6), each DSCP value can be mapped to only one color value.\nOnly the color value of an up SRv6 TE Policy can be mapped to a DSCP value. During IPv4/IPv6 traffic forwarding, packets with DSCP values are matched against SRv6 TE Policies in an SRv6 TE Policy group in the following order:\n The IPv4/IPv6 packets are first strictly matched against the SRv6 TE Policy carrying the color value mapped to the DSCP value of these packets in the corresponding address family. If the matching fails, the packets are matched against the SRv6 TE Policy with the default priority in the corresponding address family. If the matching fails, the packets are matched against the SRv6 TE Policy carrying the color value mapped to the smallest DSCP value in the corresponding address family. If the matching fails, the packets are matched against the SRv6 TE Policy with the default priority in the other address family. If the matching fails, the packets are directly steered into the SRv6 TE Policy carrying the color value mapped to the smallest DSCP value in the other address family.\nBefore configuring the color-DSCP mapping, you need to run the match-type srv6-te-policy dscp command to set the type of the specified mapping policy."
+}

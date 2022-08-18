@@ -1,0 +1,52 @@
+{
+    "PageTitle": "lsp-tetunnel (LSP Ping test instance)",
+    "FuncDef": "The lsp-tetunnel command specifies a TE tunnel used in an NQA LSP Ping test instance.\nThe undo lsp-tetunnel command deletes the configured TE tunnel.\nBy default, no TE tunnel is configured.",
+    "CLIs": [
+        "lsp-tetunnel { <tunnelName> | <ifType> <ifNum> }",
+        "lsp-tetunnel { <tunnelName> | <ifType> <ifNum> } { hot-standby | primary }",
+        "undo lsp-tetunnel",
+        "undo lsp-tetunnel { <tunnelName> | <ifType> <ifNum> } [ hot-standby | primary ]"
+    ],
+    "ParentView": [
+        "NQA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tunnelName",
+            "Info": "Specifies the interface name of a TE tunnel.\nThe value is a character string, case-sensitive characters without spaces. The length ranges from 1 to 63."
+        },
+        {
+            "Parameters": "ifType",
+            "Info": "Specifies the interface type of a TE tunnel of an NQA test instance. It must be tunnel.\n-"
+        },
+        {
+            "Parameters": "ifNum",
+            "Info": "Specifies the interface number of a TE tunnel of an NQA test instance.\nThe value is a string of 1 to 63 case-insensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "hot-standby",
+            "Info": "Specifies the checking of the hot-standby lsp of the tunnel.\n-"
+        },
+        {
+            "Parameters": "primary",
+            "Info": "Specifies the checking of the primary lsp of the tunnel.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls rsvp-te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] nqa test-instance user test",
+            "[*HUAWEI-nqa-user-test] test-type lspping",
+            "[*HUAWEI-nqa-user-test] lsp-type te",
+            "[*HUAWEI-nqa-user-test] lsp-tetunnel Tunnel 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn LSP ping test instance monitors the connectivity of a TE tunnel.\nPrerequisites\nOnly the interface number of a TE tunnel can be specified in an LSP test instance.\nBefore using the lsp-tetunnel command to configure the TE tunnel in an NQA LSP test instance, run the lsp-type te command to specify the NQA LSP test type to TE.\nConfiguration Impact\nThe specified interface number must be valid; otherwise, the test instance fails.\nPrecautions\nIf parameters need to be changed during the running of the test instance, the system prompts you whether to terminate the test instance. Press \"Y\" or \"N\" as required.\nIf you press \"Y\", the test instance is terminated and parameters changed. The changed parameters take effect after the commit command is run. To restart the test instance, run the start command.If you press \"N\", the test instance keeps running, and the parameters fail to be modified.\nThe command can be run to specify an interface number for a TE tunnel only when the LSP type is TE or SR-MPLS TE."
+}

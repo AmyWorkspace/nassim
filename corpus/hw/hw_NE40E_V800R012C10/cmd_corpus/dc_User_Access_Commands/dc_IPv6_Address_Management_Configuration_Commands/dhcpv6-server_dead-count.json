@@ -1,0 +1,45 @@
+{
+    "PageTitle": "dhcpv6-server dead-count",
+    "FuncDef": "The dhcpv6-server dead-count command configures a status (Up/Down) switchover for a DHCPv6 server.\nThe undo dhcpv6-server dead-count command restores the default threshold.\nBy default, if the device does not receive a response packet 25 seconds after sending a request packet to the DHCPv6 server, it considers that the DHCPv6 server is working improperly and sets the status of the DHCPv6 server to Down. The device assumes that the DHCPv6 server goes Up three minutes later and continues to send request packets to reestablish a connection with the DHCPv6 server.",
+    "CLIs": [
+        "dhcpv6-server { dead-count <dead-count> | timeout <timeout-value> | dead-time <dead-time> } *",
+        "dhcpv6-server <ipv6-address> [ vpn-instance <vpn-instance-name> ] { dead-count <dead-count> | timeout <timeout-value> | dead-time <dead-time> } *",
+        "undo dhcpv6-server { dead-count | timeout | dead-time } *",
+        "undo dhcpv6-server <ipv6-address> [ vpn-instance <vpn-instance-name> ] { dead-count | timeout | dead-time } *"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dead-count",
+            "Info": "Specifies the maximum number of times at which the DHCPv6 server does not send response packets.\nThe value is an integer ranging from 1 to 64. The default value is 1."
+        },
+        {
+            "Parameters": "timeout timeout-value",
+            "Info": "Specifies a timeout period. If a device receives no response from the DHCPv6 server within the timeout period, it re-sends request packets.\nThe value is an integer ranging from 0 to 60, in seconds. The default value is 25."
+        },
+        {
+            "Parameters": "dead-time dead-time",
+            "Info": "Specifies a period within which the DHCPv6 server is Down. After the dead-time, the DHCPv6 server is set to Up.\nThe value is an integer ranging from 1 to 65535, in minutes. The default value is 3."
+        },
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of the DHCPv6 server.\nIf ipv6-address is not specified, the command configuration takes effect for all DHCPv6 servers.\nThe address is a 32-digit hexadecimal number."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcpv6-server group group-name",
+            "[*HUAWEI-dhcpv6-server-group-group-name] commit",
+            "[~HUAWEI-dhcpv6-server-group-group-name] dhcpv6-server destination 2001:db8:1::1",
+            "[~HUAWEI-dhcpv6-server-group-group-name] dhcpv6-server 2001:db8:1::1 dead-count 3 timeout 20 dead-time 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBoth the master and slave DHCPv6 servers are deployed on the live network. The master is preferentially used to allocate addresses to users. If the master DHCPv6 server goes Down, the slave DHCPv6 server takes over to allocate addresses. In real-world situations, if the DHCPv6 server does not respond, it does not mean that the DHCPv6 server fails or no address is available on the DHCPv6 server, and it is probably because a user fails to be authenticated. If one unauthorized user fails to be authenticated, the DHCPv6 server will be switched to the slave DHCPv6 server to allocate addresses. After a period of time, the master DHCPv6 server is forcibly set to Up. As a result, repeated master/slave DHCPv6 server switchovers occur on the live network. If the command is configured, when the device sends DHCPv6 packets to the DHCPv6 server consecutively for specified times but receives no response, the device considers that the DHCPv6 server is abnormal and sets its status to Down after the period. After the device sets the status of the DHCPv6 server to Down, the device waits a period. Then, the device sets the status of the DHCPv6 server to Up (assumed) and tries to set up a connection with it. If the connection cannot be set up, the device re-sets the status of the DHCPv6 server to Down. Because there is little probability that several unauthorized users consecutively apply for addresses, the number of master/slave DHCPv6 server switchovers is reduced.\nPrerequisites\nA DHCPv6 server in DHCPv6 server group view has been configured.\nConfiguration Impact\nIf the DHCPv6 server fails, the device can detect the fault within 25s by default. The slave DHCPv6 server then takes over to allocate addresses to the subsequent users. In this sense, only the users who get online within the 25s are affected.\nAfter the command is configured, the device can detect the fault after a maximum of 25 x n seconds by default if the dead-count value is n. In this case, a lot more users will be affected.\nIf is not specified in this command, the command configuration takes effect for all DHCPv6 servers. If is specified in this command, the command configuration takes effect only for the specified DHCPv6 server. The configuration of the specified DHCPv6 server takes precedence over the global configuration.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

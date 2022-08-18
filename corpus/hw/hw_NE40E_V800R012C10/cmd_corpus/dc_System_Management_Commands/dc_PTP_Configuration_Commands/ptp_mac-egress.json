@@ -1,0 +1,46 @@
+{
+    "PageTitle": "ptp mac-egress",
+    "FuncDef": "The ptp mac-egress command configures MAC encapsulation parameters for PTP packets (excluding those transparently transmitted) to be sent on a specific interface.\nThe undo ptp mac-egress destination-mac command restores the MAC multicast encapsulation mode.\nThe undo ptp mac-egress vlan command restores the default virtual local area network (VLAN) ID and priority value for the packets.\nBy default, a PTP device uses the MAC encapsulation mode to send untagged PTP packets with priority 7 to a multicast address.",
+    "CLIs": [
+        "ptp mac-egress { destination-mac <destination-mac> | vlan <vlan-id> [ priority <priority-value> ] }",
+        "undo ptp mac-egress { destination-mac | vlan [ priority ] }"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "25GE interface view",
+        "400GE interface view",
+        "40GE interface view",
+        "50GE interface view",
+        "50|100GE interface view",
+        "GE optical interface view",
+        "GE electrical interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "destination-mac destination-mac",
+            "Info": "Specifies a destination MAC address for PTP packets.\nThe value is in the format of H-H-H. Each H indicates one to four hexadecimal digits. The destination MAC address can only be 01-80-C2-00-00-0E or 01-1B-19-00-00-00 under G.8275.1 mode.. By default, the destination MAC address is 01-1B-19-00-00-00 under G.8275.1 mode."
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies a VLAN ID for PTP packets.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "priority priority-value",
+            "Info": "Specifies the priority value for PTP packets.\nThe value is an integer ranging from 0 to 7. The default value is 7. A larger value allows for a higher priority."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ptp mac-egress destination-mac 001B-1911-1100"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ptp mac-egress vlan 1 priority 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can encapsulate PTP messages into Layer 2 and Layer 3 packets and set the destination address and transmission priority.\nAn encapsulation mode depends on a specific link type:\nLayer 2 links: The ptp mac-egress command configures the MAC encapsulation mode.Layer 3 links: The ptp udp-egress command configures the UDP encapsulation mode.\nSpecify a destination MAC address as needed:\nSpecify a destination MAC address if unicast MAC encapsulation is used.Use a default destination MAC address if multicast MAC encapsulation is used. The addresses 01-1B-19-00-00-00 (for all except peer delay measurement mechanisms) and 01-80-C2-00-00-0E (for peer delay measurement mechanism) are default multicast MAC addresses when specific delay measurement mechanisms are used.\nThis command applies only to 1588v2, G.8275.1 and CU-106.\n\nPrerequisites\nA delay measurement mechanism has been specified using the ptp delay-mechanism { delay | pdelay } command.\nPTP has been enabled on an interface using the ptp enable command.\nPrecautions\n1588v2 services need higher priority than other services. A high transmission priority minimizes the delay or congestion impact on clock signal recovery. Using the default highest priority is recommended. In G.8275.1 mode, only multicast MAC encapsulation is supported."
+}

@@ -1,0 +1,48 @@
+{
+    "PageTitle": "mpls l2vpn nd-dual-sending",
+    "FuncDef": "The mpls l2vpn nd-dual-sending command enables ND dual feed and sets an aging time for ND entries. After ND dual feed is enabled on an AC interface, this interface forwards upstream ND packets to both the primary and secondary PWs.\nThe undo mpls l2vpn nd-dual-sending command disables dual feed for ND packets.\n\nBy default, ND dual feed is disabled.",
+    "CLIs": [
+        "mpls l2vpn nd-dual-sending [ expire-time <expire-time> ]",
+        "undo mpls l2vpn nd-dual-sending [ expire-time <expire-time> ]"
+    ],
+    "ParentView": [
+        "40GE interface view",
+        "GE electrical interface view",
+        "XGE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50|100GE sub-interface view",
+        "GE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "50GE interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "expire-time expire-time",
+            "Info": "Specifies an aging time for ND entries. ND entries will age after the aging time expires. To ensure communication reliability, you need to update ND entries when they are invalid. A dynamic ND entry has a life cycle. If a dynamic ND entry is not updated before its life cycle ends, this dynamic ND entry will be deleted from the ND table. The life cycle is called aging time. If the entry is updated before its life cycle expires, the aging time of the entry is recalculated. To change the aging time of dynamic ND entries, specify the expire-time expire-time parameter, which ensures that dynamic ND entries are updated in time.\nThe value is an integer ranging from 60 to 4294967295, in seconds. The default value is 3600s. The value of 4294967295 indicates that ND entries do not age."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] mpls l2vc 1.1.1.1 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 2.2.2.2 2 secondary",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vpn nd-dual-sending expire-time 2400"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nIn an L2VPN PW redundancy scenario, user-side ND packets are transparently transmitted through the primary PW, which implements 1:1 protection and single feed and dual receiving. As a result, the secondary PW cannot learn ND entries from the user side. If a node fault occurs on the primary PW, the secondary PW learns the user-side ND entries only after traffic is switched to the secondary PW. This causes part of the traffic to be lost.\nTo resolve this problem, run the mpls l2vpn nd-dual-sending command to enable ND dual feed so that the primary and secondary PWs both transparently transmit ND packets.\n\nPrecautions\n\nAfter this command is run, common service packets are still transparently transmitted through the primary PW, which does not allow dual feed.\nThis command can be run on an interface that is not configured with PW redundancy, but the configuration does not take effect."
+}

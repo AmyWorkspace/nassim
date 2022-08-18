@@ -1,0 +1,64 @@
+{
+    "PageTitle": "route-filter (BGP-VPN instance IPv6 address family view)",
+    "FuncDef": "The route-filter export command filters the routes to be advertised so that BGP advertises only desired routes.\nThe undo route-filter export command restores the default configuration.\nThe route-filter import command filters the routes to be received.\nThe undo route-filter import command restores the default configuration.\nBy default, received routes or the routes to be advertised are not filtered.",
+    "CLIs": [
+        "route-filter <route-filter-name> { import | export [ direct | isis <process-id> | ospfv3 <process-id> | ripng <process-id> | static | unr ] }",
+        "undo route-filter <route-filter-name> { import | export [ direct | isis <process-id> | ospfv3 <process-id> | ripng <process-id> | static | unr ] }"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Filters the direct routes to be advertised.\n-"
+        },
+        {
+            "Parameters": "isis process-id",
+            "Info": "Specifies the ID of an IS-IS process.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "ospfv3 process-id",
+            "Info": "Specifies the ID of an OSPFv3 process.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "ripng process-id",
+            "Info": "Specifies the ID of an RIPng process.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "static",
+            "Info": "Filters the static routes to be advertised.\n-"
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Filters the UNR routes to be advertised.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] route-filter aaa import"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] route-filter aaa export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo filter the routes to be advertised using a route-filter, run the route-filter export command.\nIf you specify a route protocol in the command, BGP filters only the routes of this protocol before advertising them. If you do not specify any protocol in the command, BGP filters all routes before advertising them.\nConfiguration Impact\nIf the route-filter export command with the same route protocol specified is run more than once, the latest configuration overrides the previous one.\nThe route-filter export command is mutually exclusive with the filter-policy export command.\nIf the route-filter export command is run, some BGP routes are not added to the IP routing table. Therefore, exercise caution when using the command.\nIf the route-filter import is run more than once, the latest configuration overrides the previous one.\nThe route-filter import command is mutually exclusive with the filter-policy import command."
+}

@@ -1,0 +1,47 @@
+{
+    "PageTitle": "start l2tp",
+    "FuncDef": "The start l2tp command sets the trigger condition for the local end as the L2TP LAC.\nThe undo start command deletes the triggering condition.\nBy default, no trigger condition is configured for the local end as the L2TP LAC.",
+    "CLIs": [
+        "start l2tp { ip <ip-address> [ [ weight <lns-weight> ] | [ preference <preference-value> ] | [ remote <lns-name> ] | [ identifier-name <identifiername> ] ] * } &<1-8>",
+        "start l2tp",
+        "undo start l2tp"
+    ],
+    "ParentView": [
+        "L2TP group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip ip-address",
+            "Info": "Specifies a peer IP address, that is, the IP address of the LNS. A maximum of eight IP addresses can be specified.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "weight lns-weight",
+            "Info": "Sets the weight for LNS.\nThe value is an integer in the range of 1 to 10. The default value is 5. The greater the value, the greater the weight."
+        },
+        {
+            "Parameters": "preference preference-value",
+            "Info": "Specifies the LNS priority.\nThe value is an integer ranging from 1 to 255. The smaller the value, the higher the priority. The default value is 1."
+        },
+        {
+            "Parameters": "remote lns-name",
+            "Info": "Specifies the remote LNS name of the L2TP group.\nThe value is a string of 1 to 253 characters."
+        },
+        {
+            "Parameters": "identifier-name identifiername",
+            "Info": "Specifies a tunnel name that uniquely identifies a tunnel. By default, a tunnel name allocated by the device is used, in the format of an ID plus an index, such as ID1, ID2, or ID3.\nThe value is a string of 1 to 4 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2tp-group huawei",
+            "[*HUAWEI-l2tp-huawei] start l2tp ip 10.10.10.1 weight 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2tp-group lac1",
+            "[*HUAWEI-l2tp-lac1] start l2tp ip 10.1.1.2 remote lns1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo establish an L2TP tunnel, you need to configure this command on the LAC to send a request to the LNS for setting a tunnel.\nConfiguration Impact\nIf load balancing is not enabled and several LNSs are configured, the LAC will try to set up connections with the LNSs in the configuration order until a connection is successfully set up. The other LNSs are backup LNSs.\nAfter the load balancing is enabled by running the tunnel load-sharing command, the weight will take effect. The LAC will allocate the sessions to the LNSs based on weight values. The user prefers to go online through the tunnel which is configured but unused in the L2TP group. When the number of users is small, the weight allocation accounting may be inaccurate.\npreference configured in the start l2tp command takes effect only after the tunnel priority command is run to configured priority-based load balancing for the LNS. The device establishes a tunnel with the LNS with the highest priority. If the LNS with the highest priority is unavailable, the device selects an LNS based on the LNS priorities in descending order. If multiple LNSs have the same priority, the device establishes tunnels with the LNSs, and load balancing is implemented between these tunnels.\nPrecautions\nIf the L2TP strict local tunnel authentication is enabled, you are advised to configure the remote LNS name of the L2TP group. In this way, an LAC will compare local LNS name and the remote LNS name. If the two tunnel names are different, the check does not take effect and the tunnel fails to be set up.\nIf the peer LNS address is delivered by RADIUS, the tunnel name is delivered to allow the LAC to check the LNS tunnel based on the tunnel name.\nThe IP address for the LNS in this command is optional. If the LNS address is delivered by RADIUS, there is no need to configure the IP address. Otherwise, the IP address must be configured."
+}

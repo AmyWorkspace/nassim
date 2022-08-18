@@ -1,0 +1,41 @@
+{
+    "PageTitle": "locator",
+    "FuncDef": "The locator command configures an SRv6 locator.\nThe undo locator command deletes the configured SRv6 locator.\nBy default, no locator is configured.",
+    "CLIs": [
+        "locator <locator-name> [ ipv6-prefix <ipv6-address> <prefix-length> [ [ static <static-length> ] | [ args <args-length> ] ] * ]",
+        "undo locator <locator-name> [ ipv6-prefix <ipv6-address> <prefix-length> [ [ static <static-length> ] | [ args <args-length> ] ] * ]"
+    ],
+    "ParentView": [
+        "Segment routing IPv6 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "locator-name",
+            "Info": "Specifies the name of a SID node route locator.\nThe value is a string of 1 to 31 case-sensitive characters. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "ipv6-prefix ipv6-address",
+            "Info": "Specifies the prefix of an IPv6 address.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "IPv6 address mask.\nThe value is an integer ranging from 32 to 120."
+        },
+        {
+            "Parameters": "static static-length",
+            "Info": "Specifies a static segment length. This parameter specifies the static segment length in the Function. The static segment length determines how many static Opcodes can be configured under this Locator. For details, refer to the Usage Guidelines field of this command.\nThe value is an integer ranging from 1 to 96."
+        },
+        {
+            "Parameters": "args args-length",
+            "Info": "Specifies an arguments segment length. The arguments segment is at the end of the SID. If the args args-length parameter is configured, the arguments segment is reserved. The static or generated dynamic SID is not occupied by the configuration.\nThe value is an integer ranging from 1 to 64.\nThe total length specified using prefix-length, static-length, and args-length cannot exceed 128."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] locator test1 ipv6-prefix 100:: 64 static 32"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn SRv6 SID is a 128-bit IPv6 address expressed in the Locator:Function:Args format.\nThe Locator field corresponds to the ipv6-prefix ipv6-address parameter, and its length is determined by the prefix-length parameter. A locator identifies an IPv6 network segment on which all IPv6 addresses can be assigned as SRv6 SIDs. After the Locator field is configured for a node, the system generates a Locator network segment route through which other nodes can locate this node. In addition, all SIDs advertised by this node can be reached through the Locator network segment route.The Function field is also called Opcode (operation code), which can be dynamically assigned using an IGP or be configured using the opcode command. When configuring a locator, you can use the static static-length parameter to specify the length of a static operation code segment. The length determines the number of static operation codes that can be configured in the locator. During dynamic operation code allocation, the IGP applies for operation codes out of the static operation code segment so that no SRv6 SID conflict occurs.The Args field is determined by the args args-length parameter. It is optional.\nThe relationships between the preceding fields are as follows:\n|--Locator--|--Dynamic Opcode--|--Static Opcode--|--Args--|\nWhen the SID is statically configured, the SID only occupies the range of the static segment, the value of the static segment starts from 1, and the dynamic segment is set to 0.\nWhen dynamically assigning SID, SID will occupy the range of dynamic segment and static segment. The value of dynamic segment starts from 1, and the value of static segment starts from 0.\nThe following part describes how SIDs are generated based on different combinations of parameters.\nlocator srv6_locator1 ipv6-prefix 2001:DB8:ABCD:: 64 static 32. The locator is 2001:DB8:ABCD::, occupying 64 bits. The static operation code segment occupies 32 bits, the Args field zero bits, and the dynamic operation code segment 32 bits (128-64-32-0 = 32).\nStart value of the static operation code segment: 2001:DB8:ABCD:0000:0000:0000:0000:0001End value of the static operation code segment: 2001:DB8:ABCD:0000:0000:0000:FFFF:FFFFStart value of the dynamic operation code segment: 2001:DB8:ABCD:0000:0000:0001:0000:0000End value of the dynamic operation code segment: 2001:DB8:ABCD:0000:FFFF:FFFF:FFFF:FFFF\n2.locator srv6_locator2 ipv6-prefix 2001:DB8:ABCD:: 64 static 24 args 32. The locator is 2001:DB8:ABCD::, occupying 64 bits. The static operation code segment occupies 24 bits, the Args field 32 bits, and the dynamic operation code segment 8 bits (128-64-24-32 = 8).\nStart value of the static operation code segment: 2001:DB8:ABCD:0000:0000:0001::End value of the static operation code segment: 2001:DB8:ABCD:0000:00FF:FFFF::Start value of the dynamic operation code segment: 2001:DB8:ABCD:0000:0100:0000::End value of the dynamic operation code segment: 2001:DB8:ABCD:0000:FFFF:FFFF::\n3.locator srv6_locator3 ipv6-prefix 2001:DB8:ABCD:: 64 static 32 args 32. The locator is 2001:DB8:ABCD::, occupying 64 bits. The static operation code segment occupies 32 bits, the Args field 32 bits, and the dynamic operation code segment zero bits (128-64-32-32 = 0).\nStart value of the static operation code segment: 2001:DB8:ABCD:0000:0000:0001::End value of the static operation code segment: 2001:DB8:ABCD:0000:FFFF:FFFF::No dynamic operation code segment exists.\n4.locator srv6_locator4 ipv6-prefix 2001:DB8:ABCD:: 64 args 32. The locator is 2001:DB8:ABCD::, occupying 64 bits. The static operation code segment occupies zero bits, the Args field 32 bits, and the dynamic operation code segment 32 bits (128-64-0-32 = 32).\nNo static operation code segment exists.Start value of the dynamic operation code segment: 2001:DB8:ABCD:0000:0000:0001::End value of the dynamic operation code segment: 2001:DB8:ABCD:0000:FFFF:FFFF::\nIf a static operation code is configured, it is preferentially used for SID generation. If no static operation code is configured, operation codes are dynamically assigned. The process of generating SRv6 SIDs through IS-IS is as follows:\nConfigure a locator segment in the system view, and run the segment-routing ipv6 locator locator-name command in the IS-IS view to enable SRv6 and reference the locator.IS-IS generates End SIDs for all locators based on the dynamic operation code segment specified in locator configurations. Both penultimate segment pop of the SRH (PSP) and non-PSP SIDs are generated.Configure an IPv6 address for the desired interface, enable IS-IS IPv6, and generate End.X SIDs for the interface through IS-IS. SIDs are generated based on the dynamic operation code segment specified in locator configurations. Both PSP and non-PSP SIDs are generated.\nAfter the SRv6 SID is generated, on the one hand, it will be added to the local SID table, on the other hand, it can also be published through the IS-IS routing protocol."
+}

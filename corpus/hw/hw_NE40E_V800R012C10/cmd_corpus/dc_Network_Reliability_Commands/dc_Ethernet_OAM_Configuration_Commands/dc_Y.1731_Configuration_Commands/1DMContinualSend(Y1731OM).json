@@ -1,0 +1,62 @@
+{
+    "PageTitle": "delay-measure one-way continual send",
+    "FuncDef": "The delay-measure one-way continual send command configures proactive one-way frame delay measurement.\nThe undo delay-measure one-way continual send command cancels the configuration.\nBy default, proactive one-way frame delay measurement is not configured in an MA.",
+    "CLIs": [
+        "delay-measure one-way continual send test-id <test-id-value> interval { <1000> | <10000> | <30000> | <60000> }",
+        "undo delay-measure one-way continual send [ test-id <test-id-value> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies an interval at which DMMs are sent.\n-"
+        },
+        {
+            "Parameters": "1000",
+            "Info": "Specifies an interval at which DMMs are sent.\nThe value is 1000 in milliseconds."
+        },
+        {
+            "Parameters": "10000",
+            "Info": "Specifies an interval at which DMMs are sent.\nThe value is 10000 in milliseconds."
+        },
+        {
+            "Parameters": "30000",
+            "Info": "Specifies an interval at which DMMs are sent.\nThe value is 30000 in milliseconds."
+        },
+        {
+            "Parameters": "60000",
+            "Info": "Specifies an interval at which DMMs are sent.\nThe value is 60000 in milliseconds."
+        },
+        {
+            "Parameters": "test-id test-id-value",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send mep-id 1 enable",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 2",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep ccm-receive mep-id 2 enable",
+            "[*HUAWEI-md-md1-ma-ma1] test-id 1 mep 1 remote-mep 2",
+            "[*HUAWEI-md-md1-ma-ma1] commit",
+            "[*HUAWEI-md-md1-ma-ma1] delay-measure one-way continual send test-id 1 interval 1000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nProactive OAM refers to OAM actions that are carried out continuously to permit proactive reporting of faults or performance results.\nOne-way frame delay measurement is performed on end-to-end MEPs. A MEP receives a DM frame and returns a DMR frame to carry out one-way frame delay measurement. A MEP periodically sends DMMs carrying TxTimeStampf. After receiving a DM frame, the remote MEP calculates the one-way frame delay based on the following formula:\nFrame delay = (RxTimeb - TxTimeStampf) - (TxTimeStampb - RxTimeStampf)\nWhen the times of the MEPs at both ends of a link are synchronized, the delay-measure one-way continual send command can be used to implement proactive one-way frame delay measurement for a VLL PW.\nProactive one-way frame delay measurement is performed by specifying the remote MEP ID or destination MAC address and interval at which DMMs are sent.\nIf the local MEP has not learned the MAC address of the remote MEP, you must specify the destination MAC address for frame delay measurement.If the local MEP has learned the MAC address of the remote MEP, you can specify the remote MEP ID for frame delay measurement.\n\nPrerequisites\nIEEE Standard 802.1ag-2007 has been specified for CFM using the cfm version standard command in the system view.The CFM function has been globally enabled using the cfm enable command in the system view.An MD has been created using the cfm md command in the system view.An MA has been created using the ma command in the MD view.The MA has been bound to a specified L2VC using the map mpls l2vc command in the MA view.An inward-facing MEP has been created using the mep mep-id command in the MA view.An RMEP has been created in the MA using the remote-mep command in the MA view.The local MEP in the MA has been enabled to send CCMs using the mep ccm-send enable command in the MA view.The local MEP has been enabled to receive CCMs from the RMEP in the same MA using the remote-mep ccm-receive enable command in the MA view.A test instance has been created using the test-id command in the MA view.\n\nConfiguration Impact\nAfter the delay-measure one-way continual send command is run, proactive one-way frame delay measurement is implemented for links.\nPrecautions\nOne-way frame delay measurement requires that clocks of the local MEP and RMEP be synchronized."
+}

@@ -1,0 +1,47 @@
+{
+    "PageTitle": "mpls oam ingress delay-measure two-way proactive",
+    "FuncDef": "The mpls oam ingress delay-measure two-way proactive command enables proactive two-way frame delay measurement (DM) on the ingress of Tunnel.\nThe undo mpls oam ingress delay-measure two-way proactive command disables proactive two-way frame DM on the ingress of Tunnel.\nBy default, proactive two-way frame DM is disabled for a bidirectional LSP.",
+    "CLIs": [
+        "mpls oam ingress delay-measure two-way proactive [ exp <expvalue> | packet-size <packet-size-value> [ padding-value { 0 | 1 } ] ] * { <tunnel-type> <tunnel-number> | <tunnel-name> }",
+        "undo mpls oam ingress delay-measure two-way proactive { <tunnel-type> <tunnel-number> | <tunnel-name> }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "exp expvalue",
+            "Info": "Specifies a priority for DMMs.\nThe value is an integer ranging from 0 to 7. A larger value indicates a higher priority. The default value is 7."
+        },
+        {
+            "Parameters": "packet-size packet-size-value",
+            "Info": "Specifies the size of a sent probe packet.\nThe value is an integer ranging from 64 to 1500, in bits."
+        },
+        {
+            "Parameters": "padding-value",
+            "Info": "Indicates the padding value in a packet.\nThe value is 0 or 1. The default value is 0.\nIf the value is set to 0, each bit in a packet is padded with 0.If the value is set to 1, each bit in a packet is padded with 1."
+        },
+        {
+            "Parameters": "tunnel-type tunnel-number",
+            "Info": "Specifies a tunnel interface for sending probe packets.\n-"
+        },
+        {
+            "Parameters": "tunnel-name",
+            "Info": "Specifies a tunnel name for sending probe packets.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel10] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls oam ingress Tunnel 10",
+            "[*HUAWEI] mpls oam ingress delay-measure two-way proactive exp 5 tunnel 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDM is an MPLS-TP performance monitoring function.\nProactive two-way frame DM is performed by a local MEP to send a DMM to its RMEP and then receive a delay measurement reply (DMR) from the RMEP. After two-way frame DM is configured, a MEP sends a DMM with the TxTimeStampf value (the time when the DMM was sent) at specified intervals. After receiving the DMM, the RMEP replies with a DMR. This reply carries RxTimeStampf (the time when the DMM was received) and TxTimeStampb (the time when the DMR was sent). The value in every field of the DMM is copied to the DMR, with the exception that the source and destination MAC addresses are interchanged. Upon receipt of the DMR, the MEP calculates the two-way frame delay using the following equation:\nFrame delay = (RxTimeb - TxTimeStampf) - (TxTimeStampb - RxTimeStampf)\nPrerequisites\nThe ME of the MEG has been bound to a tunnel."
+}

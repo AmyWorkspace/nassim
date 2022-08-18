@@ -1,0 +1,56 @@
+{
+    "PageTitle": "backup block",
+    "FuncDef": "The backup block command enables an RBS to block backup for services.\nThe undo backup block command disables an RBS from blocking backup for services.\nBy default, an RBS does not block backup for any service.",
+    "CLIs": [
+        "backup block <sendRecv> [ bras | l2tp | multicast | igmp-snooping ]",
+        "undo backup block <sendRecv> [ bras | l2tp | multicast | igmp-snooping ]"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sendRecv",
+            "Info": "Enables an RBS to block backup for services in the send/receive direction.\nThe value is an enumerated type and can be case-insensitive send, receive."
+        },
+        {
+            "Parameters": "bras",
+            "Info": "Enables an RBS to block backup for BRAS services.\n-"
+        },
+        {
+            "Parameters": "l2tp",
+            "Info": "Enables an RBS to block backup for L2TP services.\n-"
+        },
+        {
+            "Parameters": "multicast",
+            "Info": "Enables an RBS to block backup for multicast services.\nIf you do not specify block type, an RBS blocks backup for all services in the send or receive direction.\n-"
+        },
+        {
+            "Parameters": "igmp-snooping",
+            "Info": "Enables an RBS to block backup for IGMP Snooping services.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service rbs",
+            "[*HUAWEI-rm-backup-service-rbs] backup block send bras"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service rbs",
+            "[*HUAWEI-rm-backup-service-rbs] backup block receive bras"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service rbs",
+            "[*HUAWEI-rm-backup-service-rbs] backup block send igmp-snooping"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service rbs",
+            "[*HUAWEI-rm-backup-service-rbs] backup block send"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a service backup attribute has been added to a later version, the earlier version cannot identify the attribute when the later version backs up user information to an earlier version, which may affect device running. The backup block command can be run to enable an RBS to block backup for specific services in the send or receive direction. After completing the master and backup devices' version upgrades, run the undo backup block command to disable an RBS from blocking backup for the services.\nConfiguration Impact\nIf an RBS has been enabled to block backup for services in the receive direction on the master device or for services in the send direction on the backup device, after the master device restarts, you must disable an RBS from blocking backup for services in the receive direction on the master device or for services in the send direction on the backup device before the master device's VRRP status switches to Master, and run the batch-backup command to back up data from the master device to the backup device in batches. Otherwise, a large number of users may be logged out.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf a later version contains a backup attribute that cannot be identified by an earlier version, perform the following steps for an upgrade:\nConfigure a large preemption delay for the master and backup devices to ensure that the VRRP status is not switched back before batch backup is complete.Add the command for enabling an RBS to block backup for services in the send direction to a later version's configuration file, and upgrade the master device. After the master device's version upgrade is complete, the master device receives only backup information from the backup device of an earlier version and does not send backup information to the backup device of an earlier version.Upgrade the backup device of an earlier version.Disable an RBS from blocking backup for services in the send direction on both ends after upgrading the backup device, and use a batch backup command to back up user information from the master device to the backup device."
+}

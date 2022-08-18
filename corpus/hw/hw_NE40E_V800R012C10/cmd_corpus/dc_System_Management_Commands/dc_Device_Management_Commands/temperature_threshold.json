@@ -1,0 +1,58 @@
+{
+    "PageTitle": "temperature-threshold",
+    "FuncDef": "The temperature-threshold command sets temperature alarm thresholds of a board.\nThe undo temperature-threshold command deletes temperature alarm thresholds of a board.\nBy default,the temperature alarm threshold is set to 100% of the original threshold.",
+    "CLIs": [
+        "temperature-threshold slot <slot-id> i2cid <i2cid_address> address <address> channel <channel-id> minor <minor-value> major <major-value> fatal <fatal-value> [ tmin <tmin-value> tmax <tmax-value> ]",
+        "undo temperature-threshold slot <slot-id> i2cid <i2cid_address> address <address> channel <channel-id>"
+    ],
+    "ParentView": [
+        "System view",
+        "Virtual access AP-ID view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "i2cid i2cid_address",
+            "Info": "ID of the I2C bus.\nThe value is an integer that ranges from 0 to 255."
+        },
+        {
+            "Parameters": "address address",
+            "Info": "Address of the I2C bus.\nThe value is an integer that ranges from 0 to 1000."
+        },
+        {
+            "Parameters": "channel channel-id",
+            "Info": "Channel ID of the I2C bus.\nThe value is an integer ranging from 0 to 255."
+        },
+        {
+            "Parameters": "minor minor-value",
+            "Info": "Minor alarm threshold of a board.\nThe value is an integer ranging from 80 to 120, in percentage."
+        },
+        {
+            "Parameters": "major major-value",
+            "Info": "Major alarm threshold of a board. The major alarm threshold must be greater than the minor alarm threshold.\nThe value is an integer ranging from 80 to 120, in percentage."
+        },
+        {
+            "Parameters": "fatal fatal-value",
+            "Info": "Fatal temperature alarm threshold of a board. The fatal temperature alarm threshold must be greater than the major temperature alarm threshold.\nThe value is an integer ranging from 80 to 120, in percentage."
+        },
+        {
+            "Parameters": "tmin tmin-value",
+            "Info": "The lowest temperature from which fans adjust the speed automatically.\nThe value is an integer ranging from -50 to 127, in C degrees Celsius."
+        },
+        {
+            "Parameters": "tmax tmax-value",
+            "Info": "The highest temperature to which fans adjust the speed automatically. The highest temperature must be equal or higher than the lowest temperature.\nThe value is an integer ranging from -50 to 127, in C degrees Celsius."
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Slot ID of a board.\nYou can run the display temperature command to view information about all temperature monitoring points, such as the slot numbers and I2C bus numbers.\nThe value is a string of 1 to 30 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] display temperature slot 1",
+            "[~HUAWEI] temperature-threshold slot 1 i2cid 1 address 3 channel 0 minor 80 major 85 fatal 95"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen environment conditions change, a user can use the temperature-threshold command to adjust temperature alarm thresholds so that the system can detect board temperature changes accurately.\nWhen fans work in auto-speed mode, the fan speed changes automatically with the board temperature. When the board temperature is lower than tmin tmin-value, fans rotate at the lowest speed. When the board temperature is higher than tmax tmax-value, fans rotate at the highest speed. When the board temperature ranges from tmin tmin-value to tmax tmax-value, the fan speed is adjusted between the lowest rotating speed and the highest rotating speed automatically. The tmin tmin-value and tmax tmax-value must be configured properly to ensure normal heat dissipation.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nRunning this command may affect the fan speed adjustment. Generally, you are advised to set Minor value higher than FanTMax value\nIf the Minor is smaller than FanTmax and the temperature monitoring point is higher than the minor value, a high temperature alarm is reported and the fans are forced to rotate at full speed. This conflicts with the policy that the fans should adjust their speed according to the values of FanTmin and FanTmax."
+}

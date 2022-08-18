@@ -1,0 +1,36 @@
+{
+    "PageTitle": "peer advertise-large-community (BGP-EVPN address family view) (group)",
+    "FuncDef": "The peer advertise-large-community command enables the function to advertise routes carrying the large-community attribute to a BGP EVPN peer group.\nThe undo peer advertise-large-community command disables the function to advertise routes carrying the large-community attribute to a BGP EVPN peer group.\nBy default, a device does not advertise routes carrying the large-community attribute to a BGP EVPN peer group.",
+    "CLIs": [
+        "peer <peerGroupName> advertise-large-community",
+        "undo peer <peerGroupName> advertise-large-community"
+    ],
+    "ParentView": [
+        "BGP-EVPN address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerGroupName",
+            "Info": "Specifies the name of a BGP EVPN peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix 1 permit 10.1.1.0 24",
+            "[*HUAWEI] route-policy RP permit node 10",
+            "[*HUAWEI-route-policy] if-match ip-prefix 1",
+            "[*HUAWEI-route-policy] apply large-community 35551:100:65552 additive",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] group gp1",
+            "[*HUAWEI-bgp] peer 10.1.1.2 as-number 100",
+            "[*HUAWEI-bgp] l2vpn-family evpn",
+            "[*HUAWEI-bgp-af-evpn] peer gp1 enable",
+            "[*HUAWEI-bgp-af-evpn] peer 10.1.1.2 group gp1",
+            "[*HUAWEI-bgp-af-evpn] peer gp1 route-policy RP export",
+            "[*HUAWEI-bgp-af-evpn] peer gp1 advertise-large-community"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo enable the function to advertise routes carrying the large-community attribute to the BGP EVPN peer, run the  peer advertise-large-community command. If a device is enabled to advertise the routes carrying the large-community attribute to a BGP EVPN peer group, all the BGP EVPN peers in the peer group inherit this configuration. This simplifies the application of a route-policy and facilitates route maintenance and management.\nPrerequisites\nA route-policy has been used to define the large-community attribute."
+}

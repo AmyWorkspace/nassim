@@ -1,0 +1,47 @@
+{
+    "PageTitle": "local-user state",
+    "FuncDef": "The local-user state command sets the status of a local user.\nBy default, a local user is in the locked state after three login failures.",
+    "CLIs": [
+        "local-user <user-name> state { active | block | block { fail-times <fail-times-value> interval <interval-value> } }"
+    ],
+    "ParentView": [
+        "AAA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-name",
+            "Info": "Specifies the user name.\nThe value is a string of 1 to 253 case-insensitive characters without spaces. If the value includes @, the characters before @ are the user name and the characters after @ are the domain name. If the value excludes @ or the domain name does not exist, the entire string is the user name and the user belongs to the default domain. A user name cannot contain two or more @s."
+        },
+        {
+            "Parameters": "active",
+            "Info": "Indicates that a local user is in the active state. The device receives and handles the authentication request from an active user.\n-"
+        },
+        {
+            "Parameters": "block",
+            "Info": "Indicates that a local user is in the blocked state. The device denies any authentication request from a blocked user. You cannot set the last administrator user in the blocked state.\n-"
+        },
+        {
+            "Parameters": "fail-times fail-times-value",
+            "Info": "Specifies the maximum number of authentication failures of a local user.\nThe value is an integer ranging from 1 to 10."
+        },
+        {
+            "Parameters": "interval interval-value",
+            "Info": "Specifies the interval at which a local user attempts to pass the authentication again.\nThe value is an integer ranging from 1 to 65535, in minutes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] local-user Hello123@huawei.net password irreversible-cipher Hello-13579",
+            "[~HUAWEI-aaa] local-user Hello123@huawei.net state active"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] local-user Hello123@huawei.net password irreversible-cipher Hello-13579",
+            "[~HUAWEI-aaa] local-user Hello123@huawei.net state block fail-times 3 interval 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a user that has set up a connection with a device is configured as blocked, the existing connection of the user is not affected, but subsequent connection requests of the user will be denied.\nConfiguration Impact\nThe device denies the authentication request of a local user in the blocked state. If and are configured in the local-user state block command on a device and the number of a local user's unsuccessful login attempts exceeds fail-times, the device denies the local user's login request within interval.\nPrecautions\nA local user attribute change does not apply to online users. The change takes effect after the online users relog in.\nThe blocked state of a user that logs in through the serial interface is independent of the state of the user that logs in through another mode."
+}

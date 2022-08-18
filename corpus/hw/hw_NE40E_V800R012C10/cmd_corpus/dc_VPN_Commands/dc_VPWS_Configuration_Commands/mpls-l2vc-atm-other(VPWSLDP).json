@@ -1,0 +1,92 @@
+{
+    "PageTitle": "mpls l2vc (ATM-bundle interface view)",
+    "FuncDef": "The mpls l2vc command creates an LDP VPWS connection.\nThe undo mpls l2vc command deletes an LDP VPWS connection.\n\nBy default, no VPWS connection is created.\n\n\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.",
+    "CLIs": [
+        "mpls l2vc { <ip-address> | pw-template <template-name> } * <vc-id> [ [ control-word [ seq-number ] | no-control-word ] | [ ip-interworking | ip-layer2 ] | tunnel-policy <tnl-policy-name> | [ secondary | bypass ] | ignore-standby-state | max-atm-cells <max-atm-cell-value> | atm-pack-overtime <atm-pack-overtime> | transmit-atm-cells <transmit-atm-cell-value> ] *",
+        "undo mpls l2vc { <ip-address> | pw-template <template-name> } * <vc-id> [ [ control-word [ seq-number ] | no-control-word ] | [ ip-interworking | ip-layer2 ] | tunnel-policy <tnl-policy-name> | [ secondary | bypass ] | ignore-standby-state | max-atm-cells <max-atm-cell-value> | atm-pack-overtime <atm-pack-overtime> | transmit-atm-cells <transmit-atm-cell-value> ] *",
+        "undo mpls l2vc [ secondary | bypass ]"
+    ],
+    "ParentView": [
+        "IMA-group sub-interface view",
+        "IMA group interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the peer IP address of an mPW. The peer IP address is generally the LSR ID of the peer device.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "pw-template template-name",
+            "Info": "Specifies the name of a PW template.\nThe value is a string of 1 to 19 case-sensitive characters, spaces not supported. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "vc-id",
+            "Info": "Specifies a 32-bit VC ID that is locally unique.\nA combination of the VC ID and VC type uniquely identifies a VC.\nThis parameter cannot be modified. To change the VC ID, you need to delete the configured one and reconfigure it.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Enables the control word function.\nThe control word carries the sequence number for forwarding packets, pads the packets to prevent the packets from being too short, and carries Layer 2 header control information.\n-"
+        },
+        {
+            "Parameters": "seq-number",
+            "Info": "Enables the Sequence Number function of the control word.\n-"
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "Disables the control word function.\n-"
+        },
+        {
+            "Parameters": "ip-interworking",
+            "Info": "Enables IP interworking for an LDP PW between Huawei devices. ip-interworking is required for IP interworking between Huawei devices.\n-"
+        },
+        {
+            "Parameters": "ip-layer2",
+            "Info": "Enables IP interworking for an LDP PW between a Huawei device and a non-Huawei device. ip-layer2 is required for IP interworking between a Huawei device and a non-Huawei device.\n-"
+        },
+        {
+            "Parameters": "tunnel-policy tnl-policy-name",
+            "Info": "Specifies the name of a tunnel policy.\nIf a tunnel policy name is specified but the tunnel policy has not been configured, the default tunnel policy is used.If no tunnel policy name is specified, the default tunnel policy is used. The default tunnel policy prefers LSPs and only one LSP is used for load balancing.\nBefore applying a tunnel policy, set the tunnel policy name and attributes in the system view.\nThe value is a string of 1 to 39 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "secondary",
+            "Info": "Configures the VC as a secondary VC. If secondary is not specified, the new VC is a primary VC. The secondary VC can be configured only if the primary VC exists on the local device.\n-"
+        },
+        {
+            "Parameters": "bypass",
+            "Info": "Configures the VC as a bypass VC. The bypass VC must have the same encapsulation type as the primary VC.\n-"
+        },
+        {
+            "Parameters": "ignore-standby-state",
+            "Info": "Configures the created PW to ignore the secondary state sent from the peer device.\n-"
+        },
+        {
+            "Parameters": "max-atm-cells max-atm-cell-value",
+            "Info": "Specifies the maximum number of ATM cells that can be transmitted.\nThe value is an integer ranging from 1 to 28. The default value is 28."
+        },
+        {
+            "Parameters": "atm-pack-overtime atm-pack-overtime",
+            "Info": "Specifies an ATM cell encapsulation period.\nThe value is an integer ranging from 100 to 10000, in microseconds. The default value is 1000."
+        },
+        {
+            "Parameters": "transmit-atm-cells transmit-atm-cell-value",
+            "Info": "Specifies the maximum number of ATM cells to be encapsulated into a packet that can be sent by the local device.\nThe value is an integer ranging from 1 to 28. The default value is 28."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback 1",
+            "[*HUAWEI-Loopback1] ip address 1.1.1.1 32",
+            "[*HUAWEI-Loopback1] quit",
+            "[*HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe VPWS network provides Layer 2 VPN services based on an MPLS network, enabling carriers to provide L2VPN services over different media, such as VLAN, Ethernet, Point-to-Point Protocol (PPP), on a unified MPLS network. The MPLS network can still provide traditional IP services, MPLS L3VPN, traffic engineering, and QoS services.\nThe VPWS network transparently transmits Layer 2 user data over the MPLS network. For users, the MPLS network is a Layer 2 switched network on which Layer 2 connections can be set up between nodes.\nLDP VPWS uses two layers of labels. The inner label uses extended LDP as the signaling protocol to transmit Layer 2 information and VC label information.\nTo configure a VPWS connection that uses LDP as the signaling protocol on interfaces, run the mpls l2vc command.\nThe primary PW needs to be created before dynamic VPWS is created.The secondary PW can be created to protect the primary PW. When the primary PW fails, traffic can be immediately switched to the secondary PW, preventing traffic interruption.\nThe secondary PWs are used to protect the primary PW. Therefore, configure the primary PW first. Otherwise, the secondary PWs cannot be configured. PWs are deleted in reverse order. Delete the secondary PWs before deleting the primary PW.\nOn the network where PW redundancy is configured, if the primary PW fails, traffic is switched to the secondary PW. If the secondary PW is in the standby state, traffic cannot be forwarded, resulting in packet loss. If ignore-standby-state is configured for the secondary PW, the secondary PW will ignore the secondary state indicated by the peer device and be always in the forwarding state, preventing packet loss during a primary/secondary PW switchover.\n\nPrerequisites\nMPLS has been enabled in the system view.MPLS L2VPN has been enabled in the system view.\n\nConfiguration Impact\nAn interface cannot serve as a VPWS AC interface and an L3VPN AC interface at the same time. If an interface is bound to a VPWS, its Layer 3 features such as the IP address and routing protocol will not take effect. If an interface is bound to both a VPWS and an L3VPN, only the VPWS connection is available. After the VPWS connection is deleted, the L3VPN service becomes available.\nPrecautions\nA sub-interface that is bound to a VPWS can be deleted only after it is unbound from the VPWS.In a PW redundancy scenario, configure the same parameters for the primary, secondary, and bypass PWs. A parameter inconsistency causes the secondary or bypass PW to fail to take over traffic if the primary PW fails.Dynamic VCs must be configured on the PEs at both ends of a PW. When configuring a VPWS connection, note the following:The peer address, destination address of the tunnel, and MPLS LSR ID of the peer PE must be the same. Otherwise, the VPWS connection cannot be set up.The VC IDs of the PEs at both ends must be the same. Otherwise, the VPWS connection cannot be set up.If a certain PW attribute is specified in the mpls l2vc command, the corresponding PW attribute in the PW template is invalid.Control word auto-negotiation is supported only if PEs at both ends of a PW support the control word function. If either of the PEs does not support the control word function, control word auto-negotiation fails.When PWs are used to carry ATM services, ATM cells are encapsulated into packets for transmission. max-atm-cells indicates the maximum number of ATM cells to be encapsulated into a packet that can be received by a device. After this parameter is set on a device, the device sends the parameter value to its remote device. transmit-atm-cells indicates the maximum number of ATM cells to be encapsulated into a packet that can be sent by a device. Before sending packets, a device compares its transmit-atm-cells value with the received max-atm-cells value and encapsulates ATM cells based on the smaller one of the two values. If the tunnel bandwidth permits, the greater the number of ATM cells that can be encapsulated into a packet, the higher the bandwidth usage is. However, data transmission timeliness decreases as the bandwidth usage increases. atm-pack-overtime indicates the ATM cell encapsulation period. If the number of ATM cells is less than the configured maximum number allowed to be encapsulated into a packet, but the ATM cell encapsulation period elapses, the device encapsulates the existing ATM cells into a packet. This ensures real-time data transmission.The PW dynamic BFD detect configuration in the interface view depends on Control Word configuration."
+}

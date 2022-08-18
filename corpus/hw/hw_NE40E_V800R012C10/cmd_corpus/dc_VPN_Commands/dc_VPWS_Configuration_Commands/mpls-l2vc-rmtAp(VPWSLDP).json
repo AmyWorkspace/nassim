@@ -1,0 +1,79 @@
+{
+    "PageTitle": "mpls l2vc (Remote-Ap interface view)",
+    "FuncDef": "The mpls l2vc encapsulation command creates an LDP VPWS PW from a master to an RSG for L2VPN access over VCs.\nThe undo mpls l2vc encapsulation command deletes the LDP VPWS PW from a master to an RSG.\nBy default, no LDP VPWS PW is established from a master to an RSG.",
+    "CLIs": [
+        "mpls l2vc [ instance-name <instance-name-value> ] encapsulation { cesopsn-basic | satop-e1 } <ip-address> <pwId> [ [ control-word | no-control-word ] | tunnel-policy <policy-name> | tdm-encapsulation-number <tdmEncapNumberValue> | tdm-sequence-number | jitter-buffer <jitterBufferValue> | idle-code <idleCodeValue> | rtp-header ] *",
+        "undo mpls l2vc [ instance-name <instance-name-value> ] encapsulation { cesopsn-basic | satop-e1 } <ip-address> <pwId> [ [ control-word | no-control-word ] | tunnel-policy <policy-name> | tdm-encapsulation-number <tdmEncapNumberValue> | tdm-sequence-number | jitter-buffer <jitterBufferValue> | idle-code <idleCodeValue> | rtp-header ] *",
+        "undo mpls l2vc"
+    ],
+    "ParentView": [
+        "Remote-AP interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "instance-name instance-name-value",
+            "Info": "Specifies a name, which uniquely identifies an L2VPN service.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.\nThe string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "encapsulation",
+            "Info": "Indicates the PW encapsulation type.\n-"
+        },
+        {
+            "Parameters": "cesopsn-basic",
+            "Info": "Specifies the PW encapsulation type as cesopsn-basic.\n-"
+        },
+        {
+            "Parameters": "satop-e1",
+            "Info": "SAToP is insensitive to the E1 frame structure and encapsulates a whole E1 frame into a PW packet.\n-"
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the LSR ID of the peer device on a PW.\nThe value is in dotted decimal notation and is usually the LSR ID of the remote peer."
+        },
+        {
+            "Parameters": "pwId",
+            "Info": "Specifies an L2VC ID that is locally unique. The primary, secondary, and bypass PWs cannot share the same VC ID. This parameter cannot be modified. To change a VC ID, you must delete the configured one and reconfigure it.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "control-word",
+            "Info": "Enables the control word function.\nThe control word function is generally applied to TDM PWs, and enabling the control word function for TDM PWs is recommended.\nThe control word function is enabled by default."
+        },
+        {
+            "Parameters": "no-control-word",
+            "Info": "Disables the control word function.\n-"
+        },
+        {
+            "Parameters": "tunnel-policy policy-name",
+            "Info": "Specifies the name of a tunnel policy.\nIf you do not specify any tunnel policy, the default tunnel policy will be used. In the default tunnel policy, LSPs have the highest selection priority and the load balancing number is 1. If you specify a tunnel policy that does not exist, the default tunnel policy will also be used.\nThe value is a string of 1 to 39 case-sensitive characters, spaces not supported. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "tdm-encapsulation-number tdmEncapNumberValue",
+            "Info": "Specifies the number of TDM frames that can be encapsulated into a CESoPSN or SAToP packet.\nSpecify the number of TDM frames you want to encapsulate into a PW packet based on your usage scenario. Encapsulating fewer frames shortens the network delay, but incurs a higher overhead. Conversely, encapsulating more frames increases the network delay, but improves bandwidth usage efficiency.\nThe value is an integer ranging from 1 to 40.\nThis value must be consistent with the default value used on the AP side. Specifically, the value can only be 8, 16, 32, or 40."
+        },
+        {
+            "Parameters": "tdm-sequence-number",
+            "Info": "Indicates that the sequence number of the first transparently transmitted TDM frame is 1. This parameter is used for interconnection with PTN/ATN devices.\n-"
+        },
+        {
+            "Parameters": "jitter-buffer jitterBufferValue",
+            "Info": "Specifies a jitter buffer depth, or the maximum jitter allowed.\nA deeper jitter buffer indicates stronger anti-jitter capabilities, but will introduce a long transmission delay when data flows are reconstructed.\nThe value is an integer ranging from 1 to 64."
+        },
+        {
+            "Parameters": "idle-code idleCodeValue",
+            "Info": "Specifies an idle code value used when a jitter buffer underflow occurs.\nUnderflow refers to a situation where packets in the jitter buffer are insufficient for forwarding. The idle code has no significance and can be set to any value.\nThe value is a decimal integer ranging from 00 to FF. The default value is FF."
+        },
+        {
+            "Parameters": "rtp-header",
+            "Info": "Configures whether to encapsulate the RTP header during transparent TDM frame transmission. By default, the RTP header is not encapsulated.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface remote-ap 1",
+            "[*HUAWEI-Remote-Ap1] bind ap ip 1.1.1.1 interface serial 1/0/0:0",
+            "[*HUAWEI-Remote-Ap1] mpls l2vc encapsulation cesopsn-basic 2.2.2.2 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn scenarios where virtual cluster access is used for end-to-end TDM service bearing, a PW must be established from the master's Remote-AP interface to the RSG. To configure such a PW, run the mpls l2vc encapsulation. The Remote-AP interface then implements L2VPN access over VCs for end-to-end service bearing.\nPrerequisites\nMPLS L2VPN has been enabled using the mpls l2vpn command.A Remote-AP interface has been created using the interface remote-ap command.\n\nPrecautions\nPay attention to parameter consistency when running this command to configure a PW:\nThe peer address, destination tunnel address, and peer LSR ID at one end of the PW must be the same as the local peer address, source tunnel address, and local LSR ID at the other end, respectively.The VC IDs on the local and remote ends must be the same.The encapsulation types, MTU values, and control word configurations on the local and remote ends must be the same."
+}

@@ -1,0 +1,65 @@
+{
+    "PageTitle": "dhcp packet-rule",
+    "FuncDef": "The dhcp packet-rule command configures whitelist rules to filter DHCP packets.\nThe undo dhcp packet-rule command deletes configured whitelist rules.\nBy default, no whitelist rule is configured.",
+    "CLIs": [
+        "dhcp packet-rule <ruleid> { source-ip <source-ip-address> { <source-ip-mask> | <source-ip-mask-length> } | destination-ip <destination-ip-address> { <destination-ip-mask-length> | <destination-ip-mask> } } * [ source-port { bootpc | bootps } ] [ destination-port { bootpc | bootps } ]",
+        "undo dhcp packet-rule <ruleid> [ { source-ip <source-ip-address> { <source-ip-mask> | <source-ip-mask-length> } | destination-ip <destination-ip-address> { <destination-ip-mask-length> | <destination-ip-mask> } } * [ source-port { bootpc | bootps } ] [ destination-port { bootpc | bootps } ] ]"
+    ],
+    "ParentView": [
+        "DHCP snooping whitelist view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ruleid",
+            "Info": "Specifies the ID of a whitelist rule.\nThe value is an integer ranging from 1 to 1023."
+        },
+        {
+            "Parameters": "source-ip source-ip-address",
+            "Info": "Specifies a source IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "source-ip-mask",
+            "Info": "Specifies the mask of a specified source IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "source-ip-mask-length",
+            "Info": "Specifies the mask length of a specified source IP address.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "destination-ip destination-ip-address",
+            "Info": "Specifies a destination IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "destination-ip-mask-length",
+            "Info": "Specifies the mask of a specified destination IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "destination-ip-mask",
+            "Info": "Specifies the mask length of a destination IP address.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "source-port",
+            "Info": "Specifies the source port number.\n-"
+        },
+        {
+            "Parameters": "bootpc",
+            "Info": "Specifies port 68.\n-"
+        },
+        {
+            "Parameters": "bootps",
+            "Info": "Specifies port 67.\n-"
+        },
+        {
+            "Parameters": "destination-port",
+            "Info": "Specifies the target port number.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping packet whitelist whitelist1",
+            "[*HUAWEI-dhcpsnp-whitelist-whitelist1] dhcp packet-rule 1 source-ip 1.1.1.1 255.255.255.0 destination-ip 2.2.2.2 255.255.255.0 source-port bootps destination-port bootpc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDHCP snooping whitelist is used on the AC and network sides of the UPE to filter DHCP packets to be sent to the CPU. After DHCP snooping is enabled and a whitelist is created, run the dhcp packet-rule command to configure whitelist rules. Only DHCP packets listed in the whitelist are sent to the CPU, and the DHCP packets not listed in the whitelist are simply forwarded. This protects the device against attacks.\nPrerequisites\nA whitelist has been created for DHCP packets using the dhcp snooping packet whitelist command.\nPrecautions\nNote the following when configuring whitelist rules:\nThe parameters of each rule in a whitelist cannot be completely the same.Whitelist rules cannot be modified once they are configured. To modify parameters, run the undo dhcp packet-rule command to delete the whitelist rules and then configure new rules.A whitelist does not take effect for DHCP packets whose destination IP address is an IP address of the device.The source and destination IP addresses cannot be all 0s or all Fs.The masks of source and destination IP addresses cannot be all 0s.\n6.In VS mode, this command is supported only by the admin VS."
+}

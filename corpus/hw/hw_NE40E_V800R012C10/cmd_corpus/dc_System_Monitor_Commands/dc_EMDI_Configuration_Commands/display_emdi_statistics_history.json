@@ -1,0 +1,84 @@
+{
+    "PageTitle": "display emdi statistics history",
+    "FuncDef": "The display emdi statistics history command displays historical statistics of a specified channel or all channels in the upstream direction.\nThe display emdi statistics history outbound command displays historical statistics of a specified channel or all channels in the downstream direction.",
+    "CLIs": [
+        "display emdi statistics history channel [ <channel-name> ] [ start <start-index> end <end-index> ]",
+        "display emdi statistics history channel [ <channel-name> ] latest-record <record-number>",
+        "display emdi statistics history outbound channel [ <channel-name> ] [ start <start-index> end <end-index> ] slot <slot-id>",
+        "display emdi statistics history outbound channel [ <channel-name> ] latest-record <record-number> slot <slot-id>"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "channel-name",
+            "Info": "Specifies the name of a channel.\nThe name is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "start start-index",
+            "Info": "Specifies the start index of historical statistics of a specified channel.\nThe value is an integer ranging from 1 to 1000."
+        },
+        {
+            "Parameters": "end end-index",
+            "Info": "Specifies the end index of historical statistics of a specified channel.\nThe value is an integer ranging from 1 to 1000 and must be greater than or equal to start-index."
+        },
+        {
+            "Parameters": "channel",
+            "Info": "Specifies a channel.\n-"
+        },
+        {
+            "Parameters": "latest-record record-number",
+            "Info": "Specifies the number of latest records of a specified channel.\nThe value is an integer ranging from 1 to 5."
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Displays historical statistics of an EMDI channel in the downstream direction.\n-"
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Specifies a slot ID.\nThe value is a string of 1 to 15 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display emdi statistics history channel abc start 3 end 5",
+            "Channel Name   : abc ",
+            "Total Records  : 3",
+            "---------------------------------------------------------------------------------------------------------------------------------------------------------",
+            " Record          Record        Monitor     Monitor    Received      Rate         Rate         RTP-LC       RTP-SE       RTP-LR       RTP-SER        RTP   ",
+            " Index           Time         Period(s)    Status     Packets       pps          bps                                   (1/100000)   (1/100000)    Jitter(ms)",
+            "---------------------------------------------------------------------------------------------------------------------------------------------------------",
+            " 3        2018-02-02:08-31-00     10      Normal      4388218      438821     4865656118       6700          6633         152           151           0         ",
+            " 4        2018-02-02:08-31-10     10      Normal      4388533      438853     4866005390       6700          6633         152           151           0         ",
+            " 5        2018-02-02:08-31-20     10      Normal      4393232      439323     4871215641       6700          6633         152           151           0         ",
+            "---------------------------------------------------------------------------------------------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display emdi statistics history channel abc latest-record 2",
+            "Channel Name   : abc ",
+            "Total Records  : 2",
+            "---------------------------------------------------------------------------------------------------------------------------------------------------------",
+            " Record          Record        Monitor     Monitor    Received      Rate         Rate         RTP-LC       RTP-SE       RTP-LR       RTP-SER        RTP   ",
+            " Index           Time         Period(s)    Status     Packets       pps          bps                                   (1/100000)   (1/100000)    Jitter(ms)",
+            "---------------------------------------------------------------------------------------------------------------------------------------------------------",
+            " 11        2018-02-02:08-31-00     10      Normal      4388218      438821     4865656118       6700          6633         152           151           0         ",
+            " 12        2018-02-02:08-31-10     10      Normal      4388533      438853     4866005390       6700          6633         152           151           729         ",
+            "---------------------------------------------------------------------------------------------------------------------------------------------------------"
+        ],
+        [
+            "<HUAWEI> display emdi statistics history outbound channel abc start 3 end 5 slot 1",
+            "Channel Name   : abc",
+            " Total Records  : 3",
+            " --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+            " Record         Record        Monitor   Monitor    Received      Rate         Rate         RTP-LC      RTP-SE        RTP-LR       RTP-SER       RTP              Interface",
+            " Index          Time         Period(s)  Status     Packets       pps          bps                                   (1/100000)   (1/100000)   Jitter(ms)",
+            "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+            " 3        2018-02-02:08-31-00     10      Normal      4388218      438821     4865656118       6700          6633         152           151           0      GigabitEthernet1/0/0",
+            " 4        2018-02-02:08-31-10     10      Normal      4388533      438853     4866005390       6700          6633         152           151           0      GigabitEthernet1/0/0",
+            " 5        2018-02-02:08-31-20     10      Normal      4393232      439323     4871215641       6700          6633         152           151           0      GigabitEthernet1/0/0",
+            "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter EMDI detection on video traffic transmitted on a device, to view historical statistics of a specified channel or all channels in the upstream direction, run the display emdi statistics history command. To view historical statistics of a specified channel or all channels in the downstream direction, run the display emdi statistics history outbound command. If the parameter channel-name is specified, historical statistics about the specified channel are displayed. If the parameter is not specified, historical statistics about all channels are displayed. In addition, you can use the start start-index end end-index parameter to specify the start index and end index of historical records or use the latest-record record-number parameter to specify the number of the latest records to be queried. If these parameters are not specified, all historical records are queried.\nPrecautions\nThis command displays statistics about abnormal traffic only, including packet loss, packet out-of-order, jitter, or service interruption. During detection, if all data is displayed as 0 in the display emdi statistics history command output, traffic is interrupted."
+}

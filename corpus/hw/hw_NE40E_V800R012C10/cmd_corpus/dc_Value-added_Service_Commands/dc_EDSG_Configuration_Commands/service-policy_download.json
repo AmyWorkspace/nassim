@@ -1,0 +1,42 @@
+{
+    "PageTitle": "service-policy download",
+    "FuncDef": "The service-policy download command configures a mode in which an EDSG service policy is obtained.\nundo service-policy download command cancels the current configuration.\nBy default, a device obtains an EDSG service policy from the local configuration.",
+    "CLIs": [
+        "service-policy download { local | radius <server-group> password cipher <cipher-password> } *",
+        "undo service-policy download [ local | radius ] *"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "local",
+            "Info": "Indicates that a device obtains an EDSG service policy from the local configuration.\nIf both local and radius are specified, their configuration sequence determines the sequence in which a service policy is obtained. local radius indicates that a service policy is obtained first from the local configuration and then from a RADIUS server; radius local indicates that a service policy is obtained first from a RADIUS server and then from the local configuration.\n-"
+        },
+        {
+            "Parameters": "radius",
+            "Info": "Indicates that a device obtains an EDSG service policy from the RADIUS server.\n-"
+        },
+        {
+            "Parameters": "server-group",
+            "Info": "Specifies the name of a RADIUS server group.\nThe value is a string of 1 to 32 characters."
+        },
+        {
+            "Parameters": "cipher cipher-password",
+            "Info": "Specifies an encrypted password.\nThe new password is at least eight characters long and contains at least two of the following types: upper-case letters, lower-case letters, digits, and special characters.\nThe value is a string of 1 to 16 and 1 to 128 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group rad1",
+            "[*HUAWEI-radius-rad1] commit",
+            "[~HUAWEI-radius-rad1] quit",
+            "[~HUAWEI] service-policy name test edsg",
+            "[~HUAWEI-service-policy-test] radius-server group rad1",
+            "[~HUAWEI-service-policy-test] quit",
+            "[~HUAWEI] service-policy download radius rad1 password cipher Huawei_123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe EDSG service allows a device to obtain an EDSG service policy from the local configuration, RADIUS server, or their combination.\nPrerequisites\nA RADIUS server group has been configured if an EDSG service policy needs to be obtained from a RADIUS server.\nConfiguration Impact\nAfter the\nservice-policy download command is run on a device, the device obtains an EDSG service policy in any of the following modes:\nLocal: A service name is used as an index to obtain an EDSG service policy from the local configuration.RADIUS: A service name is used as a user name and authentication packets are used to obtain an EDSG service policy from a RADIUS server. The obtained EDSG service policy is cached to the local device and will not be deleted if it is referenced by any service instance. The EDSG service policy does not need to be repeatedly obtained.First from the local configuration and then from an RADIUS server: A device first attempts to obtain an EDSG service policy from the local configuration. If no EDSG service policy is locally configured, the device obtains an EDSG service policy from an RADIUS server.First from an RADIUS server and then from the local configuration: A device first attempts to obtain an EDSG service policy from an RADIUS server. If the RADIUS server does not respond after expiration, the device obtains an EDSG service policy from the local configuration.\n\nPrecautions\nA password is required if you specify the RADIUS mode."
+}

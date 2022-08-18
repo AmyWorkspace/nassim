@@ -1,0 +1,79 @@
+{
+    "PageTitle": "damp-interface level (interface view)",
+    "FuncDef": "The damp-interface level command configures a suppression level for a flapping interface.\nThe undo damp-interface level command restores the default setting.\n\nBy default, a flapping interface is suppressed at a light level.",
+    "CLIs": [
+        "damp-interface level { light | middle | heavy | manual { <half-life-period> <suppress> <reuse> <max-suppress-time> } }",
+        "undo damp-interface level { middle | heavy | manual }"
+    ],
+    "ParentView": [
+        "100GE-Trunk member Layer 2 interface view",
+        "100GE-Trunk member interface view",
+        "Layer 2 100GE interface view",
+        "100GE interface view",
+        "Layer 2 10GE interface view",
+        "10GE interface view",
+        "25GE-L2 view",
+        "25GE interface view",
+        "400GE-L2 view",
+        "400GE interface view",
+        "40GE-Trunk member Layer 2 interface view",
+        "40GE-Trunk member interface view",
+        "Layer 2 40GE interface view",
+        "40GE interface view",
+        "Layer 2 50GE interface view",
+        "50GE interface view",
+        "Layer 2 50|100GE interface view",
+        "CPOS interface view",
+        "E1/CE1 interface view",
+        "E1 interface view",
+        "FlexE interface view",
+        "Layer 2 GE interface view",
+        "GE optical interface view",
+        "GE interface view",
+        "GE electrical interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "light",
+            "Info": "Indicates that a flapping interface is suppressed at a light level.\nThe value are as follows:\n             \nhalf-life-period:11\nsuppress:7700\nreuse:6000\nmax-suppress-time:10"
+        },
+        {
+            "Parameters": "middle",
+            "Info": "Indicates that a flapping interface is suppressed at a middle level.\nThe value are as follows:\n             \nhalf-life-period:16\nsuppress:5500\nreuse:4300\nmax-suppress-time:12"
+        },
+        {
+            "Parameters": "heavy",
+            "Info": "Indicates that a flapping interface is suppressed at a heavy level.\nThe value are as follows:\n             \nhalf-life-period:25\nsuppress:3500\nreuse:2700\nmax-suppress-time:18"
+        },
+        {
+            "Parameters": "manual",
+            "Info": "Indicates that a flapping interface is manually suppressed.\nThe value ranges are as follows:\n             \nhalf-life-period:1~60\nsuppress:1~20000\nreuse:1~20000\nmax-suppress-time:1~255"
+        },
+        {
+            "Parameters": "half-life-period",
+            "Info": "Specifies a half-life period for a penalty value.\nThe value is an integer ranging from 1 to 60, in seconds."
+        },
+        {
+            "Parameters": "suppress",
+            "Info": "Specifies a suppression value, which is 1000 times the suppression threshold of an interface. The interface is suppressed when the penalty value (inceased by 1 each time the interface goes down) is greater than the suppression value.\nThe value is an integer ranging from 1 to 20000. The suppress value must be greater than the reuse value."
+        },
+        {
+            "Parameters": "reuse",
+            "Info": "Specifies a reuse value, which is 1000 times the reuse threshold of an interface. The interface is no longer suppressed when the penalty value (inceased by 1 each time the interface goes down) is less than the reuse value.\nThe value is an integer ranging from 1 to 20000. The reuse value must be less than the suppress value."
+        },
+        {
+            "Parameters": "max-suppress-time",
+            "Info": "Specifies the maximum suppression time.\nThe value is an integer ranging from 1 to 255, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet3/0/0",
+            "[*HUAWEI-GigabitEthernet3/0/0] damp-interface enable",
+            "[*HUAWEI] damp-interface level middle"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\n\n        Intermittent disconnection of an optical fiber connected to a physical interface causes the interface status to alternate frequently between Up and Down. The damp-interface function can suppress a flapping interface at the physical layer. Therefore, stability of the entire link layer and network layer is guaranteed. When damp-interface is enabled, run the damp-interface level command to configure a light, middle, or heavy suppression based on damp-interface requirements:\n        \nLight: If a light damp-interface is configured, status flapping suppression is triggered only when the interface flaps frequently and rapidly.\nHeavy: If a heavy damp-interface is configured, status flapping suppression is triggered even if the interface does not flap severely. This is, a flapping interface tends to be easily suppressed.\nMiddle: Intensity of the middle damp-interface is between the light and heavy damp-interfaces.\nManual: When the light, middle, heavy levels fail to meet suppression requires, you can specify this parameter to manually control the suppression level.\n\n\n\nPrerequisites\n\nStatus flapping suppression has been enabled on a physical interface using the damp-interface enable command."
+}

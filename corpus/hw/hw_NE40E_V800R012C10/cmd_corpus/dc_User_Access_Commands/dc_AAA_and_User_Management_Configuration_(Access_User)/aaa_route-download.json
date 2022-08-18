@@ -1,0 +1,67 @@
+{
+    "PageTitle": "aaa route-download",
+    "FuncDef": "The aaa route-download command enables the device to periodically synchronize static routes with those delivered by the RADIUS server.\nThe undo aaa route-download command disables the device from periodically synchronizing static routes with those delivered by the RADIUS server.\nBy default, this function is disabled.",
+    "CLIs": [
+        "aaa route-download server-group <group-name> base-user-name <user-name> password { simple | cipher } password [ download-interval <interval-value> | retry-interval <retry-interval> | retry-max-count <retry-count> | tag <tag-value> | cost <cost-value> | synchronization <synchronization> ] *",
+        "undo aaa route-download"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "base-user-name user-name",
+            "Info": "Specifies the user name for requesting static route synchronization.\nThe value is a string of 1 to 64 characters."
+        },
+        {
+            "Parameters": "password password",
+            "Info": "Specifies the password for requesting static route synchronization.\nIt is a string of 1 to 16 characters in the simple text mode. It is a string of 1 to 16 unencrypted characters or 1 to 128 encrypted characters in the cipher mode. It is case sensitive, excluding special characters of command lines such as space and question mark."
+        },
+        {
+            "Parameters": "simple",
+            "Info": "Indicates the password in the simple password.\n-"
+        },
+        {
+            "Parameters": "cipher",
+            "Info": "Indicates the password in the encrypted text.\n-"
+        },
+        {
+            "Parameters": "download-interval interval-value",
+            "Info": "Specifies the interval at which static routes are delivered by the RADIUS server.\nThe value is an integer ranging from 1 to 1440, in minutes. The default value is 720."
+        },
+        {
+            "Parameters": "retry-interval retry-interval",
+            "Info": "Specifies the interval at which static route synchronization requests are retransmitted.\nThe value is an integer ranging from 1 to 60, in minutes. The default value is 10."
+        },
+        {
+            "Parameters": "retry-max-count retry-count",
+            "Info": "Specifies the maximum number of retransmissions of static route synchronization requests.\nThe value is an integer ranging from 1 to 10. The default value is 1."
+        },
+        {
+            "Parameters": "tag tag-value",
+            "Info": "Specifies the tag value of a static route.\nThe value is an integer ranging from 1 to 65535. The default value is 0."
+        },
+        {
+            "Parameters": "cost cost-value",
+            "Info": "Specifies the cost value of a static route.\nThe value is an integer ranging from 1 to 65535. The default value is 0."
+        },
+        {
+            "Parameters": "synchronization synchronization",
+            "Info": "Specifies the time at which static routes are synchronized each day.\nThe value is in 24 hour format, for example, 03:45:00. If this parameter is not specified, static routes will not be synchronized periodically."
+        },
+        {
+            "Parameters": "server-group group-name",
+            "Info": "Specifies the RADIUS server group name.\nThe value is a string of 1 to 32 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group test",
+            "[*HUAWEI-radius-test] commit",
+            "[~HUAWEI-radius-test] quit",
+            "[~HUAWEI] aaa route-download server-group test base-user-name huawei password cipher Root@123 download-interval 1200 retry-interval 25 retry-max-count 5 tag 10 synchronization 03:45:00"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf you want the device to use static routes delivered by the RADIUS server, you can run the aaa route-download command to enable the device to periodically synchronize static routes with those delivered by the RADIUS server.\nPrerequisites\nAn RADIUS server group has been created.\nConfiguration Impact\nRunning this command triggers the route update timer, so that the device sends an authentication request packet to the AAA server each time the timer times out and updates routes based on route information carried in the authentication reply packet.\nTo speed up route update, run the command to trigger route update.\nA short static route synchronization interval affects RADIUS authentication performance. Therefore, setting the interval to be greater than 12 hours is recommended.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe aaa route-download command is not an overriding one. To modify the configuration, run the undo aaa route-download command and then run aaa route-download command by specifying the corresponding parameters in it.\nIf the synchronization interval is less than 60 minutes, synchronization is performed frequently, which may increase the system pressure and CPU usage.\nIf the retransmission interval is less than 10 minutes, retransmission is performed frequently, and a route delivery failure may persist."
+}

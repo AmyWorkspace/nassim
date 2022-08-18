@@ -1,0 +1,45 @@
+{
+    "PageTitle": "ipv6 nd rate-limit",
+    "FuncDef": "The ipv6 nd rate-limit command configures the rate limit of ND VLAN CAR for ND packets on an interface.\nThe undo ipv6 nd rate-limit command restores the default configuration.\nBy default, the rate limit of ND VLAN CAR for ND packets configured on an interface is 100pps.",
+    "CLIs": [
+        "ipv6 nd { na | ns-multicast | ns-unicast } rate-limit <rate>",
+        "undo ipv6 nd { na | ns-multicast | ns-unicast } rate-limit"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "Global VE sub-interface view",
+        "IP-Trunk interface view",
+        "POS interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "VLANIF interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "na",
+            "Info": "Neighbor advertisement.\n-"
+        },
+        {
+            "Parameters": "ns-multicast",
+            "Info": "Neighbor solicitation-Multicast.\n-"
+        },
+        {
+            "Parameters": "ns-unicast",
+            "Info": "Neighbor solicitation-Unicast.\n-"
+        },
+        {
+            "Parameters": "rate",
+            "Info": "Specifies the rate limit of ND VLAN CAR for ND packets configured on an interface. When the threshold is reached, perform the CAR operation for the packets.\nThe value is an integer, in pps. The value is 0 or an integer ranging from 20 to 1024.\nIf the value is 0, ND VLAN CAR is not performed for ND packets to be sent to the CPU."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 nd na rate-limit 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the rate limit of ND VLAN CAR for ND packets on an interface, run the ipv6 nd rate-limit command.\nIf the rate of ND packets on an interface does not exceed the rate limit of CP-CAR, ND VLAN CAR is not performed on the interface.If the rate of ND packets on an interface exceeds the rate limit of CP-CAR, ND VLAN CAR is triggered on the interface, and two-level rate limiting is performed for ND packets to be sent to the CPU.\nAfter ND VLAN CAR is triggered on an interface, if the rate at which ND packets are sent to the CPU does not exceed the rate limit of ND VLAN CAR, CP-CAR is performed for all the ND packets that are allowed to pass through. If the rate of ND packets to be sent to the CPU exceeds the rate limit of ND VLAN CAR, the excess packets are discarded, and CP-CAR is performed for the ND packets that are allowed to pass through.CP-CAR is then performed for ND packets that have experienced ND VLAN CAR. If the rate of ND packets to be sent to the CPU does not exceed the rate limit of CP-CAR, all ND packets are sent to the CPU. If the rate of ND packets to be sent to the CPU exceeds the rate limit of CP-CAR, the excess ND packets are discarded, and the ND packets that are allowed to pass through are sent to the CPU.\nIf ipv6 nd { na | ns-multicast | ns-unicast } rate-limit 0 is specified in the command, ND VLAN CAR is not performed for ND packets, and ND packets are simply restricted using CP-CAR."
+}

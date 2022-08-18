@@ -1,0 +1,38 @@
+{
+    "PageTitle": "loop-detect block",
+    "FuncDef": "The loop-detect block command blocks an interface if a loop is detected and specifies when the blocked interface will be unblocked.\nThe undo loop-detect block command disables the loop-triggered interface blocking function.\nBy default, the loop-triggered interface blocking function is disabled on an interface.",
+    "CLIs": [
+        "loop-detect block",
+        "loop-detect block <block-time>",
+        "undo loop-detect block"
+    ],
+    "ParentView": [
+        "Eth-Trunk sub-interface view",
+        "Eth-Trunk interface view",
+        "GE sub-interface view",
+        "GE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "block-time",
+            "Info": "Specifies the interval after which a blocked interface will be unblocked if no loop detection packet is received during the interval.If this parameter is not specified, the interface is blocked permanently by default.\nThe value is an integer ranging from 1 to 255, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] loop-detection enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0.1",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] loop-detect enable",
+            "[*HUAWEI-GigabitEthernet1/0/0.1] loop-detect block 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] loop-detection enable",
+            "[*HUAWEI] interface GigabitEthernet 2/0/1.1",
+            "[*HUAWEI-GigabitEthernet2/0/1.1] loop-detect enable",
+            "[*HUAWEI-GigabitEthernet2/0/1.1] loop-detect block 16"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe loop-detect block command can be configured on a VPLS AC interface only after loop detection is enabled globally.\nThe parameter specifies the interval after which a blocked interface will be unblocked if no loop detection packet is received by the blocked interface during this interval.\nIf the parameter is not specified, the blocked interface will remain in the permanent blocking state, blocked even if the loop is eliminated and no loop detection packet is received by the blocked interface.\nIf you change the blocking priorities of interfaces, making the blocking priority of the interface in the permanent blocking state lower than the blocking priority of another interface, the interface with a higher blocking priority will be blocked, and the interface in the permanent blocking state will be unblocked. For example, in a scenario in which GE1/0/0.1 with the blocking priority as 50 and GE2/0/0.1 with the blocking priority as 100 belong to the same VPLS and 0/1/0.1 is in the permanent blocking state, if you change the blocking priority of GE2/0/0.1 to 25, GE1/0/0.1 will be unblocked and GE2/0/0.1 will be blocked.\nPrerequisites\nL2VPN loop detection has been enabled both globally and on specific AC interfaces using the loop-detection enable and loop-detect enable commands."
+}

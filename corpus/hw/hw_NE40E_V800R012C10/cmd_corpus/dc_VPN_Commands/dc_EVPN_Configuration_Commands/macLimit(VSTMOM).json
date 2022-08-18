@@ -1,0 +1,34 @@
+{
+    "PageTitle": "mac limit",
+    "FuncDef": "The mac limit command sets a MAC address limit for an EVPN instance.\nThe undo mac limit command restores the default configuration.\nBy default, no MAC address limit is set for an EVPN instance.",
+    "CLIs": [
+        "mac limit <number> [ mac-unchanged | simply-alert ]",
+        "undo mac limit"
+    ],
+    "ParentView": [
+        "BD EVPN view",
+        "EVPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "number",
+            "Info": "Sets the maximum number of MAC addresses allowable for an EVPN instance.\nThe value is an integer ranging from 1 to 131072."
+        },
+        {
+            "Parameters": "mac-unchanged",
+            "Info": "Allows the existing numbers of MAC address entries and MAC routes to persist even if the number of MAC addresses being processed by an EVPN instance exceeds the threshold. In this case, an alarm is generated, and no new MAC addresses can be processed. Threshold crossing occurs if the initially configured MAC address limit or the number value is reduced.\n-"
+        },
+        {
+            "Parameters": "simply-alert",
+            "Info": "Allows an EVPN instance to continue to process MAC addresses even if the number of MAC addresses being processed exceeds the number value. In this case, only an alarm is generated.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn vpn-instance evpn1",
+            "[*HUAWEI-evpn-instance-evpn1] mac limit 1000 simply-alert"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a device imports a large number of MAC addresses, which consumes a lot of system resources, device operation may be affected when the system processes many services concurrently. To improve system security and reliability, run the mac limit command to limit the number of MAC addresses being processed by an EVPN instance. After this configuration is performed, the device checks the number of MAC routes generated based on the local MAC address information and the number of MAC address entries generated after the device receives remote MAC routes. If the sum of the two numbers exceeds the value, an alarm is generated, prompting you to check the validity of the MAC addresses in the system.\nConfiguration Impact\nAfter the mac limit command is run on a device, the device may discard some MAC addresses.\nPrecautions\nIf the mac limit command is run repeatedly, the latest configuration overwrites the previous one.\nThe mac limit command is run in the EVPN view to limit the number of MAC addresses in an EVPN instance. The MAC addresses include those sent locally and those flooded from EVPN peers."
+}

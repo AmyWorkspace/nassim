@@ -1,0 +1,46 @@
+{
+    "PageTitle": "auto-discovery",
+    "FuncDef": "The auto-discovery command configures the auto-discovery (A-D) mode for the multicast VPN, ensuring the transmission of multicast VPN services on the public network tunnel which is based on the Protocol Independent Multicast-Source-Specific Multicast (PIM-SSM) multicast distribution tree (MDT), and associates an inbound multicast route-policy with the IPv4 address family of the current VPN instance.\nThe undo auto-discovery command deletes the configurations of the A-D mode for the multicast VPN and removes the association between the inbound multicast route-policy and the IPv4 address family of the current VPN instance.\nBy default, the A-D mode for the multicast VPN is not configured and the IPv4 address family of the current VPN instance is not associated with an inbound multicast route-policy.",
+    "CLIs": [
+        "auto-discovery mdt [ import route-policy <route-policy-name> ]",
+        "undo auto-discovery"
+    ],
+    "ParentView": [
+        "VPN instance IPv4 address family view",
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "import",
+            "Info": "Specifies the inbound.\n-"
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the inbound multicast route-policy to associate with the IPv4 address family of the VPN instance.VPN unicast routes and MDT A-D routes are crossed based on VPN targets. To further filter the MDT A-D routes that can be crossed to a VPN instance, specify.\nroute-policy in the command.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "mdt",
+            "Info": "Specifies that the multicast VPN adopts the MDT-Subsequent Address Family Identifier (SAFI) A-D mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 3.3.3.3 as-number 100",
+            "[*HUAWEI-bgp] ipv4-family mdt",
+            "[*HUAWEI-bgp-af-mdt] peer 3.3.3.3 enable",
+            "[*HUAWEI-bgp-af-mdt] quit",
+            "[*HUAWEI-bgp] quit",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 100:1 both",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] multicast routing-enable",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] multicast-domain share-group 232.2.2.0 binding mtunnel 0",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] auto-discovery mdt"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nCurrently, the mechanism of implementing the multicast VPN is that all Provider Edges (PEs) on the network know information about the Rendezvous Point (RP); in this manner, the PIM-SM MDT is established on the public network to transmit multicast VPN services. This mechanism, however, does not support the Share-Group address within the SSM address range. This is because PEs in the same VPN do not know the peer information of each other, therefore knowing nothing about the multicast source information. As a result, these PEs cannot directly send Join messages to the multicast source and establish the PIM-SSM MDT.\nTo solve this problem, in an autonomous system (AS), you can configure the BGP A-D mode to enable the automatic discovery of the PE information about PEs in the same VPN. In this manner, multicast VPN services can be transmitted on the public network tunnel which is based on the PIM-SSM MDT.\nMulticast VPN currently supports only the MDT-SAFI A-D mode, in which a new address family in the MDT-SAFI message advertised through BGP is defined. After the multicast VPN is configured on a PE, the multicast VPN configurations, including the Route Distinguisher (RD) and the Share-Group address, can be advertised to all BGP peers. After a remote PE (a BGP peer) receives the MDT-SAFI message advertised through BGP, the remote PE compares the RD carried in the message with its RD. If the RDs are the same, it indicates the remote PE is in the same VPN with the local PE. The remote PE then uses the MDT-SAFI message to establish the PIM-SSM MDT for transmitting multicast VPN services.\nPrerequisites\nThe multicast-domain share-group command has been run in the VPN.\nPrecautions\nWhen configuring the A-D mode for the multicast VPN, you need to configure an A-D address family in the BGP view so that the corresponding BGP A-D mode can be used to implement the multicast VPN function. If the configured A-D mode is inconsistent with the A-D address family enabled in the BGP view, you cannot implement the A-D mode.\nThis command is applied to the single-AS scenario, with no RP configured on the public network.\nThe PEs enabled with the BGP A-D function must support the same PIM protocol and use the Share-Group address within the SSM address range.\nRunning this command does not affect the original multicast VPN service flow. When the Share-Group address is in the Any-Source Multicast (ASM) address range, multicast VPN traffic can still be transmitted along the multicast tunnel in PIM-SM mode on the public network."
+}

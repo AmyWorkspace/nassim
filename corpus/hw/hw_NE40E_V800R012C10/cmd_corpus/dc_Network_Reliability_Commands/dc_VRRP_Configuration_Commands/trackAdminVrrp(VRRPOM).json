@@ -1,0 +1,60 @@
+{
+    "PageTitle": "vrrp vrid track admin-vrrp",
+    "FuncDef": "The vrrp vrid track admin-vrrp command binds a common VRRP backup group to a management VRRP (mVRRP) backup group. After the binding is configured, the common VRRP backup group becomes a service VRRP group.\nThe undo vrrp vrid track admin-vrrp command removes the binding between a service VRRP group and an mVRRP group. After the binding is removed, the service VRRP group changes to a common VRRP backup group.\n\nBy default, no VRRP backup group is bound to an mVRRP group.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id1> track admin-vrrp interface { <interface-name> | <interface-type> <interface-number> } vrid <virtual-router-id2> [ unflowdown ]",
+        "undo vrrp vrid <virtual-router-id1> track admin-vrrp"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-router-id1",
+            "Info": "Specifies the ID of a common VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of an interface on which an mVRRP group is configured.\n-"
+        },
+        {
+            "Parameters": "vrid virtual-router-id2",
+            "Info": "Specifies the ID of an mVRRP group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "unflowdown",
+            "Info": "Disables the flowdown function of the interface. A common VRRP backup group is bound to an mVRRP group in unflowdown mode. After the unflowdown function is configured for the mVRRP group that is in the Backup or Initialize state, the interface on which the bound service VRRP group is established will retain the Up state and the service VRRP group will enter the Backup or Initialize state. By default, the flowdown mode is used. After the flowdown function is configured for the mVRRP group that is in the Backup or Initialize state, the interface on which the bound service VRRP group is established will go Down and the service VRRP group will enter the Initialize state.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] vrrp vrid 1 track admin-vrrp interface GigabitEthernet 2/0/0.1 vrid 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nWhen multiple VRRP backup groups are configured on a single device to forward traffic, each VRRP backup group maintains its own state machine. This means that a large number of VRRP Advertisement packets are transmitted, consuming a lot of bandwidth and CPU resources. To reduce resource consumption, run the vrrp vrid track admin-vrrp command to bind a common VRRP backup group to an mVRRP group.\nVRRP backup groups can be bound to the mVRRP group in flowdown or unflowdown mode.\n\nflowdown: This mode is used on a network where the upstream and downstream traffic forwarding paths must be the same. On a network configured with a firewall and a VRRP backup group, upstream traffic flows through the master device and the downstream traffic flows through either the master or backup device. If downstream traffic flows through the backup device and the firewall detects inconsistency between the upstream and downstream traffic paths, the backup device has to discard downstream traffic. The default flowdown mode is used to allow the downstream traffic to be forwarded through the master device so that the firewall allows the packets to pass through.\nunflowdown: This mode is used on a network where the upstream and downstream traffic forwarding paths do not need to be the same. unflowdown can be configured to allow the mVRRP group to determine the states of its bound VRRP backup group. This means that upstream traffic travels through the master device and then reaches the upper-layer network and downstream traffic travels through either the master or backup device and reaches the user.\n\n\nPrerequisites\n\n\nAn mVRRP group has been created using the admin-vrrp vrid command.\nA common VRRP backup group has been created using the vrrp vrid virtual-ip command.\n\n\nConfiguration Impact\n\nAfter a common VRRP backup group is bound to an mVRRP group, the common VRRP backup group becomes a service VRRP group. The mVRRP group sends VRRP Advertisement packets to determine the master/backup status of the service VRRP group. The service VRRP group only forwards service traffic, which significantly reduces device loads and bandwidth consumption.\n\nPrecautions\n\n\nThe vrrp vrid track admin-vrrp command can be run only on the interface on which a common VRRP backup group resides.\nA common VRRP4 backup group and a common VRRP6 backup group can be configured on the same interface. However, when both a common VRRP4 backup group and a common VRRP6 backup group are configured on an interface, there are several restrictions:\n         \nThe common VRRP4 backup group must be bound to the mVRRP4 backup group, whereas the common VRRP6 backup group must be bound to the mVRRP6 backup group.\nA maximum of one common VRRP4 backup group and one common VRRP6 backup group can be configured on an interface. The common VRRP backup groups must be configured on the interface using the unflowdown parameter."
+}

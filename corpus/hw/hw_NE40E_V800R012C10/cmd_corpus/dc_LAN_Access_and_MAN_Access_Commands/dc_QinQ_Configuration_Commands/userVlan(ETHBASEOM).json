@@ -1,0 +1,62 @@
+{
+    "PageTitle": "user-vlan",
+    "FuncDef": "The user-vlan command configures a user-VLAN sub-interface. After the user-VLAN sub-interface receives matched tagged packets, it deletes the VLAN tags from the packets for Layer 3 forwarding.\nThe undo user-vlan command deletes the configured user-VLAN sub-interface.\nBy default, no user-VLAN sub-interface is configured.",
+    "CLIs": [
+        "user-vlan { <start-vlan-id> [ <end-vlan-id> ] | <cevlan> }",
+        "user-vlan { <start-vlan-id> [ <end-vlan-id> ] | <cevlan> } qinq { <start-pe-vlan> [ <end-pe-vlan> ] | <pevlan> }",
+        "undo user-vlan { <start-vlan-id> [ <end-vlan-id> ] | <cevlan> }",
+        "undo user-vlan { <start-vlan-id> [ <end-vlan-id> ] | <cevlan> } qinq { <start-pe-vlan> [ <end-pe-vlan> ] | <pevlan> }"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "PW-VE sub-interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "start-vlan-id",
+            "Info": "Specifies the start VLAN ID in a single or inner VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "end-vlan-id",
+            "Info": "Specifies the end VLAN ID in a single or inner VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "cevlan",
+            "Info": "Specifies the VLAN ID in a single or inner VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "qinq",
+            "Info": "Indicates that a user-VLAN sub-interface is encapsulated in QinQ mode.\n-"
+        },
+        {
+            "Parameters": "start-pe-vlan",
+            "Info": "Specifies the start VLAN ID in the outer VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "end-pe-vlan",
+            "Info": "Specifies the end VLAN ID in the outer VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "pevlan",
+            "Info": "Specifies the VLAN ID in the outer VLAN tag.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/1.1] user-vlan 200 qinq 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen VLAN users access an IP core network through a BRAS, the VLAN tags carried in the user VLAN packets must be deleted as the IP core network cannot identify user VLAN information.\nIf a Layer 2 network connects to an IP core network through a BRAS, it is recommended that you run the user-vlan command on the BRAS's user-side sub-interface to remove the VLAN tags before sending the VLAN packets to the IP core network.\nIf a Layer 3 network connects to an IP core network through a BRAS, it is recommended that run the dot1q termination vid or qinq termination pe-vid ce-vid command on the BRAS's user-side sub-interface to remove the VLAN tags before sending the VLAN packets to the IP core network.\nConfiguration Impact\nAfter the user-vlan command is configured on the BRAS's user-side sub-interface:\nThe sub-interface removes the single or double VLAN tags from received packets and then performs Layer 3 forwarding.The sub-interface adds a single or double VLAN tags that have been planned to packets before sending them out to terminals.\n\nPrecautions\nThe user-vlan command takes effect only when the packets that the user-VLAN sub-interface receives carry the same VLAN tag or tags as that or those specified in the user-vlan command.User-VLAN sub-interfaces can be configured with VLAN ranges. Multiple users or types of services in a VLAN range can access the same sub-interface.Before running the undo user-vlan command, ensure that the VLAN to be deleted has existed and has no services running. Otherwise, the undo user-vlan command cannot be successfully executed.If a sub-interface has had the Dot1q termination, QinQ termination, QinQ stacking, or Dot1q VLAN type configured, the sub-interface cannot have the user-vlan command configured.\nAfter a BAS service is configured and the BAS user packet carries two VLAN tags whose IDs are specified by the user-vlan command, the BAS user cannot go online in the following stacking scenarios:\nThe user's outer VLAN ID for Layer 2 access is the same as the VLAN ID specified in the vlan-type dot1q command for a dot1q sub-interface.The user's outer VLAN ID for Layer 2 access is the same as the VLAN ID terminated by a dot1q VLAN tag termination sub-interface.\nTo allow the BAS user to go online, run the vlan-miss to-cpu enable command to enable a board to send a BAS user packet that carries two VLAN tags to the board's CPU in a stacking scenario."
+}

@@ -1,0 +1,24 @@
+{
+    "PageTitle": "scramble (serial)",
+    "FuncDef": "The scramble command enables the payload scramble function on an interface.\nThe undo scramble command disables the payload scramble function on a synchronous serial interface,ATM interface  and trunk serial interface.\nBy default, the payload scramble function is enabled on an interface.",
+    "CLIs": [
+        "scramble",
+        "undo scramble"
+    ],
+    "ParentView": [
+        "Trunk serial interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface serial 3/0/0:1",
+            "[~HUAWEI-Serial3/0/0:1] link-protocol atm",
+            "Warning: The encapsulation protocol of the link will be changed.               ",
+            "Continue? [Y/N]:y",
+            "[*HUAWEI-Serial3/0/0:1] scramble"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a datacom network, the data link layer transmits distributed data frames to an interface at the physical layer. Upon receipt, the interface decapsulates these frames into data bits, encodes the bits based on the coding mode, and transmits them to a remote interface through high and low levels on a link. Upon receipt of the levels, the remote interface decodes them and restores them to data bits. In this way, the local device can communicate with the remote device.\nFor example, a local interface encodes bit 1 into a high level and bit 0 into a low level (zero level) and transmits these levels to a remote interface over a link. If the payload of a data frame contains consecutive 0s, the link will stay at the zero level for a long time. After failing to detect signals for a prolonged period of time, the remoter interface mistakenly thinks that all bits have been received or the link is faulty, leading to a communication failure.\nTo resolve this problem, run the scramble command to enable the payload scramble function on an interface. This function allows the interface to add interference to the payload, effectively preventing consecutive 0s or 1s in the payload and avoiding communication failures.\nConfigurations of the payload scramble function on the local and remote interfaces must be consistent.\nPrerequisites\nThe link layer protocol has been configured as ATM on a synchronous serial interface or trunk serial interface using the link-protocol atm command.\nConfiguration Impact\nDisabling the payload scrambling function may deteriorate the quality of clock signals extracted by the receiver.\nPrecautions\nThe status of the payload scrambling function (enabled or disabled) on the interface must be consistent with that on the transmission devices."
+}

@@ -1,0 +1,54 @@
+{
+    "PageTitle": "local-user password(AAA view)",
+    "FuncDef": "The local-user password command creates a local user and sets a login password for the user. If the local user has been created, the command modifies the login password of the user.\nThe undo local-user command deletes a local user.\nBy default, the system has no local user.",
+    "CLIs": [
+        "local-user <user-name> password cipher password",
+        "local-user <user-name> password",
+        "local-user <user-name> password irreversible-cipher <irreversible-cipher-password>",
+        "undo local-user <user-name>"
+    ],
+    "ParentView": [
+        "AAA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-name",
+            "Info": "Specifies the username.\nThe value is a string of 1 to 253 case-insensitive characters without spaces. If the value includes @, the characters before @ are the user name and the characters after @ are the domain name. If the value excludes @ or the domain name does not exist, the entire string is the user name and the user belongs to the default domain. A user name cannot contain two or more @s.\nWhen the user security policy is configured, the value is a string of 6 to 253 characters. When the user security policy is not configured, the value is a string of 1 to 253 characters.\nThe user name cannot contain spaces or the following special characters: /, \\, :, *, ?, \", <, >, |, @, ', %."
+        },
+        {
+            "Parameters": "cipher password",
+            "Info": "Specifies the password in cipher text. The password is input in simple or encrypt text but stored in cipher text in the configuration file.\nThe password in ciphertext is encrypted using the AES algorithm.\nWhen cipher is not entered, password input is in man-machine interaction mode, and the system does not display the entered password.\nWhen the user security policy is configured, the value is a string of 8 to 128 case-insensitive characters without spaces. When the user security policy is not configured, the value is a string of 1 to 128 case-insensitive characters without spaces.\nWhen the user security policy is configured, the password cannot be the same as the user name, or in reverse order with the user name. The password must contain the following characters: upper-case character, lower-case character, digit, and special character.Except the question mark (?) and space. However, when quotation marks are used around the password, spaces are allowed in the password.\nWhen cipher is entered, the password is displayed in either simple text or ciphertext during input. When being input in simple text, the password is a string of 8 to 128 case-sensitive characters when the user security policy is configured, and a string of 1 to 128 case-sensitive characters when the user security policy is not configured. When you input a password in simple text, the system displays the password in simple text mode, which brings risks. To enhance security, entering the password in interactive mode is recommended.\n\nWhen the user security policy is configured, the password\ncannot be the same as the user name, or in reverse order with the\nuser name. The password must contain the following characters: upper-case\ncharacter, lower-case character, digit, and special character.b. When being input in ciphertext, the password must be a string of 32 to 268 consecutive characters.A 20 to 268 characters ciphertext password configured in an earlier version is also supported in this version."
+        },
+        {
+            "Parameters": "irreversible-cipher irreversible-cipher-password",
+            "Info": "Specifies the password in irreversible ciphertext key. The password is input in simple or encrypt text but stored in cipher text in the configuration file.\nWhen irreversible-cipher is not entered, password input is in man-machine interaction mode, and the system does not display the entered password.\nWhen the user security policy is configured, the value is a string of 8 to 128 case-insensitive characters without spaces. When the user security policy is not configured, the value is a string of 1 to 128 case-insensitive characters without spaces.\nWhen the user security policy is configured, the password cannot be the same as the user name, or in reverse order with the user name. The password must contain the following characters: upper-case character, lower-case character, digit, and special character.Except the question mark (?) and space. However, when quotation marks are used around the password, spaces are allowed in the password.\nWhen irreversible-cipher is entered, the password is displayed in either simple text or ciphertext during input. When being input in simple text, the password is a string of 8 to 128 case-sensitive characters when the user security policy is configured, and a string of 1 to 128 case-sensitive characters when the user security policy is not configured. When you input a password in simple text, the system displays the password in simple text mode, which brings risks. To enhance security, entering the password in interactive mode is recommended.\n\nWhen the user security policy is configured, the password cannot be the same as the user name, or in reverse order with the user name. The password must contain the following characters: upper-case character, lower-case character, digit, and special character.Except the question mark (?) and space. However, when quotation marks are used around the password, spaces are allowed in the password.b. When being input in irreversible ciphertext, the password must be a string of 48 to 128 consecutive characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] local-user hello@163.net password irreversible-cipher Hello-13579"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] local-user hello@163.net password",
+            "Please configure the password (8-128)",
+            "Enter Password:",
+            "Confirm Password:"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] local-user hello1@163.net password cipher 1qaz@WSX"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] local-user hello2@163.net password cipher 1qaz@WSX",
+            "Please enter old password:"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf you need to use any of the following methods to access the device, you need to create a local user and set the login password for the user:\nFTPSSH with user name and password authenticationTelnet with user name and password authentication\nA login request is permitted only if a correct password is entered.\nIf a specified user name does not exist, running the local-user password command will create a local user. If a specified user name exists, running the local-user password command will set a new password for the user.If the local-user service-type command has been run to configure a user as an administrator by specifying the user type as the Telnet, FTP, SSH, SNMP, or terminal user, the system automatically changes the user password to an irreversible ciphertext key. When a user password is modified, the old password should be input.\n\nConfiguration Impact\nThe rules for setting a password and a user name are more strict after the user-security-policy enable command is run than before.\nA local user name must be longer than or equal to six characters. The length of a local user name is also subject to the user-name minimum-length command if the command is configured.Requirements for setting passwords are as follows:\n A password must contain at least eight characters. The password length is also subject to the user-password min-len command if the command is configured. A password must consist of digits, upper- and lower-case letters, and special characters (not including spaces or question marks). A password cannot contain the user name nor the reverse of the user name. A password cannot be the same as any of the most recent 10 passwords including the current password. After the password is reset, the user is required to change the password upon the first login.\nAfter the user-password complexity-check command is run, to create a local user or change the login password for the local user, note the following:\nA password must consist of upper-case letters, digits, and special characters.A password cannot be the same as any of the most recent 10 passwords.\nWhen the user-security-policy enable command and the user-password complexity-check complexity-enhance command are configured at the same time, the configuration with the highest security takes effect.\nIf the password is specified in an irreversible ciphertext key, the PPP CHAP authentication fails.\nA password is input in simple text or ciphertext but stored in ciphertext in the configuration file. If a user enters a password based on the prompted message, irreversible-cipher is displayed in the generated configuration file.\nAfter the configuration, when you use the display local-user username command to view the attributes of a local user, it will be displayed in encrypted text.\n\nPrecautions\nAfter a local user is created using the local-user password command, the device sets the local user rights based on the following principles:\n If the local-user level command is configured, the command takes effect.If the local-user level command is not configured, but the local-user user-group command is configured, the configured command takes effect. If neither the local-user level command nor the local-user user-group command is configured, but the adminuser-priority command is configured in the domain view, the configured command takes effect. If none of the preceding commands is configured, the device will set the local user rights to the VTY level used in login, which may has a security risk. It is recommended that you use the local-user level or local-user user-group command to configure the local user rights.\nA local user attribute change does not apply to online users. The change takes effect after the online users relog in.\nBy default, the cryptographic algorithm for the user login password is scrypt. If the crypto password irreversible-algorithm hmac-sha256 command is run, the cryptographic algorithm is set to hmac-sha256."
+}

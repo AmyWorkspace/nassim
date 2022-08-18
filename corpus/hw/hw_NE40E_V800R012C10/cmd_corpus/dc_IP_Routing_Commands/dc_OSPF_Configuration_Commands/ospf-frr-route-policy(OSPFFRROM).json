@@ -1,0 +1,43 @@
+{
+    "PageTitle": "frr-policy route",
+    "FuncDef": "The frr-policy route command configures an OSPFv3 IP FRR filtering policy so that only the OSPFv3 backup routes that match the filtering conditions of the policy can be added to the forwarding table.\nThe undo frr-policy route command deletes the configured OSPFv3 IP FRR filtering policy.\nThe frr-policy route command configures an OSPF IP FRR filtering policy so that only the OSPF backup routes that match the filtering conditions of the policy can be added to the forwarding table.\nThe undo frr-policy route command deletes the configured OSPF IP FRR filtering policy.\n\nBy default, no OSPFv3 IP FRR filtering policy is configured.\n\n\nBy default, no OSPF IP FRR filtering policy is configured.",
+    "CLIs": [
+        "frr-policy route { route-policy <route-policy-name> | route-filter <route-filter-name> }",
+        "undo frr-policy route"
+    ],
+    "ParentView": [
+        "OSPF FRR view",
+        "OSPFv3 FRR view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of an IP FRR filtering policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of an IP FRR route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy abc permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] frr",
+            "[*HUAWEI-ospfv3-1-frr] loop-free-alternate",
+            "[*HUAWEI-ospfv3-1-frr] frr-policy route route-policy abc"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy abc permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] frr",
+            "[*HUAWEI-ospf-1-frr] loop-free-alternate",
+            "[*HUAWEI-ospf-1-frr] frr-policy route route-policy abc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWith OSPFv3 IP FRR, devices can switch traffic from a faulty link to a backup link immediately, which minimizes traffic loss and improves OSPFv3 network reliability.\nTo configure an OSPFv3 IP FRR filtering policy so that only the OSPFv3 backup routes that match the filtering conditions of the policy can be added to the forwarding table, run the frr-policy route command. If the primary link fails, OSPFv3 can switch traffic to the backup link immediately.\nWith OSPF IP FRR, devices can switch traffic from a faulty link to a backup link immediately, which minimizes traffic loss and improves OSPF network reliability.\nTo configure an OSPF IP FRR filtering policy so that only the OSPF backup routes that match the filtering conditions of the policy can be added to the forwarding table, run the frr-policy route command. If the primary link fails, OSPF can switch traffic to the backup link immediately.\nPrerequisites\nThe system has entered the OSPFv3 IP FRR view using the frr command, and OSPFv3 IP FRR has been enabled using the loop-free-alternate command.\nThe system has entered the OSPF IP FRR view using the frr command, and OSPF IP FRR has been enabled using the loop-free-alternate command.\nPrecautions\nIf the command is run more than once, the last configuration overrides the previous one."
+}

@@ -1,0 +1,53 @@
+{
+    "PageTitle": "portal-server redirect-key",
+    "FuncDef": "The portal-server redirect-key command enables redirection packets of the mandatory portal service to carry user MAC addresses.\nThe undo portal-server redirect-key command cancels the portal service and restores the default setting.\nBy default, the captive portal service is disabled in a domain.",
+    "CLIs": [
+        "portal-server redirect-key user-mac-address <user-mac-address> [ simple [ type1 ] | cipher aes128 { cbc | gcm } | des ]",
+        "undo portal-server [ redirect-key ]",
+        "undo portal-server redirect-key [ user-mac-address [ user-mac-address [ simple [ type1 ] ] ] ]",
+        "undo portal-server redirect-key user-mac-address <user-mac-address> cipher { aes128 [ cbc | gcm ] | des }"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-mac-address user-mac-address",
+            "Info": "Sets a portal value for user MAC addresses.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "simple",
+            "Info": "Indicates that the user MAC address carried in redirection packets is encapsulated in simple mode.\n-"
+        },
+        {
+            "Parameters": "type1",
+            "Info": "Indicates that the delimiter of user MAC addresses is a colon (:).\n-"
+        },
+        {
+            "Parameters": "cipher aes128 cbc",
+            "Info": "Indicates that the user MAC address carried in redirection packets is encrypted in AES128 and CBC mode and to be transmitted in ciphertext.\n-"
+        },
+        {
+            "Parameters": "gcm",
+            "Info": "Indicates that the MAC address carried in redirection packets is encrypted in AES128 and GCM mode and to be transmitted in ciphertext.\n-"
+        },
+        {
+            "Parameters": "des",
+            "Info": "Specifies that the user MAC address carried in redirection packets is encapsulated using the DES algorithm. The DES mode is insecure. Therefore, the GCM mode in AES128 mode is recommended.\n-"
+        },
+        {
+            "Parameters": "redirect-key",
+            "Info": "Indicates the keywords carried in redirection packets.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[~HUAWEI-aaa-domain-huawei] portal-server redirect-key user-mac-address test cipher aes128 cbc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a user accesses an external network for the first time, the NE40E redirects the access request to the specified server (normally the portal server of carriers). This operation is called mandatory portal. The Internet website that the user first accesses is one of the services of the website specified by carriers.\nIf the portal-server redirect-key user-mac-address user-mac-address [ cipher aes128 { cbc | gcm } | des ] command is run, indicating that the MAC address is encapsulated in ciphertext.If the portal-server redirect-key user-mac-address user-mac-address simple command is run, indicating that the MAC address is encapsulated in simple and the bytes in the MAC address are separated by a hyphen (-).If the portal-server redirect-key user-mac-address user-mac-address simple type1 command is run, indicating that the MAC address is encapsulated in simple text and the bytes in the MAC address are separated by a colon (:).\nWhen redirection packets sent by the portal server are encapsulated, if the ucPortalMacMode value is not 0, encapsulate the user MAC address to the redirection packets, with szPortalMacKey as the parameter name and szUserMacAddress as the parameter value.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nIf the portal-server redirect-key user-mac-address <user-mac-address> [ cipher aes128 { cbc | gcm } | des ] command, instead of the portal-server url-parameter shared-key-cipher <shared-key-cipher> command, is run in the AAA domain view, redirection packets of the portal service do not carry MAC addresses.\nWhen users are forcibly redirected to the portal server, if you do not want the actual user MAC address  to be displayed, run the portal-server redirect-key command with cipher aes128 configured. Then the user MAC address is displayed in ciphertext. Shared-key-cipher in the portal-server url-parameter shared-key-cipher command is used to generate the ciphertext user MAC address to be displayed.The default encryption mode for the keywords of user MAC addresses is AES-GCM-128. If you want the device to use the DES encryption mode, specify the des keyword in the portal-server redirect-key command,AES-GCM-128 is recommended, because DES is insecure.\nSpecifies that only the first eight bytes of shared-key-cipher configured in portal-server url-parameter shared-key-cipher <shared-key-cipher> are used as the key for MAC address encryption when the DES algorithm is used."
+}

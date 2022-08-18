@@ -1,0 +1,115 @@
+{
+    "PageTitle": "ip route-static vpn-instance (System view)",
+    "FuncDef": "The ip route-static vpn-instance command configures an IPv4 static route for a VPN instance.\nBy default, no IPv4 static routes are configured for a VPN instance.",
+    "CLIs": [
+        "ip route-static <ip-address> { <mask> | <mask-length> } vpn-instance <vpn-instance-name> <nexthop-address> [ recursive-lookup host-route ] [ preference <preference> | tag <tag> ] * [ bfd enable | track { bfd-session <cfg-name> | nqa <admin-name> <test-name> | efm-state { <interface-name> | <interface-type> <interface-number> } } | inherit-cost | permanent ] [ no-advertise | no-install ] [ inter-protocol-ecmp ] [ description <text> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies a destination IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies a mask for an IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length. A 32-bit mask is represented by consecutive 1s, and the mask in dotted decimal notation can be replaced by the mask length.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of the destination VPN instance. If the name of the destination VPN instance is specified, the device searches the routing table of the destination VPN instance for the static route's outbound interface based on the configured next hop address.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "nexthop-address",
+            "Info": "Specifies the next hop IP address of a route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "recursive-lookup",
+            "Info": "Recurses the static route to a 32-bit host route.\n-"
+        },
+        {
+            "Parameters": "host-route",
+            "Info": "Recurses the static route to a host route.\n-"
+        },
+        {
+            "Parameters": "preference preference",
+            "Info": "Specifies a priority for the static route.\nThe value is an integer ranging from 1 to 255. The default value is 60. The smaller the value, the higher the priority."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies a tag value for the static route. The tag can be used by a routing policy. For example, the tag can be used during route import.\nThe value is an integer ranging from 1 to 4294967295. The default value is 0."
+        },
+        {
+            "Parameters": "bfd",
+            "Info": "Associates a dynamic BFD session with the static route to fast detect faults.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "Associates a dynamic BFD session with the static route to fast detect faults.\n-"
+        },
+        {
+            "Parameters": "track",
+            "Info": "Specify a track object.\n-"
+        },
+        {
+            "Parameters": "bfd-session cfg-name",
+            "Info": "Associates a static BFD session with the static route to fast detect faults.\nThe undo ip route-static [ track bfd-session ] all command with track bfd-session cfg-name specified dissociates the static route from the current BFD session only without deleting the static route.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "nqa admin-name",
+            "Info": "Associates the static route with an NQA test instance to fast detect faults so that the system determines whether to activate the static route based on the NQA link detection result to control route advertisement and guide remote traffic.\nCurrently, only ICMP NQA test instances can be bound to static routes to implement fast fault detection.\nThe value is a string of 1 to 32 case-sensitive characters."
+        },
+        {
+            "Parameters": "test-name",
+            "Info": "Associates the static route with an NQA test instance to fast detect faults so that the system determines whether to activate the static route based on the NQA link detection result to control route advertisement and guide remote traffic.\nCurrently, only ICMP NQA test instances can be bound to static routes to implement fast fault detection.\nThe value is a string of 1 to 32 case-sensitive characters."
+        },
+        {
+            "Parameters": "efm-state interface-type",
+            "Info": "Specifies the interface whose EFM OAM status needs to be detected.\nAfter track efm-state is configured, the system responds to the interface Up/Down event that is triggered by the change of EFM OAM extension status, and determines whether to activate static routes. In this manner, route advertisement can be controlled, and the traffic from the remote end can be correctly forwarded. Currently, this parameter can be used only on IPv4 networks, because IPv6 networks do not provide EFM OAM extension for static routes.\nThe interfaces to be detected through track efm-state must be Ethernet interfaces or GE interfaces.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface whose EFM OAM status needs to be detected.\nAfter track efm-state is configured, the system responds to the interface Up/Down event that is triggered by the change of EFM OAM extension status, and determines whether to activate static routes. In this manner, route advertisement can be controlled, and the traffic from the remote end can be correctly forwarded. Currently, this parameter can be used only on IPv4 networks, because IPv6 networks do not provide EFM OAM extension for static routes.\nThe interfaces to be detected through track efm-state must be Ethernet interfaces or GE interfaces.\n-"
+        },
+        {
+            "Parameters": "inherit-cost",
+            "Info": "Enables the static route to inherit the cost of recursive routes.\nIn a scenario in which an L2VPN accesses an L3VPN, the direct-route track pw-state command can be configured to control the cost of a direct route to reduce downstream traffic loss during the traffic switchback after the primary PW recovers.\nThe CSG is connected to a number of base stations. These base stations usually use logical IP addresses to communicate with AGGs. As a result, packets cannot be forwarded over direct routes between base stations and AGGs. In addition, AGGs do not have routes to the logical IP addresses of stations. In this situation, static routes must be configured on AGGs. As network administrators usually configure consecutive logical IP addresses for base stations based on IP address planning, you need to configure static routes to specific base stations on AGGs. If the static routes are not associated with the PW status, some downstream traffic may be lost during the traffic switchback after the primary PW recovers.\nTo solve this problem, associate static routes with the PW status. If you do not specify outbound interfaces when configuring static routes, the static routes will recurse to direct routes. In this situation, specify inherit-cost so that the static routes can inherit the costs of recursive routes. Because the costs of direct routes are determined by the PW status, this configuration can associate static routes with the PW status, which reduces traffic loss during the traffic switchback.\nIf you have specified an outbound interface for a static route, you can no longer specify inherit-cost for the static route.\n-"
+        },
+        {
+            "Parameters": "permanent",
+            "Info": "Configures permanent advertisement of the static route.\n-"
+        },
+        {
+            "Parameters": "no-advertise",
+            "Info": "Prevents the static route from being advertised.\nIn network maintenance scenarios, static routes are required to verify services. If you do not want these static routes to be imported by other protocols, specify no-advertise to prevent these static routes from being advertised.\nno-advertise takes effect only when it is configured for all the active static routes with the same destination address and mask.\nAfter this function is enabled, the static route can be imported to the BGP routing table but is not advertised to BGP peers.\n-"
+        },
+        {
+            "Parameters": "no-install",
+            "Info": "Prevents the static route from being delivered to the FIB. If multiple static routes with the same prefix and mask length are configured using the command repeatedly, all the static routes can be delivered to the FIB as long as no-install is not specified in the command when configuring one of the static routes.\nThe no-install and no-advertise parameters are mutually exclusive.\n-"
+        },
+        {
+            "Parameters": "inter-protocol-ecmp",
+            "Info": "Enables inter-protocol load balancing among static routes and the routes of dynamic routing protocols.\nIf a static route is the optimal or suboptimal route and the optimal and suboptimal routes share the same priority, the static route and the routes of dynamic routing protocols can participate in inter-protocol load balancing. If inter-protocol load balancing among static routes and the routes of dynamic routing protocols is enabled for any static route in the routing table, the other static routes in the routing table that have the same prefix as that of this static route can also participate in inter-protocol load balancing with the routes of dynamic routing protocols.\nIntra-protocol and inter-process load balancing and inter-protocol load balancing are mutually exclusive. If you configure them both, the former takes effect.\nInter-protocol load balancing does not take effect in the following cases:\nAmong routes imported using the import-rib command and other routes.Among black-hole routes and non-black-hole routes.Among Vlink routes and non-Vlink routes.\n-"
+        },
+        {
+            "Parameters": "description text",
+            "Info": "Specifies the description of the static route.\nTo check the configured description, run the display this or display current-configuration command in the system view.\nThe description parameter cannot be followed by other parameters, such as bfd and preference. Otherwise, the configuration will be used only as the description. For example, if ip route-static 1.1.1.1 255.255.255.255 NULL0 description aa preference 10 is run, aa preference 10 is used as the description.\nThe value is a string of 1 to 150 characters, spaces supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] ip route-static 1.2.3.4 32 vpn-instance vpn1 10.11.0.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a simple network, static routes alone can ensure that the network runs properly. If the Router cannot run dynamic routing protocols to generate routes to the destination, configure static routes on the Router.\nPrerequisites\nBFD must have been enabled when you bind a static route to a BFD session.\nAn NQA test instance must have been created when you bind it to a static route.\nEFM must have been enabled when you associate EFM OAM with a static route.\nPrecautions\nWhen configuring unicast static routes, note the following rules:\nOnly public routes can be used for tunnel recursion.When deleting a route, you can specify preference, tag, or description. The parameters, however, are not displayed in the command line help.When both the destination IP address and the mask are 0.0.0.0, the configured route is a default route. If no matching route is available in the routing table, the default route is used for packet forwarding.Setting different priorities can implement different RM policies. For example, if the same priority is configured for multiple routes to the same destination, load balancing can be implemented. If different priorities are configured for multiple routes to the same destination, route backup can be implemented.An outbound interface, a next hop address, or both of them can be configured for a static route. Actually, each routing entry requires a next hop address. Before sending a packet, a device needs to search its routing table for the route matching the destination address in the packet based on the longest match rule. The device can find the associated link layer address to forward the packet only when the next hop address of the packet is available. When specifying an outbound interface, note the following:\n For a Point-to-Point (P2P) interface, if the outbound interface is specified, the next hop address is the address of the remote interface connected to the outbound interface. For example, when a GE interface is encapsulated with Point-to-Point Protocol (PPP) and obtains the remote IP address through PPP negotiation, you need to specify only the outbound interface rather than the next hop address. Non-Broadcast Multiple-Access (NBMA) interfaces are applicable to Point-to-Multipoint networks. Therefore, IP routes and the mappings between IP addresses and link layer addresses are required. In this case, you need to configure next hop addresses. An Ethernet interface is a broadcast interface and a virtual-template (VT) interface can be associated with multiple virtual access (VA) interfaces. If the Ethernet interface or the VT interface is specified as the outbound interface of a static route, the next hop cannot be determined because multiple next hops exist. Therefore, do not specify an Ethernet interface or a VT interface as the outbound interface unless necessary. If you need to specify a broadcast interface (such as an Ethernet interface) or a VT interface as the outbound interface, specify the associated next hop address.\nThe following routes are black-hole routes:\n Static routes with null0 as the outbound interface Static routes that recurse to black-hole routes\nIf the outbound interface and next-hop IP address configured for a static route do not reside on the same network segment, traffic may fail to be forwarded.If the IP address of the outbound interface configured for a static route is changed and the new IP address resides on a network segment different from that of the static route's next-hop IP address, traffic may fail to be forwarded.If the undo ip route-static all command is run, all static route configurations on the public network are deleted. Therefore, exercise caution when running the command.If two static routes with the same destination address are configured, one of the static routes has a next-hop IP address or outbound interface specified, and the other static route has a VPN instance (without an outbound interface or next-hop IP address, that is, the Next-Table function is configured) specified for the next hop, the latest configuration overrides the previous one.After the static route configuration is saved and the device is restarted in CFG mode, the configuration sequence in the configuration file may be different from that before the restart.To delete the configuration IPv4 unicast routes, run the undo ip route-static command."
+}

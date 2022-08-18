@@ -1,0 +1,69 @@
+{
+    "PageTitle": "rip metricin",
+    "FuncDef": "The rip metricin command sets the metric that is added to the routes carried in received RIP packets.\nThe undo rip metricin command restores the default metric.\nBy default, the metric is 0.",
+    "CLIs": [
+        "rip metricin <value>",
+        "rip metricin { { <aclNumber> | acl-name <aclName> } <metricInVal> }",
+        "rip metricin { ip-prefix <ip-prefix-name> <metricInVal> }",
+        "undo rip metricin"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "VBDIF interface view",
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "GMPLS-UNI interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "value",
+            "Info": "Specifies the metric that is added to received routes.\nThe value is an integer ranging from 0 to 15. Its default value is 0."
+        },
+        {
+            "Parameters": "aclNumber",
+            "Info": "Specifies the basic ACL number.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name aclName",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "metricInVal",
+            "Info": "Specifies the metric that is added to the routes that match the ACL or IP prefix list.\nThe value is an integer ranging from 1 to 15."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] rip metricin 12"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2000",
+            "[*HUAWEI-acl4-basic-2000] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] rip metricin 2000 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen an interface receives a route, RIP adds the interface metric to the route, and then adds the route to the routing table. Therefore, increasing the interface metric also increases the metric of RIP routes received by the interface.\nYou can specify the metric to be added to the RIP routes that match the ACL or IP prefix list by specifying . If a RIP route fails to match the ACL or IP prefix list, the metric is not added to the route.\nConfiguration Impact\nIf the metric of a route is greater than 16 after the configured value is added, 16 is used as its metric.\nIf the route is unreachable after the rip metricin command is run, run the undo rip metricin command to restore the default value."
+}

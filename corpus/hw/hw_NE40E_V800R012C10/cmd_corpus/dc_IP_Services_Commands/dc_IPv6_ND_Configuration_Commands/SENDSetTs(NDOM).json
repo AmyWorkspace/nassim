@@ -1,0 +1,65 @@
+{
+    "PageTitle": "ipv6 nd security timestamp",
+    "FuncDef": "The ipv6 nd security timestamp command sets timestamp parameters for an ND message.\nThe undo ipv6 nd security timestamp command restores default timestamp parameters of an ND message.\nBy default, the maximum difference between the receive time and send time of an ND message is 300 seconds; the maximum difference between the system time of the sender and the system time of the receiver is 1%; the maximum alive time of an ND message is 1 second.",
+    "CLIs": [
+        "ipv6 nd security timestamp { delta <delta-value> | drift <drift-value> | fuzz-factor <fuzz-value> } *",
+        "undo ipv6 nd security timestamp delta",
+        "undo ipv6 nd security timestamp drift",
+        "undo ipv6 nd security timestamp fuzz-factor",
+        "undo ipv6 nd security timestamp { delta <delta-value> | drift <drift-value> | fuzz-factor <fuzz-value> } *"
+    ],
+    "ParentView": [
+        "PW-VE interface view",
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "Port extension interface view",
+        "GE electrical interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delta delta-value",
+            "Info": "Specifies the maximum difference between the receive time and send time of an ND message.\nThe value is an integer ranging from 0 to 1000, in seconds."
+        },
+        {
+            "Parameters": "drift drift-value",
+            "Info": "Specifies the maximum difference between the system time of the sender and the system time of the receiver.\nThe value is an integer ranging from 0 to 100."
+        },
+        {
+            "Parameters": "fuzz-factor fuzz-value",
+            "Info": "Specifies the maximum alive time of an ND message. If the difference between the receive time and send time of an ND message is larger than delta-value but smaller than fuzz-value, the ND message can still be received by the interface.\nThe value is an integer ranging from 0 to 1000, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 nd security timestamp delta 10",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 nd security strict"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf an ND message to be sent to an interface is intercepted by an attacker, the ND message will be delayed. Therefore, you can run the ipv6 nd security timestamp command to set timestamp parameters. The system then calculates an allowed time range based on these timestamp parameters. If the difference between the send time and receive time of an ND message is out of the allowed time range, the ND message will be regarded invalid and discarded.\nIf no neighbor relationship is established between a local interface and a remote interface, the allowed time range can be calculated based on the following formula: -delta-value < (RDnew - TSnew) < +delta-valueIf a neighbor relationship has been established between a local interface and a remote interface, the allowed time range can be calculated based on the following formula: TSnew + fuzz-value > TSlast + (RDnew - RDlast) x (1 - drift-value) - fuzz-valueRDnew: the local time at which the new SEND message is receivedRDlast: the local time at which the last SEND message for this peer is acceptedTSnew: the time stamp value present in the new received SEND message (the time is recorded by the sender in the Timestamp option in the newly sent ND message)TSlast: the time stamp value of the last received and accepted SEND message (the time is recorded by the sender in the Timestamp option in the last sent ND message)\nFor example, Device A sends the first ND message to Device B at 4:00 (the system time of Device A). That is, TSnew is 4:00. Device B receives the ND message at 5:00 (the system time of Device B). That is, RDnew is 5:00. If the received ND message is considered secure, Device B records TSlast as 4:00 and RDlast as 5:00\nThen, Device A sends the second ND message to Device B at 4:05 (the system time of Device A). That is, TSnew is 4:05. Device B receives the ND message at 5:05 (the system time of Device B). That is, RDnew is 5:05. If the received ND message is considered secure, Device B records TSlast as 4:05 and RDlast as 5:05.\n\nPrerequisites\nIPv6 has been enabled on the involved interface using the ipv6 enable command in the interface view.\nFollow-up Procedure\nRun the ipv6 nd security strict command to enable the strict security mode on the interface."
+}

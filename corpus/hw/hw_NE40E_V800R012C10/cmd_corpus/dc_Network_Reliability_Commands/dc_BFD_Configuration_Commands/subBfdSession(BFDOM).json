@@ -1,0 +1,41 @@
+{
+    "PageTitle": "sub-session discriminator",
+    "FuncDef": "The sub-session discriminator command creates a sub-session for a BFD session group.\nThe undo sub-session discriminator command deletes a sub-session of a specified BFD session group.\nBy default, no sub-session creates for a BFD session group .",
+    "CLIs": [
+        "sub-session discriminator local <discr-value> remote <remote-value> select-board <slot-id>",
+        "undo sub-session discriminator local <discr-value> [ remote <remote-value> select-board <slot-id> ]"
+    ],
+    "ParentView": [
+        "BFD session view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "remote remote-value",
+            "Info": "Specifies the remote discriminator of a BFD sub-session.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "select-board slot-id",
+            "Info": "Specifies the slot ID of a board that a BFD sub-session state machine forcibly selects.\n-"
+        },
+        {
+            "Parameters": "local discr-value",
+            "Info": "Specifies the local discriminator of a BFD sub-session.\nThe value is an integer ranging from 1 to 16384."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel 1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] quit",
+            "[*HUAWEI] bfd atob bind mpls-te interface Tunnel 1 te-lsp group",
+            "[*HUAWEI-bfd-session-atob] sub-session discriminator local 10 remote 12 select-board 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe two devices are connected through an Eth-Trunk link, and the two member interfaces of the Eth-Trunk interface are located on two different interface boards. Normally, after a BFD session is bound to an Eth-Trunk interface, only one BFD session is created. BFD selects the interface board on which a member interface resides as the board of the state machine and monitors the member link. When the interface board where the BFD session resides is different from the interface board selected for the current service traffic, if the member interface of the BFD session, the member link, or the board of the state machine is faulty, the BFD module considers that the Eth-Trunk interface is faulty. Actually, the path used for transmitting service traffic is still functioning properly. Then, a BFD detection error occurs.\nThis problem can be solved by creating a BFD session group. Create a BFD session group for an inter-board Eth-Trunk link. The BFD session group contains two BFD sub-sessions. The service components detect only the status of the BFD session group. The status of a BFD session group depends on the status of the two BFD sub-sessions. As long as one BFD sub-session is Up, the status of the BFD session group is Up. When both sub-sessions are Down, the BFD session group is Down.\nPrerequisites\nBefore running the sub-session discriminator command, ensure that:\nBFD has been globally enabled using the bfd command in the system view.The BFD session group has been created using the bfd bind peer-ip group or bfd bind mpls-te group command in the system view based on the type of the service path bound to the BFD session group.\n\nPrecautions\nEach BFD session group can be configured with only two BFD sub-sessions.The board numbers of the two BFD sub-sessions in a BFD session group must be different."
+}

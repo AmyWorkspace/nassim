@@ -1,0 +1,75 @@
+{
+    "PageTitle": "import-route (RIP view)",
+    "FuncDef": "The import-route command imports other routing protocol routes to RIP.\nThe undo import-route command deletes other routing protocol routes from RIP.\nBy default, RIP does not import routes from any other processes or routing protocols.",
+    "CLIs": [
+        "import-route { { static | direct | bgp | unr } | { { rip | ospf | isis } [ <process-id> ] } } [ [ cost <cost> ] | [ route-filter <route-filter-name> | route-policy <route-policy-name> ] ] *",
+        "import-route bgp { cost transparent { route-filter <route-filter-name> | route-policy <route-policy-name> } | route-policy <route-policy-name> cost transparent | route-filter <route-filter-name> cost transparent | cost transparent }",
+        "undo import-route { { direct | static | bgp | unr } | { { ospf | rip | isis } [ <process-id> ] } }"
+    ],
+    "ParentView": [
+        "RIP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "static",
+            "Info": "Imports static routes.\n-"
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Imports direct routes.\n-"
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Imports BGP routes.\n-"
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Imports UNR routes.\n-"
+        },
+        {
+            "Parameters": "rip",
+            "Info": "Imports RIP routes.\n-"
+        },
+        {
+            "Parameters": "ospf",
+            "Info": "Imports OSPF routes.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Imports IS-IS routes.\n-"
+        },
+        {
+            "Parameters": "process-id",
+            "Info": "Specifies the ID of an IS-IS, OSPF, or RIP process.\nA device can import RIP routes from other processes with an ID different from the local one.\nThe value is an integer ranging from 1 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "cost cost",
+            "Info": "Specifies the cost for imported routes.\nThe value is an integer ranging from 0 to 15. The default value is 0."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter used to filter imported routes. A device imports only routes matching the policy.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy used to filter imported routes. A device imports only routes matching the policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "transparent",
+            "Info": "Retains the Multi_Exit Discriminator (MED) value of an imported BGP route as its cost. transparent takes effect only when the protocol is BGP.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] rip 1",
+            "[*HUAWEI-rip-1] import-route isis 7 cost 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] rip 1",
+            "[*HUAWEI-rip-1] import-route static route-filter filter1(10,11,12,13,14,15,16,17)"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen RIP and other routing protocols are deployed on a network, you can enable the traffic within a RIP domain to reach a destination outside the RIP domain using the import-route command.\nPrerequisites\nA RIP process has been created and the RIP view has been displayed using the rip command.\nConfiguration Impact\nImporting routes from other routing protocols to a RIP process can lead to routing loops. Therefore, exercise caution when running this command.\nPrecautions\nThe import-route command cannot import default routes."
+}

@@ -1,0 +1,46 @@
+{
+    "PageTitle": "isis prefix-sid",
+    "FuncDef": "The isis prefix-sid command configures a prefix segment ID (SID) for the IP address of a loopback interface.\nThe undo isis prefix-sid command deletes the prefix SID configured for the IP address of a loopback interface.\nBy default, no prefix SID is configured for the IP address of a loopback interface.",
+    "CLIs": [
+        "isis prefix-sid { absolute <sid-value> | index <index-value> } [ node-disable ]",
+        "isis process-id <process-id> prefix-sid { absolute <sid-value> | index <index-value> } [ node-disable ]",
+        "undo isis prefix-sid [ { absolute <sid-value> | index <index-value> } [ node-disable ] ]",
+        "undo isis process-id <process-id> prefix-sid [ { absolute <sid-value> | index <index-value> } [ node-disable ] ]"
+    ],
+    "ParentView": [
+        "Loopback interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "absolute sid-value",
+            "Info": "Specifies an absolute label value, which is effective SID value.\nThe value changes dynamically, depending on the actual situation of the equipment."
+        },
+        {
+            "Parameters": "index index-value",
+            "Info": "Specifies a relative label value, also called an offset value. A relative label value plus the smallest value in an SRGB is equal to an absolute value. Effective SID value = index-value + Start SRGB value.\nThe relative label value cannot be out of the SRGB configured locally.\nA relative label value must be unique in an IS-IS process.\nIf index-value is specified, a local node advertises index-value as a prefix SID. If sid-value is specified, a local node advertises the prefix SID equal to sid-value minus the start SRGB value.\nThe value is an integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "node-disable",
+            "Info": "Specifies to disable the N flag.\nThis parameter disables the TI-LFA algorithm from preferentially selecting nodes with the N flag being disabled.\n-"
+        },
+        {
+            "Parameters": "process-id process-id",
+            "Info": "Specifies the ID of an IS-IS multi-instance process.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing",
+            "[*HUAWEI-segment-routing] quit",
+            "[*HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] cost-style wide",
+            "[*HUAWEI-isis-1] segment-routing mpls",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface loopback0",
+            "[*HUAWEI-LoopBack0] isis enable 1",
+            "[*HUAWEI-LoopBack0] isis prefix-sid index 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe IP address of a loopback interface can identify a node. If a prefix SID is configured for the IP address, the prefix SID can also identify the node in the SR domain and guide packets to be forwarded to the local node along the shortest path.\nPrerequisites\nIS-IS has been enabled on a loopback interface using the isis enable command.\nSegment Routing has been enabled for a specific IS-IS topology using the segment-routing mpls command.\nPrecautions\nA loopback interface can be assigned an IP address. The prefix SID will not take effect until an IP address with a 32-bit mask is assigned to the loopback interface.\nThis command takes effect only on the primary IP address of a loopback interface.\nIf the IP prefix SID value is beyond the SRGB range, the IP prefix SID will not be advertised."
+}

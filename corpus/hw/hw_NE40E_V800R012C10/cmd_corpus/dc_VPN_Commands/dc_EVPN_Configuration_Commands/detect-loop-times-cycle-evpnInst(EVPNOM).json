@@ -1,0 +1,32 @@
+{
+    "PageTitle": "detect loop-times (SYS-EVPN-MAC-DUP view)",
+    "FuncDef": "The detect loop-times command sets loop detection parameters for MAC duplication suppression.\nThe undo detect loop-times command restores the default configuration.\nBy default, the loop detection period for MAC duplication suppression is 180s, and the threshold for MAC entry flaps is 5 within a detection period.",
+    "CLIs": [
+        "detect loop-times <loop-times> detect-cycle <detect-cycle-time>",
+        "undo detect loop-times detect-cycle",
+        "undo detect loop-times <loop-times> detect-cycle <detect-cycle-time>"
+    ],
+    "ParentView": [
+        "SYS-BD-EVPN-MAC-DUP view",
+        "SYS-EVPN-MAC-DUP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "loop-times",
+            "Info": "Specifies the maximum number of times MAC entry flapping is allowed in a detection period.\nThe value is an integer ranging from 3 to 10."
+        },
+        {
+            "Parameters": "detect-cycle detect-cycle-time",
+            "Info": "Specifies a detection period.\nThe value is an integer ranging from 60 to 900, in seconds. The value must be a multiple of 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn vpn-instance a",
+            "[*HUAWEI-evpn-instance-a] mac-duplication",
+            "[*HUAWEI-evpn-instance-a-mac-dup] detect loop-times 4 detect-cycle 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an EVPN E-LAN, two PEs may be interconnected both through network-side and access-side links. If this is the case, a BUM traffic loop and MAC route flapping both occur, preventing devices from working properly. In this case, MAC duplication suppression on the devices works. By default, the system checks the number of times a MAC entry flaps within a detection period (180s by default). If the number of MAC flaps exceeds the upper threshold (5 by default), the system considers MAC route flapping to be occurring on the network and consequently suppresses the flapping MAC routes. The suppressed MAC routes cannot be sent to a remote PE through a BGP EVPN peer relationship. To modify the detection period or the threshold for MAC entry flaps, run the detect loop-times command.\nConfiguration Impact\nIf the detect loop-times command is run in both EVPN instance view and global EVPN configuration view, the configuration in the EVPN instance view takes precedence.\nPrecautions\nThis command takes effect does not take effect for MAC/IP routes but takes effect only for MAC routes."
+}

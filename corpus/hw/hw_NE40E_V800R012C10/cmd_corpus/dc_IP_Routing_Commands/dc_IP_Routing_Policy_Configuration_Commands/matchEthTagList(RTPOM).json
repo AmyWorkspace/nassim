@@ -1,0 +1,26 @@
+{
+    "PageTitle": "if-match eth-tag-list",
+    "FuncDef": "The if-match eth-tag-list command configures a matching rule based on an Ethernet tag list.\nThe undo if-match eth-tag-list command cancels the configuration.\nBy default, no matching rule based on an Ethernet tag list is configured.",
+    "CLIs": [
+        "if-match eth-tag-list <list-name>",
+        "undo if-match eth-tag-list [ <list-name> ]"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "list-name",
+            "Info": "Specifies the name of an Ethernet tag list.\nThe value is a string of 1 to 63 case-sensitive characters. It cannot contain spaces."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] filter-list eth-tag abc",
+            "[*HUAWEI-eth-tag-list-abc] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] if-match eth-tag-list abc"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure a matching rule based on an Ethernet tag list, run the if-match eth-tag-list command.\nRun the route-policy command to configure a route-policy or enter the view of an existing route-policy.A route-policy may consist of multiple nodes, and the relationship among these nodes is OR. The system matches routes against the nodes in ascending order of node IDs. If a route matches a node in the route-policy, the route is not matched against the next node.Each node comprises a set of if-match and apply clauses. The if-match clauses define matching rules that are based on route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. Specifically, a route matches a node only when it meets all the if-match clauses of the node. The relationship among if-match clauses of the same node that are based on the same route attribute is OR; the system matches routes against the if-match clauses in order; if a route matches an if-match clause, the route matches the route-policy, and the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set route attributes for the route.\n\nPrerequisites\nAn Ethernet tag list has been created using the filter-list eth-tag command.\nPrecautions\nIf the if-match eth-tag-list command is run more than once, the latest configuration overrides the previous one."
+}

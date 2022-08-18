@@ -1,0 +1,35 @@
+{
+    "PageTitle": "web-server mode",
+    "FuncDef": "The web-server mode command configures the HTTP mode for the web server.\nThe undo web-server mode command restores the mandatory web server in a domain to the default setting.\nBy default, the mandatory web server is not configured.",
+    "CLIs": [
+        "web-server mode { get | post }",
+        "undo web-server mode post"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "get",
+            "Info": "Specifies the get mode for HTTP access.\n-"
+        },
+        {
+            "Parameters": "post",
+            "Info": "Specifies the post mode for HTTP access.\n-"
+        },
+        {
+            "Parameters": "mode",
+            "Info": "Specifies the HTTP mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] commit",
+            "[~HUAWEI-aaa-domain-huawei] web-server mode post"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMandatory web authentication is a function that enables the to redirect the access request of a user to the web server when a user accesses an unauthorized address before being authenticated, facilitating user authentication.\nIf a customized Portal attribute is configured, after the receives a user packet that needs to be redirected, the adds the keyword and corresponding attribute to the string of the redirection URL in the redirection packet and sends the packet to the user. After receiving this redirection packet, the user accesses the web server. The access packet carries the device IP address, user IP address, user's physical location information, and corresponding keyword. The forwards the packet to the web server. The web server parses the packet based on the keyword and pops up the request homepage to the user based on the user information in the packet.\nPrecautions\nThis command is supported only on the admin VS.\nWhen you run the web-server command in the AAA domain view, check whether the web authentication server to which the active/standby server in IP mode is the same as that in URL mode. If they are different, you cannot run the web-server command.The active web server must be different from the standby Web server.To delete the web authentication server, you must remove the binding of the web authentication server.You must bind the web authentication server in the system view; otherwise, the binding fails.If the web-auth-server source interface command is not run in the system view, run the web-server redirect-key mscg-ip command and the web-server command in the AAA domain view. In this way, a source interface's route can be used as a customized parameter of this source interface when an IPv6 user switches between the authentication domain and pre-authentication domain.\n\nWhen users are forcibly redirected to the web server, if you do not want the actual user MAC address or AP MAC address to be displayed, run the web-server redirect-key command with cipher aes128 configured. Then the user MAC address or AP MAC address is displayed in ciphertext. shared-key or shared-key-cipher in the web-server url-parameter { shared-key | shared-key-cipher } command is used to generate the ciphertext user MAC address or AP MAC address to be displayed.\nIn IPv6 forcible redirection scenarios, you must run the web-server identical-url command. This configuration allows IPv4 and IPv6 users to use identical URL and the IPv6 redirection web page to be pushed to users."
+}

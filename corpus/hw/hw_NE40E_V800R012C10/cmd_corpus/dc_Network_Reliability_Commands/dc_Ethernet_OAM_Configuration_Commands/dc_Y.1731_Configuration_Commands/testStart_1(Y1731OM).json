@@ -1,0 +1,82 @@
+{
+    "PageTitle": "eth-test start",
+    "FuncDef": "The eth-test start command starts an Ethernet test signal (ETH-test) test.",
+    "CLIs": [
+        "eth-test start mep <mep-id> { mac <mac-address> | remote-mep <rmep-id> } rate <rate-value> [ [ timeout <timeout-value> ] | [ pattern { zero-no-crc | zero-crc } ] | [ 8021p <8021p-value> ] | [ packet-size <packet-size-value> ] ] * [ out-of-service lck-level <level-value> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac mac-address",
+            "Info": "Specifies the destination MAC address of test packets.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        },
+        {
+            "Parameters": "remote-mep rmep-id",
+            "Info": "Specifies an RMEP ID.\nThe value is an integer ranging from 1 to 8191."
+        },
+        {
+            "Parameters": "rate rate-value",
+            "Info": "Specifies the rate at which test packets are sent.\nThe value is an integer ranging from 1 to 4294967295, in kbit/s."
+        },
+        {
+            "Parameters": "timeout timeout-value",
+            "Info": "Specifies the timeout period to wait for a response frame.\nThe value is an integer ranging from 1 to 1800, in seconds. The default value is 300."
+        },
+        {
+            "Parameters": "pattern",
+            "Info": "Specifies the format of a Test TLV carried in test packets.\n-"
+        },
+        {
+            "Parameters": "zero-no-crc",
+            "Info": "Specifies the format of a Test TLV carried in test packets.\nA CRC-32 value follows the all-zeros code type in a Test TLV."
+        },
+        {
+            "Parameters": "zero-crc",
+            "Info": "Specifies the format of a Test TLV carried in test packets.\nNo CRC-32 value follows the all-zeros code type in a Test TLV."
+        },
+        {
+            "Parameters": "8021p 8021p-value",
+            "Info": "Specifies a priority value for test packets.\nThe value is an integer ranging from 0 to 7. By default, the priority configured in an MA is used. If no priority value is specified in an MA, priority value 7 takes effect by default."
+        },
+        {
+            "Parameters": "packet-size packet-size-value",
+            "Info": "Specifies the size of each test packet.\nThe value is an integer ranging from 64 to 1518, in bytes. The default value is 64."
+        },
+        {
+            "Parameters": "out-of-service",
+            "Info": "Specifies the level of LCK packets sent during an offline ETH-test instance.\n-"
+        },
+        {
+            "Parameters": "lck-level level-value",
+            "Info": "Specifies the level of LCK packets sent during an offline ETH-test instance.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "mep mep-id",
+            "Info": "Specifies the ID of a MEP on which an ETH-test test is to be started.\nThe value is an integer ranging from 1 to 8191."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn",
+            "[*HUAWEI-evpn] quit",
+            "[*HUAWEI] evpn vpn-instance evrf",
+            "[*HUAWEI-evpn-instance-evrf] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] evpn binding vpn-instance evrf",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map evpn vpn-instance evrf",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet 1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] eth-test enable mep 1",
+            "[*HUAWEI-md-md1-ma-ma1] remote-mep mep-id 2 mac 00e0-fc12-7890",
+            "[*HUAWEI-md-md1-ma-ma1] commit",
+            "[*HUAWEI-md-md1-ma-ma1] eth-test start mep 1 remote-mep 2 rate 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo start an ETH-test instance, run the eth-test start command. After this command is run, test results are displayed, which contain the maximum link bandwidth and frame loss ratio.\nPrerequisites\nThe ETH-test function has been enabled using the eth-test enable command.\nPrecautions\nAfter this command is run, the ETH-test instance starts. It will stop after the test timeout period elapses or the eth-test stop command is run.\nRunning this eth-test start command to start a test affects network service transmission. Exercise caution when using this command."
+}

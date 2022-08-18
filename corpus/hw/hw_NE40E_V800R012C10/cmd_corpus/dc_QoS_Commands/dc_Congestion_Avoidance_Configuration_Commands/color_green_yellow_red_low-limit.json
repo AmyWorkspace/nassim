@@ -1,0 +1,46 @@
+{
+    "PageTitle": "color",
+    "FuncDef": "The color command sets the upper threshold, lower threshold (both in percentage), and drop percentage in WRED for packets in different colors.\nThe undo color command restores the default settings.\nBy default, the lower and upper thresholds percentage and discarding percentage are 100 percent, which means the tail drop.",
+    "CLIs": [
+        "color { green | yellow | red } low-limit <low-limit-percentage> high-limit <high-limit-percentage> discard-percentage <discard-percentage>",
+        "undo color { green | yellow | red }"
+    ],
+    "ParentView": [
+        "Flow queue WRED view",
+        "Port queue WRED view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "green",
+            "Info": "Indicates the packets colored green.\n-"
+        },
+        {
+            "Parameters": "yellow",
+            "Info": "Indicates the packets colored yellow.\n-"
+        },
+        {
+            "Parameters": "red",
+            "Info": "Indicates the packets colored red.\n-"
+        },
+        {
+            "Parameters": "low-limit low-limit-percentage",
+            "Info": "Specifies the lower threshold (in percentage) for WRED dropping. It is the proportion of the value of the lower threshold for packet discarding to the length of the flow queue.\nThe value is an integer that ranges from 0 to 100 (in percentage). The default value is 100."
+        },
+        {
+            "Parameters": "high-limit high-limit-percentage",
+            "Info": "Specifies the upper threshold (in percentage) for WRED dropping. It is the proportion of the value of the upper threshold for packet discarding to the length of the flow queue.\nThe value is an integer that ranges from 0 to 100 (in percentage). It must be greater than or equal to the lower threshold. The default value is 100."
+        },
+        {
+            "Parameters": "discard-percentage discard-percentage",
+            "Info": "Specifies the maximum discard percentage when the queue length is between the lower threshold and the upper threshold.\nThe value is an integer that ranges from 1 to 100. The default value is 100."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] flow-wred test",
+            "[*HUAWEI-flow-wred-test] color green low-limit 20 high-limit 60 discard-percentage 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSevere congestion is extremely harmful to network resources and therefore it must be solved. When traffic congestion intensifies, WRED can be used to proactively drop packets to prevent network overload.\nWhen traffic congestion occurs, queues start to buffer packets. Red packets are first dropped due to low lower threshold and high drop probability. As the queue length increases, the device drops green packets at last. If the queue length reaches the upper threshold of a color, packets of this color start to be tail dropped.\nWFQ queues share bandwidth based on the weight and are prone to traffic congestion. Using WRED for WFQ queues effectively resolves TCP global synchronization when traffic congestion occurs.\nPrecautions\nA WRED template can process packets of a maximum of three colors, namely, red, yellow, and green. The drop percentage of green packets is usually set to a small value whereas the upper threshold and the lower threshold are usually set to larger values. The drop percentage of red packets is set to a larger value whereas the upper threshold and lower threshold are set to small values. The values of yellow packets are between those of the preceding colors of packets.\nWhen the percentage of the actual length of a queue over the length of a FQ is less than the low limit percentage, the system does not drop packets.When the percentage of the actual length of a queue over the length of a FQ is between the low limit percentage and the high limit percentage, the system drops packets through the WRED mechanism. The longer the queue length, the higher the drop probability.When the percentage of the actual length of a queue over the length of a FQ is greater than the high limit percentage, the system drops all subsequent packets.\nBy default, the system uses a template with the upper threshold being 100, the lower threshold being 100, and the drop percentage being 100. The default template is called a tail-drop template.\nIt is recommended that you configure a WRED object for a flow queue of a different service type.\nIf the WRED threshold is too low, packets may be discarded because the configured queuing buffer is insufficient when burst traffic occurs. The WRED threshold needs to be consistent with the bandwidth configured by users. Using the default configuration of the system is recommended."
+}

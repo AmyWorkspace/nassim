@@ -1,0 +1,32 @@
+{
+    "PageTitle": "loop-detect eth-loop",
+    "FuncDef": "The loop-detect eth-loop command globally configures MAC hopping-based loop detection alarm parameters based on which a device monitors the frequency of MAC address hoppings in forwarding domains and reports an alarm if a loop occurs.\nThe undo loop-detect eth-loop command restores the default MAC hopping-based loop detection alarm parameters.\nBy default, the number of MAC address hoppings allowed in a detection cycle is 3, the detection time is 10s, and the number of detection cycles is 3.",
+    "CLIs": [
+        "loop-detect eth-loop loop-times <timevalue> detect-cycle <detect-cycleval> cycles <cycleval>",
+        "undo loop-detect eth-loop"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "detect-cycle detect-cycleval",
+            "Info": "Specifies a detection cycle.\nThe value is an integer ranging from 10 to 30, in seconds."
+        },
+        {
+            "Parameters": "cycles cycleval",
+            "Info": "Specifies the number of detection cycles. If a device detects a loop within a specified number of consecutive detection cycles, the device breaks the loop or reports an alarm.\nIf only one detection cycle is configured, the device determines that a loop has occurred if the number of MAC address hoppings in the detection cycle exceeds the number specified by loop-times. If multiple detection cycles are specified, the device considers that a loop has occurred if the number of MAC address hoppings exceeds the number specified by loop-times in the specified number of consecutive detection cycles, not in just one detection cycle.\nThe value is an integer ranging from 3 to 15."
+        },
+        {
+            "Parameters": "loop-times timevalue",
+            "Info": "Specifies the number of MAC address hoppings allowed in a detection cycle.\nIf a device detects more MAC address hoppings than the number specified by loop-times within a detection cycle specified by detect-cycle-time, the device determines that a loop has occurred.\nThe value is an integer ranging from 3 to 1000."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] loop-detect eth-loop loop-times 30 detect-cycle 10 cycles 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nGenerally, redundant links are used on an Ethernet switching network to provide link backup and enhance network reliability. The use of redundant links, however, may produce loops and cause broadcast storms and MAC address hopping. As a result, the communication quality deteriorates, and communication may even be interrupted. To resolve the loop problem, configure the global MAC hopping-based loop detection alarm function.\nTo configure MAC hopping-based loop detection alarm parameters, run the loop-detect eth-loop command in the system view.\nPrerequisites\nThe global MAC hopping-based loop detection alarm function has been enabled.\nPrecautions\nThe loop-detect eth-loop command allows a device only to send an alarm if a loop is detected and takes effect on all forwarding domains. However, if a forwarding domain has had the MAC flapping-based loop detection alarm function configured, this configuration takes precedence over that configured in the system view. For example, if the MAC flapping-based loop detection alarm function has been configured in the VSI view, this function takes effect, irrespective of whether this function is configured in the system view."
+}

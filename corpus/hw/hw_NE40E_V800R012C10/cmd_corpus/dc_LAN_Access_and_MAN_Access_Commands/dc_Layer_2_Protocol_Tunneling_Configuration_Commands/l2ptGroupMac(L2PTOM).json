@@ -1,0 +1,28 @@
+{
+    "PageTitle": "l2protocol-tunnel group-mac",
+    "FuncDef": "The l2protocol-tunnel group-mac command configures a device to replace the multicast destination MAC addresses in Layer 2 protocol data units (PDUs) with a specified multicast MAC address (group MAC address).\nThe undo l2protocol-tunnel group-mac command deletes the specified multicast MAC address (group MAC address) from Layer 2 PDUs of all Layer 2 protocols except STP or restores the default multicast MAC address in STP BPDUs.\nBy default, Layer 2 PDUs of all Layer 2 protocols do not have a default group MAC address.",
+    "CLIs": [
+        "l2protocol-tunnel <protocol> group-mac { group-mac }",
+        "undo l2protocol-tunnel <protocol>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "protocol",
+            "Info": "Replaces the destination MAC address in Layer 2 PDUs of a specified protocol with a specified multicast MAC address.\nThe protocol as follows:\nstplacpdtpgmrpgvrplldpvtpudldpagpcdpeoam3ahdldpmvrpmmrpe-lmisstp\nOne or up to all of the preceding Layer 2 protocols can be specified."
+        },
+        {
+            "Parameters": "group-mac group-mac",
+            "Info": "Specifies the multicast MAC address which is used to replace the destination MAC address in Layer 2 PDUs.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0.group-mac must start with 0x01 and cannot be any of the following multicast MAC addresses:\nMulticast MAC addresses that are in use on the local device0180-C200-0000 to 0180-C200-002F, which are used for BPDUs010F-E200-0004, which is used for Smart Link packets0100-0CCC-CCCC and 0100-0CCC-CCCD, which are reserved for specific purposes"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2protocol-tunnel stp group-mac 0100-5e00-0011"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSome Layer 2 protocols running between user networks, such as Multiple Spanning Tree Protocol (MSTP) and Link Aggregation Control Protocol (LACP), must traverse a backbone network to perform Layer 2 protocol calculation.\nGenerally, the destination MAC addresses in Layer 2 PDUs of the same Layer 2 protocol are the same. For example, the MSTP PDUs have a destination MAC address 0180-C200-0000. When a Layer 2 PDU reaches an edge device on a backbone network, the edge device cannot identify whether the PDU comes from a user network or the backbone network and sends the PDU to the CPU to calculate a spanning tree. As a result, the user network devices calculate a spanning tree with backbone network edge devices but not with user network devices.\nTo resolve this problem, run the l2protocol-tunnel group-mac command on backbone network edge devices to replace the multicast destination MAC addresses in Layer 2 PDUs with a specified multicast MAC address (group MAC address). This configuration allows Layer 2 PDUs to be tunneled so that user network devices can calculate a spanning tree.\nFollow-up Procedure\nThe backbone network edge devices determine whether to add an outer VLAN tag to the Layer 2 PDUs with a specified multicast MAC address (group MAC address) based on the configured Layer 2 protocol tunneling type.\nPrecautions\nThe specified multicast MAC address cannot be a multicast MAC address used by well-known protocols.\nIn VS mode, this command is supported only by the admin VS."
+}

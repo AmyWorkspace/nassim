@@ -1,0 +1,36 @@
+{
+    "PageTitle": "router-id (BGP multi-instance VPN instance IPv4 address family view)",
+    "FuncDef": "The router-id command configures router ID for BGP VPN instance IPv4/IPv6 address family.\nThe undo router-id command deletes the router ID configured for BGP VPN instance IPv4/IPv6 address family.\nBy default, if no router ID is configured for the BGP VPN instance IPv4/IPv6 address family, the BGP router ID (if any) is used. If no BGP router ID exists, an interface IP address in the VPN instance is used.",
+    "CLIs": [
+        "router-id { <router-id-value> | auto-select }",
+        "undo router-id"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "router-id-value",
+            "Info": "Specifies the router ID in the format of an IPv4 address.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "auto-select",
+            "Info": "Configures automatic route ID selection for the current BGP VPN instance IPv4/IPv6 address family.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vrf1",
+            "[*HUAWEI-bgp-instance-a-vrf1] router-id 1.1.1.1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy configuring router ID for BGP VPN instance IPv4/IPv6 address family, you can differentiate the configured router ID of BGP VPN instance IPv4/IPv6 address family from the BGP router ID.\nFor example, if two VPN instances named vrf1 and vrf2 are configured on a BGP device, and a BGP session needs to be established between the interfaces bound to the two VPN instances, you need to configure different router IDs for the two VPN instance IPv4 address families. If no router ID is configured for the two VPN instance IPv4 address families, no BGP session can be established because the two VPN instance IPv4 address families have the same router ID, which is consistent with the BGP router ID.\nRules for automatically selecting a router ID for a BGP VPN instance IPv4/IPv6 address family are as follows:\nIf loopback interfaces configured with IP addresses are bound to the VPN instance, the largest IP address among the IP addresses of the loopback interfaces is selected as the router ID.If no loopback interfaces configured with IP addresses are bound to the VPN instance, the largest IP address among the IP addresses of other interfaces bound to the VPN instance is selected as the router ID, regardless of whether the interface is Up or Down.\n\nConfiguration Impact\nIf a BGP session has been established in a BGP VPN instance IPv4/IPv6 address family, changing or deleting the configured router ID resets the BGP session. So, confirm the action before you use the router-id command.\nIf router-id is configured in both the BGP VPN instance IPv4 address family view and BGP VPN instance view, it will be displayed in both views. Deleting the configuration from one view will also delete the configuration from the other view."
+}

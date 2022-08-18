@@ -1,0 +1,27 @@
+{
+    "PageTitle": "retry-cycle",
+    "FuncDef": "The retry-cycle command sets a hold-off time to unsuppress MAC duplication.\nThe undo retry-cycle command restores the default configuration.\nBy default, MAC duplication is unsuppressed after 540 seconds.",
+    "CLIs": [
+        "retry-cycle <retry-times>",
+        "undo retry-cycle",
+        "undo retry-cycle <retry-times>"
+    ],
+    "ParentView": [
+        "EVPN-MAC-DUP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "retry-times",
+            "Info": "Specifies a hold-off time to unsuppress MAC duplication suppression.\nThe value is an integer ranging from 120 to 3600, in seconds. The value must be a multiple of 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn",
+            "[*HUAWEI-evpn] mac-duplication",
+            "[*HUAWEI-evpn-mac-dup] retry-cycle 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an EVPN E-LAN, two PEs may be interconnected both through network-side and access-side links. If this is the case, a BUM traffic loop and MAC route flapping both occur, preventing devices from working properly. MAC duplication suppression on the devices works. By default, the system checks the number of times a MAC entry flaps within a detection period. If the number of MAC flaps exceeds the upper threshold, the system considers MAC route flapping to be occurring on the network and consequently suppresses the flapping MAC routes. The suppressed MAC routes cannot be sent to a remote PE through a BGP EVPN peer relationship. Then, the system starts a hold-off timer to unsuppress MAC duplication. After the timer expires, MAC routes are automatically unsuppressed. To modify the hold-off time, run the retry-cycle command.\nConfiguration Impact\nIf the retry-cycle command is run in both EVPN instance view and global EVPN configuration view, the configuration in the EVPN instance view takes precedence.\nPrecautions\nThis command takes effect does not take effect for MAC/IP routes but takes effect only for MAC routes."
+}

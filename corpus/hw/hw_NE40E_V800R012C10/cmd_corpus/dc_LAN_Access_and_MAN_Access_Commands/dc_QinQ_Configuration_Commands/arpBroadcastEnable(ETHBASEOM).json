@@ -1,0 +1,31 @@
+{
+    "PageTitle": "arp broadcast enable",
+    "FuncDef": "The arp broadcast enable command enables the Address Resolution Protocol (ARP) broadcast function on a VLAN tag termination sub-interface.\nThe undo arp broadcast enable command disables the ARP broadcast function on a VLAN tag termination sub-interface.\n\nBy default, the ARP broadcast function is disabled on VLAN tag termination sub-interfaces.",
+    "CLIs": [
+        "arp broadcast enable",
+        "undo arp broadcast enable"
+    ],
+    "ParentView": [
+        "GE sub-interface view",
+        "PW-VE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "Global VE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE sub-interface view",
+        "50GE sub-interface view",
+        "100ge sub-interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] encapsulation dot1q-termination",
+            "[*HUAWEI-GigabitEthernet1/0/1.1] arp broadcast enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nWhen IP packets reach a VLAN tag termination sub-interface which does not have ARP entries configured, the sub-interface directly discards the IP packets if the ARP broadcast function is not enabled on the sub-interface. To enable the sub-interface to forward the IP packets, run the arp broadcast enable command.\n\nPrerequisites\n\nAn encapsulation type has been configured on the VLAN tag termination sub-interface using the encapsulation command.\nThe encapsulation dot1q-termination command is replaced by the control-vid dot1q-termination command.\n\nConfiguration Impact\n\nIf an IP packet is sent to a VLAN tag termination sub-interface without a corresponding ARP entry, the following situations are available:\n\nIf the access device can automatically send ARP packets, the IP packet can be forwarded without the need to configure the ARP broadcast function on the VLAN tag termination sub-interface.\nIf the access device cannot automatically send ARP packets,\nThe device discards the IP packet if the arp broadcast enable command is not configured on the VLAN tag termination sub-interface. In this case, the route with the VLAN tag termination sub-interface as the outbound interface is considered a black hole route.\nThe device sends tagged ARP broadcast packets through the VLAN tag termination sub-interface if the arp broadcast enable command is used on the VLAN tag termination sub-interface.\n\n\nPrecautions\n\nWhen you enable or disable the ARP broadcast function on a VLAN tag termination sub-interface, the routing status of the sub-interface goes Down and then Up. This may result in route flapping on the entire network, affecting service running.\nAfter the ARP broadcast function is enabled using the arp broadcast enable command, if a service packet is sent from a termination sub-interface but does not have an ARP entry, an ARP request is copied and sent in all VLANs of the sub-interface. If a large number of VLANs are configured, the number of ARP requests to be copied and sent is large, which may bring a heavy burden on the peer devices that receive the ARP requests. Consequently, the peer devices may encounter exceptions, such as high CPU usage and broadcast suppression. The local device may also fail to immediately send ARP requests as it is busy in processing packet copying, leading to ARP learning failures. To prevent this issue, you are advised to reduce the number of VLANs configured on sub-interfaces.\n\n\nTo address the problem that the device fails to send ARP packets in time due to replication of lots of packets, you can run the broadcast-copy fast enable command to enable the hardware replication function. However, this command configuration consumes multicast resources and the sending of lots of ARP packets causes heavy load on the peer device. Therefore, you are advised to contact Huawei engineers to determine whether to enable the hardware replication function."
+}

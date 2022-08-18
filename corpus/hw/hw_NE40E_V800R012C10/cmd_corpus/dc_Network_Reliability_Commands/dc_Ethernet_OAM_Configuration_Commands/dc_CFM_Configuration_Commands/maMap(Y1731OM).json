@@ -1,0 +1,156 @@
+{
+    "PageTitle": "map",
+    "FuncDef": "The map command associates a maintenance association (MA) with a service.\nThe undo map command deletes the association.\nBy default, an MA is not associated with any services.",
+    "CLIs": [
+        "map { vsi <vsi-name> | mpls { l2vpn <l2vpn-name> ce <ce-id> ce-offset <ce-offset-id> | l2vc [ <peer-ip-value> ] <l2vc-id> { raw | tagged } } | vlan <vlan-id> | l2tpv3 pw <pwname> | l2tpv3 local connection <l2tp-connection-name> | ccc <ccc-connection-name> | evpn vpn-instance <evpn-instance-name> | bridge-domain <bd-id> }",
+        "undo map { vsi | mpls { l2vc | l2vpn <l2vpn-name> } | vlan | l2tpv3 pw <pwname> | l2tpv3 local connection <l2tp-connection-name> | ccc | evpn [ vpn-instance <evpn-instance-name> ] | bridge-domain [ <bd-id> ] }"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies the name of a virtual switching instance (VSI).\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "mpls",
+            "Info": "Specifies the MPLS service.\n-"
+        },
+        {
+            "Parameters": "l2vpn l2vpn-name",
+            "Info": "Specifies the name of an L2VPN.\nThe value is a string of 1 to 31 case-sensitive characters. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "ce ce-id",
+            "Info": "Specifies a local CE ID.\nThe value is an integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "ce-offset ce-offset-id",
+            "Info": "Specifies the remote CE ID of an L2VPN connection.\nThe value is an integer ranging from 0 to 65534."
+        },
+        {
+            "Parameters": "l2vc l2vc-id",
+            "Info": "Specifies the ID of a Layer 2 virtual circuit (L2VC).\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "peer-ip-value",
+            "Info": "Specifies the IPv4 address of a peer.\nThe address is in dotted decimal notation."
+        },
+        {
+            "Parameters": "raw",
+            "Info": "Indicates that the interface type is raw.\n-"
+        },
+        {
+            "Parameters": "tagged",
+            "Info": "Indicates that the interface type is tagged.\n-"
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies the ID of a VLAN.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "l2tpv3 local connection l2tp-connection-name",
+            "Info": "Specifies the name of an L2TPv3 local connection.\nThe value is a string of 1 to 31 case-sensitive characters without spaces, question mark, and |, start with letter."
+        },
+        {
+            "Parameters": "l2tpv3 pw pwname",
+            "Info": "Specifies the name of an L2TPv3 PW.\nThe value is a string of 1 to 19 case-sensitive characters without spaces, question mark, and |, start with letter."
+        },
+        {
+            "Parameters": "ccc ccc-connection-name",
+            "Info": "Specifies a CCC connection name that uniquely identifies a CCC connection on a PE.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.\nThe string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "evpn",
+            "Info": "Specifies the EVPN instance.\n-"
+        },
+        {
+            "Parameters": "vpn-instance evpn-instance-name",
+            "Info": "Specifies the name of an EVPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "bridge-domain bd-id",
+            "Info": "Specifies the ID of a BD.\nThe value is an integer ranging from 1 to 16777215."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsi1",
+            "[*HUAWEI-vsi-vsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-vsi1-ldp] vsi-id 10",
+            "[*HUAWEI-vsi-vsi1-ldp] peer 2.2.2.2",
+            "[*HUAWEI-vsi-vsi1-ldp] quit",
+            "[*HUAWEI-vsi-vsi1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map vsi vsi1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 2",
+            "[*HUAWEI-vlan2] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map vlan 2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/2",
+            "[*HUAWEI-GigabitEthernet1/0/2] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] ccc 1 interface GigabitEthernet 1/0/1 out-interface GigabitEthernet 1/0/2",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map ccc 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn",
+            "[*HUAWEI-evpn] quit",
+            "[*HUAWEI] evpn vpn-instance evrf",
+            "[*HUAWEI-evpn-instance-evrf] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map evpn vpn-instance evrf"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[*HUAWEI] quit",
+            "[*HUAWEI-bd10] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map bridge-domain 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBefore you use Y.1731 to collect link performance statistics or detect faults in VSI, virtual leased line (VLL), L2TPv3, EVPN or VLAN networking, you must run the map command to associate an MA with a service.\nLDP VLLs are associated with VC IDs on AC interfaces. On a device's AC interfaces, LDP VLLs cannot be associated with the same VC ID. Therefore, for LDP VLLs, a VC ID can be used to uniquely determine one PW. For BGP VLLs, the CE-associated label advertised by BGP can be used to uniquely determine one PW. Therefore, for BGP VLLs, a PW must be determined through a VPN name, CE ID, and CE offset.\nPrerequisites\nA maintenance domain (MD) has been created using the cfm md command, and an MA has been configured using the ma command.\nPrecautions\nYou can set up or delete the association between an MA and a service only when neither a MEP nor an RMEP is configured on the local device in the MA.\nTo modify the association between an MA and a service, delete the preceding association using the undo map command. Then you can run the map command to associate the MA with another service."
+}

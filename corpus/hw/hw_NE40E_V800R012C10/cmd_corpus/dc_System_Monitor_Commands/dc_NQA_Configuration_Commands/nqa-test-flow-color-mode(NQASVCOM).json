@@ -1,0 +1,53 @@
+{
+    "PageTitle": "color-mode",
+    "FuncDef": "The color-mode command enables the color mode for NQA test flows and specifies the mapping between 802.1p or DSCP priority values and colors.\nThe undo color-mode command disables the color mode for an NQA test flow.\nBy default, the color mode is disabled for NQA test flows.",
+    "CLIs": [
+        "color-mode { 8021p green <begin-8021p-value> [ <end-8021p-value> ] yellow <begin-8021p-value> [ <end-8021p-value> ] | dscp green <begin-dscp-value> [ <end-dscp-value> ] yellow <begin-dscp-value> [ <end-dscp-value> ] }",
+        "undo color-mode"
+    ],
+    "ParentView": [
+        "NQA test flow view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "8021p",
+            "Info": "Indicates the 802.1p priority.\n-"
+        },
+        {
+            "Parameters": "green begin-8021p-value",
+            "Info": "Specifies the 802.1p priority start value for green packets.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "green begin-dscp-value",
+            "Info": "Specifies the DSCP priority start value for green packets.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "end-8021p-value",
+            "Info": "Specifies the 802.1p priority end value.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "yellow begin-8021p-value",
+            "Info": "Specifies the 802.1p priority start value for yellow packets.\nThe value is an integer ranging from 0 to 7."
+        },
+        {
+            "Parameters": "yellow begin-dscp-value",
+            "Info": "Specifies the DSCP priority start value for yellow packets.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "dscp",
+            "Info": "Indicates the end DSCP .\n-"
+        },
+        {
+            "Parameters": "end-dscp-value",
+            "Info": "Specifies the end DSCP priority value.\nThe value is an integer ranging from 0 to 63."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-flow 1",
+            "[*HUAWEI-nqa-testflow-1] color-mode 8021p green 0 3 yellow 0 7"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nApplication-specific frames in the same test instance can be colored based on performance sensitivities. For example, voice traffic requires a low packet loss ratio and a short delay, and therefore, voice frames are marked green. Files using transfer protocols, for example, TCP, have a low sensitivity of transmission issues. Therefore, file frames are marked yellow. To enable the color mode and specify the mapping between packet priorities and colors, run the color-mode command on the initiator of an Ethernet service activation test. This command allows services with colors to be processed based on mapped priorities on a carrier network.\nAfter this command is run, you can view the performance indicators of packets marked in different colors, including the delay, jitter, and packet loss rate, in the display nqa results command output.\nThis command affects the EIR test and traffic policing test.\nPrecautions\nThe same priority can be mapped to both yellow and green frames.\nFor the same test flow, a range can be specified only in one of the traffic-type, vlan, pe-vid, udp destination-port, and udp source-port commands. In addition, the difference between the start and end values cannot be more than 127, and the end value must be greater than the start value.\nThe start and end addresses in a specified MAC or IP address range can contain only one different byte."
+}

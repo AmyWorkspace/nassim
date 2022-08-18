@@ -1,0 +1,42 @@
+{
+    "PageTitle": "source-ip (GRPC server view)",
+    "FuncDef": "The source-ip command configures a source IPv4 address listened during Telemetry dynamic subscription.\nThe undo source-ip command deletes a source IPv4 address listened during Telemetry dynamic subscription.\nBy default, no source IPv4 address is configured for Telemetry dynamic subscription.",
+    "CLIs": [
+        "source-ip <ip-address> [ vpn-instance <vpn-instance-name> ]",
+        "undo source-ip [ <ip-address> [ vpn-instance <vpn-instance-name> ] ]"
+    ],
+    "ParentView": [
+        "GRPC server view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies a source IPv4 address to be listened.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance to be bound to the source IPv4 address to be listened.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.\nThe value must be the name of an existing VPN instance."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] grpc",
+            "[~HUAWEI-grpc] grpc server",
+            "[~HUAWEI-grpc-server] source-ip 10.10.1.2"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 2:2 export-extcommunity",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] grpc",
+            "[*HUAWEI-grpc] grpc server",
+            "[*HUAWEI-grpc-server] source-ip 10.10.1.2 vpn-instance vpn1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a collector functioning as a client initiates a connection to a device functioning as a server, the data sampled is dynamically subscribed to. In this case, on the server, configure a source IPv4 address to be listened. A connection can then be established between the server and client.\nPrecautions\nTo ensure that routes are reachable between the server and client, you can set the source IP address on the server to 0.0.0.0. In this case, the client can certainly establish a connection with the server. If you do not set the source IPv4 address to 0.0.0.0, ensure that it is an existing service interface IP address. In this case, the client establishes a connection with the server based on the source IPv4 address configured.\nTo delete a configured source IPv4 address in the gRPC server view, ensure that the gRPC service is disabled."
+}

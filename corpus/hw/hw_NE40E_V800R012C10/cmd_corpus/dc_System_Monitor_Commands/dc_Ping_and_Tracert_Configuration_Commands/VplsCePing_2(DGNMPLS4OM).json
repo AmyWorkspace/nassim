@@ -1,0 +1,45 @@
+{
+    "PageTitle": "ce-ping evpn source-ip",
+    "FuncDef": "The ce-ping evpn source-ip command detects connectivity between a CE and a PE in an Ethernet VPN (EVPN).",
+    "CLIs": [
+        "ce-ping <ip-address> evpn <evpn-name> source-ip <source-ip-address> [ mac <mac-address> | count <count> | interval <interval> ] *"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies a destination IP address for CE ping.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "evpn evpn-name",
+            "Info": "Specifies the name of an EVPN for CE ping.\nThe name is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "source-ip source-ip-address",
+            "Info": "Specifies a source IP address for CE ping.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mac mac-address",
+            "Info": "Specifies a source MAC address for CE ping.\nThe value ranges from E024-7FA4-D2CB to E024-7FA4-D2DA. Note that the following conditions must be met:\nEach device can be assigned only one source MAC address at one time and the source MAC address must be unique.The source MAC address for CE ping must not be used by interfaces on the device.\nBy default, the system automatically chooses one from the 16 dedicated MAC addresses for CE ping as the source MAC address and encapsulates it in the packet. You are advised to manually assign a source MAC address for each device because different devices may choose the same MAC address.\nIf a user runs the mac-address blackhole command to set one of the dedicated MAC addresses as a blackhole MAC address, the MAC address cannot be used as the source MAC address for CE ping any longer."
+        },
+        {
+            "Parameters": "count count",
+            "Info": "Specifies the number of CE ping messages to be sent.\nThe value is an integer ranging from 1 to 255. The default value is 3."
+        },
+        {
+            "Parameters": "interval interval",
+            "Info": "Specifies the interval for sending CE ping messages.\nThe value is an integer ranging from 1 to 10, in seconds. The default value is 3 seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ce-ping 10.1.1.1 evpn huawei123 source-ip 10.1.1.12 mac e024-7fa4-d2cb interval 2 count 5",
+            "Info: If the designated source IP address is in use, it could cause the abnormal data transmission in EVPN network. Are you sure the source-ip is unused in this EVPN? [Y/N]:y",
+            "Ce-ping is in process...",
+            "10.1.1.1 is used by 00-e0-fc-12-34-56"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an EVPN scenario, to detect reachability to a CE in a specified EVPN broadcast domain, run the ce-ping evpn source-ip command on a PE in the MPLS network. The PE sends an ARP request to the specified EVPN broadcast domain for the MAC address of the destination CE. If the PE can receive an ARP response from the CE, the PE determines that the CE is reachable.\nPrecautions\nWhen you run the command to specify the source IP address, note the following:\nThe specified source IP address must be on the same network segment as the IP address of the CE. Otherwise, when the CE receives CE ping messages, it regards them invalid and discards them.The specified source IP address must be unused in the EVPN broadcast domain. Otherwise, CE ping messages will not be forwarded properly, which causes users who use the source IP address unable to access the network. If the specified source IP address happens to be the IP address of the gateway, all packets within the EVPN cannot be properly forwarded, making all hosts within the EVPN unable to access the network.\nTo avoid the preceding problems, the system will inform you that you must use an unused IP address as the source IP address after running the ce-ping evpn command and instruct you to enter Y for confirmation."
+}

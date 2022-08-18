@@ -1,0 +1,65 @@
+{
+    "PageTitle": "summary(IS-IS view)",
+    "FuncDef": "The summary command enables IS-IS route summarization.\nThe undo summary command disables IS-IS route summarization.\nBy default, IS-IS route summarization is disabled.",
+    "CLIs": [
+        "summary <ip-address> <mask> [ avoid-feedback | generate_null0_route | tag <tag-value> | cost <cost-value> | [ level-1 | level-2 | level-1-2 ] ] *",
+        "undo summary <ip-address> <mask> [ level-1 | level-2 | level-1-2 ]"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the address segment of the summary route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the address mask of the summary route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "avoid-feedback",
+            "Info": "Avoid learning your own published aggregation routes from another level. If there is a learning route in another level that is the same as the summary address, it is assumed that the route is infiltrated into another level and published by other routers after they have learned the summary route published by the local router. At this point, avoid-feedback occurs and the route becomes inactive, removed from the RM routing table.\n-"
+        },
+        {
+            "Parameters": "generate_null0_route",
+            "Info": "Generates Null 0 routes to prevent routing loops.\n-"
+        },
+        {
+            "Parameters": "tag tag-value",
+            "Info": "Specifies an administrative tag.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "cost cost-value",
+            "Info": "Specifies a cost for the summary route.\nThe value is an integer and varies with the cost type.\nWhen the cost type is narrow, narrow-compatible, or compatible, the value ranges from 1 to 63.When the cost type is wide or wide-compatible, the value ranges from 1 to 16777215.\nThe cost type can be configured using the cost-style command."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Summarizes Level-1 routes.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Summarizes Level-2 routes.\nIf no level is specified, Level-2 routes are summarized.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Summarizes Level-1 and Level-2 routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] summary 10.10.0.0 255.0.0.0"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip topology red",
+            "[*HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] cost-style wide",
+            "[*HUAWEI-isis-1] topology red topology-id 10",
+            "[*HUAWEI-isis-1-topology-red] summary 10.0.0.0 255.0.0.0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe IS-IS routing table of a device on a medium or large IS-IS network contains a large number of routing entries. Storing the routing table consumes a large number of memory resources, and transmitting and processing routes consume lots of network resources. IS-IS route summarization can solve this problem.\nRoutes with the same IPv4 prefix can be summarized into one route. The system then advertises the summary route to other network segments. Route summarization on a large-scale IS-IS network reduces the number of routes in a routing table and minimizes system resource consumption. In addition, if a specific link frequently alternates between Up and Down, the links not involved in the route summarization will not be affected, which prevents route flapping and improves network security.\nConfiguring route summarization does not affect the routing table on a local device. Each specific route is displayed in the routing table. Configuring route summarization, however, reduces the number of LSPs to be flooded. Any device that receives the LSP from the summarization-capable router has only one summary route in its routing table.\nPrerequisites\nAn IS-IS process has been created and the IS-IS view has been displayed using the isis command.\nPrecautions\nThe routes to be summarized can be the routes discovered by IS-IS or routes imported from other routing protocols. The cost of the summarized route is the smallest cost of the routes that are summarized."
+}

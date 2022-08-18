@@ -1,0 +1,35 @@
+{
+    "PageTitle": "gtsm peer valid-ttl-hops",
+    "FuncDef": "The gtsm peer valid-ttl-hops command configures GTSM on a specified LDP peer.\nThe undo gtsm command deletes GTSM configured on all LDP peers or a specified LDP peer.\nBy default, GTSM is not configured on any LDP peer.",
+    "CLIs": [
+        "gtsm peer <ip-address> valid-ttl-hops <hops>",
+        "undo gtsm { all | peer <ip-address> }"
+    ],
+    "ParentView": [
+        "MPLS-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "valid-ttl-hops hops",
+            "Info": "Specifies the maximum number of valid hops allowed by GTSM.\nThe value is an integer that ranges from 1 to 255."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates all LDP peers.\n-"
+        },
+        {
+            "Parameters": "peer ip-address",
+            "Info": "Specifies the LDP transport address of the LDP peer.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls ldp",
+            "[*HUAWEI-mpls-ldp] gtsm peer 2.2.2.2 valid-ttl-hops 254"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe GTSM checks TTL values to verify packets and defend devices against attacks. LDP peers are configured with the GTSM and a valid TTL range to check TTLs in LDP packets exchanged between them. If the TTL in an LDP packet is not in the valid range, this LDP packet is considered invalid and discarded. The GTSM defends against CPU-based attacks initiated using a large number of forged packets and protects upper-layer protocols.\nIf the value of hops is set to the maximum number of valid hops permitted by GTSM, when the TTL values carried in the packets sent by an LDP peer are within the range [255 - Number of hops + 1, 255], the packets are received; otherwise, the packets are discarded.\nConfiguring the GTSM on both ends of an LDP session is recommended.\nPrerequisites\nMPLS LDP has been enabled globally using the mpls ldp (system view) command.\nPrecautions\nThe valid TTL range is from 1 to 255 or from 1 to 64, depending on the specific vendor. If a Huawei device is connected to a non-Huawei device, set hops to a value in a valid range that both devices support; otherwise, the Huawei device will discard packets sent by the non-Huawei device, resulting in LDP session interruption."
+}

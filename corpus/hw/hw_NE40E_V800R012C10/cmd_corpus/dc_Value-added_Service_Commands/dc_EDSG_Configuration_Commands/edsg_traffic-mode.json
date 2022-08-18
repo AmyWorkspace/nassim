@@ -1,0 +1,31 @@
+{
+    "PageTitle": "edsg traffic-mode rate statistic together",
+    "FuncDef": "The edsg traffic-mode rate statistic together command configures EDSG service rate limiting and traffic statistics policies.\nThe undo edsg traffic-mode rate statistic together command restores the default configuration.\nBy default, the rate of service traffic is separately limited and is not affected by user bandwidth. Only user traffic is counted as user traffic.",
+    "CLIs": [
+        "edsg traffic-mode rate { separate | together } statistic together",
+        "undo edsg traffic-mode [ rate { separate | together } statistic together ]"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "separate",
+            "Info": "Performs separate rate limiting on service traffic.\n-"
+        },
+        {
+            "Parameters": "together",
+            "Info": "Performs rate limiting on service traffic and then user traffic.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain domain_test1",
+            "[*HUAWEI-aaa-domain-domain_test1] commit",
+            "[~HUAWEI-aaa-domain-domain_test1] edsg traffic-mode rate separate statistic together"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf EDSG service traffic consumes the user traffic bandwidth, run the edsg traffic-mode rate together statistic together command so that rate limiting is performed on user traffic after it is performed on service traffic. For example, when the service traffic bandwidth is 2 Mbit/s and the user traffic bandwidth is 5 Mbit/s, if a user accesses services and consumes 2 Mbit/s service traffic bandwidth, the user can only use the remaining 3 Mbit/s user traffic bandwidth to access other services.\nImplementation Procedure\nIf the edsg traffic-mode rate statistic together command is run more than once, the latest configuration overrides the previous one. Therefore, this command configuration takes effect for subsequent login users.\nPrecautions\nThis command is supported only on the admin VS.\nThe EDSG service rate limiting and traffic statistics policies are independent. After the edsg traffic-mode rate statistic together command is run, both service traffic and user traffic are counted as user accounting traffic but only service traffic is counted as service accounting traffic, irrespective of whether rate limiting is performed separately.\nFor users' EDSG service traffic and non-EDSG service traffic:\nThe edsg traffic-mode rate separate statistic together command can be run to configure rate limit separation and statistical unseparation. This function requires that CAR rate limiting or HQOS rate limiting be implemented for user traffic and EDSG service traffic at the same time.\nThe edsg traffic-mode rate together statistic together command can be run to configure rate limit unseparation and statistical unseparation. After this function is enabled, the EDSG service traffic statistics are inaccurate when CAR rate limiting is used for EDSG service traffic and SQ rate limiting is used for user traffic."
+}

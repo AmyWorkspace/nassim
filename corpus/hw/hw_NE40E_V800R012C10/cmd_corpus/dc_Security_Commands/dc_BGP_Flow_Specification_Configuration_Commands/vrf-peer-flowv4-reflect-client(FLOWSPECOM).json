@@ -1,0 +1,35 @@
+{
+    "PageTitle": "peer reflect-client (BGP-Flow VPN instance IPv4 address family view)",
+    "FuncDef": "The peer reflect-client command configures the local router as the route reflector and the peer or peer group as the client of the route reflector.\nThe undo peer reflect-client command cancels the configuration.\nBy default, the route reflector and its client are not configured.",
+    "CLIs": [
+        "peer <ipv4-address> reflect-client",
+        "undo peer <ipv4-address> reflect-client"
+    ],
+    "ParentView": [
+        "BGP-Flow VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nIt is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-vpna] peer 1.1.1.1 as-number 100",
+            "[*HUAWEI-bgp-instance-vpna] quit",
+            "[*HUAWEI-bgp] ipv4-flow vpn-instance vpna",
+            "[*HUAWEI-bgp-flow-vpna] peer 1.1.1.1 enable",
+            "[*HUAWEI-bgp-flow-vpna] peer 1.1.1.1 reflect-client"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFull-meshed connections need to be established between IBGP peers to ensure the connectivity between the IBGP peers. If there are n Devices in an AS, n (n-1)/2 IBGP connections need to be established. A large number of IBGP peers use a lot of network and CPU resources. An RR can be used to solve the problem.\nIn an AS, one Device functions as an RR and other Devices function as clients. The clients establish IBGP connections with the RR. The RR and its clients form a cluster. The RR reflects routes among the clients, and therefore the clients do not need to establish any BGP connection. Assume that an AS has n Devices. If one of the Devices functions as an RR, and other Devices function as clients, the number of IBGP connections to be established is n-1. This means that network and CPU resources are greatly reduced.\nAn RR is easy to configure, because it needs to be configured only on the device that functions as a reflector and clients do not need to know that they are clients."
+}

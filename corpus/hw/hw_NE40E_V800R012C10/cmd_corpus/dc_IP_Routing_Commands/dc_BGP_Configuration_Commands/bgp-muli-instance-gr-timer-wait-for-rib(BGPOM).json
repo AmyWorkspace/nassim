@@ -1,0 +1,36 @@
+{
+    "PageTitle": "graceful-restart timer wait-for-rib (BGP multi-instance view)",
+    "FuncDef": "The graceful-restart timer restart command sets the maximum duration on a device for each peer to wait for its BGP peer relationship to be reestablished with the device.\nThe undo graceful-restart timer restart command deletes the configured duration.\nThe graceful-restart timer wait-for-rib command sets the maximum duration for a BGP restarter to wait for the End-of-RIB flag from each peer.\nThe undo graceful-restart timer wait-for-rib command deletes the configured duration.\n\nBy default, each peer specified on a device waits for its BGP peer relationship to be reestablished with the device for a maximum of 150s.\n\n\nBy default, a BGP restarter waits for the End-of-RIB flag from each peer for a maximum of 600s.",
+    "CLIs": [
+        "graceful-restart timer wait-for-rib <time>",
+        "graceful-restart timer restart <restart-time>",
+        "undo graceful-restart timer wait-for-rib",
+        "undo graceful-restart timer restart"
+    ],
+    "ParentView": [
+        "BGP multi-instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time",
+            "Info": "Specifies the maximum duration for a BGP restarter to wait for the End-of-RIB flag from each peer.\nThe value is an integer ranging from 3 to 3000, in seconds."
+        },
+        {
+            "Parameters": "restart-time",
+            "Info": "Specifies the maximum duration on a device for each peer to wait for its BGP peer relationship to be reestablished with the device.\nThe value is an integer ranging from 3 to 3600, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] graceful-restart timer wait-for-rib 100"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] graceful-restart timer restart 250"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo set the maximum duration on a device for each peer to wait for its BGP peer relationship to be reestablished with the device, run the graceful-restart timer restart command. After this command is run, if any peer detects that the device is down, the BGP session on the peer enters the GR process. If the peer relationship is not reestablished within the specified duration, the BGP session exits from the GR process, and the peer selects the optimal route among reachable routes.To set the maximum duration for a BGP restarter to wait for the End-of-RIB flag from each peer, run the graceful-restart timer wait-for-rib command. After the BGP session between the BGP restarter and any peer is reestablished, if the BGP restarter does not receive the End-of-RIB flag from this peer within the specified duration, the BGP session on the device exits from the GR process, and the device selects the optimal route among reachable routes.\nConfiguration Impact\nIf the graceful-restart timer restart or graceful-restart timer wait-for-rib command is run more than once, the latest configuration overrides the previous one. After the graceful-restart timer restart command is run on a device, all the device's BGP peer relationships will be disconnected and then reestablished.\nPrecautions\nIf there are a large number of routes, setting time to a large value is recommended."
+}

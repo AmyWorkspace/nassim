@@ -1,0 +1,37 @@
+{
+    "PageTitle": "igmp-snooping version (VSI E-Tree view)",
+    "FuncDef": "The igmp-snooping version command sets a version for IGMP messages that can be processed by IGMP snooping.\nThe undo igmp-snooping version command restores the default configuration.\nBy default, IGMP snooping can process IGMPv1 and IGMPv2 messages but cannot process IGMPv3 messages.",
+    "CLIs": [
+        "igmp-snooping version <number>",
+        "undo igmp-snooping version"
+    ],
+    "ParentView": [
+        "VSI-STATIC view",
+        "VSI-BD view",
+        "VSI-AUTO view",
+        "VSI-DEFAULT view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "number",
+            "Info": "Specifies an IGMP version number.\nThe value is 1, 2, or 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] vsi v1",
+            "[*HUAWEI-vsi-v1] pwsignal ldp",
+            "[*HUAWEI-vsi-v1-ldp] vsi-id 200",
+            "[*HUAWEI-vsi-v1-ldp] quit",
+            "[*HUAWEI-vsi-v1] igmp-snooping enable",
+            "[*HUAWEI-vsi-v1] igmp-snooping version 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThis command is used on a Layer 2 device that is connected to hosts that support different IGMP versions.\nIf the version number is set to 1, only IGMPv1 messages can be processed. If the version number is set to 2, IGMPv1 and IGMPv2 messages can be processed. If the version number is set to 3, IGMPv1, IGMPv2, and IGMPv3 messages can be processed.\nConfiguration Impact\nIf the IGMP snooping version is changed from 3 to 2:\nThe system deletes all dynamically generated IGMP forwarding entries.The system processes statically configured Layer 2 multicast forwarding entries as follows:If interfaces are configured to statically join multicast groups with no multicast source specified, the system does not delete the static IGMP forwarding entries.If interfaces are configured to statically join source-specific multicast groups, the system deletes the static forwarding entries. When the IGMP snooping version is changed to 3, the system re-generates forwarding entries.\n\nPrecautions\nThis command fails to be run in a VSI that has been bound to a BD."
+}

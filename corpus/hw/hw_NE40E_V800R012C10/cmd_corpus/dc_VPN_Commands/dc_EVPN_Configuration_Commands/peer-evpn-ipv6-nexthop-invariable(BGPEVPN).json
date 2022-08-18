@@ -1,0 +1,28 @@
+{
+    "PageTitle": "peer next-hop-invariable (BGP-EVPN address family view) (IPv6)",
+    "FuncDef": "The peer next-hop-invariable command enables a BGP EVPN speaker to keep the next hops of routes unchanged when the speaker advertises these routes to EBGP EVPN peers and to apply the original next hops of locally imported routes when the speaker advertises these routes to IBGP EVPN peers.\nThe undo peer next-hop-invariable command restores the default configuration.\nBy default, the function of keeping the next hops of routes unchanged is not enabled.",
+    "CLIs": [
+        "peer <peerIpv6Addr> next-hop-invariable",
+        "undo peer <peerIpv6Addr> next-hop-invariable"
+    ],
+    "ParentView": [
+        "BGP-EVPN address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerIpv6Addr",
+            "Info": "Specifies the IPv6 address of a peer.\nThe prefix is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 2001:db8:1::1 as-number 200",
+            "[*HUAWEI-bgp] l2vpn-family evpn",
+            "[*HUAWEI-bgp-af-evpn] peer 2001:db8:1::1 enable",
+            "[*HUAWEI-bgp-af-evpn] peer 2001:db8:1::1 next-hop-invariable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default:\nA BGP EVPN speaker changes the next hops of routes to the interface that it uses to establish EBGP EVPN peer relationships before advertising these routes to EBGP EVPN peers.\nA BGP EVPN speaker changes the next hops of routes imported from EBGP EVPN to the interface that it uses to establish IBGP EVPN peer relationships before advertising these routes to IBGP EVPN peers.\nAn RR does not change the next hops of routes imported from IBGP EVPN when advertising these routes to IBGP EVPN peers.\nA BGP EVPN speaker changes the next hops of routes to the interface that it uses to establish IBGP EVPN peer relationships before advertising these routes to IBGP EVPN peers.\nIn an inter-AS scenario where an EVPN Route Reflector (RR) is used, the peer next-hop-invariable command needs to be run on the RR to prevent the RR from modifying the Next_Hops of routes before advertising the routes to EBGP peers. This ensures that the remote PE recurses routes to the LSP destined for the local PE during traffic transmission.\nIn a VXLAN scenario, when an EBGP EVPN peer relationship is established between VTEPs, to ensure that EVPN routes can be correctly sent, run the peer next-hop-invariable command on the VTEPs.\nPrerequisites\nThe specified peer has been enabled in the BGP-EVPN address family view.\nPrecautions\nIf a device needs to advertise routes to its IBGP peer, the peer next-hop-invariable and peer next-hop-local commands are mutually exclusive on the device."
+}

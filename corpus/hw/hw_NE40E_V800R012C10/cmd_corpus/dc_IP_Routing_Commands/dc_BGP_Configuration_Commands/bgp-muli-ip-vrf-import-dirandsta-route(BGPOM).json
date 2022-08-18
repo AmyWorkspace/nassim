@@ -1,0 +1,86 @@
+{
+    "PageTitle": "import-route (BGP multi-instance VPN instance IPv4 address family view) (route)",
+    "FuncDef": "The import-route command configures BGP to import routes from other protocols.\nThe undo import-route command cancels the configuration.\nBy default, BGP does not import routes from other protocols.",
+    "CLIs": [
+        "import-route { static | direct | unr | op-route } [ [ med <med-value> ] | [ [ route-policy <route-policy-name> ] | [ route-filter <route-filter-name> ] ] ] *",
+        "import-route { unr | { ospf | isis | rip } <processId> } [ [ med <med-value> ] | [ [ route-policy <route-policy-name> ] | [ route-filter <route-filter-name> ] ] ] *",
+        "undo import-route { static | direct | unr | op-route }",
+        "undo import-route { { ospf | isis | rip } <processId> }"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "static",
+            "Info": "Configures BGP to import static routes.\n-"
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Configures BGP to import direct routes.\n-"
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Configures BGP to import UNR routes.\n-"
+        },
+        {
+            "Parameters": "op-route",
+            "Info": "Configures BGP to import open programming (OP)-routes.\n-"
+        },
+        {
+            "Parameters": "med med-value",
+            "Info": "Specifies the MED for imported routes.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the route-policy used to filter routes and modify route attributes when these routes are imported from other protocols.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the route-filter used to filter routes and modify route attributes when these routes are imported from other protocols.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "ospf",
+            "Info": "Configures BGP to import OSPF routes.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Configures BGP to import IS-IS routes.\n-"
+        },
+        {
+            "Parameters": "rip",
+            "Info": "Configures BGP to import RIP routes.\n-"
+        },
+        {
+            "Parameters": "processId",
+            "Info": "Specifies the number of a process from which routes are to be imported.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-a-vpna] import-route static"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-a-vpna] import-route ospf 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP can import routes using the import-route command or network command:- The import-route command imports routes of a specified type into the BGP routing table, such as RIP, OSPF, IS-IS, static, or direct routes.- The network command imports routes with the specified prefix and mask into the BGP routing table. Compared with the import-route command, the network command imports more specific routes.When the import-route static command is run, only active static routes are imported.\nConfiguration Impact\nIf the default-route imported command has not been used when you run the import-route command to import routes from other protocols, BGP cannot import default routes.\nPrecautions\nThe import-route route-policy command is mutually exclusive with the import-route route-filter command."
+}

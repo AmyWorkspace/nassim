@@ -1,0 +1,51 @@
+{
+    "PageTitle": "qos phb disable vlan",
+    "FuncDef": "The qos phb disable vlan command disables a Layer 2 interface from searching the PHB table for outgoing traffic with a specific VLAN ID.\nThe undo qos phb disable vlan command cancels the configuration.\nBy default, a Layer 2 interface does not search the PHB table for outgoing traffic.",
+    "CLIs": [
+        "qos phb [ inner-8021p | outer-8021p | dscp | mpls-exp ] disable vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10>",
+        "undo qos phb [ inner-8021p | outer-8021p | dscp | mpls-exp ] disable vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10>"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "25GE interface view",
+        "40GE interface view",
+        "Eth-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension Layer 2 interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "inner-8021p",
+            "Info": "Indicates that an interface does not check the PHB table for the inner 802.1p value of outgoing packets.\n-"
+        },
+        {
+            "Parameters": "outer-8021p",
+            "Info": "Indicates that an interface does not check the PHB table for the inner 802.1p value of outgoing packets.\n-"
+        },
+        {
+            "Parameters": "dscp",
+            "Info": "Indicates?that?an?interface?does?not?check?the?PHB?table?for?the?DSCP?value?of?outgoing?packets.\nIndicates that an interface does not check the PHB table for the DSCP value of outgoing packets.\n-"
+        },
+        {
+            "Parameters": "mpls-exp",
+            "Info": "Indicates that an interface does not check the PHB table for the EXP value of outgoing packets.\n-"
+        },
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies the start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to vlan-id2",
+            "Info": "Specifies the end VLAN ID.\nvlan-id2 must be greater than or equal to vlan-id1. vlan-id2 and vlan-id1 specify a VLAN range.\nIf to vlan-id2 is not specified, only the VLAN specified by vlan-id1 can be configured.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] qos phb disable vlan 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen simple traffic classification is configured on an interface, the interface searches the behavior aggregate (BA) table to map the external priorities of incoming traffic into internal priorities, and searches the per-hop behavior (PHB) table to map the internal priorities of outgoing traffic into external priorities.\nThe PHB table saves the mapping relationship between the priority, CoS, and color of packets. After receiving a packet, an interface identifies the packet priority and searches the PHB table to map the internal priority of the packet into the external priority.\nIn this case, you can run the qos phb disable vlan command to disable the Layer 2 interface based on vlan from searching the PHB table to keep the external priority of packets unchanged.\nIf packets forwarded through the downstream interface do not search the PHB, the packet priority field, like 8021p, dscp, exp, will not be modified. When part of the priority fields need to be modified while others need not. the exterior priority type, inner-8021p, outer-8021p, dscp, mpls-exp should be specified when configuring the command qos phb disable vlan.\nPrecautions\nThe qos phb disable vlan command and the qos phb enable command are mutually exclusive on the same interface.\nBefore you use the qos phb disable vlan command, use the trust upstream command to enable simple traffic classification for incoming traffic and remark the incoming packets."
+}

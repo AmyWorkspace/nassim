@@ -1,0 +1,32 @@
+{
+    "PageTitle": "peer route-update-interval (BGP-IPv4 multicast address family view) (group)",
+    "FuncDef": "The peer route-update-interval command sets the interval at which a device sends routing updates carrying the same prefix to a specified MBGP peer group.\nThe undo peer route-update-interval command restores the default setting.\nBy default, the interval at which routing updates are sent to an IBGP peer is 15s, and the interval at which routing updates are sent to an EBGP peer is 30s.",
+    "CLIs": [
+        "peer <peerGroupName> route-update-interval <interval>",
+        "undo peer <peerGroupName> route-update-interval"
+    ],
+    "ParentView": [
+        "BGP-IPv4 multicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerGroupName",
+            "Info": "Specifies the name of an MBGP peer group.\nThe value is a string of 1 to 47 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the minimum interval at which MBGP routing updates are sent.\nThe value is an integer ranging from 0 to 600, in seconds. The value 0 indicates that the device immediately sends BGP Update messages to notify its peers of route changes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer test internal",
+            "[*HUAWEI-bgp] ipv4-family multicast",
+            "[*HUAWEI-bgp-af-multicast] peer test enable",
+            "[*HUAWEI-bgp-af-multicast] peer test route-update-interval 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen routes change, the router sends routing updates to notify its peers. If a route changes frequently, the peer route-update-interval command can be used to adjust the interval at which Update packets are sent for changes of this route. This frees the router from sending Update packets for every route change.\nPrerequisites\nAn MBGP peer or peer group has been configured using the group and the peer group command.\nIf the peer route-update-interval command is used but no peer exists, a message is displayed, indicating that the peer does not exist.\nPrecautions\nIf a route is removed or added, the router sends an Update (Withdraw) packet to its peers immediately, without waiting the interval set using the peer route-update-interval command to expire."
+}

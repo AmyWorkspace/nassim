@@ -1,0 +1,43 @@
+{
+    "PageTitle": "peer route-policy import (BGP multi-instance VPN instance IPv4 address family view) (group)",
+    "FuncDef": "The peer route-policy import command specifies a route-policy for filtering routes received from a peer group.\nThe undo peer route-policy import command deletes a specified route-policy.\nBy default, no route-policy is configured for filtering routes received from a peer group.",
+    "CLIs": [
+        "peer <group-name> route-policy <route-policy-name> import",
+        "undo peer <group-name> route-policy <route-policy-name> import"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "import",
+            "Info": "Applies a route-policy to routes to be imported from a peer group.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] route-policy aaa permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-a-vpna] group test",
+            "[*HUAWEI-bgp-instance-a-vpna] peer test route-policy aaa import"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter a route-policy is created, the peer route-policy import command is used to apply a Route-Policy to a peer group so that the routes received from a peer group can be controlled. To be specific, only the necessary routes are received from the peer group. In this manner, route management is implemented, the scale of the routing table is reduced, and fewer network resources are consumed.\nPrerequisites\nIf the command specifies a route-policy that does not exist, use the route-policy command to create the route-policy.\nConfiguration Impact\nIf the peer route-policy command is run for a peer group, all the members of the peer group inherit the configuration.\nThe peer route-policy command is mutually exclusive with the peer route-filter commands.\nBinding a route-policy after a BGP peer relationship is established may cause peer flapping."
+}

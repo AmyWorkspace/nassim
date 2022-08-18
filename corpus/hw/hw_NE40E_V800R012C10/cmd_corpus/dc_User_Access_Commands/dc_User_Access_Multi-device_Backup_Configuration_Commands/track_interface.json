@@ -1,0 +1,43 @@
+{
+    "PageTitle": "track interface",
+    "FuncDef": "The track interface command configures the remote backup service to track the network-side interface status.\nThe undo track interface command cancels the tracking.\nBy default, the remote backup service is not configured to track the network-side interface status.",
+    "CLIs": [
+        "track interface { <interface-name> | <interface-type> <interface-number> } [ weight <weight-value> ]",
+        "undo track interface { <interface-name> | <interface-type> <interface-number> } [ weight <weight-value> ]",
+        "undo track interface id <interface_id>"
+    ],
+    "ParentView": [
+        "Remote backup service view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an interface.\n-"
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Specifies the weight of the interface to be tracked.\nThe value is an integer ranging from 1 to 100. The default value is 10."
+        },
+        {
+            "Parameters": "id interface_id",
+            "Info": "Specifies the ID of the interface to be tracked.\nThe value is an integer ranging from 0 to 15."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] remote-backup-service rbs",
+            "[*HUAWEI-rm-backup-service-rbs] commit",
+            "[~HUAWEI-rm-backup-service-rbs] track interface GigabitEthernet 1/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nUsers can configure the remote backup service to track the network-side interface status by using this command, so that they can detect the fault and recovery of the TCP connection established by the remote backup service.\nIf devices have multiple uplinks with different bandwidths, configure different weights for uplink interfaces based on the uplink bandwidths. If the interfaces have different rates, configure the weights based on their rates. Configure a larger weight for a 10GE interface than a GE interface. For example, interface A is 10GE, and the bandwidth planned for RUI is 5 Gbit/s; interface B is GE, and the bandwidth planned for RUI is 1 Gbit/s; interface C is GE, and the bandwidth planned for RUI is 0.5 Gbit/s. If you use interface B as a reference interface and configure its weight as 10, the weight of interface A is 50 and that of interface C is 5.\nThe formula is as follows: Fault rate = Total weight of faulty interfaces/Total weight of interfaces x 100%. Interface B and interface C are faulty. The current faulty percentage is (10 + 5) / (50 + 10 + 5) x 100% = 23%. Interface A is faulty. The current faulty percentage is 50 / (50 + 10 + 5) x 100% = 77%.\nFollow-up Procedure\nRun the switchover uplink command to configure a master/backup switchover to be performed based on the fault rate of uplinks.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nAfter the track interface command is used, the fault on the local device is considered removed if the network-side interface status changes from Down to Up. In this case, the revertive master/backup switchback is delayed. The revertive master/backup switchback is performed only after the connection of the remote backup service is set up and the data are synchronized.\nThis command can configure the remote backup service to track a maximum of 16 network-side interfaces. This supports load balancing on the network side."
+}

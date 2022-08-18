@@ -1,0 +1,51 @@
+{
+    "PageTitle": "dampening (BGP-IPv4 multicast address family view)",
+    "FuncDef": "The dampening command enables MBGP route dampening or modifies MBGP route dampening parameters that meet the filtering policy.\nThe undo dampening command restores the default configuration.\nBy default, route dampening is disabled.",
+    "CLIs": [
+        "dampening [ <half-life-reach> <reuse> <suppress> <ceiling> | [ route-policy <route-policy-name> | route-filter <route-filter-name> ] ] * [ update-standard ]",
+        "dampening <half-life-reach> <reuse> <suppress> <ceiling> route-filter <route-filter-name> [ update-standard ]",
+        "undo dampening"
+    ],
+    "ParentView": [
+        "BGP-IPv4 multicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "half-life-reach",
+            "Info": "Specifies a half-life for reachable routes.\nThe value is an integer ranging from 1 to 45, in minutes. The default value is 15, in minutes."
+        },
+        {
+            "Parameters": "reuse",
+            "Info": "Specifies a Reuse value. If the penalty value of a route falls below the Reuse value, the route is reused.\nThe value is an integer ranging from 1 to 20000. The default value is 750."
+        },
+        {
+            "Parameters": "suppress",
+            "Info": "Specifies a Suppress value. If the penalty value of a route exceeds the Suppress value, the route is dampened.\nThe value is an integer ranging from 1 to 20000. The default value is 2000. The configured value must be greater than that of reuse."
+        },
+        {
+            "Parameters": "ceiling",
+            "Info": "Specifies a penalty ceiling.\nThe value is an integer ranging from 1001 to 20000. The configured value must be greater than that of suppress. The default value is 16000."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a routing policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "update-standard",
+            "Info": "Enables MBGP to add a penalty value (500) to the route carried in each received Update message (excluding Withdraw message).\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family multicast",
+            "[*HUAWEI-bgp-af-multicast] dampening 25 1000 2000 2005"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the suppression policy for route dampening is configured, routes preferentially match suppression parameters defined by route-policy in the command.\nThe dampening command is valid only for EBGP routes.\nIf no optional parameter is configured in the command, the default value of each parameter is used. The four parameters of the command are mutually dependent. If you configure one of the parameters, the other parameters also need to be configured in the command.\nMBGP route flap dampening measures the stability of a route by using a penalty value. The greater the penalty value, the less stable a route. Each time a route flaps, the Router receives a Withdraw packet and MBGP adds a penalty value (1000) for the route.\nIf the penalty value of a route exceeds the Suppress value, the route is dampened. The Router does not add the route to the IP routing table or advertise any Update packet to other MBGP peers. MBGP strips off the best flag of the route. If the route is marked with the d flag, the last packet received by the Router is an Update packet; if the route is marked with the h flag, the last packet received by the Router is a Withdraw packet. After the penalty value reaches a certain limit, it does not increase any more. The limit is called the penalty ceiling.\nAfter the route is suppressed for a certain period, the penalty value is reduced by half. If the penalty value of a route marked with the d flag decreases to the reuse threshold, the d flag is removed, and the route becomes available and is selected preferentially. After that, the route can be added to the IP routing table and used to send Update packets to other MBGP peers. If the penalty value of a route marked with the h flag decreases to 0, the route is deleted from the MBGP routing table.\nConfiguration Impact\nIf the dampening command is run multiple times, the latest configuration overrides the previous ones.\nAfter the dampening command is run, the system suppresses unstable routes. This means that the system does not add unstable routes to the MBGP routing table or advertise them to other MBGP peers.\nPrecautions\nWhen configuring MBGP route flap dampening, note the following points:\nThe value of suppress must be greater than that of reuse and smaller than that of ceiling.If MaxSuppressTime obtained by using the formula of MaxSuppressTime = half-life-reach x 60 x (ln(ceiling/reuse)/ln(2)) is smaller than 1, suppression cannot be performed. You need to ensure that the value of MaxSuppressTime is greater than or equal to 1. This means that the value of ceiling/reuse must be great enough."
+}

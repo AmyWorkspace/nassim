@@ -1,0 +1,62 @@
+{
+    "PageTitle": "trunkport",
+    "FuncDef": "The trunkport command adds an interface to an Eth-Trunk interface in the Eth-Trunk interface view.\nThe undo trunkport command deletes an interface from an Eth-Trunk interface in the Eth-Trunk interface view.\nBy default, no member interface is added to an Eth-Trunk interface.",
+    "CLIs": [
+        "trunkport <interface-type> { <interface-number1> [ to <interface-number2> ] } &<1-64> [ mode { active | passive } ]",
+        "trunkport <interface-name> [ mode { active | passive } ]",
+        "undo trunkport <interface-type> { <interface-number1> [ to <interface-number2> ] } &<1-64>",
+        "undo trunkport <interface-name>"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of the interface that is added to the Eth-Trunk interface.\n-"
+        },
+        {
+            "Parameters": "interface-number1",
+            "Info": "Specifies the start number of the Eth-Trunk interface.\nThe value is a string of 1 to 49 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "interface-number2",
+            "Info": "Specifies the end number of the Eth-Trunk interface.\nThe value is a string of 1 to 49 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "mode",
+            "Info": "Indicates a mode in which the member interface of an Eth-Trunk interface in static LACP mode sends LACPDUs.\nThis parameter can be specified only for Eth-Trunk interfaces in static LACP mode.\nIf this parameter is not specified, member interfaces of an Eth-Trunk interface in static LACP mode send LACPDUs in active mode.\n-"
+        },
+        {
+            "Parameters": "active",
+            "Info": "Indicates the active mode in which the member interface of an Eth-Trunk interface in static LACP mode sends LACPDUs.\nMember interfaces in active mode proactively send LACPDUs to the peer end for negotiation.\n-"
+        },
+        {
+            "Parameters": "passive",
+            "Info": "Indicates the passive mode in which the member interface of an Eth-Trunk interface in static LACP mode sends LACPDUs.\nMember interfaces in passive mode respond to LACPDUs only when receiving LACPDUs from the peer end that works in active mode.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of the interface that is added to the Eth-Trunk interface.\nThe value is a string of 1 to 49 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] trunkport GigabitEthernet 1/0/1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 2",
+            "[*HUAWEI-Eth-Trunk2] trunkport GigabitEthernet 1/0/1 to 1/0/4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] mode lacp-static",
+            "[*HUAWEI-Eth-Trunk1] trunkport GigabitEthernet 1/0/1 mode passive"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo increase bandwidth, improve reliability, and implement load balancing, you can run this command to add physical interfaces to an Eth-Trunk interface in batches.\nPrerequisites\nNo service is configured on the Ethernet interfaces to be added to the Eth-Trunk interface. For example:\nLayer 3 configurations such as IP addresses\nStatic MAC entries\nConfiguration Impact\nAfter physical interfaces are added to an Eth-Trunk interface:\nBandwidth is increased: The bandwidth of an Eth-Trunk interface is the total bandwidth of all member interfaces.Reliability is improved: When a member link fails, traffic automatically switches to other available member links. This ensures reliability of Eth-Trunk.\nIf an Eth-Trunk interface is configured with services, interfaces added to the Eth-Trunk interface take over the services.\n\nFollow-up Procedure\nConfigure the weight for each member interface in the view of each member interface. This allows member interfaces to carry different loads.\nPrecautions\nEth-Trunk consists of only Ethernet links.\nEth-Trunk interfaces cannot be added to Eth-Trunk interfaces.\nAn Ethernet interface can be added to only one Eth-Trunk interface. Before adding an Ethernet interface to another Eth-Trunk interface, you must delete it from the original Eth-Trunk interface.\nEthernet interfaces with different rates can be added to the same Eth-Trunk interface. If no weight is configured for any member interface, the weight of each member interface is the same. In this case, the lowest forwarding capability among all member interfaces is adopted and applied to each member interface. Therefore, it is not recommended that you bundle interfaces with different forwarding capacities into an Eth-Trunk interface.\nEthernet interfaces on different interface boards can be added to the same Eth-Trunk interface.\nIf a member interface of an Eth-Trunk interface is connected to the peer, the directly connected interface on the peer must also be a member interface of an Eth-Trunk interface; otherwise, the devices cannot communicate with each other.\nWhen you specify the interface range, note that:\nThe interface number after to must be greater than the interface number before to.The types of the interfaces in the range must be the same.The interfaces in the range must exist.If the trunkport command is run more than once, all configurations take effect.\n\nIn a port extension scenario, a member interface must be shut down before it is added to an internal communication Eth-Trunk interface. Otherwise, services may be compromised."
+}

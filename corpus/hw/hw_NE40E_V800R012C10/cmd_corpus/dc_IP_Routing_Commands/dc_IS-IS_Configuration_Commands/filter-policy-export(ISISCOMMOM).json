@@ -1,0 +1,72 @@
+{
+    "PageTitle": "filter-policy export",
+    "FuncDef": "The filter-policy export command configures IS-IS to filter the imported routes to be advertised.\nThe undo filter-policy export command disables IS-IS from filtering the routes to be advertised.\nBy default, IS-IS does not filter the routes to be advertised.",
+    "CLIs": [
+        "filter-policy { <acl-number> | acl-name <acl-name-string> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> } { export [ direct | static | rip <process-id> | bgp | ospf <process-id> | isis <process-id> | unr ] }",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name-string> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> ] { export [ direct | static | rip <process-id> | bgp | ospf <process-id> | isis <process-id> | unr ] }"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies a basic ACL number.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name-string",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy to filter routes based on tags and other protocol parameters.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of route filter policy. The policy is used to filter the imported routes so that only some of the routes can be advertised.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Specifies to filter the imported direct routes before route advertisement.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Specifies to filter the imported static routes before route advertisement.\n-"
+        },
+        {
+            "Parameters": "rip process-id",
+            "Info": "Specifies to filter the imported RIP routes before route advertisement.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Specifies to filter the imported BGP routes before route advertisement.\n-"
+        },
+        {
+            "Parameters": "ospf process-id",
+            "Info": "Specifies to filter the imported OSPF routes before route advertisement.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "isis process-id",
+            "Info": "Specifies to filter the imported IS-IS routes before route advertisement.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Specifies to filter the imported UNR routes before route advertisement.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix-a index 10 permit 172.17.1.0 24",
+            "[*HUAWEI] route-policy policy1 permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] isis",
+            "[*HUAWEI-isis-1] filter-policy route-policy policy1 export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen IS-IS and other routing protocols are running on the network, and a boundary router in the IS-IS domain has imported routes of other routing protocols, the boundary router will advertise all the imported routes to its IS-IS neighbors by default.\nWhen the routes that meet certain conditions need to be advertised, you can run the filter-policy export command to configure filtering rules. In this manner, only the routes that meet the filtering rules can be advertised.\nPrerequisites\nRoutes of other routing protocols have been imported using the import-route command.\nConfiguration Impact\nThe filter-policy export command does not take effect on local routes. After the command is run, only the imported routes that meet the filtering rules can be advertised to IS-IS neighbors."
+}

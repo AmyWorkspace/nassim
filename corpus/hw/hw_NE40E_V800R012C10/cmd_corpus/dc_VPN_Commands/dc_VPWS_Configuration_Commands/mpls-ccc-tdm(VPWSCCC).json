@@ -1,0 +1,64 @@
+{
+    "PageTitle": "mpls ccc (Serial interface view)",
+    "FuncDef": "The mpls ccc command enables an AC interface on a PE to establish a circuit cross connect (CCC) connection with another AC interface on the same PE.\nThe undo mpls ccc command removes a local CCC connection.\nBy default, no local CCC connection is created on an AC interface of a PE.",
+    "CLIs": [
+        "mpls ccc instance-name <instance-name-value> out-interface { <interface-name> | <interface-type> <interface-number> } [ [ ip-interworking | ip-layer2 ] | jitter-buffer <depth> | tdm-encapsulation <number> | idle-code <idle-code-value> | rtp-header ] *",
+        "mpls ccc out-interface { <interface-name> | <interface-type> <interface-number> } [ [ ip-interworking | ip-layer2 ] | jitter-buffer <depth> | tdm-encapsulation <number> | idle-code <idle-code-value> | rtp-header | secondary ] *",
+        "undo mpls ccc [ instance-name <instance-name-value> ]",
+        "undo mpls ccc [ out-interface { <interface-name> | <interface-type> <interface-number> } [ [ ip-interworking | ip-layer2 ] | jitter-buffer <depth> | tdm-encapsulation <number> | idle-code <idle-code-value> | rtp-header ] ] * secondary"
+    ],
+    "ParentView": [
+        "Trunk serial interface view",
+        "Serial interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "out-interface interface-type interface-number",
+            "Info": "Specifies the type and number of the outbound interface of a CCC connection.\n-"
+        },
+        {
+            "Parameters": "ip-interworking",
+            "Info": "Enables heterogeneous media IP interworking between Huawei devices.\n-"
+        },
+        {
+            "Parameters": "ip-layer2",
+            "Info": "Enables heterogeneous media IP interworking between a Huawei device and a non-Huawei device.\n-"
+        },
+        {
+            "Parameters": "jitter-buffer depth",
+            "Info": "Specifies the depth of a jitter buffer.\nThe value is an integer ranging from 1 to 64. The default value is 4."
+        },
+        {
+            "Parameters": "tdm-encapsulation number",
+            "Info": "Specifies the number of TDM frames encapsulated in a CESoPSN packet.\nThe value is an integer ranging from 1 to 40. The default value is 8."
+        },
+        {
+            "Parameters": "idle-code idle-code-value",
+            "Info": "Specifies an idle code value when a jitter buffer underflow occurs.\nThe value is a hexadecimal integer ranging from FF to FF."
+        },
+        {
+            "Parameters": "rtp-header",
+            "Info": "Indicates that the RTP header is carried in transparently transmitted TDM frames. By default, transparently transmitted TDM frames do not carry the RTP header.\n-"
+        },
+        {
+            "Parameters": "instance-name instance-name-value",
+            "Info": "Specifies the name of an L2VPN service. This parameter uniquely identifies an L2VPN service on a PE.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported.The character string can contain spaces if it is enclosed with double quotation marks (\" \")."
+        },
+        {
+            "Parameters": "secondary",
+            "Info": "Configures a CCC as a secondary CCC. If this keyword is not specified, the created CCC will be a primary CCC. Note that this parameter can be specified only if a primary VC exists locally.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls ccc out-interface GigabitEthernet 2/0/0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the scenario where an LDP VC is configured to protect a CCC VC, CE1 and CE2 are connected to the same PE through a local CCC VC. If CE2 serves as a BRAS and needs to authenticate CE1, in case that CE2 or the AC2 interface on CE2 fails, CE1 cannot be authenticated. If the PE is connected to another BRAS through an LDP VC, you can run the mpls ccc command to configure the PW as the backup for the AC2 link. If CE2 or the AC2 interface on CE2 fails, CE1 can access the other BRAS for authentication.\nSpecifying the raw or tagged parameter in the mpls ccc command takes effect only when a CCC connection is established on Ethernet links and heterogeneous IP interworking is not configured.\nSpecifying the tdm-encapsulation, jitter-buffer, idle-code, and rtp-header parameters takes effect only on TDM-capable interfaces.\nPrerequisites\nMPLS L2VPN has been enabled using the mpls l2vpn command.\nPrecautions\nIf a PW is configured on an AC interface, the Layer 3 features of the interface, such as the IP address and routing protocol, stop taking effect. An interface cannot serve as both a PW AC interface and an L3VPN AC interface. If an interface is bound to both a PW and an L3VPN, only the PW configuration takes effect on the interface. After the PW is deleted, the L3VPN configuration takes effect on the interface.If a sub-interface is bound to a PW:The sub-interface can be deleted only after the binding configuration is removed.The encapsulation protocol type of the main interface cannot be changed."
+}

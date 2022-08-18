@@ -1,0 +1,81 @@
+{
+    "PageTitle": "import-route (OSPF view)",
+    "FuncDef": "The import-route command imports routes learned by other protocols.\nThe undo import-route command cancels the configuration.\nBy default, routes learned by other protocols are not imported.",
+    "CLIs": [
+        "import-route { direct | static | bgp [ permit-ibgp ] } [ cost <cost> | { route-policy <route-policy-name> | route-filter <route-filter-name> } | tag <tag> | type <type> ] *",
+        "import-route { ospf | isis | rip } [ <process-id-rip> ] [ cost <cost> | { route-policy <route-policy-name> | route-filter <route-filter-name> } | tag <tag> | type <type> ] *",
+        "import-route { unr } [ cost <cost> | { route-policy <route-policy-name> | route-filter <route-filter-name> } | tag <tag> | type <type> ] *",
+        "undo import-route { direct | static | bgp }",
+        "undo import-route { ospf | isis | rip } [ <process-id-rip> ]",
+        "undo import-route { unr }"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "direct",
+            "Info": "Imports direct routes.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Imports static routes.After the parameter is specified, only active static routes can be imported.\n-"
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Imports BGP routes.\nFor an OSPF process that is not bound to a VPN instance or is bound to a VPN instance but the vpn-instance-capability simple command is run, the parameter imports only EBGP routes.\n-"
+        },
+        {
+            "Parameters": "permit-ibgp",
+            "Info": "Imports IBGP routes.NOTICE:\nFor an OSPF process that is not bound to a VPN instance or is bound to a VPN instance but the vpn-instance-capability simple command is run, importing IBGP routes may cause routing loops. Therefore, exercise caution when using this parameter.\n-"
+        },
+        {
+            "Parameters": "cost cost",
+            "Info": "Specifies a route cost.\nThe value is an integer ranging from 0 to 16777214. The default value is 1."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route filter policy.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Specifies the tag of an external LSA.\nThe value is an integer ranging from 0 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "type type",
+            "Info": "Specifies the type of the external routes.\nThe value is 1 or 2.\n1: Type 1 external route2: Type 2 external route\nThe default value is 2."
+        },
+        {
+            "Parameters": "ospf",
+            "Info": "Imports OSPF routes.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Imports IS-IS routes.\n-"
+        },
+        {
+            "Parameters": "rip",
+            "Info": "Imports RIP routes.\n-"
+        },
+        {
+            "Parameters": "process-id-rip",
+            "Info": "Specifies the process ID of the protocol whose routes are imported.\nThe value is an integer ranging from 1 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Imports UNR routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] import-route isis 1 type 2 tag 33 cost 50"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nImporting the routes discovered by other routing protocols can enrich OSPF routing information.\nOSPF routes are classified into the following types in the descending order of priorities:\nIntra-area routes: refer to the routes in an area within an AS.Inter-area routes: refer to the routes between areas of the same AS. Intra-area routes and area external routes are internal routes of an AS.Type 1 external routes: When the cost of external routes is almost the same as that of AS internal routes and can be compared with the cost of OSPF routes, these external routes have a high reliability and can be configured as Type 1 external routes.Type 2 external routes: When the cost of the routes from an ASBR to the destination outside an AS is much greater than the cost of the internal routes to the ASBR, these external routes have a low reliability and can be configured as Type 2 external routes.\nFor an OSPF process that is not bound to a VPN instance or is bound to a VPN instance but the vpn-instance-capability simple command is run, only EBGP routes are imported after the import-route bgp command is configured. IBGP routes are also imported after the import-route bgp permit-ibgp command is configured. If IBGP routes are imported, routing loops may occur. In this case, run the preference (OSPF) and preference (BGP) commands to prevent loops by specifying priorities of OSPF and BGP routes. If IBGP routes need to be imported, configure the import-route bgp permit-ibgp command, and run the preference (OSPF) and preference (BGP) commands to set the priority of OSPF ASE routes lower than that of IBGP routes (priority value of OSPF ASE routes larger than that of IBGP routes).\nFor an OSPF process that is bound to a VPN instance and the vpn-instance-capability simple command is not run, configuring the import-route bgp command imports both EBGP routes and IBGP routes, no matter whether the import-route bgp permit-ibgp command is configured.\n\nPrerequisites\nA route-policy has been created using the route-policy command.\nProcedure\nThe costs of a Type 1 external route and a Type 2 external route are as follows:\nThe cost of a Type 1 external route equals the cost for the OSPF device to reach an ASBR plus the cost of the route from the ASBR to the destination.The cost of a Type 2 external route equals the cost of the route from an ASBR to the destination.\n\nImplementation Procedure\nThe costs of a Type 1 external route and a Type 2 external route are as follows:\nThe cost of a Type 1 external route equals the cost for the OSPF device to reach an ASBR plus the cost of the route from the ASBR to the destination.The cost of a Type 2 external route equals the cost of the route from an ASBR to the destination.\n\nConfiguration Impact\nOSPF cannot prevent external routing loops. Therefore, avoid the loops caused by manual configurations when configuring OSPF to import external routes.\nAfter you configure the policy for importing routes using the route-policy parameters, the OSPF process imports only the routes of the network segments that match the requirements to filter unwanted routes.\nPrecautions\nYou can use the default (OSPF) command to configure default parameters for OSPF to import external routes, including the cost, type (Type 1 or Type 2), tag, and number of routes.\nThe import-route (OSPF) command cannot import the default route of an external protocol. To enable a router to advertise the default route of an external protocol it learns when updating the OSPF routing table to other routers within the area, run the default-route-advertise (OSPF) command.\nA segment routing-capable device can import OSPF routes. If labels have been assigned to these routes, the labels are imported to a local process by default and advertised using LSAs, regardless of whether the labels are active.\nA segment routing-capable device can import labeled IS-IS routes into the OSPF routing table and use the routes to compute SR LSPs."
+}

@@ -1,0 +1,30 @@
+{
+    "PageTitle": "timer ldp-sync hold-max-cost (OSPF area view)",
+    "FuncDef": "The timer ldp-sync hold-max-cost command sets the period of time during which an interface in an IS-IS process waits to leave the LDP-IGP synchronization state.\nThe undo timer ldp-sync hold-max-cost command restores the default period.\nBy default, IS-IS keeps advertising the maximum cost by sending link state PDUs on a device before an LDP session and an LDP adjacency are reestablished.",
+    "CLIs": [
+        "timer ldp-sync hold-max-cost { <interval> | infinite }",
+        "undo timer ldp-sync hold-max-cost"
+    ],
+    "ParentView": [
+        "OSPF area view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the period during which IS-IS sends link state PDUs to advertise the maximum cost on a device.\nThe value is an integer ranging from 0 to 65535, in seconds."
+        },
+        {
+            "Parameters": "infinite",
+            "Info": "Indicates that IS-IS keeps advertising the maximum cost by sending link state PDUs on a device before an LDP session and an LDP adjacency are reestablished.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] area 0",
+            "[*HUAWEI-ospf-1-area-0.0.0.0] timer ldp-sync hold-max-cost infinite"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLDP-IGP synchronization prevents traffic loss on a network with both primary and backup link switched paths (LSPs). The\ntimer ldp-sync hold-max-cost command is used in either of the following situations:\nWhen the primary LSP is recovering, this command allows the backup LSP to transmit traffic before the primary LSP is established.After an LDP session or LDP adjacency fails over the primary LSP, this command is used to allow the backup LSP to transmit traffic before the primary LSP recovers.\nConfiguring infinite keeps traffic traveling through the backup LSP before the primary LSP is established.\n\nConfiguration Impact\nIf an LDP session or LDP adjacency is unable to go Up, configuring infinite affects OSPF route selection because the interface keeps advertising the maximum cost."
+}

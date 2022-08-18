@@ -1,0 +1,38 @@
+{
+    "PageTitle": "mld-snooping group-policy (VLAN view)",
+    "FuncDef": "The mld-snooping group-policy command sets the range of multicast groups that hosts can join.\nThe undo mld-snooping group-policy command cancels the configuration.\nBy default, hosts can join any multicast groups.",
+    "CLIs": [
+        "mld-snooping group-policy { <acl6-number> | acl6-name <acl6-name> } [ version <number> ]",
+        "undo mld-snooping group-policy"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl6-number",
+            "Info": "Specifies the number of a basic or advanced IPv6 ACL.\nThe number of a basic IPv6 ACL is an integer that ranges from 2000 to 2999; the number of an advanced IPv6 ACL ranges from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named ACL6.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "version number",
+            "Info": "Specifies an MLD version.\nThe value can be 1 or 2."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl ipv6 2008",
+            "[*HUAWEI-acl6-basic-2008] rule permit source ff15::1 128",
+            "[*HUAWEI-acl6-basic-2008] quit",
+            "[*HUAWEI] mld-snooping enable",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] mld-snooping enable",
+            "[*HUAWEI-vlan10] mld-snooping group-policy 2008"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo limit the range of multicast groups that hosts can join, run the mld-snooping group-policy command.\nPrerequisites\nMLD snooping has been enabled globally and in the VLAN view.\nRules have been configured in the specified ACL6.\nConfiguration Impact\nAfter the mld-snooping group-policy command is run, hosts cannot join multicast groups out of the configured multicast group range. If the mld-snooping group-policy command is run more than once in the same view, the latest configuration overrides the previous one.\nPrecautions\nIf an MLD version is not set, the device will apply the configured group policy to all MLDv1 and MLDv2 messages. The ACL6 configured for the group policy must be a basic ACL6.\nThe\nmld-snooping group-policy command fails to be run in a VLAN view in any of the following conditions:\nA dot1q termination sub-interface is added to the VLAN.The VLAN is a super or user VLAN."
+}

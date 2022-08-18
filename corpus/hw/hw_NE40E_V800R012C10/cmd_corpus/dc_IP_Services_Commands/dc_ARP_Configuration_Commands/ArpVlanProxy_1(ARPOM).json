@@ -1,0 +1,33 @@
+{
+    "PageTitle": "arp-proxy inter-sub-vlan-proxy enable",
+    "FuncDef": "The arp-proxy inter-sub-vlan-proxy enable command enables inter-VLAN proxy Address Resolution Protocol (ARP).\nThe undo arp-proxy inter-sub-vlan-proxy enable command disables inter-VLAN proxy ARP.\nBy default, inter-VLAN proxy ARP is disabled.",
+    "CLIs": [
+        "arp-proxy inter-sub-vlan-proxy enable",
+        "undo arp-proxy inter-sub-vlan-proxy enable"
+    ],
+    "ParentView": [
+        "100ge sub-interface view",
+        "10GE sub-interface view",
+        "25GE sub-interface view",
+        "400GE sub-interface view",
+        "40GE sub-interface view",
+        "50GE sub-interface view",
+        "Eth-Trunk sub-interface view",
+        "GE sub-interface view",
+        "Global VE sub-interface view",
+        "PW-VE sub-interface view",
+        "Remote-AP interface view",
+        "Vbridge interface view",
+        "VE sub-interface view",
+        "VLANIF interface view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.3",
+            "[~HUAWEI-GigabitEthernet1/0/1.3] arp-proxy inter-sub-vlan-proxy enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy using VLANs, you can divide a network into different subnets, therefore dividing large broadcast domains into several small ones. This implements user isolation between VLANs, effectively limiting the scope of broadcast packets and improving network security.\nTo implement Layer 2 communication between different VLANs, you must enable inter-VLAN proxy ARP on the interface.In VLAN aggregation scenarios, hosts between sub-VLANs cannot communicate by default. To allow hosts to communicate, you must enable inter-VLAN proxy ARP on the VLANIF interface of the super-VLAN.\n\nPrecautions\nYou must configure QinQ (Layer 2 encapsulation) on Ethernet sub-interfaces, GE sub-interfaces, and Eth-Trunk sub-interfaces to support inter-VLAN proxy ARP.\nAfter inter-VLAN proxy ARP is enabled and packets are sent from different VLANs but do not have the corresponding ARP entries, ARP packets are replicated in all VLANs on the involved sub-interface. If a lot of VLANs are configured, a large number of ARP packets need to be replicated, causing heavy burden on the peer device and abnormalities (such as high CPU usage and broadcast suppression) on downstream devices. In addition, the local device may fail to send ARP packets in time due to the replication of a large number of packets, which may lead to ARP learning failures. Therefore, do not configure too many VLANs on an interface.To address the problem that the device fails to send ARP packets in time due to replication of lots of packets, you can run the broadcast-copy fast enable command to enable the hardware replication function. However, this command configuration consumes multicast resources and the sending of lots of ARP packets causes heavy load on the peer device. Therefore, you are advised to contact Huawei engineers to determine whether to enable the hardware replication function."
+}

@@ -1,0 +1,30 @@
+{
+    "PageTitle": "apply tunnel-policy",
+    "FuncDef": "The apply tunnel-policy command applies a tunnel policy to a tunnel selector.\nThe undo apply tunnel-policy command cancels the setting.\nBy default, no tunnel policy is configured for tunnel selector.",
+    "CLIs": [
+        "apply tunnel-policy <tunnel-policy-name>",
+        "undo apply tunnel-policy"
+    ],
+    "ParentView": [
+        "Tunnel-selector view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tunnel-policy-name",
+            "Info": "Specifies the name of a tunnel policy applying to routes filtered by the if-match clause.\nThe value is a string of 1 to 39 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-policy policy1",
+            "[*HUAWEI-tunnel-policy-policy1] tunnel select-seq cr-lsp lsp load-balance-number 1",
+            "[*HUAWEI-tunnel-policy-policy1] quit",
+            "[*HUAWEI] ip rd-filter 1 deny 100:3",
+            "[*HUAWEI] tunnel-selector tps permit node 10",
+            "[*HUAWEI-tunnel-selector] if-match rd-filter 1",
+            "[*HUAWEI-tunnel-selector] apply tunnel-policy policy1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn BGP/MPLS IP VPN networking, VPNv4 and labeled BGP routes direct traffic to LSPs by default, and load balancing is not performed. If you want to select other types of tunnels or configure load balancing for VPNv4 or labeled BGP routes, run the apply tunnel-policy command to apply a tunnel policy. The apply tunnel-policy command can be used in the following situations:\nAn ASBR in inter-AS VPN Option B networking needs to apply a tunnel policy to VPNv4 routes learned from PEs.The RR on a VPN backbone network needs to apply a tunnel policy to VPNv4 routes learned from PEs.A PE in inter-AS VPN Option C networking needs to apply a tunnel policy to received labeled BGP routes.\nIf you want to apply a tunnel policy only to specific VPN or labeled BGP routes in the preceding situations, first use the if-match clause to filter routes. The if-match clauses that can be used are listed below:\nif-match ip next-hop (tunnel-selector view) This clause filters routes by the specific IPv4 next hop.if-match ipv6 next-hop (tunnel-selector view) This clause filters routes by the specific IPv6 next hop.if-match rd-filter This clause filters routes by the RD.\n\nPrerequisites\nA tunnel selector has been created using the tunnel-selector command.\nThe if-match clauses have been configured as needed.\nFollow-up Procedure\nIf the tunnel policy specified in the apply tunnel-policy command does not exist in the system, run the tunnel-policy command to create the tunnel policy."
+}

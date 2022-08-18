@@ -1,0 +1,41 @@
+{
+    "PageTitle": "lsp-trigger (IPv4 view)",
+    "FuncDef": "The lsp-trigger command configures a policy for establishing LDP LSPs.\nThe undo lsp-trigger command restores the default policy.\nBy default, LDP uses IP routes with 32-bit addresses to establish LSPs.",
+    "CLIs": [
+        "lsp-trigger { all | host | none }",
+        "lsp-trigger ip-prefix <ip-prefix-name>",
+        "undo lsp-trigger"
+    ],
+    "ParentView": [
+        "MPLS-LDP-IPv4 view",
+        "MPLS-LDP-VPN-IPv4 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "all",
+            "Info": "Uses all static and IGP routes to establish LSPs.\n-"
+        },
+        {
+            "Parameters": "host",
+            "Info": "Uses IP routes with 32-bit addresses to establish LSPs.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "Does not allow LDP to establish LSPs.\n-"
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Uses routes matching the IP prefix list to establish LSPs.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls ldp",
+            "[*HUAWEI-mpls-ldp] ipv4-family",
+            "[*HUAWEI-mpls-ldp-ipv4] lsp-trigger host"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn MPLS LDP-enabled device automatically establishes a large number of LSPs, which wastes resources.\nThe lsp-trigger command can be run to configure a policy for establishing LSPs. LDP can only use specified routes to establish LSPs, reducing LSPs to be established and system resource consumption.\nBy default, IP routes with 32-bit addresses trigger LDP to set up LSPs. The default setting is recommended. The lsp-trigger all command is not recommended. The all parameter allows LDP to use static routes and IGP routes to establish LSPs, which consumes a lot of label resources and causes LSP convergence slowdown on an MPLS network. Before using the lsp-trigger all command, configure a policy for filtering out routes so that LDP does not use them to establish LSPs. This helps reduce the number of LSPs to be established and efficiently use system resources.If the lsp-trigger all command is run and some IGP routes are available and are not used to existing MPLS LDP sessions, the system uses the routes to create proxy egress LSPs.\n\nPrecautions\nThe lsp-trigger command can be used to configure policies only for ingress and egress LSPs on the public network and ingress and egress LSPs on the private network that are established using IGP routes. To configure a policy for triggering the transit LSP establishment, run the propagate mapping command.\nIf the lsp-trigger command is run in both the MPLS view and MPLS LDP IPv4 view, the configuration in the MPLS LDP IPv4 view preferentially takes effect."
+}

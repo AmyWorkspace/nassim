@@ -1,0 +1,37 @@
+{
+    "PageTitle": "nat64 reverse-session-limit",
+    "FuncDef": "The nat64 reverse-session-limit command sets the maximum number of reverse (IPv4-to-IPv6) sessions of a specific or all three IP protocols.\nThe undo nat64 reverse-session-limit command restores the default maximum numbers.\n\nBy default, the maximum number of reverse IP sessions for each user of a specific or all three protocols is as follows:\n\n\nTCP or UDP: 10240\n\nICMP: 512\n\nSummation of TCP, UDP and ICMP: 8192\n\n\nIf the total parameter is set, this parameter takes precedence.",
+    "CLIs": [
+        "nat64 reverse-session-limit { tcp <limit-number> | udp <limit-number> | icmp <limit-number> | total <limit-number> }",
+        "undo nat64 reverse-session-limit { { tcp | udp | icmp | total } [ <limit-number> ] }"
+    ],
+    "ParentView": [
+        "NAT64 instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tcp limit-number",
+            "Info": "Indicates the maximum number of TCP reverse IP sessions for each user.\nThe value is an integer ranging from 50 to 65535."
+        },
+        {
+            "Parameters": "udp limit-number",
+            "Info": "Indicates the maximum number of UDP reverse IP sessions for each user.\nThe value is an integer ranging from 50 to 65535."
+        },
+        {
+            "Parameters": "icmp limit-number",
+            "Info": "Indicates the maximum number of ICMP reverse IP sessions for each user.\nThe value is an integer ranging from 50 to 65535."
+        },
+        {
+            "Parameters": "total limit-number",
+            "Info": "Indicates the maximum number of all reverse IP sessions for each user.\nIf the total number of TCP, UDP, and ICMP reverse IP sessions for each user reaches the upper limit, NAT cannot be performed even if the number of TCP, UDP, or ICMP reverse IP sessions for each user has not reached the maximum number.\nThe value is an integer ranging from 50 to 65535."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat64 instance cpe1 id 1",
+            "[*HUAWEI-nat64-instance-cpe1] nat64 reverse-session-limit tcp 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nReverse sessions refer to sessions initiated from IPv4-side devices to IPv6-side devices. Some unauthorized users may consume a lot of reverse session resources to attack devices. As a result, there is a possibility that no NAT64 session can be used by authorized users. To prevent this problem, run the nat64 reverse-session-limit command to limit the number of sessions that can be used.\nPrerequisites\nThe device has been enabled to monitor the number of reverse IP sessions in a specified NAT64 instance.\nConfiguration Impact\nWhen the number of reverse NAT64 sessions of a user reaches the specified upper limit, no more sessions can be established. New NAT64 sessions can be established only after the number of reverse NAT64 sessions falls below the threshold."
+}

@@ -1,0 +1,37 @@
+{
+    "PageTitle": "link-quality (Port extension interface view)",
+    "FuncDef": "The link-quality command enables bit error detection on an interface and sets the thresholds for determining link quality.\nThe undo link-quality command disables bit error detection on an interface.\nBy default, bit error detection is disabled on an interface.",
+    "CLIs": [
+        "link-quality low bit-error-threshold error-ratio <trigger-coefficient> <trigger-power> resume-ratio <recovery-coefficient> <recovery-power>",
+        "undo link-quality low"
+    ],
+    "ParentView": [
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "resume-ratio recovery-coefficient recovery-power",
+            "Info": "Specifies the threshold for triggering link quality to change from low to good. The formula for calculating this threshold is recovery-coefficientx10-recovery-power. If the BER detected by an interface falls below this threshold, the link quality changes from low to good.\nThe recovery-coefficient value is an integer ranging from 1 to 9.\nThe recovery-power value is an integer ranging from 1 to 7."
+        },
+        {
+            "Parameters": "low",
+            "Info": "Indicates that the quality level of a link is LOW. After this parameter is specified, the system determines whether the link level is LOW.\n-"
+        },
+        {
+            "Parameters": "bit-error-threshold",
+            "Info": "Specifies the statistical bit error rate of the link.\n-"
+        },
+        {
+            "Parameters": "error-ratio trigger-coefficient trigger-power",
+            "Info": "Specifies the threshold for triggering link quality to change from good to low. The formula for calculating this threshold is trigger-coefficientx10-trigger-power. If the BER detected by an interface reaches or exceeds this threshold, the link quality changes from good to low.\nThe trigger-coefficient value is an integer ranging from 1 to 9.\nThe trigger-power value is an integer ranging from 1 to 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1025/1/0/0",
+            "[*HUAWEI-GigabitEthernet1025/1/0/0] link-quality low bit-error-threshold error-ratio 1 3 resume-ratio 1 6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA bit error refers to the deviation between a bit that is sent and the bit that is received. Bit errors caused by optical fiber aging or optical signal jitter are inevitable on carrier networks. During data transmission, a high BER will degrade or even interrupt services in extreme cases.\nIn a bit-error-triggered LDP LSP switching scenario, bit error detection is enabled on interfaces along the primary and secondary links of the LDP LSP and the switching type of each interface is set to trigger-section. If the BER detected by an interface reaches or exceeds the bit error alarm reporting threshold, the status of the interface changes to Down. If the primary and secondary links of the LDP LSP both have Down interfaces, traffic transmitted over the LDP LSP is interrupted. To prevent this problem, run the link-quality set the upper and lower thresholds used by an interface to determine link quality. Then, if the BER detected by an OSPF or IS-IS interface reaches or exceeds the set upper threshold, the OSPF or IS-IS interface changes its link quality to low and increases the link cost, so that this link, which has a higher BER, is not used by the optimal route. As a result, the LDP LSP always uses the link with a lower BER to transmit traffic, minimizing the impact of bit errors on services.\nPrerequisites\nBefore running the link-quality command, run the interface interface-type interface-number command to enter the specified physical interface view.\nConfiguration Impact\nAfter the link-quality command is configured:\nIf the BER detected by an interface reaches or exceeds the set upper threshold, the link quality changes from good to low; if the BER detected by an interface reaches or falls below the set lower threshold, the link quality changes from low to good.If the BER detected by an IS-IS or OSPF interface reaches or exceeds the set upper threshold, the interface increases the link cost, so that this link is not used by the optimal route.\n\nPrecautions\nWhen you run the link-quality command to configure bit error detection on an interface, you need to configure the same bit error detection mode on two adjacent nodes of an LDP LSP and set the same BER threshold. Otherwise, the upstream and downstream traffic may be inconsistent."
+}

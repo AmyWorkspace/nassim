@@ -1,0 +1,64 @@
+{
+    "PageTitle": "snmp-agent inform",
+    "FuncDef": "The snmp-agent inform address command sets parameters for sending Inform messages. The parameters include the timeout period for waiting for Inform ACK messages from the NMS and the number of attempts to retransmit an Inform message.\nThe undo snmp-agent inform address command restores the default settings for a particular inform host.\nBy default, the timeout waiting period for Inform ACK messages is 15 seconds, and the number of attempts to retransmit an Inform message is 3.",
+    "CLIs": [
+        "snmp-agent inform { timeout <seconds> | resend-times <times> } * { host-name <target-host-name> | address udp-domain <ip-address> [ vpn-instance <vpn-instance-name> ] params securityname { <security-name> | cipher <security-name> } }",
+        "undo snmp-agent inform { timeout [ <seconds> ] | resend-times [ <times> ] } * { host-name <target-host-name> | address udp-domain <ip-address> [ vpn-instance <vpn-instance-name> ] params securityname { <security-name> | cipher <security-name> } }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "timeout seconds",
+            "Info": "Specified the timeout period for waiting for Inform ACK messages from the NMS.\nThe value is an integer ranging from 1 to 1800, in seconds. The default value is 15, which is equal to the global timeout period configured using the snmp-agent inform command."
+        },
+        {
+            "Parameters": "resend-times times",
+            "Info": "Specifies the maximum number of attempts to retransmit an Inform message if no Inform ACK message is returned by the NMS.\nThe value is an integer ranging from 0 to 10. The default value is 3, which is equal to the global retransmission times configured using the snmp-agent inform command."
+        },
+        {
+            "Parameters": "host-name target-host-name",
+            "Info": "Specifies an SNMP target host name.\nThe name is a string of 1 to 32 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "address",
+            "Info": "Indicates the IP address of a target host for receiving SNMP trap messages.\nThe IP address specified using address and the security name specified using securityname together identify a host."
+        },
+        {
+            "Parameters": "udp-domain ip-address",
+            "Info": "Specifies the IP address of a specified target host within a UDP transmission domain.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string.\nThe parameter vpn-instance is optional. On a VPN network, use the VPN instance specified using vpn-instance, IP address, and security name together to identify a target host."
+        },
+        {
+            "Parameters": "params",
+            "Info": "Indicates information about a target host that generates SNMP notifications.\n-"
+        },
+        {
+            "Parameters": "securityname security-name",
+            "Info": "Displays the name of a target host for receiving Inform messages on the NMS.\nFor SNMPv3, securityname must be set to a user name. securityname configured on the host must be the same as that configured on the NMS, or the NMS cannot receive the trap messages sent by the host.\nFor SNMPv1 and SNMPv2c, the NMS can receive trap messages from all hosts without having securityname configured. securityname is used to distinguish multiple hosts that generate trap messages.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "cipher",
+            "Info": "Indicates the password in ciphertext. The simple password or the ciphertext password can be entered. The password in the configuration file is displayed in ciphertext.\nIf you do not specify the keyword, enter the simple password only.\nA simple text password is a string of 1 to 32 case-sensitive characters. A ciphertext password is a string of 32, 48, 56 or from 68 to 168 case-sensitive characters.\nWhen quotation marks are used around the string, spaces are allowed in the string.\nCiphertext passwords with various lengths configured in an earlier version are also supported in the existing version."
+        },
+        {
+            "Parameters": "cipher security-name",
+            "Info": "Specifies a ciphertext security name.\nA simple text password is a string of 1 to 32 case-sensitive characters. A ciphertext password is a string of 32, 48, 56 or from 68 to 168 case-sensitive characters.\nWhen quotation marks are used around the string, spaces are allowed in the string.\nCiphertext passwords with various lengths configured in an earlier version are also supported in the existing version."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent inform resend-times 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent inform resend-times 10 address udp-domain 10.1.1.1 params securityname ABC"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf the snmp-agent inform address command is run on the target host after the global Inform parameters are configured, only the parameter configure using the snmp-agent inform address command takes effect.\nYou can use both the snmp-agent inform address command and the snmp-agent inform command to set parameters based on network conditions.\nIf a large number of Inform messages are dropped on the network, run the snmp-agent inform pending command to lengthen the trap message queue and then the snmp-agent inform address command to specify the destination IP address and name of the target host.If the transmission speed on the network is low, you are recommended to increase the timeout period. Increasing the timeout period will increase the waiting time of Inform messages in the trap message queue for confirmation. In this case, run the snmp-agent inform { timeout | pending } * command to lengthen the trap message queue and then the snmp-agent inform address command to specify the destination address and the displayed user name.If the transmission speed on the network is high, run the snmp-agent inform timeout address udp-domain params securityname command to reduce the timeout period.If Inform messages are transmitted on an unreliable network, increase the retransmission times. In this case, the Inform messages in the trap message queue need to wait for a longer time to be confirmed. This requires you to run the snmp-agent inform { resend-times | pending } * command to lengthen the trap message queue and then the snmp-agent inform address command to specify the destination address and the displayed user name.\n\nPrerequisites\nParameters for sending Inform messages take effect only after the IP address of the target host for receiving Inform messages is configured using the snmp-agent target-host inform command.\nThe IP address of the target host for receiving Inform messages has been configured using the snmp-agent target-host inform command.\nPrecautions\nYou must set the parameters timeout and resend-times based on network conditions. Setting an inappropriate parameter deteriorates the transmission efficiency of SNMP messages. If the parameters timeout and resend-times are already configured using the snmp-agent inform command, after the snmp-agent inform address command is run on a specified target host, the earlier configure is overwritten.\nOnly parameters for sending Inform messages need to be configured using the snmp-agent inform address command. Parameters for sending trap messages do not need to be configured."
+}

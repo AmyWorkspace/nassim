@@ -1,0 +1,33 @@
+{
+    "PageTitle": "security acl",
+    "FuncDef": "The security acl command sets an ACL used by the IPSec policy.\nThe undo security acl command restores the default setting.\nBy default, the ACL for the IPSec policy is not set.",
+    "CLIs": [
+        "security acl { <acl-number> | name <acl-name> }",
+        "undo security acl"
+    ],
+    "ParentView": [
+        "ISAKMP IPsec policy view",
+        "IPsec policy template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "name acl-name",
+            "Info": "Indicates the name of an ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "acl acl-number",
+            "Info": "Specifies the number of an advanced ACL.\nIt is an integer that ranges from 3000 to 3999."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 3000",
+            "[*HUAWEI-acl4-advance-3000] rule permit ip source 10.1.1.1 32 destination 10.2.1.1 32",
+            "[*HUAWEI-acl4-advance-3000] quit",
+            "[*HUAWEI] ipsec policy policy1 1 isakmp",
+            "[*HUAWEI-ipsec-policy-isakmp-policy1-1] security acl 3000"
+        ]
+    ],
+    "ExtraInfo": "IPSec determines which packets need protection according to the defined ACL.\nAfter an IPSec policy is applied to an interface, you cannot run the security acl command to modify the ACL quoted by the IPSec policy. After an IPSec policy template is quoted by an IPSec policy, you cannot run the security acl command to modify the ACL quoted by the IPSec policy template.\nNote that:\nAn IPSec policy can only quote one ACL. The original configuration must be deleted when a new ACL is quoted.An ACL cannot include rules containing the deny keyword.An ACL cannot include rules referencing address sets or port sets.ACLs configured in the same security policy group cannot include the same rules.Rules in an ACL can match data flows according to the source or destination IP address, source or destination port, and protocol number only.After an IPsec policy is applied to an interface, you can delete, modify, or add rules in the ACL or run the step command to set the step for the ACL. Do not start a new operation if the system is still processing the previous one. Otherwise, the new request will be denied. In addition, deleting or modifying rules in the ACL and setting the step for the ACL will cause the original IPsec SA to be deleted.When multiple initiators negotiate with the same responder, the ACL rules of each initiator cannot overlap those of any other initiator. If the ACL rules of an initiator overlap those of any other initiator, the IPsec tunnel that incoming packets match cannot be identified."
+}

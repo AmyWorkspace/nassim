@@ -1,0 +1,60 @@
+{
+    "PageTitle": "ipv6 import-route isis level-1 into level-2 (IS-IS view)",
+    "FuncDef": "The ipv6 import-route isis level-1 into level-2 command enables IPv6 route leaking from a Level-1 area to a Level-2 area.\nThe undo ipv6 import-route isis level-1 into level-2 command disables IPv6 route leaking from a Level-1 area to a Level-2 area.\nBy default, all IPv6 routes can leak from a Level-1 area to a Level-2 area.",
+    "CLIs": [
+        "ipv6 import-route isis level-1 into level-2 [ tag <tag> | filter-policy { <acl6-number> | acl6-name <acl6-name-string> | ipv6-prefix <ipv6-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> } | direct allow-filter-policy ] *",
+        "undo ipv6 import-route isis level-1 into level-2",
+        "undo ipv6 import-route isis level-1 into level-2 { tag <tag> | filter-policy { <acl6-number> | acl6-name <acl6-name-string> | ipv6-prefix <ipv6-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> } | direct allow-filter-policy } *"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tag tag",
+            "Info": "Assigns administrative tags to imported routes.\nThe value ranges from 1 to 4294967295."
+        },
+        {
+            "Parameters": "filter-policy",
+            "Info": "Indicates a route filtering policy.\n-"
+        },
+        {
+            "Parameters": "acl6-number",
+            "Info": "Specifies a basic ACL6 number.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name-string",
+            "Info": "Specifies the name of a named basic ACL6.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ipv6-prefix ipv6-prefix-name",
+            "Info": "Specifies the name of an IPv6 prefix list. Only the routes that match the specified IPv6 prefix can leak from a Level-1 area to a Level-2 area.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route filter policy. The policy is used to filter the imported routes so that only some of the routes of other routing domains can be imported.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Specifies the direct routes.\n-"
+        },
+        {
+            "Parameters": "allow-filter-policy",
+            "Info": "Applies the filtering policy to direct routes. If the parameter is configured, only the IS-IS direct routes that match the filtering policy can leak from a Level-1 area to a Level-2 area. If the parameter is not configured, all direct routes can leak from a Level-1 area to a Level-2 area.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ipv6-prefix list deny 2001:db8::1 64",
+            "[*HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] ipv6 enable",
+            "[*HUAWEI-isis-1] ipv6 import-route isis level-1 into level-2 filter-policy ipv6-prefix list"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo enable IPv6 route leaking from a Level-1 area to a Level-2 area, run the ipv6 import-route isis level-1 into level-2 command, which facilitates routing management. The ipv6 import-route isis level-1 into level-2 command takes effect only after IPv6 is enabled for the IS-IS process. For details, see isis ipv6 enable.\nPrecautions\nThis command must be configured on a Level-1-2 device on the area boundary.\nIn the route-policy specified in this command, if-match clauses can be configured to set matching rules, but apply clauses cannot be configured to set route attributes."
+}

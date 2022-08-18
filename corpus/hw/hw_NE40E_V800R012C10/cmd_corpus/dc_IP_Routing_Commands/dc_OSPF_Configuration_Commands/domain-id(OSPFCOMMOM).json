@@ -1,0 +1,65 @@
+{
+    "PageTitle": "domain-id",
+    "FuncDef": "The domain-id command sets the ID for an OSPF domain.\nThe undo domain-id command restores the default setting.\nBy default, the domain ID is null.",
+    "CLIs": [
+        "domain-id { null | { <domain-idvalue> | <domain-idvalue_ipv4> } [ [ type { 0005 | 0105 | 0205 | 8005 } value <domainTypeValue> ] | secondary ] * }",
+        "undo domain-id [ { <domain-idvalue> | <domain-idvalue_ipv4> } [ type { 0005 | 0105 | 0205 | 8005 } value <domainTypeValue> ] ]"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "null",
+            "Info": "Indicates that the OSPF domain ID is null.\n-"
+        },
+        {
+            "Parameters": "domain-idvalue",
+            "Info": "Specifies the ID of an OSPF domain as an integer.\nIt is an integer, the value ranges from 0 to 4294967295. The value is converted to dotted decimal notation (with 256 as a carry) when the ID is displayed."
+        },
+        {
+            "Parameters": "domain-idvalue_ipv4",
+            "Info": "Specifies the ID of an OSPF domain as an IP address.\nIt is in dotted decimal notation, it is displayed as entered."
+        },
+        {
+            "Parameters": "type",
+            "Info": "Specifies the domain ID type.\n-"
+        },
+        {
+            "Parameters": "0005",
+            "Info": "Specifies the type 0x0005.\n-"
+        },
+        {
+            "Parameters": "0105",
+            "Info": "Specifies the type 0x0105.\n-"
+        },
+        {
+            "Parameters": "0205",
+            "Info": "Specifies the type 0x0205.\n-"
+        },
+        {
+            "Parameters": "8005",
+            "Info": "Specifies the type 0x8005.\n-"
+        },
+        {
+            "Parameters": "value domainTypeValue",
+            "Info": "Specifies the value of the OSPF domain ID.\nThe value is a hexadecimal number ranging from 0 to FFFF, and the default value is 0."
+        },
+        {
+            "Parameters": "secondary",
+            "Info": "Indicates the ID of a secondary domain.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] ospf 1 vpn-instance vpn1",
+            "[*HUAWEI-ospf-1] domain-id 234"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDomain IDs are used to identify domains.\nIf the local OSPF area and an OSPF area of a remote VPN attempt to exchange Type 3 LSAs, the two areas must be in the same OSPF domain. You can run the domain-id command to configure the same domain ID for the two OSPF areas.\nThe routes that are imported from a PE Router are advertised using External-LSAs. The routes destined for different nodes in the same OSPF domain are advertised based on Type-3 LSAs. This requires that the nodes in the same OSPF domain be configured with the same domain ID.\nOSPF direct routes to a PE do not carry the domain ID, whereas BGP direct routes to a PE do.\nIf the undo domain-id command with no parameter specified is executed, the primary domain ID will be deleted.\nConfiguration Impact\nBefore sending routes to a remote CE Router, a PE Router sends Type-3 LSAs or Type-5 LSAs to the CE based on domain ID. If local domain IDs are the same as or compatible with remote domain IDs in BGP routes, the PE advertises Type 3 routes. If local domain IDs are different from or incompatible with remote domain IDs in BGP routes, the PE advertises Type 5 routes.\nPrecautions\nEach OSPF domain has one or multiple domain IDs. One of them is a primary ID, and the others are secondary IDs.If an OSPF instance does not have a specific domain ID, its ID is considered as null.If the value of the domain ID is 0, secondary cannot be configured.The maximum number of domain-id secondary items configured in an OSPF process is 1000.The domain-id command cannot be run on a public network."
+}

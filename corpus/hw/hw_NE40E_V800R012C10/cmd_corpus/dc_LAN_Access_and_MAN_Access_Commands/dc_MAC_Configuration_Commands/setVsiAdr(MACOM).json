@@ -1,0 +1,113 @@
+{
+    "PageTitle": "mac-address vsi",
+    "FuncDef": "The mac-address static command configures static MAC address entries for a VLAN to direct data forwarding.\nThe undo mac-address command deletes static MAC address entries for a VLAN.\nThe mac-address blackhole command configures a static blackhole MAC address entry.\nThe undo mac-address blackhole command deletes a static blackhole MAC address entry.\nBy default, no static MAC address entry for a VLAN is configured for the system, no blackhole MAC address entry is configured for the system.",
+    "CLIs": [
+        "mac-address static mac-address { <interface-type> <interface-number> | <interface-name> } { { vsi <vsi-name> [ pe-vid <pe-vid> [ ce-vid { ce-vid | any } ] ] } | { <interface-type> <interface-number> | <interface-name> } vsi <vsi-name> }",
+        "mac-address blackhole mac-address vsi <vsi-name>",
+        "mac-address blackhole mac-address vsi <vsi-name> vlan <vlan-id>",
+        "mac-address static mac-address { <interface-type> <interface-number> | <interface-name> } vsi <vsi-name> vlan <vlan-id>",
+        "mac-address static mac-address peer <ip-address> [ pw-id <pw-id> ] vsi <vsi-name> [ vlan <vlan-id> ]",
+        "undo mac-address [ static ] vsi <vsi-name>",
+        "undo mac-address <mac-address> vsi <vsi-name>",
+        "undo mac-address blackhole [ mac-address ] vsi <vsi-name>",
+        "undo mac-address static mac-address { <interface-type> <interface-number> | <interface-name> } { { vsi <vsi-name> [ pe-vid <pe-vid> [ ce-vid { ce-vid | any } ] ] } | { <interface-type> <interface-number> | <interface-name> } vsi <vsi-name> }",
+        "undo mac-address blackhole [ mac-address ] vsi <vsi-name> vlan <vlan-id>",
+        "undo mac-address [ static [ mac-address { <interface-type> <interface-number> | <interface-name> } ] | mac-address ] vsi <vsi-name> vlan <vlan-id>",
+        "undo mac-address static mac-address peer <ip-address> [ pw-id <pw-id> ] vsi <vsi-name> [ vlan <vlan-id> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies a destination MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0. A MAC address cannot be FFFF-FFFF-FFFF or a broadcast MAC."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of a VLANIF interface.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of a VLANIF interface.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the interface name.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the name of a VLANIF interface.\n-"
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies static MAC address entries of a Virtual Switching Instance (VSI).\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "pe-vid pe-vid",
+            "Info": "Specifies the outer VLAN tag.\nThe value is a decimal integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vid ce-vid",
+            "Info": "Specifies an inner VLAN tag.\nIf pe-vid peVlan or ce-vid cevid is configured, the interface must be a sub-interface that is bound to the VSI and configured with QinQ termination.\nThe value is a decimal integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "any",
+            "Info": "Specifies any VLAN.\n-"
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies a VLAN ID.\nThe value is a decimal integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "static",
+            "Info": "Specifies the static MAC address entries.\n-"
+        },
+        {
+            "Parameters": "peer ip-address",
+            "Info": "Specifies an IP address for a remote VTEP.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "pw-id pw-id",
+            "Info": "Specifies the PW ID of the device on the other end of the PW that corresponds to the static MAC address.\nVirtual Private LAN Service (VPLS) is a point-to-multipoint L2VPN technology. A VPLS network consists of multiple VSIs connecting PEs. VSIs can map the physical links on a VPLS network to PWs.\nTo correctly delete the MAC addresses learned on a VPLS network, you need to specify peer peer-ip and pw-id pwidNum.\nThe value is a decimal integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] quit",
+            "[*HUAWEI] vlan 20",
+            "[*HUAWEI-vlan20] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/3",
+            "[*HUAWEI-GigabitEthernet1/0/3] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/3] port default vlan 10",
+            "[*HUAWEI-GigabitEthernet1/0/3] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] port trunk allow-pass vlan 20",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] mac-address static 00e0-fc12-3457 GigabitEthernet 1/0/3 vlan 10",
+            "[*HUAWEI] mac-address static 00e0-fc12-3456 GigabitEthernet 1/0/1 vlan 20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 40",
+            "[*HUAWEI-vlan40] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] port trunk allow-pass vlan 40",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] mac-address static 1-1-1 GigabitEthernet 1/0/1 vlan 40"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMAC address table capacity attackThe attack source sends packets with different source MAC addresses to a network device. After receiving these packets, the network device learns the source MAC addresses. Since the capacity of a MAC address table is limited, when the number of the MAC addresses in the MAC address table reaches the limit, the source MAC addresses of valid packets cannot be learned. These packets sent from the attack source are also broadcast in the VLAN, consuming lots of bandwidth on the network. This may also affect the hosts attached to the network device.\nMAC address entry attackWhen a device learns source MAC addresses and creates a MAC address table, the system cannot identify whether the packets are from authorized users or hackers. This brings security threats. If hackers send attack packets with forged source MAC addresses and access a device through other interfaces, the device will learn incorrect MAC address entries. As a result, the packets that should be forwarded to authorized users are forwarded to hackers.\n\nTo improve interface security, a network administrator can run the mac-address static command to add specific MAC address entries to the MAC address table. User devices are bound to interfaces to prevent unauthorized users from obtaining data.\n\nConfiguration Impact\nAfter static MAC address entries are configured, when receiving a frame with a specific MAC address, a device directly forwards the frame through the corresponding outbound interface. Static MAC address entries will not be aged and they will not be lost after the system resets or the interface board is hot-swapped.\nPrecautions\nManually configured MAC address entries take precedence over automatically generated entries. Static and static blackhole MAC address entries that are configured by users will not be overwritten by dynamic MAC address entries. Dynamic MAC address entries, however, can be overwritten by static and blackhole MAC address entries.\nThe network administrator is familiar with the MAC addresses of the network devices that need to use static MAC address entries for communication; otherwise, the configuration will interrupt authorized users' communication."
+}

@@ -1,0 +1,188 @@
+{
+    "PageTitle": "ping ipv6",
+    "FuncDef": "The ping ipv6 command checks whether an IPv6 host is reachable.",
+    "CLIs": [
+        "ping ipv6 { [ -a <source-ipv6-address> | -c <echo-number> | { -s <byte-number> | -range [ [ min <min-value> | max <max-value> | step <step-value> ] * ] } | -t <timeout> | { -tc <traffic-class-value> | -dscp <dscp> } | vpn-instance <vpn-instance-name> | -m <wait-time> | -name | { -si { <source-interface-name> | <source-interface-type> <source-interface-number> } | -nexthop <nextHopAddr> } | { -brief | [ -system-time | -ri | -detail ] * } | -p <pattern> | ignore-mtu ] * <destination-ipv6-address> [ -i { <interface-name> | <interface-type> <interface-number> } ] [ ipv6-forwarding ] }",
+        "ping ipv6 { [ -a <source-ipv6-address> | -c <echo-number> | { -s <byte-number> | -range [ [ min <min-value> | max <max-value> | step <step-value> ] * ] } | -t <timeout> | { -tc <traffic-class-value> | -dscp <dscp> } | { vpn-instance <vpn-instance-name> [ peer <peerIpv6> ] } | -m <wait-time> | -name | { -si { <source-interface-name> | <source-interface-type> <source-interface-number> } | -nexthop <nextHopAddr> } | -h <hoplimit> | { -brief | [ -system-time | -ri | -detail ] * } | -p <pattern> | ignore-mtu ] * <destination-ipv6-address> [ -i { <interface-name> | <interface-type> <interface-number> } ] [ ipv6-forwarding ] }"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "-a source-ipv6-address",
+            "Info": "Specifies the source IPv6 address of an ICMPv6 Echo Request packet to be sent.\nIf no source IPv6 address is specified, the IPv6 address of the outbound interface through which ICMPv6 Echo Request packets are sent is used as the source address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-c echo-number",
+            "Info": "Specifies the maximum number of times for sending ICMPv6 Echo Request packets.\nIn the case of a poor network quality, increase the value to check network quality based on the packet loss ratio.\nThe value is an integer ranging from 1 to 4294967295. The default value is 5."
+        },
+        {
+            "Parameters": "-s byte-number",
+            "Info": "Specifies the length of an ICMPv6 Echo Request packet (excluding IP and ICMPv6 headers).\nThe value is an integer ranging from 20 to 9600, in bytes. The default value is 56."
+        },
+        {
+            "Parameters": "-range",
+            "Info": "Enables the device to send ICMPv6 Echo Request messages with variable payload lengths.\nIf the -range parameter is not specified, the payload length of an ICMPv6 Echo Request message is equal to the length specified by the -s byte-number parameter. The default value is 56, in bytes.AL21If AM10the -range parameter is specified, the payload length of the first ICMPv6 Echo Request message is min min-value, and that of the second ICMPv6 Echo Request message is min min-value plus step step-value. The payload length increases incrementally by step step-value for subsequent ICMPv6 Echo Request messages until max max-value is reached. After that, the device will not send ICMPv6 Echo Request messages any more.\nBy default, the payload length of an ICMPv6 Echo Request message ranges from 56 to 9600 bytes, and the step length is 1 byte.\nThe command execution takes a long period if a large number of ICMPv6 Echo Request messages need to be sent. If you want to terminate the command execution, press Ctrl+C.To change the number of ICMPv6 Echo Request messages to be sent, change the values of min min-value and max max-value. The value of min min-value must be smaller than that of max max-value.If both the -range and -c echo-number parameters are specified, the device sends ICMPv6 Echo Request messages of the same payload length for the number of times specified by the -c echo-number parameter."
+        },
+        {
+            "Parameters": "min min-value",
+            "Info": "Specifies the minimum payload length of an ICMPv6 Echo Request message.\nThe value is an integer ranging from 20 to 9600, in bytes. The default value is 56."
+        },
+        {
+            "Parameters": "max max-value",
+            "Info": "Specifies the maximum payload length of an ICMPv6 Echo Request message.\nThe value is an integer ranging from 20 to 9600, in bytes. The default value is 9600."
+        },
+        {
+            "Parameters": "step step-value",
+            "Info": "Specifies the step length of an ICMPv6 Echo Request message.\nThe value is an integer ranging from 1 to 1000, in bytes. The default value is 1."
+        },
+        {
+            "Parameters": "-t timeout",
+            "Info": "Specifies the timeout period for waiting for an ICMPv6 Echo Response packet after an ICMPv6 Echo Request packet is sent.\nAfter the ping command is run, the source sends an ICMPv6 Echo Request packet to a specific address and waits for a reply. If the destination sends an ICMPv6 Echo Response packet to the source within the time specified by timeout, the destination is reachable. If the destination does not send any reply within the timeout period, the source displays \"Request time out\".\nNormally, the source will receive an ICMPv6 Echo Response packet within 1 to 10 seconds after an ICMPv6 Echo Request packet is sent. If the network transmission rate is low, increase the timeout period.\nThe value is an integer ranging from 0 to 65535, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "-tc traffic-class-value",
+            "Info": "Specifies the traffic class for ICMPv6 Echo Request packets.\nYou can specify traffic-class-value to control ICMPv6 traffic.\nThe value is an integer ranging from 0 to 255. The default value is 0."
+        },
+        {
+            "Parameters": "-dscp dscp",
+            "Info": "Specifies the DSCP value of an ICMPv6 Echo Request packet to be sent.\nThe value is an integer ranging from 0 to 63. The default value is 0."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the VPN instance to which the IPv6 address belongs.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "-m wait-time",
+            "Info": "Specifies the interval at which ICMPv6 Echo Request packets are sent.\nAfter the ping command is run, the device sends an ICMPv6 Echo Request packet. If the device fails to receive a reply within 500 ms, it sends the next ICMPv6 Echo Request packet. You can use this parameter to set the packet sending interval as required. Do not set this parameter to less than 2000 ms on an unstable network.\nThe value is an integer ranging from 1 to 10000, in milliseconds. The default value is 500."
+        },
+        {
+            "Parameters": "-name",
+            "Info": "Displays the host name of the destination address.\n-"
+        },
+        {
+            "Parameters": "-si source-interface-name",
+            "Info": "Specifies the name of an inbound interface of ICMPv6 Echo Request packets. You can simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "source-interface-type",
+            "Info": "Specifies the type of an inbound interface of ICMPv6 Echo Request packets. You can simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "source-interface-number",
+            "Info": "Specifies the number of an inbound interface of ICMPv6 Echo Request packets. You can simulate packet sending on the remote device and check whether the forwarding path of packets entering from the inbound interface is faulty.\n-"
+        },
+        {
+            "Parameters": "-nexthop nextHopAddr",
+            "Info": "Specifies an IPv6 address for the next hop.\nIf you have specified this parameter, the device no longer searches the routing table before sending ICMPv6 Echo Response packets. This process prevents ping failures caused by incorrect routing entries.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X.\nThe specified next hop address must be the next hop address of a directly connected physical interface.When you specify a next hop address, you can configure -i interface-type interface-number to specify an outbound interface. The following conditions must be met to ensure a test success:The specified next hop address must match the outbound interface.The specified outbound interface cannot be a logical interface's member interface.\nIf you have specified a next hop address, you cannot specify a VPN."
+        },
+        {
+            "Parameters": "-h hoplimit",
+            "Info": "Specifies the hop limit value for ICMPv6 Echo Request packet to be sent.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "-brief",
+            "Info": "Displays brief information about packet loss.\n-"
+        },
+        {
+            "Parameters": "-system-time",
+            "Info": "Specifies the system time when an ICMP Echo Request packet is sent.\n-"
+        },
+        {
+            "Parameters": "-ri",
+            "Info": "Indicates that the source interface of echo response packet is displayed.\n-"
+        },
+        {
+            "Parameters": "-detail",
+            "Info": "Displays detailed information about packet loss.\n-"
+        },
+        {
+            "Parameters": "-p pattern",
+            "Info": "Specifies the padding byte of ICMPv6 Echo Request packets.\nThe padding byte allows the system to identify a specific packet among a great number of received ICMPv6 Echo Response packets.\nThe value is a hexadecimal number ranging from 0 to FFFFFFFF. By default, the padding starts from 0x00."
+        },
+        {
+            "Parameters": "ignore-mtu",
+            "Info": "Indicates that the system does not check the interface MTU when a packet is sent.\n-"
+        },
+        {
+            "Parameters": "destination-ipv6-address",
+            "Info": "Specifies the source IPv6 address of an ICMPv6 Echo Request packet to be sent.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "-i interface-name",
+            "Info": "Specifies the name of an outbound interface through which ICMP Echo Request packets are sent.\nIf the specified destination IPv6 address is a link-local address, specify the outbound interface for ICMP Echo Request packets.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the type of an outbound interface through which ICMP Echo Request packets are sent.\nIf the specified destination IPv6 address is a link-local address, specify the outbound interface for ICMP Echo Request packets.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the number of an outbound interface through which ICMP Echo Request packets are sent.\nIf the specified destination IPv6 address is a link-local address, specify the outbound interface for ICMP Echo Request packets.\n-"
+        },
+        {
+            "Parameters": "ipv6-forwarding",
+            "Info": "Indicates that the ping packets are forcibly forwarded through IPv6 on the first node.\n-"
+        },
+        {
+            "Parameters": "peer peerIpv6",
+            "Info": "Specifies a peer SID, that is, the address of the last hop in the SRv6 domain, in EVPN L3VPN over SRv6 BE scenarios.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ping ipv6 2001:db8::1",
+            "PING 2001:db8::1 : 56  data bytes, press CTRL_C to break",
+            "    Reply from 2001:db8::1",
+            "    bytes=56 Sequence=1 hop limit=64 time=115 ms",
+            "    Reply from 2001:db8::1",
+            "    bytes=56 Sequence=2 hop limit=64 time=1 ms",
+            "    Reply from 2001:db8::1",
+            "    bytes=56 Sequence=3 hop limit=64 time=1 ms",
+            "    Reply from 2001:db8::1",
+            "    bytes=56 Sequence=4 hop limit=64 time=1 ms",
+            "    Reply from 2001:db8::1",
+            "    bytes=56 Sequence=5 hop limit=64 time=1 ms",
+            "- --2001:db8::1 ping statistics---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max=1/23/115 ms"
+        ],
+        [
+            "<HUAWEI> ping ipv6 -brief 2001:db8:1::1",
+            "  PING 2001:db8:1::1 : 56  data bytes, press CTRL_C to break",
+            "    !!!!!",
+            "- -- 2001:db8:1::1 ping statistics---",
+            "    5 packet(s) transmitted",
+            "    5 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max=1/1/1 ms"
+        ],
+        [
+            "<HUAWEI> ping ipv6 -c 1 -name www.huawei.com",
+            "  Resolved Host ( www.huawei.com -> 2001:db8::1 )",
+            "  PING www.huawei.com (2001:db8::1) : 56  data bytes, press CTRL_C to break",
+            "    Reply from 2001:db8::1 ",
+            "    bytes=56 Sequence=1 hop limit=64 time=5 ms",
+            "- --2001:db8::1 ping statistics---",
+            "    1 packet(s) transmitted",
+            "    1 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max=5/5/5 ms"
+        ],
+        [
+            "<HUAWEI> ping ipv6 -c 1 -name 2001:db8::1",
+            "  PING 2001:db8::1 (www.huawei.com): 56  data bytes, press CTRL_C to break",
+            "    Reply from 2001:db8::1 ",
+            "    bytes=56 Sequence=1 hop limit=64 time=7 ms",
+            "- --2001:db8::1 ping statistics---",
+            "    1 packet(s) transmitted",
+            "    1 packet(s) received",
+            "    0.00% packet loss",
+            "    round-trip min/avg/max=7/7/7 ms"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo test the network connectivity, run the ping ipv6 command. It uses ICMPv6 packets to monitor the following items:\nWhether the remote device is available.Round-trip delay of packets transmitted between the local and remote devices.Whether packet loss occurs and what is the packet loss ratio.\nYou can use the ping ipv6 command to check network connectivity or line quality in the following scenarios:\nCheck the protocol stack on the local device.\nYou can run the ping ipv6 loopback-address command to check whether the TCP/IP protocol suite works properly on the local device.\nCheck whether the destination IPv6 host is reachable on an IPv6 network.\nYou can run the ping ipv6 destination-ipv6-address command to send an ICMP Echo Request packet to the destination host. If a reply is received, the destination host is reachable.\nCheck whether the peer is reachable on ang L3VPN.\nOn an L3VPN, devices may lack routing information about each other. Run the ping ipv6 vpn-instance vpna destination-ipv6-address command, not the ping ipv6 destination-ipv6-address command, to check whether the peer is reachable. If the VPN instance name is specified, an ICMPv6 Echo Request packet can reach the peer. If a reply is received, the peer is reachable.\nCheck network quality by analyzing the packet loss ratio and average delay in the command output.\nFor example, you can run the ping ipv6 -c 20 -t 5000 2001:db8::1 command to check the quality of the line connecting the local device to the peer at 2001:db8::1. In the case of an unreliable network, increase -c and -t values to obtain more information.\nCheck the path MTU. For example, you can run the ping ipv6 -f -s 3500 2001:db8::1 command to prevent ICMPv6 packet fragmentation and set the length of an ICMPv6 packet so as to obtain the path MTU after multiple probes.To display brief information about packet loss, set the -brief parameter.\n\nPrecautions\nIf the IPv6 address of the destination host corresponds to a local address, specify the outbound interface through which ICMP Echo Request packets are sent; otherwise, the ping times out.If an abnormality occurs in the ping process, you can press Ctrl+C to terminate the ping operation.If the destination host is unreachable, you cannot run the ping ipv6 command to check network connectivity or locate a line fault. In this case, the system displays \"Request time out\", indicating that the ICMP Echo Request packet times out.If an intermediate device is disabled from responding to ICMPv6 packets, detection on this node fails."
+}

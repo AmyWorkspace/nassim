@@ -1,0 +1,68 @@
+{
+    "PageTitle": "radius-client",
+    "FuncDef": "The radius-client command configures the IP address, VPN instance, shared key, and RADIUS server group for a RADIUS client.\nThe undo radius-client command deletes a RADIUS client.\nBy default, no RADIUS client is configured.",
+    "CLIs": [
+        "radius-client <ip-address> [ mask { <mask-ip> | <mask-length> } ] [ vpn-instance <instance-name> ] { roam-domain <domain-name> | domain-authorization | trigger-web { authentication | accounting | none } } *",
+        "radius-client <ip-address> [ mask { <mask-ip> | <mask-length> } ] [ vpn-instance <instance-name> ] { { shared-key <key> | shared-key-cipher <key-cipher> } | server-group <groupname> } *",
+        "undo radius-client <ip-address> [ mask { <mask-ip> | <mask-length> } ] [ vpn-instance <instance-name> ] [ roam-domain | domain-authorization | trigger-web { authentication | accounting | none } ] *"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of a RADIUS client.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the mask of a RADIUS client.\n-"
+        },
+        {
+            "Parameters": "mask-ip",
+            "Info": "Specifies the IP address mask of a RADIUS client.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the IP address mask length of a RADIUS client.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "vpn-instance instance-name",
+            "Info": "Specifies the name of a VPN instance to which a RADIUS client belongs. The specified VPN instance must have been configured.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "roam-domain domain-name",
+            "Info": "Specifies the name of a roaming domain for RADIUS proxy authentication users. The specified domain must already exist.\nThe value is a string of 1 to 64 characters."
+        },
+        {
+            "Parameters": "domain-authorization",
+            "Info": "Specifies the authorized authentication domain for users.\nTo allow users to access a specified roaming domain, you must specify both roam-domain domain-name and domain-authorization.\n-"
+        },
+        {
+            "Parameters": "trigger-web",
+            "Info": "Specifies the mechanism for triggering web re-authentication for RADIUS proxy users.\nauthentication: The device starts the re-authentication process immediately after the AC is successfully authenticated.accounting: The device starts the re-authentication process when processing the accounting packets sent from the AC.noyoujiane: Re-authentication is disabled.\nBy default, the device starts the re-authentication process when processing the accounting packets sent from the AC.\n-"
+        },
+        {
+            "Parameters": "shared-key key",
+            "Info": "Specifies a shared key for the packet exchange between a RADIUS client and RADIUS server.\nThe value is a string of 1 to 128 characters, and the default value is huawei."
+        },
+        {
+            "Parameters": "shared-key-cipher key-cipher",
+            "Info": "Specifies a shared cipher key for the packet exchange between a RADIUS client and RADIUS server.\nThe value is a character string. If the input string is not encrypted, the string can contain 1 to 128 characters. If the input string is encrypted, the string can contain 1 to 268 characters"
+        },
+        {
+            "Parameters": "server-group groupname",
+            "Info": "Specifies the name of a RADIUS server group. The specified RADIUS server group must have been configured.\nThe value is a string of 1 to 32 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group huawei",
+            "[*HUAWEI-radius-huawei] commit",
+            "[~HUAWEI-radius-huawei] quit",
+            "[~HUAWEI] radius-client 10.163.0.5 shared-key Root@123 server-group huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn some cases, user authentication and accounting may be performed on different devices. For example, the AC is responsible for user authentication, while the BRAS is responsible for user accounting. To prevent two devices from sending authentication packets to the RADIUS server at the same time, configure the BRAS that performs user accounting as a RADIUS proxy. The RADIUS proxy then records authentication information of users when forwarding RADIUS authentication packets. To allow the BRAS to transparently transmit RADIUS packets from a specified RADIUS client (for example, the AC) to the RADIUS server, record RADIUS-delivered authorization information, and transparently transmit authentication response packets, run the radius-client command to configure a RADIUS client. If the authentication mode configured in the user domain of the BRAS is radius-proxy, the BRAS can use the recorded authorization information to authorize users.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

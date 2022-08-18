@@ -1,0 +1,30 @@
+{
+    "PageTitle": "tnl-policy (VPN instance view)",
+    "FuncDef": "The tnl-policy command associates a tunnel policy with the current VPN instance IPv4 address family.\nThe undo tnl-policy command dissociates the current VPN instance IPv4 address family from a tunnel policy.\nBy default, no tunnel policy is associated with a VPN instance IPv4 address family. A tunnel is selected for a VPN in the sequence of conventional LSPs and Local_IfNet tunnels, and load balancing is not performed.",
+    "CLIs": [
+        "tnl-policy <policy-name>",
+        "undo tnl-policy"
+    ],
+    "ParentView": [
+        "VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name",
+            "Info": "Specifies the name of the tunnel policy to be associated with the VPN instance IPv4 address family.\nThe value is a string of 1 to 39 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] tunnel-policy po1",
+            "[*HUAWEI-tunnel-policy-po1] tunnel select-seq lsp load-balance-number 2",
+            "[*HUAWEI-tunnel-policy-po1] quit",
+            "[*HUAWEI] ip vpn-instance vpn2",
+            "[*HUAWEI-vpn-instance-vpn2] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn2-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn2-af-ipv4] tnl-policy po1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBy default, a tunnel is selected for a VPN in the sequence of conventional LSPs and Local_IfNet tunnels to forward data on the backbone network and cannot implement multi-path load balancing at the same time. To ensure transmission quality by using a TE tunnel to transmit VPN services or improve transmission efficiency by load balancing VPN services among tunnels, run the tunnel-policy command to configure a tunnel policy and run the tnl-policy command in the IPv4 or IPv6 address family view to apply the tunnel policy.\nPrerequisites\nAn RD has been configured for the VPN instance enabled with the IPv4 or IPv6 address family using the route-distinguisher command.\nIf the associated tunnel policy does not exist, run the tunnel-policy command to create the tunnel policy first.\nConfiguration Impact\nIf the tunnel policy associated with a VPN instance enabled with the IPv4 address family cannot match an existing tunnel on the network, the VPN instance will have routes recurse to tunnels based on the default tunnel policy. If the recursion fails, services will be interrupted.\nPrecautions\nIf the address family of a VPN instance changes or the associated tunnel policy is deleted, VPN services will be interrupted for a short time even if tunnels matching the tunnel policy are available on the network. Exercise caution when running the tnl-policy command."
+}

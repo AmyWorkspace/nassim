@@ -1,0 +1,68 @@
+{
+    "PageTitle": "commit (All views except the user view)",
+    "FuncDef": "The commit command commits a configuration.",
+    "CLIs": [
+        "commit [ trial [ <time> ] [ label <label> ] ] [ description <description> ]"
+    ],
+    "ParentView": [
+        "All views except the user view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "trial time",
+            "Info": "Specifies the timeout period for the trial running of a configuration.\nThe value is an integer ranging from 60 to 65535, in seconds. The default value is 600 seconds."
+        },
+        {
+            "Parameters": "label label",
+            "Info": "Specifies a user label for a configuration rollback point.\nThe value is a string of 1 to 256 case-sensitive characters. It can be any visible ASCII character except for the space. However, the string can contain spaces if it is enclosed with double quotation marks (\" \"). The string cannot start with a digit or be a hyphen (-)."
+        },
+        {
+            "Parameters": "description description",
+            "Info": "Specifies information about a configuration rollback point.\nThe value is a string of 1 to 60 case-sensitive ASCII characters, spaces supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] sysname HUAWEIA",
+            "[*HUAWEI] commit label a123",
+            "[~HUAWEI]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] sysname ROLLBACK",
+            "[*HUAWEI] commit description This is a new name",
+            "[~ROLLBACK] display configuration commit list verbose",
+            "1) CommitId: 1000000114",
+            "        Label: -",
+            "        User: Huawei",
+            "        User-Intf: VTY 0",
+            "        Type: CLI",
+            "        TimeStamp: 2012-07-03 20:20:40",
+            "        Description: This is a new name",
+            "",
+            "2) CommitId: 1000000113",
+            "        Label: -",
+            "        User: root",
+            "        User-Intf: VTY 0",
+            "        Type: CLI",
+            "        TimeStamp: 2012-06-30 15:17:09",
+            "        Description: ",
+            "",
+            "3) CommitId: 1000000112",
+            "        Label: -",
+            "        User: SNMP_User",
+            "        User-Intf: ",
+            "        Type: SNMP",
+            "        TimeStamp: 2012-06-30 15:16:56",
+            "        Description:"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] sysname ROLLBACK",
+            "[*HUAWEI] commit trial 120",
+            "[~HUAWEI]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFor the committed configuration, description must be configured to provide guidance and assistance for future configuration rollbacks, run the commit description command in the two-phase configuration validation mode. All the generated description information can be viewed using the display configuration commit list verbose command.To enable the trial running of a configuration, run the trial command. This configuration enables the trial running of new functions and services without interrupting the services running on the live network, which improves network reliability. The time parameter specifies the timeout period for the trial running of a configuration. When the trial running time expires, the configuration that has been run in trial rolls back automatically. The system configuration restores to the configuration status before the configuration is committed. To validate the configuration that has been run in trial, reconfigure the function and commit the configuration.In two-phase validation mode, if a configuration has not been committed, the symbol \"*\" is displayed in the corresponding view (except the user view). If all configurations have been configured, the symbol \"~\" is displayed in the corresponding view (except the user view).\n\nPrerequisites\nThe system view for the two-phase configuration validation mode has been displayed using the system-view command, and the configuration has been modified.\nConfiguration Impact\nAfter the commit command is run, the changes in system configurations take effect. The changes include only configuration changes committed after the two-phase configuration validation mode is configured.\nPrecautions\nThe commit trial command applies to the two-phase configuration validation mode only.\nWhen multiple users commit configurations at the same time, the configurations of some users may fail to be committed due to configuration locking."
+}

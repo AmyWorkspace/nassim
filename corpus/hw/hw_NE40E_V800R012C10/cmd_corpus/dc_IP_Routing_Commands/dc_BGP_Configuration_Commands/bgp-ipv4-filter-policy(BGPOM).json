@@ -1,0 +1,67 @@
+{
+    "PageTitle": "filter-policy (BGP-IPv4 unicast address family view)",
+    "FuncDef": "The filter-policy export command configures a device to use an export policy to filter the routes to be advertised so that only the routes that match the export policy are advertised.\nThe undo filter-policy export command restores the default configuration.\nThe filter-policy import command configures a device to filter received routes.\nThe undo filter-policy import command restores the default configuration.\nBy default, received routes or the routes to be advertised are not filtered.",
+    "CLIs": [
+        "filter-policy { <acl-number> | ip-prefix <ip-prefix-name> | acl-name <acl-name> } { import | export [ direct | isis <process-id> | ospf <process-id> | rip <process-id> | static | op-route ] }",
+        "undo filter-policy [ <acl-number> | ip-prefix <ip-prefix-name> | acl-name <acl-name> ] { import | export [ direct | isis <process-id> | ospf <process-id> | rip <process-id> | static | op-route ] }"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer that ranges from 2000 to 2999."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IPv4 prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Configures a device to filter the direct routes to be advertised.\n-"
+        },
+        {
+            "Parameters": "isis process-id",
+            "Info": "Specifies the ID of an IS-IS process.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "ospf process-id",
+            "Info": "Specifies the ID of an OSPF process.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "rip",
+            "Info": "Configures BGP to import RIP routes.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Configures a device to filter the static routes to be advertised.\n-"
+        },
+        {
+            "Parameters": "op-route",
+            "Info": "Configures a device to filter the open programming (OP)-routes to be advertised.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix aaa permit 10.0.192.0 8 greater-equal 17 less-equal 18",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] filter-policy ip-prefix aaa import"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 2000",
+            "[*HUAWEI-acl4-basic-2000] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] filter-policy 2000 export"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe filter-policy export command takes effect on the routes to be advertised by BGP. BGP filters the routes that are imported using the import-route command. After the command is run, only the routes that match the export policy can be added to the local BGP routing table and advertised by BGP.\nThe filter-policy import command is used to filter the routes received by BGP so that BGP adds only desired routes to the BGP routing table.\nIf protocol is specified, only the routes imported from the specified protocol will be filtered. If protocol is not specified, the routes imported from all protocols will be filtered.\nIf rules are configured for a named ACL using the rule command, only the source address range specified by source and the time period specified by time-range are valid.\nConfiguration Impact\nIf the filter-policy export command with the same protocol specified is run more than once, the latest configuration overrides the previous one.\nIf the filter-policy import command runs more than once, the latest configuration overrides the previous one.\nPrecautions\nThe filter-policy export command is mutually exclusive with the route-filter export command.\nThe filter-policy import command is mutually exclusive with the route-filter import command."
+}

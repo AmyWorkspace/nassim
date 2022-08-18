@@ -1,0 +1,34 @@
+{
+    "PageTitle": "peer keychain (VPN instance MSDP view/MSDP view of a public network instance)",
+    "FuncDef": "The peer keychain command applies a keychain to a Multicast Source Discovery Protocol (MSDP) peer, so that the peer can use this keychain to authenticate TCP connection setup and MSDP message exchange requests.\nThe undo peer keychain command cancels keychain authentication for an MSDP peer.\nBy default, keychain authentication is not configured for an MSDP peer. Configuring keychain authentication is recommended to improve system security.",
+    "CLIs": [
+        "peer <peer-address> keychain <keychain-name>",
+        "undo peer <peer-address> keychain"
+    ],
+    "ParentView": [
+        "VPN instance MSDP view",
+        "MSDP view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies the address of an MSDP peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "keychain-name",
+            "Info": "Specifies the name of a keychain.\nThe value must be a keychain-name parameter value specified in the keychain command. The value is a string of 1 to 47 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface loopback1",
+            "[*HUAWEI-LoopBack1] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] msdp",
+            "[*HUAWEI-msdp] peer 1.1.1.2 connect-interface LoopBack 1",
+            "[*HUAWEI-msdp] peer 1.1.1.2 keychain Huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo improve system security, run the peer keychain command to apply a keychain to an MSDP peer, so that the peer can use this keychain to authenticate TCP connection setup and MSDP message exchange requests. Keychain implements higher MSDP peer authentication security than the message-digest algorithm 5 (MD5).\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command in the public network instance view or VPN instance view.\nMSDP peers have been configured.\nA keychain name has been specified using the keychain-name parameter in the keychain command. Otherwise, a TCP connection cannot be set up.\nConfiguration Impact\nIf the peer keychain command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nTo use keychain authentication, you must configure keychain authentication on both MSDP peers, as well as the same encryption algorithms and passwords on both peers; otherwise, a TCP connection cannot be set up, and MSDP messages cannot be transmitted.\nThe MSDP MD5 authentication and MSDP keychain authentication are mutually exclusive.\nThe MD5 encryption algorithm has low security and has security risks. You are advised to use the MSDP Keychain encryption algorithm."
+}

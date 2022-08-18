@@ -1,0 +1,74 @@
+{
+    "PageTitle": "arp-fake",
+    "FuncDef": "Using the arp fake timeout command, you can set the aging expiry time of a fake dynamic Address Resolution Protocol (ARP) entry.\nUsing the undo arp-fake expire-time command, you can restore the default aging expiry time of a fake dynamic ARP entry.\nThe arp-fake penalty-time command sets a penalty interval to suppress dynamic ARP fake entry aging.\nThe undo arp-fake penalty-time command restores the default penalty interval to suppress dynamic ARP fake entry aging.\n\n\n By default, the aging expiry time of a fake dynamic ARP entry is 5s. \n By default, the penalty interval is set to 5s to suppress dynamic ARP fake entry aging.",
+    "CLIs": [
+        "arp-fake expire-time <expire-time>",
+        "arp-fake penalty-time <penalty-time>",
+        "undo arp-fake expire-time",
+        "undo arp-fake penalty-time [ penalty-time ]"
+    ],
+    "ParentView": [
+        "PW-VE interface view",
+        "PW-VE sub-interface view",
+        "Layer 2 40GE interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Port extension Layer 2 interface view",
+        "Remote-AP interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Eth-Trunk sub-interface view",
+        "GMPLS-UNI interface view",
+        "400GE interface view",
+        "50GE sub-interface view",
+        "10GE interface view",
+        "VE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Global VE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "Layer 2 50GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Vbridge interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "expire-time expire-time",
+            "Info": "Specifies the aging expiry time of a fake dynamic ARP entry.\nThe value is an integer ranging from 1 to 36000 in seconds."
+        },
+        {
+            "Parameters": "penalty-time penalty-time",
+            "Info": "Specifies a penalty interval to suppress dynamic ARP fake entry aging.\nThe value is an integer ranging from 1 to 180, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] arp-fake expire-time 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] arp-fake penalty-time 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nARP Miss is an event message triggered when a device forwards IP packets. When receiving an IP packet, the device searches its ARP table. If no matching ARP entry is found, the device sends an ARP Miss message to the upper-layer software. In this case, the upper-layer software generates an ARP request message for the MAC address corresponding to the IP address to further generate the corresponding ARP entry for forwarding.\nIf an unauthorized user sends a large number of invalid packets with a forged destination IP address to a device, the device generates a large number of ARP Miss messages because it cannot find the corresponding ARP entry. As a result, the upper-layer software keeps processing these ARP Miss messages and sending ARP request messages. Therefore, such attacks degrade device performance or even cause network storms.\nTo prevent this problem, the upper-layer software generates a fake ARP entry in the ARP table when no response to a sent ARP request message is received. Although the fake ARP entry cannot be used for packet forwarding, the packets matching the fake ARP entry do not trigger ARP Miss messages. After receiving an ARP reply message, the upper-layer software updates the fake ARP entry as a real one, which can be used for packet forwarding.\nFake ARP entries cannot always exist; otherwise, packets cannot be forwarded normally. The default aging time of fake ARP entries is 5s. That is, the device does not trigger ARP Miss messages within 5s. You can run the command to set an aging time for fake ARP entries to control the frequency of reporting ARP Miss messages.\nFor security purposes, if the aging time of fake ARP entries is set to a value less than 5s, the setting does not take effect.\n\nTo prevent continuous attacks from invalid packets with the same forged IP address, you can run the command to configure a penalty interval for suppressing fake ARP entry aging to further control the frequency of reporting ARP Miss messages. After a penalty interval for suppressing fake ARP entry aging is configured, the device accumulates the penalty interval values when receiving ARP Miss messages from the same IP address repeatedly. That is, if ARP learning for packets from the same IP address always fails, the frequency of reporting ARP Miss messages gradually decreases.\nYou cannot configure both an aging time for fake ARP entries and a penalty interval for suppressing fake ARP entry aging.\n\nConfiguration Impact\n\nYou are not advised to set a large aging time for fake ARP entries or a large penalty interval for suppressing fake ARP entry aging, because fake ARP entries cannot be used for packet forwarding and packets matching such entries are discarded.\n\nIn a low-security environment, you can set a large aging time for fake ARP entries or a large penalty interval for suppressing fake ARP entry aging to reduce the frequency of reporting ARP Miss messages, minimizing the impact of attacks on devices and networks.\nIn a high-security environment, you can set a small aging time for fake ARP entries or a small penalty interval for suppressing fake ARP entry aging to increase the frequency of reporting ARP Miss messages, preventing much normal traffic from being discarded.\n\n\nPrecautions\n\nIf a new aging time is configured for fake ARP entries on an interface, this time takes effect only for newly generated fake ARP entries."
+}

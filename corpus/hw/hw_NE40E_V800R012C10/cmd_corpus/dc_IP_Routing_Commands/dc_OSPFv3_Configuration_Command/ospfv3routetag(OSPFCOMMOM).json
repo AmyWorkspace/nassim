@@ -1,0 +1,29 @@
+{
+    "PageTitle": "route-tag",
+    "FuncDef": "The route-tag command sets the VPN route tag for imported VPN routes.\nThe undo route-tag command restores the default setting.\nBy default, the first two bytes of a tag value are fixed at 0xD000, and the last two bytes are the local BGP AS number. For example, if the local BGP AS number is 100, the default tag value in decimal notation is 3489661028; if the BGP AS number is greater than 65535, the tag value is 0, and you can manually change the tag value. If BGP is not configured, the default tag value is 0.",
+    "CLIs": [
+        "route-tag <tag-value>",
+        "undo route-tag"
+    ],
+    "ParentView": [
+        "OSPFv3 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tag-value",
+            "Info": "Specifies the VPN route tag.\nThe value is an integer ranging from 0 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance huawei",
+            "[*HUAWEI-vpn-instance-huawei] ipv6-family",
+            "[*HUAWEI-vpn-instance-huawei-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-huawei] quit",
+            "[*HUAWEI] ospfv3 100 vpn-instance huawei",
+            "[*HUAWEI-ospfv3-100] route-tag 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a PE, the VPN instance associated with an OSPFv3 instance is configured with a VPN route tag. This route tag must be carried in Type 5 or Type 7 LSAs. You are advised to configure the same route tag for PEs in the same area. Not carried in BGP extended community attributes, the VPN route tag is configured and takes effect only on the PEs that receive BGP routes and generate OSPFv3 LSAs. Different OSPFv3 processes can be configured with the same route tag.\nThe priority of VPN route tags varies with the command.\nThe priority of the VPN route tag configured using the import-route command is the highest.The priority of the VPN route tag configured using the route-tag command is medium.The priority of the VPN route tag configured using the default command is the lowest.\nIf a Type 5 or Type 7 LSA whose tag is the same as the local tag is received, this LSA is ignored during route calculation."
+}

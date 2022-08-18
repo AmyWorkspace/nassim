@@ -1,0 +1,50 @@
+{
+    "PageTitle": "ipsec policy (tunnel interface view)",
+    "FuncDef": "The ipsec policy command applies an IPSec policy group on the tunnel interface.\nThe undo ipsec policy command restores the default setting.\nBy default, the IPSec policy group is not applied on the tunnel interface.",
+    "CLIs": [
+        "ipsec policy <policy-name> { service-instance-group <service-group-name> }",
+        "ipsec policy <policy-name> service-instance-group <service-group-name> instance <instance-id> [ slave-down ]",
+        "ipsec policy <policy-name>",
+        "undo ipsec policy"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name",
+            "Info": "Specifies the name of an IPSec policy group applied on the interface.\nIt is a string of 1 to 15 case sensitive characters."
+        },
+        {
+            "Parameters": "service-instance-group service-group-name",
+            "Info": "Specifies the name of an IPSec service group instance.\nIt is a string of 1 to 31 case insensitive characters, which cannot include the hyphen(-)."
+        },
+        {
+            "Parameters": "instance instance-id",
+            "Info": "Specifies an IPsec instance ID.\nThe value is an integer ranging from 1 to 128."
+        },
+        {
+            "Parameters": "slave-down",
+            "Info": "Indicates the slave-down mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipsec policy policy1 1 isakmp",
+            "[*HUAWEI-ipsec-policy-isakmp-policy1-1] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol ipsec",
+            "[*HUAWEI-Tunnel10] ipsec policy policy1 service-instance-group test1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipsec policy policy1 1 isakmp",
+            "[*HUAWEI-ipsec-policy-isakmp-policy1-1] quit",
+            "[*HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] tunnel-protocol ipsec",
+            "[*HUAWEI-Tunnel10] ipsec policy policy1 service-instance-group test1 instance 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEach tunnel interface can only apply a single IPsec policy group. If you want to apply another security group, you must cancel application of the current IPsec policy group. An IPsec policy group can only be applied on one interface.\nAfter a security policy group is applied to a tunnel interface, no new policy can be added to the policy group and the original policy cannot be deleted. Before you change the IPsec policy, run the undo ipsec policy command to unbind the IPsec policy group from the tunnel interface view.\nAfter you apply an IPsec policy group to a specified tunnel interface, the SA is not established immediately. The IKE negotiation is triggered to establish an SA only when the data flow that matches a certain IPsec policy is sent from the interface.\nWhen sending packets from a tunnel interface, you must search for the security policy in the IPsec policy group one by one in ascending order by sequence number for packets. If an ACL used by security policy is matched, this ACL is used to process packets. If there is no matching ACL, the search for the next security policy continues. If none of the ACLs used by the security policy is matched, the packets are directly sent (that is, the packets are not protected by IPsec).\nThe undo ipsec policy command run in the interface view deletes all IKE and IPsec SAs.\nAn IPsec policy group can be applied to a GRE or IPsec tunnel.\nPrerequisites\nDPD detection has been enabled using the ike dpd command.\nPrecautions\nIPsec dual devices do not support the combination usage of IP FRR and slavedown or that of hybrid FRR and slavedown.\nWhen slave-down is specified in the command, the tunnel interface is not allowed to borrow the IP address of another interface.\nThe ipsec policy and virtual-access port-extend commands are mutually exclusive."
+}

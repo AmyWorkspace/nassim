@@ -1,0 +1,49 @@
+{
+    "PageTitle": "nexthop recursive-lookup bit-error-detection (BGP multi-instance VPNv4 address family view)",
+    "FuncDef": "The nexthop recursive-lookup bit-error-detection command associates bit error events with the adjustment of VPN route local preference or MED values.\nThe undo nexthop recursive-lookup bit-error-detection command deletes the association between bit error events and the adjustment of VPN route local preference or MED values.\nBy default, bit error events are not associated with the adjustment of VPN route local preference or MED values.",
+    "CLIs": [
+        "nexthop recursive-lookup bit-error-detection { med + <med-adjust-value> | local-preference - <localpref-adjust-value> } * [ route-policy <route-policy-name> ]",
+        "nexthop recursive-lookup bit-error-detection { med + <med-adjust-value> | local-preference - <localpref-adjust-value> } * route-filter <route-filter-name>",
+        "undo nexthop recursive-lookup bit-error-detection"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "med med-adjust-value",
+            "Info": "Specifies the MED value adjustment for a BGP route.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "+",
+            "Info": "Add metric.\n-"
+        },
+        {
+            "Parameters": "local-preference localpref-adjust-value",
+            "Info": "Specifies the local preference adjustment for a BGP route.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "-",
+            "Info": "Subtract BGP local preference value.\n-"
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy nhp-biterr permit node 10",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-instance-a-af-vpnv4] nexthop recursive-lookup bit-error-detection med + 50 local-preference - 100 route-policy nhp-biterr"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an H-VPN scenario (for the networking diagram, see \"Network Reliability\" -> \"Bit-Error-Triggered Protection Switching Configuration\" -> \"Configuring Bit-Error-Triggered L3VPN Route Switching\" in the Configuration Guide), VPNv4 peer relationships are established between the UPE and SPEs and between the NPE and SPEs. VPN FRR is configured on the UPE. Among the routes bound for the UPE and advertised by SPEs, the NPE preferentially selects the routes advertised by SPE1 and transmits traffic along the path NPE -> SPE1 -> UPE. If the tunnel between the UPE and SPE1 encounters a bit error event, SPE1 can detect the bit error event, but cannot notify the NPE of the event. As a result, the NPE cannot switch from the path NPE -> SPE1 -> UPE to another path, and packet loss occurs.\nAfter you configure the association between bit error events and the adjustment of VPN route local preference or MED values, SPE1 can detect the bit error event encountered by the tunnel between itself and the UPE and reduces the local preference or increases the MED values of the VPNv4 routes that it advertises to the NPE. As a result, the NPE preferentially selects the routes advertised by SPE2 and switches traffic to the backup path NPE -> SPE2 -> UPE. After the bit error event is over, SPE1 restores the local preference or MED values of the routes advertised to the NPE. Consequently, the NPE preferentially selects the routes advertised by SPE1 and switches traffic back to the primary path NPE->SPE2->UPE.\nConfiguration Impact\nIf a bit error event has occurred before you configure the association between bit error events and VPN route local preference or MED values, the NPE may select a path other than NPE -> SPE2 -> UPE to transmit traffic after you configure the nexthop recursive-lookup bit-error-detection command.\nPrecautions\nAfter you configure the association between bit error events and the adjustment of VPN route local preference or MED values, the local preference or MED value of the route changes if the tunnel to which the route recurses encounters a bit error event. However, only routes meeting the routing policy can be advertised with adjusted local preference or MED values. Pay special attention to routing policy configuration when configuring the association between bit error events and the adjustment of VPN route local preference or MED values. If the routing policy is not appropriately configured, routes may fail to be advertised after having their local preference or MED values changed."
+}

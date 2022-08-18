@@ -1,0 +1,35 @@
+{
+    "PageTitle": "lacp timeout",
+    "FuncDef": "The lacp timeout command configures a timeout period for an Eth-Trunk interface in static Link Aggregation Control Protocol (LACP) mode to receive LACPDUs.\nThe undo lacp timeout command restores the default timeout period.\nThe default timeout period for an Eth-Trunk interface to receive LACPDUs is slow mode, 90 seconds.",
+    "CLIs": [
+        "lacp timeout fast [ user-defined <user-defined> ]",
+        "lacp timeout slow",
+        "undo lacp timeout"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-defined user-defined",
+            "Info": "Indicates a timeout period for an Eth-Trunk interface to receive LACPDUs when fast is specified.\nThe value is an integer ranging from 3 to 90, in seconds."
+        },
+        {
+            "Parameters": "slow",
+            "Info": "Indicates that the timeout period of Eth-Trunk interfaces in static LACP mode to receive packets is 90 seconds.\nIf slow is configured, the peer sends an LACP packet every 30 seconds. In this case, the device responds to the LACPDUs from the peer slowly but consumes fewer system resources compared with the situation that fast is configured.\nThe timeout periods set for the two ends can be different. To facilitate maintenance, setting the same timeout period for both ends is recommended.\n-"
+        },
+        {
+            "Parameters": "fast",
+            "Info": "Indicates that the timeout period of Eth-Trunk interfaces in static LACP mode to receive packets is 3 seconds.\nIf fast is configured, the peer sends an LACP packet every 1 second. In this case, the device can quickly respond to the LACPDUs from the peer but consume more system resources compared with the situation that slow is configured.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface eth-trunk 1",
+            "[*HUAWEI-Eth-Trunk1] mode lacp-static",
+            "[*HUAWEI-Eth-Trunk1] lacp timeout slow"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFor an Eth-Trunk interface with many member Ethernet interfaces, if one of the member interfaces has not received packets for indicated period then it will be turned down. To make sure the reliability of the network, and other member interfaces will forward the data. By default, the timeout period is slow mode, 90 seconds, and the fast mode can quickly respond to the LACPDUs from the peer but consume more system resources compared with the situation that slow is configured.\nPrerequisites\nThe mode lacp-static command has been run in the Eth-Trunk interface view to configure the Eth-Trunk interface to work in static LACP mode.\nConfiguration Impact\nAfter a timeout period is successfully configured, the interval at which the peer sends LACPDUs is set. Details are described as follows:\nIf the parameter fast is configured, the peer sends an LACP packet every 1 second.If the parameter slow is configured, the peer sends an LACP packet every 30 seconds.\nThe timeout period configured on an Eth-Trunk interface takes effect on all its member interfaces."
+}

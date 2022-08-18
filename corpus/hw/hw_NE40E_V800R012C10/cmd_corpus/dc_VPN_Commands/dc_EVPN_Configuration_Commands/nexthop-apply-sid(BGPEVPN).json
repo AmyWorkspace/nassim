@@ -1,0 +1,28 @@
+{
+    "PageTitle": "segment-routing ipv6 apply-sid evpn (BGP-VPN instance IPv4 address family view)",
+    "FuncDef": "The segment-routing ipv6 apply-sid all-nexthop evpn command configures a device to allocate SIDs to BGP VPN IPv4 routes based on all next hops.\nThe undo segment-routing ipv6 apply-sid all-nexthop evpn command restores the default configuration.\nThe segment-routing ipv6 apply-sid specify-nexthop evpn command configures a device to allocate SIDs to BGP VPN IPv4 routes based on specified next hops.\nThe undo segment-routing ipv6 apply-sid specify-nexthop evpn command restores the default configuration.\nBy default, a device is not configured to allocate SIDs to BGP VPN IPv4 routes based on next hops.",
+    "CLIs": [
+        "segment-routing ipv6 apply-sid all-nexthop evpn",
+        "segment-routing ipv6 apply-sid specify-nexthop evpn",
+        "undo segment-routing ipv6 apply-sid all-nexthop evpn",
+        "undo segment-routing ipv6 apply-sid specify-nexthop evpn"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance v",
+            "[*HUAWEI-vpn-instance-v] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-v-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-v] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance v",
+            "[*HUAWEI-bgp-v] segment-routing ipv6 locator 1 evpn",
+            "[*HUAWEI-bgp-v] segment-routing ipv6 apply-sid all-nexthop evpn"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn EVPN L3VPNv4 over SRv6 BE/SRv6 TE Policy scenarios, a SID is allocated to each instance by default. That is, the same SID is assigned to BGP VPN IPv4 routes in a specified VPN instance. After traffic arrives at a PE, the PE searches the IP routing table of the VPN instance for an entry and uses the entry to forward the traffic to a CE. To properly use network resources and reduce network congestion, run the segment-routing ipv6 apply-sid all-nexthop evpn command to assign a SID to each next hop of a BGP private IPv4 route so that traffic is forwarded through different next hops. If only some next hops in a VPN instance are involved in traffic forwarding, you can run the segment-routing ipv6 apply-sid specify-nexthop evpn command to enter the next hop-based SID allocation view and specify a next hop and an outbound interface for SID allocation. With this function configured, a SID is allocated to each specified next hop.\nPrerequisites\nThe segment-routing ipv6 locator evpn command has been run in the BGP-VPN instance IPv4 address family view to enable BGP VPN routes to carry the SID attribute when being sent to the BGP-EVPN address family.\nPrecautions\nIf dynamic SIDs cannot be allocated to BGP VPN IPv4 routes based on next hops due to the insufficiency of configured dynamic SID resources, SIDs are allocated to routes based on instances, leading to a failure of SID-based load balancing."
+}

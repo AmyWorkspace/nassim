@@ -1,0 +1,43 @@
+{
+    "PageTitle": "filter-policy import (OSPFv3 view)",
+    "FuncDef": "The filter-policy import command configures a filtering policy to filter the routes received by OSPF.\nThe undo filter-policy import command restores the default setting.\nBy default, the received routes are not filtered.",
+    "CLIs": [
+        "filter-policy <acl-number> import",
+        "filter-policy { acl6-name <acl6-name> | ipv6-prefix <ipv6-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> } import",
+        "undo filter-policy [ <acl-number> | acl6-name <acl6-name> | ipv6-prefix <ipv6-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> ] import"
+    ],
+    "ParentView": [
+        "OSPFv3 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl6-name acl6-name",
+            "Info": "Specifies the name of a named basic ACL6.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ipv6-prefix ipv6-prefix-name",
+            "Info": "Specifies the name of an IPv6 address prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route-filter. Only the routes that match the route-filter are added to the routing information base (RIB) and can be advertised.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ipv6-prefix abc deny 2001:db8::1 64",
+            "[*HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] filter-policy ipv6-prefix abc import"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe filter-policy import command is used to set a filtering policy for received routes. Only the routes that match the filtering policy are added to the routing information base (RIB) and can be advertised. Routes that fail to match the filtering policy can be added to the OSPFv3 routing table but cannot be added to the RIB nor advertised.\nPrecautions\nWhen the rule (basic ACL6 view) command is used to configure a filtering rule for a named IPv6 ACL, only the source address range is specified in source and the time period is specified in time-range take effect on the filtering rule."
+}

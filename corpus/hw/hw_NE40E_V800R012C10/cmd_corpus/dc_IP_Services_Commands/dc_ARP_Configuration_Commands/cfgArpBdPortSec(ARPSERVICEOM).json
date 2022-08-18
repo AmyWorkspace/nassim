@@ -1,0 +1,46 @@
+{
+    "PageTitle": "arp l2-proxy learning dynamic-user",
+    "FuncDef": "The arp l2-proxy learning dynamic-user disable command disables ARP snooping entry learning on an interface.\nThe undo arp l2-proxy learning dynamic-user disable command enables ARP snooping entry learning on an interface.\nThe arp l2-proxy learning dynamic-user max-user command configures the maximum number of ARP snooping entries that an interface can learn.\nThe undo arp l2-proxy learning dynamic-user max-user command restores the default configuration.\nBy default, ARP snooping entry learning is enabled. The default maximum number of ARP snooping entries that an interface can learn is set to 0, indicating that the maximum number of ARP snooping entries is not limited.",
+    "CLIs": [
+        "arp l2-proxy learning dynamic-user disable",
+        "arp l2-proxy learning dynamic-user max-user <max-user-number>",
+        "undo arp l2-proxy learning dynamic-user disable",
+        "undo arp l2-proxy learning dynamic-user max-user [ <max-user-number> ]"
+    ],
+    "ParentView": [
+        "400GE Layer 2 sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "Global-VE layer2 subinterface view",
+        "VE layer2 subinterface view",
+        "Layer 2 sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "max-user max-user-number",
+            "Info": "Specifies the maximum number of ARP snooping entries that an interface can learn.\nThe value is an integer ranging from 0 to 4294967295. The default value is 131072."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[~HUAWEI-bd10] a rp l2-proxy enable",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.1 mode l2",
+            "[~HUAWEI-GigabitEthernet 1/0/0.1] encapsulation dot1q vid 100",
+            "[~HUAWEI-GigabitEthernet 1/0/0.1] bridge-domain 10",
+            "[~HUAWEI-GigabitEthernet 1/0/0.1] arp l2-proxy learning dynamic-user max-user 50"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bridge-domain 10",
+            "[~HUAWEI-bd10] arp l2-proxy enable",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0.1 mode l2",
+            "[~HUAWEI-GigabitEthernet 1/0/0.1] encapsulation dot1q vid 100",
+            "[~HUAWEI-GigabitEthernet 1/0/0.1] bridge-domain 10",
+            "[~HUAWEI-GigabitEthernet 1/0/0.1] arp l2-proxy learning dynamic-user disable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter receiving an ARP request packet, a device broadcasts the packet in its broadcast domain (BD). If a device receives a large number of ARP request packets within a period and broadcasts the packets, many network resources are consumed, causing network congestion. As a result, network performance deteriorates and user services are affected. Layer 2 proxy ARP can relieve the pressure on processing ARP packets by isolating ARP BDs. With this function enabled, a device preferentially uses learned ARP snooping entries to respond to received ARP request packets.\nWhen Layer 2 proxy ARP is enabled on a device, ARP snooping is automatically enabled. The device then creates ARP snooping entries by snooping ARP packets. The entries record senders' information. When most users obtain IP addresses through DHCP, attackers may frequently send bogus ARP packets to attack ARP snooping entries, causing Layer 2 proxy ARP failures. To prevent the preceding issue, run the arp l2-proxy learning dynamic-user disable command to disable ARP snooping entry learning on an interface, or run the arp l2-proxy learning dynamic-user max-use command to configure the maximum number of ARP snooping entries that an interface can learn.\nPrerequisites\n A Layer 2 sub-interface has been added to a BD. Layer 2 proxy ARP has been enabled using the arp l2-proxy enable command in the BD view."
+}

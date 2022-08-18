@@ -1,0 +1,31 @@
+{
+    "PageTitle": "export route-filter (VPN instance IPv6 address family view)",
+    "FuncDef": "The export route-filter command associates an export route-filter with a VPN instance IPv6 address family.\nThe undo export route-filter command dissociates an export route-filter from a VPN instance IPv6 address family.\nBy default, no export route-filter is associated with a VPN instance IPv6 address family.",
+    "CLIs": [
+        "export route-filter <route-filter-name> [ add-ert-first ]",
+        "undo export route-filter <route-filter-name> [ add-ert-first ]"
+    ],
+    "ParentView": [
+        "VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-filter-name",
+            "Info": "Specifies the name of an export route-filter to be associated with a VPN instance IPv6 address family.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "add-ert-first",
+            "Info": "Adds ERTs to VPN routes after these routes are matched against an export routing policy.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vrf1",
+            "[*HUAWEI-vpn-instance-vrf1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv6] export route-filter filter1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a scenario in which the routes of a VPN instance IPv6 address family need to be imported into a public network VPNv6 routing table, if the routing information to be imported into the VPNv6 routing table needs to be specified or attributes need to be set for the routes imported into the VPNv6 routing table, an export route-filter must be applied to the VPNv6 instance IPv6 address family.\nCompared with the export route-filter command, the peer route-filter export command configured in the BGP-VPN instance IPv6 address family view is used to filter the routes advertised by the VPN instance IPv6 address family to the CE (a BGP peer).\nBy default, ERTs are added to VPN routes after these routes are matched against an export routing policy. If the export routing policy contains RT-related filtering rules, these rules cannot apply to these routes. If you want to apply the RT-related filtering rules defined in an export routing policy to VPN routes, run the add-ert-first command to configure the system to add ERTs to VPN routes after matching these routes against the export routing policy.\nIn local cross scenarios, you can run the export route-filter command to filter out locally crossed routes and set the attributes of these routes. Locally crossed routes include both locally imported routes and routes learned from VPN peers.\nPrerequisites\nThe ipv6-family command has been run in the VPN instance view to enable the IPv6 address family, and the route-distinguisher command has been run in the VPN instance view to set an RD for the VPN instance IPv6 address family.\nConfiguration Impact\nOnly one export route-filter can be associated with a VPN instance IPv6 address family. If the export route-filter command is run more than once, the latest configuration overrides the previous one.\nFollow-up Procedure\nIf the export route-filter to be associated with a VPN instance IPv6 address family does not exist, configure the route-filter."
+}

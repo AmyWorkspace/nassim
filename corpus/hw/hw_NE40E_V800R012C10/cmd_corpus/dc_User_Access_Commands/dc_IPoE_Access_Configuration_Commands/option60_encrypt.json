@@ -1,0 +1,22 @@
+{
+    "PageTitle": "option60 encrypt",
+    "FuncDef": "The option60 encrypt command encrypts the VENDOR-CLASS(DHCPv4 OPTION60/DHCPv6 OPTION16) field value.\nThe undo option60 encrypt command cancels the configuration.\nBy default, the VENDOR-CLASS(DHCPv4 OPTION60/DHCPv6 OPTION16) field value is not encrypted.",
+    "CLIs": [
+        "option60 encrypt",
+        "undo option60 encrypt"
+    ],
+    "ParentView": [
+        "Service policy view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] service-identify-policy test",
+            "[*HUAWEI-serviceid-policy-test] undo service-identify",
+            "[*HUAWEI-serviceid-policy-test] service-identify dhcp-option60",
+            "[*HUAWEI-serviceid-policy-test] option60 encrypt"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a DHCP user accesses the device and sends a packet carrying the VENDOR-CLASS(DHCPv4 OPTION60/DHCPv6 OPTION16) attribute, if the device parses the VENDOR-CLASS(DHCPv4 OPTION60/DHCPv6 OPTION16) attribute, the parsed contents are considered as domain information about users; if the device fails to parse the VENDOR-CLASS(DHCPv4 OPTION60/DHCPv6 OPTION16) attribute, you can run the option60 encrypt command to send the unparsed contents of the Option 60 attribute in the format of username@vendor-class to the RADIUS server. After parsing the domain name, the RADIUS server sends the No.138 attribute carrying the domain name to the BAS device. Then, the BAS device authorizes the user to go online by using the delivered domain name.\nWhen service identification based on Option 60 in DHCP packets is configured, the VENDOR-CLASS(DHCPv4 OPTION60/DHCPv6 OPTION16) attribute value is encrypted. After the option60 encrypt command is configured, the device cannot parse the VENDOR-CLASS(DHCPv4 OPTION60/DHCPv6 OPTION16) attribute into a domain name in the format of username@vendor-class and thus sends it to the RADIUS server for another parsing attempt. In this case, the domain information contained in the username is never the name of an actual domain but a VENDOR-CLASS(DHCPv4 OPTION60/DHCPv6 OPTION16) string. Users, however, still access the device by using the original domain.\nPrerequisites\nBefore configuring the option60 encrypt command, run the service-identify-policy command in the system view to create a service identification policy and then run the service-identify command to configure service identification based on VENDOR-CLASS(DHCPv4 OPTION60/DHCPv6 OPTION16)0 in DHCP packets.\nConfiguration Impact\nThe use of this command affects the generation of user names.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThe option60 encrypt command functions the same as the vendor-class encrypt command. Both commands are used to encrypt the vendor-class string. If both commands are configured, the latest configuration takes effect."
+}

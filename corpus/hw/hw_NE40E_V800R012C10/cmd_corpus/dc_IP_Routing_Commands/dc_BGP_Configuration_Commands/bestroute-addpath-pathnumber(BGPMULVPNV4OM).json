@@ -1,0 +1,26 @@
+{
+    "PageTitle": "bestroute add-path (BGP multi-instance VPNv4 address family view)",
+    "FuncDef": "The bestroute add-path command enables BGP Add-Path and configures the number of routes that the device can select.\nThe undo bestroute add-path command restores the default configuration.\nBy default, BGP Add-Path is not enabled.",
+    "CLIs": [
+        "bestroute add-path path-number <path-number>",
+        "undo bestroute add-path"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "path-number path-number",
+            "Info": "Specifies the number of routes that the device can select.\nThe value is an integer ranging from 2 to 64."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-instance-a-af-vpnv4] bestroute add-path path-number 6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a scenario with an RR and clients, if the RR has multiple routes to the same destination (with the same prefix), the RR selects an optimal route from these routes and then sends only the optimal route to its clients. Therefore, the clients have only one route to the destination. If a link along this route fails, route convergence takes a long time, which cannot meet the requirements for high reliability. To address this issue, deploy the BGP Add-Path feature on the RR. With BGP Add-Path, the RR can send two or more routes with the same prefix to a specified IBGP peer. These routes can back up each other or load-balance traffic, which ensures high reliability in data transmission.\nFollow-up Procedure\nRun the peer capability-advertise add-path send command to enable the RR to send Add-Path routes to a specified IBGP peer.Run the peer advertise add-path command to configure the number of routes that the RR can send to a specified IBGP peer.\n\nPrecautions\nThe bestroute add-path command is run on RRs in most cases although it can be configured on any device. After the command is run, the RR can select 2 to 64 routes.Preferred Add-Path routes participate in load balancing only if they meet load balancing requirements.The type (labeled or unlabeled) of Add-Path routes is the same as that of the optimal route.You need to run the peer capability-advertise add-path receive command on the IBGP peer so that the IBGP peer can learn Add-Path routes from the specified RR."
+}

@@ -1,0 +1,32 @@
+{
+    "PageTitle": "direct-route cost",
+    "FuncDef": "The direct-route cost command configures a cost for routes to the directly connected network segment on an interface.\nThe undo direct-route cost command restores the default configuration.\nBy default, the cost of routes to the directly connected network segment on interfaces is 0.",
+    "CLIs": [
+        "direct-route cost <cost>",
+        "undo direct-route cost"
+    ],
+    "ParentView": [
+        "Global VE sub-interface view",
+        "Remote-AP interface view",
+        "Vbridge interface view",
+        "VE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cost",
+            "Info": "Specifies the cost of routes to the directly connected network segment on an interface.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface virtual-ethernet2/0/0",
+            "[*HUAWEI-Virtual-Ethernet2/0/0] ve-group 1 l3-access",
+            "[*HUAWEI-Virtual-Ethernet2/0/0] commit",
+            "[~HUAWEI-Virtual-Ethernet2/0/0] quit",
+            "[~HUAWEI] interface virtual-ethernet2/0/0.1",
+            "[*HUAWEI-Virtual-Ethernet2/0/0.1] direct-route cost 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the direct-route cost command is run on an L3VE sub-interface, the cost of routes to the directly connected network segment on the L3VE sub-interface becomes the configured value. For configurations details, see Configuration-IP Routing Basis Configuration-Configuring AGGs to Load-Balance RNC-to-CSG Traffic.\nPrecautions\nBoth the direct-route cost and direct-route track pw-state, direct-route track vrrp, or direct-route degrade-delay commands can be run.\nIf both the direct-route cost and direct-route track pw-state commands are run, the cost of routes to the directly connected network segment is calculated according to the following rules:If the PW is active, the cost is the value configured using the direct-route cost command.If the PW is standby or Down, the cost is the value configured using the direct-route cost command plus that configured using the direct-route track pw-state command. If the calculated cost is greater than the maximum value (4294967295), 4294967295 takes effect.\nIf both the direct-route cost and direct-route track vrrp commands are run, the cost of routes to the directly connected network segment is calculated according to the following rules:If the device is the master of the VRRP backup group, the cost is the value configured using the direct-route cost command.If the device is a backup device of the VRRP backup group, the cost is the value configured using the direct-route cost command plus that configured using the direct-route track vrrp command. If the calculated cost is greater than the maximum value (4294967295), 4294967295 takes effect.\nIf both the direct-route cost and direct-route degrade-delay commands are run and the L3VE sub-interface goes from Down to Up, the cost of routes to the directly connected network segment is calculated according to the following rules:After the delay expires, the cost is the value configured using the direct-route cost command.Before the delay expires, the cost is the value configured using the direct-route cost command plus that configured using the direct-route degrade-delay command. If the calculated cost is greater than the maximum value (4294967295), 4294967295 takes effect."
+}

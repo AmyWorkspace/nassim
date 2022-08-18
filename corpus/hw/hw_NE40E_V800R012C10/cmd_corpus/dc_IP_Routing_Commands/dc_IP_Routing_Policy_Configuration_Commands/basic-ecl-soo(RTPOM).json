@@ -1,0 +1,36 @@
+{
+    "PageTitle": "ip extcommunity-list soo basic",
+    "FuncDef": "The ip extcommunity-list soo basic command configures a basic Source of Origin (SoO) extended community filter.\nThe undo ip extcommunity-list soo basic command deletes a specified basic SoO extended community filter.\nBy default, no basic SoO extended community filter is configured.",
+    "CLIs": [
+        "ip extcommunity-list soo basic <basic-extcomm-filter-name> [ index <index-number> ] <matchMode> { <site-of-origin> } &<1-16>",
+        "undo ip extcommunity-list soo basic <basic-extcomm-filter-name> [ index <index-number> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "index index-number",
+            "Info": "Specifies the sequence number of an SoO extended community filter.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "matchMode",
+            "Info": "Sets the matching mode of the SoO extended community filter.\nThe value is an enumerated type:\npermit: Sets the matching mode of the SoO extended community filter to permit.deny: Sets the matching mode of the SoO extended community filter to deny."
+        },
+        {
+            "Parameters": "site-of-origin",
+            "Info": "Specifies the SoO extended community.\nThe SoO attribute is a BGP extended community attribute and can be expressed in any of the following formats:\n2-byte AS number:4-byte user-defined number, for example, 1:3. The AS number ranges from 0 to 65535, and the user-defined number ranges from 0 to 4294967295.IPv4-address:2-byte user-defined number, for example, 192.168.122.15:1. The IP address ranges from 0.0.0.0 to 255.255.255.255, and the user-defined number ranges from 0 to 65535.Integral 4-byte AS number:2-byte user-defined number, for example, 0:3 or 65537:3. An AS number ranges from 65536 to 4294967295. A user-defined number ranges from 0 to 65535. The AS number and user-defined number cannot be both 0s. Specifically, the value of the SoO attribute cannot be 0:0.4-byte AS number in dotted notation:2-byte user-defined number, for example, 0.0:3 or 0.1:0. A 4-byte AS number in dotted notation is in the format of x.y, where x and y are integers ranging from 1 to 65535 and from 0 to 65535, respectively. A user-defined number ranges from 0 to 65535."
+        },
+        {
+            "Parameters": "basic basic-extcomm-filter-name",
+            "Info": "Specifies the name of the basic SoO extended community filter.\nThe name is a string of 1 to 51 case-sensitive characters, spaces not supported. The string cannot be all digits. The character string can contain spaces if it is enclosed with double quotation marks (\")."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip extcommunity-list soo basic aaa permit 1.2.3.4:5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSoO records the BGP route originator. To configure an SoO extended community filter so that BGP routes carrying SoO can be filtered, run the ip extcommunity-list soo command.\nAn SoO extended community filter can be used as a matching condition of a route-policy using a command, such as the if-match extcommunity-list soo aaa command.\nAn SoO extended community filter in different formats may lead to different matching results. For example:\nFormat 1:\nip extcommunity-list soo basic aaa permit 100:1 200:1 300:1\nFormat 2:\nip extcommunity-list soo basic aaa permit 100:1\nip extcommunity-list soo basic aaa permit 200:1 300:1\nIn format 2, the extended community defined in each rule must be a sub-set of route extended communities so that the rule can be matched.\nThe undo ip extcommunity-list soo command deletes a specified SoO extended community filter.\nThe display ip extcommunity-list soo command displays detailed configurations of the SoO extended community filter.\nPrecautions\nThe extended community attributes of a route include VPN-target and SoO. The ip extcommunity-list soo command adds an SoO extended community filter.\nBy default, Source of Origin (SoO) extended community filters work in deny mode. If all matching rules in a filter are configured to work in deny mode, all routes are denied by the filter; to prevent this problem, configure one matching rule in permit mode after one or multiple matching rules in deny mode so that the routes except for those denied by preceding matching rules are permitted by the filter."
+}

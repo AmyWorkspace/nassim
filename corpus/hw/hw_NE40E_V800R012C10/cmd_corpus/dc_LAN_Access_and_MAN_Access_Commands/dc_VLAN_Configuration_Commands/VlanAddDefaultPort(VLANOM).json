@@ -1,0 +1,36 @@
+{
+    "PageTitle": "port default vlan",
+    "FuncDef": "The port default vlan command sets a default VLAN for interfaces and adds interfaces to the VLAN.\nThe undo port default vlan command deletes the interfaces from the default VLAN and restores the default VLAN ID.\nBy default, no default VLAN is set for interface.",
+    "CLIs": [
+        "port default vlan <vlan-id>",
+        "undo port default vlan"
+    ],
+    "ParentView": [
+        "Layer 2 100GE interface view",
+        "Layer 2 10GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Layer 2 Eth-Trunk interface view",
+        "Layer 2 GE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan-id",
+            "Info": "Specifies a VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] vlan 3",
+            "[*HUAWEI-vlan3] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] port default vlan 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFrames sent from user hosts are untagged and those sent from a remote device may also be untagged. However, a switching device only processes and forwards tagged frames. Therefore, tags need to be added to the untagged frames on the switching device. To implement this function, run the port default vlan command to configure a default VLAN on an interface of the switching device. After this function is enabled, the interface adds the default VLAN ID to received untagged frames.\nAfter a default VLAN is configured on an interface:\nThe interface inserts the default VLAN ID to a received untagged frame if the link type of the interface is access or hybrid.When the interface receives a tagged frame:If the interface type is access and the VLAN ID in the tag is the same as the default VLAN ID, the access interface forwards the frame. If the VLAN ID in the tag is different from the default VLAN ID, the access interface discards the frame.If the interface type is hybrid and the VLAN ID in the tag is in the permitted VLAN ID list, the hybrid interface forwards the frame. If the VLAN ID is not in the permitted VLAN ID list, the hybrid interface discards the frame.\nWhen the interface sends a tagged frame:If the VLAN ID of the packet is the same as the default VLAN ID of the interface, the interface removes the outer tag of the packet and forwards the packet.If the VLAN ID of the packet is different from the default VLAN ID of the interface, the interface discards the packets.\n\n\nPrerequisites\nA VLAN has been created.\nThe link type of the interface has been configured as access or hybrid using the port link-type command.\nPrecautions\nA super VLAN cannot be configured as a default VLAN.\nThe port default vlan command has the same function as the port command in the VLAN view.\nThe interface to be added to a VLAN must be a Layer 2 interface. If the interface is a Layer 3 interface, run the portswitch command to switch the interface to Layer 2.\nThe port default vlan command cannot be configured on physical interfaces that are added to an Eth-Trunk."
+}

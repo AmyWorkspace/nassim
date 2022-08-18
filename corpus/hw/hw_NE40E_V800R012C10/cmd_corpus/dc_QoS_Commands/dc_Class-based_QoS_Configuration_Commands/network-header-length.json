@@ -1,0 +1,44 @@
+{
+    "PageTitle": "network-header-length",
+    "FuncDef": "The network-header-length command sets a network header length for a service profile.\nThe undo network-header-length command cancels the configuration.\nBy default, no network header length is set for a service profile.",
+    "CLIs": [
+        "network-header-length <network-header-length> { inbound | outbound }",
+        "network-header-length <network-header-length> outbound adjust-on-etm",
+        "undo network-header-length { inbound | outbound }",
+        "undo network-header-length <network-header-length> outbound adjust-on-etm"
+    ],
+    "ParentView": [
+        "Service template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "network-header-length",
+            "Info": "Specifies a network header length for a service profile.\nThe value is an integer ranging from -63 to 63."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies a network header length for a service profile in the inbound direction.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies a network header length for a service profile in the outbound direction.\n-"
+        },
+        {
+            "Parameters": "adjust-on-etm",
+            "Info": "The function takes effect in ETM.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] service-template template1",
+            "[*HUAWEI-service-template-template1-slot-all] network-header-length 10 inbound"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] service-template template 1",
+            "[*HUAWEI-service-template-template1-slot-all] network-header-length 10 outbound adjust-on-etm"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe lengths of user packets change after the user packets are processed by a module, which affects traffic shaping precision. To resolve this problem, the network-header-length command can be used to set a network header length for compensating processed packets with a certain length.\nPrerequisites\nThe service-template command has been used to create a service profile.\nPrecautions\nThe network-header-length outbound adjust-on-etm command configures a precision compensation value for the eTM module. In the same service template, you can specify precision compensation values for both the non-eTM and eTM modules, which is unnecessary to consider the type of application interface. This command is mutually exclusive with adjust-on-card configured in a QoS profile or interface SQ scenario.\nThe LPUF400-E board requires different precision compensation values for different services.\nWhen the service type is L3VPN over LDP / L3VPN over SRV6, the actual precision compensation value required in the inbound direction is 22. No compensation is required in the outbound direction.When the service type is L2VPN over LDP, the actual precision compensation value required in the inbound direction is 4. No compensation is required in the outbound direction.When the service type is L2VPN over SRV6, the actual precision compensation value required in the inbound direction is 0. No compensation is required in the outbound direction."
+}

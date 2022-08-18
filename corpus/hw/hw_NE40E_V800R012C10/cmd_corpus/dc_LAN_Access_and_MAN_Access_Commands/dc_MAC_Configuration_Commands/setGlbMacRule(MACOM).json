@@ -1,0 +1,56 @@
+{
+    "PageTitle": "mac-limit rule-name (System view)",
+    "FuncDef": "The mac-limit rule-name command creates a global MAC address learning limit rule.\nThe undo mac-limit rule-name command deletes a global MAC address learning limit rule.\nBy default, no global MAC address learning limit rule is created.",
+    "CLIs": [
+        "mac-limit rule-name <rule-name> { maximum <max> [ rate <interval> ] | action { discard | forward } | alarm { enable | disable } } *",
+        "undo mac-limit rule-name <rule-name>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "rule-name rule-name",
+            "Info": "Specifies the name of a global MAC address learning limit rule.\nThe value is a string of 1 to 31 characters. It does not support space, question mark, or subtraction sign."
+        },
+        {
+            "Parameters": "maximum max",
+            "Info": "Specifies the maximum number of MAC address that can be learned.\nThe parameter must be configured when configuring the global MAC address learning limit rule.\nThe value is an integer ranging from 0 to 262144.\nWhen the value is 0, no limitation is set on the address learning number."
+        },
+        {
+            "Parameters": "rate interval",
+            "Info": "Indicates the interval at which MAC addresses are learned.\nThe parameter must be configured when configuring the global MAC address learning limit rule.\nThe value is an integer ranging from 0 to 1000, in milliseconds.\nWhen the value is 0, no limitation is set on the address learning interval."
+        },
+        {
+            "Parameters": "action",
+            "Info": "Specifies an action to be taken when the number of MAC address entries in the MAC address table reaches the limit.\n-"
+        },
+        {
+            "Parameters": "discard",
+            "Info": "The packet with the source MAC address not contained in the MAC address table is discarded.\n-"
+        },
+        {
+            "Parameters": "forward",
+            "Info": "The packet with the source MAC address not contained in the MAC address table is forwarded but its MAC address is not recorded.\n-"
+        },
+        {
+            "Parameters": "alarm",
+            "Info": "Specifies whether an alarm is generated when the number of the MAC address entries in the MAC address table reaches the limit.\n-"
+        },
+        {
+            "Parameters": "enable",
+            "Info": "No alarm is generated.\n-"
+        },
+        {
+            "Parameters": "disable",
+            "Info": "An alarm is generated.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mac-limit rule-name name1 maximum 10000 rate 100 alarm enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo control the number of users and protect a MAC address table against attacks, you can limit the number of MAC addresses that a device can learn. You can also configure the system to discard packets or generate an alarm to improve network security.\nTo create a global MAC address learning limit rule on a device, run the mac-limit rule-name command in the system view.\nFollow-up Procedure\nRun the mac-limit rule-name (Layer 2 sub-interface view) command in the interface view to apply the global MAC address learning limit rule on the interface.\nPrecautions\nA device can be configured with several global MAC address learning limit rules. rule-name is used to specify a rule. If two rules have the same rule name, the later configured rule overwrites the previous rule.\nA global MAC address learning limit rule is configured in the system view and applied in the interface view. If the undo mac-limit rule-name command is run in the system view, the configuration of this rule will be deleted in both views.\nIf both the maximum and rate parameters are set to 0, the maximum and rate values are the same as the default values. Therefore, such configuration is not supported."
+}

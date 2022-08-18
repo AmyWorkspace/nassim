@@ -1,0 +1,52 @@
+{
+    "PageTitle": "dhcp session-mismatch",
+    "FuncDef": "The dhcp session-mismatch action offline command triggers online users whose physical location information changes but MAC addresses stay unchanged to go offline when these users resend DHCP.\nThe undo dhcp session-mismatch command restores the default configuration.\nThe dhcp session-mismatch action roam command configures an interface to update VLAN and interface information based on the DHCPv4 Discover or Request messages or DHCPv6 Solicit messages or ND RS messages sent by online users when the users roam to another AP.\nThe undo dhcp session-mismatch action roam command restores the default configuration.\nBy default, the online users whose physical location information changes but MAC addresses stay unchanged are not triggered to go offline when these users resend DHCP or ND requestion. An interface does not update VLAN and interface information based on the DHCPv4 Discover or Request messages or DHCPv6 Solicit messages or ND RS messages sent by online users when the users roam to another AP.",
+    "CLIs": [
+        "dhcp session-mismatch action { offline | roam { ipv4 | ipv6 | nd } * }",
+        "undo dhcp session-mismatch [ action { offline | roam { ipv4 | ipv6 | nd } * } ]"
+    ],
+    "ParentView": [
+        "BAS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "action",
+            "Info": "The action when mismatch happens.\n-"
+        },
+        {
+            "Parameters": "offline",
+            "Info": "Logs out online users to go offline.\n-"
+        },
+        {
+            "Parameters": "ipv4",
+            "Info": "Allows an interface to update VLAN and interface information based on the DHCPv4 Discover or Request messages sent by online users when the users roam to another AP.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Allows an interface to update VLAN and interface information based on the DHCPv6 Solicit messages sent by online users when the users roam to another AP.\n-"
+        },
+        {
+            "Parameters": "nd",
+            "Info": "Allows an interface to update VLAN and interface information based on the ND RS messages sent by online users when the users roam to another AP.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet3/0/0.3",
+            "[~HUAWEI-GigabitEthernet3/0/0.3] commit",
+            "[~HUAWEI-GigabitEthernet3/0/0.3] bas",
+            "[~HUAWEI-GigabitEthernet3/0/0.3-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet3/0/0.3-bas] dhcp session-mismatch action roam ipv4"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/2.3",
+            "[*HUAWEI-GigabitEthernet1/0/2.3] commit",
+            "[*HUAWEI-GigabitEthernet1/0/2.3] bas",
+            "[*HUAWEI-GigabitEthernet1/0/2.3-bas] access-type layer2-subscriber",
+            "[*HUAWEI-GigabitEthernet1/0/2.3-bas] dhcp session-mismatch action offline"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a WLAN scenario, when end users switch their SSIDs, their physical location information is changed, but their MAC addresses stay the same. In this situation, the end users resend DHCP or ND requests. Since the physical location information is changed but the MAC addresses stay the same, the device concludes that the resent DHCP or ND requests are attack packets and discards them. The device considers the end users are still online, but the end users may have gone offline. The device cannot sense that the end users are offline immediately. As a result, the end users cannot go online again quickly. You can run the dhcp session-mismatch action offline command to log out the end users when the end users resend DHCP or ND requests. After that, when the end users continue to send DHCP or ND requests, the end users can go online again quickly.\nWhen a WLAN user roams between different APs, the user resends DHCPv4 Discover or Request messages or DHCPv6 Solicit messages for login from the new AP. Because the user's VLAN and interface information has changed (MAC address unchanged), the device considers the messages newly received from the user as attacks and then discards them. This prevents the device from immediately detecting that the WLAN user has logged off. As such, the user cannot rapidly log in from the new AP. To resolve this problem, run the dhcp session-mismatch action roam { ipv4 | ipv6 } * command.\nPrerequisites\nWLAN user roaming switchover has been enabled using the wlan-switch enable command.\nConfiguration Impact\nIf an attacker forges a MAC address to send a DHCP or ND request packet after you run this command, the normal online user is logged out. This may cause a potential security risk, exercise caution when you run this command.\nAfter this command is run, the CPU usage may go up. To address the issue, run the dhcp connection chasten command or refer to Enabling One-to-Many Mapping Between One MAC Address and Many Sessions.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nThis command does not support VE interfaces and PW-VE interfaces."
+}

@@ -1,0 +1,32 @@
+{
+    "PageTitle": "routing-table rib-only (BGP-VPN instance IPv6 address family view)",
+    "FuncDef": "The routing-table rib-only command prohibits BGP routes from being added to the IP routing table.\nThe undo routing-table rib-only command restores the default configuration.\nBy default, the preferred BGP routes are added to the IP routing table.",
+    "CLIs": [
+        "routing-table rib-only [ route-policy <route-policy-name> ]",
+        "undo routing-table rib-only"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a routing policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vrf1",
+            "[*HUAWEI-vpn-instance-vrf1] ipv6-family unicast",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv6] route-distinguisher 333:3",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv6] vpn-target 333:3",
+            "[*HUAWEI-vpn-instance-vrf1-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vrf1-af] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vrf1",
+            "[*HUAWEI-bgp-6-vrf1] routing-table rib-only"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a route reflector (RR) is used and preferred BGP routes do not need to be used during the forwarding, the routing-table rib-only command can be used to make BGP routes unable to be added to the IP routing table or the forwarding layer. This improves forwarding efficiency and the system capacity.\nWhen route-policy-name is specified in the command, the routes matching the policy are not added to the IP routing table, and the routes not matching the policy are added to the IP routing table.\nConfiguration Impact\nAfter the routing-table rib-only command is run, the routes preferred by BGP are not added to the IP routing table.\nPrecautions\nThe routing-table rib-only command and the active-route-advertise command are mutually exclusive."
+}

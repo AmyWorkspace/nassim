@@ -1,0 +1,37 @@
+{
+    "PageTitle": "peer default-originate vpn-instance (BGP-VPNv4 address family view) (IPv6)",
+    "FuncDef": "The peer default-originate vpn-instance command configures BGP to advertise all default routes related to the specified VPN instance to the specified virtual private network version 4 (VPNv4) peer.\nThe undo peer default-originate vpn-instance command removes the configuration.\nBy default, BGP does not advertise its default route to the VPNv4 peer.",
+    "CLIs": [
+        "peer <ipv6-address> default-originate vpn-instance <vpn-instance-name>",
+        "undo peer <ipv6-address> default-originate vpn-instance <vpn-instance-name>"
+    ],
+    "ParentView": [
+        "BGP-VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a peer.\nThe address is in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[~HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[~HUAWEI-vpn-instance-vpn1] route-distinguisher 110:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 2001:db8:1::2 as-number 100",
+            "[*HUAWEI-bgp] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-af-vpnv4] peer 2001:db8:1::2 enable",
+            "[*HUAWEI-bgp-af-vpnv4] peer 2001:db8:1::2 default-originate vpn-instance vpn1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nHierarchy of VPN (HoVPN) refers to a hierarchical VPN, with multiple provider edges (PEs) functioning as different roles to form a hierarchical architecture and provide functions of a single PE. In this manner, the performance requirement on PEs is lowered. If the peer default-originate vpn-instance command is used, superstratum PE (SPE) sends the default route with the address of the next hop as the local address to underlayer PE (UPE), regardless of whether there is a default route in the local routing table. The underlayer PE (UPE) then only needs to maintain the local VPN routes, whereas all remote routes are replaced by the default route. The workload of the UPE is reduced.\nPrecautions\nThe default routes on the UPE can be obtained through the following methods:\nRun the peer default-originate vpn-instance command on the SPE to configure routes for the neighboring UPE.Import routes through the import-route (BGP) or network (BGP) command on the UPE.\nThe priority of the default route obtained through the former method is higher than that through the latter method. If the former method is adopted, the UPE sends neither update nor withdraw packets in the latter method."
+}

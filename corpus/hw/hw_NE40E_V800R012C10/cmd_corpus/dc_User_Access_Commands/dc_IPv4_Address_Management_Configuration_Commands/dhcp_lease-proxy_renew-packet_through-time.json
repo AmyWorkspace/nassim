@@ -1,0 +1,30 @@
+{
+    "PageTitle": "dhcp lease-proxy renew-packet through-time",
+    "FuncDef": "The dhcp lease-proxy renew-packet through-time command configures the maximum number of times that a lease proxy user's client sends lease renewal packets to the DHCP server before the original T1/T2 lease arrives.\nThe undo dhcp lease-proxy renew-packet through-time command restores the default configuration.\nBy default, the number of times that a lease proxy user's client sends lease renewal packets to the DHCP server is not specified.",
+    "CLIs": [
+        "dhcp lease-proxy renew-packet through-time <time-value>",
+        "undo dhcp lease-proxy renew-packet through-time <time-value>"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time-value",
+            "Info": "Specifies the maximum number of times that a lease proxy user's client sends lease renewal packets to the DHCP server before the original T1/T2 lease arrives.\nThe value is an integer ranging from 1 to 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1.1",
+            "[*HUAWEI] commit",
+            "[~HUAWEI-GigabitEthernet1/0/1.1] bas",
+            "[~HUAWEI-GigabitEthernet1/0/1.1-bas] dhcp lease-proxy 700",
+            "[*HUAWEI-GigabitEthernet1/0/1.1-bas] dhcp lease-proxy renew-packet through-time 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter DHCP lease proxy is enabled on a BAS interface, a user's client sends lease renewal packets to the DHCP server only when the original T1 (1/2 of the lease)/T2 (7/8 of the lease) lease arrives. The BRAS directly replies with an ACK message in other cases. If a lease renewal packet contains options that are not supported, the packet is transparently transmitted to the DHCP server and directly processed by the server for lease renewal.\nAfter the dhcp lease-proxy renew-packet through-time command is run, the server renews the lease for a specified number of times before T1 and T2 of the original lease expire. If the number of times the DHCP renews the lease exceeds the specified threshold, lease renewal is not implemented on the server.In an inter-board trunk master/slave main processing board switchver or dual-device hot backup master/slave host switchover scenarios, the BRAS re-calculates the number of lease renewal packets to be transparently transmitted to the DHCP server.\nPrerequisites\nDHCP lease proxy has been enabled on a BAS interface using the dhcp lease-proxy command.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

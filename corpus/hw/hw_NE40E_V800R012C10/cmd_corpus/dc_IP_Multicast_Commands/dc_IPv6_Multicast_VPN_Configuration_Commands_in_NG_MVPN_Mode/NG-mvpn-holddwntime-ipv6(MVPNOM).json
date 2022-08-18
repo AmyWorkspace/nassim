@@ -1,0 +1,34 @@
+{
+    "PageTitle": "holddown-time (IPv6 address family MVPN-SPMSI view)",
+    "FuncDef": "The holddown-time command configures a hold time after which a VPN instance switches multicast data from a selective-provider multicast service interface (S-PMSI) tunnel back to the inclusive-provider multicast service interface (I-PMSI) tunnel.\nThe undo holddown-time command restores the default configuration.\nBy default, a VPN instance switches multicast data from an S-PMSI tunnel back to the I-PMSI tunnel after a hold time of 60s.",
+    "CLIs": [
+        "holddown-time <interval>",
+        "undo holddown-time"
+    ],
+    "ParentView": [
+        "IPv6 address family MVPN-SPMSI view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the hold time after which a VPN instance switches multicast data from an S-PMSI tunnel back to the I-PMSI tunnel.\nThe value is an integer ranging from 0 to 180, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 mvpn 2.2.2.2",
+            "[*HUAWEI] ip vpn-instance mcast1",
+            "[*HUAWEI-vpn-instance-mcast1] ipv6-family",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] multicast ipv6 routing-enable",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] mvpn",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn] ipmsi-tunnel",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn-ipmsi] mldp",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn-ipmsi] quit",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn] spmsi-tunnel",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn-spmsi] holddown-time 80"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn some cases, the multicast data forwarding rate may fluctuate around the specified switching threshold. To prevent multicast data from being frequently switched between the I-PMSI and S-PMSI tunnels, a VPN instance does not immediately switch multicast data back to the I-PMSI tunnel when detecting that the multicast data forwarding rate is below the specified switching threshold. Instead, the VPN instance starts a hold timer. Before the timer expires, the VPN instance continues to detect the multicast data forwarding rate. If the rate remains consistently below the specified switching threshold throughout the timer lifecycle, the VPN instance switches multicast data back to the I-PMSI tunnel. Otherwise, the VPN instance still uses the S-PMSI tunnel to send multicast data. The holddown-time command allows you to configure the hold timer value.\nConfiguration Impact\nIf the holddown-time command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nIn actual switching from an S-PMSI tunnel to the I-PMSI tunnel, due to necessary traffic rate calculation and protocol processing, there is a lag of 1 to 30 seconds between the time the multicast data forwarding rate changes and the time a VPN instance starts the hold timer. As a result, the actual hold time is 1 to 30 seconds longer than the specified hold time.\nThe interval for sampling the multicast data forwarding rate may be prolonged when a large number of multicast entries exist. As a result, MVPN traffic may be switched back from the S-PMSI tunnel to the I-PMSI tunnel earlier than expected, causing the loss of a small number of data packets. To prevent this problem, you are advised to increase the holddown-time based on the device performance and the number of existing multicast entries."
+}

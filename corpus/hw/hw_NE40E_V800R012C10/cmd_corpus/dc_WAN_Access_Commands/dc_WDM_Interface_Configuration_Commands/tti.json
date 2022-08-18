@@ -1,0 +1,45 @@
+{
+    "PageTitle": "tti",
+    "FuncDef": "The tti command configures trail trace identifiers (TTIs) of the optical transport unit (OTU) and optical data unit (ODU).\nThe undo tti command deletes the TTI configurations.\nBy default, the TTI value is empty, meaning that it is not displayed.",
+    "CLIs": [
+        "tti { otu | odu-pm } { expected | sent } 64byte-mode <value>",
+        "undo tti { otu | odu-pm } [ expected | sent ]"
+    ],
+    "ParentView": [
+        "WDM interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "otu",
+            "Info": "Indicates OTU.\n-"
+        },
+        {
+            "Parameters": "odu-pm",
+            "Info": "Indicates ODU path monitoring.\n-"
+        },
+        {
+            "Parameters": "expected",
+            "Info": "Indicates the expected receiving mode of data frames.\n-"
+        },
+        {
+            "Parameters": "sent",
+            "Info": "Indicates the sending mode of data frames.\n-"
+        },
+        {
+            "Parameters": "64byte-mode",
+            "Info": "Indicates the 64-byte frame mode.\n-"
+        },
+        {
+            "Parameters": "value",
+            "Info": "Specifies a TTL value in 64-byte mode.\nIt is a string of up to 64 characters in the following format: source access point identifier (up to 15 characters)/destination access point identifier (up to 15 characters)/operator identifier (up to 32 characters). The three parts must be separated by a slash (/).\nIf no character is specified, the related part is null. For example:\n[HUAWEI-Wdm1/0/0] tti otu sent 64byte-mode /beijing/huawei"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] controller wdm 1/0/0",
+            "[~HUAWEI-Wdm1/0/0] tti otu sent 64byte-mode shenzhen/beijing/huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTTI is a byte string in the overhead of an OTU or an ODU. Like the J byte in the SDH segment overhead, the TTI is used for identifying the source and destination stations to which each optical fiber is connected to prevent incorrect connection. If the received TTI differs from the expected value, a TIM alarm is generated.\nOTU overhead: contains information about the transmission function of optical channels, and defines FAS, MFAS, GCC0, and SM (such as TTI, BIP-8, BDI, BEI/BIAE, and IAE) overheads. Among these overheads, TTI is a 64-byte string monitoring the connectivity of the OTU segment.\nODU overhead: contains information about the maintenance and operation function of optical channels, and defines TCM, PM, GCC1/GCC2, APS/PCC, and FTFL overheads. Among these overheads, PM (odu-pm) monitors ODU paths.\nPrecautions\nThis command is supported only on the admin VS.\nFor one link, the value on the sending end must be the same as the expected value set on the peer end of an optical fiber."
+}

@@ -1,0 +1,41 @@
+{
+    "PageTitle": "port-mirroring (Tunnel interface view)",
+    "FuncDef": "The port-mirroring command configures mirroring for incoming or outgoing packets on an interface.\nThe undo port-mirroring command cancels mirroring for incoming or outgoing packets on an interface.\nBy default, the mirroring function is disabled.",
+    "CLIs": [
+        "port-mirroring [ acl <acl-num> ] to observer-index <index> { inbound | outbound }",
+        "undo port-mirroring { inbound | outbound }"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl acl-num",
+            "Info": "Specifies the ID of an ACL rule.\nThe value is a decimal integer ranging from 3000 to 3999."
+        },
+        {
+            "Parameters": "observer-index index",
+            "Info": "Specifies the index of an observing interface.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies the IPSec packets sent from the public network to a private network.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the IPSec packets sent from a private network to the public network.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl 3001",
+            "[*HUAWEI-acl4-advance-3001] rule deny ip source 10.1.1.1 0 destination 10.2.1.1 0",
+            "[*HUAWEI-acl4-advance-3001] quit",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] interface Tunnel 10",
+            "[*HUAWEI-Tunnel10] port-mirroring acl 3001 to observer-index 1 inbound"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen X2 traffic is forwarded between LTE base stations, packets of the X2 traffic must be sent to the gateway and decrypted. Then the decrypted packets will be encrypted and forwarded along a tunnel based on the destination IP address of the packets. All the X2 traffic decryption and encryption operations are performed on an interface board.\nIf packets are decrypted at first and encrypted later, their decrypted packets can be viewed only on the interface board responsible for decryption. In order to monitor the related traffic, decrypted packets must be copied on the interface board and be mirrored to the observing interface before the packets are encrypted.\nPrerequisites\nBefore configuring this command, confirm that an observing interface for the mirroring has already been configured using the port-observing observe-index command. The index of an observing interface observe-index must be the same as the slot number of the interface board where the observing interface resides. For example, if an interface on interface board 1 is configured as an observing interface, the index of the observing interface must be 1.\nPrecautions\nOnly VSU boards support IPsec traffic filtering and mirroring. The command only takes effect on VSU.\nOnly advanced ACLs can be referenced for IPsec packet filtering and mirroring. Other types of ACLs cannot.\nThe observing interface of the IPsec mirroring function can be a physical interface of the FE or GE type, rather than any other type of interface or sub-interface.\nWhen mirroring the IPSec packets on a tunnel interface, the parameter observe-index of this command must be the same as that of the port-observing observe-index command.When IPSec mirroring is to be configured on a tunnel interface, defining the acl acl-num parameter in this command is recommended. After the ACL rule is specified, only the packets that match the ACL rule are to be mirrored, protecting the forwarding performance of the CPU.When mirroring is configured for IPsec packets on an intra-board GRE over IPsec tunnel, for packets to be decrypted, specify the source and destination IP addresses of user packets in the ACL rule applied to this command; for packets to be encrypted, specify the source and destination IP addresses of GRE headers in the ACL rule applied to this command."
+}

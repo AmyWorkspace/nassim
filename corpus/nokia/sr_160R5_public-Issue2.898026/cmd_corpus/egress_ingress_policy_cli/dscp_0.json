@@ -1,0 +1,35 @@
+{
+    "PageTitle": "dscp",
+    "FuncDef": "This command explicitly sets the forwarding class or subclass or enqueuing priority when a packet is marked with the DiffServ Code Point (DSCP) value contained in thedscp-name. A list of up to eight dscp-names can be entered on a single command. The lists of dscp-names within the configuration are managed by the system to ensure that each list does not exceed eight names. Entering more than eight dscp-names with the same parameters (fc,priority) will result in multiple lists being created. Conversely, multiple lists with the same parameters (fc, priority) are merged and the lists repacked to a maximum of eight per list if DSCP names are removed or the parameters changed so the multiple lists use the same parameters. Also, if a subset of a list is entered with different parameters, then a new list will be created for the subset. When the list is stored in the configuration, the DSCP names are sorted by\ntheir DSCP value in ascending numerical order; consequently, the order in the configuration may not be exactly what the user entered.",
+    "CLIs": [
+        "dscp <dscp-name> [ <dscp-name> ] fc <fc-name> [ priority { low | high } ]",
+        "no dscp <dscp-name> [ <dscp-name> ]"
+    ],
+    "ParentView": [
+        "config>qos>sap-ingress"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "dscp-name",
+            "Info": "The DSCP name is a required parameter that specifies the unique IP header ToS byte DSCP bits value that will match the DSCP rule. If the command is executed multiple times with the same dscp-name, the previous forwarding class and enqueuing priority is completely overridden by the new parameters or defined to be inherited when a forwarding class or enqueuing priority parameter is missing."
+        },
+        {
+            "Parameters": "fc fc-name",
+            "Info": "The value given for fc-name must be one of the predefined forwarding classes in the system. Specifying the fc-name is optional. When a packet matches the rule, the forwarding class is only overridden when the fc fc-name parameter is defined on the rule. If the packet matches and the forwarding class is not explicitly defined in the rule, the forwarding class is inherited based on previous rule matches. Values-fc: |class[.subclass], ||class: be, l2, af, l1, h2, ef, h1, nc, ||subclass: 29 characters max. ParamDefault: Default- Inherit (When fc fc-name is not defined, the rule preserves the previous forwarding class of the packet.)"
+        },
+        {
+            "Parameters": "priority",
+            "Info": "This parameter overrides the default enqueuing priority for all packets received on an ingress SAP using this policy that match this rule. Specifying the priority is optional. When a packet matches the rule, the enqueuing priority is only overridden when the priority parameter is defined on the rule. If the packet matches and priority is not explicitly defined in the rule, the enqueuing priority is inherited based on previous rule matches. ParamDefault: Default- Inherits the priority defined by the default-priority statement."
+        },
+        {
+            "Parameters": "high",
+            "Info": "This parameter is used in conjunction with the priority parameter. Setting the enqueuing parameter to high for a packet increases the likelihood of enqueuing the packet when the ingress queue is congested. Ingress enqueuing priority only affects ingress SAP queuing. When the packet is placed in a buffer on the ingress queue, the significance of the enqueuing priority is lost."
+        },
+        {
+            "Parameters": "low",
+            "Info": "This parameter is used in conjunction with the priority parameter. Setting the enqueuing parameter to low for a packet decreases the likelihood of enqueuing the packet when the ingress queue is congested. Ingress enqueuing priority only affects ingress SAP queuing. When the packet is placed in a buffer on the ingress queue, the significance of the enqueuing priority is lost."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

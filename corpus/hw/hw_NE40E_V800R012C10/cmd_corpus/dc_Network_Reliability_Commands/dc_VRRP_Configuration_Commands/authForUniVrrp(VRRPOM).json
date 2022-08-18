@@ -1,0 +1,35 @@
+{
+    "PageTitle": "vrrp vrid authentication-mode",
+    "FuncDef": "The vrrp vrid authentication-mode command sets an authentication mode and authentication key for a specified VRRP backup group.\nThe undo vrrp vrid authentication-mode command restores the default configuration.\nBy default, a VRRP backup group uses the non-authentication mode.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id> authentication-mode { md5 <md5-key> | hmac-sha256 <hmac-sha256> }",
+        "undo vrrp vrid <virtual-router-id> authentication-mode"
+    ],
+    "ParentView": [
+        "Loopback interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "virtual-router-id",
+            "Info": "Specifies the ID of a VRRP backup group.\nThe value is a decimal integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "md5 md5-key",
+            "Info": "Specifies an MD5 authentication key.\nFor the sake of security, using the HMAC-SHA256 algorithm rather than the MD5 algorithm is recommended.\nThe value is a string of 1 to 8 case-sensitive characters, spaces not supported. Authentication keys are saved in ciphertext in the configuration file.\nA plaintext authentication key is a string of 1 to 8 characters.A ciphertext authentication key is a string of 48 characters.\nThe string can contain spaces if it is enclosed with double quotation marks (\").\nCiphertext passwords with different lengths are automatically supported after an upgrade."
+        },
+        {
+            "Parameters": "hmac-sha256 hmac-sha256",
+            "Info": "Specifies an HMAC-SHA256 authentication key.\nThe value is a string of characters.\nA plaintext authentication key is a string of 1 to 8 characters.A ciphertext authentication key is a string of 48 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack1",
+            "[*HUAWEI-LoopBack1] ip address 10.1.1.1 255.255.255.0",
+            "[*HUAWEI-LoopBack1] vrrp vrid 64 peer-ip 10.1.1.10",
+            "[*HUAWEI-LoopBack1] vrrp vrid 64 authentication-mode hmac-sha256 huawei"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo improve the security of protocol packets, set an authentication key for VRRP Advertisement packets. You can run the vrrp vrid authentication-mode command to set an authentication mode and authentication key for a specified VRRP backup group.\nPrerequisites\nA VRRP backup group has been configured using the vrrp vrid command.\nConfiguration Impact\nAfter you set an authentication key for a specified VRRP backup group, a backup device in the group compares its authentication key with the authentication key in a received VRRP Advertisement packet.\nIf the authentication keys are the same, the backup device discards the packet and resets the timer after the VRRP module finishes processing.If the authentication keys are different, the backup device directly discards the packet and enters the Master state after a period that is three times the interval at which VRRP Advertisement packets are sent.\n\nPrecautions\nYou must set the same authentication mode and authentication key for devices in a specified VRRP backup group. If you set different authentication modes or authentication keys, two master devices coexist. As a result, the VRRP backup group cannot work properly.If the MD5 algorithm is used for VRRP backup group authentication, a risk message is displayed. The HMAC-SHA256 algorithm is recommended."
+}

@@ -1,0 +1,39 @@
+{
+    "PageTitle": "policer",
+    "FuncDef": "Within a sap-egress QoS policy forwarding class context, the policer command is used to map packets that match the forwarding class to the specified policer-id. The specified policer-id must already exist within the sap-egress QoS policy. The forwarding class of the packet is first discovered at ingress, based on the ingress classification rules. When the packet arrives at egress, the sap-egress QoS policy may match a forwarding class reclassification rule that overrides the ingress derived forwarding class. The forwarding class context within the sap-egress QoS policy is then used to map the packet to an egress queue (using the queue queue-id, or port-redirect-group queue queue-id, or group queue-group-name instance instance-id queue queue-id commands) or an egress policer (policer policer-id). The queue and policer commands within the forwarding class context are mutually exclusive. By default, the forwarding class is mapped to the SAP egress default queue (queue\n1). If the policer policer- id command is executed, any previous policer mapping or queue mapping for the forwarding class is overridden if the policer mapping is successful.",
+    "CLIs": [
+        "policer <policer-id> [ { [ port-redirect-group-queue ] [ queue <queue-id> ] | group <group-name> [ instance <instance-id> ] [ queue <queue-id> ] } ]",
+        "no policer"
+    ],
+    "ParentView": [
+        "config>qos>sap-egress>fc"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policer-id",
+            "Info": "When the forwarding class policer command is executed, a valid policer-id must be specified. The parameter policer-id references a policer-id that has already been created within the sap-egress QoS policy. Values-1 to 63."
+        },
+        {
+            "Parameters": "port-redirect-group-queue",
+            "Info": "Used to override the forwarding class default egress queue destination to an egress port queue group. The specific egress queue group instance to use is specified at the time the QoS policy is applied to the SAP. Therefore, this parameter is only valid if SAP-based redirection is required."
+        },
+        {
+            "Parameters": "queue queue-id",
+            "Info": "This parameter overrides the forwarding class default egress queue destination to a specified queue-id. If port-redirect-group is not configured, this will be a local SAP queue of that queue-id. A queue of ID queue-id must exist within the egress QoS policy. If port-redirect-group-queue is configured, the queue queue-id in the egress port queue group instance is used. Values-1 to 8. ParamDefault: Default- Derived from forwarding class assignment in queue-group definition."
+        },
+        {
+            "Parameters": "group group-name",
+            "Info": "The group queue-group-name is optional and is used to override the forwarding class's default egress queue destination. If the queue group-queue-id parameter is not specified, the forwarding class map within the specified group's template is used to derive which queue within the group will receive the forwarding class's packets. An egress queue group template must exist for the specified queue-group-name or the policer command will fail. The specified queue-group-name must also exist as an egress queue group on the ports where SAPs and subscribers associated with the sap-egress policy are applied or the policer command will fail. Values-Any qualifying egress queue group name. ParamDefault: Default- policer-output-queues"
+        },
+        {
+            "Parameters": "queue queue-id",
+            "Info": "The queue group-queue-id is optional when the group queue-group-name parameter is specified and is used to override the forwarding class mapping within the group's egress queue group template. The specified group-queue-id must exist within the group's egress queue group template or the policer command will fail. Values-1 to 8. ParamDefault: Default- Derived from forwarding class assignment in queue-group definition"
+        },
+        {
+            "Parameters": "instance instance-id",
+            "Info": "This parameter is used to specify the specific instance of a queue group with template queue-group-name to which this queue should be redirected. This parameter is only valid for queue groups on egress ports where policy-based redirection is required. Values-1 to 40960. ParamDefault: Default- 1"
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: no policer"
+}

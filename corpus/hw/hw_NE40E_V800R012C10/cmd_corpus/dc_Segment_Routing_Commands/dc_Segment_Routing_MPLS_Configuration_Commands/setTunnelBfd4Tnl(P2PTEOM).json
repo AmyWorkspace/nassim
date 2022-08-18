@@ -1,0 +1,56 @@
+{
+    "PageTitle": "mpls te bfd tunnel enable",
+    "FuncDef": "The mpls te bfd tunnel enable command enables BFD for SR-MPLS TE tunnel.\nThe undo mpls te bfd tunnel enable command disables BFD for SR-MPLS TE tunnel.\nThe mpls te bfd tunnel block command blocks the one-arm BFD capability on a specified SR-MPLS TE tunnel interface.\nThe undo mpls te bfd tunnel block command enables the one-arm BFD capability.\nBy default, the SBFD for SR-MPLS TE tunnel and one-arm BFD for SR-MPLS TE tunnel functions are disabled.",
+    "CLIs": [
+        "mpls te bfd tunnel enable { one-arm-echo | seamless }",
+        "mpls te bfd tunnel block",
+        "undo mpls te bfd tunnel enable { one-arm-echo | seamless }",
+        "undo mpls te bfd tunnel block"
+    ],
+    "ParentView": [
+        "Tunnel interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "one-arm-echo",
+            "Info": "Enables one-arm echo BFD for SR-MPLS TE tunnel.\n-"
+        },
+        {
+            "Parameters": "seamless",
+            "Info": "Enables SBFD for SR-MPLS TE Tunnel.\n-"
+        },
+        {
+            "Parameters": "block",
+            "Info": "Blocks the BFD capability.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] sbfd",
+            "[*HUAWEI-sbfd] quit",
+            "[*HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] mpls te signal-protocol segment-routing",
+            "[*HUAWEI-Tunnel1] mpls te bfd tunnel enable seamless"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] interface Tunnel1",
+            "[*HUAWEI-Tunnel1] tunnel-protocol mpls te",
+            "[*HUAWEI-Tunnel1] mpls te signal-protocol segment-routing",
+            "[*HUAWEI-Tunnel1] mpls te bfd tunnel enable one-arm-echo"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nSBFD for SR-MPLS TE tunnel quickly detects faults on SR-MPLS TE tunnels. If the primary tunnel fails, SBFD instructs applications such as VPN FRR to quickly switch traffic, minimizing the impact on services.\nOne-arm BFD for SR-MPLS TE tunnel quickly detects faults on inter-AS E2E SR-MPLS TE tunnels and protects traffic on the E2E SR-MPLS TE tunnels. To enable one-arm BFD for SR-MPLS TE tunnel, run the mpls te bfd tunnel enable one-arm-echo command.\nAfter the mpls te bfd tunnel enable one-arm-echo command is run in the MPLS view, one-arm BFD is enabled for all E2E SR-MPLS TE tunnels. To disable this function on a specified tunnel, run the mpls te bfd tunnel block command.\nPrecautions\nThe undo mpls te bfd tunnel enable one-arm-echo command in the tunnel interface view is different from the mpls te bfd tunnel block command:\nAfter the undo mpls te bfd tunnel enable one-arm-echo command is run in the tunnel interface view, the tunnel interface is still capable of one-arm BFD for SR-MPLS TE tunnel if the mpls te bfd tunnel enable one-arm-echo command is run in the MPLS view.If the mpls te bfd tunnel block command is run in the tunnel interface view, one-arm BFD for SR-MPLS TE is disabled even if the mpls te bfd tunnel enable one-arm-echo command is run in the MPLS view.To enable one-arm BFD for SR-MPLS TE tunnel for a majority of tunnel interfaces, run the mpls te bfd tunnel block command for each tunnel interface that does not need the function and then run the mpls te bfd tunnel enable one-arm-echo command in the MPLS view.To enable one-arm BFD for SR-MPLS TE tunnel for a small number of tunnel interfaces, run the mpls te bfd tunnel enable one-arm-echo command on each of these interfaces."
+}

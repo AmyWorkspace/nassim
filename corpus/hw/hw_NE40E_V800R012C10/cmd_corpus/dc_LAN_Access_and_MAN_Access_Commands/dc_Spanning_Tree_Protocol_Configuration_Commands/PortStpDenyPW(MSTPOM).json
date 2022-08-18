@@ -1,0 +1,40 @@
+{
+    "PageTitle": "stp deny packet vlan (VSI-LDP-PW view)",
+    "FuncDef": "The stp deny packet vlan command enables the function to deny STP, RSTP, and MSTP BPDUs that carry a specified VLAN ID.\nThe undo stp deny packet vlan command disables the function to deny STP, RSTP, and MSTP BPDUs that carry a specified VLAN ID.\nBy default, the function to deny STP, RSTP, and MSTP BPDUs that carry a specified VLAN ID is not enabled.",
+    "CLIs": [
+        "stp deny packet vlan { { <vlan-id1> [ to <vlan-id2> ] } &<1-10> }",
+        "undo stp deny packet vlan { { <vlan-id1> [ to <vlan-id2> ] } &<1-10> }"
+    ],
+    "ParentView": [
+        "VSI-LDP-PW view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "to vlan-id2",
+            "Info": "Specifies the end VLAN ID carried in the STP, RSTP, or MSTP BPDUs received by an interface.\n<vlanEnd> and <vlanBgn> jointly specify a value range. If the to <vlanEnd> parameter is not specified, only the STP, RSTP, and MSTP that carry <vlanBgn> are discarded.\nThe value is an integer ranging from 1 to 4094. vlanEnd must be greater than <vlanBgn>."
+        },
+        {
+            "Parameters": "vlan vlan-id1",
+            "Info": "Specifies the start VLAN ID carried in the STP, RSTP, or MSTP BPDUs received by an interface.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi 1",
+            "[*HUAWEI-vsi-1] pwsignal ldp",
+            "[*HUAWEI-vsi-1-ldp] vsi-id 33",
+            "[*HUAWEI-vsi-1-ldp] peer 1.1.1.1",
+            "[*HUAWEI-vsi-1-ldp] peer 1.1.1.1 pw pw1",
+            "[*HUAWEI-vsi-1-ldp-pw-pw1] quit",
+            "[*HUAWEI-vsi-1-ldp] pw pw1",
+            "[*HUAWEI-vsi-1-ldp-pw-pw1] stp enable",
+            "[*HUAWEI-vsi-1-ldp-pw-pw1] stp deny packet vlan 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a network running STP, RSTP, or MSTP, if a device transparently transmits unexpected STP, RSTP, or MSTP BPDUs, network flapping may occur. To address this problem, run the stp deny packet command to enable the function to discard the STP, RSTP, and MSTP BPDUs that carry a specified VLAN ID.\nPrerequisites\nTo set the stp deny packet command, run the stp enable command on the interface to enable STP/RSTP/MSTP.\nPrecautions\nA maximum of 16 VLAN IDs can be configured in the same interface view or VSI-LDP-PW view.If both the stp deny packet and stp permit packet commands are configured in the same interface view or VSI-LDP-PW view, the device preferentially executes the stp deny packet command.If the function to deny STP, RSTP, and MSTP BPDUs that carry a specified VLAN ID is incorrectly enabled, a broadcast storm may occur. Therefore, ensure that the VLAN ID is correct before running the stp deny packet command."
+}

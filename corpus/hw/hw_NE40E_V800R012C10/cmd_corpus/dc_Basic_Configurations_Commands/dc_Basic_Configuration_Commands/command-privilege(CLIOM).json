@@ -1,0 +1,36 @@
+{
+    "PageTitle": "command-privilege",
+    "FuncDef": "The command-privilege command sets the command level of a specified view.\nThe undo command-privilege command removes the configured command level.\nBy default, the level of a command is its default one.",
+    "CLIs": [
+        "command-privilege level <level> view <view-name> <command-key>",
+        "undo command-privilege [ level <level> ] view <view-name> <command-key>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "level level",
+            "Info": "Specifies the privilege level of a command.\nIf the command-privilege level rearrange configuration exists, the value of level ranges from 0 to 15.\nIf the command-privilege level rearrange configuration does not exist, the value of level ranges from 0 to 3.\nIf the command-privilege level rearrange command configuration is changed, the value of level changes based on the level mapping.\nIf the command-privilege level rearrange command configuration is added, the levels of level-0 and level-1 commands remain unchanged, the level of level-2 commands is upgraded to 10, and that of level-3 commands is upgraded to 15.If the command-privilege level rearrange command configuration is deleted, the level of level-0 commands remains unchanged, the levels of level-1 to level-9 commands are downgraded to 1, the levels of level-10 to level-14 commands are downgraded to 2, and the level of level-15 commands is downgraded to 3."
+        },
+        {
+            "Parameters": "view view-name",
+            "Info": "Specifies a view name. Before specifying a view name, you can enter a question mark (?) to check in which views all commands of a specified level can be run.\nFor example:\nshell: user view.system: system view.global: all views.\n-"
+        },
+        {
+            "Parameters": "command-key",
+            "Info": "Specifies the command to be configured.\nThe value is a string of 1 to 1604 characters, spaces supported. An command-privilege can be configured for each command supported by the device."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] command-privilege level 3 view shell save"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] command-privilege level 3 view global display current-configuration"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe command-privilege command is used to set a level for a specified command. An administrator grants configuration access to users by setting levels for the users. Users at a specified level can configure commands equal to and lower than the specified level.\nA login user can configure commands according to the configured privilege corresponding to the user name (through the user privilege level command).\nTo ensure higher security, do not reduce the command level.\nChanging a command level affects the use of the command by other users. Therefore, change the command level only when necessary.\nThe command-key parameter specifies the command of which the level is to be changed. The view view-name parameter specifies the view to which the command belongs. The command matching rule is prefix-based matching. For example, the command-privilege level 2 view shell display interface command changes the level of all commands starting with display interface in the user view to level 2.\nThe command lines are classified into visit level (0), monitoring level (1), configuration level (2), and management level (3) in an ascending order."
+}

@@ -1,0 +1,45 @@
+{
+    "PageTitle": "filter-policy import",
+    "FuncDef": "The filter-policy import command configures IS-IS to filter the received routes to be added to the IP routing table.\nThe undo filter-policy import command disables IS-IS from filtering received routes.\nBy default, IS-IS does not filter received routes.",
+    "CLIs": [
+        "filter-policy { <acl-number> | acl-name <acl-name-string> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> } import",
+        "undo filter-policy [ <acl-number> | acl-name <acl-name-string> | ip-prefix <ip-prefix-name> | route-policy <route-policy-name> | route-filter <route-filter-name> ] import"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies a basic ACL number.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name-string",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy to filter routes based on tags and other protocol parameters.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of route filter policy.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix-a index 10 permit 172.17.1.0 24",
+            "[*HUAWEI] route-policy policy1 permit node 10",
+            "[*HUAWEI-route-policy] if-match ip-prefix prefix-a",
+            "[*HUAWEI-route-policy] quit",
+            "[*HUAWEI] isis",
+            "[*HUAWEI-isis-1] filter-policy route-policy policy1 import"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIS-IS routing entries need to be added to an IP routing table for IP packet forwarding.\nIf an IS-IS routing table has routes destined for a specific network segment, but you do not want to add these routes to an IP routing table, run the filter-policy import command with specified parameters to add only the needed IS-IS routes to the IP routing table.\nPrerequisites\nAn IS-IS process has been created.\nConfiguration Impact\nRunning the filter-policy import command on a router does not affect LSP flooding and LSDB synchronization on the router, but affects the local IP routing table."
+}

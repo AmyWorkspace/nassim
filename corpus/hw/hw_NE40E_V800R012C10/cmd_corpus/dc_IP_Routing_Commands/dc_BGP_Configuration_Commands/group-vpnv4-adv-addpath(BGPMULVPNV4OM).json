@@ -1,0 +1,32 @@
+{
+    "PageTitle": "peer advertise add-path (BGP multi-instance VPNv4 address family view) (group)",
+    "FuncDef": "The peer advertise add-path command configures the maximum number of routes that the device can send to a specified IBGP peer.\nThe undo peer advertise add-path command restores the default configurations.\nBy default, the device sends only the optimal route to the specified IBGP peer.",
+    "CLIs": [
+        "peer <group-name> advertise add-path path-number <path-number>",
+        "undo peer <group-name> advertise add-path"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPNv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "path-number path-number",
+            "Info": "Specifies the maximum number of routes that the device can send to a specified IBGP peer.\nThe value is an integer ranging from 2 to 64."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100 instance p1",
+            "[*HUAWEI-bgp-instance-p1] group a internal",
+            "[*HUAWEI-bgp-instance-p1] ipv4-family vpnv4",
+            "[*HUAWEI-bgp-instance-p1-af-vpnv4] peer a enable",
+            "[*HUAWEI-bgp-instance-p1-af-vpnv4] peer a advertise add-path path-number 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter BGP Add-Path is configured on an RR, the RR needs to send routes to a specified IBGP peer. To configure the maximum number of routes that the RR can send to the peer, run the peer advertise add-path command. The actual number of routes that the RR can send to the peer is the smaller one of the value configured using the peer advertise add-path command and the actual number of routes selected by the RR. If the maximum number of routes that the RR can send to the peer is less than the actual number of routes selected by the RR, the RR selects the optimal and Add-Path routes based on the BGP route selection rules.\nPrerequisites\nThe following operations have been performed:\nBGP Add-Path has been enabled and the maximum number of routes that an RR can select has been configured using the bestroute add-path command.The RR has been enabled to send Add-Path routes to a specified IBGP peer using the peer capability-advertise add-path send command.\n\nPrecautions\nYou need to run the peer capability-advertise add-path receive command on the IBGP peer so that the IBGP peer can have Add-Path routes from the specified RR.The RR can send Add-Path routes only to IBGP peers, and Add-Path routes are advertised based on BGP route advertisement rules.If a peer is specified when the peer advertise add-path command is run, a peer group is specified when the peer advertise best-external command is run, and then the peer is added to the peer group, the peer cannot inherit the configuration of the peer advertise best-external command from the peer group."
+}

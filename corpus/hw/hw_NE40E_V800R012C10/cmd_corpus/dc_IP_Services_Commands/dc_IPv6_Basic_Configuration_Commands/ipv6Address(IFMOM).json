@@ -1,0 +1,65 @@
+{
+    "PageTitle": "ipv6 address",
+    "FuncDef": "The ipv6 address command configures a global unicast address for an interface.\nThe undo ipv6 address command deletes the global unicast address configured for an interface.\nBy default, no global unicast address is configured for an interface.",
+    "CLIs": [
+        "ipv6 address { <ipv6-address> <prefix-length> | <ipv6-address/prefix-length> }",
+        "undo ipv6 address { <ipv6-address> <prefix-length> | <ipv6-address/prefix-length> }",
+        "undo ipv6 address"
+    ],
+    "ParentView": [
+        "PW-VE interface view",
+        "Tunnel interface view",
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "50GE sub-interface view",
+        "10GE interface view",
+        "MP-group interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address to be configured for the interface.\nThe address is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "prefix-length",
+            "Info": "Specifies the prefix length of the IPv6 address.\nThe value is an integer that ranges from 1 to 128. In the EUI-64 address format, the prefix length must be less than 64."
+        },
+        {
+            "Parameters": "ipv6-address/prefix-length",
+            "Info": "Specifies the IPv6 address and prefix length of an interface.\nThe value is the IPv6 address/IPv6 address prefix length."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 address 2001:db8:: 127"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA global unicast address equals an IPv4 public network address. Global unicast addresses are for links that can be aggregated and are provided for network service providers. The structure of global unicast addresses allows route-prefix aggregation for limiting the number of global routing entries. A global unicast address is composed of a 48-bit route prefix managed by operators, a 16-bit subnet ID managed by local nodes, and a 64-bit interface ID.\nConfiguring an IPv6 address with the prefix length of 127 has the following advantages:\nAvoids loops in traffic forwarding on P2P links that have no neighbor discovery mechanisms.Addresses the neighbor cache exhaustion issue when network devices are attacked.Saves IPv6 address resources.\n\nPrerequisites\nBefore running the ipv6 address command to configure a global unicast address for an interface, you need to run the ipv6 enable command in the interface view to enable the IPv6 function on the interface.\nConfiguration Impact\nIf the ipv6 address is run to configure an IPv6 address for an interface but no link-local address is configured for the interface, the system automatically generates a link-local address for the interface.\nIf no parameter (IPv6 address and prefix length) is specified in the undo ipv6 address command, all the IPv6 addresses configured for the interface are deleted.\nPrecautions\nThe following conditions are prohibited for different interfaces on the same device:\nThe IPv6 addresses are the same.The network prefixes of the IPv6 addresses are the same. For example, if the IPv6 address of interface A is 2001:db8:1::1/32 and its network prefix is 2001:db8:: and the IPv6 address of interface B is 2001:db8::1/16 and its network prefix is 2001::, the configuration succeeds. If the IPv6 address of interface B is 2001:db8:2::1/32 and its network prefix is also 2001:db8::, the configuration fails.\nThe 6to4 addresses can be configured for a 6to4 tunnel interface but not a 6in4 tunnel interface.\nThe following IPv6 addresses cannot be configured for an interface:\nLoopback address (::1/128)Unspecified address (::/128)Multicast addressAnycast address\nIPv4-mapped IPv6 addresses (0:0:0:0:0:FFFF:IPv4-address) can be configured on public networks but not on VPNs.\nA global unicast address cannot be the same as its network prefix because an IPv6 address which is the same as its network prefix is a subnet-router anycast address reserved for a device. However, this rule does not apply to an IPv6 address with a 127-bit network prefix. For example, if the ipv6 address command is run to configure an IPv6 address as 2001:db8:5::10 with the prefix length of 124 bits and the network prefix of the IPv6 address is also 2001:db8:5::10, this IPv6 address is a subnet-router anycast address and cannot be configured as a global unicast address. To configure an IPv6 anycast address, run the ipv6 address anycast command.\n\nAn interface can be configured with a maximum of 64 global unicast addresses."
+}

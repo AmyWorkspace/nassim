@@ -1,0 +1,44 @@
+{
+    "PageTitle": "opcode bridge-domain",
+    "FuncDef": "The opcode bridge-domain command configures a static SRv6 End.DT2U/End.DT2UL/End.DT2M SID operation code (Opcode).\nThe undo opcode bridge-domain command deletes a static SRv6 End.DT2U/End.DT2UL/End.DT2M SID operation code.\nBy default, no static SRv6 End.DT2U/End.DT2UL/End.DT2M SID operation code is configured.",
+    "CLIs": [
+        "opcode <func-opcode> { end-dt2u | end-dt2ul | end-dt2m } bridge-domain <bd-id>",
+        "undo opcode <func-opcode> { end-dt2u | end-dt2ul | end-dt2m } [ bridge-domain <bd-id> ]"
+    ],
+    "ParentView": [
+        "Segment routing IPv6 locator view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "func-opcode",
+            "Info": "Specifies a static SRv6 SID operation code.\nSpecifies a static SRv6 SID operation code."
+        },
+        {
+            "Parameters": "end-dt2u",
+            "Info": "End.DT2U SID Type.\n-"
+        },
+        {
+            "Parameters": "end-dt2ul",
+            "Info": "End.DT2UL SID Type.\n-"
+        },
+        {
+            "Parameters": "end-dt2m",
+            "Info": "End.DT2M SID Type.\n-"
+        },
+        {
+            "Parameters": "bd-id",
+            "Info": "Bridge-domain ID.\nThe value is an integer ranging from 1 to 16777215."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] locator test1 ipv6-prefix 100:: 64 static 32",
+            "[*HUAWEI-segment-routing-ipv6-locator] opcode ::800 end-dt2u bridge-domain 10",
+            "[*HUAWEI-segment-routing-ipv6-locator] opcode ::801 end-dt2ul bridge-domain 10",
+            "[*HUAWEI-segment-routing-ipv6-locator] opcode ::803 end-dt2m bridge-domain 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn SRv6 SID is a 128-bit IPv6 address expressed in the Locator:Function:Args format. The Function field is also called Opcode, and different operation codes define different functions.\nStatic operation codes must be configured within the static operation code segment. The length of a static operation code segment is configured through the static static-length parameter in the locator command to determine the number of static operation codes that can be configured in a specified locator range.\nAfter you run the opcode command to configure various types of operation codes, the Locator, Opcode, and Args fields form a unique SRv6 SID. The SRv6 SID is then added to the local SID table on the device. In forwarding, the Locator field in the SRv6 SID instructs other nodes to find the SRv6 SID generation node through addressing and forward SRv6 packets to the node; the Opcode field instructs the SRv6 SID generation node to implement corresponding functions.\nEnd.DT2U (short for decapsulation and unicast MAC L2 table lookup) supports packet decapsulation, inner source MAC address learning and saving to a specified Layer 2 table, and lookup in the table for packet forwarding based on the inner destination MAC address. End.DT2U SIDs are mainly used in EVPN bridging unicast scenarios.\nEnd.DT2U can be disassembled into End + D + T2U, where D indicates decapsulation and T2U indicates Layer 2 table lookup for unicast forwarding. Therefore, each End.DT2U SID needs to be bound to a Layer 2 table. The End.DT2U SID instruction includes the following operations:\n Removes the outer IPv6 header and SRH. Learns the source MAC address of the inner Ethernet frame. Saves the source MAC address to the Layer 2 table bound to the End.DT2U SID. Searches the Layer 2 table bound to the End.DT2U SID based on the destination MAC address of the inner Ethernet frame. Forwards the corresponding packet accordingly.\nEnd.DT2M (short for decapsulation and L2 table flooding) supports packet decapsulation, inner source MAC address learning and saving to a specified Layer 2 table, and packet forwarding to Layer 2 outbound interfaces excluding the specified one. End.DT2M SIDs are mainly used in EVPN bridging Broadcast & Unknown-unicast & Multicast (BUM) and EVPN E-Tree scenarios.\nEnd.DT2M can be disassembled into End + D + T2M, where D indicates decapsulation and T2M indicates Layer 2 table lookup for multicast forwarding. Therefore, each End.DT2M SID needs to be bound to a Layer 2 table and may carry EVPN ESI filtering or EVPN E-Tree parameters in order to exclude specified outbound interfaces during flooding. The End.DT2M SID instruction includes the following operations:\n Removes the outer IPv6 header and SRH. Learns the source MAC address of the inner Ethernet frame. Saves the source MAC address to the Layer 2 table bound to the End.DT2M SID. Forwards the inner Ethernet frame through Layer 2 outbound interfaces excluding the interface specified by the parameters carried in the End.DT2M SID.\n\nPrecautions\nTo ensure proper forwarding, configured static SIDs and IPv6 addresses configured on interfaces cannot conflict with each other."
+}

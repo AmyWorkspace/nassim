@@ -1,0 +1,40 @@
+{
+    "PageTitle": "mep mep-id lck enable",
+    "FuncDef": "The mep mep-id lck enable command enables the ETH-LCK function.\nThe undo mep mep-id lck enable command disables the ETH-LCK function.\nBy default, the ETH-LCK function is disabled.",
+    "CLIs": [
+        "mep mep-id <mep-id> lck enable level <level>",
+        "undo mep mep-id <mep-id> lck enable"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mep-id mep-id",
+            "Info": "Specifies the MEP ID.\nThe value is an integer ranging from 1 to 8191. A MEP ID identifies a MEP. The MEP ID must be unique in an MA."
+        },
+        {
+            "Parameters": "level level",
+            "Info": "Specifies the level of ETH-LCK packets.\nThe value is an integer ranging from 1 to 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] evpn",
+            "[*HUAWEI-evpn] quit",
+            "[*HUAWEI] evpn vpn-instance evrf",
+            "[*HUAWEI-evpn-instance-evrf] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] evpn binding vpn-instance evrf",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map evpn vpn-instance evrf",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet 1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 lck enable level 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an MD nesting scenario, if the ETH-LCK function is configured on a MEP in a lower priority MD (inner layer), the MEP sends ETH-LCK packets to MEPs in another MD at the outer layer. After MEPs in an MD with a matching level receive the ETH-LCK packets, they generate LCK alarms. After the MEPs do not receive ETH-LCK packets within a period of time 3.5 times as long as the interval at which ETH-LCK packets are sent, the MEPs generate clear alarms. The ETH-LCK function can be used with the ETH-test function so that the outer MD can be notified of the administrative locked state of the inner MD.\nPrerequisites\nAn MD has been created using the cfm MD command in the system view.An MA has been created using the MA command in the MD view.An inward-facing MEP has been created using the MEP MEP-id command in the MA view.\n\nPrecautions\nThe specified level must be higher than that of the MD to which the MEP belongs."
+}

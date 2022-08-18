@@ -1,0 +1,33 @@
+{
+    "PageTitle": "is-level",
+    "FuncDef": "The is-level command configures a level for an IS-IS device.\nThe undo is-level command restores the default value.\nBy default, the level of an IS-IS device is Level-1-2.",
+    "CLIs": [
+        "is-level { level-1 | level-1-2 | level-2 }",
+        "undo is-level"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "level-1",
+            "Info": "Sets the level of the device to Level-1. It calculates only intra-area routes and maintains the LSDBs of Level-1.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Sets the level of the device to Level-1-2. It calculates both Level-1 and Level-2 routes and maintains the LSDBs of Level-1 and Level-2.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Sets the level of the device to Level-2. It calculates Level-2 routes and maintains the LSDBs of Level-2.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] is-level level-1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo support a network with a large number of routes, IS-IS uses a two-level structure in an IS-IS domain. IS-IS devices are classified into the following levels:\nLevel-1 device: A Level-1 device manages intra-area routing. It establishes neighbor relationships with only Level-1 and Level-1-2 devices in the same area. Level-1 devices can be connected to other areas through Level-1-2 devices only.Level-2 device: A Level-2 device manages intra-area routing. It establishes neighbor relationships with Level-2 devices in the same area and Level-1-2 devices in other areas only. All Level-2 devices form the backbone network of the routing domain. They are responsible for communications between areas. The Level-2 devices in the routing domain must be reachable, and no device of other levels is deployed between every two Level-2 devices.Level-1-2 device: A Level-1-2 device can establish Level-1 neighbor relationships with Level-1 devices and Level-1-2 devices in the same area. It can also establish Level-2 neighbor relationships with Level-2 devices and Level-1-2 devices in other areas.\nIn most cases, Level-1 devices are located within an area, Level-2 devices are located between areas, and Level-1-2 devices are located between Level-1 devices and Level-2 devices.\nThe level of an IS-IS device and of an interface determine the level of a neighbor relationship. By default, neighbor relationships between two Level-1-2 devices are Level-1 and Level-2. To establish a Level-1 or Level-2 neighbor relationship, run the isis circuit-level command to modify the level of interfaces.\nIf only one area exists, setting the level of devices to Level-1 or Level-2 is recommended to prevent devices from maintaining two LSDBs that are the same. On an IP network, setting the level of all devices to Level-2 for future extension is recommended.\nThe is-level command is applicable to all topologies of the IS-IS process.\n\nPrerequisites\nAn IS-IS process has been created using the isis command in the system view.\nConfiguration Impact\nIf the levels of IS-IS devices are changed during network operation, the IS-IS process will be restarted and IS-IS neighbor relationships will be disconnected. Setting the levels of Routers when configuring IS-IS is recommended.\nPrecautions\nIf neither Level-1 nor Level-2 is specified, the device works at Level-1-2. That is, the device calculates Level-1 and Level-2 routes and maintains Level-1 and Level-2 LSDBs."
+}

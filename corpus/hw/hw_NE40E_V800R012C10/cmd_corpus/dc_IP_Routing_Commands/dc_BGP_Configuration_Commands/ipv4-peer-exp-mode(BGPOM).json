@@ -1,0 +1,35 @@
+{
+    "PageTitle": "peer exp-mode",
+    "FuncDef": "The peer exp-mode command specifies the mode in which a BGP label inherits the QoS priority in the outer tunnel label carried in packets.\nThe undo peer exp-mode command restores the default mode.\n\nThe default QoS priority inheriting mode varies according to the outer MPLS tunnel type:\n\n\nLDP: By default, the BGP label inherits the QoS priority carried in the outer MPLS tunnel label.\n\nTE: By default, the BGP label does not inherit the QoS priority carried in the outer MPLS tunnel label.\n\nLDP over TE: By default, the BGP label inherits the QoS priority carried in the outer MPLS tunnel label.",
+    "CLIs": [
+        "peer <ipv4-address> exp-mode { pipe | uniform }",
+        "undo peer <ipv4-address> exp-mode"
+    ],
+    "ParentView": [
+        "BGP view",
+        "BGP-IPv4 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a BGP peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "pipe",
+            "Info": "Allows the BGP label to use its own QoS priority.\n-"
+        },
+        {
+            "Parameters": "uniform",
+            "Info": "Allows the BGP label to inherit the QoS priority carried in the outer MPLS tunnel label.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.2.3.4 as-number 200",
+            "[*HUAWEI-bgp] peer 10.2.3.4 exp-mode uniform"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the inter-AS seamless MPLS or inter-AS seamless MPLS+HVPN networking, each packet arriving at a CORE ASBR or AGG ASBR carries an inner private label, a BGP LSP label, and an outer MPLS tunnel label. The core ASBR and AGG ASBR remove outer MPLS tunnel labels from packets before sending the packets to each other. If the BGP LSP label in a packet carries a QoS priority different from that in the outer MPLS tunnel label in the packet, run the peer exp-mode command on the core ASBR or AGG ASBR to determine whether the BGP LSP label inherits the QoS priority carried in the outer MPLS tunnel label to be removed."
+}

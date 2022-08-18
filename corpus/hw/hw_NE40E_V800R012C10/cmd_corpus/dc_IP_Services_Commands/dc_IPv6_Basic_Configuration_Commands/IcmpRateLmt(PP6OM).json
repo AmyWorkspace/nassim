@@ -1,0 +1,36 @@
+{
+    "PageTitle": "ipv6 icmp-error",
+    "FuncDef": "The ipv6 icmp-error command limits the rate of sending ICMPv6 error messages.\nThe undo ipv6 icmp-error command restores the default.\nBy default, the size of the token buckets is 10 and the interval for placing tokens into the bucket is 100 milliseconds.",
+    "CLIs": [
+        "ipv6 icmp-error { ratelimit <interval> | bucket <bucket-size> } *",
+        "undo ipv6 icmp-error"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ratelimit interval",
+            "Info": "Specifies the interval for placing tokens into the bucket.\nThe value is an integer ranging from 0 to 2147483647, in milliseconds."
+        },
+        {
+            "Parameters": "bucket bucket-size",
+            "Info": "Specifies the number of tokens the bucket contains.\nIt is an integer ranging from 1 to 200."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 icmp-error ratelimit 120"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 icmp-error bucket 50"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 icmp-error bucket 50 ratelimit 120"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn the case that a network does not suffer any attacks, a Router can correctly send ICMPv6 error messages to notify other devices of abnormalities in message transmission. If an attacker frequently sends ICMPv6 message to network devices, the network devices need to respond with ICMPv6 messages, which greatly affects the throughput and CPU usage of the system. Therefore, to prevent the system from sending a great number of ICMPv6 messages, you can run the ipv6 icmp-error command to limit the rate at which ICMPv6 messages are sent.\nThe token bucket algorithm is used for counting ICMPv6 messages. One token represents an ICMPv6 message. The system places tokens into the virtual bucket at a certain interval until the number of tokens in the bucket reaches the upper limit. Once the number of ICMPv6 messages exceeds the maximum tokens that the bucket can contain, the excessive messages are discarded. You can limit the rate at which ICMPv6 messages are sent by setting the bucket size and the interval for placing tokens into the bucket.\nConfiguration Impact\nThe ipv6 icmp-error command is circular in nature. That is, if the bucket sizes and intervals set two times are different, the latest setting takes effect.\nIf the interval for placing tokens into the bucket is 0, it indicates that the interval is not limited."
+}

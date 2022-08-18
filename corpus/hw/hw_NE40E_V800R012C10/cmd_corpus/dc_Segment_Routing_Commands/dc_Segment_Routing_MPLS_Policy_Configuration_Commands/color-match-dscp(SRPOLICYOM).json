@@ -1,0 +1,47 @@
+{
+    "PageTitle": "color match dscp",
+    "FuncDef": "The color match dscp command configures mappings between the color values of SR-MPLS TE Policies in an SR-MPLS TE Policy group and the DSCP values of packets to be steered into the SR-MPLS TE Policies.\nThe undo color match dscp command deletes the mappings configured.\nBy default, mappings between the color values of SR-MPLS TE Policies in an SR-MPLS TE Policy group and the DSCP values of packets to be steered into the SR-MPLS TE Policies are not configured.",
+    "CLIs": [
+        "color <color-value> match dscp { ipv4 | ipv6 } { default | { <dscp-value1> [ to <dscp-value2> ] } &<1-10> }",
+        "undo color <color-value> match dscp { ipv4 | ipv6 } { [ default ] | { <dscp-value1> [ to <dscp-value2> ] } &<1-10> }"
+    ],
+    "ParentView": [
+        "SR-MPLS TE policy group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "color-value",
+            "Info": "Specifies color values for SR-MPLS TE Policies in an SR-MPLS TE Policy group.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "ipv4",
+            "Info": "Maps color values to the DSCP values of IPv4 packets to be steered into SR-MPLS TE Policies.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Maps color values to the DSCP values of IPv6 packets to be steered into SR-MPLS TE Policies.\n-"
+        },
+        {
+            "Parameters": "default",
+            "Info": "Steers packets whose DSCP values are out of the specified range into the default SR-MPLS TE Policy.\n-"
+        },
+        {
+            "Parameters": "dscp-value1",
+            "Info": "Specifies a begin DSCP value.\nThe value is an integer ranging from 0 to 63."
+        },
+        {
+            "Parameters": "to dscp-value2",
+            "Info": "Specifies an end DSCP value.\nThe value is an integer ranging from 0 to 63."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] segment-routing",
+            "[*HUAWEI-segment-routing] sr-te-policy group 1",
+            "[*HUAWEI-segment-routing-te-policy-group-1] color 100 match dscp ipv4 20 to 30",
+            "[*HUAWEI-segment-routing-te-policy-group-1] color 200 match dscp ipv4 default"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nEach SR-MPLS TE Policy in the SR-MPLS TE Policy group has its own color attribute. To configure mappings between the color values of SR-MPLS TE Policies in an SR-MPLS TE Policy group and the DSCP values of packets to be steered into the SR-MPLS TE Policies, run the color match dscp command. In this way, DSCP values, color values, and SR-MPLS TE Policies are associated within the SR-MPLS TE Policy group. Based on the association, packets with the specified DSCP values can be steered into SR-MPLS TE Policies with the mapping color values.\nPrecautions\nThe mappings between color and DSCP values can be separately configured for IPv4 and IPv6 address families. However, in the same IPv4 or IPv6 address family, each DSCP value can be associated with only one SR-MPLS TE Policy. Only up SR-MPLS TE Policies can be associated with DSCP values.\nYou can run the color color-value match dscp { ipv4 | ipv6 } default command to specify a default SR-MPLS TE Policy for an IPv4 or IPv6 address family. When a DSCP value is not associated with any SR-MPLS TE Policy in an SR-MPLS TE Policy group, the packets with this DSCP value are forwarded through the default SR-MPLS TE Policy. In an SR-MPLS TE Policy group, only one default SR-MPLS TE Policy can be specified for an IPv4 or IPv6 address family.\nIn scenarios where no default SR-MPLS TE Policy is specified for an IPv4 or IPv6 address family in an SR-MPLS TE Policy group:\nIf the mappings between color and DSCP values are configured in the group and only some of the DSCP values are associated with SR-MPLS TE Policies, the packets with DSCP values that are not associated with SR-MPLS TE Policies are forwarded through the SR-MPLS TE Policy associated with the smallest DSCP value in the address family.If no DSCP value is associated with an SR-MPLS TE Policy in the group, for example, the mappings between color and DSCP values are not configured or DSCP values are not successfully associated with SR-MPLS TE Policies, the default SR-MPLS TE Policy specified for the other type of address family (IPv4 or IPv6) is used to forward packets. If no default SR-MPLS TE Policy is specified for the other type of address family, packets are forwarded through the SR-MPLS TE Policy associated with the smallest DSCP value in the local address family."
+}

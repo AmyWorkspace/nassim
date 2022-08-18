@@ -1,0 +1,40 @@
+{
+    "PageTitle": "peer listen-as-segment (BGP-VPN instance view)",
+    "FuncDef": "The peer listen-as-segment command specifies a peer AS range from which a dynamic EBGP peer group listens for BGP connection requests.\nThe undo peer listen-as-segment command deletes the specified peer AS range from which a dynamic EBGP peer group listens for BGP connection requests.\nBy default, no peer AS range from which a dynamic EBGP peer group listens for BGP connection requests is specified.",
+    "CLIs": [
+        "peer <group-name> listen-as-segment begin-as <begin-asn> end-as <end-asn>",
+        "undo peer <group-name> listen-as-segment begin-as <begin-asn> end-as <end-asn>"
+    ],
+    "ParentView": [
+        "BGP-VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe value is a string of 1 to 47 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "begin-as begin-asn",
+            "Info": "Specifies the start AS number in an AS range.\nFor an integral AS number, the value is an integer ranging from 1 to 4294967295.\nFor an AS number in dotted notation, the value is in the format of x.y, where x and y are integers ranging from 1 to 65535 and from 0 to 65535, respectively."
+        },
+        {
+            "Parameters": "end-as end-asn",
+            "Info": "Specifies the end AS number in an AS range.\nFor an integral AS number, the value is an integer ranging from 1 to 4294967295.\nFor an AS number in dotted notation, the value is in the format of x.y, where x and y are integers ranging from 1 to 65535 and from 0 to 65535, respectively."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] vpn-instance vpn1",
+            "[*HUAWEI-bgp-instance-vpn1] group ex listen external",
+            "[*HUAWEI-bgp-instance-vpn1] peer ex listen-as-segment begin-as 200 end-as 300"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo specify a peer AS range from which a dynamic EBGP peer group listens for BGP connection requests, run the peer listen-as-segment command. The dynamic BGP peer function enables BGP to listen for BGP connection requests from a specified network segment, dynamically establish BGP peer relationships, and add these peers to the same dynamic peer group. This spares you from adding or deleting BGP peer configurations in response to each change in BGP peers.\nPrecautions\nIf the undo peer listen-as-segment command is run, all connections established between the local device and the dynamic peers in the specified AS-Segment are also deleted. Therefore, exercise caution when running this command.\nWhen you run the undo peer listen-as-segment command, ensure that the start and end AS numbers in the AS range to be deleted are the same as those in the configured AS range."
+}

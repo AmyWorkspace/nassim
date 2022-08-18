@@ -1,0 +1,73 @@
+{
+    "PageTitle": "set multicast-nat bind (multicast-nat-bind-list)",
+    "FuncDef": "The set multicast-nat bind command fast switches the binding between a multicast NAT outbound group and multicast NAT instance group in the multicast NAT binding view.",
+    "CLIs": [
+        "set multicast-nat outbound-group-id <outbound-group-id-value> bind instance-group-id <instance-group-id-value> [ clean-switch [ first-field | second-field ] ] fast-mode"
+    ],
+    "ParentView": [
+        "multicast-nat-bind-list"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "instance-group-id instance-group-id-value",
+            "Info": "Specifies the ID of a multicast NAT instance group.\nThe value is an integer that ranges from 1 to 4000."
+        },
+        {
+            "Parameters": "clean-switch",
+            "Info": "Sets the switching mode of multicast groups to clean switching.\n-"
+        },
+        {
+            "Parameters": "first-field",
+            "Info": "Sets the first field for multicast group switching.\n-"
+        },
+        {
+            "Parameters": "second-field",
+            "Info": "Sets the second field for multicast group switching.\n-"
+        },
+        {
+            "Parameters": "fast-mode",
+            "Info": "Sets the switching mode of multicast groups to fast switching.\n-"
+        },
+        {
+            "Parameters": "outbound-group-id outbound-group-id-value",
+            "Info": "Specifies the ID of a multicast NAT outbound group.\nThe value is an integer that ranges from 1 to 4000."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast-nat enable",
+            "[*HUAWEI] multicast-nat instance id 1 name stream1",
+            "[*HUAWEI-multicast-nat-instance-1] multicast-nat instance id 2 name stream2",
+            "[*HUAWEI-multicast-nat-instance-2] multicast-nat instance id 3 name stream3",
+            "[*HUAWEI-multicast-nat-instance-3] multicast-nat instance id 4 name stream4",
+            "[*HUAWEI-multicast-nat-instance-4] commit",
+            "[~HUAWEI-multicast-nat-instance-4] quit",
+            "[~HUAWEI] multicast-nat instance-group id 1 name streamin1",
+            "[*HUAWEI-multicast-nat-instance-group-1] assign instance id 1 part 1",
+            "[*HUAWEI-multicast-nat-instance-group-1] assign instance id 2 part 2",
+            "[*HUAWEI-multicast-nat-instance-group-1] commit",
+            "[~HUAWEI-multicast-nat-instance-group-1] quit",
+            "[~HUAWEI] multicast-nat instance-group id 2 name streamin2",
+            "[*HUAWEI-multicast-nat-instance-group-2] assign instance id 3 part 1",
+            "[*HUAWEI-multicast-nat-instance-group-2] assign instance id 4 part 2",
+            "[*HUAWEI-multicast-nat-instance-group-2] commit",
+            "[~HUAWEI-multicast-nat-instance-group-2] quit",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] multicast-nat outbound id 1 name out1 src-mac auto-translate src-ip 10.0.0.1 dst-ip 225.0.0.1 dst-udp-port 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] multicast-nat outbound id 2 name out2 src-mac auto-translate src-ip 10.0.0.1 dst-ip 225.0.0.2 dst-udp-port 101",
+            "[*HUAWEI-GigabitEthernet1/0/1] commit",
+            "[~HUAWEI-GigabitEthernet1/0/1] quit",
+            "[~HUAWEI] multicast-nat outbound-group id 1 name streamout1",
+            "[~HUAWEI-multicast-nat-outbound-group-1] assign outbound id 1 part 1",
+            "[*HUAWEI-multicast-nat-outbound-group-1] assign outbound id 2 part 2",
+            "[*HUAWEI-multicast-nat-outbound-group-1] commit",
+            "[~HUAWEI-multicast-nat-outbound-group-1] quit",
+            "[~HUAWEI] multicast-nat bind-list",
+            "[~HUAWEI-multicast-nat-bind-list] multicast-nat outbound-group id 1 name streamout1 bind instance id 1 name streamin1 switch-mode clean-switch switch-field first-field fast-mode",
+            "[*HUAWEI-multicast-nat-bind-list] commit",
+            "[~HUAWEI-multicast-nat-bind-list] set multicast-nat outbound-group-id 1 bind instance-group-id 2 clean-switch first-field fast-mode"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo fast switch the binding between a multicast NAT outbound group and multicast NAT instance group, run the set multicast nat group bind fast switch command in the multicast NAT binding view.\nThis command takes effect only when fast switching is configured for the binding between a multicast NAT outbound group and multicast NAT instance group. No configuration is generated in the configuration file."
+}

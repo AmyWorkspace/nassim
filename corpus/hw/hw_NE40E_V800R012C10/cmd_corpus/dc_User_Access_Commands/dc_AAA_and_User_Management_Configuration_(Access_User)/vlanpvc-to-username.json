@@ -1,0 +1,54 @@
+{
+    "PageTitle": "vlanpvc-to-username",
+    "FuncDef": "The vlanpvc-to-username command configures the format of the Nas-Port-Id attribute sent from the device to the RADIUS server. You can also configure the format of the user names of the binding authentication user, fast authentication user, and pre-authentication user.\nBy default, the format of version 2.0 is adopted.",
+    "CLIs": [
+        "vlanpvc-to-username { standard | turkey | version10 | version20 }",
+        "vlanpvc-to-username standard trust { pevlan | cevlan } [ ignore-rid ]",
+        "vlanpvc-to-username standard ignore-rid"
+    ],
+    "ParentView": [
+        "AAA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "standard",
+            "Info": "Indicates the standard format conforming to the VBAS protocol.\n-"
+        },
+        {
+            "Parameters": "turkey",
+            "Info": "Indicates the format of Turkey version.\n-"
+        },
+        {
+            "Parameters": "version10",
+            "Info": "Indicates the format of version 1.0.\n-"
+        },
+        {
+            "Parameters": "version20",
+            "Info": "Indicates the format of version 2.0.\n-"
+        },
+        {
+            "Parameters": "trust",
+            "Info": "Trusts the VLAN tag values.\n-"
+        },
+        {
+            "Parameters": "pevlan",
+            "Info": "Trusts the outer VLAN tag value.\n-"
+        },
+        {
+            "Parameters": "cevlan",
+            "Info": "Trusts the inner VLAN tag value.\n-"
+        },
+        {
+            "Parameters": "ignore-rid",
+            "Info": "Indicates that the RID field in the Nas-Port-Id attribute carried by Option 82 is removed.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] vlanpvc-to-username version20"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe formats used by the device to generate the user names for the binding authentication user, fast authentication user, and pre-authentication userare as follows:\nStandard VBAS version. Same as version 2.0.Turkey version. Same as version 2.0.Version 1.0User name format on an Ethernet interface: Host name + - + slot number (2 digits) + card number (1 digit)+ port number (2 digit) + VLAN ID (7 digits)Version 2.0User name format on the Ethernet interface: Host name + - + slot number (2 digits) + card number (1 digit)+ port number (2 digit) + outer VLAN ID (4 digits) + 0 + inner VLAN ID (4 digits)\nThe format of the Nas-Port-ID attribute varies with the vlanpvc-to-username commands of different versions.\nWhen the vlanpvc-to-username is set to version 20the VBAS or CLIENT-OPTION82 switch of the BAS interface is enabled, the format of NAS-Port-Id is as follows: If the client carries the information about the VBAS or OPTION82, the format of NAS-Port-Id is the same as that is carried by the client. If the client does not carry the information about the VBAS or OPTION82, the format of NAS-Port-Id is host name {eth} 0/slot number/subslot number/port number:{vpi.vci|vlan|evlan.ivlan}. For the UNTAG Ethernet users, the value of vlan is 0. For the QINQ interface, the evlan is the outer VLAN and the ivlan is the inner VLAN.the VBAS and CLIENT-OPTION82 switches of the BAS interface are both disabled, the format of NAS-Port-Id is as follows: Slot=slot number;subslot=subslot number;port=port number;{VPI=VPI number;VCI=VCInumber;|vlanid=VLAN number;|vlanid=inner VLAN number;vlanid2=outer VLAN number;} The slot number, subslot number, port number, VPI number, VCI number, VLAN number, outer VLAN number, and inner VLAN number are filled with the actual value. For the UNTAG Ethernet access users, the VLAN number is 0.When the vlanpvc-to-username is set to version10,the VBAS or CLIENT-OPTION82 switch of the BAS interface is enabled, the format of NAS-Port-Id is the same as that of version 20 when the VBAS or CLIENT-OPTION82 switch of the BAS interface is enabled.the VBAS and CLIENT-OPTION82 switches of the BAS interface are both disabled, the format of NAS-Port-Id is as follows:\nSlot=slot number;subslot=subslot number;port=port number;{VPI=VPI number;VCI=VCI number;|vlanid=VLAN number;}The slot number, subslot number, port number, VPI number, VCI number, and VLAN number are filled with the actual value. For the UNTAG Ethernet access users, the VLAN number is 0. For the QINQ interface access users, the VLAN number is filled with the inner VLAN number.\nWhen the vlanpvc-to-username is set to standardthe VBAS and CLIENT-OPTION82 switches of the BAS interface are enabled, the format of NAS-Port-Id is as follows:\n{eth|trunk} slot number/subslot number/port number:{vpi.vci|evlan.ivlan} information carried by the clientFor the UNTAG Ethernet access users, the values of evlan and ivlan are both 4096. For the non-QINI VLAN access users, the value of evlan is 4096 and the value of ivlan is filled with the actual value.\nUser packets carry Option 82 information. If the vbas command is configured on the BAS interface, parse the complete Option 82 information carried by user packets. Otherwise, parse Option 82 information with two offset bytes. If user Option 82 information contains no blank space, information carried by the client is filled with user Option 82 information with two offset bytes. For example, if user Option 82 information is abc, the format of NAS-Port-Id is eth 2/0/5:4096.4 c. If user Option 82 information contains a space and / is in front of the space, information carried by the client is filled with user Option 82 information with two offset bytes. For example, if user Option 82 information is aaa/b cd, the format of NAS-Port-Id is eth 2/0/5:4096.4 a/b cd. If user Option 82 information contains two spaces and no / in front of the first space, information carried by the client is filled with user Option 82 information after the second space. For example, if user Option 82 information is aaab cd e, the format of NAS-Port-Id is eth 2/0/5:4096.4 e. If user Option 82 information contains two spaces and no / in front of the spaces, information carried by the client is filled with 0/0/0/0/0/0. For example, if user Option 82 information is aaab cde, the format of NAS-Port-Id is eth 2/0/5:4096.4 0/0/0/0/0/0.User packets do not carry Option 82 information. Information carried by the client is filled with 0/0/0/0/0/0, for example, eth 2/0/5:4096.4 0/0/0/0/0/0.the VBAS and CLIENT-OPTION82 switches of the BAS interface are both disabled, the format of NAS-Port-Id is as follows: {eth|trunk} slot number/subslot number/port number:{vpi.vci|evlan.ivlan} 0/0/0/0/0/0\nThe slot number, subslot number, port number, VPI number, VCI number, evlan number, and ivlan number are filled with the actual value. For the trunk type interface, the subslot number is filled with 0.\nFor the UNTAG Ethernet access users. The evlan number and ivlan number are both filled with 4096. For the non-QINQ VLAN access users, the evlan number is filled with 4096 and the ivlan number is filled with the actual value.\nThe trust VLAN function takes effect only when the user packets carry both inner and outer VLAN tags.If trust pevlan is configured in the command, the outer VLAN tag value is trusted and can be added to the Nas-Port-ID attribute; the inner VLAN tag value is 4096 by default.If trust cevlan is configured in the command, the inner VLAN tag value is trusted and can be added to the Nas-Port-ID attribute; the outer VLAN tag value is 4096 by default.If trust is not configured, the VLAN tag values of online users are used.If ignore-rid is configured, the RID field in the Nas-Port-Id attribute carried by Option 82 will be removed.When the vlanpvc-to-username is set to turkey, the format of NAS-Port-Id is as follows: Slot number/port number + a space + vlan-id + a blank space + svlan + : + cvlanThe format of the user names of the binding authentication user, fast authentication user, and pre-authentication user is determined by the vlanpvc-to-username command only when the default-user-name include command is not used or does not take effect.The default-user-name include and vlanpvc-to-username commands configure only the method of generating a user name. The method of generating a user account also depends on the domain name delimiter and position of the domain name. If the domain name is on the right of the domain name delimiter, the user account is in the format of user name + domain name delimiter + domain name. If the domain name is on the left of the domain name delimiter, the user account is in the format of domain name + domain name delimiter + user name. The domain name is the name of the pre-authentication domain or default authentication domain configured on the BAS interface.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

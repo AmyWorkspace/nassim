@@ -1,0 +1,111 @@
+{
+    "PageTitle": "test-type (NQA view)",
+    "FuncDef": "The test-type command specifies the test type for an NQA test instance.\nThe undo test-type command deletes the test type.\nBy default, no test type is configured.",
+    "CLIs": [
+        "test-type { tcp | jitter | icmp | lspping | lsptrace | pwe3ping | pwe3trace | lspjitter | pathmtu | icmpjitter | pathjitter | trace | udp | vplspwping | generalflow | vplspwtrace | ethernet-service | macping | vplsping | dns }",
+        "test-type snmp",
+        "undo test-type"
+    ],
+    "ParentView": [
+        "NQA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "tcp",
+            "Info": "Indicates a TCP test, which checks TCP services.\n-"
+        },
+        {
+            "Parameters": "jitter",
+            "Info": "Indicates a UDP jitter test, which checks the jitter in processing UCP packets.\n-"
+        },
+        {
+            "Parameters": "icmp",
+            "Info": "Indicates an ICMP test, which checks link connectivity.\n-"
+        },
+        {
+            "Parameters": "pathmtu",
+            "Info": "Indicates a Path MTU test.\n-"
+        },
+        {
+            "Parameters": "icmpjitter",
+            "Info": "Indicates an ICMP jitter test, which checks the path jitter by sending ICMP packets.\n-"
+        },
+        {
+            "Parameters": "pathjitter",
+            "Info": "Indicates a Path Jitter test.\n-"
+        },
+        {
+            "Parameters": "trace",
+            "Info": "Indicates a trace route test, which detects the faulty node on a link.\n-"
+        },
+        {
+            "Parameters": "udp",
+            "Info": "Indicates a UDP test, which checks UDP services.\n-"
+        },
+        {
+            "Parameters": "dns",
+            "Info": "Indicates a DNS test, which tests DNS service performance.\n-"
+        },
+        {
+            "Parameters": "lspping",
+            "Info": "Indicates an LSP ping test, which checks LSP connectivity.\n-"
+        },
+        {
+            "Parameters": "lsptrace",
+            "Info": "Indicates an LSP trace test, which locates faulty nodes on an LSP.\n-"
+        },
+        {
+            "Parameters": "pwe3ping",
+            "Info": "Indicates a PWE3 ping test, which checks PW connectivity.\n-"
+        },
+        {
+            "Parameters": "pwe3trace",
+            "Info": "Indicates a PWE3 trace test, which detects the faulty node on a PWE3 link.\n-"
+        },
+        {
+            "Parameters": "lspjitter",
+            "Info": "Indicates an LSP jitter test, which checks the jitter on an LSP.\n-"
+        },
+        {
+            "Parameters": "vplspwping",
+            "Info": "Indicates a VPLS PW ping test, which tests the link connectivity on a VPLS network.\n-"
+        },
+        {
+            "Parameters": "vplspwtrace",
+            "Info": "Indicates a VPLS PW trace test, which detects the faulty node on a VPLS link.\n-"
+        },
+        {
+            "Parameters": "generalflow",
+            "Info": "Indicates a generalflow test.\nA generalflow test complies with standard protocols and is used to monitor interconnected device performance in Ethernet, IP, IP network gateway, L2VPN, and L3VPN scenarios.\n-"
+        },
+        {
+            "Parameters": "ethernet-service",
+            "Info": "Indicates an Ethernet service activation test, which tests network performance.\n-"
+        },
+        {
+            "Parameters": "macping",
+            "Info": "Indicates a MAC ping test, which tests Ethernet OAM performance.\n-"
+        },
+        {
+            "Parameters": "vplsping",
+            "Info": "Indicates a VPLS MAC ping test, which tests the connectivity of Layer 2 links on a VPLS network.\n-"
+        },
+        {
+            "Parameters": "snmp",
+            "Info": "Indicates an SNMP test, which checks communication performance between a host and an SNMP agent.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance user test",
+            "[*HUAWEI-nqa-user-test] test-type icmp"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa test-instance user test",
+            "[*HUAWEI-nqa-user-test] test-type dns"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nNQA measures the performance of various protocols on the network, which allows carriers to collect network operation indexes in real time and effectively locate and diagnose faults on the networks.\nNQA test instances of various types help diagnose and locate faults.\nExamples are as follows:\nThe test-type dns command configures a DNS test. A DNS test is based on UDP packets and measures the speed at which a DNS name is resolved to an IP address.The test-type ethernet-service command configures an Ethernet service activation test instance. Carriers hope to learn the performance and running status of existing deployed networks before rolling out services. Information obtained helps make business proposals and promote services.The test-type icmp command configures an ICMP test. You must set test parameters for the ICMP test based on the configured test group parameters. Tests parameters include the TTL, ToS, and delay time. After that, you can enable the device to send test packets to the destination address and interface.\nWhen receiving a test packet, the NQA server first determines whether the packet times out. If the packet times out, the NQA server discards it; if not, the NQA server calculates the RTT and records the information to the history table and the result table.\nThe test-type icmpjitter command configures an ICMP jitter test. The test uses ICMP packets to simulate end-to-end jitters of services and detects jitters on paths.The test-type trace command configures a traceroute test. You must set ping parameters for the tracert test based on the user-defined parameters. Tests parameters include the TTL and delay time. The TTL of the first ICMP Echo Request packet sent to the destination is 1. After the TTL expires, the destination sends an ICMP Echo Reply packet to the source. This process repeats until all Routers along the path return the Echo packets. Then, the traceroute test is complete. The ingress collects the test results based on the received Echo packets.The test-type tcp command configures a TCP test. You must configure the NQA TCP server on the client. The client then originates a test to the specified IP address and port of the server. This test is used to collect the time taken to set up a TCP connection.The test-type lspping command configures an LSP ping tests. In an LSP ping test, a UDP MPLS Echo Request packet is first constructed. The destination IP address in the IP header is filled with an IP address on the network segment 127.0.0.0/8. The UDP MPLS Echo Request packet is transmitted along the corresponding LSP on an MPLS network. If a TE CR-LSP is used, a packet is sent by a tunnel interface and then forwarded along a specified CR-LSR. The egress monitors port 3503 that returns the response packet to the sender. An LSP ping test is used to collect RTT statistics.The test-type lsptrace command configures an LSP traceroute test. In an LSP traceroute test, a UDP MPLS Echo Request packet is first constructed. The destination IP address in the IP header is filled with an IP address on the network segment 127.0.0.0/8. The UDP MPLS Echo Request packet is transmitted along the corresponding LSP. If a TE LSP is used, a packet is sent by a tunnel interface and then forwarded along a CR-LSR. The Echo Request packet must carry a Downstream Mapping TLV (which is used to carry information about the downstream devices, including the address of the next hop and the outgoing label).\nThe TTL of the first sent MPLS Echo Request packet is 1. The packet is forwarded along a specified LSP on an MPLS network. An MPLS Echo Reply packet is returned after the TTL expires. The sender then continues to send Echo Request packets with TTL values gradually increasing until all LSRs along the LSP return the Echo packets. After that, the traceroute test is complete. The ingress collects the test results based on the received Echo packets.\nThe test-type jitter command configures a jitter test. In a jitter test, the source periodically sends packets to the destination. Each packet is marked with a timestamp. After receiving a packet, the destination timestamps the packet based on the local system time and returns the packet to the source. The source then calculates the jitter time based on the timestamp carried in the received packet. Jitter tests use a maximum of 3000 packets at a time continuously to simulate voice traffic.The test-type lspjitter command configures an ICMP LSP jitter test. NQA creates an MPLS Echo Request packet and adds the network address 127.0.0.0/8 to the IP header as the destination IP address. The packet is forwarded along the specified LSP on the MPLS network. The egress monitors port 3503 that sends Echo packets.\nIn the NQA LSP jitter test, the maximum, minimum, and average jitter time from the source to the destination or from the destination to the source are calculated based on the information received on the source node. The test results are used to analyze the network status.\nThe test-type macping command configures a MAC ping test.\nTo delete and reconfigure 802.1ag services during a test, stop the test instance first. After 802.1ag services are reconfigured, restart the test instance.\nThe test-type vplsping command configures a VPLS MAC ping test.The test-type vplspwping command configures a VPLS PW ping test. The test checks the VPLS link connectivity.The test-type pwe3trace command configures a PWE3 trace test. The test detects the faulty node on a PWE3 link.The test-type vplspwtrace command configures a VPLS PW trace test. The test detects the faulty node on a VPLS link.The test-type generalflow command configures a generalflow test.\n\nPrecautions\nThe test type of an NQA test instance cannot be changed after being configured."
+}

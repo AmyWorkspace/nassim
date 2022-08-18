@@ -1,0 +1,64 @@
+{
+    "PageTitle": "peer track admin-vrrp vrid(VSI-LDP view)",
+    "FuncDef": "The peer track admin-vrrp vrid command binds a service PW in a service VSI to an mVRRP group.\nThe undo peer track admin-vrrp vrid command unbinds a service PW in a service VSI from an mVRRP group.\nBy default, no service PW in a service VSI is bound to an mVRRP group.",
+    "CLIs": [
+        "peer <peer-address> [ negotiation-vc-id <vc-id> ] track admin-vrrp interface { <interface-name> | <interface-type> <interface-number> } vrid <virtual-router-id> pw-redundancy backup-block-all",
+        "undo peer <peer-address> [ negotiation-vc-id <vc-id> ] track admin-vrrp [ interface { <interface-name> | <interface-type> <interface-number> } vrid <virtual-router-id> pw-redundancy backup-block-all ]"
+    ],
+    "ParentView": [
+        "VSI-LDP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer-address",
+            "Info": "Specifies a peer IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "negotiation-vc-id vc-id",
+            "Info": "Specifies a VC ID. A VC ID is used when two ends that have different VSI IDs need to communicate.\nnegotiation-vc-id must be different from local VSI IDs or VSI IDs specified locally using the negotiate-vc-id command. Specifically, the specified negotiation-vc-id must be an unused one.The local negotiation-vc-id must be the same as the peer negotiation-vc-id or VSI ID.\nThe value is an integer ranging from 1 to 4294967295.The value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies an interface name.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies an interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies an interface number.\n-"
+        },
+        {
+            "Parameters": "virtual-router-id",
+            "Info": "Specifies the ID of an mVRRP group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "pw-redundancy",
+            "Info": "Indicates a VPLS PW redundancy scenario.\nIf pw-redundancy is configured, the PW redundancy mechanism determines the active/standby status of a PW based on the master/backup status of the corresponding remote PE in the mVRRP group.\n-"
+        },
+        {
+            "Parameters": "backup-block-all",
+            "Info": "Blocks multicast traffic forwarding.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] ip address 192.168.10.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/0] vrrp vrid 100 virtual-ip 192.168.10.100",
+            "[*HUAWEI-GigabitEthernet1/0/0] admin-vrrp vrid 100",
+            "[*HUAWEI-GigabitEthernet1/0/0] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi v100 bd-mode",
+            "[*HUAWEI-v100] pwsignal ldp",
+            "[*HUAWEI-v100-ldp] vsi-id 100",
+            "[*HUAWEI-v100-ldp] peer 2.2.2.2 negotiation-vc-id 100 track admin-vrrp interface GigabitEthernet 1/0/0 vrid 100 pw-redundancy backup-block-all"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a VLL accessing VPLS+VXLAN scenario where independent PW redundancy is configured, the PW redundancy mechanism determines the active/standby status of PWs based on the master/backup status of the remote PEs in the mVRRP group.\nThe initial status of each PW between the local and remote PEs is Active.The mVRRP group determines the master/backup status of the two remote PEs.\nAfter the peer track admin-vrrp vrid command is configured, the PW redundancy mechanism determines the active/standby status of a PW based on the master/backup status of the corresponding remote PE in the mVRRP group."
+}

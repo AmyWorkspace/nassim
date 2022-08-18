@@ -1,0 +1,67 @@
+{
+    "PageTitle": "test connectivity (System view)",
+    "FuncDef": "The test connectivity command starts a PRBS test.",
+    "CLIs": [
+        "test connectivity interface { <interface-name> | <interface-type> <interface-number> } { uni-direction | nni-direction } pattern <pattern-list> interval { hour <hour-value> | minute <minute-value> | second <second-value> } interval-repeat <repeat-count>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies an interface name.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies an interface type.\nThe value can be only a serial interface."
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies an interface number.\n-"
+        },
+        {
+            "Parameters": "uni-direction",
+            "Info": "Indicates the User-to-Network Interface (UNI) side.\n-"
+        },
+        {
+            "Parameters": "nni-direction",
+            "Info": "Indicates the network-to-network (NNI) side.\n-"
+        },
+        {
+            "Parameters": "pattern pattern-list",
+            "Info": "Specifies an index of a PRBS test pattern.\nIt varies with subcards. The value can be prbs15, prbs20, prbs23, qrss, 0s, alt-0-1, lin8, 3in24, prbs6, prbs9, prbs11, or qrw:\nprbs15:215-1 test pattern.prbs20:220-1 test pattern.prbs23:223-1 test pattern.qrss:220-1 QRSS ITU-T O.151 test pattern.0s:All 0's test patternalt-0-1:Alternating 0's and 1's test pattern.lin8:8 1-in-8 test pattern.3in24:3-in-24 test pattern.prbs6:26-1 test pattern.prbs9:29-1 test pattern.prbs11:211-1 test pattern.qrw:215-1 QRW test pattern.The value is null if the subcard is not supported or the interfaces is not activated."
+        },
+        {
+            "Parameters": "interval",
+            "Info": "Test interval.\n-"
+        },
+        {
+            "Parameters": "hour hour-value",
+            "Info": "Specifies a test interval.\nThe value is an integer ranging from 1 to 4, in hours."
+        },
+        {
+            "Parameters": "minute minute-value",
+            "Info": "Specifies a test interval.\nThe value is an integer ranging from 1 to 240, in minutes."
+        },
+        {
+            "Parameters": "second second-value",
+            "Info": "Specifies a test interval.\nThe value is an integer ranging from 1 to 14400, in seconds."
+        },
+        {
+            "Parameters": "interval-repeat repeat-count",
+            "Info": "Specifies the number of test intervals.\nThe value is an integer ranging from 1 to 60."
+        },
+        {
+            "Parameters": "interface",
+            "Info": "Specifies an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] test connectivity interface serial 1/0/0:1 uni-direction pattern PRBS20 hour 1 interval-repeat 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDuring site deployment or device maintenance, PRBS enhanced tests on CES service connectivity are performed when there is no BER tester. The tests are performed as follows:\nThe board supporting PRBS sends PRBS bit errors to a tested network.The bit errors are looped back to the original board over a loopback-enabled remote device on the tested network.Upon receipt of the bit errors, the PRBS monitoring module on the board analyzes whether the bit errors are the same as those before being sent and determines whether the links or devices on the tested network are working properly.\nYou can enter the Tab button to display the pattern-list when using the test connectivity command.\nAfter being deployed on a serial interface, sometimes CES services are unavailable although the PW status as well as the physical layer and protocol layer status of the serial interface are Up. Therefore, CES service connectivity needs to be checked before the services are run.\n\nPrerequisites\nCES services have been deployed on the tested serial interface. This means that the serial interface has used TDM as the encapsulation protocol and joined the PW.\nThe physical layer status and protocol layer status on the serial interface are Up.\nThe PW which the serial interface joins is Up.\nLocal loopback has been configured on the corresponding interface, which is connected to the serial interface, on the other end of the PW.\nConfiguration Impact\nServices will be interrupted during the PRBS test because local loopback is configured on the other end. You need to manually cancel the local loopback configuration on the other end after the test is completed."
+}

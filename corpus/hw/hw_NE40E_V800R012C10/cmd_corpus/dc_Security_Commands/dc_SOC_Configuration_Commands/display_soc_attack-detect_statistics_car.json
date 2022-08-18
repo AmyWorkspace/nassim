@@ -1,0 +1,69 @@
+{
+    "PageTitle": "display soc attack-detect statistics car",
+    "FuncDef": "The display soc attack-detect statistics car command displays statistics about protocol packets sent to the CPU.",
+    "CLIs": [
+        "display soc attack-detect statistics car slot <slot-id> protocol <protocol-name> [ <cpcar-name> history { 15-minutes | 60-minutes | 72-hours } ]",
+        "display soc attack-detect statistics car slot <slot-id>"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "protocol protocol-name",
+            "Info": "Specifies the protocols that support CAR, such as 802.1ag, arp, bfd, bgp, telnet-client, telnet-server, tftp.\nThe supported protocols can be queried using a question mark (?)."
+        },
+        {
+            "Parameters": "cpcar-name",
+            "Info": "Specifies the type of protocol packet (to be sent to the CPU) on which a CAR action is performed. This parameter corresponds to the CarName field in the command output. One protocol-name corresponds to multiple cpcar-name values.\nThe value is a string of 1 to 49 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "history",
+            "Info": "Historical statistics.\n-"
+        },
+        {
+            "Parameters": "15-minutes",
+            "Info": "Displays statistics within the last 15 minutes.\n-"
+        },
+        {
+            "Parameters": "60-minutes",
+            "Info": "Displays statistics within the last 1 hour.\n-"
+        },
+        {
+            "Parameters": "72-hours",
+            "Info": "Displays statistics within the last 72 hours.\n-"
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Specifies the slot ID of a board.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display soc attack-detect statistics car slot 1 protocol arp",
+            "=====================================================================================================",
+            "  CarName                                  Pass-Pkt      Drop-Pkt       Pass-Bytes      Drop-Bytes",
+            "  PES_EXCP_CAUSE_ARP                       2187          0              136252          0",
+            "  PES_EXCP_ID_QVCT_MISS_ARP                0             0              0               0",
+            "  PES_EXCP_ID_USER_MAC_HIT_ARPREQ          0             0              0               0",
+            "  PES_EXCP_ID_USER_MAC_HIT_ARPRLY          0             0              0               0",
+            "  PES_EXCP_ID_MSE_IPARP_TRIGGER            0             0              0               0",
+            "  PES_EXCP_CAUSE_LRN_MSG                   0             0              0               0",
+            "  PES_EXCP_CAUSE_ARP_PING_FOR_VSI          0             0              0               0",
+            "  PES_EXCP_CAUSE_ARP_MISS                  0             0              0               0",
+            "  PES_EXCP_ID_FREE_ARP_FOR_PW              0             0              0               0",
+            "  PES_EXCP_ID_FREE_ARP_FOR_VLAN            0             0              0               0",
+            "  PES_EXCP_CODE_QINQ_ARP                   0             0              0               0",
+            "  ====================================================================================================="
+        ],
+        [
+            "<HUAWEI> display soc attack-detect statistics car slot 1",
+            "------------------------------------------------------------------------------",
+            "  CarName                                  Pass-Pkt      Drop-Pkt       Pass-Bytes      Drop-Bytes                                                                                                                                 ",
+            "  PES_EXCP_CAUSE_IGMP                      1213350       0              31547100        0                                                                       ",
+            "  PES_EXCP_CAUSE_NEW_IPFPM                 0             4814640        0               125180640                                                                                                                                    ",
+            "  PES_EXCP_CAUSE_NEW_IGMP                  0             4833545        0               125672170"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a device is being attacked, a large number of packets may be sent to the CPU, causing the CPU overload. To prevent this problem, use CPCAR to limit the rate of packets to be sent to the CPU.\nThen the device collects statistics about the number of packets received and discarded by CPCAR, the rate of packets sent to the CPU, and the rate of packets discarded. If the rate of protocol packets sent to the CPU exceeds the threshold, CPCAR discards excess packets and records information about the discarded packets. Therefore, checking CPCAR statistics helps identify the rate of specific protocol packets sent to the CPU. If a large number of specific protocol packets are discarded by CPCAR, and the CPCAR drop rate is high, for example, over 10%, this protocol has exceptions. In CPU overload scenarios, you can determine the protocol being attacked by identifying the CPCAR with the highest packet loss rate. This helps locate the attack. To check CPCAR statistics and identify the protocol with the highest packet loss rate, run the display soc attack-detect statistics car command.\nImplementation Procedure\nRun the display soc attack-detect statistics car slot slot-id protocol protocol-name command to check all CPCAR statistics monitored by the SOC. Identify CarName of the CPCAR with the highest packet loss rate or the largest number of lost packets.Run the display soc attack-detect statistics car slot slot-id protocol protocol-name [ cpcar-name history { 15-minute | 60-minutes | 72-hour } ] command to check the packet loss rate of the protocol packets identified by cpcar-name within a specified period.Run the display soc attack-detect cpu-usage slot slot-id history { 15-minutes | 60-minutes | 72-hours } command to check the CPU usage within the same period. If the CPU usage and packet loss rate within the same period have similar tendencies, the CPU overload is caused by the protocol packets identified by cpcar-name.\nTo query the protocols whose packets were sent to the CPU within the last 1 minute, run the display soc attack-detect statistics car slot slot-id command. To further query historical statistics about packets of these protocols, run the display soc attack-detect statistics car slot slot-id protocol protocol-name [ cpcar-name history { 15-minutes | 60-minutes | 72-hours }] command.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

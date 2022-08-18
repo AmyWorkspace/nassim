@@ -1,0 +1,50 @@
+{
+    "PageTitle": "dhcpv6 user-identify-policy",
+    "FuncDef": "The dhcpv6 user-identify-policy command configures a method for obtaining MAC addresses of Layer 3 DHCPv6 users during login.\nThe undo dhcpv6 user-identify-policy command restores the default configuration.\nBy default, a device preferentially obtains MAC addresses of Layer 3 DHCPv6 users from the Option 38 field. If MAC addresses fail to be obtained from the Option 38 field, the device obtains users' MAC addresses from DUIDs. If MAC addresses fail to be obtained from DUIDs, user login fails.",
+    "CLIs": [
+        "dhcpv6 user-identify-policy { option79-option38 | option38-option79 | option79 | option38 } [ no-exist-action offline ]",
+        "undo dhcpv6 user-identify-policy { option79-option38 | option38-option79 | option79 | option38 } [ no-exist-action offline ]"
+    ],
+    "ParentView": [
+        "BAS interface view (FE)",
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "option79-option38",
+            "Info": "Get mac by option79 or option38.\n-"
+        },
+        {
+            "Parameters": "option38-option79",
+            "Info": "Get mac by option38 or option79.\n-"
+        },
+        {
+            "Parameters": "option79",
+            "Info": "Get mac by option79.\n-"
+        },
+        {
+            "Parameters": "option38",
+            "Info": "Get mac by option38.\n-"
+        },
+        {
+            "Parameters": "no-exist-action",
+            "Info": "Action for no option79 or option38.\n-"
+        },
+        {
+            "Parameters": "offline",
+            "Info": "Offline for option79 or option38.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet3/0/1",
+            "[~HUAWEI-GigabitEthernet3/0/1] bas",
+            "[~HUAWEI-GigabitEthernet3/0/1-bas] access-type layer3-subscriber default-domain authentication domain1",
+            "[~HUAWEI-GigabitEthernet3/0/1-bas] dhcpv6 user-identify-policy option79-option38 no-exist-action offline"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a Layer 3 DHCPv6 user requests to go online, the device needs to obtain the user's MAC address. To configure a method for obtaining users' MAC addresses, run the dhcpv6 user-identify-policy command.\nIf option79-option38 is specified, the device preferentially obtains users' MAC addresses from the Option 79 field in relay headers of DHCPv6 Solicit or Advertise messages. If no MAC address is carried in the Option 79 field, the device obtains users' MAC addresses from the Option 38 field.If option38-option79 is specified, the device preferentially obtains users' MAC addresses from the Option 38 field in relay headers of DHCPv6 Solicit or Advertise messages. If no MAC address is carried in the Option 38 field, the device obtains users' MAC addresses from the Option 79 field.If option79 is specified, the device obtains users' MAC addresses from the Option 79 field in relay headers of DHCPv6 Solicit or Advertise messages.If option38 is specified, the device obtains users' MAC addresses from the Option 38 field in relay headers of DHCPv6 Solicit or Advertise messages.If no-exist-action offline is specified and the device fails to obtain users' MAC addresses using one of the preceding methods, user login fails. If no-exist-action offline is not specified and the device fails to obtain users' MAC addresses using one of the preceding methods, the device obtains users' MAC addresses from DUIDs. If users' MAC addresses cannot be obtained from DUIDs, user login then fails.\nWhen the dhcpv6 user-identify-policy command is not configured, the device obtains users' MAC addresses from the Option 38. If users' MAC addresses cannot be obtained from Option 38, the device obtains users' MAC addresses from DUIDs.\nThis configuration modification may affects the dhcpv6 protocol interaction interrupt of online users, therefore, the prompt information is added during command line configuration.\n\nPrerequisites\nThe access-type layer3-subscriber command has been run in the BAS interface view to set the access type of the BAS interface to layer3-subscriber.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

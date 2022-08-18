@@ -1,0 +1,38 @@
+{
+    "PageTitle": "bfd all-interfaces (OSPF view)",
+    "FuncDef": "The bfd all-interfaces command sets parameter values for a BFD session.\nThe undo bfd all-interfaces command restores the default parameter values of a BFD session.\nBy default, BFD is disabled.",
+    "CLIs": [
+        "bfd all-interfaces { min-tx-interval <transmit-interval> | min-rx-interval <receive-interval> | detect-multiplier <multiplier-value> | frr-binding } *",
+        "undo bfd all-interfaces { min-tx-interval [ <transmit-interval> ] | min-rx-interval [ <receive-interval> ] | detect-multiplier [ <multiplier-value> ] | frr-binding } *"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-tx-interval transmit-interval",
+            "Info": "Specifies the minimum interval at which BFD packets are sent to the remote end.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-rx-interval receive-interval",
+            "Info": "Specifies the minimum interval at which BFD packets are received from the remote end.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "detect-multiplier multiplier-value",
+            "Info": "Specifies the local detection multiplier.\nThe value is an integer ranging from 3 to 50. The default value is 3."
+        },
+        {
+            "Parameters": "frr-binding",
+            "Info": "Associates the BFD session status with the link status on an interface. If BFD detects a link fault on an interface, the BFD session goes Down, triggering FRR. Traffic is then quickly switched to the backup link, minimizing service loss.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf",
+            "[*HUAWEI-ospf-1] bfd all-interfaces enable",
+            "[*HUAWEI-ospf-1] bfd all-interface min-tx-interval 30"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAny link failure or topology change causes routers to re-calculate routes, and the convergence of routing protocols affects network performance.\nIf BFD is associated with routing protocols, BFD can fast detect faults and notify routing protocols of the faults immediately, which speeds up the convergence of routing protocols.\nOSPF IP FRR requires the lower layer to fast respond to the link change so that traffic can be rapidly switched to the backup link if a link fails. In such a case, if frr-binding is configured, the association between the BFD session status and link status is enabled on an interface. If the BFD session on the interface becomes Down, the link goes Down immediately."
+}

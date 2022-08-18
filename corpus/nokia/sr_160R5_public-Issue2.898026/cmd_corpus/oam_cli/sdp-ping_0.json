@@ -1,0 +1,47 @@
+{
+    "PageTitle": "sdp-ping",
+    "FuncDef": "This command tests SDPs for uni-directional or round trip connectivity and performs SDP MTU Path tests.",
+    "CLIs": [
+        "sdp-ping <orig-sdp-id> [ resp-sdp <resp-sdp-id> ] [ fc <fc-name> [ profile { in | out } ] ] [ size <octets> ] [ send-count <send-count> ] [ timeout <timeout> ] [ interval <interval> ]"
+    ],
+    "ParentView": [
+        "oam",
+        "config>saa>test>type"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "orig-sdp-id",
+            "Info": "The SDP-ID to be used by sdp-ping, expressed as a decimal integer. The far-end address of the specified SDP-ID is the expected responder-id within each reply received. The specified SDP-ID defines the encapsulation of the SDP tunnel encapsulation used to reach the far end. This can be IP/GRE or MPLS. If orig-sdp-id is invalid or administratively down or unavailable for some reason, the SDP Echo Request message is not sent and an appropriate error message is displayed (once the interval timer expires, sdp-ping will attempt to send the next request if required). Values-1 to 17407."
+        },
+        {
+            "Parameters": "resp-sdp-id",
+            "Info": "Optional parameter is used to specify the return SDP-ID to be used by the far-end router for the message reply for round trip SDP connectivity testing. If resp-sdp-id does not exist on the far-end router, terminates on another router different than the originating router, or another issue prevents the far-end router from using resp-sdp-id, the SDP echo reply will be sent using generic IP/GRE OAM encapsulation. The received forwarding class (as mapped on the ingress network interface for the far end) defines the forwarding class encapsulation for the reply message. Values-1 to 17407. ParamDefault: Default- null. Use the non-SDP return path for message reply."
+        },
+        {
+            "Parameters": "fc-name",
+            "Info": "The fc parameter is used to indicate the forwarding class of the SDP encapsulation. The actual forwarding class encoding is controlled by the network egress DSCP or LSP-EXP mappings. Values-be, l2, af, l1, h2, ef, h1, nc. ParamDefault: Default- be"
+        },
+        {
+            "Parameters": "profile {in | out}",
+            "Info": "The profile state of the SDP encapsulation. ParamDefault: Default- out"
+        },
+        {
+            "Parameters": "timeout",
+            "Info": "The time-out parameter in seconds, expressed as a decimal integer. This value is used to override the default timeout value and is the amount of time that the router will wait for a message reply after sending the last probe for a specific test. Upon the expiration of timeout, the test will be marked complete and no more packets will be processed for any of those request probes. Values-1 to 10. ParamDefault: Default- 5"
+        },
+        {
+            "Parameters": "interval",
+            "Info": "The interval parameter in seconds, expressed as a decimal integer. This parameter is used to override the default request message send interval and defines the minimum amount of time that must expire before the next message request is sent. Values-1 to 10. ParamDefault: Default- 1"
+        },
+        {
+            "Parameters": "octets",
+            "Info": "The size parameter in octets, expressed as a decimal integer. This parameter is used to override the default message size for the sdp-ping request. Changing the message size is a method of checking the ability of an SDP to support a path-mtu. The size of the message does not include the SDP encapsulation, VC-Label (if applied) or any DLC headers or trailers. Values-40 to 9198. ParamDefault: Default- 40"
+        },
+        {
+            "Parameters": "send-count",
+            "Info": "The number of messages to send, expressed as a decimal integer. The count parameter is used to override the default number of message requests sent. Each message request must either timeout or receive a reply before the next message request is sent. The message interval value must be expired before the next message request is sent. Values-1 to 100. ParamDefault: Default- 1"
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": ""
+}

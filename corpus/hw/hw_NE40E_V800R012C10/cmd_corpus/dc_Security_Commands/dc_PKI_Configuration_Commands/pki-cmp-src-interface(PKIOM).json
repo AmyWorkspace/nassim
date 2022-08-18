@@ -1,0 +1,31 @@
+{
+    "PageTitle": "cmp source interface",
+    "FuncDef": "The cmp source interface command configures the source interface of CMPv2 packets. The IP address of the configured source interface is used as the source IP address of the packets sent from the device to the CMPv2 server.\nThe undo cmp source interface command deletes the source interface configured for CMPv2 packets.\nBy default, the source IP address of CMPv2 packets is obtained based on the destination IP address in the routing table.",
+    "CLIs": [
+        "cmp source interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo cmp source interface [ <interface-name> | <interface-type> <interface-number> ]"
+    ],
+    "ParentView": [
+        "VS PKI CMP session view",
+        "PKI CMP session view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface-type interface-number",
+            "Info": "Specifies the type and number of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack 1",
+            "[*HUAWEI-LoopBack1] ip address 10.1.1.1 32",
+            "[*HUAWEI-LoopBack1] commit",
+            "[~HUAWEI-LoopBack1] quit",
+            "[~HUAWEI] pki domain domain1",
+            "[*HUAWEI-pki-domain-domain1] pki cmp session session1",
+            "[*HUAWEI-pki-domain-domain1-pki-cmp-session-session1] cmp source interface loopback 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a device exchanges packets with the CMPv2 server to apply for certificates, the IP address of the outbound interface for the reachable route to the device is used as the source IP address of the packets. If a different route is used, the outbound interface may change, causing the following problems:\nThe source IP address of CMPv2 packets changes, requiring the device and PKI system to implement CMP renegotiation.If there is a firewall between the device and PKI system, the source IP address of CMPv2 packets cannot be specified on the firewall, increasing insecurity risks.\nTo resolve the preceding problems, run the cmp source interface command to specify a source interface for CMPv2 packets. After a source interface is specified for CMPv2 packets, the IP address of this interface is used as the source IP address of the packets sent from the device to the CMPv2 server."
+}

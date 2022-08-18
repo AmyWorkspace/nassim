@@ -1,0 +1,36 @@
+{
+    "PageTitle": "ip community-filter advanced",
+    "FuncDef": "The ip community-filter advanced command adds an advanced community filter.\nThe undo ip community-filter advanced command deletes an advanced community filter.\nBy default, no advanced community filter exists.",
+    "CLIs": [
+        "ip community-filter advanced <comm-filter-name> [ index <index-number> ] <matchMode> <regular-expression>",
+        "undo ip community-filter advanced <comm-filter-name> [ index <index-number> ] [ <matchMode> <regular-expression> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "index index-number",
+            "Info": "Specifies the sequence number of a basic community filter.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "matchMode",
+            "Info": "Sets the matching mode of the community filter.\nThe value is an enumerated type:\npermit: Sets the matching mode of the community filter to permit.deny: Sets the matching mode of the community filter to deny."
+        },
+        {
+            "Parameters": "regular-expression",
+            "Info": "Specifies a community-based regular expression.\nThe value is a string of 1 to 1024 characters, spaces supported."
+        },
+        {
+            "Parameters": "advanced comm-filter-name",
+            "Info": "Specifies the name of an advanced community filter.\nThe value is a string of 1 to 51 case-sensitive characters. The string cannot be all digits."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip community-filter advanced aa permit ^10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe community attribute is a private attribute of BGP and can be used to filter only BGP routes. The community attribute can be used as a matching condition of a route-policy using a command, such as the if-match community-filter command.\nFollow-up Procedure\nRun the display ip community-filter command to view detailed community filter configurations.\nPrecautions\nOnly the community number or known community attribute can be specified for a basic community filter. The regular expression can be used as a matching rule in an advanced community filter.\nThe relationship between the rules of the community filter is \"AND\", which is different from that of an RD filter. This is because each route has only one RD but can have multiple communities.\nWhen you run the apply comm-filter delete command in the route-policy view, only one community attribute can be deleted each time. To delete more than one community attribute, run the command repeatedly. If multiple community attributes are specified in one filter, none of them can be deleted. For information about examples, see apply comm-filter delete.\nBy default, Community filters work in deny mode. If all matching rules in a filter are configured to work in deny mode, all routes are denied by the filter; to prevent this problem, configure one matching rule in permit mode after one or multiple matching rules in deny mode so that the routes except for those denied by preceding matching rules are permitted by the filter.If an advanced community filter is used to filter routes, the community-based regular expression can be set to a character string in either the aa:nn format or integer format. The following are two examples:\nThe ip community-filter advanced aa index 30 permit ^1:1$ configuration matches routes that carry the community value of 65537 or 1:1.\nThe ip community-filter advanced aa index 30 permit ^65537$ configuration also matches routes that carry the community value of 65537 or 1:1."
+}

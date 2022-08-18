@@ -1,0 +1,91 @@
+{
+    "PageTitle": "mpls oam egress",
+    "FuncDef": "The mpls oam egress command configures MPLS OAM parameters on the egress of an LSP.\nThe undo mpls oam egress command deletes MPLS OAM parameters configured on the egress of an LSP.\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.\nBy default, the egress uses OAM auto protocol extension; the reverse LSP is in share mode; the interval at which BDI packets are sent is the same as the interval between sending OAM detection packets.",
+    "CLIs": [
+        "mpls oam egress { lsp-name <lsp-name> | lsr-id <ingress-lsr-id> tunnel-id <tunnel-id> } [ type { cv | ffd frequency { 3 | 10 | 20 | 50 | 100 | 200 | 500 } } ] [ backward-lsp { <tunnel-type> <tunnel-number> | <tunnel-name> } [ share | private ] ] [ bdi-frequency <bdi-frep-value> ]",
+        "mpls oam egress { lsp-name <lsp-name> | lsr-id <ingress-lsr-id> tunnel-id <tunnel-id> } auto-protocol [ overtime <over-time> ] [ backward-lsp { <tunnel-type> <tunnel-number> | <tunnel-name> } [ share | private ] ] [ bdi-frequency <bdi-frep-value> ]",
+        "undo mpls oam egress { lsp-name <lsp-name> | lsr-id <ingress-lsr-id> tunnel-id <tunnel-id> }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "lsp-name lsp-name",
+            "Info": "Specifies the name of a static bidirectional CR-LSP.\nThe value is a string of 1 to 19 characters, spaces not supported.\nIf quotation marks are used at both ends of an entered character sting, you can enter spaces in the string."
+        },
+        {
+            "Parameters": "lsr-id ingress-lsr-id",
+            "Info": "Specifies the LSR ID of the ingress of an LSP to be monitored.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "tunnel-id tunnel-id",
+            "Info": "Specifies the tunnel ID of the bound LSP to be monitored.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "type",
+            "Info": "Indicates the type of OAM detection packets.\nThis parameter takes effect only when the auto-protocol parameter is not set.\n-"
+        },
+        {
+            "Parameters": "cv",
+            "Info": "Indicates that the type of OAM detection packets is CV.\n-"
+        },
+        {
+            "Parameters": "ffd",
+            "Info": "Indicates that the type of OAM detection packets is FFD.\n-"
+        },
+        {
+            "Parameters": "frequency",
+            "Info": "Indicates that the interval between sending FFD packets.\nThe value is 3, 10, 20, 50, 100, 200 and 500 in milliseconds."
+        },
+        {
+            "Parameters": "backward-lsp",
+            "Info": "Specifies the tunnel ID of a reverse LSP.\n-"
+        },
+        {
+            "Parameters": "tunnel-type tunnel-number",
+            "Info": "Specifies the tunnel type and number.\n-"
+        },
+        {
+            "Parameters": "tunnel-name",
+            "Info": "Specifies the tunnel name of a reverse LSP.\n-"
+        },
+        {
+            "Parameters": "share",
+            "Info": "Indicates that a reverse LSP works in shared mode. That is, the reverse LSP can be shared by multiple LSPs.\n-"
+        },
+        {
+            "Parameters": "private",
+            "Info": "Indicates that a reverse LSP works in private mode. After a reverse LSP works in private mode, the reverse LSP cannot be bound to other LSPs.\n-"
+        },
+        {
+            "Parameters": "bdi-frequency bdi-frep-value",
+            "Info": "Indicates the interval at which BDI packets are sent.\nThe values are as follows:\n?per-second\n?detect-freq"
+        },
+        {
+            "Parameters": "auto-protocol",
+            "Info": "Enables OAM auto protocol extension.\n-"
+        },
+        {
+            "Parameters": "overtime over-time",
+            "Info": "Specifies the timeout period of waiting for the first packet. After OAM auto protocol extension is enabled, the system waits for receiving the first packet to perform OAM detection. If no packet is received after the specified period of time elapses, a fault is considered to occur. BDI packets are then sent to the ingress.\nThe value is an integer ranging from 0 to 255. The step is 30 seconds. The default value is 10, meaning 5 minutes (10 x 30s)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls oam egress lsr-id 1.1.1.1 tunnel-id 100 auto-protocol"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls oam",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls oam egress lsr-id 1.1.1.1 tunnel-id 100 type cv"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe MPLS OAM mechanism effectively detects and locates MPLS link faults. The MPLS OAM mechanism also triggers a protection switchover after detecting a fault. To configure MPLS OAM to monitor an LSP, you must configure MPLS OAM parameters on the ingress and egress. To configure MPLS OAM parameters on the egress, run the mpls oam egress command.\nPrerequisites\nMPLS OAM has been globally enabled using the mpls oam command.\nPrecautions\nIf the type of MPLS OAM detection packets is configured on the egress, the auto protocol function is invalid.Only OAM auto protocol extension can be enabled automatically, and other configured OAM parameters must be manually enabled."
+}

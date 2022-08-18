@@ -1,0 +1,33 @@
+{
+    "PageTitle": "nexthop recursive-lookup route-policy (BGP multi-instance VPN instance IPv4 address family view)",
+    "FuncDef": "The nexthop recursive-lookup route-policy command configures route-policy next hop recursion.\nThe undo nexthop recursive-lookup route-policy command disables route-policy next hop recursion.\nBy default, route-policy-based next hop recursion is disabled.",
+    "CLIs": [
+        "nexthop recursive-lookup route-policy <route-policy-name>",
+        "undo nexthop recursive-lookup route-policy"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-policy-name",
+            "Info": "Indicates the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[*HUAWEI] route-policy rp_nexthop permit node 0",
+            "[*HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-a-vpna] nexthop recursive-lookup route-policy rp_nexthop"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBGP needs route recursion in case of next hops. If route recursion is not limited, BGP routes may be incorrectly iterated, causing traffic loss. Therefore, next hops should perform recursion according to certain conditions.\nTo control route recursion based on a route-policy, run the nexthop recursive-lookup route-policy command. If a target recursive route is filtered out by the route-policy, the route is considered unreachable. In this manner, BGP route recursion will fail.\nPrerequisites\nThe target recursive route has been determined, and a route-policy has been configured.\nBefore configuring a route-policy, ensure that all desired target recursive routes will not be filtered out by the route-policy.\nPrecautions\nThe command does not apply to the routes received from LinkLocal peers."
+}

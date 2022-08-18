@@ -1,0 +1,46 @@
+{
+    "PageTitle": "rpf-frr",
+    "FuncDef": "The rpf-frr command enables PIM FRR.\nThe undo rpf-frr command disables PIM FRR.\nBy default, PIM FRR is disabled.",
+    "CLIs": [
+        "rpf-frr",
+        "rpf-frr policy { acl-name <acl-name> | <acl-number> }",
+        "undo rpf-frr"
+    ],
+    "ParentView": [
+        "VPN instance PIM view",
+        "PIM view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy",
+            "Info": "Configure a policy which uses ACL rules to specify the routing table entries that the FRR function takes effect on.\n-"
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies an ACL by its name.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies an ACL by its number.\nThe value is an integer ranging from 2000 to 3999."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] rpf-frr"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl name frracl",
+            "[*HUAWEI-acl4-advance-frracl] rule permit ip source 10.0.0.1 0 destination 226.0.0.1 0",
+            "[*HUAWEI-acl4-advance-frracl] commit",
+            "[~HUAWEI-acl4-advance-frracl] quit",
+            "[~HUAWEI] multicast routing-enable",
+            "[~HUAWEI] pim",
+            "[*HUAWEI-pim] rpf-frr policy acl-name frracl"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a multicast link fails, services are interrupted before unicast routes are converged. Route convergence generally takes a long time, which is unacceptable by multicast services that have high requirements on real-time data transmission. To resolve this problem, configure PIM FRR. After PIM FRR is configured, PIM sets up primary and backup MDTs based on unicast backup FRR routes, allowing multicast traffic transmission through both the primary and backup links. The device's forwarding plane permits the multicast traffic on the primary link and discards that on the backup link. However, the forwarding plane permits the multicast traffic on the backup link immediately after the primary link fails, thus minimizing traffic loss.\nYou can specify an ACL to enable PIM FRR for the specified entry."
+}

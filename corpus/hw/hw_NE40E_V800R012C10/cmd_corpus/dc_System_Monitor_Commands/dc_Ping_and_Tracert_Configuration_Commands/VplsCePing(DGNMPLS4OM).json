@@ -1,0 +1,45 @@
+{
+    "PageTitle": "ce-ping vsi",
+    "FuncDef": "The ce-ping vsi command checks CE connectivity on a VPLS network.",
+    "CLIs": [
+        "ce-ping <ip-address> vsi <vsi-name> source-ip <source-ip-address> [ mac <mac-address> | count <count> | interval <interval> ] *"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies a destination IP address.\nDotted decimal notation."
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies the name of a VSI to be checked.\nThe value is a string ranging from 1 to 31."
+        },
+        {
+            "Parameters": "source-ip source-ip-address",
+            "Info": "Specifies a source IP address.\nDotted decimal notation."
+        },
+        {
+            "Parameters": "mac mac-address",
+            "Info": "Specifies an MAC address for CE ping. The MAC address is encapsulated into a packet as the source MAC address.\nThe value is in the range E024-7FA4-D2CB to E024-7FA4-D2DA. The MAC address must meet the following conditions:\nYou can specify only one MAC address for a device. You must specify a specific MAC addresses for each device.The MAC address for CE ping must not be used by an interface.\nBy default, the system automatically selects one MAC address from 16 MAC addresses for CE ping as the source MAC address and encapsulates it into a packet. The system may not select different MAC addresses for different devices. Therefore, you are advised to manually configure this parameter.\nIf you run the mac-address blackhole command to configure an MAC address as a blackhole MAC address, the MAC address can no longer be specified as the MAC address for CE ping."
+        },
+        {
+            "Parameters": "count count",
+            "Info": "Specifies the number of CE Ping request packets to be sent.\nThe value is an integer ranging from 1 to 255. The default value is 3."
+        },
+        {
+            "Parameters": "interval interval",
+            "Info": "Specifies an interval at which request packets are sent.\nThe value is an integer ranging from 1 to 10, in seconds. The default value is 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> ce-ping 10.1.1.1 vsi abc source-ip 10.1.1.2 mac E024-7FA4-D2CB interval 2 count 5",
+            "Info: If the designated source IP address is in use, it could cause the abnormal data transmission in VPLS network. Are you sure the source-ip is unused in this VPLS? [Y/N]:y",
+            "Ce-ping is in process...",
+            "10.1.1.1 is used by 00e0-fc12-3456"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can run the ce-ping vsi command to monitor local and remote CE connectivity on a VPLS network.\nAfter you run the ce-ping vsi command, the source PE broadcasts ARP request packets and all users in a specified VSI receive the ARP request packets. If the source PE receives an ARP response packet from a user, it considers that the user is online.\nPrecautions\nBecause the VPLS network, a Layer 2 network, is neither aware of users' network segments nor has IP addresses, you must specify a source IP address so that the source PE broadcasts ARP request packets.\nWhen you specify a source IP address, note the following points:\nThe source IP address must be on the same network segment as the destination IP address. If they are on different network segments, the destination node considers Address Resolution Protocol (ARP) request packets invalid and does not return ARP response packets.The source IP address must be an unused IP address on the VPLS network. If you specify a used IP address for the source IP address, packets cannot be properly forwarded. As a result, the user with the specified IP address cannot access the Internet. If you specify a gateway IP address for the source IP address, all users cannot access the Internet.\nTo avoid the preceding problems, the system will inform you that you must use an unused IP address as the source IP address after running the ce-ping vsi command and instruct you to enter Y for confirmation."
+}

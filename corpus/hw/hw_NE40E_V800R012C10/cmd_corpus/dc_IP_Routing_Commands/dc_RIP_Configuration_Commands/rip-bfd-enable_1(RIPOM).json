@@ -1,0 +1,36 @@
+{
+    "PageTitle": "bfd all-interfaces (RIP view)",
+    "FuncDef": "The bfd all-interfaces command configures parameters for a BFD session.\nThe undo bfd all-interfaces command restores the default BFD session parameters.\nBy default, the default BFD session parameters are used.",
+    "CLIs": [
+        "bfd all-interfaces { min-tx-interval <min-transmit-value> | min-rx-interval <min-receive-value> | detect-multiplier <detect-multiplier-value> } *",
+        "undo bfd all-interfaces { min-tx-interval [ <min-transmit-value> ] | min-rx-interval [ <min-receive-value> ] | detect-multiplier [ <detect-multiplier-value> ] } *"
+    ],
+    "ParentView": [
+        "RIP view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-tx-interval min-transmit-value",
+            "Info": "Specifies the minimum interval at which BFD packets are sent to the remote device.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-rx-interval min-receive-value",
+            "Info": "Specifies the minimum interval at which BFD packets are received from the remote device.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "detect-multiplier detect-multiplier-value",
+            "Info": "Specifies the local detection multiplier.\nThe value is an integer ranging from 3 to 50. The default value is 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] rip",
+            "[*HUAWEI-rip-1] bfd all-interfaces enable",
+            "[*HUAWEI-rip-1] bfd all-interfaces min-tx-interval 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter BFD for RIP is enabled, the default BFD parameters take effect. The minimum interval at which BFD packets are received and sent are 100 ms, and the detection multiplier is 3.\nIf the default parameters cannot meet network requirements, run the\nbfd all-interfaces command to modify the parameters to change the route convergence speed. If the local end does not receive any BFD packet from its neighbor within the detection period, the local end considers this neighbor Down. The relationships between the parameters and actual intervals or the detection period are as follows:\nActual interval at which BFD packets are sent on the local end = Max { local , remote }Actual interval at which BFD packets are received on the local end = Max { remote , local }Actual detection period = Actual interval at which BFD packets are received on the local end x Remote\n\nPrerequisites\nBefore running this command, ensure the following operations have been performed:\nGlobal BFD has been enabled using the bfd command.A RIP process has been created and the RIP view has been displayed using the rip command.BFD has been enabled on interfaces using the bfd all-interfaces enable command.\n\nPrecautions\nParameters set using the rip bfd command in the interface view takes precedence over those set using the bfd all-interfaces command."
+}

@@ -1,0 +1,38 @@
+{
+    "PageTitle": "delay-measure one-way receive",
+    "FuncDef": "The delay-measure one-way receive command enables a remote device to receive DMMs to implement one-way frame delay measurement.\nThe undo delay-measure one-way receive command disables a remote device from receiving DMMs.\nBy default, a remote device is disabled from receiving DMMs in an MA.",
+    "CLIs": [
+        "delay-measure one-way receive test-id <test-id>",
+        "undo delay-measure one-way receive [ test-id <test-id> ]"
+    ],
+    "ParentView": [
+        "MA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "test-id test-id",
+            "Info": "Specifies the ID of a test instance.\nThe value is an integer ranging from 1 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] undo shutdown",
+            "[*HUAWEI-GigabitEthernet1/0/1] mpls l2vc 2.2.2.2 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[~HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] map mpls l2vc 2.2.2.2 100 raw",
+            "[*HUAWEI-md-md1-ma-ma1] mep mep-id 1 interface GigabitEthernet1/0/1 inward",
+            "[*HUAWEI-md-md1-ma-ma1] mep ccm-send mep-id 1 enable",
+            "[*HUAWEI-md-md1-ma-ma1] delay-measure one-way receive test-id 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter you configure on-demand one-way frame delay measurement using the delay-measure one-way send command, you must run the delay-measure one-way receive command to enable a remote device to receive DMMs to implement one-way frame delay measurement.\nPrerequisites\nIEEE Standard 802.1ag-2007 of CFM has been specified using the cfm version standard command in the system view.The CFM function has been globally enabled using the cfm enable command in the system view.An MD has been created using the cfm md command in the system view.An MA has been created using the ma command in the MD view.An inward-facing MEP has been created using the mep mep-id command in the MA view.A test instance has been created using the test-id command in the MA view."
+}

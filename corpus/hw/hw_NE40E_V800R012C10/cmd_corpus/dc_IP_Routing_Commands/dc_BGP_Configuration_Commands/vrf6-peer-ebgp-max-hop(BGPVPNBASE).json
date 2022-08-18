@@ -1,0 +1,36 @@
+{
+    "PageTitle": "peer ebgp-max-hop (BGP-VPN instance IPv6 address family view) (IPv6)",
+    "FuncDef": "The peer ebgp-max-hop command configures a BGP device to establish an EBGP peer relationship with a peer on an indirectly-connected network and set the maximum number of hops between the two devices.\nThe undo peer ebgp-max-hop command cancels the existing configuration.\nBy default, an EBGP connection can be set up only on a directly-connected physical link.",
+    "CLIs": [
+        "peer <ipv6-address> ebgp-max-hop [ <hop-count> ]",
+        "undo peer <ipv6-address> ebgp-max-hop"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv6-address",
+            "Info": "Specifies the IPv6 address of a peer.\nThe prefix is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "hop-count",
+            "Info": "Specifies the maximum number of hops.\nThe value is an integer ranging from 1 to 255. By default, the maximum number of hops in an EBGP connection is 1. If the specified maximum number of hops is 1, EBGP connection cannot be established between non-directly connected devices. If hop-count is not specified in the peer ebgp-max-hop command, 255 is used as the maximum number of hops in EBGP connections."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpna",
+            "[*HUAWEI-bgp-6-vpna] peer 2001:DB8:1::1 as-number 200",
+            "[*HUAWEI-bgp-6-vpna] peer 2001:DB8:1::1 ebgp-max-hop"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA directly-connected physical link must be available between EBGP peers. Otherwise, the peer ebgp-max-hop command must be used to allow EBGP peers to establish a TCP connection over multiple hops.\nIf loopback interfaces are used to establish an EBGP peer relationship, the peer ebgp-max-hop command (max-hop-value >= 2) must be run; otherwise, the peer relationship cannot be established.\nPrecautions\nIf the peer ebgp-max-hop command is used on one end of an EBGP connection, it must also be used on the other end.\nThe configurations of GTSM and EBGP-MAX-HOP affect the TTL values of sent BGP packets, and the configurations of the two functions are mutually exclusive."
+}

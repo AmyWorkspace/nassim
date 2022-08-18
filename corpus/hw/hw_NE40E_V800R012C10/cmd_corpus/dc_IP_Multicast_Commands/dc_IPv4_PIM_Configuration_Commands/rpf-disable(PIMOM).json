@@ -1,0 +1,42 @@
+{
+    "PageTitle": "rpf disable",
+    "FuncDef": "The rpf disable command disables the reverse path forwarding (RPF) check function for multicast entries.\nThe undo rpf disable command enables the RPF check function for multicast entries.\nBy default, the RPF check function is enabled for all multicast entries.",
+    "CLIs": [
+        "rpf disable { policy { <advanced-acl-number> | acl-name <acl-name> } | all }",
+        "undo rpf disable"
+    ],
+    "ParentView": [
+        "VPN instance PIM view",
+        "PIM view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy",
+            "Info": "Specifies a policy for specifying a range of multicast entries for which the RPF check function is disabled.\n-"
+        },
+        {
+            "Parameters": "advanced-acl-number",
+            "Info": "Specifies the number of an advanced ACL.\nThe value is an integer ranging from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Disables the RPF check function for all multicast entries.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 3000",
+            "[*HUAWEI-acl4-advance-3000] rule permit ip source 10.0.0.1 0 destination 226.0.0.1 0",
+            "[*HUAWEI-acl4-advance-3000] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] rpf disable policy 3000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a point-to-multipoint (P2MP) traffic engineering (TE) tunnel is used to carry multicast services, PIM does not need to be enabled on the transit nodes of the tunnel. When a leaf node performs RPF check for a matching multicast entry upon the receipt of a multicast packet, the RPF check fails. As a result, the multicast packet cannot be forwarded to the next hop. To address this problem, run the rpf disable command to disable the leaf node from performing RPF check.\nPrecautions\nIf the rpf disable command is run more than once, the latest configuration overrides the previous one.\nIf RPF check is disabled for the multicast forwarding entry of a received multicast data packet, the device directly forwards the packet because it cannot determine whether the inbound interface of the packet is correct. As a result, RPF check may be disabled for multicast packets that are transmitted over a non-P2MP TE tunnel. To address this problem, you can configure policy to specify the range of multicast entries for which RPF check is disabled."
+}

@@ -1,0 +1,74 @@
+{
+    "PageTitle": "isis bfd enable",
+    "FuncDef": "The isis bfd command configures BFD session parameters.\nThe undo isis bfd command restores the default values.\nThe isis bfd enable command enables BFD on an IS-IS interface to establish BFD sessions using default parameters.\nThe undo isis bfd enable command disables BFD from the IS-IS interface.\n\nBy default, the minimum interval at which BFD packets are received and the minimum interval at which BFD packets are sent are 10 ms, and the local detection multiple is 3.\n\n\nBy default, BFD is not enabled.",
+    "CLIs": [
+        "isis bfd { min-tx-interval <transmit-interval> | min-rx-interval <receive-interval> | detect-multiplier <multiplier-value> | frr-binding | tos-exp <tosexp-value> } *",
+        "isis bfd enable",
+        "undo isis bfd enable"
+    ],
+    "ParentView": [
+        "Tunnel interface view",
+        "FlexE interface view",
+        "Cellular channel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "VE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "min-tx-interval transmit-interval",
+            "Info": "Specifies the minimum interval at which BFD packets are sent to the peer end.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-rx-interval receive-interval",
+            "Info": "Specifies the minimum interval at which BFD packets are received from the peer end.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "detect-multiplier multiplier-value",
+            "Info": "Specifies a local detection multiplier.\nThe value ranges from 3 to 50."
+        },
+        {
+            "Parameters": "frr-binding",
+            "Info": "Binds the status of the BFD session to IS-IS Auto FRR. When BFD detects a link fault on the interface, the BFD session goes Down, triggering FRR on the interface. Then, traffic is switched from the faulty link to the backup link.\n-"
+        },
+        {
+            "Parameters": "tos-exp tosexp-value",
+            "Info": "Sets a priority for all IS-IS BFD packets of the current interface.\nThe value is an integer ranging from 0 to 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable 1",
+            "[~HUAWEI-GigabitEthernet1/0/0] isis bfd enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis enable 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis bfd enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] isis bfd min-rx-interval 400 detect-multiplier 4"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nBFD can provide millisecond-level fault detection, help IS-IS to detect the faults that occur on neighboring devices or links more quickly, and instruct IS-IS to recalculate routes for correct packet forwarding. The isis bfd command can be used to set values for BFD session parameters on an interface. To enable BFD on an IS-IS interface to establish BFD sessions using default parameters, run the isis bfd enable command.\nPrerequisites\nBFD has been enabled globally, and the isis bfd enable command has been run on the interface.\nBFD has been enabled globally, and An IS-IS process has been created on the interface.\nPrecautions\nThe priority of BFD configured on an interface is higher than that of BFD configured in a process. If BFD is enabled on an interface, BFD sessions are established with the BFD parameters set on the interface.\nThe set BFD session parameters take effect only when BFD is enabled on the interface.\nIf BFD is not enabled globally, you can set BFD parameters on an interface but the interface cannot establish BFD sessions.\nIf the isis bfd block, isis bfd enable, and isis bfd static commands are run, only the last command takes effect."
+}

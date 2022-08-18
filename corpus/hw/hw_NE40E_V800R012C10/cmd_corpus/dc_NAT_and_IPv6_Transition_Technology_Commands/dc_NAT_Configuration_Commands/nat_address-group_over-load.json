@@ -1,0 +1,58 @@
+{
+    "PageTitle": "nat address-group over-load",
+    "FuncDef": "The nat address-group over-load command configures a NAT overloaded address pool and displays the view of the overloaded address pool.\nThe undo nat address-group over-load command deletes a NAT overloaded address pool.\nNo NAT overloaded address pool is configured by default.",
+    "CLIs": [
+        "nat address-group <address-group-name> group-id <id> [ vpn-instance <vpn-instance-name> ] over-load",
+        "nat address-group <address-group-name> group-id <id> <start-address> { mask { <address-mask> | <address-mask-length> } | <end-address> } [ vpn-instance <vpn-instance-name> ] over-load",
+        "nat address-group <address-group-name> over-load",
+        "undo nat address-group <address-group-name> group-id <id> [ vpn-instance <vpn-instance-name> ] over-load",
+        "undo nat address-group <address-group-name> group-id <id> <start-address> { mask { <address-mask> | <address-mask-length> } | <end-address> } [ vpn-instance <vpn-instance-name> ] over-load"
+    ],
+    "ParentView": [
+        "NAT instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "address-group-name",
+            "Info": "Specifies the name of an overloaded IP address pool.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "group-id id",
+            "Info": "Specifies an overloaded address pool ID.\nThe value is an integer ranging from 0 to 127."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "start-address",
+            "Info": "Specifies a start IP address in a public address pool.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask address-mask-length",
+            "Info": "Specifies the mask length of public IP addresses.\nThe value is an integer ranging from 1 to 32."
+        },
+        {
+            "Parameters": "mask address-mask",
+            "Info": "Specifies the mask of public IP addresses.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "end-address",
+            "Info": "Specifies the end IP address in a public network address pool.\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat address-group group1 group-id 1 192.168.131.1 192.168.131.155 over-load"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance cpe1 id 1",
+            "[*HUAWEI-nat-instance-cpe1] nat address-group group1 group-id 0 over-load",
+            "[*HUAWEI-nat-instance-cpe1-nat-address-group-group1] section 1 192.168.2.0 mask 24"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter public IP addresses in a NAT address pool are used up, traffic of new users is dropped because no IP addresses are available. To prevent traffic loss, the overloaded IP address pool function is used to assign IP addresses to new users for NAT forwarding in the preceding situation. To configure a NAT overloaded address pool, run the\nnat address-group over-load command. Perform either of the following operations to configure a NAT overloaded address pool:\nConfigure an address range by specifying a start address and an end address or by specifying a network segment address with a mask in the nat address-group over-load command.Run the nat address-group over-load command to enter the NAT overloaded address pool view and run the section command to configure a public IP address pool.\n\nFollow-up Procedure\nAfter a NAT overloaded address pool is configured, bind a common address pool or global static address pool to the overloaded address pool.\nPrecautions\nNote the following issues when configuring a NAT overloaded address pool:\nIP addresses in different NAT overloaded address pools must be different. An IP address added to a NAT overloaded address pool must be different from an interface address or a server address on the NAT server.IP addresses in a NAT overloaded address pool cannot be assigned to interfaces.The address pool that contains easy IP cannot be used as a NAT overloaded address pool or be bound to this overloaded address pools.The nat outbound command cannot be run for an overloaded address pool.The common IP address pool in no-PAT mode cannot be used as a NAT overloaded address pool.A no-PAT global static address pool cannot be bound to a NAT overloaded address pool.\n\nThe nat address-group over-load command takes effect only on the VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S."
+}

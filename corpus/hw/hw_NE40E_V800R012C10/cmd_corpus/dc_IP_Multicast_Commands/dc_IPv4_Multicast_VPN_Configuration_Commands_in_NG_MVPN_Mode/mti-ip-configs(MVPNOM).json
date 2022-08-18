@@ -1,0 +1,34 @@
+{
+    "PageTitle": "ip address (Mtunnel view)",
+    "FuncDef": "The ip address command configures an IP address for an interface.\nThe undo ip address command deletes the IP address of an interface.\nBy default, no IP address is configured for interfaces.",
+    "CLIs": [
+        "ip address <ipv4Addr> { <ipv4Mask> | <ipv4Masklen> }",
+        "undo ip address [ <ipv4Addr> { <ipv4Mask> | <ipv4Masklen> } ]"
+    ],
+    "ParentView": [
+        "MTI interface view",
+        "Mtunnel view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4Addr",
+            "Info": "Specifies an IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "ipv4Mask",
+            "Info": "Specifies a subnet mask.\nThe IP address with the subnet mask of 255.255.255.255 can be assigned only to a Loopback interface.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "ipv4Masklen",
+            "Info": "Specifies the length of the subnet mask.\nThe IP address with the subnet mask length of 32 can be assigned only to a Loopback interface.\nThe value is an integer ranging from 0 to 32."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] ip address 10.102.0.1 255.255.255.0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure an IP address and its mask for an interface, run the ip address command. This configuration allows the interface to access a network. To connect an interface to several subnets, configure several IP addresses for the interface, one of which is the primary IP address and the others are secondary IP addresses. Each interface can have a maximum of one primary IP address and 255 secondary IP addresses configured.\nConfiguration Impact\nThe undo ip address command deletes all IP addresses of an interface.The undo ip address ip-address mask command deletes the primary IP address.When you configure a new primary IP address for an interface, the newly configured address overrides the previous one.After an interface is configured with an IP address, if the interface is Up, the system generates the host route and network segment route based on the IP address.\n\nPrecautions\nThe following conditions are prohibited for different interfaces on the same device:The IP addresses are the same.The broadcast addresses (with the host ID field containing all 1s in the binary mode) corresponding to the IP addresses are the same. For example, if the IP address of interface A is 10.1.1.1/16 and its corresponding broadcast address is 10.1.255.255 and the IP address of interface B is 10.1.1.2/24 and its corresponding broadcast address is 10.1.1.255, the configuration is successful. However, if the IP address of interface B is also 10.1.1.2/16 and its corresponding broadcast address is also 10.1.255.255, the configuration fails.The IP address of an interface is the same as the broadcast address of another interface. For example, if the IP address of interface A is 1.1.1.1/28 and its broadcast address is 1.1.1.15 and the IP address of interface B is 1.1.1.15/26, the configuration fails.IP addresses configured for interfaces cannot be multicast or broadcast addresses. Ethernet interfaces cannot be configured with loopback addresses.All secondary IP addresses must be deleted before you delete the primary IP address.The configured IP address cannot be the same as the network ID corresponding to the IP address. For example, given the IP address of 10.0.0.88 and subnet mask of 255.255.255.248 (or subnet mask length of 29), the network ID corresponding to the IP address is 10.0.0.88. In this case, the configured IP address is the same as the network ID and therefore is an invalid IP address."
+}

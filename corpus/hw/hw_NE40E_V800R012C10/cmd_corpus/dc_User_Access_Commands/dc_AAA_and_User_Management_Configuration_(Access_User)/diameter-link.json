@@ -1,0 +1,40 @@
+{
+    "PageTitle": "diameter-link",
+    "FuncDef": "The diameter-link command sets up a Diameter link.\nThe undo diameter-link command deletes a specified Diameter link.\nBy default, Diameter links do not exist in the Diameter server group view.",
+    "CLIs": [
+        "diameter-link local <localname> peer <peername> client-port <port-number> [ weight <weight-value> ]",
+        "undo diameter-link local <localname> peer <peername> client-port <port-number>"
+    ],
+    "ParentView": [
+        "Diameter server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peer peername",
+            "Info": "Specifies the name of the Diameter server.\nThe name is a string of 1 to 32 case-insensitive characters."
+        },
+        {
+            "Parameters": "client-port port-number",
+            "Info": "Specifies the port number on the Diameter client.\nThe value is an integer that ranges from 0 to 49151."
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Specifies the weight of the Diameter link.\nThe value is an integer that ranges from 0 to 100. The default value is 0."
+        },
+        {
+            "Parameters": "local localname",
+            "Info": "Specifies the name of the Diameter client.\nThe name is a string of 1 to 32 case-insensitive characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] diameter enable",
+            "[~HUAWEI] diameter-local huawei interface loopback 0 host pcef product NE40E realm huawei.com",
+            "[~HUAWEI] diameter-peer huawei ip 10.10.10.2 port 3288 host pcrf realm huawei.com",
+            "[~HUAWEI] diameter-server group huawei",
+            "[~HUAWEI-diameter-group-huawei] diameter-link local huawei peer huawei client-port 4097 weight 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe diameter-link command can be run in the Diameter server group view to set up a connection between the Diameter client and server, A client can use different local port numbers to set up multiple links with one server. One of the links in the Up state will be selected as the working link based on the weights () applied to them. As determined by the weighted algorithm on the client, the greater the link weight, the more likely the link will be chosen as the working link.\nPrerequisites\nThe diameter-local command has been run to specify the Diameter client, and the diameter-peer command has been run to specify the Diameter server.\nPrecautions\nThe parameters local local-name and peer peer-name together determine a Diameter link group. The client-port port-number parameter determines a member link in the group. A Diameter server group can consist of a maximum of eight link groups with each containing a maximum of four links."
+}

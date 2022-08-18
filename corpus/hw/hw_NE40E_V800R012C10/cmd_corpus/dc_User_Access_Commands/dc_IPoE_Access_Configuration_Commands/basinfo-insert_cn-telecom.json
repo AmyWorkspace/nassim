@@ -1,0 +1,33 @@
+{
+    "PageTitle": "basinfo-insert",
+    "FuncDef": "The basinfo-insert cn-telecom command configures the device to insert the access-line-id information in the format defined by China Telecom if the device does not trust the access-line-id information sent from the DHCP client.\nThe undo basinfo-insert cn-telecom command configures the device not to trust the access-line-id information sent from the DHCP client.\nThe basinfo-insert version2 command configures the device to insert the access-line-id information in the format defined by version2 if the device does not trust the access-line-id information sent from the DHCP client.\nThe undo basinfo-insert version2 command restores the default setting.\nBy default, the device does not trust the access-line-id information sent from a DHCP client or insert BAS information in the format defined by China Telecom or version2 before the access-line-id information.",
+    "CLIs": [
+        "basinfo-insert { cn-telecom | version2 }",
+        "undo basinfo-insert { cn-telecom | version2 }"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cn-telecom",
+            "Info": "Inserts information about the BAS interface in the telecom format.\n-"
+        },
+        {
+            "Parameters": "version2",
+            "Info": "Specifies encapsulating the access-line-id information into a DHCP packet in version2 format.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] bas",
+            "[~HUAWEI-GigabitEthernet1/0/0-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet1/0/0-bas] basinfo-insert cn-telecom"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the basinfo-insert cn-telecom or basinfo-insert version2 command is configured, the device untrusts the access-line-id field or the PPPoE+ field contained in the DHCP sent by a client. Instead, the device creates an access-line-id field based on the physical location of the user that is determined through the user information such as the VLAN, and then inserts the access-line-id to the message before sending the message to the DHCP server, or RADIUS server.\nIf basinfo-insert cn-telecom is set, the device will insert the BAS information in the format defined by China Telecom in one of the following formats:\nBAS information in the format defined by China Telecom + 0/0/0/0/0/0\nEncapsulation format on a GE interface: <slot>/<subslot>/<port>/:<outer vlan>.<inner vlan>Encapsulation format on a trunk interface: <slot>/<subslot>/<port>/:<outer vlan>.<inner vlan>\nFor example, eth 2/0/5:4096.4 0/0/0/0/0/0\nIf basinfo-insert version2 is set, the device will insert the BAS information in the format defined by version2 in one of the following formats:\nEncapsulation format on a GE interface: <BNG-Hostname> eth <0>/<slot>/<subslot>/<port>:<outer vlan>.<inner vlan>For example, huawei eth 0/0/1/1:50.60\nEncapsulation format on a trunk interface: <BNG-Hostname> trunk <0>/<0>/<slot>/<trunkid>:<outer vlan>.<inner vlan>For example, huawei trunk 0/0/2/11:200.100\n\n\nPrerequisites\nBefore running this command, set the access type of the user by the access-type command.\nPrecautions\nThis command is supported only on the admin VS.\nThe basinfo-insert cn-telecom command is mutually exclusive with the following commands:\nclient-option82 basinfo-insert cn-telecomaccess-line-id basinfo-insert cn-telecomclient-option82 version1basinfo-insert version2"
+}

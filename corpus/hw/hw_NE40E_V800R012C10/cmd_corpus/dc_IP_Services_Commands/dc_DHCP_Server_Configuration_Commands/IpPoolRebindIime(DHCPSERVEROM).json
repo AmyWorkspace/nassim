@@ -1,0 +1,34 @@
+{
+    "PageTitle": "rebinding-time",
+    "FuncDef": "The rebinding-time command configures the rebinding time of IP addresses.\nThe undo rebinding-time command restores the default configuration.\nBy default, the rebinding time of IP addresses is 87.5% of the lease of the address pool.",
+    "CLIs": [
+        "rebinding-time <days> [ <hours> [ <minutes> ] ]",
+        "undo rebinding-time"
+    ],
+    "ParentView": [
+        "IP address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "days",
+            "Info": "Specifies the number of days used for rebinding IP addresses.\nThe value is an integer ranging from 0 to 999."
+        },
+        {
+            "Parameters": "hours",
+            "Info": "Specifies the number of hours used for rebinding IP addresses.\nThe value is an integer ranging from 0 to 23."
+        },
+        {
+            "Parameters": "minutes",
+            "Info": "Specifies the number of minutes used for rebinding IP addresses.\nThe value is an integer ranging from 0 to 59."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei server",
+            "[*HUAWEI-ip-pool-huawei] lease 90",
+            "[*HUAWEI-ip-pool-huawei] rebinding-time 80"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo configure the rebinding time of IP addresses in an address pool, run the rebinding-time command.\nIf the client does not receive any responses from the server before the rebinding timer expires, it considers the original DHCP server unavailable and starts to broadcast a DHCPREQUEST packet. Any DHCP server on the network can reply to this request with a DHCPACK or DHCPNAK packet.\nIf the client receives a DHCPACK packet, the IP address can be continuously used. If the client receives a DHCPNAK packet, a new IP address needs to be requested.\nPrerequisites\nAn address pool has been created using the ip pool command in the system view.\nPrecautions\nThe rebinding time for an IP address must be less than the address pool lease configured using the lease command and greater than the renewal time of the IP address configured using the renewal-time command.\nIf rebinding-time has been configured and is reconfigured to 0, this parameter automatically restores to the default value. If rebinding-time has not been configured before, the default value is used."
+}

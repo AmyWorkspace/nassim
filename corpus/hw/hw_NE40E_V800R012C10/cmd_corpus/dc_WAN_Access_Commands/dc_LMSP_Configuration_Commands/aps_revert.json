@@ -1,0 +1,29 @@
+{
+    "PageTitle": "aps revert",
+    "FuncDef": "The aps revert command sets the wait to restore (WTR) time, after which an LMSP group switches traffic back to the working interface.\nThe undo aps revert command configures the non-retrieve mode for an LMSP group.\nThis command varies in transport and router modes. For detailed differences, see Differences Between Commands in Transport and Router Modes. This topic describes the command configuration in router mode.\nIf an LMSP group is working in 1:1 mode, the LMSP group supports the retrieve mode by default, and the default WTR time is 5 minutes. If the LMSP group is working in 1+1 mode, the LMSP group supports the non-retrieve mode by default, which disables data services from being switched back to the restored working interface.",
+    "CLIs": [
+        "aps revert <wtr-time>",
+        "undo aps revert"
+    ],
+    "ParentView": [
+        "CPOS interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "wtr-time",
+            "Info": "Specifies the WTR time, after which an LMSP group switches traffic back to the working interface.\nThe value is an integer ranging from 1 to 12, in minutes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] controller cpos 1/0/0",
+            "[~HUAWEI-cpos1/0/0] aps group 1",
+            "[*HUAWEI-cpos1/0/0] aps protect",
+            "[*HUAWEI-cpos1/0/0] aps mode one2one bidirection",
+            "[*HUAWEI-cpos1/0/0] aps revert 8"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a working link in an LMSP group fails, services are switched to a protection link. After the working link is restored and working stably, services are switched back to the working link after a specified WTR time elapses. To set the WTR time, run the aps revert command.\nThe aps revert and undo aps revert commands can only be run on the protection interface in an LMSP group.\nPrerequisites\nAn interface has been configured as a protection interface in an LMSP group.\nConfiguration Impact\nIf different WTR time values are configured on interfaces at both ends of a protection link of an LMSP group, the effective WTR time depends on the LMSP automatic protection switching mode configured using the aps mode { one2one bidirection | one-plus-one { bidirection | unidirection } } command:\nIf the 1+1 unidirectional mode is configured, the interface on each end of the protection link of the LMSP group performs a traffic switchback after the WTR time configured on the interface itself elapses.If the 1+1 bidirectional mode or 1:1 bidirectional mode is configured, the interfaces on both ends of the protection link of the LMSP group perform a traffic switchback after the longer WTR time elapses.\n\nPrecautions\nThe same WTR time must be configured on directly connected protection interfaces."
+}

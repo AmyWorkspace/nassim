@@ -1,0 +1,30 @@
+{
+    "PageTitle": "peer timer connect-retry (BGP multi-instance view)",
+    "FuncDef": "The peer timer connect-retry command sets a ConnectRetry interval for a peer.\nThe undo peer timer connect-retry command restores the default setting.\nBy default, the ConnectRetry interval is 32s.",
+    "CLIs": [
+        "peer <ipv4-address> timer connect-retry <connect-retry-time>",
+        "undo peer <ipv4-address> timer connect-retry"
+    ],
+    "ParentView": [
+        "BGP multi-instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "connect-retry-time",
+            "Info": "Specifies a ConnectRetry interval.\nThe value ranges from 1 to 65535, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] peer 10.2.2.2 as-number 200",
+            "[*HUAWEI-bgp-instance-a] peer 10.2.2.2 timer connect-retry 60"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen BGP initiates a TCP connection, the ConnectRetry timer is stopped if the TCP connection is established successfully. If the attempt to establish a TCP connection fails, BGP tries again to establish the TCP connection after the ConnectRetry timer expires. The ConnectRetry interval can be adjusted as needed.\nThe ConnectRetry interval can be reduced in order to lessen the time BGP waits to retry establishing a TCP connection after the first attempt fails.To suppress route flapping caused by constant peer flapping, the ConnectRetry interval can be increased to accelerate route convergence.\n\nPrerequisites\nThe peer as-number command has been used to create a peer.\nPrecautions\nA ConnectRetry interval can be configured globally, or on a particular peer. A ConnectRetry interval configured on a specific peer or peer group takes precedence over a global ConnectRetry interval.\nIf both the peer ipv4-address timer connect-retry connect-retry-time command and the peer group-name timer connect-retry connect-retry-time command are run on a device, the configuration of the peer ipv4-address timer connect-retry connect-retry-time command takes effect, but the configuration of the peer group-name timer connect-retry connect-retry-time command does not.If both the peer { group-name | ipv4-address } timer connect-retry connect-retry-time command and the timer connect-retry connect-retry-time command are run on a device, the configuration of the peer { group-name | ipv4-address } timer connect-retry connect-retry-time command takes effect, but the configuration of the timer connect-retry connect-retry-time command does not."
+}

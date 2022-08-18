@@ -1,0 +1,58 @@
+{
+    "PageTitle": "graceful-restart (OSPF view)",
+    "FuncDef": "The graceful-restart command configures a device as a GR helper.\nThe undo graceful-restart command cancels the configuration.\nBy default, the device does not function as a GR helper.",
+    "CLIs": [
+        "graceful-restart [ helper-role { { { ip-prefix <ip-prefix-name> | acl-number <acl-number> | acl-name <acl-name> } | ignore-external-lsa | planned-only } * } ]",
+        "graceful-restart helper-role never",
+        "graceful-restart non-ietf",
+        "undo graceful-restart [ helper-role [ { { ip-prefix [ <ip-prefix-name> ] | acl-number [ acl-number ] | acl-name [ acl-name ] } | ignore-external-lsa | planned-only } * ] ]",
+        "undo graceful-restart helper-role never",
+        "undo graceful-restart non-ietf"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "helper-role",
+            "Info": "Indicates the GR Helper mode.\n-"
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters except spaces. When double quotation marks are used to include the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "acl-number acl-number",
+            "Info": "Specifies the basic ACL number.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "ignore-external-lsa",
+            "Info": "Prevents the device from checking Type 5 and Type 7 LSAs.\n-"
+        },
+        {
+            "Parameters": "planned-only",
+            "Info": "Indicates that the device supports only planned GR.\nBy default, the device supports both planned GR and unplanned GR."
+        },
+        {
+            "Parameters": "never",
+            "Info": "Indicates that the router does not support the Helper mode.\n-"
+        },
+        {
+            "Parameters": "non-ietf",
+            "Info": "Enables the non-IETF mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 1",
+            "[*HUAWEI-ospf-1] opaque-capability enable",
+            "[*HUAWEI-ospf-1] graceful-restart helper-role planned-only"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter an OSPF process is restarted through GR, the restarter and the helper reestablish the neighbor relationship, exchange routing information, synchronize LSDBs, and update routing tables and FIBs to ensure network stability.\nPrerequisites\nThe Opaque-LSA capability has been enabled using the opaque-capability enable command.\nPrecautions\nThe graceful-restart non-ietf and graceful-restart [ helper-role { { { { ip-prefix | acl-number | acl-name } | ignore-external-lsa | planned-only } * } | never } ] commands are mutually exclusive.\nIf the GR restarter fails to complete GR within 1800s, the GR helper in non-IETF mode exits the helper mode.\nIn non-IETF mode, only broadcast interfaces can be simulated as P2P interfaces."
+}

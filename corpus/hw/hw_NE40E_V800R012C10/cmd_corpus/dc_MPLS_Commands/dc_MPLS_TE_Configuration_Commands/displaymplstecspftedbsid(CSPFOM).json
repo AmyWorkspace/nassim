@@ -1,0 +1,142 @@
+{
+    "PageTitle": "display mpls te cspf tedb sid",
+    "FuncDef": "The display mpls te cspf tedb sid command displays CSPF-based SID information that meets the specified conditions.",
+    "CLIs": [
+        "display mpls te cspf tedb sid { all | srv4 } [ igp-type { ospf | isis } ]",
+        "display mpls te cspf tedb sid area { <area-id> | <area-ip> } [ igp-type { ospf | isis } ] [ srv4 ]",
+        "display mpls te cspf tedb sid node [ <router-id> ] [ igp-type { ospf | isis } ]",
+        "display mpls te cspf tedb sid interface <ip-address> [ igp-type { ospf | isis } ]",
+        "display mpls te cspf tedb sid node <router-id> parallel-label",
+        "display mpls te cspf tedb sid node <router-id> label <label-value>"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "all",
+            "Info": "Displays all SID node information.\n-"
+        },
+        {
+            "Parameters": "srv4",
+            "Info": "Displays SR-MPLS TE information.\n-"
+        },
+        {
+            "Parameters": "igp-type",
+            "Info": "Display information with IGP filter.\n-"
+        },
+        {
+            "Parameters": "ospf",
+            "Info": "Display information only for OSPF.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Display information only for ISIS.\n-"
+        },
+        {
+            "Parameters": "area area-id",
+            "Info": "Displays SID information about a specified area.\nFor IS-IS, the value can be 1 or 2. For OSPF, the value ranges from 0 to 4294967295."
+        },
+        {
+            "Parameters": "area-ip",
+            "Info": "Area ID value (IP address).\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "node router-id",
+            "Info": "Specifies a router ID of a device.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "interface ip-address",
+            "Info": "Displays SID information about an interface with a specified IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "parallel-label",
+            "Info": "Display information about parallel label.\n-"
+        },
+        {
+            "Parameters": "label label-value",
+            "Info": "Specifies a label value.\nThe value is an integer ranging from 16 to 1048575."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display mpls te cspf tedb sid all",
+            "Current Total Node SID Number: 2",
+            "Current Total Adjacency SID Number: 6",
+            "Id     Node-Id          IGP      Process-Id     Area         Node-SID   Adj-SID-Count",
+            "1      2.2.2.2          ISIS     1              Level-2      10         3            ",
+            "2      1.1.1.1          ISIS     1              Level-2      0          3"
+        ],
+        [
+            "<HUAWEI> display mpls te cspf tedb sid node",
+            "Router ID: 10.255.200.24",
+            " IGP Type : ISIS      Process ID: 1      IGP Area: Level-2 ",
+            " SRGB Base: 190464    Range: 10001       MSD: -",
+            "",
+            " Node SID[SRv4]:",
+            " Index          Value          Flags",
+            " 11             -              Node-SID, no-PHP",
+            "",
+            "  Link Count: 9",
+            "  Link[1]:",
+            "    Interface Address: 10.113.0.2",
+            "    Link Type: Multi-access",
+            "    Neighbor Id: 1002.5520.0003.00",
+            "     Adj SID[SRv4]:",
+            "       21548                                         Flags: Value, Local",
+            "  Link[2]:",
+            "    Interface Address: 10.113.1.2",
+            "    Link Type: Multi-access",
+            "    Neighbor Id: 1002.5520.0003.00",
+            "     Adj SID[SRv4]:",
+            "       34969                                         Flags: Value, Local",
+            "  Link[3]:",
+            "    Interface Address: 10.113.3.2",
+            "    Link Type: Multi-access",
+            "    Neighbor Id: 1002.5520.0003.00",
+            "     Adj SID[SRv4]:",
+            "       10565                                         Flags: Value, Local",
+            "  Link[4]:",
+            "    Interface Address: 10.113.5.1",
+            "    Link Type: Multi-access",
+            "    Neighbor Id: 1002.5520.0003.00",
+            "     Adj SID[SRv4]:",
+            "       28404                                         Flags: Value, Local",
+            "  Link[5]:",
+            "    Interface Address: 10.113.7.1",
+            "    Peer Interface Address: 10.113.7.2",
+            "    Link Type: point-to-point",
+            "     Adj SID[SRv4]:",
+            "       50195                                         Flags: Value, Local",
+            "  Link[6]:",
+            "    Interface Address: 10.114.0.6",
+            "    Link Type: Multi-access",
+            "    Neighbor Id: 1002.5520.0025.00",
+            "     Adj SID[SRv4]:",
+            "       9683                                          Flags: Value, Local"
+        ],
+        [
+            "<HUAWEI> display mpls te cspf tedb sid node 1.1.1.1 label 322001",
+            "IGP   Process-Id   Area       IGP-RouterId            SidLabel    LabelType   NAI                                ",
+            "ISIS  1            Level-1    0000.0000.0000.00:00    322001      adj         10.2.0.1:10.2.0.2                ",
+            "                                                                  adj         10.3.0.1:10.3.0.2                ",
+            "ISIS  1            Level-2    0000.0000.0000.00:00    322001      adj         10.2.0.1:10.2.0.2                ",
+            "                                                                  adj         10.3.0.1:10.3.0.2"
+        ],
+        [
+            "<HUAWEI> display mpls te cspf tedb sid node 1.1.1.1 parallel-label",
+            "IGP   Process-Id   Area       IGP-RouterId            SidLabel    LabelType   NAI                                ",
+            "ISIS  1            Level-1    0000.0000.0000.00:00    322000      adj         10.14.0.1:10.14.0.2                  ",
+            "                                                                  adj         10.12.0.1:10.12.0.2                  ",
+            "                                                                  adj         10.121.0.1:10.121.0.2                ",
+            "ISIS  1            Level-1    0000.0000.0000.00:00    322001      adj         10.122.0.1:10.122.0.2                ",
+            "                                                                  adj         10.123.0.1:10.123.0.2                ",
+            "ISIS  1            Level-2    0000.0000.0000.00:00    322000      adj         10.12.0.1:10.12.0.2                  ",
+            "                                                                  adj         10.121.0.1:10.121.0.2                ",
+            "ISIS  1            Level-2    0000.0000.0000.00:00    322001      adj         10.122.0.1:10.122.0.2                ",
+            "                                                                  adj         10.123.0.1:10.123.0.2                ",
+            "[~RTA-diagnose]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe display mpls te cspf tedb sid command displays CSPF-based SID information that meets the specified conditions on the main control board."
+}

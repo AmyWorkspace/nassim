@@ -1,0 +1,38 @@
+{
+    "PageTitle": "peer soo (BGP multi-instance VPN instance IPv4 address family view) (group)",
+    "FuncDef": "The peer soo command configures the Site of Origin (SoO) attribute for an EBGP peer in a BGP VPN instance.\nThe undo peer soo command cancels the configuration.\nBy default, no SoO attribute is configured for an EBGP peer in a BGP VPN instance.",
+    "CLIs": [
+        "peer <group-name> soo <site-of-origin>",
+        "undo peer <group-name> soo"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a BGP peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "site-of-origin",
+            "Info": "Specifies the SoO attribute.\nThe SoO attribute is a BGP extended community attribute and can be expressed in any of the following formats:\n2-byte AS number:4-byte user-defined number, for example, 1:3 The AS number ranges from 0 to 65535, and the user-defined number ranges from 0 to 4294967295. The AS number and user-defined number cannot both be set to 0. This means that the value of the SoO attribute cannot be 0:0.IPv4-address:2-byte user-defined number, for example, 192.168.122.15:1 The IP address ranges from 0.0.0.0 to 255.255.255.255, and the user-defined number ranges from 0 to 65535.Integral 4-byte AS number:2-byte user-defined number, for example, 0:3 or 65537:3. An AS number ranges from 65536 to 4294967295. A user-defined number ranges from 0 to 65535. The AS number and user-defined number cannot be both 0s. That is, the value of the SoO attribute cannot be 0:0.4-byte AS number in dotted notation:2-byte user-defined number, for example, 0.0:3 or 0.1:0. A 4-byte AS number in dotted notation is in the format of x.y, where x and y are integers that range from 1 to 65535 and from 0 to 65535, respectively. A user-defined number ranges from 0 to 65535. The AS number and user-defined number cannot be both 0s. That is, the value of the SoO attribute cannot be 0.0:0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-a-vpna] group test external",
+            "[*HUAWEI-bgp-instance-a-vpna] peer test as-number 200",
+            "[*HUAWEI-bgp-instance-a-vpna] peer test soo 10.2.2.2:45"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a L3VPN scenario, if the ASs to which two VPN sites belong use private AS numbers, the AS numbers of the two VPN sites may be the same. As a result, different sites of the same VPN cannot communicate. The peer substitute-as command can be used to enable AS number substitution on PEs to address this problem.\nEnabling AS number substitution will cause another problem. Several CEs at a VPN site may establish EBGP connections with different PEs of a L3VPN backbone network, and a routing protocol has been configured on the CEs. If AS number substitution is enabled on PEs, the AS numbers carried by VPN routes of this site will be replaced on the PEs. As a result, routes advertised from a CE to a PE may be re-advertised to this VPN site after the routes traverse the backbone network, causing a routing loop. The peer soo command can be run on the PEs to address this problem.\nAfter the peer soo command is run on a PE to configure the SoO attribute for a specified CE, the PE adds the attribute to a route sent from the CE and advertises the route to the remote PE. The remote PE checks the SoO attribute of the route before sending it to its attached CE. If the SoO attribute is the same as the local SoO attribute on the remote PE, the remote PE does not send the route to its attached CE, preventing a routing loop in a VPN site.\nPrecautions\nThe peer soo command is used only in the scenarios where PEs and CEs establish EBGP peer relationships."
+}

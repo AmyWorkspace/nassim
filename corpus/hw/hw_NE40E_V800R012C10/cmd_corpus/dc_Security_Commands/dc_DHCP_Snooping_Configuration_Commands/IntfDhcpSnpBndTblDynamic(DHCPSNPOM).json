@@ -1,0 +1,57 @@
+{
+    "PageTitle": "dhcp snooping bind-table dynamic (interface view)",
+    "FuncDef": "The dhcp snooping bind-table dynamic command configures a dynamic binding between an IP address and a MAC address in the DHCP snooping binding table.",
+    "CLIs": [
+        "dhcp snooping bind-table dynamic ip-address <ip-address> [ mac-address <mac-address> ] [ vlan <vlan-id> [ ce-vlan <ce-vlan-id> ] ] [ lease <day> [ <hour> [ <minute> ] ] ]"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10GE interface view",
+        "40GE interface view",
+        "Eth-Trunk interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "Sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address ip-address",
+            "Info": "Specifies a user IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mac-address mac-address",
+            "Info": "Specifies a user MAC address.\nThe value is in the format of H-H-H. Each H contains one to four hexadecimal numbers, such as 00e0 and fc01. If an H contains less than four bits, 0s are padded ahead. For example, an H is e0. It is displayed as 00e0 in the MAC address."
+        },
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies an outer VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "ce-vlan ce-vlan-id",
+            "Info": "Specifies an inner VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "lease day",
+            "Info": "Specifies the number of days in a lease.\nThe value is an integer ranging from 0 to 999. The default value is 7."
+        },
+        {
+            "Parameters": "hour",
+            "Info": "Specifies the number of hours in a lease.\nThe value is an integer ranging from 0 to 23. The default value is 0."
+        },
+        {
+            "Parameters": "minute",
+            "Info": "Specifies the number of minutes in a lease.\nThe value is an integer ranging from 0 to 59. The default value is 0."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/6",
+            "[*HUAWEI-GigabitEthernet1/0/6] dhcp snooping enable",
+            "[*HUAWEI-GigabitEthernet1/0/6] commit",
+            "[~HUAWEI-GigabitEthernet1/0/6] dhcp snooping bind-table dynamic ip-address 10.10.10.2 mac-address 00e0-fc20-0327"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a cutover scenario, if the non-Huawei device to be replaced has generated a dynamic DHCP snooping binding for a user's IP address and MAC address, run the dhcp snooping bind-table dynamic command on the Huawei device to configure the same dynamic binding for the user. This configuration prevents the user's services from being interrupted during the cutover. When the user requires to update the lease, the Huawei device will update the user's lease and generate a normal dynamic binding entry for the user.\nPrerequisites\nDHCP snooping has been enabled using the dhcp snooping enable command. DHCP snooping is considered enabled if any of the following conditions is met:\nDHCP snooping is enabled on an interface.An interface is bound to a BD for which DHCP snooping is enabled.An interface is bound to a BD, and DHCP snooping is enabled for the BDIF interface of the BD.\n\nPrecautions\nWhen dynamic DHCP snooping binding entries are deleted using the reset dhcp snooping bind-table command, user entries will be deleted, interrupting services. Therefore, exercise caution when running this reset command."
+}

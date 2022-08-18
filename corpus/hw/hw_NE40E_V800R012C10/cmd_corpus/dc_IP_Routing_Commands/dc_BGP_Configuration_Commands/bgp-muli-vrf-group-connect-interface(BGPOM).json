@@ -1,0 +1,52 @@
+{
+    "PageTitle": "peer connect-interface (BGP multi-instance VPN instance IPv4 address family view) (group)",
+    "FuncDef": "The peer connect-interface command specifies a source interface from which BGP packets are sent, and a source address used for initiating a connection.\nThe undo peer connect-interface command restores the default setting.\nBy default, the outbound interface of a BGP packet serves as the source interface of a BGP packet.",
+    "CLIs": [
+        "peer <group-name> connect-interface { <interface-name> | <ipv4-source-addr> | <interface-type> <interface-number> | <interface-name> <ipv4-source-addr> | <interface-type> <interface-number> <ipv4-source-addr> }",
+        "undo peer <group-name> connect-interface"
+    ],
+    "ParentView": [
+        "BGP multi-instance VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of a peer group.\nThe name is a string of 1 to 47 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies an interface name.\n-"
+        },
+        {
+            "Parameters": "ipv4-source-addr",
+            "Info": "Specifies an IPv4 source address used for establishing a connection.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies an interface type and number.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies an interface type and number.\nThe value is a string of 1 to 63 case-sensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface LoopBack 0",
+            "[*HUAWEI-LoopBack0] ip address 10.1.1.1 32",
+            "[*HUAWEI-LoopBack0] quit",
+            "[*HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] vpn-target 111:1 both",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-instance-vpna] quit",
+            "[*HUAWEI] bgp 100 instance a",
+            "[*HUAWEI-bgp-instance-a] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-instance-a-vpna] group test",
+            "[*HUAWEI-bgp-instance-a-vpna] peer test connect-interface LoopBack 0"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nRunning the peer connect-interface command to establish multiple peer relationships between two devices by using multiple links is recommended.\nIf the physical interface has multiple IP addresses, the parameter ipv4-source-address must be in the command peer connect-interface.\nPrerequisites\nPeer relationships have been established using the peer as-number command.\nConfiguration Impact\nRunning the peer connect-interface command causes the teardown and re-establishment of peer relationships.\nBecause the BGP peer relationships in various address families on the same device share one TCP connection, connect-interface configured in the BGP view can be inherited in either the IPv4 unicast address family or the VPNv4 address family.\nPrecautions\nTo enable a device to send BGP packets even if its physical interface fails, you can configure the device to use a loopback interface as the source interface of the BGP packets. When configure a device to use a loopback interface as the source interface of BGP packets, note the following points:\nThe loopback interface of the device's BGP peer must be reachable.In the case of an EBGP connection, the peer ebgp-max-hop command needs to be run to enable the two devices to establish an indirect peer relationship.\nIf the specified interface borrows the IP address of another interface and then the IP address of the specified interface is changed, BGP still uses the borrowed IP address to keep the connection if no connection reestablishment is triggered, and data receiving and sending is not affected; if connection reestablishment is triggered, BGP uses the new IP address to reestablish the connection."
+}

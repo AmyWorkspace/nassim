@@ -1,0 +1,48 @@
+{
+    "PageTitle": "peer public-as-only (BGP-IPv4 unicast address family view)",
+    "FuncDef": "The peer public-as-only command configures the AS-Path attribute in a BGP Update message not to carry the private AS number. Only the public AS number is contained in the update messages.\nThe undo peer public-as-only command allows the AS-Path attribute in a BGP Update message to carry the private AS number.\nBy default, the AS-Path attribute in a BGP Update message is allowed to carry private AS numbers.",
+    "CLIs": [
+        "peer <ipv4-address> public-as-only",
+        "peer <ipv4-address> public-as-only force [ replace ] [ include-peer-as ]",
+        "peer <ipv4-address> public-as-only limited [ replace ] [ include-peer-as ]",
+        "undo peer <ipv4-address> public-as-only",
+        "undo peer <ipv4-address> public-as-only force [ replace ] [ include-peer-as ]",
+        "undo peer <ipv4-address> public-as-only limited [ replace ] [ include-peer-as ]"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view",
+        "BGP-Labeled address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "force",
+            "Info": "Deletes all private AS numbers from the AS_Path attribute except the private AS number of a specified peer.\n-"
+        },
+        {
+            "Parameters": "replace",
+            "Info": "Replaces private AS numbers in an AS_Path list with a local AS number:\nIf both force and replace are specified, private AS numbers in an AS_Path list, except the AS number of a specified peer or peer group, are replaced with the local AS number.\nIf both limited and replace are specified, private AS numbers starting from the leftmost one in an AS_Path list, except the local or private AS number of a specified peer or peer group, are replaced with the local AS number.\n-"
+        },
+        {
+            "Parameters": "include-peer-as",
+            "Info": "Deletes AS numbers:\nIf both force and include-peer-as are specified, all private AS numbers are forcibly deleted.\nIf force, replace, and include-peer-as are specified, the private AS numbers in an AS_Path list are replaced with the local AS number.\nIf both limited and include-peer-as are specified, the AS numbers starting from the leftmost one in an AS_Path list, except the local and public AS numbers, are deleted.\nIf limited, replace, and include-peer-as are specified, private AS numbers starting from the leftmost one in an AS_Path list, except the local or private AS numbers, are replaced with the local AS number.\n-"
+        },
+        {
+            "Parameters": "limited",
+            "Info": "Deletes private AS numbers from the leftmost one to the local or a public AS number except the private AS number of a specified peer.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.1.1.1 as-number 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] peer 10.1.1.1 public-as-only"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn general, AS numbers range from 1 to 4294967295. The public AS numbers range from 1 to 64511, and 65536 (1.0 in the format of x.y) to 4294967295 (65535.65535 in the format of x.y), and private AS numbers range from 64512 to 65534, and 65535 is reserved for certain circumstances.\nIf the 4-byte private AS number function is enabled using the private-4-byte-as enable command, private AS numbers range from 64512 to 65534 and from 4200000000 to 4294967294 (64086.59904 to 65535.65534 in the format of x.y).\nPublic AS numbers can be used on the Internet. Private AS numbers cannot be advertised to the Internet, and they are used only within ASs. If private AS numbers are advertised to the Internet, a routing loop may occur. After this command is configured, if the AS path attribute contains only private AS numbers, BGP deletes the private AS numbers and then advertises these update routes.\nBGP does not delete private AS numbers in either of the following scenarios if the peer public-as-only command is run, without any parameter following public-as-only specified:\nThe AS_Path attribute of a route carries the AS number of the remote peer. In this case, deleting private AS numbers may lead to a routing loop.The AS_Path attribute carries both public and private AS numbers, which indicates that the route has passed through the public network. In this case, deleting private AS numbers may lead to a traffic forwarding error.\nParameters that are used to delete or replace private AS numbers are described as follows:\nforce: deletes all private AS numbers from the AS_Path attribute except the private AS number of a specified peer.force replace: replaces the private AS numbers in the AS_Path attribute with the local AS number except the private AS number of a specified peer.force include-peer-as: deletes all private AS numbers from the AS_Path attribute.force replace include-peer-as: replaces the private AS numbers in the AS_Path attribute with the local AS number. This parameter ensures that the AS_Path attribute length remains unchanged. Therefore, the route selection result is not affected.limited: deletes private AS numbers from the leftmost one to the local or a public AS number except the private AS number of a specified peer.limited replace: replaces private AS numbers from the leftmost one to the local or a public AS number in the AS_Path attribute with the local AS number except the private AS number of a specified peer.limited include-peer-as: deletes private AS numbers from the leftmost one to the local or a public AS number. This parameter ensures that all private AS numbers of the local network are deleted.limited replace include-peer-as: replaces private AS numbers from the leftmost one to the local or a public AS number in the AS_Path attribute with the local AS number.\nSelect one of the preceding parameters based on the network topology to prevent routing loops or forwarding errors.\n\nConfiguration Impact\nIf the peer public-as-only command is run for a peer group, the peers of the peer group inherit the configuration."
+}

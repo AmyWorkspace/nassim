@@ -1,0 +1,86 @@
+{
+    "PageTitle": "igmp group-policy",
+    "FuncDef": "The  igmp group-policy command configures an IGMP group policy on an interface to limit the range of multicast groups that hosts connected to the interface can join.\nThe undo igmp group-policy command restores the default configuration.\nBy default, no IGMP group policy is configured on an interface, so that hosts connected to this interface can join any multicast groups.",
+    "CLIs": [
+        "igmp group-policy { <acl-number> | acl-name <acl-name> } { 1 | 2 | 3 }",
+        "igmp group-policy { <acl-number> | acl-name <acl-name> }",
+        "undo igmp group-policy"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "PW-VE sub-interface view",
+        "Tunnel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "POS sub-interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic ACL or an advanced ACL. The ACL defines a multicast group range.\nThe number of a basic ACL is an integer ranging from 2000 to 2999; the number of an advanced ACL is an integer ranging from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "1",
+            "Info": "Sets the range of multicast groups that an IGMPv1 host can join.\n-"
+        },
+        {
+            "Parameters": "2",
+            "Info": "Sets the range of multicast groups that an IGMPv2 host can join.\n-"
+        },
+        {
+            "Parameters": "3",
+            "Info": "Sets the range of multicast groups that an IGMPv3 host can join.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 2005",
+            "[*HUAWEI-acl4-basic-2005] rule permit source 225.1.1.1 0",
+            "[*HUAWEI-acl4-basic-2005] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp group-policy 2005"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl name myacl",
+            "[*HUAWEI-acl4-advance-myacl] rule permit ip destination 225.1.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-advance-myacl] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp group-policy acl-name myacl"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo restrict the range of multicast groups that user hosts can join, run the igmp group-policy command to apply an ACL to the Router interface connected to the user hosts. IGMP security is thus improved.\nPrerequisites\nThe multicast routing-enable command must be run in the instance to which the interface belongs and the ACL to be referenced must be configured.\nConfiguration Impact\nIf the igmp group-policy command is run more than once, the latest configuration overrides the previous one.\nAfter the igmp group-policy command is run on an interface:\nThe interface filters received Report messages based on the ACL and maintains memberships only for multicast groups permitted by the ACL.The interface discards Report messages denied by the ACL. If entries have been already created for multicast groups denied by the ACL, the device deletes these entries after the specified timeout period expires.\nIf an IGMP version is not specified, the ACL applies to IGMPv1, IGMPv2, and IGMPv3 hosts.\n\nPrecautions\nThe igmp group-policy command requires an ACL configured using the acl command. To use a numbered ACL or named ACL, perform either of the following operations to configure an ACL rule:\nIn the basic ACL view, specify the source parameter in the rule command to set the range of multicast groups that a specified interface can join.In the advanced ACL view, specify the source parameter in the rule command to set the range of source addresses that are allowed to send multicast data to multicast groups. Specify the destination parameter in the rule command to set the range of multicast groups that an interface can join. &crarr; For IGMPv1/v2 and IGMPv3 MODE_IS_EXCLUDE/CHANGE_TO_EXCLUDE_MODE Report messages, the source parameter in the rule command must be set to 255.255.255.255."
+}

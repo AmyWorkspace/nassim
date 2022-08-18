@@ -1,0 +1,43 @@
+{
+    "PageTitle": "apply cost",
+    "FuncDef": "The apply cost command sets the MED value for BGP routes or cost value for routes of other protocols.\nThe undo apply cost command cancels the configuration.\nBy default, no MED value is set for BGP routes nor cost value is set for routes of other protocols.",
+    "CLIs": [
+        "apply cost [ + | - ] cost",
+        "apply cost inherit",
+        "apply cost none",
+        "undo apply cost"
+    ],
+    "ParentView": [
+        "Route-policy view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "+",
+            "Info": "Increases the route cost. If the link quality is poor or the link bandwidth is low, specify this parameter to increase the route cost, which helps control route selection.\nIf the MED of BGP routes or cost of non-BGP routes is greater than the maximum value (4294967295) after the adjustment, 4294967295 takes effect."
+        },
+        {
+            "Parameters": "-",
+            "Info": "Reduces the route cost. If the link quality is good or the link bandwidth is high, specify this parameter to reduce the route cost, which helps control route selection.\nIf the MED of BGP routes or cost of non-BGP routes is less than the minimum value (0) after the adjustment, 0 takes effect."
+        },
+        {
+            "Parameters": "cost",
+            "Info": "Specifies the route cost. To control route selection, adjust the route cost to prevent routing loops.\nThe value is an integer ranging from 0 to 4294967295."
+        },
+        {
+            "Parameters": "inherit",
+            "Info": "Inherits the original route cost.\nThis function applies to IGP routes, not to BGP routes.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "Delete the MED value of BGP routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] route-policy policy permit node 10",
+            "[*HUAWEI-route-policy] apply cost 120"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the filtering conditions specified in if-match clauses are met, you can run the apply cost command to change the route cost, which helps control route selection. After setting the cost of the routes that match the route-policy, the cost of the imported routes is changed accordingly.\nRun the route-policy command to enter the route-policy view.A route-policy may consist of multiple nodes. The relationship between the nodes is \"OR\". The system matches a route against the nodes in sequence. If the route matches a node, the route matches the route-policy, and the system no longer matches it against other nodes.Each node comprises a set of if-match and apply clauses. The if-match clauses define the filtering rules that are used to match certain route attributes. The relationship among if-match clauses of the same node that are based on different route attributes is AND. A route matches a node only when the route matches all the filtering rules specified in the if-match clauses of the node. The apply clauses specify actions. The relationship among if-match clauses of the same node that are based on the same route attribute is OR. The system matches routes against the if-match clauses in order. If a route matches an if-match clause, the system no longer matches the route against the rest if-match clauses. For example, the if-match community-filter 1 and if-match as-path-filter 1 configurations in node 10 are based on different route attributes. Therefore, the relationship among if-match clauses of this node is AND. The if-match community-filter 1 and if-match community-filter 2 configurations in node 20 are both based on the community attribute. Therefore, the relationship among if-match clauses of this node is OR. The apply clauses specify actions. If a route matches a node, the apply clauses set some attributes for the route.By default, the route cost is not set.\nAfter the undo apply cost command is run to cancel the set route cost, the cost of the imported routes is not affected by the route-policy.\n\nPrerequisites\nA route-policy has been configured using the route-policy command.\nConfiguration Impact\nAfter routes match the route-policy, the cost of the routes is changed.\nPrecautions\nThe costs of imported routes are independent of the route-policy after the undo apply cost command is used to cancel the configuration of route costs."
+}

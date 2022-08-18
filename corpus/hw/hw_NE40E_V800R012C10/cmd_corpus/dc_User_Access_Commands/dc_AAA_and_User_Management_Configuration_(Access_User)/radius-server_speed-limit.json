@@ -1,0 +1,56 @@
+{
+    "PageTitle": "radius-server speed-limit",
+    "FuncDef": "The radius-server speed-limit command configures the limit on the number of packets sent to a RADIUS server within a specified period.\nThe undo radius-server speed-limit command deletes the limit on the number of packets sent to a RADIUS server within a specified period.\nBy default, the number of packets sent to a RADIUS server within a specified period is not limited.",
+    "CLIs": [
+        "radius-server { authentication | accounting } <ip-address> [ vpn-instance <vpn-instance-name> ] [ <port> ] speed-limit <send-packet-number> <second>",
+        "undo radius-server { authentication | accounting } <ip-address> [ vpn-instance <vpn-instance-name> ] [ <port> ] speed-limit"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "authentication",
+            "Info": "Specifies a RADIUS server as an authentication server.\n-"
+        },
+        {
+            "Parameters": "accounting",
+            "Info": "Specifies a RADIUS server as an accounting server.\n-"
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IPv4 address of a RADIUS server, in X.X.X.X format. It must be a valid unicast address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the VPN instance name.\nThe value is a string of 1-31 characters and must be the name of a configured VPN instance."
+        },
+        {
+            "Parameters": "port",
+            "Info": "Specifies the interface number of a RADIUS server. If you specify the port value, the command configures the limit on the number of packets that the device can send to the RADIUS server with a specified interface number within a specified period. If you do not specify the port value, the command configures the limit on the number of packets that the device can send to all RADIUS servers within a specified period.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "speed-limit",
+            "Info": "Specifies the limit on the number of packets sent to a RADIUS server within a specified period.\n-"
+        },
+        {
+            "Parameters": "send-packet-number",
+            "Info": "Specifies the limit on the number of packets sent to a RADIUS server.\nThe value is an integer ranging from 1 to 65535."
+        },
+        {
+            "Parameters": "second",
+            "Info": "Specifies a period within which only the number of packets specified by send-packet-number can be sent to a RADIUS server.\nThe value is an integer ranging from 1 to 255, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server group huawei",
+            "[~HUAWEI-radius-huawei] radius-server accounting 2.2.2.2 1813 weight 50",
+            "[*HUAWEI-radius-huawei] commit",
+            "[~HUAWEI-radius-huawei] quit",
+            "[~HUAWEI] radius-server accounting 2.2.2.2 speed-limit 500 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA RADIUS server has limited processing capabilities. Therefore, when a BRAS sends users' authentication and accounting packets to the RADIUS server, there should be a limit on the transmission rate.\nTo configure the limit on the number of packets sent to a RADIUS server within a specified period, run the radius-server speed-limit command.\nTo improve the usage of RADIUS server resources on a live network, divide a RADIUS server into several logical RADIUS servers. These logical RADIUS servers share one IP address and one VPN instance and need to be differentiated using interface numbers. In this situation, you can run the radius-server speed-limit command to specify the same IP address and VPN instance name but different interface numbers for these logical RADIUS servers and the limit on the number of packets that the NE40E can send to these logical RADIUS servers within a specified period.\nConfiguration Impact\nIf users go online at a high rate that the BRAS generates authentication and accounting packets at a rate higher than the configured value, the packets that cannot be sent are stored in the timeout retransmission buffer waiting to be transmitted next time. To configure the wait time for retransmitting timeout packets, run the radius-server retransmit timeout command in the RADIUS server group view. By default, packets are retransmitted in 5s.\nWhen a BRAS retransmits packets, the BRAS also determines whether the transmission rate exceeds the configured value. If a packet fails to be sent to the RADIUS server after being retransmitted for several times, the BRAS does not send the packet to the RADIUS server. As a result, the user fails to go online. To configure the maximum retransmission times for timeout packets, run the radius-server retransmit timeout command in the RADIUS server group view. By default, the maximum retransmission times is 3.\nFollow-up Procedure\nIf an authentication packet fails to be sent to the RADIUS server, the display aaa online-fail-record command output shows that the cause of the login failure is Online fail reason: Sending RADIUS packets failed due to speed-limit.\nIf an accounting-start packet fails to be sent to the RADIUS server, the display aaa offline-record or display aaa abnormal-offline-record command output shows that the information of user offline reason is User offline reason: AAA with start accounting fail. In the meantime, the BRAS sends an accounting-stop packet to the RADIUS server and generates an log.\nIf the BRAS fails to send a real-time accounting packet, the BRAS generates an log.\nIf the BRAS fails to send an accounting-stop packet, the BRAS generates an log.\nPrecautions\nIf you specify the same RADIUS server type, IP address, and VPN instance name, the following commands cannot both be configured. When you have configured one command, you must run the undo command before you configure the other command.\nradius-server { authentication | accounting } ip-address [ vpn-instance instance-name ] speed-limit number timeradius-server { authentication | accounting } ip-address [ vpn-instance instance-name ] port speed-limit number time"
+}

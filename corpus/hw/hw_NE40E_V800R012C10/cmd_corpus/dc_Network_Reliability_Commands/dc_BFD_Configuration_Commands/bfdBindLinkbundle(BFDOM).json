@@ -1,0 +1,79 @@
+{
+    "PageTitle": "bfd bind link-bundle",
+    "FuncDef": "The bfd bind link-bundle peer-ip command creates a BFD for link-bundle session that detects IPv4 Eth-Trunk faults and displays the BFD session view.\nThe bfd bind link-bundle peer-ipv6 command creates a BFD for link-bundle session that detects IPv6 Eth-Trunk faults and displays the BFD session view.\nBy default, no BFD for link-bundle session is created.",
+    "CLIs": [
+        "bfd <session-name> bind link-bundle peer-ip <ip-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } source-ip <ip-address>",
+        "bfd <session-name> bind link-bundle peer-ip <ip-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } source-ip <ip-address> unshared-mode",
+        "bfd <session-name> bind link-bundle compatible-mode peer-ip <ip-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } source-ip <ip-address>",
+        "bfd <session-name> bind link-bundle compatible-mode peer-ip <ip-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } source-ip <ip-address> unshared-mode",
+        "bfd <session-name> bind link-bundle peer-ipv6 <ipv6-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } source-ipv6 <ipv6-address>",
+        "bfd <session-name> bind link-bundle peer-ipv6 <ipv6-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } source-ipv6 <ipv6-address> unshared-mode",
+        "bfd <session-name> bind link-bundle compatible-mode peer-ipv6 <ipv6-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } source-ipv6 <ipv6-address>",
+        "bfd <session-name> bind link-bundle compatible-mode peer-ipv6 <ipv6-address> [ vpn-instance <vpn-name> ] interface { <interface-name> | <interface-type> <interface-number> } source-ipv6 <ipv6-address> unshared-mode"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "session-name",
+            "Info": "Specifies the name of a BFD session.\nThe value is a string of 1 to 64 characters, spaces not supported. When quotation marks are used around the string, spaces are allowed in the string.\nWhen the name of a BFD session is configured, the uppercase and lowercase letters in the name must be the same as what you enter.BFD session names are case-insensitive. For example, ABC and abc are regarded as the same BFD session. If you have configured ABC as the name of a BFD session, the ABC BFD session view is directly displayed when you configure abc."
+        },
+        {
+            "Parameters": "peer-ip ip-address",
+            "Info": "Specifies the peer IPv4 address bound to a BFD session.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "vpn-instance vpn-name",
+            "Info": "Specifies the name of a VPN instance bound to a BFD session.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the type and number of a local Layer 3 interface bound to a BFD session.\nThe interface type can be Layer 3 Eth-Trunk."
+        },
+        {
+            "Parameters": "source-ip ip-address",
+            "Info": "Specifies the source IPv4 address carried in BFD packets.\nSpecifies the source IPv4 address carried in BFD packets. If the source IP address is not specified, the system searches for an outbound interface to the remote IP address in the local routing table. The IP address of this outbound interface is used as the source IP address of BFD packets sent by the local end.\nYou do not need to set this parameter. When BFD and Unicast Reverse Path Forwarding (URPF) are used together, URPF checks the source IP address of received packets. You need to manually configure the source IP address of BFD packets."
+        },
+        {
+            "Parameters": "unshared-mode",
+            "Info": "Specifies unshared-mode. If this parameter is not configured, the shared mode takes effect.\n-"
+        },
+        {
+            "Parameters": "compatible-mode",
+            "Info": "Indicates that BFD sessions support interworking with non-Huawei devices.\nBy default, UDP port 6784 defined by relevant standards is used. If this parameter is specified, UDP port 3784 is used.\n-"
+        },
+        {
+            "Parameters": "peer-ipv6 ipv6-address",
+            "Info": "Specifies the peer IPv6 address bound to a BFD session.\nThe value is in 32-digit hexadecimal notation."
+        },
+        {
+            "Parameters": "source-ipv6 ipv6-address",
+            "Info": "Specifies the source IPv6 address carried in BFD packets.\nThe address is the IPv6 address of a Layer 3 Eth-Trunk interface bound to a BFD session.\nThe value is in 32-digit hexadecimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface Eth-Trunk 1",
+            "[*HUAWEI-Eth-Trunk1] ipv6 enable",
+            "[*HUAWEI-Eth-Trunk1] ipv6 address 2001:db8::1 64",
+            "[*HUAWEI-Eth-Trunk1] quit",
+            "[*HUAWEI] bfd atob bind link-bundle peer-ipv6 2001:db8::2 interface eth-trunk 1 source-ipv6 2001:db8::1",
+            "[*HUAWEI-bfd-session-atob]"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] interface Eth-Trunk 1",
+            "[*HUAWEI-Eth-Trunk1] ip address 10.10.20.1 24",
+            "[*HUAWEI-Eth-Trunk1] quit",
+            "[*HUAWEI] bfd atob bind link-bundle peer-ip 10.10.20.2 interface eth-trunk 1 source-ip 10.10.20.1",
+            "[*HUAWEI-bfd-session-atob]"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTwo routing devices are connected through a Layer 3 Eth-Trunk. An Eth-Trunk interface has multiple member interfaces. If a single-hop BFD session is bound to an Eth-Trunk interface to detect link faults, the session randomly selects a member interface. When the member interface fails (including link, interface, and board faults), the Eth-Trunk interface is considered faulty. However, the Eth-Trunk status may still be normal at that time. To resolve this issue, you can create a BFD for link-bundle session. A BFD sub-session is created for each Eth-Trunk member interface. The BFD for link-bundle session goes Down only when all BFD sub-sessions go Down.\nA BFD for link-bundle session can work in shared or unshared mode.\nIf you specify unshared-mode, a BFD for link-bundle session works in unshared mode. In this mode, a BFD for link-bundle session for detecting a link is independent of a dynamic BFD session for detecting the link.If you do not specify unshared-mode, a BFD for link-bundle session works in shared mode. In this mode, a BFD for link-bundle session for detecting a link is dependent of a dynamic BFD session for detecting the link.\n\nPrerequisites\nBFD has been globally enabled using the bfd command in the system view before using the bfd bind link-bundle peer-ip command and the bfd bind link-bundle peer-ipv6 command .\nFollow-up Procedure\nAfter a BFD for link-bundle session is created, the system creates a sub-session for each member interface of an Eth-Trunk interface bound to the session to detect faults in each member link. Sub-session discriminators are determined through automatic negotiation, and main session discriminators are generated by the local system. That is, you do not need to configure local or remote discriminators for a BFD for link-bundle session.\nYou can perform any of the following operations as required:\nRun the min-tx-interval command to set a desired minimum interval at which BFD packets are sent.Run the min-rx-interval command to set a desired minimum interval at which BFD packets are received.Run the detect-multiplier command to set a local detection multiplier for the BFD session.Run the wtr command to set a WTR time for the BFD session.\n\nPrecautions\nBFD for link-bundle sessions must be created on both ends of an Eth-Trunk and cannot interwork with other BFD sessions.You can run the undo bfd session-name command to delete a specified BFD session and its binding information.A BFD for link-bundle session bound to the Eth-Trunk interface and IP address cannot be configured together with a BFD for peer-IP auto session bound to the same Eth-Trunk interface and IP address."
+}

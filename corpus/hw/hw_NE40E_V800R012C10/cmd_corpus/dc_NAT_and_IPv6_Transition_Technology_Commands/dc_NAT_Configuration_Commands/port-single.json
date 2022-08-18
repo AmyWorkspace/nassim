@@ -1,0 +1,31 @@
+{
+    "PageTitle": "port-single enable",
+    "FuncDef": "The port-single enable command enables the per-port allocation mode.\nThe port-single enable command enables the per-port allocation mode.\nBy default, the per-port allocation mode is disabled, and the dynamic port allocation mode is enabled.",
+    "CLIs": [
+        "port-single enable",
+        "undo port-single enable"
+    ],
+    "ParentView": [
+        "DS-Lite instance view",
+        "NAT64 instance view",
+        "NAT instance view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat instance nat1 id 1",
+            "[*HUAWEI-nat-instance-nat1] nat ip access-user limit 500",
+            "[*HUAWEI-nat-instance-nat1] port-single enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ds-lite instance cpe1 id 1",
+            "[*HUAWEI-ds-lite-instance-cpe1] port-single enable",
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat64 instance cpe1 id 1",
+            "[*HUAWEI-nat64-instance-cpe1] port-single enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPer-port allocation, a dynamic port mode, enables a device to assign a port, not a port range each time the device creates a flow table. With per-port allocation enabled, port usage of public IP addresses is maximized. This mode applies when the number of public addresses is small or when the number of user services or needed ports is small. Per-port allocation resolves the following issues:\nIn dynamic port allocation mode, a maximum of 1008 users share a public IP address. The port range contains a fixed number of 64, ports and there is no limit on the maximum number of times when the port range is extended.In dynamic port allocation mode, each user is assigned a minimum of 64 ports. Port usage is low. As a result, some user services that need many ports fail to be forwarded, and a NAT_1.3.6.1.4.1.2011.5.25.240.2.24 hwCGNSpecificIpExhaustAlarm alarm indicating that ports in an address pool are used up is generated.\n\nConfiguration Impact\nAfter per-port allocation is enabled, all user tables and flow tables in the existing NAT instance are deleted.\nPrecautions\nIf the vsm on-board-mode enable command is already run in the system view, the port-single enable command cannot be delivered.\nNote the following issues after per-port allocation is enabled:\nThe port allocation mode cannot be modified within 75s.In the same NAT instance, the port-range or static-mapping command cannot be run.If the vsm on-board-mode enable command is already run in the system view, the port-single enable command cannot be delivered.If distributed users are online, the port-single enable command cannot be run.If the NAT instance is bound to a VSUF-80/VSUF-160, the port-single enable and undo port-single enable commands cannot be run simultaneously within 75s. After a mode is changed, all user tables and flow tables of the existing NAT instance are deleted.If the NAT instance is bound to a VSUI-160-E/VSUI-400A/VSUI-400/VSUI-400A-E/VSUI-400-E, the port-single enable and undo port-single enable commands cannot be run simultaneously within 150s. After a mode is changed, all user tables and flow tables of the existing NAT instance are deleted.For the per-port allocation mode, the nat ip access-user limit command must be run. Otherwise, too many users are allowed to use the same public IP address, affecting the subsequent services of online users.\n\nThis function is supported only by VSUF-80/VSUF-160/VSUI-160-E/VSUI-400/VSUI-400-E/VSUI-400A/VSUI-400A-E/VSUI-400-S/VSUI-400A-S."
+}

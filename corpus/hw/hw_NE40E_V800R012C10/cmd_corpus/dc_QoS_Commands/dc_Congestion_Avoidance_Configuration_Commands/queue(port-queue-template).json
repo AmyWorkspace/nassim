@@ -1,0 +1,96 @@
+{
+    "PageTitle": "queue (port queue view)",
+    "FuncDef": "The queue command sets the scheduling parameters for port queues in a port-queue template. The parameters include the scheduling mode, shaping value and CIR.\nThe undo port-queue command restores the default scheduling parameters.\nBy default, the shaping value of an interface equals the bandwidth of the interface, the BE, AF1, AF2, AF3, and AF4 queues are scheduled using the WFQ scheduling mode, with the scheduling weights being 10, 10, 10, 15, and 15, respectively, and the EF, CS6, and CS7 queues are scheduled using the PQ scheduling mode. The shaping percentage is set to 100 for all queues, and the tail drop mode is used.",
+    "CLIs": [
+        "queue <cos-value> cir { { <cir-value> [ cbs <cbs-value> ] cir-schedule pq pir <pir-value> } | { cir-percentage <cir-percentage-value> [ cbs <cbs-value> ] cir-schedule pq pir pir-percentage <pir-percentage-value> } } [ pbs <pbs-value> ] pir-schedule { pq | wfq weight <weight-value> | lpq } [ port-wred <wred-name> ]",
+        "queue <cos-value> { { pq | wfq weight <weight-value> | lpq } | shaping { <shaping-value> | shaping-percentage <shaping-percentage-value> } [ pbs <pbs-value> ] | port-wred <wred-name> | low-latency } *",
+        "undo queue <cos-value> [ pq | wfq | lpq | shaping | port-wred | low-latency ]",
+        "undo queue <cos-value> [ cir { { <cir-value> [ cbs <cbs-value> ] cir-schedule pq pir <pir-value> } | { cir-percentage <cir-percentage-value> [ cbs <cbs-value> ] cir-schedule pq pir pir-percentage <pir-percentage-value> } } [ pbs <pbs-value> ] pir-schedule { pq | wfq weight <weight-value> | lpq } [ port-wred <wred-name> ] ]"
+    ],
+    "ParentView": [
+        "Port queue view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cos-value",
+            "Info": "Specifies the service class of a port queue.\nThe value is an enumerated type and can be cs7, cs6, ef, af4, af3, af2, af1, or be."
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR.\nThe value is an integer ranging from 0 to 4294967294, in Mbit/s."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the CBS.\nThe value is an integer ranging from 1 to 65535, in bytes."
+        },
+        {
+            "Parameters": "cir-schedule",
+            "Info": "Specifies the scheduling mode for CIR.\n-"
+        },
+        {
+            "Parameters": "pq",
+            "Info": "Specifies the scheduling mode of a queue as PQ scheduling.\n-"
+        },
+        {
+            "Parameters": "pir pir-value",
+            "Info": "Specifies the PIR.\nThe value is an integer ranging from 0 to 4294967294, in Mbit/s."
+        },
+        {
+            "Parameters": "cir-percentage cir-percentage-value",
+            "Info": "Specifies the CIR percentage.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "pir-percentage pir-percentage-value",
+            "Info": "Specifies the PIR percentage.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "pbs pbs-value",
+            "Info": "Specifies the depth of a shaping token bucket.\nThe value is an integer ranging from 1 to 65535, in bytes."
+        },
+        {
+            "Parameters": "pir-schedule",
+            "Info": "Specifies the scheduling mode for PIR.\n-"
+        },
+        {
+            "Parameters": "wfq",
+            "Info": "Specifies the scheduling mode of a queue as WFQ scheduling.\n-"
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Specifies the weight value of a port-queue. To be specific, the percentage of the remaining bandwidth after bandwidth is allocated to PQ queues.\nThe value is an integer ranging from 1 to 100."
+        },
+        {
+            "Parameters": "lpq",
+            "Info": "Specifies the scheduling mode of a queue as LPQ scheduling.\n-"
+        },
+        {
+            "Parameters": "port-wred wred-name",
+            "Info": "Specifies the name of a WRED profile for port queues.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "shaping shaping-value",
+            "Info": "Specifies a shaping rate.\nThe value is an integer ranging from 0 to 4294967294, in Mbit/s."
+        },
+        {
+            "Parameters": "shaping-percentage shaping-percentage-value",
+            "Info": "Specifies the shaping percentage of a port queue. It indicates the percentage of bandwidth that can be used by a specific port queue.\nThe value is an integer ranging from 0 to 100, in percentage."
+        },
+        {
+            "Parameters": "low-latency",
+            "Info": "Indicates the low-latency mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] port-queue-template test",
+            "[*HUAWEI-port-queue-template-test] queue af1 wfq weight 50 shaping 20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] port-queue-template test",
+            "[*HUAWEI-port-queue-template-test] queue af1 cir 1000 cir-schedule pq pir 2000 pir-schedule pq"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a network is congested, to ensure that service packets in the queues of a high priority, such as VoIP packets and video packets, are preferentially scheduled, run the queue command.\nAfter packets enter the queues on an interface, the interface schedules packets based on policies. If no congestion occurs on an interface, the rate at which packets are transmitted can reach the shaping value. If congestion occurs on an interface, the rate at which packets are transmitted is higher than the weight-based bandwidth. You can increase the weight value for queues of high priorities, when a network is congested, to prevent packet loss.\nPrerequisites\nA port-queue profile has been created.\nPrecautions\nDo not configure both the shaping rate and CIR for one queue.You can configure the CIR for a maximum of two queues on one interface.Only PQ queues can be configured to work in low-latency mode. A queue that is configured to work in low-latency mode is scheduled preferentially if congestion occurs.The priorities of CS7, CS6, EF, AF4, AF3, AF2, AF1, and BE queues are placed in descending order. The low-latency function is preferentially guaranteed for the three high-priority (CS7, CS6, and EF) queues. Therefore, configure the low-latency function for the three high-priority (CS7, CS6, and EF) queues. If you configure the low-latency function for the five low-priority queues, ensure that the three high-priority queues are not congested. Otherwise, the low-latency function cannot be guaranteed for the five low-priority queues.When the shaping value is set for a queue, the maximum bandwidth of the queue is equal to the shaping value regardless of the bandwidth of the entire interface or whether other queues have traffic."
+}

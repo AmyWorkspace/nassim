@@ -1,0 +1,56 @@
+{
+    "PageTitle": "l2protocol-tunnel vlan",
+    "FuncDef": "The l2protocol-tunnel vlan command enables Layer 2 protocol tunneling on a tagged interface.\nThe undo l2protocol-tunnel vlan command disables Layer 2 protocol tunneling on a tagged interface.\nBy default, Layer 2 protocol tunneling is disabled on tagged interfaces.",
+    "CLIs": [
+        "l2protocol-tunnel { all | { <protocol> } &<1-19> } { [ reverse ] vlan } { <low-vid> [ to <high-vid> ] } &<1-10>",
+        "undo l2protocol-tunnel { all | { <protocol> } &<1-19> } { [ reverse ] vlan } { <low-vid> [ to <high-vid> ] } &<1-10>"
+    ],
+    "ParentView": [
+        "Layer 2 100GE interface view",
+        "Layer 2 10GE interface view",
+        "25GE-L2 view",
+        "400GE-L2 view",
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Layer 2 Eth-Trunk interface view",
+        "Layer 2 GE interface view",
+        "Interface group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "all",
+            "Info": "Enables or disables Layer 2 protocol tunneling for all supported standard and user-defined Layer 2 protocols.\n-"
+        },
+        {
+            "Parameters": "protocol",
+            "Info": "Enables or disables Layer 2 protocol tunneling for a specified Layer 2 protocol.\nThe protocol as follows:\nstplacpdtpgmrpgvrplldpvtpudldpagpcdpeoam3ahdldpmvrpmmrpe-lmisstp\nOne or up to all of the preceding Layer 2 protocols can be specified."
+        },
+        {
+            "Parameters": "reverse",
+            "Info": "Enables the reverse Layer 2 protocol tunneling function on an interface. After the function is enabled, a specified multicast MAC address is replaced with the multicast destination MAC address in Layer 2 PDUs.\n-"
+        },
+        {
+            "Parameters": "low-vid",
+            "Info": "Specifies a start VLAN ID.\nThe value is an integer ranging from 1 to 4094. <vidEnd> must be greater than <vidBgn>."
+        },
+        {
+            "Parameters": "high-vid",
+            "Info": "Specifies an end VLAN ID.\nThe value is an integer ranging from 1 to 4094. <vidEnd> must be greater than <vidBgn>."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] l2protocol-tunnel stp group-mac 0100-5e00-0011",
+            "[*HUAWEI] vlan batch 100 to 200",
+            "[*HUAWEI] gvrp",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] port link-type trunk",
+            "[*HUAWEI-GigabitEthernet1/0/1] gvrp",
+            "[*HUAWEI-GigabitEthernet1/0/1] l2protocol-tunnel stp vlan 100 to 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLayer 2 protocols running between user networks, such as Spanning Tree protocol (STP), Link Aggregation Control Protocol (LACP), must traverse a backbone network to perform Layer 2 protocol calculation.When each edge device interface on a backbone network connects to more than one user network and Layer 2 protocol data units (PDUs) from the user networks carry VLAN tags, run the l2protocol-tunnel vlan command to configure Layer 2 protocol tunneling on tagged interfaces to allow the Layer 2 PDUs from the user networks to be tunneled across the backbone network.On some special networks, for example, a network with both Huawei and non-Huawei devices, to ensure that the Huawei device can communicate with the non-Huawei device, specify reverse so that a specified multicast MAC address is replaced with the multicast destination MAC address in Layer 2 PDUs.\n\nPrerequisites\nThe l2protocol-tunnel group-mac command has been run to configure an edge device on a backbone network to replace the multicast destination MAC addresses in Layer 2 PDUs with a specified multicast MAC address.\nConfiguration Impact\nWhen all the parameters are the same except for the VLAN ID, if the l2protocol-tunnel vlan command is run more than once, all configurations take effect."
+}

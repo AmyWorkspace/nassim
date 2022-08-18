@@ -1,0 +1,32 @@
+{
+    "PageTitle": "static-bind (IP address pool view)",
+    "FuncDef": "The static-bind command binds an IP address to a MAC address, which is static address assignment.\nThe undo static-bind command deletes the configuration.\nBy default, no binding between IP addresses and MAC addresses is configured for an address pool.",
+    "CLIs": [
+        "static-bind ip-address <ip-address> mac-address <mac-address>",
+        "undo static-bind ip-address <ip-address> mac-address <mac-address>"
+    ],
+    "ParentView": [
+        "IP address pool view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ip-address ip-address",
+            "Info": "Specifies an IP address to be statically assigned. It must be a valid IP address in the address pool.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mac-address mac-address",
+            "Info": "Specifies the MAC address of a DHCP client.\nThe value is in H-H-H format. An H is a hexadecimal number of 1 to 4 digits."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip pool huawei server",
+            "[~HUAWEI-ip-pool-huawei] gateway 10.1.1.1 255.255.255.0",
+            "[*HUAWEI-ip-pool-huawei] section 0 10.1.1.2 10.1.1.253",
+            "[*HUAWEI-ip-pool-huawei] commit",
+            "[~HUAWEI-ip-pool-huawei] static-bind ip-address 10.1.1.10 mac-address 0000-e03f-0305"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nFixed IP addresses need to be assigned to specified clients, such as the WWW server. In this case, you can bind an available IP address in an address pool with the MAC address of a client. When the DHCP server receives a request for the IP address of a specific client, run the static-bind command to bind the IP address with the MAC address of the client.\nAfter the undo static-bind command is executed, the bound IP address restores to be available, and the IP address can be assigned to other clients.\nPrerequisites\nPerform the following operations:\nRun the ip pool command in the system view to create an address pool on the DHCP server.Run the gateway command in the Server IP address pool view to configure a gateway address and subnet mask for the created address pool.Run the section command in the Server IP address pool view to specify the address segment that can be assigned from the address pool.\n\nPrecautions\nThe IP address to be bound must be within the address segment configured using the section command in the Server IP address pool view.The IP address to be bound must have never been used. Before the static-bind command is executed, run the excluded-ip-address command to prohibit the IP address to be bound from taking part in automatic address assignment.After the binding, the lease of this IP address is not managed. After the bound client obtains the IP address, the configuration cannot be deleted using the undo static-bind command. The binding relationship can be removed only when the user proactively goes offline.After the undo ip pool command is run, you can configure the binding relationship between IP addresses and MAC addresses.You can repeat executing the static-bind command to assign IP addresses to multiple clients. An IP address or MAC address can be used only once."
+}

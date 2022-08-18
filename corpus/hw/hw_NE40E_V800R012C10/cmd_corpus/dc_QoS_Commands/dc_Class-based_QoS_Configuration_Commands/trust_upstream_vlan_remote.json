@@ -1,0 +1,42 @@
+{
+    "PageTitle": "trust upstream vlan remote",
+    "FuncDef": "The trust upstream vlan remote command configures BA classification on a Layer 2 interface so that the priority of IP and MPLS packets can be re-marked.\nThe undo trust upstream vlan remote command command cancels the configuration.\nBy default, VLAN-based BA classification is not configured on a Layer 2 interface.",
+    "CLIs": [
+        "trust upstream { 5p3d | <ds-domain-name> | default } inbound vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> remote",
+        "undo trust upstream { 5p3d | <ds-domain-name> | default } inbound vlan { <vlan-id1> [ to <vlan-id2> ] } &<1-10> remote"
+    ],
+    "ParentView": [
+        "Eth-Trunk interface view",
+        "Port extension Layer 2 interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ds-domain-name",
+            "Info": "Specifies the name of a DS domain. A DS domain consists of the DiffServ (DS) nodes that adopt the same service policy and Per-Hop Behavior (PHB) collection.\nThe value is a string of 1 to 48 case-sensitive characters."
+        },
+        {
+            "Parameters": "vlan-id1",
+            "Info": "Specifies a start VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "to",
+            "Info": "Specifies a VLAN ID range.\n-"
+        },
+        {
+            "Parameters": "vlan-id2",
+            "Info": "Specifies an end VLAN ID.\nThe value is an integer ranging from 1 to 4094. vlan-id2 must be greater than vlan-id1."
+        },
+        {
+            "Parameters": "remote",
+            "Info": "Enables BA classification on the interface of the master device and configures the interface to deliver configurations to AP devices.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1024/4/0/0",
+            "[~HUAWEI-GigabitEthernet1024/4/0/0] trust upstream default inbound vlan 1 remote"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo implement a simple traffic classification-based QoS policy, for example, to change the priorities of IP and MPLS packets, on a Layer 2 interface, run the trust upstream vlan command to bind the Layer 2 interface to a DS domain and enable the Layer 2 interface to map the priorities of packets.\nExternal interfaces of APs function as inbound interfaces of traffic. To ensure that different queues are scheduled based on priorities, BA classification for AP devices is enabled on the interface of the master device.\nPrecautions\nSimple traffic classification cannot be configured on a physical interface that has been added to a trunk interface.\nThe local BA classification configurations (not carrying the remote keyword) on the interface of the master device can coexist with the BA classification configurations (carrying the remote keyword) to be delivered to AP devices.\nIf remote is not configured in the undo trust upstream vlan command or undo trust upstream inbound vlan command, the local BA classification configurations on the master device are deleted.\nIf the undo trust upstream inbound vlan remote command is run, the BA classification configurations to be delivered to AP devices are deleted."
+}

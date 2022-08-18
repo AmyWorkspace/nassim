@@ -1,0 +1,42 @@
+{
+    "PageTitle": "track ip route",
+    "FuncDef": "The track ip route command adds a route to a route monitoring group.\nThe undo track ip route command deletes a route from a route monitoring group.\nBy default, no routes are added to a route monitoring group.",
+    "CLIs": [
+        "track ip route [ vpn-instance <vpn-instance-name> ] <destination> { <mask> | <mask-length> } [ down-weight <down-weight-value> ]",
+        "undo track ip route [ vpn-instance <vpn-instance-name> ] <destination> { <mask> | <mask-length> } [ down-weight <down-weight-value> ]"
+    ],
+    "ParentView": [
+        "Route monitoring group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the VPN instance to which a route belongs. If vpn-instance vpn-instance-name is specified, a VPN route in the VPN instance is added to the route monitoring group; if vpn-instance vpn-instance-name is not specified, a public network route is added to the route monitoring group.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "destination",
+            "Info": "Specifies the destination IP address of a route.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask",
+            "Info": "Specifies the mask of a route IP address.\nThe value is in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask-length",
+            "Info": "Specifies the mask length of a route IP address.\nThe value is an integer ranging from 0 to 32."
+        },
+        {
+            "Parameters": "down-weight down-weight-value",
+            "Info": "Specifies a down-weight for the route. The larger the down-weight value, the more important the route. The value can be set based on such information as the link bandwidth, rate, and cost.\nThe value is an integer ranging from 1 to 1000, with default value 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip route-monitor-group uplink",
+            "[*HUAWEI-route-monitor-group-uplink] track ip route 10.1.1.0 24 down-weight 100",
+            "[*HUAWEI-route-monitor-group-uplink] track ip route 10.1.2.0 24 down-weight 120"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA route monitoring group monitors the status of its member routes, each of which has a down-weight. The down-weight indicates the link quality. The larger the down-weight value, the more important the route. The down-weight can be set based on parameters, such as the link bandwidth, rate, and cost.\nIf a route in the route monitoring group goes Down, its down-weight is added to the down-weight sum of the route monitoring group.If a route in the route monitoring group goes Up again, its down-weight is subtracted from the down-weight sum of the route monitoring group.\nTo add a route to a route monitoring group, run the track ip route command.\n\nPrerequisites\nA route monitoring group has been created using the ip route-monitor-group command.\nPrecautions\nA maximum of 16 routes can be added to a route monitoring group, and one route can be added to multiple route monitoring groups."
+}

@@ -1,0 +1,33 @@
+{
+    "PageTitle": "port-range (NAT64 instance view)",
+    "FuncDef": "The port-range command configures a port range for NAT64 port allocation.\nThe undo port-range command deletes a port range for NAT64 port allocation.\nBy default, dynamic port allocation mode is used.",
+    "CLIs": [
+        "port-range <range-value> [ extended-port-range <range-value> extended-times <times> ]",
+        "undo port-range [ <range-value> [ extended-port-range <range-value> extended-times <times> ] ]"
+    ],
+    "ParentView": [
+        "NAT64 instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "range-value",
+            "Info": "Specifies the number of initially assigned ports.\nThe value is an integer ranging from 64 to 64512."
+        },
+        {
+            "Parameters": "extended-port-range range-value",
+            "Info": "Specifies the number of ports that can be assigned every time after the first port assignment.\nThe value is an integer ranging from 64 to 8192."
+        },
+        {
+            "Parameters": "extended-times times",
+            "Info": "Specifies the maximum number of times the port range can be extended.\nThe value is an integer ranging from 1 to 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nat64 instance nat1 id 1",
+            "[*HUAWEI-nat64-instance-nat1] port-range 1280 extended-port-range 128 extended-times 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the port-range command is run in the NAT64 instance view, the system pre-allocates a port range to each private network user to perform NAT64. Running the port-range command in the NAT64 instance view indicates that this NAT64 instance uses the static port pre-allocation mode. The port-range command specifies the size of a port range. The start and end port numbers are automatically generated.\nA device supports various port allocation modes, such as dynamic allocation, port pre-allocation mode, and port semi-dynamic pre-allocation mode.\nDynamic port allocation mode: By default, the system dynamically allocates ports to users. In this mode, the number of ports allocated to users is not limited.In port pre-allocation (port range) mode, a NAT64 device pre-allocates an IPv4 address and a port range to an IPv6 address when mapping the IPv6 address to IPv4 address. The IPv4 address and ports in the port range are used in the NAT64 mapping of the IPv6 address. In port pre-allocation mode, the NAT64 device generates a log only when it pre-allocates an IPv4 address and a port range to an IPv6 address. Therefore, the number of generated logs is small.The semi-dynamic port allocation (Semi-Port Dynamic) mode is an extension of the port range mode. Semi-dynamic port allocation extends the parameters of the port range mode into three parameters: the initial port range, extended port range, and maximum number of times the port range is extended. When a terminal with an IPv6 address accesses an IPv4 network, a NAT64 device allocates an initial port range and then ports in the port range to the IPv6 address. If the number of ports used by the host exceeds the initial port range, the CGN device allocates an extended port range. The maximum number of times the port range is extended determines the number of times the extended port range can be allocated. In semi-dynamic port allocation mode, a NAT64 device generates a log only when it allocates an IPv4 address, initial port range, extended port range, and maximum number of times the port range can be extended to an IPv6 address. Therefore, the number of generated logs is small.\n\nPrecautions\nIf the port pre-allocation mode or incremental port allocation mode has been configured, you can change the port-range parameter values in overriding mode. The change takes effect only for new users.\nIf the port-range command is run more than once, the latest configuration overrides the previous one."
+}

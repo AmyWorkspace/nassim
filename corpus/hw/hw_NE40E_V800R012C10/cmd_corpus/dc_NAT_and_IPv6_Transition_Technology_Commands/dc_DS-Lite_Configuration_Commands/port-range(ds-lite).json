@@ -1,0 +1,33 @@
+{
+    "PageTitle": "port-range (DS-Lite instance view)",
+    "FuncDef": "The port-range command configures a port range for DS-Lite port pre-allocation.\nThe undo port-range command deletes a port range for DS-Lite port pre-allocation.\nBy default, the dynamic port allocation mode is used.",
+    "CLIs": [
+        "port-range <initial-port-range> [ extended-port-range <extended-port-range> extended-times <extended-times> ]",
+        "undo port-range [ <initial-port-range> [ extended-port-range <extended-port-range> extended-times <extended-times> ] ]"
+    ],
+    "ParentView": [
+        "DS-Lite instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "initial-port-range",
+            "Info": "Specifies the number of initially assigned ports.\nThe value is an integer ranging from 64 to 64512, in multiple of 64."
+        },
+        {
+            "Parameters": "extended-port-range extended-port-range",
+            "Info": "Specifies the number of ports that can be assigned every time after the first port assignment.\nThe value is an integer that ranges from 64 to 8192, in multiple of 64."
+        },
+        {
+            "Parameters": "extended-times extended-times",
+            "Info": "Specifies the number of times that the port range is extended.\nThe value is an integer ranging from 1 to 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ds-lite instance cpe1 id 1",
+            "[*HUAWEI-ds-lite-instance-cpe1] port-range 1024"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA DS-Lite device supports various port allocation modes: dynamic port allocation, per-port allocation, static port pre-allocation, and semi-dynamic port pre-allocation.\nDynamic allocation: By default, the system dynamically allocates ports to users. In dynamic port allocation mode, the number of ports allocated to users is not limited.To configure the static port pre-allocation mode, run this command without extended-port-range extended-times. After the port-range command is run in the DS-Lite instance view, the system pre-allocates a port range to private network users to perform DS-Lite. Running the port-range command in the DS-Lite instance view indicates that this DS-Lite instance uses the static port pre-allocation mode. The port-range command specifies the size of a port range. The start and end port numbers are automatically generated.To configure the semi-dynamic port pre-allocation mode, run this command with extended-port-range and extended-times configured. In semi-dynamic port pre-allocation mode, the system pre-allocates a port range to private network users. The system uses ports in this port range to perform DS-Lite. When all ports in this port range are allocated, a pre-set range of ports are assigned to users. The number of assignable ports depends on the number of assignable port ranges. If a newly assigned port range is no longer used, this port range can be reclaimed and allocated to other users.\nIn either of port pre-allocation, after the port-range command is run in the DS-Lite policy template view, the device pre-allocates user ports based on the template.\nIf the number of ports assigned to users exceeds the specified port range, subsequent user traffic cannot be processed using DS-Lite.\n\nPrecautions\nIf the port-range command is run for both the instance and the NAT template, the configurations in the DS-Lite policy template take precedence when the system matches an online user with the policy template issued by a RADIUS server.\nIf the port-range command is run more than once, the latest configuration overrides the previous one.\nIf a DS-Lite instance has had online users, the port allocation mode of the instance cannot be changed to another port allocation mode. If the port pre-allocation mode or incremental port allocation mode has been configured, you can change the port-range parameter values in overriding mode. The change takes effect only for new users."
+}

@@ -1,0 +1,55 @@
+{
+    "PageTitle": "sub-reason mapping",
+    "FuncDef": "The sub-reason mapping command maps login failure and logout sub-reasons to general reasons.\nThe undo sub-reason mapping command cancels the mappings between login failure and logout sub-reasons and general reasons.\nBy default, login failure or logout sub-reasons are not mapped to general reasons.",
+    "CLIs": [
+        "sub-reason <start-reason> [ <end-reason> ] mapping <mapping-reason>",
+        "undo sub-reason <start-reason> [ <end-reason> ] [ mapping <mapping-reason> ]"
+    ],
+    "ParentView": [
+        "AAA view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mapping mapping-reason",
+            "Info": "Specifies a general reason ID to which sub-reason IDs are to be mapped.\nThe value is an integer. The minimum value is 1, and the maximum value increases with the increase in sub-reasons. For the supported value range, see the command help."
+        },
+        {
+            "Parameters": "sub-reason end-reason",
+            "Info": "Specifies the end sub-reason ID.\nThe value is an integer. The minimum value is 1, and the maximum value increases with the increase in sub-reasons. For the supported value range, see the command help.The end subcause value must be greater than the start subcause value. When the start subcause value is the maximum value, the end subcause cannot be configured."
+        },
+        {
+            "Parameters": "sub-reason start-reason",
+            "Info": "Specifies the start sub-reason ID.\nThe value is an integer. The minimum value is 1, and the maximum value increases with the increase in sub-reasons. For the supported value range, see the command help."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] sub-reason 500 710 mapping 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] display aaa online-fail-record",
+            "----------------------------------------------------------------------------",
+            "  User name          : user#",
+            "  Domain name        : anl",
+            "  User MAC           : 00e0-fc12-3456",
+            "  User access type   : PPPoE",
+            "  User interface     : GigabitEthernet3/0/0",
+            "  User access PeVlan/CeVlan    : -/-",
+            "  User IP address    : -",
+            "  User ID            : 8320",
+            "  User authen state  : Authened",
+            "  User acct state    : AcctIdle",
+            "  User author state  : AuthorIdle",
+            "  User login time    : 2017-04-12 07:12:17",
+            "  Online fail reason : Nas request to offline",
+            "  Pre-mapping reason : There are no available addresses in the address pool",
+            "  -------------------------------------------------------------------------",
+            "  Are you sure to display some information? [Y/N]:n"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo map login failure and logout sub-reasons to general reasons, run the sub-reason mapping command. Then, you can check the mappings between login failure and logout sub-reasons and general reasons using the display radius offline-sub-reason command. If no mapping is found, a hyphen (-) is displayed. After the display radius offline-sub-reason command is run, the login failure and logout sub-reasons are displayed as the corresponding general reasons.\nTo classify login failure and logout sub-reasons into the same categories and better present the reasons, run the sub-reason mapping command to map sub-reasons to general reasons.\nConfiguration Impact\nAfter the sub-reason mapping command is run, you can view information about the mappings using the display aaa online-fail-record command.\nIn VS mode, this command is supported only by the admin VS.\nPrecautions\nThe device supports a maximum of 64 mappings between sub-reasons and general reasons. If sub-reasons with consecutive IDs are mapped to the same general reason, the mappings are combined into one. If a sub-reason ID is in the range of sub-reasons mapped to a general reason and this sub-reason ID is not the start or end sub-reason ID of the range, the mapping is divided into two mappings after this sub-reason ID is deleted from the mapping.\nA sub-reason cannot be specified as both a start or end sub-reason and the general reason to which the sub-reason is mapped.\nThe undo sub-reason mapping command allows you to delete existing and non-existent sub-reasons with consecutive IDs."
+}

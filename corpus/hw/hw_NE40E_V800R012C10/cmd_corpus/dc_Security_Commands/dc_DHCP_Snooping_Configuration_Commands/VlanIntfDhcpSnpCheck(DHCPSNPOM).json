@@ -1,0 +1,47 @@
+{
+    "PageTitle": "dhcp snooping check enable",
+    "FuncDef": "The dhcp snooping check enable command enables DHCP check.\nThe undo dhcp snooping check enable command disables DHCP check.\nBy default, this function is disabled.",
+    "CLIs": [
+        "dhcp { snooping check { arp | ip | dhcp-request } | check chaddr } enable interface { <interface-type> <interface-number> | <interface-name> }",
+        "undo dhcp { snooping check { arp | ip | dhcp-request } | check chaddr } enable interface { <interface-type> <interface-number> | <interface-name> }"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "arp",
+            "Info": "Indicates that ARP packets are matched against the binding table.\n-"
+        },
+        {
+            "Parameters": "ip",
+            "Info": "Indicates that IP packets are matched against the binding table.\n-"
+        },
+        {
+            "Parameters": "dhcp-request",
+            "Info": "Indicates that DHCP request packets are matched against the binding table.\n-"
+        },
+        {
+            "Parameters": "chaddr",
+            "Info": "Indicates that the client hardware address (CHADDR) field value is matched against the MAC address in the Ethernet frame header.\n-"
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Indicates the interface type and interface number.\n-"
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Indicates the interface name.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp snooping enable",
+            "[*HUAWEI] vlan 10",
+            "[*HUAWEI-vlan10] dhcp snooping enable",
+            "[*HUAWEI-vlan10] dhcp snooping check arp enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nYou can configure the following check functions in DHCP snooping applications:\nWhen the man-in-the-middle attack or IP/MAC address spoofing occurs, you can configure ARP or IP check to determine whether the source IP and MAC addresses in the ARP or IP packets match those in the DHCP snooping binding table.To enable the device to protect against DHCP exhaustion attacks, configure the device to check whether a received DHCP request packet or DHCP release packet matches an entry in the DHCP snooping binding table.After receiving a DHCP request packet:\n The device checks whether the source MAC address is all Fs. If the source MAC address is all Fs, the device allows the packet to pass. If the source MAC address is not all Fs, the device considers the packet a packet for extending the IP address lease and checks whether the packet matches an entry in the DHCP snooping binding table. The device checks whether the CHADDR field in the packet matches an entry in the DHCP snooping binding table. If no matching entry exists, the device allows the packet to pass. If a matching entry exists, the device checks whether the VLAN ID, IP address, and interface information in the packet match an entry in the DHCP snooping binding table. If a matching entry exists, the device allows the packets to pass. If no matching entry exists, the device discards the packet.\nFor a DHCP release packet, check whether the VLAN, IP address, MAC address, and interface information matches the binding table. If yes, the system allows the packet to pass. If not, the system drops the packet.\n\nPrerequisites\nDHCP snooping has been enabled globally by running the dhcp snooping enable command."
+}

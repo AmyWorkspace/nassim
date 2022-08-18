@@ -1,0 +1,54 @@
+{
+    "PageTitle": "ospfv3 link-quality low incr-cost",
+    "FuncDef": "The ospfv3 link-quality low incr-cost command enables an OSPFv3 interface to adjust the link cost based on link quality.\nThe undo ospfv3 link-quality low incr-cost command disables an OSPFv3 interface from adjusting the link cost based on link quality.\nBy default, an OSPFv3 interface cannot adjust the link cost based on link quality.",
+    "CLIs": [
+        "ospfv3 link-quality low incr-cost { max-reachable | <cost> } [ instance <instance-id> ]",
+        "undo ospfv3 link-quality low incr-cost [ max-reachable | <cost> ] [ instance <instance-id> ]"
+    ],
+    "ParentView": [
+        "FlexE interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "50GE interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "Eth-Trunk interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "max-reachable",
+            "Info": "Adjusts the link cost of an OSPFv3 interface to the maximum link cost 65535.\n-"
+        },
+        {
+            "Parameters": "cost",
+            "Info": "Specifies the link cost adjustment value.\nAfter you specify this parameter:\nIf the link quality decreases, the link cost equals the original link cost plus the adjustment value. The maximum link cost allowed is 65535.If the link quality increases, the original link cost is restored.\nThe value is an integer ranging from 1 to 65534."
+        },
+        {
+            "Parameters": "instance instance-id",
+            "Info": "Specifies an interface instance ID.\nThe value is an integer ranging from 0 to 255. The default value is 0."
+        },
+        {
+            "Parameters": "low",
+            "Info": "Configures an OSPFv3 interface to increase the link cost when the link quality is low.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospfv3 1",
+            "[*HUAWEI-ospfv3-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/0] ospfv3 1 area 0 instance 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] ospfv3  link-quality low incr-cost max-reachable instance 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA bit error refers to the deviation between a bit that is sent and the bit that is received. Bit errors caused by optical fiber aging or optical signal jitter are inevitable on carrier networks. During data transmission, a high bit error rate will degrade or even interrupt services.To ensure network reliability, run the ospfv3 link-quality low incr-cost command to configure an OSPFv3 interface to adjust the link cost based on link quality. If an OSPFv3 interface detects that its link quality is low, the OSPFv3 interface increases the link cost, so that its link, which has a higher bit error rate, is not used by the optimal route. After the link quality restores, the OSPFv3 interface restores the link cost.\nPrerequisites\nBefore running this command, run the ipv6 enable command to enable the IPv6 function in the interface view."
+}

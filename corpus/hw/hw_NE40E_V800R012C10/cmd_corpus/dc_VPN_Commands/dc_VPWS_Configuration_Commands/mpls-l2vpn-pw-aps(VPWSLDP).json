@@ -1,0 +1,80 @@
+{
+    "PageTitle": "mpls l2vpn pw-aps",
+    "FuncDef": "The mpls l2vpn pw-aps command associates a PW APS instance with a PW protection group.\nThe undo mpls l2vpn pw-aps command dissociates a PW APS instance with a PW protection group.\nBy default, a PW APS instance is not associated with any PW protection group.",
+    "CLIs": [
+        "mpls l2vpn pw-aps <apsId> { admin | reference }",
+        "undo mpls l2vpn pw-aps"
+    ],
+    "ParentView": [
+        "Global IMA-group sub-interface view",
+        "50GE Layer 2 sub-interface view",
+        "IP-Trunk interface view",
+        "400GE interface view",
+        "MP-group interface view",
+        "Trunk serial interface view",
+        "GE sub-interface view",
+        "Layer 2 sub-interface view",
+        "POS-Trunk interface view",
+        "VC4 interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "IMA group interface view",
+        "Global VE sub-interface view",
+        "XGE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "400GE Layer 2 sub-interface view",
+        "40GE interface view",
+        "Eth-Trunk Layer 2 sub-interface view",
+        "GE Layer 2 sub-interface view",
+        "GE electrical interface view",
+        "Global MP-group interface view",
+        "XGE sub-interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50|100GE interface view",
+        "50GE sub-interface view",
+        "10GE interface view",
+        "50|100GE sub-interface view",
+        "IMA-group sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "50GE interface view",
+        "100ge sub-interface view",
+        "Eth-Trunk interface view",
+        "40GE sub-interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "apsId",
+            "Info": "Specifies ID of a PW APS instance.\nThe value is an integer ranging from 1 to 16384."
+        },
+        {
+            "Parameters": "admin",
+            "Info": "Configures the PW protection group associated with a PW APS instance as the administrative protection group.\n-"
+        },
+        {
+            "Parameters": "reference",
+            "Info": "Configures the PW protection group associated with a PW APS instance as the reference protection group.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] pw-aps 1",
+            "[*HUAWEI-pw-aps-1] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 1.1.1.1 1",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vc 1.1.1.1 2 secondary",
+            "[*HUAWEI-GigabitEthernet1/0/0] mpls l2vpn pw-aps 1 admin"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn PW APS networking, PW protection groups need to be associated with a PW APS instance, so that the status of the PW APS instance determines the protection switching in the PW protection group.\nMultiple PW protection groups with the same source and destination often coexist on the network. They share LSPs or MPLS TE tunnels. If a tunnel fault occurs, all PW protection groups may become unavailable. To better utilize resources, you can associate the PW protection groups that have the same source and destination with the same PW APS instance and configure one of them as the administrative PW protection group and the others as the reference PW protection groups. After the configuration, PW OAM only needs to monitor the status of the administrative PW protection group. The reference PW protection groups, which are associated with the administrative PW protection group, then perform switching or remain unchanged based on the status monitoring results. The mpls l2vpn pw-aps command allows you to configure multiple PW protection groups to share one PW APS state machine and one PW OAM monitoring task, reducing APS resource consumption and minimizing PW OAM signaling transmission.\nPrerequisites\nA PW APS instance has been created using the pw-aps command, and a LDP, SVC, or PWE3 PW protection group has been configured in the interface view.\nConfiguration Impact\nIf the primary PW in the administrative PW APS protection group fails, APS protection switching will be implemented in both the administrative and reference PW protection groups. If the primary PW in a reference PW protection group fails, APS protection switching will not be implemented.\nFollow-up Procedure\nEnable PW OAM to monitor the administrative PW protection group. This configuration can increase the link status monitoring speed.\nPrecautions\nIf the mpls l2vpn pw-aps command is run more than once, the latest configuration does not override the previous one. If you want to change the type of an associated PW protection group between admin and reference, delete the existing association and then reconfigure it.\nA PW protection group can be associated with only one PW APS instance, but a PW APS instance can be associated with multiple protection groups. A PW APS instance must be associated with one and only one administrative PW protection group, but can be associated with multiple reference PW protection groups."
+}

@@ -1,0 +1,95 @@
+{
+    "PageTitle": "vsi (System view)",
+    "FuncDef": "The vsi bd-mode command creates a VSI in BD mode.\nThe vsi command creates a VSI or displays the VSI view.\nThe undo vsi command deletes a VSI.\n\nBy default, no VSI is created.\n\n\nBy default, no VSI in BD mode is configured.",
+    "CLIs": [
+        "vsi <vsi-name> [ static | auto ] [ bd-mode ]",
+        "vsi <vsi-name> [ static | auto ] { i-vsi { p2p | b-evpn-interworking } | b-vsi }",
+        "undo vsi <vsi-name>",
+        "undo vsi <vsi-name> [ static | auto ] { i-vsi { p2p | b-evpn-interworking } | b-vsi }"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vsi-name",
+            "Info": "Specifies the name of a VSI.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. The VSI names on one device must be different.\nThe string can contain spaces if it is enclosed in double quotation marks (\")."
+        },
+        {
+            "Parameters": "static",
+            "Info": "Uses static VPLS member discovery.\n-"
+        },
+        {
+            "Parameters": "auto",
+            "Info": "Uses automatic VPLS member discovery.\n-"
+        },
+        {
+            "Parameters": "i-vsi",
+            "Info": "Creates an I-VSI.\nTo create an I-VSI on a PBB VPLS network, configure the i-vsi keyword when running the vsi command. PBB VPLS-related configurations can be performed after an I-VSI is configured.\n-"
+        },
+        {
+            "Parameters": "p2p",
+            "Info": "Configures an I-VSI to work in P2P mode.\n-"
+        },
+        {
+            "Parameters": "b-evpn-interworking",
+            "Info": "Configures an I-VSI to work in B-EVPN interworking mode.\n-"
+        },
+        {
+            "Parameters": "b-vsi",
+            "Info": "Creates a B-VSI.\nTo create a B-VSI on a PBB VPLS network, configure the b-vsi keyword when running the vsi command. PBB VPLS-related configurations can be performed after a B-VSI is configured.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI] vsi company1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 2.2.2.2",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI] vsi company2 auto"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 3.3.3.3",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi ivsi1 i-vsi p2p",
+            "[*HUAWEI-vsi-ivsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-ivsi1-ldp] vsi-id 10",
+            "[*HUAWEI-vsi-ivsi1-ldp] quit",
+            "[*HUAWEI-vsi-ivsi1] quit",
+            "[*HUAWEI] vsi bvsi1 b-vsi",
+            "[*HUAWEI-vsi-bvsi1] pwsignal ldp",
+            "[*HUAWEI-vsi-bvsi1-ldp] vsi-id 20"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 3.3.3.3",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi evpn1 i-vsi b-evpn-interworking"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls lsr-id 1.1.1.1",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI] vsi company1 bd-mode"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen you create a VSI for the first time, you can configure the VSI to work in BD mode. The BD mode cannot be changed after being configured. A VSI in BD mode applies to Ethernet virtual connection (EVC) scenarios and can be bound to BDs, but not to interfaces. A VSI that does not work in BD mode can be bound to interfaces, but not to BDs. If you do not configure a VSI to work in BD mode when you create the VSI, you cannot enter the VSI view in BD mode.\nIn VPLS scenarios, VSIs are the prerequisites for establishing VPLS connections. On a device, a VSI has to be configured for each VPLS domain.\nVSIs are essential to VPLS networks. On a device, a VSI must be created for each VPLS network.\nPrerequisites\nMPLS L2VPN has been enabled on the device.\nConfiguration Impact\nAfter a VSI is configured for a VPLS network, the VPLS packets are forwarded based on the VSI.The execution of the undo vsi command interrupts VPLS traffic. Exercise caution when using this command.\n\nFollow-up Procedure\nAfter creating a VSI, you need to specify the signaling mode and set the VSI ID and peer address to complete the VPLS configuration.\nPrecautions\nIf a VSI has been bound to an AC interface, deleting the VSI causes all configurations in the VSI to be deleted and the binding relationship to be removed. Therefore, exercise caution when performing this operation."
+}

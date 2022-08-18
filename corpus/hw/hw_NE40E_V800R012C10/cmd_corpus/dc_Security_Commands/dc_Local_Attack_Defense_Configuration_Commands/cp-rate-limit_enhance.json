@@ -1,0 +1,71 @@
+{
+    "PageTitle": "cp-rate-limit enhance",
+    "FuncDef": "The cp-rate-limit enhance command restricts the rate at which specific packets on an interface are sent to the CPU.\nThe undo cp-rate-limit enhance command cancels the rate at which specific packets on an interface are sent to the CPU.\nBy default, the rate at which protocol packets are sent to the CPU is not limited.",
+    "CLIs": [
+        "cp-rate-limit enhance { port | { dhcp | dhcpv6 | icmp | icmpv6 } } cir <cir-value> [ cbs <cbs-value> ]",
+        "undo cp-rate-limit enhance { port | { dhcp | dhcpv6 | icmp | icmpv6 } } [ cir <cir-value> [ cbs <cbs-value> ] ]"
+    ],
+    "ParentView": [
+        "Layer 2 100GE interface view",
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "Layer 2 40GE interface view",
+        "40GE interface view",
+        "Layer 2 Eth-Trunk interface view",
+        "Eth-Trunk interface view",
+        "Layer 2 GE interface view",
+        "GE optical interface view",
+        "GE electrical interface view",
+        "IP-Trunk interface view",
+        "POS interface view",
+        "Port extension interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "port",
+            "Info": "Indicates that the rate at which an interface sends packets of a specific protocol to the CPU is restricted.\n-"
+        },
+        {
+            "Parameters": "dhcp",
+            "Info": "Indicates that the rate at which an interface sends DHCP packets to the CPU is restricted.\n-"
+        },
+        {
+            "Parameters": "dhcpv6",
+            "Info": "Indicates that the rate at which an interface sends DHCPv6 packets to the CPU is restricted.\n-"
+        },
+        {
+            "Parameters": "icmp",
+            "Info": "Indicates that the rate at which an interface sends ICMP packets to the CPU is restricted.\n-"
+        },
+        {
+            "Parameters": "icmpv6",
+            "Info": "Indicates that the rate at which an interface sends ICMPv6 packets to the CPU is restricted.\n-"
+        },
+        {
+            "Parameters": "cir cir-value",
+            "Info": "Specifies the CIR.\nThe value is an integer ranging from 32 to 1000000, in packet/s.If an interface is configured with the port-vlan-car and igmp-vlan-car, it is recommended that the bandwidth of the port-vlan-car be greater than that of the igmp-vlan-car. If the bandwidth of the port-vlan-car is smaller than that of the igmp-vlan-car, the igmp-vlan-car configuration becomes invalid."
+        },
+        {
+            "Parameters": "cbs cbs-value",
+            "Info": "Specifies the committed burst size (CBS), that is, the depth of the token bucket indicating the peak size of packets that can pass through at a burst.\nThe value is an integer ranging from 100 to 33554432, in bytes. It is recommended that the CBS be set to a value greater than 10 times the packet length. The default CBS value is equal to cir-value.The\ncbs-value that takes effect is at least 187 times the cir-value.\nIf the configured cbs-value is less than 187 times the cir-value, the cbs-value that takes effect is 187 times the cir-value.If the configured cbs-value is greater than 187 times the cir-value, the configured cbs-value takes effect."
+        },
+        {
+            "Parameters": "enhance",
+            "Info": "Indicates the port-vlan-car level-2 CAR.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] cp-rate-limit enhance port cir 1000 cbs 2000"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] cp-rate-limit enhance icmp cir 200 cbs 2000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo restrict the rate at which packets of a specific protocol are sent to the CPU, run the cp-rate-limit enhance command.\nRate limiting does not apply to the following packets to be sent to the CPU:\nLink Aggregation Control Protocol (LACP)Bridge protocol data unit (BPDU)Reverse Address Resolution Protocol (RARP)CHDLC_KEEPALIVEIPv6_Neighbor Advertisement (IPV6_NA)Two-Way Active Measurement Protocol (TWAMP)Data communication network (DCN)PPP_LLDPIPV6MC_PIMIPv6_Router Advertisement (IPV6_RA)IPv6_Router Solicitation (IPV6_RS)Hierarchy VLAN Register Protocol (HVRP)IPv4_Virtual eXtensible Local Area Network (IPV4_VXLAN)IPv6_Neighbor Solicitation (IPV6_NS)\n\nConfiguration Impact\nThe rate of the packets on the abnormal ports will be limited, with other packets not being affected.\nPrecautions\nInterface-based CAR is configured on an interface and restricts the overall rate at which packets on the interface and its sub-interfaces are sent to the CPU.Interface-based CAR applies to all VLANs on an interface."
+}

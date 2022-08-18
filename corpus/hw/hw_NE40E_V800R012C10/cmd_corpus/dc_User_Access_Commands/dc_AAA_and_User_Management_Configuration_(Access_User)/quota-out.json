@@ -1,0 +1,46 @@
+{
+    "PageTitle": "quota-out",
+    "FuncDef": "The quota-out command sets the measure that the device takes against the online users who use up their quotas of traffic or session time. the device can force the users to go offline, allow the users to remain online, or forcibly redirect the users.\nThe undo quota-out command restores the default setting.\nBy default, the device forces the users who use up their quotas to go offline.",
+    "CLIs": [
+        "quota-out { offline | online | redirect url <url-string> [ redirect-stop-accounting ] | send-realtime-accounting }",
+        "undo quota-out"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "offline",
+            "Info": "Forces the users to go offline.\n-"
+        },
+        {
+            "Parameters": "online",
+            "Info": "Allows the users to remain online.\n-"
+        },
+        {
+            "Parameters": "redirect",
+            "Info": "Forcibly redirects the users.\n-"
+        },
+        {
+            "Parameters": "url url-string",
+            "Info": "Specifies the URL, for example, http://www.portal.com. By default, the value of this parameter is null.\nThe value is a string of 1 to 200 characters."
+        },
+        {
+            "Parameters": "redirect-stop-accounting",
+            "Info": "Indicates that a user sends an accounting-stop packet after the user is redirected because the quota of the user is used up.\n-"
+        },
+        {
+            "Parameters": "send-realtime-accounting",
+            "Info": "Indicates that a user sends real-time accounting packets after the quota of the user is used up.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI] domain huawei",
+            "[*HUAWEI-aaa-domain-huawei] quota-out online"
+        ]
+    ],
+    "ExtraInfo": "If redirect-stop-accounting is set, a user sends an accounting-stop packet to the accounting server after the user is directed because the quota of the user is used up. By default, a user does not send any accounting-stop packet after the user is redirected because the quote of the user is used up.\nThis command takes effect only when the user's quota is used up and the user is in the specified domain. If the user domain is changed by a COA packet sent from a policy server and the quota-out command is not configured in the new domain, the user will be logged out if the quota is used up.\nIf the RADIUS server does not deliver any quota, the quota-out online command does not take effect. In addition, the quota-out redirect command forcibly redirects a user that has used up the quota only if the authening quota-out-redirect-enable command has been run in the authentication scheme view."
+}

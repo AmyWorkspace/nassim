@@ -1,0 +1,21 @@
+{
+    "PageTitle": "ldp-sync enable",
+    "FuncDef": "The ldp-sync enable command enables LDP-IGP synchronization on all IGP interfaces in an IGP process or instance.\nThe undo ldp-sync enable command disables LDP-IGP synchronization on all interfaces in an IGP process or instance.\nLDP-IGP synchronization is disabled on all IGP interfaces by default.",
+    "CLIs": [
+        "ldp-sync enable",
+        "undo ldp-sync enable"
+    ],
+    "ParentView": [
+        "OSPF area view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf 100",
+            "[*HUAWEI-ospf-100] area 2",
+            "[*HUAWEI-ospf-100-area-0.0.0.2] ldp-sync enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nLDP-IGP synchronization reduces LSP traffic loss on a network with both primary and backup LSPs. Traffic loss occurs in either of the following situations:\nThe primary link works properly and an LDP local session or LDP adjacency between two nodes on the primary LSP fails. IGP still uses the primary link. As a result, LSP traffic cannot be switched to the standby link, and traffic is continuously discarded. In this situation, you can configure LDP-IGP synchronization. If an LDP local session or LDP adjacency fails, the IGP advertises the maximum cost of the faulty link. The route is switched to the standby link, and the LSP is also switched to the standby link.If a link on the primary LSP recovers, IGP routes converge. IGP routes associated with the primary LSP become reachable earlier than the primary LSP because IGP routes converge faster than LDP routes. Revertive traffic is discarded because the backup LSP becomes unavailable after the IGP convergence is complete but the primary LSP is not established. In this situation, you can configure LDP-IGP synchronization. If a link on the primary LSP recovers, IGP advertises the maximum cost of the active link, delaying the IGP route switchback until LDP convergence is complete.\nThe ldp-sync enable command can be run in either of the following views to enable LDP-IGP synchronization on the following interfaces:\nInterfaces with OSPF neighbors in the Up state on a P2P networkDRs' and non-DR/BDR devices' interfaces with OSPF neighbors in the Up state on a broadcast network\n\nFollow-up Procedure\nRun the ospf ldp-sync block command to disable LDP-IGP synchronization on desired IGP interfaces.\nPrecautions\nLDP-IGP synchronization can be enabled globally or on a specified interface. If this function is enabled both globally and on an interface, the configuration on the interface takes effect.\nBefore running the ldp-sync enable command, ensure that LDP is enabled on all IGP-enabled interfaces. Otherwise, services on the interfaces that do not enable LDP may be affected."
+}

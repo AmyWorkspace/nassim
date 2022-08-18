@@ -1,0 +1,28 @@
+{
+    "PageTitle": "rip valid-ttl-hops",
+    "FuncDef": "The rip valid-ttl-hops command enables RIP Generalized TTL Security Mechanism (GTSM) and sets the time to live (TTL) value to be detected.\nThe undo rip valid-ttl-hops command cancels the function.\nBy default, RIP GTSM is disabled.",
+    "CLIs": [
+        "rip valid-ttl-hops <valid-ttl-hops-value> [ vpn-instance <vpn-instance-name> ]",
+        "undo rip valid-ttl-hops [ <valid-ttl-hops-value> ] [ vpn-instance <vpn-instance-name> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "valid-ttl-hops-value",
+            "Info": "Specifies the number of TTL value to be detected.\nThe valid TTL range of the detected packets is [ 255 -<ttl>.1, 255 ].\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nIf this parameter is used, you need only to specify the TTL value to be detected by the VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] rip valid-ttl-hops 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf an attacker simulates RIP unicast packets and keeps sending them to a router, an interface board on the router receives the packets and directly sends them to the main control board for RIP processing, without validating the packets. In this case, the router is busy processing these packets, causing high usage of the CPU. GTSM protects the routers and enhances the system security by checking whether the TTL value in the IP packet header is in a pre-defined range.\nTo enable RIP GTSM, run the rip valid-ttl-hops command.\nPrecautions\nGTSM must be enabled on devices at both ends.\nIf GTSM is enabled on a device, after the device receives a RIP packet, it checks whether the TTL value in the packet is in a pre-defined range. If the TTL value is beyond the pre-defined range, the device considers the packet as an attack packet and discards it."
+}

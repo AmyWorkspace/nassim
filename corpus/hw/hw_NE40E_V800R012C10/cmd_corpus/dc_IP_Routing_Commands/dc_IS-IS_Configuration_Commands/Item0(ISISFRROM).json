@@ -1,0 +1,41 @@
+{
+    "PageTitle": "remote-lfa available-tunnel-destination",
+    "FuncDef": "The remote-lfa available-tunnel-destination command configures a filtering policy to allow only the PQ node that matches the policy to be used as the next hop of an LFA link.\nThe undo remote-lfa available-tunnel-destination command restores the default configuration.\nBy default, no filtering policy is configured, and each PQ node can be used as a next hop of an LFA link.",
+    "CLIs": [
+        "remote-lfa available-tunnel-destination ip-prefix <ip-prefix-name> [ level-1 | level-2 | level-1-2 ]",
+        "undo remote-lfa available-tunnel-destination ip-prefix <ip-prefix-name> [ level-1 | level-2 | level-1-2 ]"
+    ],
+    "ParentView": [
+        "IS-IS FRR view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "level-1",
+            "Info": "Selects Level-1 PQ nodes.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Selects Level-2 PQ nodes.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Selects all PQ nodes.\nIf no Level is specified in the command, level-1-2 takes effect.\n-"
+        },
+        {
+            "Parameters": "ip-prefix ip-prefix-name",
+            "Info": "Specifies the name of an IP prefix list.\nThe name is a string of 1 to 169 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip ip-prefix prefix1 deny 1.1.1.1 24",
+            "[*HUAWEI] isis",
+            "[*HUAWEI-isis-1] frr",
+            "[*HUAWEI-isis-1-frr] loop-free-alternate level-2",
+            "[*HUAWEI-isis-1-frr] remote-lfa tunnel ldp level-2",
+            "[*HUAWEI-isis-1-frr] remote-lfa available-tunnel-destination ip-prefix prefix1 level-2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn most cases, Remote LFA obtains multiple PQ nodes using the LFA algorithm. In this situation, you can run the remote-lfa available-tunnel-destination command to configure a filtering policy to allow only the PQ node that matches the policy to be used as the next hop of an LFA link.\nPrerequisites\nFRR has been enabled and the FRR view has been displayed using the frr command.\nPrecautions\nIf level-1-2 is specified in one of the remote-lfa available-tunnel-destination and remote-lfa commands that have been run, the level specified in the other command takes effect. If level-1-2 is not specified in either command, the same level (Level-1 or Level-2) must be specified in the two commands."
+}

@@ -1,0 +1,107 @@
+{
+    "PageTitle": "display mac-address",
+    "FuncDef": "The display mac-address command displays information about MAC address entries.\nThe display mac-address blackhole command displays information about static blackhole MAC address entries.\nThe display mac-address dynamic-blackhole command displays information about dynamic blackhole MAC address entries.\nThe display mac-address static command displays information about static MAC address entries.\nThe display mac-address dynamic command displays information about dynamic MAC address entries.",
+    "CLIs": [
+        "display mac-address { mac-address bridge-domain <bd-id> | bridge-domain <bd-id> } [ verbose ]",
+        "display mac-address blackhole bridge-domain <bd-id> [ verbose ]",
+        "display mac-address dynamic-blackhole bridge-domain <bd-id> [ verbose | last-change ]",
+        "display mac-address static { bridge-domain <bd-id> [ <interface-type> <interface-number> | <interface-name> ] | { <interface-type> <interface-number> | <interface-name> } bridge-domain <bd-id> } [ verbose ]",
+        "display mac-address dynamic [ ineffective ] { bridge-domain <bd-id> [ verbose | last-change ] | slot <slot-id> bridge-domain <bd-id> [ verbose | last-change ] }"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "mac-address",
+            "Info": "Specifies a MAC address.\nThe value is a 12-digit hexadecimal number, in the format of H-H-H. Each H is 4 digits. If an H contains fewer than 4 digits, the left-most digits are padded with zeros. For example, e0 is displayed as 00e0."
+        },
+        {
+            "Parameters": "bridge-domain bd-id",
+            "Info": "Displays dynamic black-hole MAC address entries based on a BD ID.\nThe value is an integer ranging from 1 to 16777215."
+        },
+        {
+            "Parameters": "verbose",
+            "Info": "Displays detailed information about dynamic black-hole MAC address entries.\n-"
+        },
+        {
+            "Parameters": "last-change",
+            "Info": "Indicates the time when dynamic black-hole MAC entries were last updated.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Specifies the interface name.\n-"
+        },
+        {
+            "Parameters": "ineffective",
+            "Info": "Ineffective MAC.\n-"
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Specifies the slot ID.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display mac-address dynamic-blackhole bridge-domain 1",
+            "MAC address table of slot 1:",
+            "-------------------------------------------------------------------------------",
+            "MAC Address    VLAN/BD/    PEVLAN CEVLAN Port    Type           LSP/LSR-ID",
+            "               VSI/SI/EVPN                                      MAC-Tunnel",
+            "-------------------------------------------------------------------------------",
+            "00e0-fc12-3456 1           -      -      -       dyn-blackhole       -",
+            "-------------------------------------------------------------------------------",
+            "Total matching items on slot 1 displayed = 1"
+        ],
+        [
+            "<HUAWEI> display mac-address",
+            "MAC address table of slot 1:                                                                                                        ",
+            "-------------------------------------------------------------------------------",
+            "MAC Address    VLAN/BD/    PEVLAN CEVLAN Port/Peerip     Type      LSP/LSR-ID",
+            "               VSI/SI/EVPN                                         MAC-Tunnel",
+            "-------------------------------------------------------------------------------",
+            "00e0-fc12-3456 6           -      -      -               blackhole -           ",
+            "00e0-fc12-3457 7           -      -      -               blackhole -           ",
+            "00e0-fc12-3457 8           -      -      -               blackhole -           ",
+            "00e0-fc12-3457 9           -      -      -               blackhole -           ",
+            "00e0-fc12-3457 10          -      -      -               blackhole -           ",
+            "00e0-fc12-3457 11          -      -      -               blackhole -           ",
+            "00e0-fc12-3457 12          -      -      -               blackhole -           ",
+            "00e0-fc12-3457 54          -      -      GE1/0/1         static    -                                                                ",
+            "00e0-fc12-3463 200         -      -      GE1/0/1         static    -                                                                ",
+            "00e0-fc12-3462 v1          54     -      GE1/0/2.1       static    -                                                                ",
+            "00e0-fc12-3461 vsa         3      4      GE1/0/2.1       static    -                                                                ",
+            "00e0-fc12-3460 vsa         4094   4094   GE1/0/2.2       static    -                                                                ",
+            "-------------------------------------------------------------------------------  ",
+            "Total matching items on slot 1 displayed = 12"
+        ],
+        [
+            "[~HUAWEI-diagnose] display mac-address bridge-domain 100 verbose",
+            "MAC address table of slot 9:",
+            "------------------------------------------------------------------------------------------------",
+            "MAC Address: 38ba-2d60-6102                              VLAN/BD/VSI/SI/EVPN: BD 100                    ",
+            "Port       : GE1/0/1.1                                   Type               : dynamic                   ",
+            "PEVLAN     : 100                                         CEVLAN             : -                         ",
+            "TrustFlag  : -                                           TrustPort          : -                         ",
+            "Peer IP    : -                                           VC-ID              : -                         ",
+            "Aging time : 300                                         LSP/MAC_Tunnel     : 9/0                       ",
+            "TimeStamp  : 5917                                      ",
+            "MacAccountingEnable: Enable",
+            "MAC address used as destination:",
+            "Packet count : 1                                         Byte count : 128                                 ",
+            "MAC address used as source:",
+            "Packet count : 2                                         Byte count : 256                                 ",
+            "----------------------------------------------------------------------------------------------------------------------",
+            "Total matching items on slot 9 displayed = 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA MAC address table is an interface-based Layer 2 forwarding table. It stores information about MAC addresses learned by a device. A MAC address entry contains a MAC address, an interface on which a packet is forwarded to this MAC address. Before forwarding a packet, the device searches the MAC address table based on the destination MAC address of the packet and locate the outbound interface quickly. This facilitates packet forwarding and reduces broadcast traffic.\nMAC address entries are divided into the following types:\nStatic MAC address entries: configured by users and used to forward packets with specified destination MAC addresses. Static MAC address entries protect a device against attacks of forged MAC addresses and will not be aged.Dynamic MAC address entries: obtained by a device through source MAC address learning and will be aged based on the aging time.Static blackhole MAC address entries: manually configured by users. To prevent invalid MAC address entries (for example, those of unauthorized users) from occupying the MAC address table and prevent hackers from attacking a device or network using forged MAC addresses, MAC addresses of untrusted users can be configured as static blackhole MAC addresses. A device discards packets destined for the static blackhole MAC addresses. These address entries do not age out.Dynamic blackhole MAC address entries: The device learns the source MAC address. To prevent frequent flapping of the MAC address table, the device can set the MAC address entry as a dynamic blackhole MAC address entry to block the port and quickly break the loop. Entries are not aged.\nTo view information about all MAC address entries on the device, run the display mac-address command."
+}

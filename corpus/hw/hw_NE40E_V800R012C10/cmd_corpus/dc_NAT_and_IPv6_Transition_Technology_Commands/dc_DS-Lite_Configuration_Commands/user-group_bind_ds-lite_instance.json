@@ -1,0 +1,35 @@
+{
+    "PageTitle": "user-group bind ds-lite instance (AAA domain view)",
+    "FuncDef": "The user-group bind ds-lite instance command binds a user group to a DS-Lite instance in an AAA domain.\nThe undo user-group command deletes the binding between the user group and DS-Lite instance.\nBy default, no DS-Lite instance is bound to an AAA domain.",
+    "CLIs": [
+        "user-group <user-group-name> bind ds-lite instance <instance-name>",
+        "undo user-group [ <user-group-name> ]"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "user-group-name",
+            "Info": "Specifies the name of a user group.\nThe value is a string of 1 to 32 characters."
+        },
+        {
+            "Parameters": "instance-name",
+            "Info": "Specifies the name of a DS-Lite instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ds-lite instance cpe1 id 1",
+            "[~HUAWEI-ds-lite-instance-cpe1] commit",
+            "[~HUAWEI-ds-lite-instance-cpe1] quit",
+            "[~HUAWEI] user-group group1",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] domain isp1",
+            "[*HUAWEI-aaa-domain-isp1] commit",
+            "[*HUAWEI-aaa-domain-isp1] user-group group1 bind ds-lite instance cpe1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMultiple associations between user groups and DS-Lite instances can be configured in a domain. After a user gets online, the system checks the number of users in each user group and adds the user to the group that has the least members, so that the user's traffic can be allocated to the least busy DS-Lite instance to implement load sharing among DS-Lite instances.\nPrecautions\nEach user group can be bound to a single DS-Lite instance.Multiple associations between user groups and DS-Lite instances can be configured in a domain.If you run the undo user-group command without specifying the parameter group-name, associations between all user groups and NAT64 instances are deleted in an AAA domain.When Multiple user groups are bound to DS-Lite instances in an AAA domain, the number of users who can be assigned addresses is determined by the DS-Lite instance that provides the least number of public ip addresses. As a result, some ip addresses of other DS-Lite instances waste. to prevent such a problem, ensure that Multiple DS-Lite instances provide the same number of valid public ip addresses.the user-group bind DS-Lite instance command is mutually exclusive with the user-group command run in the AAA domain view in the same domain and the same user group.the user-group bind DS-Lite instance command takes effect only on the VSUF-80/VSUF-160/VSUI-160-E."
+}

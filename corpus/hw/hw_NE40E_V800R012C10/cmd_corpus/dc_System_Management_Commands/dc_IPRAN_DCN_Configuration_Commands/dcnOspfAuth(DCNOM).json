@@ -1,0 +1,96 @@
+{
+    "PageTitle": "dcn ospf authentication-mode",
+    "FuncDef": "The dcn ospf authentication-mode command sets the authentication mode and key on a DCN interface of OSPF neighbors.\nThe dcn ospf authentication-mode null command sets the null authentication mode on a DCN interface.\nThe undo dcn ospf authentication-mode command deletes the authentication mode configured on a DCN interface.\nBy default, a DCN interface does not authenticate OSPF packets.",
+    "CLIs": [
+        "dcn ospf authentication-mode simple [ plain <plain-text> | [ cipher ] <cipher-text> ]",
+        "dcn ospf authentication-mode { { md5 | hmac-md5 | hmac-sha256 } [ <key-id> { plain <plain-text> | [ cipher ] <cipher-text> } ] }",
+        "dcn ospf authentication-mode null",
+        "undo dcn ospf authentication-mode"
+    ],
+    "ParentView": [
+        "FlexE-50|100G interface view",
+        "40GE interface view",
+        "100GE interface view",
+        "GE electrical interface view",
+        "Serial interface view",
+        "10GE interface view",
+        "GE optical interface view",
+        "FlexE-100G interface view",
+        "POS interface view",
+        "FlexE-50G interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "plain plain-text",
+            "Info": "Specifies a simple text password.\nWhen simple is configured, plain-text is a string of 1 to 8 characters."
+        },
+        {
+            "Parameters": "plain",
+            "Info": "Sets the simple text password type. If this parameter is specified, the device allows you to set only a simple text password, and the password is displayed in simple text mode in the configuration file.\nThe new password is at least eight characters long and contains at least two of the following types: upper-case letters, lower-case letters, digits, and special characters.For security purposes, you are advised to configure a password in ciphertext mode. To further improve device security, periodically change the password.\n-"
+        },
+        {
+            "Parameters": "plain plain-text",
+            "Info": "Specifies a simple text password.\nWhen simple is configured, plain-text is a string of 1 to 8 characters."
+        },
+        {
+            "Parameters": "cipher",
+            "Info": "Sets the ciphertext password type.\n-"
+        },
+        {
+            "Parameters": "cipher-text",
+            "Info": "Specifies a ciphertext password.\nFor MD5, HMAC-MD5, or HMAC-SHA256 authentication, a simpletext is 1 to 255 characters, and a ciphertext password is 20 to 432 characters.\nCiphertext passwords with various lengths configured in an earlier version are also supported in the existing version."
+        },
+        {
+            "Parameters": "cipher-text",
+            "Info": "Specifies a simple ciphertext password.\nFor MD5, HMAC-MD5, or HMAC-SHA256 authentication, a simpletext is 1 to 255 characters, and a ciphertext password is 20 to 432 characters.\nCiphertext passwords with various lengths configured in an earlier version are also supported in the existing version."
+        },
+        {
+            "Parameters": "md5",
+            "Info": "Sets the message digest algorithm 5 (MD5) authentication mode.To ensure high security, do not use the MD5 authentication mode.\n-"
+        },
+        {
+            "Parameters": "hmac-md5",
+            "Info": "Sets the Hashed message authentication code-MD5 (HMAC-MD5) authentication mode.To ensure high security, do not use the HMAC-MD5 authentication mode.\n-"
+        },
+        {
+            "Parameters": "hmac-sha256",
+            "Info": "Sets the HMAC-secure hash algorithm 256 (HMAC-SHA256) authentication mode.\nHAMC-SHA256 authentication mode is better and more secure than other authentication modes. To ensure high security, HAMC-SHA256 authentication algorithm is recommended.\n-"
+        },
+        {
+            "Parameters": "key-id",
+            "Info": "Specifies the key ID in MD5, HMAC-MD5, or HMAC-SHA256 authentication mode. The key ID must be the same as the key ID on the peer device.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "null",
+            "Info": "Sets the null authentication mode.\n-"
+        },
+        {
+            "Parameters": "simple",
+            "Info": "Enables the simple authentication mode.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] sysname HUAWEI1",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] dcn",
+            "Warning: This operation will enable DCN function. Continue? [Y/N]:y",
+            "[*HUAWEI-dcn] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] dcn",
+            "[*HUAWEI-GigabitEthernet1/0/0] dcn ospf authentication-mode hmac-sha256 1 cipher 321cba",
+            "",
+            "<HUAWEI> system-view",
+            "[~HUAWEI] sysname HUAWEI2",
+            "[*HUAWEI] commit",
+            "[~HUAWEI] dcn",
+            "Warning: This operation will enable DCN function. Continue? [Y/N]:y",
+            "[*HUAWEI-dcn] quit",
+            "[*HUAWEI] interface GigabitEthernet 2/0/0",
+            "[*HUAWEI-GigabitEthernet2/0/0] dcn",
+            "[*HUAWEI-GigabitEthernet2/0/0] dcn ospf authentication-mode hmac-sha256 1 cipher 321cba"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a network demanding higher security, run the dcn ospf authentication-mode command to configure OSPF authentication modes on a DCN Serial interface of OSPF neighbors.\nPrerequisites\nThe DCN feature has been enabled using the dcn command on an interface.\nPrecautions\nThe Router interfaces on the same network segment must use the same authentication mode and key.\nInterface-based authentication has a higher priority than area-based authentication.\nOSPF does not support the configuration of a null interface.\nBy default, area-based authentication is not configured for OSPF. Configuring interface-based authentication is recommended to ensure system security.\nIn VS mode, this command is supported only by the admin VS."
+}

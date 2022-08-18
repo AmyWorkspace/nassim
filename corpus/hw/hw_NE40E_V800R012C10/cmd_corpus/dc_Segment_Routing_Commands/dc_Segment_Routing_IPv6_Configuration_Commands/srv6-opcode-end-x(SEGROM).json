@@ -1,0 +1,46 @@
+{
+    "PageTitle": "opcode end-x",
+    "FuncDef": "The opcode end-x command configures a static SRv6 End.X SID operation code (Opcode).\nThe undo opcode end-x command deletes a static SRv6 End.X SID operation code.\nBy default, no static SRv6 End.X SID operation code is configured.",
+    "CLIs": [
+        "opcode <func-opcode> end-x interface { <interface-name> | <interface-type> <interface-number> } nexthop <nexthop-address> [ no-psp ]",
+        "undo opcode <func-opcode> end-x interface { <interface-name> | <interface-type> <interface-number> } nexthop <nexthop-address> [ no-psp ]"
+    ],
+    "ParentView": [
+        "Segment routing IPv6 locator view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "func-opcode",
+            "Info": "Specifies a static SRv6 End.X SID operation code.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the interface name.\n-"
+        },
+        {
+            "Parameters": "interface-type",
+            "Info": "Specifies the interface type.\n-"
+        },
+        {
+            "Parameters": "interface-number",
+            "Info": "Specifies the interface number.\n-"
+        },
+        {
+            "Parameters": "nexthop nexthop-address",
+            "Info": "Specifies the next hop address.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "no-psp",
+            "Info": "Disables penultimate segment pop of the SRH (PSP).\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] segment-routing ipv6",
+            "[*HUAWEI-segment-routing-ipv6] locator test1 ipv6-prefix 100:: 64 static 32",
+            "[*HUAWEI-segment-routing-ipv6-locator] opcode ::200 end-x interface GigabitEthernet1/0/0 nexthop 400::100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn SRv6 SID is a 128-bit IPv6 address expressed in the Locator:Function:Args format. The Function field is also called Opcode, and different operation codes define different functions. Operation codes can be dynamically assigned using an IGP or be configured using the opcode command.\nStatic operation codes must be configured within the static operation code segment to prevent conflicts with dynamically assigned operation codes. The length of a static operation code segment is configured through the static static-length parameter in the locator command to determine the number of static operation codes that can be configured in a specified locator range.\nAfter you run the opcode command to configure various types of operation codes, the Locator, Opcode, and Args fields form a unique SRv6 SID. The SRv6 SID is then added to the local SID table on the device and also advertised externally through a routing protocol. In forwarding, the Locator field in the SRv6 SID instructs other nodes to find the SRv6 SID generation node through addressing and forward SRv6 packets to the node; the Opcode field instructs the SRv6 SID generation node to implement corresponding functions.\nEnd.X (short for Layer-3 cross-connect) supports packet forwarding to a Layer 3 adjacency over a specified link. End.X SIDs can be used in scenarios including Topology Independent Loop Free Alternate (TI-LFA) and strict explicit path-based Traffic Engineering (TE).\nIn essence, End.X SIDs are developed based on End SIDs. End.X can be disassembled into End + X, where X indicates cross-connect (meaning that a packet needs to be directly forwarded to a specified Layer 3 adjacency). Therefore, each End.X SID needs to be bound to one or a group of Layer 3 adjacencies.\nThe End.X SID instruction includes the following operations:\n Decrements the SL value by 1. Obtains the next SID from the SRH based on the SL value. Updates the DA field in the IPv6 header with the next SID. Forwards the IPv6 packet to the Layer 3 adjacency bound to the End.X SID.\n\nPrecautions\nTo ensure proper forwarding, configured static SIDs and IPv6 addresses configured on interfaces cannot conflict with each other."
+}

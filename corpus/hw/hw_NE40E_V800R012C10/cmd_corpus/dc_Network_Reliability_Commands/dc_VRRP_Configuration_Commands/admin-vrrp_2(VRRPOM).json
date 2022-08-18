@@ -1,0 +1,61 @@
+{
+    "PageTitle": "admin-vrrp vrid",
+    "FuncDef": "The admin-vrrp vrid command creates a management Virtual Router Redundancy Protocol (mVRRP) backup group or designates a common VRRP backup group as an mVRRP group.\nThe undo admin-vrrp vrid command deletes an mVRRP group or restores an mVRRP group with a virtual IP address to a common VRRP backup group.\n\nBy default, no mVRRP group is configured.",
+    "CLIs": [
+        "admin-vrrp vrid <virtual-router-id> [ ignore-if-down ]",
+        "undo admin-vrrp vrid <virtual-router-id>"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "GE interface view",
+        "25GE sub-interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ignore-if-down",
+            "Info": "Indicates that an mVRRP group ignores an interface Down event. If an interface on which an mVRRP group is configured goes Down, the status of the mVRRP group becomes Master, not Initialize.\n-"
+        },
+        {
+            "Parameters": "vrid virtual-router-id",
+            "Info": "Specifies the ID of an mVRRP group.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/0",
+            "[~HUAWEI-GigabitEthernet2/0/0] ip address 10.1.1.1 24",
+            "[*HUAWEI-GigabitEthernet2/0/0] vrrp vrid 1 virtual-ip 10.1.1.111",
+            "[*HUAWEI-GigabitEthernet2/0/0] admin-vrrp vrid 1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/1",
+            "[~HUAWEI-GigabitEthernet2/0/1] ip address 10.2.1.1 24",
+            "[*HUAWEI-GigabitEthernet2/0/1] vrrp vrid 2 virtual-ip 10.2.1.111",
+            "[*HUAWEI-GigabitEthernet2/0/1] admin-vrrp vrid 2 ignore-if-down"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nA lot of VRRP packets are sent by multiple master devices when multiple common VRRP backup groups are configured. The VRRP packets consume network bandwidth resources and burden the system. The admin-vrrp vrid command can be run to configure an mVRRP group. The mVRRP group sends VRRP packets and determines the status of services VRRP backup groups that are bound to the mVRRP group. Using mVRRP reduces resource consumption.\n\nAn mVRRP group functioning as a gateway processes both protocol and service packets. An mVRRP group that does not function as a gateway processes only protocol packets.\nBefore a VRRP backup group is bound to an mVRRP group, the VRRP backup group is a common VRRP backup group and is able to process both protocol and service packets.\nAfter the VRRP backup group is bound to the mVRRP group, the VRRP backup group becomes a service VRRP group and is able to process only service packets.\n\nignore-if-down must be configured in the admin-vrrp vrid command in the following scenario:\nIf a user-side device cannot broadcast packets, mVRRP can be enabled on directly connected interfaces on devices in a VRRP backup group. The master device sends VRRP packets along the direct link.If a device on one end of the direct link fails, the VRRP-enabled interface on the other device also goes Down. The mVRRP status on both devices becomes Initialize, causing service packet interruptions. To prevent the preceding problem, specify the ignore-if-down parameter in the admin-vrrp vridvrrp vrid admin command on both the master and backup devices. The parameter enables the mVRRP group to ignore the event that a directly connected interface goes Down. This setting allows the VRRP-enabled interface on one end of the direct link to continue forwarding service packets if the VRRP-enabled interface on the other end goes Down.\nUsing an inter-board trunk interface is recommended to improve intermediate link reliability when mVRRP is enabled on two directly connected interfaces. Do not run the shutdown command on either of the directly connected interfaces, preventing them from both entering the Master state.\n\nPrerequisites\n\nA VRRP backup group has been created using the vrrp vrid virtual-ip command in the interface view if an mVRRP group is used as a gateway.\n\nFollow-up Procedure\n\nAfter the admin-vrrp vrid command is run, run the vrrp vrid track admin-vrrp command on the interface on which a service VRRP group is configured to bind the service VRRP group to the mVRRP group.\n\nPrecautions\n\nAfter the undo admin-vrrp vrid command is run to delete an mVRRP group, the associations between service VRRP groups and the mVRRP group are automatically deleted."
+}

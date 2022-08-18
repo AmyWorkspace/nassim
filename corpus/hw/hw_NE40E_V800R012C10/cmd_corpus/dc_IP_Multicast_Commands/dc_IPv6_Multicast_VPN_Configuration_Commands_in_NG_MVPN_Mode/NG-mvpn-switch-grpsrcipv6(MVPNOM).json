@@ -1,0 +1,66 @@
+{
+    "PageTitle": "group (IPv6 address family MVPN-SPMSI view)",
+    "FuncDef": "The group command configures the address pool range and criteria for switching between Inclusive-Provider Multicast Service Interface (I-PMSI) and Selective-Provider Multicast Service Interface (S-PMSI) tunnels.\nThe undo group command restores the default configuration.\nBy default, no address pool range or criteria are configured for switching between I-PMSI and S-PMSI tunnels.",
+    "CLIs": [
+        "group <group-address> <group-mask-length> [ source <source-address> <source-mask-length> ] [ threshold <threshold-value> ] { mldp | rsvp-te p2mp-template <p2mp-te-template-name> } [ limit <number> ]",
+        "undo group <group-address> <group-mask-length> [ source <source-address> <source-mask-length> ]"
+    ],
+    "ParentView": [
+        "IPv6 address family MVPN-SPMSI view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-address",
+            "Info": "Specifies a group address for switching between I-PMSI and S-PMSI tunnels.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X. The value ranges from FF00:: to FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF."
+        },
+        {
+            "Parameters": "group-mask-length",
+            "Info": "Specifies mask length for a group address.\nThe value is an integer ranging from 8 to 128."
+        },
+        {
+            "Parameters": "source source-address",
+            "Info": "Specifies a source address for switching between I-PMSI and S-PMSI tunnels.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "source-mask-length",
+            "Info": "Specifies mask length for a source address.\nThe value is an integer ranging from 0 to 128."
+        },
+        {
+            "Parameters": "threshold threshold-value",
+            "Info": "Specifies a threshold that triggers a switchover between the I-PMSI tunnel and the S-PMSI tunnel.\nIf the multicast data forwarding rate of a VPN exceeds threshold-value, the system performs a switchover from the I-PMSI tunnel to the S-PMSI tunnel, but the system starts to use the S-PMSI tunnel for data forwarding after a delay (the delay can be specified using the switch-delay command).If the multicast data forwarding rate of a VPN falls below threshold-value, the system performs a switchback from the S-PMSI tunnel to the I-PMSI, but the system starts to use the I-PMSI for data forwarding after a delay (the delay can be specified using the holddown-time command).\nThe value is an integer ranging from 0 to 4194304, in kbit/s. If the default value 0 is used, the VPN instance does not detect the multicast data forwarding rate and switches multicast data from the I-PMSI tunnel to an S-PMSI tunnel immediately after the switch-delay timer expires."
+        },
+        {
+            "Parameters": "mldp",
+            "Info": "Specifies the S-PMSI tunnel type as mLDP.\n-"
+        },
+        {
+            "Parameters": "rsvp-te",
+            "Info": "Specifies the S-PMSI tunnel type as RSVP-TE.\n-"
+        },
+        {
+            "Parameters": "p2mp-template p2mp-te-template-name",
+            "Info": "Specifies the name of a tunnel template to be referenced by an RSVP-TE P2MP tunnel.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "limit number",
+            "Info": "Specifies the maximum number of S-PMSI tunnels allowed.\nThe value is an integer ranging from 1 to8192, and the default value is 16.\nAfter limit number is changed to a larger value, the traffic of newly added multicast groups will preferentially be switched to idle S-PMSI tunnels.After limit number is changed to a smaller value, the traffic of all multicast groups will be switched first to the I-PMSI tunnel and then to specific S-PMSI tunnels."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 mvpn 2.2.2.2",
+            "[*HUAWEI] ip vpn-instance mcast1",
+            "[*HUAWEI-vpn-instance-mcast1] ipv6-family",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] route-distinguisher 22:1",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] multicast ipv6 routing-enable",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] mvpn",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn] ipmsi-tunnel",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn-ipmsi] mldp",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn-ipmsi] quit",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn] spmsi-tunnel",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn-spmsi] group FF37::1 64 source 1::1 64 threshold 10 mldp"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn IPv6 NG MVPN uses the I-PMSI tunnel to send multicast data to receivers. The I-PMSI tunnel connects to all PEs on the MVPN and sends multicast data to these PEs regardless of whether these PEs have receivers. If some PEs do not have receivers, this implementation will cause redundant traffic, wasting bandwidth resources and increasing PEs' burdens.\nS-PMSI tunnels solve this problem by sending multicast data only to PEs interested in the data.\nTo configure the address pool range and criteria for switching between I-PMSI and S-PMSI tunnels, run the group command.\nPrecautions\nUp to 1024 such commands can be configured for each VPN, and up to 16384 such commands can be configured on an entire device, and the maximum limit value in a group command configuration is 8192. Up to 8192 S-PMSI tunnels can be configured for each VPN instance.If the address pool range specified in a group command overlaps with a previously configured address pool range, the command cannot be configured. If you want to change the tunnel type configured for an address pool range, you must delete the existing group command configuration and then run the group command with the desired tunnel type."
+}

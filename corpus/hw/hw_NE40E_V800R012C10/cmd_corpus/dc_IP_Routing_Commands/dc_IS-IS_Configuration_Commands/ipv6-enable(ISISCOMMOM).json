@@ -1,0 +1,42 @@
+{
+    "PageTitle": "ipv6 enable (IS-IS view)",
+    "FuncDef": "The ipv6 enable command enables the IPv6 capability for an IS-IS process.\nThe undo ipv6 enable command disables the IPv6 capability.\nBy default, the IPv6 capability is disabled.",
+    "CLIs": [
+        "ipv6 enable [ topology { compatible [ enable-mt-spf ] | ipv6 | standard } ]",
+        "undo ipv6 enable"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "topology",
+            "Info": "Indicates a topology of the network.\n-"
+        },
+        {
+            "Parameters": "compatible",
+            "Info": "Sets-the-compatible-mode-for-the-topology.-If-the-compatible-mode-is-specified,-after-an-IPv6-IS-IS-neighbor-relationship-is-established,-IS-IS-advertises-the-neighbor-information-in-both-standard-and-IPv6-topologies-but-uses-the-standard-topology-to-calculate-IPv4-and-IPv6-routes.\n-"
+        },
+        {
+            "Parameters": "enable-mt-spf",
+            "Info": "Configures-the-device-to-use-the-IPv6-topology-to-calculate-IPv6-routes-when-the-topology-mode-is-compatible.\n-"
+        },
+        {
+            "Parameters": "ipv6",
+            "Info": "Sets-the-IPv6-mode-for-the-topology.-If-the-IPv6-mode-is-specified,-after-an-IPv6-IS-IS-neighbor-relationship-is-established,-IS-IS-advertises-the-neighbor-information-only-in-the-IPv6-topology-and-uses-the-IPv6-topology-to-calculate-IPv6-routes.\n-"
+        },
+        {
+            "Parameters": "standard",
+            "Info": "Sets-the-standard-mode-for-the-topology.-If-the-standard-mode-is-specified,-after-an-IPv6-IS-IS-neighbor-relationship-is-established,-IS-IS-advertises-the-neighbor-information-only-in-the-standard-topology-and-uses-the-standard-topology-to-calculate-IPv4-and-IPv6-routes.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] network-entity 10.0001.1010.1020.1030.00",
+            "[*HUAWEI-isis-1] ipv6 enable topology ipv6"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn IS-IS, if the topology mode is set to standard or compatible, the device advertises neighbor information about an interface in the standard topology when the interface establishes either IPv4 or IPv6 neighbor relationships with other devices. In this case, other devices cannot determine whether the interface is configured with both IPv4 and IPv6 addresses, and both the local device and other devices use the interface to calculate IPv4 and IPv6 routes in the standard topology. As a result, traffic of the interface on which the IPv4 or IPv6 address family is not configured may be interrupted. To prevent this problem, you are advised to set the topology mode to IPv6 to isolate IPv6 services from IPv4 services. If the current topology mode is standard, you are advised to change it to IPv6. Before you change the mode, ensure that both IPv4 and IPv6 addresses are configured for IS-IS interfaces on the entire network. The configuration procedure is as follows:\n Run the ipv6 enable topology compatible command on all devices on the network to set the topology mode to compatible. Run the ipv6 enable topology compatible enable-mt-spf command on all devices on the network to set the topology mode to compatible with the enable-mt-spf parameter specified. Run the ipv6 enable topology ipv6 command on all devices on the network to set the topology mode to IPv6.\n\nPrerequisites\nThe following operations have been performed:- Run the isis command to enable an IS-IS process.- Run the network-entity command in the IS-IS view to set a NET for the device.- Run the ipv6 enable topology ipv6 command in the IS-IS view to enable the IPv6 capability for the IS-IS process.- Run the ipv6 enable command to enable the IPv6 capability and then configure an IPv6 address on each interface that runs an IS-IS process.- Run the isis ipv6 enable command to enable IS-IS on the interfaces.\nPrecautions\nIf the ipv6 enable command is run more than once, the latest configuration overrides the previous one. When IPv6 is enabled for an IS-IS process, the standard topology mode is used by default. In this mode, both IPv4 and IPv6 must be enabled on all IS-IS interfaces on the network. Otherwise, services are interrupted. To prevent this problem, you are advised to set the topology mode to IPv6 to isolate IPv6 services from IPv4 services."
+}

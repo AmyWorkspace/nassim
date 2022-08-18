@@ -1,0 +1,25 @@
+{
+    "PageTitle": "trigger-up-delay",
+    "FuncDef": "The trigger-up-delay command configures a delay for the RM module to instruct the service module to perform a link switchback.\nThe undo trigger-up-delay command restores the default configuration.\nBy default, the delay is 5s.",
+    "CLIs": [
+        "trigger-up-delay <trigger-up-delay-value>",
+        "undo trigger-up-delay"
+    ],
+    "ParentView": [
+        "Route monitoring group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "trigger-up-delay-value",
+            "Info": "Specifies the delay for the RM module to instruct the service module to perform a link switchback.\nThe value is an integer ranging from 0 to 1000, in seconds."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip route-monitor-group uplink",
+            "[*HUAWEI-route-monitor-group-uplink] trigger-up-delay 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn dual-device backup scenarios, service modules can be associated with a route monitoring group to trigger link switchovers.\nA route monitoring group monitors the status of its member routes. If a route in the group goes Down, its down-weight is added to the down-weight sum of the route monitoring group. If the down-weight sum of the route monitoring group reaches the switchover threshold of a service module, the RM module instructs the service module to switch services from the primary link to the backup link.If a route in the route monitoring group goes Up again, its down-weight is subtracted from the down-weight sum of the route monitoring group. If the down-weight sum of the route monitoring group falls below the threshold of a service module, the RM module instructs the service module to switch services back.\nIf a route in a route monitoring group goes Up, the RM module delivers this route to the forwarding table and establishes a forwarding entry for it, which takes some time. Packet loss may occur if the RM module instructs the service module to perform a link switchback immediately when the down-weight sum of the route monitoring group falls below the switchover threshold of the service module. To address this issue, run the trigger-up-delay command to configure a delay for the RM module to instruct the service module to perform a link switchback.\n\nPrecautions\nIf the value of delay-time is set to 0, the RM module instructs the service module to perform a link switchback immediately when the down-weight sum of the route monitoring group falls below the threshold of the service module."
+}

@@ -1,0 +1,59 @@
+{
+    "PageTitle": "import admin-ip to(Virtual access port-extension view)",
+    "FuncDef": "The import admin-ip to command imports a route to a management IP address into a specified routing protocol.\nThe undo import admin-ip to command restores the default configuration.\nBy default, no routing protocol imports a route to a management IP address.",
+    "CLIs": [
+        "import admin-ip to { bgp [ vpn-instance <vpn-instance-name> ] | isis <process-id> [ level-1 | level-1-2 | level-2 ] | ospf <process-id> | public }",
+        "undo import admin-ip to { bgp [ vpn-instance <vpn-instance-name> ] | isis <process-id> | ospf <process-id> | public }"
+    ],
+    "ParentView": [
+        "Virtual access port-extension view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "bgp",
+            "Info": "Imports a route to a management IP address into BGP.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Imports a route to a management IP address into IS-IS.\n-"
+        },
+        {
+            "Parameters": "process-id",
+            "Info": "Specifies the process ID of a unicast routing protocol. You must specify process-id if a unicast routing protocol is IS-IS or OSPF.\nThe value is an integer ranging from 1 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Indicates that the Router's level is Level-1. The Router at Level-1 is responsible for intra-area route calculations only and maintains the Level-1 LSDB.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Indicates that the Router's level is Level-1-2. The Router at Level-1-2 is responsible for both Level-1 and Level-2 route calculations and maintains the Level-1 and Level-2 LSDBs.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Indicates that the Router's level is Level-2. The Router at Level-2 is responsible for inter-area route calculations only and maintains the Level-2 LSDB.\n-"
+        },
+        {
+            "Parameters": "ospf",
+            "Info": "Imports a route to a management IP address into OSPF.\n-"
+        },
+        {
+            "Parameters": "public",
+            "Info": "Specifies a public network route.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] virtual-access port-extend",
+            "[*HUAWEI-virtual-access-portextend] import admin-ip to isis 1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA DCN supports route isolation. To allow an NMS to directly manage masters and APs, run the import admin-ip command to import a route in the port extension system to the outside of the DCN. After the command is run, the NMS is reachable to an AP and the AP's information (such as configurations and status) can be directly queried on the NMS.\nPrerequisites\nDCN has been globally enabled using the dcn command.\nOther prerequisites depend on a routing protocol into which a route to a management IP address is imported.\nBGP has been enabled using the bgp command if a route to a management IP address is imported into BGP.An IS-IS process has been created using the isis command if a route to a management IP address is imported into IS-IS.An OSPF process has been created using the ospf command if a route to a management IP address is imported into OSPF.\n\nPrecautions\nThis command is supported only on the admin VS.\nIf DCN has been configured to import routes with the same protocol and process ID, the configuration fails."
+}

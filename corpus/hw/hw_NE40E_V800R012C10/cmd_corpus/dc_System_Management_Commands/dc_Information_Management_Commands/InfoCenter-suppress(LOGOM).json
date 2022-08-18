@@ -1,0 +1,23 @@
+{
+    "PageTitle": "info-center statistic-suppress enable",
+    "FuncDef": "The info-center statistic-suppress enable command enables the suppression of statistics about consecutive identical logs.\nThe undo info-center statistic-suppress enable command disables the suppression of statistics about consecutive identical logs.\nSuppressing the statistics about consecutive identical logs is enabled by default.",
+    "CLIs": [
+        "info-center statistic-suppress enable",
+        "undo info-center statistic-suppress enable"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] undo info-center statistic-suppress enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] info-center statistic-suppress enable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPlenty of repeated logs may be generated in a short time in some scenarios, for example, when Address Resolution Protocol (ARP) service features are enabled. This wastes both the storage space and CPU resources, and users do not hope to view these redundant logs. To suppress statistics about consecutive identical logs without affecting other logs, run the info-center statistic-suppress enable command.\nA device outputs a log immediately after receiving the log by default. For all subsequent logs consecutively and repeatedly generated, the device outputs only the repetition count till receiving other logs. For example, a module may generate logs in the following order: A(T1) A(T2) A(T2) B(T3) B(T4) B(T4) C1(T5) C2(T6) A(T7) B(T8) B(T8) B(T8) B(T9) A(T9) B(T10) C3(T11) A(T11) A(T12) A(T12) A(T13) A(T14) A(T15) A(T16) A(T17) A(T18) B(T18). Cn indicates logs that do not repeat (C1 and C2 are two different logs), and Tn indicates the sequence number. Then the module outputs the following information:\nT1:A\nT3(1): last message repeated 2 times\nT3:B\nT5: last message repeated 2 times\nT5:C1\nT6:C2\nT8:B\nT9(1): last message repeated 3 times\nT9:A\nT10:B\nT11:C3\nT11:A\nT13(2): last message repeated 3 times\nT18(2): last message repeated 5 times\nT18:B\nThe log information displayed on the device is explained as follows:\nThe following two methods can trigger statistics about consecutive identical logs:If the next log is not identical, the module will output statistics about consecutive identical logs till the last consecutive identical log, for example, (1).If consecutive identical logs are generated again a specific period of time (30, 120, and 600 seconds) later, the module will update statistics about consecutive identical logs, for example, (2).\nEach time after outputting statistics, the device resets the counter. That is, log A repeats nine times (1 + 3 + 5) in a period from T11 to T18.The logs output by the device are sorted in the same order of log generation to facilitate later review of the logs and scenario rehabilitation.\n\nPrecautions\nThree time granularities are used to control the output of statistics about repeated logs. Statistics are output 30 seconds later for the first time, 120 seconds later for the second time, and 600 seconds later for the third time.\nTwo logs are consecutive identical logs only when all parameters, including the log ID, are the same, and no other logs exist between them. The logs following the order of A B A B A B A B are not consecutive identical logs, so statistics about these logs cannot be suppressed."
+}

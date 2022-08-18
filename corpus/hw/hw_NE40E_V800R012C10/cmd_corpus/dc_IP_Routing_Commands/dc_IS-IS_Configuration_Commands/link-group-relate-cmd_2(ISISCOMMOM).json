@@ -1,0 +1,34 @@
+{
+    "PageTitle": "cost-offset",
+    "FuncDef": "The cost-offset command configures a link cost offset to be added to the link cost of the member links in a link group when the number of available member links falls below a specified number.\nThe undo cost-offset command restores the original link cost of the member links in a link group.\nBy default, IS-IS does not automatically adjust the link cost of the member links in a link group.",
+    "CLIs": [
+        "cost-offset { <cost> | max-reachable | maximum }",
+        "undo cost-offset"
+    ],
+    "ParentView": [
+        "IS-IS link-group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cost",
+            "Info": "Specifies the link cost offset to be added to the link cost of the member links in a link group when the number of available member links falls below a specified number.\nThe value is an integer ranging from 1 to 16777213. The default value is 1."
+        },
+        {
+            "Parameters": "max-reachable",
+            "Info": "Indicates that the maximum link cost of reachable routes (16777214) is used as the link cost of member links in a link group when the number of available member links in the link group falls below a specified number.\n-"
+        },
+        {
+            "Parameters": "maximum",
+            "Info": "Indicates that 16777215 is used as the link cost of member links in a link group when the number of available member links in the link group falls below a specified number. After 16777215 is used as the link cost, the routes along the links are used to transmit TE information, not selected for traffic forwarding.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] link-group link-a",
+            "[*HUAWEI-isis-link-group-link-a] cost-offset 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an IS-IS dual-homing access scenario, when the traffic rate exceeds the bandwidth of a link, additional links are needed to carry the traffic. If one of the links fails and the bandwidth of the other links is not sufficient enough to carry the traffic, traffic will get lost. To prevent this problem, run the link-group command to bundle multiple links into a link group and run the cost-offset command to configure a link cost offset to be added to the link cost of the member links in the link group when the number of available member links falls below a specified number. After the link cost is adjusted, the traffic forwarding path is changed, preventing traffic loss.\nPrerequisites\nA link group has been created using the link-group command."
+}

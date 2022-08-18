@@ -1,0 +1,51 @@
+{
+    "PageTitle": "spatial-multicast bandwidth (Spatial multicast view)",
+    "FuncDef": "The spatial-multicast bandwidth command sets the bandwidth based on which load balancing is performed for Layer 2 flows in a spatial multicast scenario.\nThe undo spatial-multicast bandwidth command restores the default setting.\nThe default value is 3000 kbit/s for each Layer 2 flow.",
+    "CLIs": [
+        "spatial-multicast { vlan <vlan-id> | vsi <vsi-name> } [ <group-ip> mask <mask-value> [ <source-ip> ] ] bandwidth <bandwidth-value>",
+        "undo spatial-multicast { vlan <vlan-id> | vsi <vsi-name> } [ <group-ip> mask <mask-value> [ <source-ip> ] ]"
+    ],
+    "ParentView": [
+        "Spatial multicast view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vlan vlan-id",
+            "Info": "Specifies a VLAN ID.\nThe value is an integer ranging from 1 to 4094."
+        },
+        {
+            "Parameters": "vsi vsi-name",
+            "Info": "Specifies a VSI name.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "group-ip",
+            "Info": "Specifies a multicast group address.\nThe value ranges from 224.0.0.0 to 239.255.255.255, in dotted decimal notation."
+        },
+        {
+            "Parameters": "mask mask-value",
+            "Info": "Specifies the mask length of a multicast group address.\nThe value is an integer ranging from 4 to 32."
+        },
+        {
+            "Parameters": "source-ip",
+            "Info": "Specifies a multicast source address.\nThe value is a unicast IP address, in dotted decimal notation."
+        },
+        {
+            "Parameters": "bandwidth-value",
+            "Info": "Specifies the bandwidth based on which load balancing is performed for Layer 2 flows.\nThe value is an integer ranging from 1 to 40000000, in kbit/s."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi vsia",
+            "[*HUAWEI-vsia] quit",
+            "[*HUAWEI] spatial-multicast",
+            "[*HUAWEI-spatial-multicast] spatial-multicast vsi vsia 225.0.0.1 mask 24 1.1.1.1 bandwidth 2500"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a spatial multicast scenario, Layer 2 multicast flows of a VLAN/VSI are balanced among SFUs. To set the bandwidth based on which load balancing is performed for Layer 2 multicast flows, run the spatial-multicast vlan vsi bandwidth command. If the group-ip or source-ip parameter is specified, the command configuration takes effect only for the Layer 2 multicast flow with the specified address. If neither of the parameters are specified, the command configuration takes effect for unknown multicast and unicast flows.\nThe specified VLAN/VSI must have been created.\nPrecautions\nA maximum of 1000 spatial-multicast vlan vsi bandwidth command instances are supported.\nThe bandwidth specified in this command does not mean the actual bandwidth available to a multicast group. The actual forwarding capability depends on the service and board forwarding capabilities. If the bandwidth specified in this command is much greater than the actual bandwidth, traffic may not be evenly balanced.\nThis command is supported only on the admin VS."
+}

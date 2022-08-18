@@ -1,0 +1,32 @@
+{
+    "PageTitle": "peer route-update-interval (BGP-IPv4 unicast address family view) (IPv6)",
+    "FuncDef": "The peer route-update-interval command sets the interval at which a device sends routing updates carrying the same prefix to peer.\nThe undo peer route-update-interval command restores the default setting.\nBy default, the interval at which routing updates are sent to IBGP peers is 15s, and the interval at which routing updates are sent to EBGP peers is 30s.",
+    "CLIs": [
+        "peer <peerIpv6Addr> route-update-interval <interval>",
+        "undo peer <peerIpv6Addr> route-update-interval"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "peerIpv6Addr",
+            "Info": "Specifies the IPv6 address of a peer.\nThe value is a 32-digit hexadecimal number, in the format of X:X:X:X:X:X:X:X."
+        },
+        {
+            "Parameters": "interval",
+            "Info": "Specifies the minimum interval at which routing updates are sent.\nThe value is an integer ranging from 0 to 600, in seconds. The value 0 indicates that the device immediately sends BGP Update messages to notify its peers of route changes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 2001:DB8:1::1 as-number 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] peer 2001:DB8:1::1 enable",
+            "[*HUAWEI-bgp-af-ipv4] peer 2001:DB8:1::1 route-update-interval 10"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen routes change, the router sends routing updates to notify its peers. If a route changes frequently, the peer route-update-interval command can be used to adjust the interval at which Update packets are sent for changes of this route. This frees the router from sending Update packets for every route change.\nImplementation Procedure\nIf the peer route-update-interval command is  used but no peer exists, a message is displayed, indicating that the peer does  not exist.\nPrecautions\nIf a route is withdrawn, the Router immediately  sends an Update message to its peers, regardless of the peer  route-update-interval configuration. If a route is added and the interval  between the last route addition time and the current route addition time is  greater than the interval configured using the peer route-update-interval  command, the Router immediately sends an Update message to its peers. If a route  is added and the interval between the last route addition time and the current  route addition time is less than the interval configured using the peer  route-update-interval command, the Router sends an Update message to its peers  only after the configured interval expires."
+}

@@ -1,0 +1,34 @@
+{
+    "PageTitle": "vni (NVE interface view)",
+    "FuncDef": "The vni command configures a VXLAN network identifier (VNI) for an NVE interface.\nThe undo vni command deletes the VNI for an NVE interface, and deletes all configurations for the same VNI on the current NVE interface.\nThe vni head-end peer-list command configures an ingress replication list that contains the IP addresses of those remote VTEPs for a VXLAN network identifier (VNI).\nThe undo vni head-end peer-list command deletes the ingress replication list of a VNI.\nBy default, no VNI is configured for an NVE interface, no ingress replication list is configured for any VNI.",
+    "CLIs": [
+        "vni <vni-id> [ head-end peer-list { <ip-address> } &<1-10> ]",
+        "undo vni <vni-id> [ head-end peer-list { <ip-address> } &<1-10> ]"
+    ],
+    "ParentView": [
+        "NVE interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vni-id",
+            "Info": "Specifies a VNI ID.\nThe value is an integer ranging from 1 to 16777215."
+        },
+        {
+            "Parameters": "ip-address",
+            "Info": "Specifies the IP address of a remote VXLAN tunnel endpoint (VTEP).\nThe value is in dotted decimal notation."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface nve 1",
+            "[*HUAWEI-Nve1] vni 10"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface nve 1",
+            "[*HUAWEI-Nve1] vni 5010 head-end peer-list 2.2.2.2 3.3.3.3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nVNIs are similar to VLAN IDs. VXLAN uses VNIs to differentiate VXLAN segments and identify tenants. A VNI identifies only one tenant. Even if multiple terminal users belong to the same VNI, they are considered one tenant. Run this command to configure a VNI for an NVE interface.\nAfter the ingress of a VXLAN tunnel receives broadcast, unknown unicast, and multicast (BUM) packets, it replicates these packets and sends a copy to each VTEP in the ingress replication list. The ingress replication list is a collection of remote VTEP IP addresses to which the ingress of a VXLAN tunnel should send replicated BUM packets.\nIf a source VTEP on a VXLAN connects to multiple remote VTEPs on the same VXLAN segment, run the vni head-end peer-list command to configure an ingress replication list that contains the IP addresses of those remote VTEPs. After the source NVE receives BUM packets, the local VTEP sends a copy of the BUM packets to every VTEP in the list.\nConfiguration Impact\nIngress replication allows BUM packets to be transmitted in broadcast mode, independent of multicast routing protocols.\nPrecautions\nIf other configurations are performed for the same VNI on the current NVE interface, the command configuration will be overwritten.\nEven if a source VTEP connects only to one remote VTEP, you still need to run the vni head-end peer-list command to configure an ingress replication list with the remote VTEP's IP address specified.\nBUM packet forwarding is implemented only using ingress replication. To establish a VXLAN tunnel between a Huawei device and a non-Huawei device, ensure that the non-Huawei device also has ingress replication configured. Otherwise, communication fails."
+}

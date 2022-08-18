@@ -1,0 +1,20 @@
+{
+    "PageTitle": "avoid-microloop frr-protected (OSPF view)",
+    "FuncDef": "The avoid-microloop frr-protected command enables OSPF anti-microloop.\nThe undo avoid-microloop frr-protected command disables OSPF anti-microloop.\nBy default, OSPF anti-microloop is disabled.",
+    "CLIs": [
+        "avoid-microloop frr-protected",
+        "undo avoid-microloop frr-protected"
+    ],
+    "ParentView": [
+        "OSPF view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ospf",
+            "[*HUAWEI-ospf-1] avoid-microloop frr-protected"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOSPF remote LFA FRR is enabled, the primary link is PE1 -> P1 -> P2 -> PE2, and the backup link is PE1 -> P1 -> P3 -> P4 -> P2 -> PE2, and the link P1 -> P3 -> P4 is an LDP tunnel. If the primary link fails, traffic is switched to the backup link, and then another round of the new primary link calculation begins. Specifically, after P1 completes route convergence, its next hop becomes P3. However, the route convergence on P3 is slower than that on P1, and P3's next hop is still P1. As a result, a temporary loop occurs between P1 and P3. OSPF anti-microloop can address this problem by delaying P1 from switching its next hop until the next hop of P3 becomes P4. Then traffic is switched to the new primary link (PE1 -> P1 -> P3 -> P4 -> P2 -> PE2), and on the link P1 -> P3 -> P4, traffic is forwarded based on IP routes.\nOSPF anti-microloop applies only to OSPF remote LFA FRR.\nPrerequisites\nOSPF has been enabled using the ospf command."
+}

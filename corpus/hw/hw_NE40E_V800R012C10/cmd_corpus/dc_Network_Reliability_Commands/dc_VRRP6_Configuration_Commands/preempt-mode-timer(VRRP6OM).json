@@ -1,0 +1,54 @@
+{
+    "PageTitle": "vrrp6 vrid preempt-mode timer delay",
+    "FuncDef": "The vrrp6 vrid preempt-mode timer delay command sets a preemption delay for a router in a Virtual Router Redundancy Protocol for IPv6 (VRRP6) backup group.\nThe undo vrrp6 vrid preempt-mode timer delay command restores the default preemption delay.\n\nThe default preemption delay is 5 seconds for a preemption caused by an interface Up event or 0 seconds (indicating immediate preemption) for a preemption caused by other reasons.",
+    "CLIs": [
+        "vrrp6 vrid <virtual-router-id> preempt-mode timer delay <delay-time>",
+        "undo vrrp6 vrid <virtual-router-id> preempt-mode timer delay"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "delay delay-time",
+            "Info": "Specifies a preemption delay for a router in a VRRP6 backup group.\nThe value is an integer ranging from 0 to 3600, in seconds."
+        },
+        {
+            "Parameters": "vrid virtual-router-id",
+            "Info": "Specifies the ID of a VRRP6 backup group.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ipv6 enable",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipv6 address 2001:db8::1 64",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp6 vrid 1 virtual-ip FE80::7 link-local",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp6 vrid 1 preempt-mode timer delay 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nOn an unstable network, if backup routers in a VRRP6 backup group fail to receive VRRP packets from the master router within a specified timeout period, a backup router with the highest priority preempts the Master state. If network congestion occurs, backup routers also may not receive VRRP packets from the master router. To prevent frequent master/backup VRRP6 switchovers, run the vrrp6 vrid preempt-mode timer delay command to set a preemption delay for a backup router in a VRRP6 backup group. The backup router preempts the Master state only after the configured preemption delay elapses.\n\nPrerequisites\n\nA VRRP6 backup group has been created using the vrrp6 vrid virtual-ip command.\n\nPrecautions\n\nSet the preemption delay to 0 on a router to allow it to become a master immediately after its priority changes or set the preemption delay to a non-0 value on the master router so that it can preempt the Master state after a specified delay if a master/backup VRRP6 switchover is performed. After the faulty master device in the VRRP6 backup group recovers, receives protocol packets, and has a lot of service configurations, the master device slowly delivers the VRRP6 forwarding table. An immediate traffic switchback leads to packet loss on the master device. To prevent packet loss, properly set a delay time in this situation.\nWhen an IP address owner recovers from a fault, it immediately preempts the Master state. Therefore, the preemption delay is meaningless for an IP address owner. If a preemption delay needs to be configured for a VRRP6 backup group, do not configure the master router in the group as an IP address owner."
+}

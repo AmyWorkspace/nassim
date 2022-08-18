@@ -1,0 +1,39 @@
+{
+    "PageTitle": "dhcpv6-server destination",
+    "FuncDef": "The dhcpv6-server destination command sets an IP address or outbound interface and the load balancing weight for a DHCPv6 server.\nThe undo dhcpv6-server destination command deletes a DHCPv6 server. If no parameters are specified, all DHCPv6 servers are deleted from a DHCPv6 server group.\nBy default, the load balancing weight is 0 for DHCPv6 servers.",
+    "CLIs": [
+        "dhcpv6-server { destination <destination-address> [ vpn-instance <vpn-name> ] | interface { <interface-name> | <interface-type> <interface-number> } } [ weight <weight-value> ]",
+        "undo dhcpv6-server [ destination <destination-address> [ vpn-instance <vpn-name> ] | interface { <interface-name> | <interface-type> <interface-number> } ]"
+    ],
+    "ParentView": [
+        "DHCPv6 server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "destination destination-address",
+            "Info": "Specifies the IP address for a destination DHCPv6 server, in the format of X:X::X:X.\nThe address is a 32-digit hexadecimal number."
+        },
+        {
+            "Parameters": "vpn-instance vpn-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Specifies the outbound interface for DHCPv6 packets.\n-"
+        },
+        {
+            "Parameters": "weight weight-value",
+            "Info": "Specifies the load balancing weight for a DHCPv6 server.\nThe value is an integer that ranges from 0 to 100."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcpv6-server group remote",
+            "[*HUAWEI-dhcpv6-server-group-remote] commit",
+            "[*HUAWEI-dhcpv6-server-group-remote] dhcpv6-server destination 2001:db8:1::1",
+            "[~HUAWEI-dhcpv6-server-group-remote] dhcpv6-server destination 2001:db8:2::1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a remote DHCPv6 server needs to be used for address allocation, you need to configure a DHCPv6 server group and then run the dhcpv6-server command to specify a DHCPv6 server.\nPrerequisites\nA DHCPv6 server group to which the remote DHCPv6 server belongs must have been configured.The algorithm for selecting DHCPv6 servers must have been set to load balancing for the DHCPv6 server group if load balancing needs to be configured.\n\nConfiguration Impact\nAfter the dhcpv6-server destination command is run, the first address specifies the master server if DHCPv6 servers in a DHCPv6 server group work in master/backup mode.\nIf the parameter loading-share is specified in the dhcpv6-server algorithm { loading-share | master-backup } command, the parameter weight is valid only when you configure a DHCPv6 server.\nNote that weight refers to the weight of a DHCPv6 server in load balancing rather than the priority of a DHCPv6 server. If the weight is set, packets are sent to two DHCPv6 servers according to the weight of each DHCPv6 server. If the weight is not set, packets are sent equally to two DHCPv6 servers.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nA maximum of eight DHCPv6 servers can be configured in a DHCPv6 server group."
+}

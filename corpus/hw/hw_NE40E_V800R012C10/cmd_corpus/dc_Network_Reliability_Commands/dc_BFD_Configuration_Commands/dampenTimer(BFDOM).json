@@ -1,0 +1,57 @@
+{
+    "PageTitle": "dampening timer-interval",
+    "FuncDef": "The dampening timer-interval command configures a flapping suppression time for a BFD session.\nThe undo dampening timer-interval command restores the default flapping suppression time.\nBy default, the flapping suppression timer is started.",
+    "CLIs": [
+        "dampening timer-interval maximum <maximum-milliseconds> initial <initial-milliseconds> secondary <secondary-milliseconds>",
+        "dampening timer-interval bundle-member maximum <bundle-maximum-milliseconds> initial <bundle-initial-milliseconds> secondary <bundle-secondary-milliseconds>",
+        "dampening timer-interval bundle-member l3-only-mode",
+        "undo dampening timer-interval [ maximum <maximum-milliseconds> initial <initial-milliseconds> secondary <secondary-milliseconds> ]",
+        "undo dampening timer-interval bundle-member [ maximum <bundle-maximum-milliseconds> initial <bundle-initial-milliseconds> secondary <bundle-secondary-milliseconds> ]",
+        "undo dampening timer-interval bundle-member l3-only-mode"
+    ],
+    "ParentView": [
+        "BFD view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "initial bundle-initial-milliseconds",
+            "Info": "Specifies an initial flapping suppression time for a BFD for link-bundle session.\nThe value is an integer ranging from 6000 to 3600000, in milliseconds. The default value is 16000."
+        },
+        {
+            "Parameters": "initial initial-milliseconds",
+            "Info": "Specifies an initial flapping suppression time for a BFD session.\nThe value is an integer ranging from 1 to 3600000, in milliseconds. The default value is 2000."
+        },
+        {
+            "Parameters": "secondary secondary-milliseconds",
+            "Info": "Specifies a secondary flapping suppression time for a BFD session.\nThe value is an integer ranging from 1 to 3600000, in milliseconds. The default value is 5000."
+        },
+        {
+            "Parameters": "secondary bundle-secondary-milliseconds",
+            "Info": "Specifies a secondary flapping suppression time. The value is an integer ranging from 10000 to 3600000, in milliseconds. The default value is 20000.e for a BFD for link-bundle session.\nThe value is an integer ranging from 10000 to 3600000, in milliseconds. The default value is 20000."
+        },
+        {
+            "Parameters": "bundle-member",
+            "Info": "Indicates that a flapping suppression time is configured for a BFD for link-bundle session.\n-"
+        },
+        {
+            "Parameters": "maximum bundle-maximum-milliseconds",
+            "Info": "Specifies a maximum flapping suppression time for a BFD for link-bundle session.\nThe value is an integer ranging from 20000 to 3600000, in milliseconds. The default value is 600000."
+        },
+        {
+            "Parameters": "maximum maximum-milliseconds",
+            "Info": "Specifies a maximum flapping suppression time for a BFD session.\nThe value is an integer ranging from 1 to 3600000, in milliseconds. The default value is 12000."
+        },
+        {
+            "Parameters": "l3-only-mode",
+            "Info": "Indicates that flapping suppression takes effect only for a main BFD for link-bundle session.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bfd",
+            "[*HUAWEI-bfd] dampening timer-interval maximum 30000 initial 8000 secondary 20000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf BFD detects link Down, services are switched. A penalty mechanism is provided to delay BFD session establishment and prevent frequent service switchovers, protecting link resources and reducing link resource consumption.\nFlapping suppression can take effect for the following BFD sessions:\nNon-BFD for link-bundle sessionsBFD for link-bundle sessions (bundle-member must be specified)\nIn flapping suppression detection for BFD, BFD flapping suppression is started if BFD detects two consecutive down events within 10 minutes. For the first time when flapping suppression starts, the BFD session remains Down within a period specified using the initial bundle-initial-milliseconds parameter. After the period of time expires, BFD session negotiation is restarted. If the BFD session detects a Down event again, for the second time when flapping suppression starts, the BFD session remains Down within a period specified using the secondary secondary-milliseconds parameter. After the period of time elapses, BFD session negotiation is restarted. If the BFD session detects a Down event for the third time, the flapping suppression time is incremented based on the formula of secondary secondary-milliseconds multiplied by 2 and multiplied by (total number of flapping times - 3). The flapping suppression time keeps increasing till it reaches the maximum maximum-milliseconds value, and stays at the maximum value.\n\nPrerequisites\nBFD has been globally enabled using the bfd command.\nPrecautions\nIt is recommended that the secondary flapping suppression time be greater than the initial flapping suppression time and less than the maximum flapping suppression time."
+}

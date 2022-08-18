@@ -1,0 +1,46 @@
+{
+    "PageTitle": "peer label-route-capability (BGP-IPv4 unicast address family view)",
+    "FuncDef": "The peer label-route-capability command enables a BGP device to exchange labeled routes with a specified peer.\nThe undo peer label-route-capability command disables this function.\nBy default, this function is disabled.",
+    "CLIs": [
+        "peer <ipv4-address> label-route-capability [ check-tunnel-reachable ] [ check-withdraw-type | check-withdraw-type-disable ]",
+        "undo peer <ipv4-address> label-route-capability"
+    ],
+    "ParentView": [
+        "BGP-IPv4 unicast address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "ipv4-address",
+            "Info": "Specifies the IPv4 address of a peer.\nIt is in dotted decimal notation."
+        },
+        {
+            "Parameters": "check-tunnel-reachable",
+            "Info": "Checks tunnel reachability when imported routes are sent as labeled routes.\n-"
+        },
+        {
+            "Parameters": "check-withdraw-type",
+            "Info": "Checks whether the route type in a Withdraw message received from a peer is the same as the type of a local route to be withdrawn (route previously received from the peer). If the route types are consistent, the local route is withdrawn. (Two types of routes are involved: labeled routes and unlabeled routes). By default, a device is enabled to check whether the route type in a received Withdraw message is the same as the type of a local route to be withdrawn.\n-"
+        },
+        {
+            "Parameters": "check-withdraw-type-disable",
+            "Info": "Disables the device from checking whether the type of each withdrawn route received from the peer is the same as the local one.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.1.1.2 as-number 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] peer 10.1.1.2 label-route-capability"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] peer 10.1.1.2 as-number 100",
+            "[*HUAWEI-bgp] ipv4-family unicast",
+            "[*HUAWEI-bgp-af-ipv4] peer 10.1.1.2 label-route-capability check-tunnel-reachable"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe peer label-route-capability command is applicable to the scenario where labeled IPv4 routes need to be exchanged between the local end and the specified peer.\nConfiguring the check-tunnel-reachable parameter can only be used to check tunnels on IPv4 public networks.\nIf the check-tunnel-reachable parameter is configured, BGP advertises IPv4 unicast routes to peers when routed tunnels are unreachable or advertises labeled routes to peers when routed tunnels are reachable. In VPN scenario, this eliminates the risk of establishing an MP-EBGP peer relationship between PEs over a faulty LSP because this will cause data forwarding failures.If the check-tunnel-reachable parameter is not configured, BGP advertises labeled routes to peers whether the tunnels for imported routes are reachable or not.\nTo disable tunnel reachability checking, run the peer label-route-capability command, not the undo peer label-route-capability command.\n\nPrerequisites\nThe peer as-number command has been run to create a peer.\nConfiguration Impact\nIf the peer label-route-capability command is run multiple times, the latest configuration overwrites the previous one.\nPrecautions\nWhen the capability of sending labeled routes is enabled or disabled, BGP connection is automatically closed and the capability of the neighbor is re-negotiated, and then the BGP connection is automatically established.\nIf the peer label-route-capability command is run in the IPv4 unicast address family view to enable the device to send labeled routes to a specified peer, the function takes effect only after the apply mpls-label command is run in the view of the export route-policy that is applied to routes to be sent to the peer.\nTo configure a 6PE device to send labeled routes, specify an IPv4 unicast address for the peer of the device in the IPv6 unicast address family view."
+}

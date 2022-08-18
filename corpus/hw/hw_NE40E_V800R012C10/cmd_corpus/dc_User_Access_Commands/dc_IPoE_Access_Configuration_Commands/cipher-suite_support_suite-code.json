@@ -1,0 +1,25 @@
+{
+    "PageTitle": "cipher-suite support",
+    "FuncDef": "The cipher-suite support command configures the supported cipher suite.\nThe undo cipher-suite support command deletes the supported cipher suite.\nBy default, the HTTPS redirection function does not support any cipher suite.",
+    "CLIs": [
+        "cipher-suite support <suite-code> &<1-6>",
+        "undo cipher-suite support [ <suite-code> &<1-6> ]"
+    ],
+    "ParentView": [
+        "HTTPS redirect view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "support suite-code",
+            "Info": "Specifies the IANA code of the cipher suite.\nThe value can be:\n002f:The suite is named TLS_RSA_WITH_AES_128_CBC_SHA(TLS1.2). The key exchange algorithm is RSA. The symmetric encryption algorithm is AES_128_CBC. The abstract algorithm is SHA.0035:The suite is named TLS_RSA_WITH_AES_256_CBC_SHA(TLS1.2). The key exchange algorithm is RSA. The symmetric encryption algorithm is AES_256_CBC. The abstraction algorithm is SHA.c02b:The suite is named TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256(TLS1.2). The key exchange algorithm is ECDHE_ECDSA. The symmetric encryption algorithm is AES_128_GCM. The abstract algorithm is SHA256.c02f:The suite is named TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256(TLS1.2). The key exchange algorithm is ECDHE_RSA. The symmetric encryption algorithm is AES_128_GCM. The abstract algorithm is SHA256.1301:The suite is named TLS_AES_128_GCM_SHA256(TLS1.3). The symmetric encryption algorithm is AES_128_GCM. The abstract algorithm is SHA256.1302:The suite is named TLS_AES_256_GCM_SHA384(TLS1.3). The symmetric encryption algorithm is AES_256_GCM. The abstract algorithm is SHA384.\nAmong them:\nRSA and ECDHE_RSA are key exchange algorithms.\nAES_128_CBC, AES_256_CBC, AES_128_GCM, AES_128_GCM, and AES_256_GCM are symmetric encryption algorithms.\nSHA, SHA256, and SHA384 are digest algorithms."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] access https-redirect",
+            "[~HUAWEI-access-https-redirect] cipher-suite support c02f"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn HTTPS redirection scenarios, this command must be run to select a cipher suite. Otherwise, the HTTPS redirection function is unavailable.\nThe rule for selecting a cipher suite by priority is as follows: The protocol version is determined based on the packets sent by the user. In the version scope of the corresponding protocol, the cipher suite with earlier configuration is selected at a higher priority.\nIf multiple cipher suites are supported, for example, if the cipher-suite support 002f 0035 c02f 1301 1302 command is run, a cipher suite is selected by priority based on the following rules:If the protocol version is TLS1.3, a cipher suite is selected among the ones supported only in TLS1.3. In this case, the cipher suites that take effect on the device are TLS_AES_128_GCM_SHA256 and TLS_AES_256_GCM_SHA384 in order (from high priority to low priority). If TLS1.3 does not match, the cipher suites of degraded TLS versions can be selected based on the supported_versions extension option carried in packets.If the protocol version is TLS1.2, a cipher suite is selected among the ones supported only in TLS1.2. In this case, the cipher suites that take effect on the device are TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_256_CBC_SHA, and TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (from high priority to low priority).\n\n\nPrecautions\nIn VS mode, this command applies only to the admin VS.The cipher suites 002f and 0035 provide low security levels. Other cipher suites are recommended.TLS1.2 cipher suites:Cipher suites are selected in the following priority sequence based on security stength: c02f > 0035 >002f\nCipher suites are selected in the following priority sequence based on redirection performance: 002f > 0035 > c02f.\nTLS1.3 cipher suite:Cipher suites are selected in the following priority sequence based on security stength: 1302 > 1301\nCipher suites are selected in the following priority sequence based on redirection performance: 1301 > 1302."
+}

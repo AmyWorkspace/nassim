@@ -1,0 +1,27 @@
+{
+    "PageTitle": "hello-option dr-priority",
+    "FuncDef": "The hello-option dr-priority command sets a designated router (DR) election priority for an IPv6 Router.\nThe undo hello-option dr-priority command restores the default priority.\nBy default, the DR election priority of an IPv6 Router is 1.",
+    "CLIs": [
+        "hello-option dr-priority <priority>",
+        "undo hello-option dr-priority"
+    ],
+    "ParentView": [
+        "VPN instance IPv6 PIM view",
+        "IPv6 PIM view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "priority",
+            "Info": "Specifies a DR election priority. A larger value indicates a higher priority.\nThe value is an integer ranging from 0 to 4294967295."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 routing-enable",
+            "[*HUAWEI] pim-ipv6",
+            "[*HUAWEI-pim6] hello-option dr-priority 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn an IPv6 PIM-SM shared network segment, a DR is dynamically elected among candidate Routers. The DR registers local multicast sources and processes join requests from receivers.\nDR election is based on DR election priorities and IPv6 addresses of Routers. In a DR election process, Routers exchange Hello messages carrying DR priorities. If the Routers have the same priority, the Router with the highest IPv6 address wins the election.\nIf one or more Routers do not support Hello packets that contain a DR election priority, DR election is based on IPv6 addresses of the Router. The Router with the highest IPv6 address wins the election.\nTo change the DR election priority of a Router, run the hello-option dr-priority command.\nWhen the source's DR receives multicast data, it sends Register messages to the RP, and add registered egress interface. If too many redundant Register messages are sent to RP, the performance is affected. Run the register-with-probe command to disable Register messages sending function on the source's DR, the DR sends Probe messages instead of Register messages, so that the performance is not affected.\nPrerequisites\nThe multicast routing function has been enabled using the multicast ipv6 routing-enable command in the public network instance view.\nConfiguration Impact\nIf the hello-option dr-priority command is run more than once, the latest configuration overrides the previous one.\nPrecautions\nThe function of the hello-option dr-priority command is the same as the function of the pim ipv6 hello-option dr-priority command in the interface view. The configuration in the interface view takes precedence over that in the IPv6 PIM view. The configuration in the IPv6 PIM view is used only when the configuration in the interface view is not available."
+}

@@ -1,0 +1,34 @@
+{
+    "PageTitle": "ingress-lsp trigger route-filter (BGP-VPN instance IPv4 address family view/BGP-labeled VPN instance IPv4 address family view)",
+    "FuncDef": "The ingress-lsp trigger route-filter command specifies a route filter to control the creation of ingress LSPs based on labeled BGP IPv4 routes.\nThe undo ingress-lsp trigger route-filter command restores the default configuration.\nBy default, ingress LSPs are not created based on received private BGP labeled routes.",
+    "CLIs": [
+        "ingress-lsp trigger route-filter <route-filter-name>",
+        "undo ingress-lsp trigger route-filter <route-filter-name>"
+    ],
+    "ParentView": [
+        "BGP-labeled VPN instance IPv4 address family view",
+        "BGP-VPN instance IPv4 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of a route filter to be used to create ingress LSPs based on BGP labeled routes.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] route-distinguisher 1:1",
+            "[*HUAWEI-vpn-instance-vpna-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] xpl route-filter test-filter",
+            "[*HUAWEI-xpl-filter] end-filter",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpna",
+            "[*HUAWEI-bgp-vpna] ingress-lsp trigger route-filter test-filter"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn a CSC scenario, BGP VPN labeled routes are required in order to establish end-to-end LSPs. To create ingress LSPs based on the BGP VPN labeled routes that match a route-filter, run the ingress-lsp trigger command.\nPrerequisites\nIf the filter policy specified in the ingress-lsp trigger command does not exist, you need to configure the filter policy using the xpl route-filter command first.\nConfiguration Impact\nIf the ingress-lsp trigger command is run more than once, the latest configuration overrides the previous one."
+}

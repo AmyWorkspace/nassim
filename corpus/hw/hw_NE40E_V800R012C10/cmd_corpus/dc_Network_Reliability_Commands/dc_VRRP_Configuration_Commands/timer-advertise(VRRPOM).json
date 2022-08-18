@@ -1,0 +1,55 @@
+{
+    "PageTitle": "vrrp vrid timer advertise",
+    "FuncDef": "The vrrp vrid timer advertise command sets an interval at which the master device sends a VRRP Advertisement packet.\nThe undo vrrp vrid timer advertise command restores the default interval.\n\nBy default, the master device sends a VRRP Advertisement packet every second.",
+    "CLIs": [
+        "vrrp vrid <virtual-router-id> timer advertise <advertise-interval>",
+        "undo vrrp vrid <virtual-router-id> timer advertise"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "advertise advertise-interval",
+            "Info": "Specifies the interval at which the master device sends a VRRP Advertisement packet.\nThe value is an integer ranging from 1 to 255, in seconds."
+        },
+        {
+            "Parameters": "vrid virtual-router-id",
+            "Info": "Specifies the ID of a VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/1",
+            "[~HUAWEI-GigabitEthernet1/0/1] ip address 10.1.1.1 24",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 virtual-ip 10.1.1.111",
+            "[*HUAWEI-GigabitEthernet1/0/1] vrrp vrid 1 timer advertise 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\n\nThe master device in a VRRP backup group periodically sends VRRP Advertisement packets to the backup devices in the group to notify them of its status. You can run the vrrp vrid timer advertise command to set an interval at which the master device in the VRRP backup group sends a VRRP Advertisement packet.\nIf a backup device does not receive a VRRP Advertisement packet from the master device within a period three times the interval (As defined in relevant standards protocols: Interval specified by master-down-interval= (256 - priority)/256 + 3 x timer. According to the formula, the default interval specified by master-down-interval is about three times the interval specified by advertise-interval.) between sending VRRP Advertisement packets, the backup device considers the master device Down and preempts the Master state. If a backup device does not receive a VRRP Advertisement packet within a specified timeout period due to heavy network traffic or timer differences, a master/backup VRRP switchover is performed. To prevent this situation, configure a large interval at which the master device sends VRRP Advertisement packets.\n\nPrerequisites\n\nA VRRP backup group has been configured using the vrrp vrid command.\n\nConfiguration Impact\n\nAfter the vrrp vrid timer advertise command is run, the master device in the specified VRRP backup group on a specified interface sends a VRRP Advertisement packet at a specified interval.\n\nPrecautions\n\nIf the undo vrrp timer-advertise learning enable command has been run to disable a device from learning the interval at which VRRP Advertisement packets are sent, ensure that the devices in the VRRP backup group have the same time for learning the interval. An interval inconsistency causes a VRRP negotiation failure. As a result, two master devices coexist."
+}

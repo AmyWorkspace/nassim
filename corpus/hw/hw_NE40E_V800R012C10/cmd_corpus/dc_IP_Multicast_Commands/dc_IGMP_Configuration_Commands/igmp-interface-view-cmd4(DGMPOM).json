@@ -1,0 +1,69 @@
+{
+    "PageTitle": "igmp access-limit",
+    "FuncDef": "The igmp access-limit command sets the maximum number of IGMP group memberships that can be created on an interface.\nThe undo igmp access-limit command cancels the setting.\nBy default, the maximum number of IGMP group memberships on an interface is not configured.",
+    "CLIs": [
+        "igmp access-limit <number> except { <acl-number> | acl-name <acl-name> }",
+        "igmp access-limit <number>",
+        "undo igmp access-limit"
+    ],
+    "ParentView": [
+        "PW-VE sub-interface view",
+        "40GE interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Eth-Trunk sub-interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "50GE sub-interface view",
+        "POS sub-interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "25GE interface view",
+        "100ge sub-interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "number",
+            "Info": "Specifies the maximum number of IGMP entries that can be created on an interface.\nThe value is an integer ranging from 1 to 16384."
+        },
+        {
+            "Parameters": "acl-number",
+            "Info": "Specifies the number of a basic or an advanced ACL.\nThe value is an integer.\nThe value ranging from 2000 to 2999 specifies a basic ACL. A basic ACL filters group addresses, without distinguishing between (*, G) and (S, G) entries.The value ranging from 3000 to 3999 specifies an advanced ACL. An advanced ACL filters only (S, G) entries on an interface."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp access-limit 1024"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] acl name myacl",
+            "[*HUAWEI-acl4-advance-myacl] rule permit ip source 1.1.1.1 0 destination 232.0.0.0 0.0.255.255",
+            "[*HUAWEI-acl4-advance-myacl] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp access-limit 1024 except acl-name myacl"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen a large number of multicast users request multiple programs simultaneously, excessive bandwidth resources will be exhausted, and the Router's performance will be degraded, deteriorating the multicast service quality. To prevent this issue, run the igmp access-limit command on a Router interface to limit the number of IGMP entries. When receiving an IGMP Join message from a user, the Router interface first checks whether the configured maximum number of IGMP entries is reached. If the maximum number is reached, the Router interface discards the IGMP Join message and rejects the user. If the maximum number is not reached, the Router interface sets up an IGMP membership and forwards data flows of the requested multicast group to the user. This mechanism enables users who have successfully joined multicast groups to enjoy smoother multicast services.\nThe principles of counting the number of IGMP entries are as follows:\nEach (*, G) entry is counted as one entry on an interface, and each (S, G) is counted as one entry on an interface.SSM-mapping (*, G) entries are not counted as entries on an interface, and each (S, G) entry mapped using the SSM-mapping mechanism is counted as one entry on an interface.\n\nPrerequisites\nThe multicast routing function has been enabled using the multicast routing-enable command.\nPrecautions\nTo use except, an ACL must be configured to filter IGMP Join messages received by an interface. If except is specified, the maximum number of IGMP entries is not effective for multicast groups that match the specified ACL. If except is not specified, the maximum number is effective for all multicast groups, including source-specific groups.\nThe igmp access-limit command requires an ACL configured using the acl (basic ACL) or acl (advanced ACL) command. To use a numbered ACL, perform either of the following operations to configure an ACL rule:\nIn the basic ACL view, specify the source parameter in the rule command to set the range of multicast groups whose IGMP entries are not limited.In the advanced ACL view, specify the source parameter in the rule command to set the range of sources that are allowed to send multicast data to multicast groups. Specify the destination parameter in the rule command to set the range of multicast groups whose IGMP entries are not limited.\nIf the igmp access-limit command is run more than once, the latest configuration overrides the previous one."
+}

@@ -1,0 +1,51 @@
+{
+    "PageTitle": "loss-measure enable",
+    "FuncDef": "The loss-measure enable command enables on-demand packet loss measurement for an IP Flow Performance Measurement (IP FPM) instance.\nThe undo loss-measure enable command disables on-demand packet loss measurement for an IP Flow Performance Measurement (IP FPM) instance.\nThe loss-measure enable continual command enables proactive packet loss measurement for an IP Flow Performance Measurement (IP FPM) instance.\nThe undo loss-measure enable command disables proactive packet loss measurement from an IP FPM instance.\nBy default, proactive packet loss measurement and on-demand packet loss measurement are disabled from an IP FPM instance.",
+    "CLIs": [
+        "loss-measure enable [ time-range <time-range> | continual ]",
+        "undo loss-measure enable"
+    ],
+    "ParentView": [
+        "IPFPM-DCP instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "time-range time-range",
+            "Info": "Specifies the statistical period for on-demand packet loss measurement.\nThe value is an integer that can be 5, 10, 15, or 30, in minutes.\nThe default value is 10 minutes."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] ipfpm tlp 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] nqa ipfpm mcp",
+            "[*HUAWEI-nqa-ipfpm-mcp] mcp id 1.1.1.1",
+            "[*HUAWEI-nqa-ipfpm-mcp] protocol udp port 2048",
+            "[*HUAWEI-nqa-ipfpm-mcp] instance 1",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1] dcp 1.1.1.1",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1] ach 1",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1-ach-1] flow forward",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1-ach-1] in-group dcp 1.1.1.1 tlp 100",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1-ach-1] quit",
+            "[*HUAWEI-nqa-ipfpm-mcp-instance-1] quit",
+            "[*HUAWEI-nqa-ipfpm-mcp] quit",
+            "[*HUAWEI] nqa ipfpm dcp",
+            "[*HUAWEI-nqa-ipfpm-dcp] dcp id 1.1.1.1",
+            "[*HUAWEI-nqa-ipfpm-dcp] mcp 1.1.1.1 port 2048",
+            "[*HUAWEI-nqa-ipfpm-dcp] instance 1",
+            "[*HUAWEI-nqa-ipfpm-dcp-instance-1] tlp 100 in-point ingress",
+            "[*HUAWEI-nqa-ipfpm-dcp-instance-1] flow forward source 1.1.1.1",
+            "[*HUAWEI-nqa-ipfpm-dcp-instance-1] commit",
+            "[*HUAWEI-nqa-ipfpm-dcp-instance-1] loss-measure enable time-range 30"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] nqa ipfpm dcp",
+            "[*HUAWEI-nqa-ipfpm-dcp] instance 1",
+            "[*HUAWEI-nqa-ipfpm-dcp-instance-1] loss-measure enable continual"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe IP FPM performance statistics serve as a reliable reference for assessing IP network performance and therefore are useful for fault diagnosis and service statistics.\nTo monitor on-demand packet loss performance in a specified period, run the loss-measure enable command.To detect faults when network performance deteriorates and monitor proactive packet loss performance, run the loss-measure enable continual command.\n\nPrerequisites\nAn IP FPM model has been established, including configuring a DCP and MCP, binding a TLP to a physical interface, and creating a target flow and IP FPM instance.\nPrecautions\nAfter a master/slave main control board switchover or a device restart, on-demand packet loss measurement does not take effect any longer.\nOn-demand packet loss measurement cannot function together with proactive packet loss measurement."
+}

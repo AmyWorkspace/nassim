@@ -1,0 +1,38 @@
+{
+    "PageTitle": "accounting interim interval",
+    "FuncDef": "The accounting interim interval command sets an interval for real-time accounting and the conditions for sending real-time accounting packets and hashes real-time accounting packets.\nThe undo accounting interim interval command restores the default value.\nBy default, accounting schemes are not real-time.",
+    "CLIs": [
+        "accounting interim interval <interval> [ second ] [ traffic ] [ hash ]",
+        "undo accounting interim interval"
+    ],
+    "ParentView": [
+        "Accounting scheme view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interval interval",
+            "Info": "Specifies the real-time accounting interval. When second is included in the command, the unit is second; otherwise, the unit is minute.\nThe value is an integer ranging from 0 to 65535."
+        },
+        {
+            "Parameters": "second",
+            "Info": "Specifies the unit of accounting interval. The unit is second.\n-"
+        },
+        {
+            "Parameters": "traffic",
+            "Info": "Specifies that real-time accounting packets are sent when traffic increment is not zero.\n-"
+        },
+        {
+            "Parameters": "hash",
+            "Info": "Specifies that real-time accounting packets are hashed.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] accounting-scheme huawei",
+            "[*HUAWEI-aaa-accounting-huawei] accounting interim interval 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDuring real-time accounting for online users, the device periodically generates and sends accounting packets to a remote accounting server. Real-time accounting is a bill-protection measure to ensure minimum error and maximum accuracy of CDRs when a link is faulty.\nTo prevent the server from receiving a large number of real-time accounting packets so that server performance is not affected, configure hash or traffic.\nWhen a large number of users go online during the same time, a lot of real-time accounting packets are generated within a short period of time. If the interval values specified for these online users are the same, a lot of real-time accounting packets are generated at each interval. If the number of real-time accounting packets exceeds the processing capability of an accounting server, the performance of the accounting server is affected. In this situation, you can hash the real-time accounting packets. After that, the first real-time accounting packet for each user is generated after a random value between interval and 2 x interval, the other real-time accounting packets are generated at each interval. This prevents a large number of real-time accounting packets to be generated in a short period of time and minimize the influence on the performance of accounting servers.\nIf the accounting server performs accounting according to traffic flow, you are advised to configure the parameter traffic. By doing this, the system sends real-time accounting packets when traffic increment of value-added services is not zero. In this way, the system will not generate a large number of real-time accounting packets in a short time, avoiding a serious impact on the accounting server.\nPrecautions\nIf the accounting server performs accounting according to traffic duration, it is not necessary to configure the parameter traffic.\nIf the accounting interval is less than 1 hour, the system pressure may increase, causing the CPU usage to increase."
+}

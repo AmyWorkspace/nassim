@@ -1,0 +1,55 @@
+{
+    "PageTitle": "spoke-sdp",
+    "FuncDef": "This command binds a service to an existing Service Distribution Point (SDP). A spoke-SDP is treated like the equivalent of a traditional bridge \"port\" where flooded traffic received on the spoke-SDP is replicated on all other \"ports\" (other spoke and mesh SDPs or SAPs) and not transmitted on the port it was received.",
+    "CLIs": [
+        "spoke-sdp sdp-id [ <:vc-id> ] [ vc-type { ether | vlan } ] [ split-horizon-group <group-name> ] endpoint [ no-endpoint ] [ root-leaf-tag | leaf-ac ]",
+        "no spoke-sdp sdp-id [ <:vc-id> ]"
+    ],
+    "ParentView": [
+        "config>service>vpls"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "sdp-id",
+            "Info": "Specifies the SDP identifier. Values-1 to 17407."
+        },
+        {
+            "Parameters": "vc-id",
+            "Info": "Specifies the virtual circuit identifier. Values-1 to 4294967295."
+        },
+        {
+            "Parameters": "vc-type",
+            "Info": "This command overrides the default VC type signaled for the spoke or mesh binding to the far end of the SDP. The VC type is a 15 bit-quantity containing a value which represents the type of VC. The actual signaling of the VC type depends on the signaling parameter defined for the SDP. If signaling is disabled, the vc-type command can still be used to define the dot1q value expected by the far-end provider equipment. A change of the bindings VC type causes the binding to signal the new VC type to the far end when signaling is enabled. \nVC types are derived according to IETF draft-martini-l2circuit-trans-mpls. Values-ether, vlan."
+        },
+        {
+            "Parameters": "ether",
+            "Info": "Defines the VC type as Ethernet. The ethernet and vlan keywords are mutually exclusive. When the VC type is not defined then the default is Ethernet for spoke-SDP bindings. Defining Ethernet is the same as executing no vc-type and restores the default VC type for the spoke-SDP binding. (hex 5)."
+        },
+        {
+            "Parameters": "vlan",
+            "Info": "Defines the VC type as VLAN. The ethernet and vlan keywords are mutually exclusive. When the VC type is not defined then the default is Ethernet for spoke-SDP bindings. \nThe VLAN VC-type inserts one dot1q tag within each encapsulated Ethernet packet transmitted to the far end and strips one dotQ tag, if a tag is present, from traffic received on the pseudowire."
+        },
+        {
+            "Parameters": "group-name",
+            "Info": "Specifies the name of the split horizon group to which the SDP belongs."
+        },
+        {
+            "Parameters": "endpoint",
+            "Info": "Specifies the service endpoint to which this SDP bind is attached. The service ID of the SDP binding must match the service ID of the service endpoint."
+        },
+        {
+            "Parameters": "no endpoint",
+            "Info": "Removes the association of a spoke-SDP with an explicit endpoint name."
+        },
+        {
+            "Parameters": "root-leaf-tag",
+            "Info": "Specifies a tagging spoke-SDP under an E-Tree VPLS. When a tag SDP binding is required, it is created with a root-leaf-tag flag. Only VLAN tag SDP bindings are supported. The VLAN type must be set to VC VLAN type. The root-leaf-tag parameter indicates this SDP binding is a tag SDP that will use a default VID tag of 1 for root and 2 for leaf. The SDP binding tags egress E-Tree traffic with root and leaf VIDs as appropriate. Root and leaf VIDs are only significant between peering VPLS but the values must be consistent on each end. On ingress a tag SDP binding removes the VID tag on the interface between VPLS in the same E-Tree service. The tag SDP receives root tagged traffic and marks the traffic with a root indication internally. This option is not available on BGP EVPN-enabled E-Tree services."
+        },
+        {
+            "Parameters": "leaf-ac",
+            "Info": "Specifies an access (AC) spoke-SDP binding under a E-Tree VPLS as a leaf access (AC) SDP. The default E-Tree SDP binding type is a root-ac if leaf-ac or root-leaf-tag is not specified at SDP creation. This option is only available when the VPLS is designated as an E-Tree VPLS. BGP EVPN-enabled E-Tree VPLS services support the leaf-ac option."
+        }
+    ],
+    "Examples": null,
+    "ExtraInfo": "Default: none"
+}

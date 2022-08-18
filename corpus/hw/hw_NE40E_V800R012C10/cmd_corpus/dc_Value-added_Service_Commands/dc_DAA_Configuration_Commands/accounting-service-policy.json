@@ -1,0 +1,38 @@
+{
+    "PageTitle": "accounting-service-policy",
+    "FuncDef": "The accounting-service-policy command applies a DAA traffic policy globally.\nThe undo accounting-service-policy command restores the default configuration.\nBy default, no DAA traffic policy is applied globally.",
+    "CLIs": [
+        "accounting-service-policy <policy-name>",
+        "undo accounting-service-policy"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy-name",
+            "Info": "Specifies the name of a DAA traffic policy.\nThe value is a string of 1 to 127 characters. The value is a string of case-insensitive characters, spaces not supported."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "<HUAWEI> user-group u1",
+            "[~HUAWEI] acl 6000",
+            "[*HUAWEI-ucl-6000] rule permit ip source user-group u1 destination ip-address 10.0.0.0 0.0.255.255",
+            "[*HUAWEI-ucl-6000] quit",
+            "[*HUAWEI] traffic classifier c1",
+            "[*HUAWEI-classifier-c1] if-match acl 6000",
+            "[*HUAWEI-classifier-c1] quit",
+            "[*HUAWEI] traffic behavior b1",
+            "[*HUAWEI-behavior-b1] tariff-level 1",
+            "[*HUAWEI-behavior-b1] quit",
+            "[*HUAWEI] traffic policy p1",
+            "[*HUAWEI-trafficpolicy-p1] classifier c1 behavior b1",
+            "[*HUAWEI-trafficpolicy-p1] commit",
+            "[~HUAWEI-trafficpolicy-p1] quit",
+            "[~HUAWEI] accounting-service-policy p1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo apply a DAA traffic policy globally, run the accounting-service-policy command.\nPrerequisites\nA DAA traffic policy has been configured, and a traffic classifier and traffic behavior have been bound to the policy.\nPrecautions\nThis command is supported only on the admin VS.\nThe accounting-service-policy and classifier [ { source | destination } { user-group | service-group }  ] behavior  [ precedence  ] commands are mutually exclusive."
+}

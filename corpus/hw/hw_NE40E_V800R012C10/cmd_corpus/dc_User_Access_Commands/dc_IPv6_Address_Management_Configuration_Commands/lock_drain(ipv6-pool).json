@@ -1,0 +1,25 @@
+{
+    "PageTitle": "lock drain(IPv6 address pool view)",
+    "FuncDef": "The lock drain command locks an IP address pool so that the renew packets sent by online users in the address pool and the rebind packets sent at 7/8 of the lease periods. In the through packet phase, the device discards the solicit and request packets of online users.\nThe undo lock drain command unlocks an IP address pool.\nBy default, no address pool is locked.",
+    "CLIs": [
+        "lock drain",
+        "undo lock drain"
+    ],
+    "ParentView": [
+        "IPv6 address pool view"
+    ],
+    "ParaDef": null,
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 pool pool1 bas local",
+            "[~HUAWEI-ipv6-pool-pool1] lock drain"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ipv6 pool pool1 bas local",
+            "[~HUAWEI-ipv6-pool-pool1] undo lock drain"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAn IP address pool with an in-use IP address cannot be deleted. Therefore, lock an IP address pool before you delete the address pool. The address pool can be deleted after all online users using the address pool go offline upon lease expiry. To lock an IP address pool, run the lock drain command.\nThe lock drain function of the address pool does not support the configuration of the prefix pool, PPPoE users, or remote address pool of ND users.\nAfter the bas remote address pool is configured and the BAS interface is undo dhcp-proxy, the BAS device does not process the lease renewal packets from the client and directly sends the packets to the server. In this case, the lock drain function of the address pool is invalid.\nConfiguration Impact\nAfter the lock drain command is run, no IPv6 address in the address pool can be assigned to new users and the Renew messages sent at 1/2 of the lease and Rebind messages sent at 7/8 of the lease from online users are discarded so that the users go offline due to lease renewal failures. To unlock an IPv6 address pool, run the undo lock drain command. The IPv6 address pool can be used again after being unlocked.\nPrecautions\nThis command is supported only on the admin VS.\nThe lock drain command does not take effect for PPPoE users or ND users in remote address pool scenarios.\nFor a remote BAS address pool, if the undo dhcp-proxy enable command is run in the BAS interface view, the device directly sends Renew or Rebind messages from clients to the DHCPv6 server instead of processing the messages. In this case, the lock drain command does not take effect for the remote BAS address pool.\nThe lock drain and lock commands are mutually exclusive.\nUsers whose IP addresses are delivered by the RADIUS server from a locked address pool are not allowed to go online or renew the lease."
+}

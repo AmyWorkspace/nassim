@@ -1,0 +1,69 @@
+{
+    "PageTitle": "user-priority",
+    "FuncDef": "The user-priority command configures the priority of user traffic in a domain.\nThe undo user-priority command restores the default priority of traffic of users in a domain.\nThe user-priority set-dscp-outer command sets the outer DSCP value to be negotiated with an LNS for Echo Request and Echo Reply packets to be sent by the LNS over an L2TP tunnel.\nThe undo user-priority set-dscp-outer command restores the  outer dscp value of the echo request/reply default setting  sent by the LNS to 48.\nBy default, the priorities of the upstream and downstream traffic of users are both 0.",
+    "CLIs": [
+        "user-priority { upstream | downstream } { <priority> | trust-8021p-inner | trust-8021p-outer | trust-exp-inner | trust-exp-outer | trust-dscp-inner | trust-dscp-outer | unchangeable }",
+        "user-priority set-dscp-outer <dscp-outer>",
+        "undo user-priority { upstream | downstream }",
+        "undo user-priority set-dscp-outer"
+    ],
+    "ParentView": [
+        "AAA domain view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "upstream",
+            "Info": "Sets the priority of the user-side traffic in the upstream direction.\n-"
+        },
+        {
+            "Parameters": "downstream",
+            "Info": "Sets the priority of the user-side traffic in the downstream direction.\n-"
+        },
+        {
+            "Parameters": "priority",
+            "Info": "Specifies the priority of user traffic.\nThe value is a inter, ranging from 0 to 7."
+        },
+        {
+            "Parameters": "trust-8021p-inner",
+            "Info": "Indicates that the user priority is the 8021p value of the inner tags carried in Layer 2 user packets.\n-"
+        },
+        {
+            "Parameters": "trust-8021p-outer",
+            "Info": "Indicates that the user priority is the 8021p value of the outer tags carried in Layer 2 user packets.\n-"
+        },
+        {
+            "Parameters": "trust-exp-inner",
+            "Info": "Indicates that the user priority is the EXP value of the inner tags carried in MPLS packets.\n-"
+        },
+        {
+            "Parameters": "trust-exp-outer",
+            "Info": "Indicates that the user priority is the EXP value of the outer tags carried in MPLS packets.\n-"
+        },
+        {
+            "Parameters": "trust-dscp-inner",
+            "Info": "Indicates that the user priority is the DSCP value of the inner tags carried in IP packets.\n-"
+        },
+        {
+            "Parameters": "trust-dscp-outer",
+            "Info": "Indicates that the user priority is the DSCP value of the outer tags carried in IP packets.\n-"
+        },
+        {
+            "Parameters": "unchangeable",
+            "Info": "Indicates that the user priority is not changed.\n-"
+        },
+        {
+            "Parameters": "set-dscp-outer dscp-outer",
+            "Info": "Specifies the DSCP value of the outer tags carried in IP packets.\nThe value is an inter, ranging from 0 to 63."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[*HUAWEI-aaa] domain domain1",
+            "[*HUAWEI-aaa-domain-domain1] commit",
+            "[~HUAWEI-aaa-domain-domian1] user-priority upstream 7"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe user-priority command configuration takes effect only after the trust upstream is configured in the AAA domain or on an interface.\nCurrently, one domain can be configured with only one user priority.\nIn the L2TP scenario, when the user-priority downstream trust-exp-inner command is configured on the LAC or LTS, packets are placed in queues based on the outer EXP value.\nPrecautions\nThe user-priority set-dscp-outer command takes effect on the LAC. After the command is run, the LAC sends the specified outer DSCP value to the LNS through an ICRQ packet, and negotiates the AVP48 attribute's DSCP value with the LNS. If the received outer DSCP value is mapped to a red queue, the LNS ignores the value and uses the fixed value 32."
+}

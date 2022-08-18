@@ -1,0 +1,57 @@
+{
+    "PageTitle": "igmp robust-count",
+    "FuncDef": "The igmp robust-count command sets a robustness variable for an IGMP querier on an interface.\nThe undo igmp robust-count command restores the default setting.\nBy default, the robustness variable of an IGMP querier is 2.",
+    "CLIs": [
+        "igmp robust-count <robust-value>",
+        "undo igmp robust-count"
+    ],
+    "ParentView": [
+        "Virtual template view",
+        "PW-VE sub-interface view",
+        "Tunnel interface view",
+        "40GE interface view",
+        "IP-Trunk interface view",
+        "GE electrical interface view",
+        "Port extension interface view",
+        "Loopback interface view",
+        "Serial interface view",
+        "Eth-Trunk sub-interface view",
+        "50GE sub-interface view",
+        "MP-group interface view",
+        "400GE interface view",
+        "10GE interface view",
+        "POS sub-interface view",
+        "GE sub-interface view",
+        "VBDIF interface view",
+        "VE sub-interface view",
+        "25GE sub-interface view",
+        "GE interface view",
+        "100GE interface view",
+        "VLANIF interface view",
+        "Global VE sub-interface view",
+        "50GE interface view",
+        "400GE sub-interface view",
+        "GE optical interface view",
+        "100ge sub-interface view",
+        "25GE interface view",
+        "40GE sub-interface view",
+        "Eth-Trunk interface view",
+        "10GE sub-interface view",
+        "POS interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "robust-value",
+            "Info": "Specifies the robustness variable for an IGMP querier. It is the number of attempts to retransmit messages to compensate for packet loss.\nThe value is an integer ranging from 2 to 5."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] igmp robust-count 3"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nOn a shared network segment where user hosts reside, the querier is responsible for maintaining IGMP group memberships. The robustness variable affects the timeout period of group memberships. The timeout period of a group membership is calculated by using the formula: Timeout period of a group membership = Interval for sending general IGMP query messages x Robustness variable + Maximum response time. The robustness variable defines the following values:\nNumber of times for sending general query messages when the querier starts\nWhen the querier starts, it sends general query messages for the number of \"robustness variable\" times to query the multicast groups that have members on the attached network segment. The sending interval is 1/4 of the interval for sending general query messages. The interval for sending general query messages can be set by using the igmp timer query command or the timer query command.\nNumber of times for sending IGMPv2 or IGMPv3 group-specific query messages when the querier receives a Leave message\nAfter receiving a Leave message for a group, the querier sends group-specific query messages continuously for the number of \"robustness variable\" times to check whether any other member of this group exists. The interval for sending group-specific query messages can be set by using the igmp lastmember-queryinterval command or the lastmember-queryinterval command.\nNumber of times for a querier to send group/source-specific query messages after receiving an IGMPv3 (S, G) Report message\nAfter receiving a Report message for a multicast group corresponding to a source list, the querier sends group/source-specific query messages for the \"robustness variable\" times. The interval for sending group/source-specific query messages can be set by using the igmp lastmember-queryinterval command or the lastmember-queryinterval command.\nThe function of the igmp robust-count command is the same as the function of the robust-count command in the IGMP view. The configuration in the IGMP view is effective for all interfaces, whereas the configuration in the interface view is effective only for the specified interface. The configuration in the interface view takes precedence over the configuration in the IGMP view. The configuration in the IGMP view is used only when the configuration in the interface view is not available."
+}

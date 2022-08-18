@@ -1,0 +1,46 @@
+{
+    "PageTitle": "multicast-list ipv6 (IPv6 multicast profile view)",
+    "FuncDef": "The multicast-list ipv6 command binds IPv6 multicast lists to an IPv6 multicast profile.\nThe undo multicast-list ipv6 command unbinds the IPv6 multicast lists from an IPv6 multicast profile.\nBy default, no IPv6 multicast list is bound to an IPv6 multicast profile.",
+    "CLIs": [
+        "multicast-list ipv6 { name <list-name> | list-index <start-index> [ <end-index> ] } [ static ]",
+        "undo multicast-list ipv6 { name <list-name> | list-index <start-index> [ <end-index> ] } [ static ]"
+    ],
+    "ParentView": [
+        "IPv6 multicast profile view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "name list-name",
+            "Info": "Specifies the name of an IPv6 multicast program list. The specified list must have been created.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported. The string can contain letters, digits, underscores (_), hyphens (-), and dots (.). It must start with a letter or digit."
+        },
+        {
+            "Parameters": "list-index start-index",
+            "Info": "Specifies the start index of the IPv6 multicast list that is bound to the IPv6 multicast profile.\nThe value is an integer that ranges from 0 to 8191."
+        },
+        {
+            "Parameters": "end-index",
+            "Info": "Specifies the end index of an IPv6 multicast program list.\nThe value is an integer ranging from 0 to 8191."
+        },
+        {
+            "Parameters": "static",
+            "Info": "Specifies statically binds.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] multicast-list ipv6 cctv1 group-ipv6-address ff02::1",
+            "[*HUAWEI-aaa] multicast-profile ipv6 profile1",
+            "[*HUAWEI-aaa-mprofileipv6-profile1] multicast-list ipv6 name cctv1 static"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] multicast-list ipv6 cctv1 group-ipv6-address ff02::1",
+            "[*HUAWEI-aaa] multicast-profile ipv6 profile1",
+            "[*HUAWEI-aaa-mprofileipv6-profile1] multicast-list ipv6 name cctv1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe multicast-list ipv6 command binds IPv6 multicast lists to an IPv6 multicast profile.\nAfter running the multicast-list static ipv6 command in the AAA view to create a multicast program list and add the group address of the program to the list, run the multicast-list static (IPv6 multicast profile view) command to bind the multicast program list to a multicast profile. Then, users of this multicast profile can receive the service flows of the program without sending MLD Report messages after they go online. Use these commands when a program (such as an advertisement program) needs to be pushed to users, delivered to users' STBs before users join the program, or delivered to Layer 2 devices before users join the program. These commands help shorten the program switching duration.\nPrecautions\nA maximum of eight IPv6 multicast program lists can be bound to the same multicast profile.\nBefore running the multicast-list static command in the IPv6 multicast profile view, ensure that the target multicast program lists have been created.\nend-index must not be less than start-index.\nAn IPv6 multicast program list cannot be bound to an IPv6 multicast profile if masks are configured for multicast source or group addresses in the program list."
+}

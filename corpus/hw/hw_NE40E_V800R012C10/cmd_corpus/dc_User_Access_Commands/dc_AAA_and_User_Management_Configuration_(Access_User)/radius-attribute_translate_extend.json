@@ -1,0 +1,58 @@
+{
+    "PageTitle": "radius-attribute translate extend",
+    "FuncDef": "The radius-attribute translate extend command performs proprietary RADIUS attribute translation.\nThe undo radius-attribute translate extend command cancels proprietary RADIUS attribute translation.\nBy default, proprietary RADIUS attribute translation is not configured.",
+    "CLIs": [
+        "radius-attribute translate extend <src-attr-description> <dest-attr-description> { access-request | access-accept | account } *",
+        "radius-attribute translate extend <src-attr-description> vendor-specific <src-vendor-id> <src-sub-attr-id> { access-request | account } *",
+        "radius-attribute translate extend vendor-specific <src-vendor-id> <src-sub-attr-id> <dest-attr-description> access-accept",
+        "undo radius-attribute translate extend [ <src-attr-description> | vendor-specific <src-vendor-id> <src-sub-attr-id> ]"
+    ],
+    "ParentView": [
+        "RADIUS server group view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "src-attr-description",
+            "Info": "Specifies the source attribute description. The value can automatically match the attribute names in the attribute dictionary.\nThe value is a string of 1 to 64 characters."
+        },
+        {
+            "Parameters": "dest-attr-description",
+            "Info": "Specifies the destination attribute description. The value can automatically match the attribute names in the attribute dictionary.\nThe value is a string of 1 to 64 characters."
+        },
+        {
+            "Parameters": "access-request",
+            "Info": "Indicates an access-request packet.\n-"
+        },
+        {
+            "Parameters": "access-accept",
+            "Info": "Indicates an access-accept packet.\n-"
+        },
+        {
+            "Parameters": "account",
+            "Info": "Indicates an accounting packet.\n-"
+        },
+        {
+            "Parameters": "extend",
+            "Info": "Indicates an extension attribute.\n-"
+        },
+        {
+            "Parameters": "vendor-specific src-vendor-id",
+            "Info": "Specifies the vendor ID.\nThe value is an integer of 1 to 4294967295"
+        },
+        {
+            "Parameters": "src-sub-attr-id",
+            "Info": "Specifies the sub ID.\nThe value is an integer of 1 to 255"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "Enter system view, return user view with return command.",
+            "[~HUAWEI] radius-server group  huawei",
+            "Info: Create a new server group ",
+            "[*HUAWEI-radius-huawei] commit",
+            "[~HUAWEI-radius-huawei] radius-attribute  translate extend hw-avpair hw-account-info access-request"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen the device connects to the RADIUS server, the RADIUS attributes supported by the two devices may be different. If the formats of the attributes are the same and only the vendor number and attribute number are different, you can use the attribute conversion to adapt to the differences.\nPrerequisites\nBefore performing RADIUS attribute translation, you need to run the radius-server attribute translate command to enable RADIUS attribute explanation.\nConfiguration Impact\nAfter the attribute translation function is configured, the device can encapsulate or parse src-attribute by using the format of dest-attribute when transmitting or receiving RADIUS packets. By doing this, the device can communicate with different types of RADIUS servers.\nFor details about the attributes that can be translated and attribute translation formats, see \"RADIUS Attributes\" in the Feature Description.\nPrecautions\nFor the same source attribute name and destination attribute name, if different packet types (access-accept, access-request, and account) are configured for multiple times, the union set of the packet types is used.For the same source attribute name, only one destination attribute name can be configured. To configure a new destination attribute name, delete the current destination attribute name first.After the function to convert attributes is enabled, the converted attributes cannot be modified through flexible interoperation of RADIUS attributes based on the attribute number used before the conversion."
+}

@@ -1,0 +1,40 @@
+{
+    "PageTitle": "mpls bgp bfd (MPLS-BGP-VPN instance view)",
+    "FuncDef": "The mpls bgp bfd command sets time parameters for BGP BFD sessions.\nThe undo mpls bgp bfd command restores default time parameters for BGP BFD sessions.\nBy default, no time parameters are set for BGP BFD sessions.",
+    "CLIs": [
+        "mpls bgp bfd { detect-multiplier <value-detect-multiplier> | min-rx-interval <value-min-rx-interval> | min-tx-interval <value-min-tx-interval> } *",
+        "undo mpls bgp bfd { detect-multiplier <value-detect-multiplier> | min-rx-interval <value-min-rx-interval> | min-tx-interval <value-min-tx-interval> } *",
+        "undo mpls bgp bfd { detect-multiplier | min-rx-interval | min-tx-interval } *"
+    ],
+    "ParentView": [
+        "MPLS-BGP-VPN instance view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "detect-multiplier value-detect-multiplier",
+            "Info": "Specifies the local BGP BFD detection multiplier.\nThe value is an integer ranging from 3 to 50. The default value is 3."
+        },
+        {
+            "Parameters": "min-rx-interval value-min-rx-interval",
+            "Info": "Specifies the minimum interval at which BGP BFD packets are received.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        },
+        {
+            "Parameters": "min-tx-interval value-min-tx-interval",
+            "Info": "Specifies the minimum interval at which BGP BFD packets are sent.\nThe value is an integer ranging from 3 to 20000, in milliseconds. The default value is 10."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instance vpna",
+            "[*HUAWEI-vpn-instance-vpna] quit",
+            "[*HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] bfd",
+            "[*HUAWEI-bfd] quit",
+            "[*HUAWEI] mpls bgp vpn-instance vpna",
+            "[*HUAWEI-mpls-bgp-vpn-instance-vpna] mpls bgp bfd min-tx-interval 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA BGP BFD session working in asynchronous mode monitors BGP LSPs over BGP tunnels. The ingress and egress of E2E BGP LSPs exchange BFD packets periodically. If a node receives no BFD packet after the detection period elapses, the node considers the BGP LSP faulty.BFD time parameters are calculated as follows:- Effective local interval at which BFD packets are sent = MAX { Locally configured minimum interval at which BFD packets are sent, Remotely configured minimum interval at which BFD packets are received } - Effective local interval at which BFD packets are received = MAX { Remotely configured minimum interval at which BFD packets are sent, Locally configured minimum interval at which BFD packets are received } - Local BFD detection period = Effective local interval at which BFD packets are received x Remotely configured BFD detection multiplierThe egress has the fixed minimum interval at which BGP BFD packets are sent, the fixed minimum interval at which BGP BFD packets are received, and the detection multiplier of 3. You can only change the time parameters on the ingress so that the BFD time parameters can be updated on both the ingress and egress."
+}

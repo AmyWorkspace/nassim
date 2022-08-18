@@ -1,0 +1,104 @@
+{
+    "PageTitle": "display igmp group",
+    "FuncDef": "The display igmp group ssm-mapping command displays information about multicast groups for which source-specific multicast (SSM) mapping rules are configured using the ssm-mapping command.\nThe display igmp group command displays information about IGMP groups, including multicast groups that hosts dynamically join by sending Report messages and multicast groups to which hosts are statically added by using commands.",
+    "CLIs": [
+        "display igmp group [ <group-address> | interface { <interface-type> <interface-number> | <interface-name> } ] * [ ssm-mapping ] [ verbose ]",
+        "display igmp { vpn-instance <vpn-instance-name> | all-instance } group [ <group-address> | interface { <interface-type> <interface-number> | <interface-name> } ] * [ ssm-mapping ] [ verbose ]"
+    ],
+    "ParentView": [
+        "All views"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "group-address",
+            "Info": "Displays configurations and running information about IGMP groups that have the specified group address.\ngroup-address specifies a multicast group address.\nThe value ranges from 224.0.0.0 to 239.255.255.255, in dotted decimal notation."
+        },
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Displays configurations and running information about IGMP groups that a specified interface joins.\n-"
+        },
+        {
+            "Parameters": "interface-name",
+            "Info": "Displays configurations and running information about IGMP groups that a specified interface joins.\n-"
+        },
+        {
+            "Parameters": "ssm-mapping",
+            "Info": "Specifies information about multicast groups for which source-specific multicast (SSM) mapping rules are configured using the ssm-mapping command.\n-"
+        },
+        {
+            "Parameters": "verbose",
+            "Info": "Displays detailed configurations and running information about IGMP groups that hosts dynamically join or the IGMP groups to which hosts are statically added.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Displays configurations and running information about IGMP groups in a specified VPN instance.\nvpn-instance-name specifies a VPN instance name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "all-instance",
+            "Info": "Displays configurations and running information about IGMP groups in all instances.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> display igmp group",
+            "Interface group report information of VPN-Instance: public net",
+            " GigabitEthernet1/0/1(10.1.6.2):",
+            "  Total 1 IGMP Group reported",
+            "   Group Address   Last Reporter   Uptime      Expires",
+            "   225.1.1.2       10.1.6.10       00:02:04    00:01:17"
+        ],
+        [
+            "<HUAWEI> display igmp group verbose",
+            "Interface group report information of VPN-Instance: public net",
+            " Limited entry of this VPN-Instance: -",
+            " GigabitEthernet1/0/1(10.1.6.2)",
+            "  Total entries on this interface: 2",
+            "  Limited entry on this interface: -",
+            "  Access-Limited entries on this interface: 2",
+            "  Total 2 IGMP Groups reported",
+            "   Group: 224.0.1.22",
+            "     Uptime: 00:03:59",
+            "     Expires: 00:01:21",
+            "     Last reporter: 10.1.6.1",
+            "     Last-member-query-counter: 0",
+            "     Last-member-query-timer-expiry: off",
+            "     Version1-host-present-timer-expiry: off",
+            "   Group: 239.255.255.253",
+            "     Uptime: 00:03:59",
+            "     Expires: 00:01:26",
+            "     Last reporter: 10.1.6.3",
+            "     Last-member-query-counter: 0",
+            "     Last-member-query-timer-expiry: off",
+            "     Version1-host-present-timer-expiry: off"
+        ],
+        [
+            "<HUAWEI> display igmp group ssm-mapping",
+            "IGMP SSM mapping interface group report information of VPN-Instance: public net",
+            " Limited entry of this VPN-Instance: -",
+            " GigabitEthernet1/0/0(192.168.101.1):",
+            "  Total 1 IGMP SSM-Mapping Group reported",
+            "   Group Address   Last Reporter   Uptime      Expires",
+            "   232.0.0.1       192.168.101.1   00:00:02    00:02:08"
+        ],
+        [
+            "<HUAWEI> display igmp group ssm-mapping verbose",
+            "Interface group report information of VPN-Instance: public net",
+            " Limited entry of this VPN-Instance: -",
+            " GigabitEthernet1/0/0(10.133.133.1):",
+            "  Total entry on this interface: 1",
+            "  Limited entries on this interface: -",
+            "  Access-Limited entries on this interface: 1",
+            "  Total 1 IGMP SSM-Mapping Group reported",
+            "   Group: 232.0.0.1",
+            "     Uptime: 00:00:15",
+            "     Expires: 00:01:55",
+            "     Last reporter: 192.168.27.62",
+            "     Last-member-query-counter: 0",
+            "     Last-member-query-timer-expiry: off",
+            "     Source list:",
+            "       Source Address        Uptime",
+            "       10.11.0.4          00:00:08"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a host wants to receive multicast data for a multicast group, the host must join the multicast group. Either of the following modes can be used to enable a host to join a multicast group:\nDynamic mode: Run the igmp enable command to enable IGMP on the interface connected to the network segment on which the host resides. Then, the network sends data to the host after the host joins the group and stops sending data after the host leaves the group.Static mode: Run the igmp static-group command to enable IGMP on the interface connected to the network segment on which the host resides. Then, the host becomes a static data receiver of this group, and the network keeps sending data to the host.\nTo learn the status of or locate a fault in a dynamically joined multicast group, run the display igmp group command to view information about the multicast group. The information helps you analyze and locate the fault.\n\nPrecautions\nBefore using the display igmp group command, note the following:\nIf neither vpn-instance nor all-instance is specified, the command displays information about multicast groups in the public network instance.If group-address is specified, the command displays information about the specified IGMP group.If interface is specified, the command displays information about IGMP groups that the specified interface joins.If verbose is specified, the command displays detailed information about IGMP groups."
+}

@@ -1,0 +1,32 @@
+{
+    "PageTitle": "mpls rsvp-te authentication (MPLS RSVP-TE neighbor view)",
+    "FuncDef": "The mpls rsvp-te authentication command enables authentication on an interface.\nThe undo mpls rsvp-te authentication command disables authentication on an interface.\nBy default, authentication is disabled. Configuring RSVP authentication is recommended to improve device security.",
+    "CLIs": [
+        "mpls rsvp-te authentication { cipher <authkey-cipher> | plain <authkey-plain> }",
+        "undo mpls rsvp-te authentication"
+    ],
+    "ParentView": [
+        "MPLS RSVP-TE neighbor view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "cipher authkey-cipher",
+            "Info": "Specifies an authentication key in ciphertext.\nThe value is a string, spaces not supported. A ciphertext key is 20 to 392 characters."
+        },
+        {
+            "Parameters": "plain authkey-plain",
+            "Info": "Specifies an authentication key in simple text.\nThe value is a string, spaces not supported. A simple text key is 1 to 255 characters"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] mpls te",
+            "[*HUAWEI-mpls] mpls rsvp-te",
+            "[*HUAWEI-mpls] mpls rsvp-te peer 10.1.0.1",
+            "[*HUAWEI-mpls-rsvp-te-peer-10.1.0.1] mpls rsvp-te authentication cipher Huawei-123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nRSVP authentication can be configured to improve network reliability and security and prevent attacks initiated using messages modified or forged by unauthorized users.\nRSVP authentication can prevent the setup of an illegal RSVP neighbor relationship using the following methods and protect the local node against attacks (such as malicious reservation of a larger number of bandwidth resources):\nAn unauthorized node attempts to set up an RSVP neighbor relationship with the local node.A remote node generates and sends forged RSVP messages to set up a neighbor relationship with the local node.\n\nPrerequisites\nThe mpls rsvp-te command has been run to enable RSVP-TE in the MPLS and interface views.\nConfiguration Impact\nIf the mpls rsvp-te authentication command is configured in the MPLS RSVP-TE neighbor view, a neighbor node sends RSVP-TE packets all carrying authentication information that is calculated using the key of the configured authentication mode, and authenticates all received RSVP-TE packets based on the configured key.\nIf the mpls rsvp-te authentication command is run on an interface, the interface sends RSVP-TE packets all carrying authentication information that is calculated using the key of the configured authentication mode, and authenticates all received RSVP-TE packets based on the configured key.\nPrecautions\nThe mpls rsvp-te authentication command run in either of the following views produces a specific result:\nIf this command is run in the interface view, RSVP authentication takes effect on packets received by the interface.If this command is run in the MPLS RSVP-TE neighbor view, RSVP authentication takes effect on packets received by the local RSVP-TE neighbor.\nParameters are optional for configuring HMAC-MD5 or keychain authentication:\ncipher: indicates HMAC-MD5 authentication with the key displayed in cipher text.plain: indicates HMAC-MD5 authentication with the key displayed in plain text.keychain: indicates keychain authentication with a globally configured keychain.\nHMAC-MD5 authentication has low security. In order to ensure better security, it is recommended to use Keychain authentication and use a more secure algorithm, such as HMAC-SHA-256.\nRun the mpls rsvp-te authentication keychain command to ensure that the authentication keys and authentication algorithms remain consistent on both ends of a TE LSP."
+}

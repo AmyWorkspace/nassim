@@ -1,0 +1,55 @@
+{
+    "PageTitle": "import to dcn-ospf(Virtual access port-extension view)",
+    "FuncDef": "The import to dcn-ospf command imports a specified protocol's routes into DCN.\nThe undo import to dcn-ospf command restores the default configuration.\nBy default, DCN does not import any route from other protocols.",
+    "CLIs": [
+        "import { bgp [ vpn-instance <vpn-instance-name> ] | static [ vpn-instance <vpn-instance-name> ] | isis <process-id> | ospf <process-id> | direct [ vpn-instance <vpn-instance-name> ] } to dcn-ospf [ route-policy <route-policy-name> ]",
+        "undo import { bgp [ vpn-instance <vpn-instance-name> ] | static [ vpn-instance <vpn-instance-name> ] | isis <process-id> | ospf <process-id> | direct [ vpn-instance <vpn-instance-name> ] } to dcn-ospf [ route-policy <route-policy-name> ]"
+    ],
+    "ParentView": [
+        "Virtual access port-extension view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "bgp",
+            "Info": "Imports BGP routes into DCN.\n-"
+        },
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "static",
+            "Info": "Imports static routes into DCN.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Imports IS-IS routes into DCN.\n-"
+        },
+        {
+            "Parameters": "process-id",
+            "Info": "Specifies the process ID of a unicast routing protocol. You must specify process-id if a unicast routing protocol is IS-IS or OSPF.\nThe value is an integer ranging from 1 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "ospf",
+            "Info": "Imports OSPF routes into DCN.\n-"
+        },
+        {
+            "Parameters": "direct",
+            "Info": "Imports direct routes into DCN.\n-"
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy that is used to filter routes and modify route attributes when routes are imported from other routing protocols.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. The string can contain spaces if it is enclosed in double quotation marks (\")."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis 1",
+            "[*HUAWEI-isis-1] quit",
+            "[*HUAWEI] virtual-access port-extend",
+            "[*HUAWEI-virtual-access-portextend] import isis 1 to dcn-ospf"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nA DCN provides route isolation. To allow an NMS to directly manage masters and APs, run the import to dcn-ospf command to import the route between a master and NMS to DCN in the port extension system. After the command is run, the NMS is reachable to an AP and the AP's information (such as configurations and status) can be directly queried on the NMS.\nPrerequisites\nDCN has been globally enabled using the dcn command.\nOther prerequisites depend on a routing protocol whose routes are to be imported into DCN.\nBGP has been enabled using the bgp command if BGP routes are imported into DCN.A static route has been configured using the ip route-static command if static routes are imported into DCN.An IS-IS process has been created using the isis command if IS-IS routes are imported into DCN.An OSPF process has been created using the ospf command if OSPF routes are imported into DCN.\n\nPrecautions\nThis command is supported only on the admin VS.\nIf DCN has been configured to import routes with the same protocol and process ID, the configuration fails."
+}

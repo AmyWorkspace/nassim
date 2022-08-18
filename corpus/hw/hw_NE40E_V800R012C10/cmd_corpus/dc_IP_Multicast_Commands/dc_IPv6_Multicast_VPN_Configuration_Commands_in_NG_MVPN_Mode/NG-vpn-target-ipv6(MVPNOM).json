@@ -1,0 +1,40 @@
+{
+    "PageTitle": "vpn-target (VPN instance IPv6 address family MVPN view)",
+    "FuncDef": "The vpn-target command configures a multicast virtual private network (MVPN) target for the VPN instance MVPN address family.\nThe undo vpn-target command deletes the MVPN target of the VPN instance MVPN address family.\nBy default, no MVPN target is configured for the VPN instance MVPN address family. The VPN instance MVPN address family uses the VPN target configured in the VPN instance IPv6 address family view as the MVPN target.",
+    "CLIs": [
+        "vpn-target { <vrfRT> } &<1-8> [ <vrfRTType> ]",
+        "undo vpn-target { <vrfRT> } &<1-8> [ <vrfRTType> ]",
+        "undo vpn-target all"
+    ],
+    "ParentView": [
+        "VPN instance IPv6 address family MVPN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vrfRT",
+            "Info": "Specifies the MVPN target to be added to the import or export VPN target extended community list of the VPN instance MVPN address family.\nThe available MVPN target formats are as follows:\n16-bit AS number: 32-bit user-defined number. For example, 1:3. An AS number ranges from 0 to 65535, and a user-defined number ranges from 0 to 4294967295. The AS number and user-defined number cannot both be 0s. This means that the VPN target value cannot be 0:0.32-bit IP address: 16-bit user-defined number. For example, 192.168.122.15:1. An IP address ranges from 0.0.0.0 to 255.255.255.255, and a user-defined number ranges from 0 to 65535.Integral 4-byte AS number: 2-byte user-defined number, for example, 65537:3. An AS number ranges from 65536 to 4294967295, and a user-defined number ranges from 0 to 65535. The AS number and user-defined number cannot both be 0s. This means that the VPN target value cannot be 0:0.-4-byte AS number in dotted notation: 2-byte user-defined number, for example, 0.0:3 or 0.1:0. A 4-byte AS number in dotted notation is in the format of x.y, where x and y are integers that range from 0 to 65535. A user-defined number ranges from 0 to 65535. The AS number and user-defined number cannot both be 0s. This means that the VPN target value cannot be 0:0.0."
+        },
+        {
+            "Parameters": "vrfRTType",
+            "Info": "vrfRT Type.\nThe parameters are as follows:\nboth: Adds an MVPN target to both the import and export VPN target extended community lists of the VPN instance MVPN address family.export-extcommunity:Indicates the export MVPN target. A maximum of 500 export MVPN targets can be configured.import-extcommunity:Indicates the import MVPN target. A maximum of 4096 import MVPN targets can be configured."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Deletes all MVPN targets.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast ipv6 mvpn 2.2.2.2",
+            "[*HUAWEI] ip vpn-instance mcast1",
+            "[*HUAWEI-vpn-instance-mcast1] ipv6-family",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] route-distinguisher 100:100",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] multicast ipv6 routing-enable",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6] mvpn",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn] vpn-target 3:3 4:4 export-extcommunity",
+            "[*HUAWEI-vpn-instance-mcast1-af-ipv6-mvpn] vpn-target 100:1 3:3 import-extcommunity"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe MVPN target controls route learning between MVPN sites. An MVPN target can be an import or export MVPN target. An export MVPN target is contained in an MVPN route to be advertised to a remote Multiprotocol Border Gateway Protocol (MP-BGP) peer. After receiving an MVPN route, an MP-BGP peer compares the received export MVPN target with the local import MVPN target to determine whether the MVPN route can be added to the MVPN routing table of the local VPN instance.\nConfiguration Impact\nAfter an MVPN target is configured for the VPN instance MVPN address family, the VPN instance MVPN address family accepts only the MVPN routes that match the MVPN target. When MVPN routes are advertised between VPN instances, if one of the MVPN targets carried in the MVPN routes matches the import VPN target of the local VPN instance MVPN address family, the routes will be added to the MVPN routing table of the local VPN instance.\nIf all MVPN targets of the VPN instance MVPN address family are deleted using the undo vpn-target command, all routes learned by the VPN instance MVPN address family from other VPN instances will be deleted.\nPrecautions\nAn MVPN target configured using the vpn-target command will not overwrite any previously configured MVPN target. If the number of configured MVPN targets has reached the maximum limit, no additional MVPN target can be added.\nMultiple MVPN targets can be configured for the VPN instance MVPN address family. One vpn-target command instance can configure a maximum of eight MVPN targets. To configure more MVPN targets for the VPN instance MVPN address family, run the vpn-target command several times."
+}

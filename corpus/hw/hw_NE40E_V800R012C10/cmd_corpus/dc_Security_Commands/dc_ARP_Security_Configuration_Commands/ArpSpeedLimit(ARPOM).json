@@ -1,0 +1,44 @@
+{
+    "PageTitle": "arp speed-limit",
+    "FuncDef": "The arp speed-limit command sets a rate-limit value of ARP packets based on destination IP address.\nThe undo arp speed-limit command restores the default configuration.\nThe arp-miss speed-limit command sets a rate-limit value of Address Resolution Protocol (ARP) Miss messages based on source IP address.\nThe undo arp-miss speed-limit command restores the default configuration.\n\nBy default, destination IP address-based rate limiting for ARP packets is enabled and the rate limit is 500 pps.\n\n\nBy default, source IP address-based rate limiting for ARP packets is enabled and the rate limit is 100 pps.\n\n\nBy default, source IP address-based rate limiting for ARP Miss messages is enabled and the rate limit is 500 pps.",
+    "CLIs": [
+        "arp-miss speed-limit source-ip maximum <maximum> [ slot <slot-id> ]",
+        "arp speed-limit destination-ip maximum <maximum> [ slot <slot-id> ]",
+        "arp speed-limit source-ip maximum <maximum> [ slot <slot-id> ]",
+        "undo arp-miss speed-limit source-ip [ slot <slot-id> ]",
+        "undo arp speed-limit destination-ip [ slot <slot-id> ]",
+        "undo arp speed-limit source-ip [ slot <slot-id> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "maximum maximum",
+            "Info": "Sets a rate-limit value of ARP packets or ARP Miss messages.\nThe value is an integer ranging from 0 to 65536, in pps. 0 indicates that rate limit is disabled."
+        },
+        {
+            "Parameters": "slot slot-id",
+            "Info": "Specifies a slot number of the specified interface board.\nThe value is a string of 1 to 23 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "source-ip",
+            "Info": "Specifies that the speed limit of the ARP packet or ARP Miss message bases on the source IP address.\n-"
+        },
+        {
+            "Parameters": "destination-ip",
+            "Info": "Specifies that the speed limit of the ARP packet bases on the destination IP address.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] arp-miss speed-limit source-ip maximum 100"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] arp speed-limit destination-ip maximum 100"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf unauthorized users send a large number of ARP packets to a device. Many resources are diverted into processing these ARP packets, and the processing of other services is affected. To resolve this problem, run the arp speed-limit command to set the limit-value of ARP packets, so that only a specified number of ARP packets will be sent to the device for processing.\nIf unauthorized users use specific tools to send a large number of ARP packets to hosts in the local network segment or other network segments. Many ARP Miss packets are generated because MAC addresses corresponding to the destination IP addresses do not exist. As a result, the CPU will be busy with processing these ARP Miss messages, affecting other services. To resolve this problem, run the arp-miss speed-limit command to set a rate-limit value of ARP Miss messages, so that only a specified number of ARP Miss messages will be sent to the device for processing.\nConfiguration Impact\nAfter the rate-limit value is set, the device counts the number of received ARP packets. If the number of ARP packets received in a specified period exceeds the upper limit, the device discards the excess ARP packets. As a result, the device may fail to process some valid ARP packets, causing service interruptions.\nAfter the rate-limit value of ARP Miss messages is set based on addresses, the device counts the number of received ARP Miss messages. If the number of ARP Miss messages received in a specified period exceeds the upper limit, the device discards the excess ARP Miss messages. As a result, the device may fail to process some valid ARP Miss messages, causing service interruptions."
+}

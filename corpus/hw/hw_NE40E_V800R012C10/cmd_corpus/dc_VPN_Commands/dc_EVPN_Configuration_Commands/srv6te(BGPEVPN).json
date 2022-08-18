@@ -1,0 +1,47 @@
+{
+    "PageTitle": "segment-routing ipv6 traffic-engineer evpn",
+    "FuncDef": "The segment-routing ipv6 traffic-engineer evpn command enables EVPN L3VPN services to recurse to an SRv6 TE policy.\nThe undo segment-routing ipv6 traffic-engineer evpn command restores the default configuration.\nBy default, EVPN L3VPN services do not recurse to an SRv6 TE policy.",
+    "CLIs": [
+        "segment-routing ipv6 traffic-engineer [ best-effort ] evpn",
+        "segment-routing ipv6 best-effort traffic-engineer evpn",
+        "undo segment-routing ipv6 traffic-engineer [ best-effort ] evpn",
+        "undo segment-routing ipv6 best-effort traffic-engineer evpn"
+    ],
+    "ParentView": [
+        "BGP-VPN instance IPv4 address family view",
+        "BGP-VPN instance IPv6 address family view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "best-effort",
+            "Info": "Indicates that services can use an SRv6 BE tunnel as a best-effort path if an SRv6 TE policy is faulty.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instatnce vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv6-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] route-distinguisher 100:1",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] vpn-target 100:1 both",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv6] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv6-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-6-vpn1] segment-routing ipv6 traffic-engineer evpn"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip vpn-instatnce vpn1",
+            "[*HUAWEI-vpn-instance-vpn1] ipv4-family",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] route-distinguisher 100:2",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] vpn-target 100:2 both",
+            "[*HUAWEI-vpn-instance-vpn1-af-ipv4] quit",
+            "[*HUAWEI-vpn-instance-vpn1] quit",
+            "[*HUAWEI] bgp 100",
+            "[*HUAWEI-bgp] ipv4-family vpn-instance vpn1",
+            "[*HUAWEI-bgp-vpn1] segment-routing ipv6 traffic-engineer evpn"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIn an EVPN L3VPN scenario, if you want to use an SRv6 TE policy to carry service traffic, run the segment-routing ipv6 traffic-engineer evpn command in a specified EVPN L3VPN instance. In this way, EVPN routes recurse to the SRv6 TE policy, and service traffic is forwarded over the SRv6 TE policy.\nTo improve reliability, you can configure the best-effort parameter when an SRv6 BE tunnel exists on the network. With this parameter configured, if the SRv6 TE policy becomes faulty, services can use the SRv6 BE tunnel as a best-effort path.\nPrerequisites\nAn L3VPN instance has been created.\nConfiguration Impact\nIf both the segment-routing ipv6 traffic-engineer evpn command and the segment-routing ipv6 best-effort evpn command are run, a later configuration overrides a previous one."
+}

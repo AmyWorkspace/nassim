@@ -1,0 +1,52 @@
+{
+    "PageTitle": "oam-bind cfm md ma vrrp vrid",
+    "FuncDef": "The oam-bind cfm md ma vrrp vrid command configures the bidirectional association between CFM and VRRP.\nThe undo oam-bind cfm md ma vrrp vrid command deletes the bidirectional association between CFM and VRRP.\nBy default, the bidirectional association between CFM and VRRP is disabled.",
+    "CLIs": [
+        "oam-bind cfm md <md-name> ma <ma-name> vrrp vrid <vrid> interface { <interface-name> | <interface-type> <interface-number> }",
+        "undo oam-bind cfm md <md-name> ma <ma-name> vrrp vrid <vrid> interface { <interface-name> | <interface-type> <interface-number> }"
+    ],
+    "ParentView": [
+        "OAM management view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "md-name",
+            "Info": "Specifies the name of an MD.\nThe value is a string of 1 to 43 case-sensitive characters. Question marks (?), hyphens (-) are not supported."
+        },
+        {
+            "Parameters": "ma-name",
+            "Info": "Specifies the name of an MA.\nThe value is a string of 1 to 43 case-sensitive characters. Question marks (?), hyphens (-) are not supported. The total length of MA and MD names must be no greater than 44 characters."
+        },
+        {
+            "Parameters": "vrid",
+            "Info": "Specifies the ID of a VRRP backup group.\nThe value is an integer ranging from 1 to 255."
+        },
+        {
+            "Parameters": "interface interface-type",
+            "Info": "Specifies the type of an interface.\n-"
+        },
+        {
+            "Parameters": "interface interface-number",
+            "Info": "Specifies the number of an interface.\n-"
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Specifies the name of an interface.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet3/0/1",
+            "[~HUAWEI-GigabitEthernet3/0/1] ip address 10.1.1.1 255.255.255.0",
+            "[*HUAWEI-GigabitEthernet3/0/1] vrrp vrid 1 virtual-ip 10.1.1.111",
+            "[*HUAWEI-GigabitEthernet3/0/1] quit",
+            "[*HUAWEI] cfm enable",
+            "[*HUAWEI] cfm md md1",
+            "[*HUAWEI-md-md1] ma ma1",
+            "[*HUAWEI-md-md1-ma-ma1] oam-mgr",
+            "[*HUAWEI-oam-mgr] oam-bind cfm md md1 ma ma1 vrrp vrid 1 interface GigabitEthernet3/0/1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo improve network reliability, associate CFM with VRRP. With this association, when CFM or VRRP detects a link fault, it instructs the MGR module to notify the other mechanism of the fault.\nThe association between CFM and VRRP can be unidirectional or bidirectional.\nIf the VRRP module detects a link fault, it instructs the CFM module to notify the remote end of the fault.\nIf the CFM module detects a link fault, it instructs the VRRP module to perform a link switchover.\nThe following commands are used when CFM is associated with VRRP:\noam-bind cfm md ma vrrp vridoam-bind ingress cfm md ma egress vrrp vridoam-bind ingress vrrp vrid egress cfm md ma\n\nPrerequisites\nCFM and VRRP have been configured."
+}

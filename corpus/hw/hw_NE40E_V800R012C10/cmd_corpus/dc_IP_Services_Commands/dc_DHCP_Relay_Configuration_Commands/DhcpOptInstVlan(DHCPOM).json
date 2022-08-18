@@ -1,0 +1,36 @@
+{
+    "PageTitle": "dhcp option82 insert enable (VLAN view)",
+    "FuncDef": "The dhcp option82 insert enable command enables option 82 insertion.\nThe undo dhcp option82 insert enable command disables option 82 insertion.\nBy default, option 82 insertion is disabled.",
+    "CLIs": [
+        "dhcp option82 insert enable [ interface { <interface-type> <interface-number> | <interface-name> } ]",
+        "undo dhcp option82 insert enable [ interface { <interface-type> <interface-number> | <interface-name> } ]"
+    ],
+    "ParentView": [
+        "VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "interface interface-type interface-number",
+            "Info": "Indicates the interface type and interface number.\n-"
+        },
+        {
+            "Parameters": "interface interface-name",
+            "Info": "Indicates the interface name.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] dhcp enable",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] quit",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] port default vlan 100",
+            "[*HUAWEI-GigabitEthernet1/0/1] quit",
+            "[*HUAWEI] vlan 100",
+            "[*HUAWEI-vlan100] dhcp option82 insert enable interface GigabitEthernet 1/0/1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe option fields in a DHCP packet store some control information and parameters that are not defined in common protocols. This field consists of the Code, Length, and Value fields. Option 82 field refers to the option fields in which the Code value is 82.\nThe option 82 field contains the location information of DHCP hosts, such as information about login interface, VLAN, and address. The option 82 field helps create DHCP snooping binding entries with accurate interface information. DHCP relays specify clients and policies for IP address assignment based on the option 82 field. For example, the DHCP server assigns IP addresses in a network segment for the clients that logs in from Gigabitethernet 1/0/1. The DHCP server assigns IP addresses in another network segment for the clients that logs in from Ethernet 1/0/2.\nConfiguration Impact\nAfter the dhcp option82 insert enable command is run, the device inserts the option 82 field into a DHCP packet if no option 82 field exists in the packet. If the option 82 field exists in a DHCP packet, the device checks whether the option 82 field contains suboptions. If the option 82 field contains suboptions, the device does not change the suboptions. If the option 82 field does not contain suboptions and the suboption format is configured, the device inserts suboptions into the option 82 field.\nIf the dhcp option82 insert enable (VLAN view) command and the dhcp option82 rebuild enable (VLAN view) command are run in the same view, the last configuration takes effect."
+}

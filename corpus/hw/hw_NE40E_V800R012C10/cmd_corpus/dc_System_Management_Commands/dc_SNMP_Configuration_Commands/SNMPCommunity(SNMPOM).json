@@ -1,0 +1,59 @@
+{
+    "PageTitle": "snmp-agent community (System view)",
+    "FuncDef": "The snmp-agent community command configures an SNMPv1 or SNMPv2c read/write community name (either in ciphertext or simple text) and specifies a MIB view and an ACL.\nThe undo snmp-agent community command deletes the community name configuration.\nBy default, no community name is configured.",
+    "CLIs": [
+        "snmp-agent community { read | write } <community-name> [ mib-view <security-string-cipher> | acl { <acl-number> | <acl-name> } | alias <alias-name> ] *",
+        "snmp-agent community { read | write } cipher <host-string> [ mib-view <security-string-cipher> | acl { <acl-number> | <acl-name> } | alias <alias-name> ] *",
+        "undo snmp-agent community { read | write } <community-name>",
+        "undo snmp-agent community { read | write } cipher <host-string>",
+        "undo snmp-agent community <host-string>"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "read",
+            "Info": "Indicates that a community with a specified name has read-only permission in the specified view.\n-"
+        },
+        {
+            "Parameters": "write",
+            "Info": "Indicates that a community with a specified name has read-write permission in the specified view.\n-"
+        },
+        {
+            "Parameters": "community-name",
+            "Info": "Specifies the name of a community.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nIf the complexity check of a community name is enabled, the value is a string of 8 to 32 case-sensitive characters, spaces not supported.if the complexity check of a community name is disabled, the value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "mib-view security-string-cipher",
+            "Info": "Specifies a MIB view that a community with the specified name can access.The view must have been created using the snmp-agent mib-view { excluded | included } view-name oid-tree command.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nWhen quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "acl acl-number",
+            "Info": "Specifies the number of an access control list (ACL) mapped to a community with a specified name.\nThe value is an integer ranging from 2000 to 2999."
+        },
+        {
+            "Parameters": "acl acl-name",
+            "Info": "Specifies the name of a named basic ACL.\nIf no matching rule is configured for the referenced ACL, the matching rule is permit by default.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        },
+        {
+            "Parameters": "alias alias-name",
+            "Info": "Specifies a community alias.\nThe community alias will be saved in plaintext format in the configuration file.\nA community alias must be unique and differs from the community. Only one alias can be configured for a community.\nThe value is a string of 1 to 32 case-sensitive characters, spaces not supported.\nIf quotation marks are used at both ends of an entered character sting, you can enter spaces in the character string."
+        },
+        {
+            "Parameters": "cipher host-string",
+            "Info": "Specifies the name of an SNMP proxy community to be stored in ciphertext. The cipher-name value is displayed in ciphertext, no matter whether you specify it in ciphertext or simple text.\nThe value is a string of 1 to 168 characters, spaces not supported.Ciphertext passwords with various lengths configured in an earlier version are also supported in the existing version."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent community read cipher public1234"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] snmp-agent community read cipher %^%#OU}iDvz!JQ3=CpU-4'F&*:xl/~wPKFSBY'-67di.Z~Pg$+BN~C,r0-Nxl:w=yHzR:zG,G!V[xzY>#pTB%^%#"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe snmp-agent community command is used on SNMPv1 and SNMPv2C networks. A community is a combination of the NMS and SNMP agent and is identified by a community name. The community name functions as a password for authentication during device communication in a community. Devices can communicate if the community name of the NMS matches that of the SNMP agent. The snmp-agent community command configures a community name on a device so that the NMS can communicate with the device. Parameters in the snmp-agent community command include the access authority, ACL, and accessible MIB views mapped to a community name.\nPrecautions\nThe NMS can access a device only when the community name of the NMS matches that of the device.\nIf receiving a packet with the community name field being null, a device discards the packet without filtering the packet based on ACL rules. In addition, a log about the community name error is generated. ACL filtering is triggered only when the community name is not null.\nBy default, the complexity check is enabled for a community name. If a community name fails the complexity check, the community name cannot be configured. To disable the complexity check for a community name, run the snmp-agent community complexity-check disable command."
+}

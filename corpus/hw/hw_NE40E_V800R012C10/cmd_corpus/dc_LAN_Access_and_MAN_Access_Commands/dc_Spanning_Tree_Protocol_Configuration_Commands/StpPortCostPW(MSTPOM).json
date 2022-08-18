@@ -1,0 +1,39 @@
+{
+    "PageTitle": "stp cost (VSI-LDP-PW view)",
+    "FuncDef": "The stp cost command sets a path cost for a spanning tree port.\nThe undo stp cost command restores the default path cost.\nBy default, the path cost of a spanning tree port is the path cost corresponding to the port rate.",
+    "CLIs": [
+        "stp [ process <process-id> ] cost <cost>",
+        "undo stp [ process <process-id> ] cost"
+    ],
+    "ParentView": [
+        "VSI-LDP-PW view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "process process-id",
+            "Info": "Specifies the ID of a Multiple Spanning Tree Protocol (MSTP) process.\nThe value is an integer ranging from 1 to 256."
+        },
+        {
+            "Parameters": "cost",
+            "Info": "Specifies the path cost of an interface.\nThe value varies with path cost calculation standards:\nHuawei legacy standard: 1 to 200,000IEEE 802.1D standard: 1 to 65535IEEE 802.1t standard: 1 to 200,000,000"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] mpls",
+            "[*HUAWEI-mpls] quit",
+            "[*HUAWEI] mpls l2vpn",
+            "[*HUAWEI-l2vpn] quit",
+            "[*HUAWEI] vsi 1",
+            "[*HUAWEI-vsi-1] pwsignal ldp",
+            "[*HUAWEI-vsi-1-ldp] vsi-id 33",
+            "[*HUAWEI-vsi-1-ldp] peer 1.1.1.1",
+            "[*HUAWEI-vsi-1-ldp] peer 1.1.1.1 pw pw1",
+            "[*HUAWEI-vsi-1-ldp-pw-pw1] quit",
+            "[*HUAWEI-vsi-1-ldp] pw pw1",
+            "[*HUAWEI-vsi-1-ldp-pw-pw1] stp cost 200"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nPort path costs are important basis for calculating a spanning tree. Path costs determine root port selection. On a spanning tree, the port with the lowest path cost to the root bridge is selected as a root port. To configure a port path cost, run the stp cost command.\nIf different path costs are set for a port in different spanning tree instances, traffic of different VLANs will be forwarded along different physical links and VLAN-based load balancing can be performed.\nThe configured path cost takes effect only for MSTP instance 0.\nPrerequisites\nA path cost calculation standard has been set using the stp pathcost-standard command. By default, the IEEE 802.1T is used to calculate the path cost.\nConfiguration Impact\nIf the path cost of a port changes, the spanning tree where the port resides is recalculated.\nPrecautions\nIf the path cost calculation standard is changed using the stp pathcost-standard command, the path cost set using the stp cost command is restored to the default value."
+}

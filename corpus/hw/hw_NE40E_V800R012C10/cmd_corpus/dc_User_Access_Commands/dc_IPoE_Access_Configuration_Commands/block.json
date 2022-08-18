@@ -1,0 +1,51 @@
+{
+    "PageTitle": "block(BAS interface view)",
+    "FuncDef": "The block command blocks a BAS interface.\nThe undo block command unblocks a BAS interface.\nBy default, the BAS interface is unblocked.",
+    "CLIs": [
+        "block [ start-vlan { start-vlan [ end-vlan <end-vlan> ] [ qinq <qinq-vlan> ] | any qinq <start-qinq-vlan> [ <end-qinq-vlan> ] } ]",
+        "block",
+        "undo block [ start-vlan { start-vlan [ end-vlan <end-vlan> ] [ qinq <qinq-vlan> ] | any qinq <start-qinq-vlan> [ <end-qinq-vlan> ] } ]",
+        "undo block"
+    ],
+    "ParentView": [
+        "BAS interface view (GE)",
+        "BAS interface view (VE)",
+        "BAS interface view (trunk)"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "start-vlan start-vlan",
+            "Info": "Start VLAN ID. This parameter is used only for Ethernet BAS sub-interfaces.\nThe value is in the range of 1 to 4094."
+        },
+        {
+            "Parameters": "end-vlan end-vlan",
+            "Info": "End VLAN ID. This parameter is used only for Ethernet BAS sub-interfaces.\nThe value is in the range of 1 to 4094. The end-vlan value must be greater than or equal to the start-vlan value."
+        },
+        {
+            "Parameters": "qinq start-qinq-vlan",
+            "Info": "Specifies the start VLAN ID of QinQ users to be blocked. This parameter is used only for Ethernet BAS sub-interfaces.\nThe value is in the range of 1 to 4094."
+        },
+        {
+            "Parameters": "qinq qinq-vlan",
+            "Info": "Outer VLAN ID of QinQ users. This parameter is used only for Ethernet BAS sub-interfaces.\nThe value is in the range of 1 to 4094."
+        },
+        {
+            "Parameters": "any",
+            "Info": "Specifies all VLAN IDs in the inner tag. You can specify a VLAN range in the outer tag after this parameter to block QinQ users in the VLAN range.\n-"
+        },
+        {
+            "Parameters": "end-qinq-vlan",
+            "Info": "Specifies the end VLAN ID of QinQ users to be blocked. This parameter is used only for Ethernet BAS sub-interfaces.\nThe value is an integer ranging from 1 to 4094. The end-qinq-vlan value must be greater than or equal to the start-qinq-vlan value."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 1/0/0",
+            "[~HUAWEI-GigabitEthernet1/0/0] bas",
+            "[~HUAWEI-GigabitEthernet1/0/0-bas] access-type layer2-subscriber",
+            "[~HUAWEI-GigabitEthernet1/0/0-bas] block"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nNo new users are allowed to access a blocked BAS interface, but the users who have gone online can remain online.\nBefore you configure the block command, run the access-type command to configure access type on the BAS interface.\nVLAN-related parameters cannot be configured on main Ethernet BAS interfaces.\nA blocked BAS interface still responds with PADO packets after receiving PADI packets from terminals.\nIn user access load balancing scenarios, PADI packets from a terminal can reach multiple BAS interfaces. If any of these BAS interfaces responds with PADO packets, the terminal user will use this BAS interface to go online. However, if the BAS interfaces that responds with PADO packets is blocked, the terminal user cannot go online. In this case, run the access-delay command in the BAS interface view to set an access delay after which the terminal user can re-select a BAS interface to go online.\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

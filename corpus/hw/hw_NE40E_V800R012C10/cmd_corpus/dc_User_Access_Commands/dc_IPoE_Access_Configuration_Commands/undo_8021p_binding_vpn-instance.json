@@ -1,0 +1,43 @@
+{
+    "PageTitle": "802.1p binding vpn-instance",
+    "FuncDef": "The 802.1p binding vpn-instance command binds a VPN instance to an 802.1p priority so that packets carrying the 802.1p priority are sent to this VPN.\nThe undo 802.1p binding vpn-instance command removes the binding between VPN instances and 802.1p priorities.\nBy default, VPN instances are not bound to 802.1p priorities so that packets are not sent to VPNs based on 802.1p priorities.",
+    "CLIs": [
+        "802.1p <8021p-priority> binding vpn-instance <vpn-instance-name>",
+        "undo 802.1p binding vpn-instance all",
+        "undo 802.1p <8021p-priority> binding vpn-instance <vpn-instance-name>"
+    ],
+    "ParentView": [
+        "User VLAN view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance vpn-instance-name",
+            "Info": "Specifies a VPN instance name.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "all",
+            "Info": "Indicates all service packets of users.\n-"
+        },
+        {
+            "Parameters": "802.1p 8021p-priority",
+            "Info": "Indicates the priority of VLAN frames.\nThe value is an integer ranging from 0 to 7."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/0.2",
+            "[*HUAWEI-GigabitEthernet2/0/0.2] commit",
+            "[*HUAWEI-GigabitEthernet2/0/0.2] user-vlan 100",
+            "[*HUAWEI-GigabitEthernet2/0/0.2-vlan-100-100] 802.1p 2 binding vpn-instance huawei"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface GigabitEthernet 2/0/0.3",
+            "[*HUAWEI-GigabitEthernet2/0/0.3] commit",
+            "[*HUAWEI-GigabitEthernet2/0/0.3] user-vlan 100 qinq 200",
+            "[*HUAWEI-GigabitEthernet2/0/0.3-vlan-100-100-QinQ-200-200] 802.1p 3 binding vpn-instance huawei123"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nService packets carry 802.1p values to identify their priorities. The BRAS can identify service priorities based on the 802.1p values of received Layer 2 service packets and transmit the service packets to corresponding VPNs. To allow this, enable a BAS interface to transmit packets to different VPNs based on 802.1p priorities of the packets and also run the 802.1p binding vpn-instance command to bind a VPN instance to an 802.1p priority.\nPrerequisites\nA BAS interface has been enabled to transmit packets to different VPNs based on 802.1p priorities of the packets using the 802.1p-to-vpn command.\nPrecautions\nThis command is supported only on the admin VS.\nIf the user-VLAN sub-interface terminates two VLAN tags, services enter different VPN instances based on the 802.1p in the outer VLAN tag."
+}

@@ -1,0 +1,30 @@
+{
+    "PageTitle": "ip route-static frr vpn-instance",
+    "FuncDef": "The ip route-static frr vpn-instance command enables fast reroute (FRR) for IPv4 static routes in a VPN instance.\nThe undo ip route-static frr vpn-instance command disables FRR for IPv4 static routes in a VPN instance.\nThe ip rpf-route-static command configures a multicast static route.\nThe undo ip rpf-route-static command deletes a multicast static route.\nBy default, FRR is disabled for an IPv4 static route.",
+    "CLIs": [
+        "ip route-static frr vpn-instance <vpn-instance-name>",
+        "ip rpf-route-static frr [ vpn-instance <vpn-instance-name> ]",
+        "undo ip route-static frr vpn-instance <vpn-instance-name>",
+        "undo ip rpf-route-static frr [ vpn-instance <vpn-instance-name> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "vpn-instance-name",
+            "Info": "Specifies the name of a VPN instance.\nThe value is a string of 1 to 31 case-sensitive characters, spaces not supported. In addition, the VPN instance name must not be _public_. When double quotation marks are used around the string, spaces are allowed in the string."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip route-static frr vpn-instance v1"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] ip rpf-route-static frr vpn-instance v1"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nMulticast static routes are an important basis of the RPF check. By configuring multicast static routes, you can specify an RPF interface and an RPF neighbor for the specific source of packets on the current Router.\nMulticast static routes provide the following functions, depending on specific applicable environments:\nChanging RPF routes\nIf the topology of multicast is the same as that of unicast, the transmission path of multicast data is the same as that of unicast data. You can configure multicast static routes to change the RPF routes. Thus, a transmission path dedicated for the multicast data is established, which is different from the transmission path of unicast data.\nConnecting RPF routes\nOn the network segment where unicast routes are blocked, when multicast static routes are not configured, packets cannot be forwarded because there is no RPF route. In such a case, you can configure multicast static routes. Therefore, the system can generate RPF routes, complete the RPF check, create routing entries, and guide the forwarding of packets.\nTo enable FRR for static IPv4 multicast routes, run the ip rpf-route-static frr command. If the vpn-instance parameter is specified, the command enables FRR for a VPN instance. If the vpn-instance parameter is not specified, the command enables FRR for the public network instance. By default, FRR is disabled for static IPv4 multicast routes.\nTo protect IPv4 static routes, configure FRR for IPv4 static routes using the ip route-static frr command.\nIf the name of a VPN instance is specified, FRR is enabled for the static route of the VPN instance.\n\nPrerequisites\nThe multicast routing-enable command is run in the public network instance view or VPN instance view.\nA VPN instance has been configured if you want to configure FRR for the VPN.\nConfiguration Impact\nEnabling or disabling FRR takes effect on all the static routes in the VPN instance.\nPrecautions\nWhen configuring a multicast static route, configure the next hop interface in the command if the type of the next hop interface is P2P. If the next hop interface is not P2P, configure it in the next hop address form.\nA multicast static route configured using the ip rpf-route-static command may not take effect if the outbound interface recursion fails or the specified interface is Down. Therefore, after running this command, you are advised to run the display ip routing-table protocol static command to check whether the configuration is successful or the configured multicast static route is effective."
+}

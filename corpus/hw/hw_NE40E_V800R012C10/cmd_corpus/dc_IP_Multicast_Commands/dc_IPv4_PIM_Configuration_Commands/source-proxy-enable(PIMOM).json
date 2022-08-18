@@ -1,0 +1,44 @@
+{
+    "PageTitle": "source-proxy enable",
+    "FuncDef": "The source-proxy enable command enables multicast source proxy.\nThe undo source-proxy enable command disables multicast source proxy.\nBy default, multicast source proxy is disabled.",
+    "CLIs": [
+        "source-proxy enable [ policy { <advanced-acl-number> | acl-name <acl-name> } ]",
+        "undo source-proxy enable"
+    ],
+    "ParentView": [
+        "VPN instance PIM view",
+        "PIM view of a public network instance"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "policy",
+            "Info": "Specifies a policy for specifying multicast entries for which multicast source proxy is enabled.\nIf this parameter is not specified, multicast source proxy is enabled for all multicast entries.\n-"
+        },
+        {
+            "Parameters": "advanced-acl-number",
+            "Info": "Specifies the number of an advanced ACL.\nThe value is an integer ranging from 3000 to 3999."
+        },
+        {
+            "Parameters": "acl-name acl-name",
+            "Info": "Specifies the name of a named ACL.\nThe value is a string of 1 to 64 case-sensitive characters without spaces. The value must start with a letter (a to z or A to Z, case sensitive)."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] source-proxy enable"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] acl number 3000",
+            "[*HUAWEI-acl4-advance-3000] rule permit ip source 10.0.0.1 0 destination 226.0.0.1 0",
+            "[*HUAWEI-acl4-advance-3000] quit",
+            "[*HUAWEI] multicast routing-enable",
+            "[*HUAWEI] pim",
+            "[*HUAWEI-pim] source-proxy enable policy 3000"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf a multicast data packet for a multicast group transmitted over a point-to-multipoint (P2MP) traffic engineering (TE) tunnel is directed to the egress and the egress is not the rendezvous point (RP) to which the multicast group corresponds, the multicast data packet will not be forwarded because the egress is not directly connected to the multicast source. To enable downstream hosts to receive the multicast data packet, run the source-proxy enable command to enable multicast source proxy. Then, the egress can send a Register message to the PIM domain, so that the multicast data packet can be forwarded along the shared tree.\nPrerequisites\nPIM has been enabled and the PIM interface view has been displayed using the pim command.An ACL has been configured using the acl (advanced ACL) command.\n\nPrecautions\nAfter the source-proxy enable command is run on the device, run the rpf disable command to disable the RPF check, so that the multicast packets can be forwarded to the next hop.\nAfter the source-proxy enable command is run on the device, run the register-source command to specify an interface using which the source's DR sends Register messages to RP. The interface and the RP can communicate with each other through unicast routes."
+}

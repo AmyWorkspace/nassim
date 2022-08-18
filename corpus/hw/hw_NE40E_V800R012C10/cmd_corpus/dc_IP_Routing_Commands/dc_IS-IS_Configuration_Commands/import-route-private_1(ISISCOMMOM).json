@@ -1,0 +1,87 @@
+{
+    "PageTitle": "ipv6 import-route (IS-IS view)",
+    "FuncDef": "The ipv6 import-route command enables IS-IS to import IPv6 routes from other protocols.\nThe undo ipv6 import-route command disables IS-IS from importing IPv6 routes from other protocols.\nBy default, IS-IS does not import IPv6 routes from other protocols.",
+    "CLIs": [
+        "ipv6 import-route { direct | static | unr | { ospfv3 | ripng | isis } [ <process-id> ] | bgp } [ cost <cost> | tag <tag> | { route-policy <route-policy-name> | route-filter <route-filter-name> } | [ level-1 | level-2 | level-1-2 ] ] *",
+        "ipv6 import-route { { ospfv3 | ripng | isis } [ <process-id> ] | bgp | direct | unr } inherit-cost [ { level-1 | level-2 | level-1-2 } | tag <tag> | { route-policy <route-policy-name> | route-filter <route-filter-name> } ] *",
+        "undo ipv6 import-route { direct | static | unr | { ospfv3 | ripng | isis } [ <process-id> ] | bgp }"
+    ],
+    "ParentView": [
+        "IS-IS view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "direct",
+            "Info": "Imports direct routes.\n-"
+        },
+        {
+            "Parameters": "static",
+            "Info": "Imports static routes.\n-"
+        },
+        {
+            "Parameters": "unr",
+            "Info": "Imports UNR routes.\n-"
+        },
+        {
+            "Parameters": "ospfv3",
+            "Info": "Imports OSPFv3 routes.\n-"
+        },
+        {
+            "Parameters": "ripng",
+            "Info": "Imports RIPng routes.\n-"
+        },
+        {
+            "Parameters": "isis",
+            "Info": "Imports IS-IS routes.Before you specify this parameter, enable an IS-IS process with a.\nprocess-id different from the local one.\n-"
+        },
+        {
+            "Parameters": "process-id",
+            "Info": "Specifies the process ID of the imported protocol.\nThe value is an integer ranging from 1 to 4294967295. The default value is 1."
+        },
+        {
+            "Parameters": "bgp",
+            "Info": "Imports BGP routes.\n-"
+        },
+        {
+            "Parameters": "cost cost",
+            "Info": "Specifies a cost for the imported route.\nThe value ranges from 0 to 4261412864, regardless of cost types."
+        },
+        {
+            "Parameters": "tag tag",
+            "Info": "Assigns administrative tags to the imported routes.\nThe value is an integer ranging from 1 to 4294967295."
+        },
+        {
+            "Parameters": "route-policy route-policy-name",
+            "Info": "Specifies the name of a route-policy.\nThe name is a string of 1 to 200 case-sensitive characters, with spaces not supported. When double quotation marks are used around the string, spaces are allowed in the string."
+        },
+        {
+            "Parameters": "route-filter route-filter-name",
+            "Info": "Specifies the name of route filter policy. The policy is used to filter the imported routes so that only some of the routes of other routing domains can be imported.\nThe value is a string of 1 to 200 case-sensitive characters, spaces not supported. If parameters are included in the referenced route-filter, specify values for them in the format of (var1, var2, ...var8) behind the route-filter name. A maximum of eight parameters can be specified, and each value ranges from 1 to 200 characters."
+        },
+        {
+            "Parameters": "level-1",
+            "Info": "Imports routes to the Level-1 routing table.\n-"
+        },
+        {
+            "Parameters": "level-2",
+            "Info": "Imports routes to the Level-2 routing table.\n-"
+        },
+        {
+            "Parameters": "level-1-2",
+            "Info": "Imports routes to Level-1 and Level-2 routing tables.\nIf no level is specified in the command, routes are imported to the Level-2 routing table by default.\n-"
+        },
+        {
+            "Parameters": "inherit-cost",
+            "Info": "Retains the original cost of the imported route. If this parameter is specified, you cannot configure the cost and cost type for the routes imported by IS-IS.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] isis",
+            "[*HUAWEI-isis-1] ipv6 enable",
+            "[*HUAWEI-isis-1] ipv6 import-route static cost 15"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nWhen IS-IS and other routing protocols are deployed on a network, you can enable the traffic within an IS-IS domain to reach a destination outside the IS-IS domain using either of the following methods:\nRun the ipv6 default-route-advertise command to configure boundary devices in the IS-IS domain to advertise default routes to the IS-IS domain.Run the ipv6 import-route command to configure boundary devices in the IS-IS domain to import routes from other routing domains into the IS-IS domain.\nIf there are multiple boundary devices in the IS-IS domain, optimal routes destined for another routing domain need to be selected. This requires all devices in the IS-IS domain learn all or some external routes.\nWhen the routes of other protocols are imported, you can set the cost values and types for the imported routes be specifying cost. You can also configure IS-IS to retain the original cost values of the imported routes by specifying inherit-cost. If you do not specify either cost or inherit-cost, the cost of the imported routes is 0.\n\nPrerequisites\nAn IS-IS process has been created using the isis command, and the IPv6 has been enabled on IS-IS process using the ipv6 enable command.\nConfiguration Impact\nThe imported routes may lead to a routing loop. Therefore, exercise caution. Using a routing policy to filter imported routes is recommended."
+}

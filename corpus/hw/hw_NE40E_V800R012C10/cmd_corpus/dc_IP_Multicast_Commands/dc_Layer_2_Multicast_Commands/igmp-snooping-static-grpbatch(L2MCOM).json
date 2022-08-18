@@ -1,0 +1,49 @@
+{
+    "PageTitle": "l2-multicast static-group group-address to vlan",
+    "FuncDef": "The l2-multicast static-group group-address to vlan command configures a static member interface.\nThe undo l2-multicast static-group group-address to vlan command cancels the configuration.\nBy default, a dynamic member interface is used.",
+    "CLIs": [
+        "l2-multicast static-group [ source-address <source-address> ] group-address <group-address1> to <group-address2> vlan <vlan-id>",
+        "undo l2-multicast static-group [ source-address <source-address> ] group-address <group-address1> to <group-address2> vlan <vlan-id>"
+    ],
+    "ParentView": [
+        "Layer 2 40GE interface view",
+        "Layer 2 50GE interface view",
+        "Port extension Layer 2 interface view",
+        "Layer 2 10GE interface view",
+        "Layer 2 GE interface view",
+        "Layer 2 100GE interface view",
+        "Layer 2 50|100GE interface view",
+        "Eth-Trunk interface view",
+        "25GE-L2 view",
+        "400GE-L2 view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "source-address",
+            "Info": "Specifies a multicast source address.\nThe-value-can-be-a-Class-A,-Class-B,-or-Class-C-address,-in-dotted-decimal-notation."
+        },
+        {
+            "Parameters": "group-address1",
+            "Info": "Specifies a multicast group address.\nThe value ranges from 224.0.1.0 to 239.255.255.255, in dotted decimal notation."
+        },
+        {
+            "Parameters": "group-address2",
+            "Info": "Specifies a multicast group address and the value is larger than GrpIpAddr1.\nThe value ranges from 224.0.1.0 to 239.255.255.255, in dotted decimal notation."
+        },
+        {
+            "Parameters": "vlan-id",
+            "Info": "Specifies a VLAN.\nThe value is an integer ranging from 1 to 4094."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] igmp-snooping enable",
+            "[*HUAWEI] interface GigabitEthernet 1/0/1",
+            "[*HUAWEI-GigabitEthernet1/0/1] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/1] port trunk allow-pass vlan 2",
+            "[*HUAWEI-GigabitEthernet1/0/1] l2-multicast static-group group-address 224.1.1.1 vlan 2"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nIf hosts connected to an interface need to regularly receive data for a multicast group or a source-specific multicast group, the l2-multicast static-group command can be used to configure the interface as a static member interface.\nStatic member interfaces can be configured on different positions on a network to enable users to receive data for specific multicast groups or source-specific multicast groups regularly. The commands listed in the following table can be run in any order. Run one or more commands as required to configure static member interfaces. For details, see Table Description of the l2-multicast static-group group-address to vlan command in different scenarios.\nPrerequisites\nIGMP snooping has been configured globally and in a VLAN.\nConfiguration Impact\nA static member interface does not respond to IGMP Query messages. After the undo l2-multicast static-group group-address to vlan command is run on a static member interface, the interface does not initiate an IGMP Leave message.\nIf the l2-multicast static-group group-address to vlan command is run more than once, all configurations take effect.\nPrecautions\nIf the number of (S, G) entries relevant to a group has reached the maximum value (128), no static entry will be created after the l2-multicast static-group group-address to vlan command is run. This means that no entry relevant to a static multicast group will be generated even after the reset igmp-snooping group all command is run in the system view to refresh entries."
+}

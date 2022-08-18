@@ -1,0 +1,40 @@
+{
+    "PageTitle": "radius-server state-recovery-detect",
+    "FuncDef": "The radius-server state-recovery-detect command enables status detection and restoration of RADIUS authentication and accounting servers.\nThe undo radius-server state-recovery-detect command restores the default configuration.\nBy default, status detection and restoration of RADIUS authentication and accounting servers is disabled.",
+    "CLIs": [
+        "radius-server state-recovery-detect { authentication | accounting } username <username> [ detect-interval <detect-interval> ] [ detect-threshold <detect-threshold> ]",
+        "undo radius-server state-recovery-detect { authentication | accounting } [ username <username> ] [ detect-interval <detect-interval> ] [ detect-threshold <detect-threshold> ]"
+    ],
+    "ParentView": [
+        "System view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "authentication",
+            "Info": "Specifies a RADIUS authentication server.\n-"
+        },
+        {
+            "Parameters": "accounting",
+            "Info": "Specifies a RADIUS accounting server.\n-"
+        },
+        {
+            "Parameters": "username username",
+            "Info": "Specifies a user name for RADIUS server status detection.\nThe value is a string of 1 to 253 case-sensitive characters, spaces not supported."
+        },
+        {
+            "Parameters": "detect-interval detect-interval",
+            "Info": "Specifies a detection interval.\nThe value is an integer ranging from 10 to 3600, in seconds. The default value is 30s."
+        },
+        {
+            "Parameters": "detect-threshold detect-threshold",
+            "Info": "Specifies the number of consecutive successful detections required for restoring the Up state of a RADIUS server.\nThe value is an integer ranging from 1 to 100. The default value is 3."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] radius-server state-recovery-detect authentication username abc detect-interval 100 detect-threshold 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nAfter the status of a RADIUS server is set to Down, the status of the RADIUS server is automatically restored to Up after a specified period of time by default. However, the device does not know the actual status of the RADIUS server and only assumes that the server is in the Up state. To allow the device to accurately determine the status of the RADIUS server, run the radius-server state-recovery-detect command to enable RADIUS server status detection and restoration.\nThen, the device sends detection packets to the RADIUS server at an interval specified by the parameter detect-interval using a user name specified by the parameter username. If detection succeeds for a consecutive number of times specified by the parameter detect-threshold , the device sets the RADIUS server status to Up again.\nPrecautions\nBefore configuring the radius-server state-recovery-detect command, ensure that the RADIUS server can respond to Accounting Stop requests from sessions for which no accounting has been performed, so that the RADIUS server can successfully receive detection packets.\nIn VS mode, this command is supported only by the admin VS."
+}

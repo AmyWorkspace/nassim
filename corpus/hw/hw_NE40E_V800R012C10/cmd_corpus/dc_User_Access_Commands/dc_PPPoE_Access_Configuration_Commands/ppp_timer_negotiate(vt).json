@@ -1,0 +1,46 @@
+{
+    "PageTitle": "ppp timer (Virtual template view)",
+    "FuncDef": "The ppp timer command sets the PPP negotiation timeout and the number of PPP retransmissions.\nThe undo ppp timer command restores the default.\nBy default, the PPP negotiation timeout time is 3 seconds and the number of PPP packet retransmissions is 10.",
+    "CLIs": [
+        "ppp timer { negotiate <seconds> | retransmit <retry-times> } *",
+        "undo ppp timer negotiate",
+        "undo ppp timer retransmit",
+        "undo ppp timer { negotiate retransmit | retransmit negotiate }"
+    ],
+    "ParentView": [
+        "Virtual template view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "negotiate",
+            "Info": "Specifies the value of negotiation timer (in second).\n-"
+        },
+        {
+            "Parameters": "negotiate seconds",
+            "Info": "Specifies the negotiation timeout in seconds.\nThe value is an integer that ranges from 1 to 10 .\nThe default value is 3.\nwhen a specified value is smaller than the default value, it may cause high CPU usage and overburden the system."
+        },
+        {
+            "Parameters": "retransmit",
+            "Info": "Specifies the value of negotiation retransmit times.\n-"
+        },
+        {
+            "Parameters": "retransmit retry-times",
+            "Info": "Specifies the number of PPP packet retransmissions.\nThe value is an integer that ranges from 1 to 30 .\nThe default value is 10.\nwhen a specified value is smaller than the default value, it may cause high CPU usage and overburden the system."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface virtual-template 2",
+            "[*HUAWEI-Virtual-Template2] ppp timer negotiate 5"
+        ],
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] interface virtual-template 2",
+            "[*HUAWEI-Virtual-Template2] ppp timer negotiate 5 retransmit 3",
+            "Warning: The negotiate interval value is less than 3 or retransmit value is less than 10.",
+            "This operation may cause high CPU usage and overburden the system .Continue? [Y/N]:"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nDuring the PPP negotiation, if the local end does not receive the response packet of the peer, PPP re-sends the packet. If you want to change the default, you can run the ppp timer command.\nConfiguration Impact\nIf the ppp timer command is run more than once in the same view, the latest configuration overrides the previous one.\nPrecautions\nIn VS mode, this command is supported only by the admin VS.\nwhen a specified value is smaller than the default value, it may cause high CPU usage and overburden the system."
+}

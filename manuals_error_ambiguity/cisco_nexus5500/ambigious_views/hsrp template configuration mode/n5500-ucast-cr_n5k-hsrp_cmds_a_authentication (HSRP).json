@@ -1,0 +1,63 @@
+{
+    "PageTitle": "authentication (HSRP)",
+    "FuncDef": "To configure authentication for the Hot Standby Router Protocol (HSRP), use the authentication command. To disable authentication, use the no form of this command.",
+    "CLIs": [
+        "authentication { <string> | md5 { key-chain <key-chain> | key-string { 0 | 7 } <text> [ timeout <seconds> ]} | text <string> }",
+        "no authentication { <string> | md5 { key-chain <key-chain> | key-string { 0 | 7 } <text> [ timeout <seconds> ]} | text <string> }"
+    ],
+    "ParentView": [
+        "hsrp configuration mode",
+        "hsrp template configuration mode"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "md5",
+            "Info": "Specifies the Message Digest 5 (MD5) authentication."
+        },
+        {
+            "Parameters": "key-chain key-chain",
+            "Info": "Identifies a group of authentication keys."
+        },
+        {
+            "Parameters": "key-string",
+            "Info": "Specifies the secret key for MD5 authentication."
+        },
+        {
+            "Parameters": "0",
+            "Info": "Specifies a clear text string."
+        },
+        {
+            "Parameters": "7",
+            "Info": "Specifies an encrypted string."
+        },
+        {
+            "Parameters": "text",
+            "Info": "Secret key for MD5 authentication. The range is from 1 to 255 characters. We recommend that you use at least 16 characters."
+        },
+        {
+            "Parameters": "timeout seconds",
+            "Info": "(Optional) Specifies the authentication timeout value. The range is from 0 to 32767."
+        },
+        {
+            "Parameters": "text string",
+            "Info": "Specifies an authentication string. The range is from 1 to 255 characters. The default string is \"cisco\"."
+        }
+    ],
+    "Examples": [
+        [
+            "switch# configure terminal",
+            "switch(config)# interface ethernet 0/1",
+            "switch(config-if)# no switchport",
+            "switch(config-if)# ip address 10.0.0.1 255.255.255.0",
+            "switch(config-if)# hsrp 2",
+            "switch(config-if-hsrp)# priority 110",
+            "switch(config-if-hsrp)# preempt",
+            "switch(config-if-hsrp)# authentication text sanjose",
+            "switch(config-if-hsrp)# ip 10.0.0.3",
+            "switch(config-if-hsrp)# end",
+            "switch(config-if-hsrp)#"
+        ]
+    ],
+    "ExtraInfo": "Use the authentication text command to prevent misconfigured routers from participating in HSRP groups that they are not intended to participate in. The authentication string is sent unencrypted in all HSRP messages. The same authentication string must be configured on all routers in the same group to ensure interoperation. HSRP protocol packets that do not authenticate are ignored.Caution If you configure two routers with identical HSRP IP addresses but with different authentication strings, then neither router is aware of the duplication.\nCommand Default:Disabled",
+    "HTMLPage": "data/manuals/cisco/cisco_nexus5500/n5500-ucast-cr_n5k-hsrp_cmds_a.html"
+}

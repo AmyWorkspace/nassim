@@ -1,0 +1,52 @@
+{
+    "PageTitle": "multicast-list (Multicast bandwidth view)",
+    "FuncDef": "The multicast-list command sets the parameters for multicast program bandwidth.\nThe undo multicast-list command cancels the bandwidth for the multicast program list.\nBy default, the bandwidth for multicast program list is not configured.",
+    "CLIs": [
+        "multicast-list { name <list-name> | index <list-index> | start-list-index <start-list-index> end-list-index <end-list-index> } { bandwidth <bandwidth-value> | detect-interval <interval> threshold <threshold> }",
+        "undo multicast-list { name <list-name> | index <list-index> | start-list-index <start-list-index> end-list-index <end-list-index> }"
+    ],
+    "ParentView": [
+        "Multicast bandwidth view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "name list-name",
+            "Info": "Specifies the name of a multicast program list.\nThe name is a string of 1 to 32 characters."
+        },
+        {
+            "Parameters": "index list-index",
+            "Info": "Specifies the index of the multicast program list.\nThe value is an integer ranging from 0 to 8191."
+        },
+        {
+            "Parameters": "start-list-index start-list-index",
+            "Info": "Specifies the start index of the multicast program lists. The value is an integer ranging from 0 to 8191.\nThe value is an integer ranging from 0 to 8191."
+        },
+        {
+            "Parameters": "end-list-index end-list-index",
+            "Info": "Specifies the end index of the multicast program lists.\nThe value is an integer ranging from start-list-index to 8191."
+        },
+        {
+            "Parameters": "bandwidth bandwidth-value",
+            "Info": "Indicates the static bandwidth for multicast programs.\nThe value is an integer ranging from 10 to 400000. The unit is kbit/s."
+        },
+        {
+            "Parameters": "detect-interval interval",
+            "Info": "Specifies the interval for making statistics of the dynamic bandwidth for multicast programs.\nThe value is an integer ranging from 15 to 1800. The value of interval must be a multiple of 15. The unit is second."
+        },
+        {
+            "Parameters": "threshold threshold",
+            "Info": "Specifies the threshold of bandwidth change for multicast programs.\nThe value is an integer ranging from 1 to 100."
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] aaa",
+            "[~HUAWEI-aaa] multicast-list list1 group-address 239.0.0.1",
+            "[~HUAWEI-aaa] quit",
+            "[~HUAWEI] multicastbandwidth",
+            "[*HUAWEI-mbandwidth] multicast-list name list1 detect-interval 30 threshold 5"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nThe bandwidth for multicast programs is as follows:\nStatic bandwidth: set by bandwidth-value. The NE40E always allocates bandwidth-value bandwidth to the multicast programs, rather than the bandwidth actually required by the multicast programs.Dynamic bandwidth: set by interval and threshold. The NE40E collects statistics about the program bandwidth every interval seconds. If the threshold of the bandwidth change does not exceed threshold, the program bandwidth is normal. If the threshold of the bandwidth change exceeds threshold, the unicast bandwidth is adjusted without changing the total bandwidth of the user. The adjustment range of unicast bandwidth cannot exceed the bandwidth reserved for unicast.\nThe multicast-list command configuration takes effect for subsequent users that go online after this command is run only when the multicast-list command in the AAA view is also run.\n\nPrecautions\nIn VS mode, this command is supported only by the admin VS."
+}

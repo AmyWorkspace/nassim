@@ -1,0 +1,77 @@
+{
+    "PageTitle": "qos-profile vlan",
+    "FuncDef": "The qos-profile vlan command applies the QoS profile to layer-2 interfaces or Dot1Q sub-interfaces.\nThe undo qos-profile vlan command removes the QoS profile that is applied to layer-2 interfaces Dot1Q sub-interfaces.\nBy default, no QoS profile is applied to an interface.",
+    "CLIs": [
+        "qos-profile <qos-profile-name> { inbound | outbound } vlan <vlan-id-begin> [ to <vlan-id-end> ] [ identifier { none | vlan-id } ] [ group <group-name> ]",
+        "qos-profile <qos-profile-name> { inbound | outbound } vlan <vlan-id-begin> [ to <vlan-id-end> ] [ identifier { none | vlan-id } ] linkage-bandwidth",
+        "undo qos-profile { inbound | outbound } vlan <vlan-id-begin> [ to <vlan-id-end> ]"
+    ],
+    "ParentView": [
+        "100GE interface view",
+        "10G LAN interface view",
+        "10G WAN interface view",
+        "40GE interface view",
+        "Eth-Trunk sub-interface view",
+        "GE optical interface view",
+        "GE sub-interface view",
+        "GE electrical interface view",
+        "Global VE interface view",
+        "VE interface view",
+        "Port extension Layer 2 interface view"
+    ],
+    "ParaDef": [
+        {
+            "Parameters": "qos-profile-name",
+            "Info": "Specifies the name of a QoS profile.\nThe value is a string of 1 to 63 characters."
+        },
+        {
+            "Parameters": "inbound",
+            "Info": "Specifies the inbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "outbound",
+            "Info": "Specifies the outbound direction of an interface.\n-"
+        },
+        {
+            "Parameters": "vlan-id-begin",
+            "Info": "Specifies the start VLAN ID.\nThe value is an integer that ranges from 1 to 4094."
+        },
+        {
+            "Parameters": "to vlan-id-end",
+            "Info": "Specifies the end VLAN ID.\nThe value is an integer that ranges from 1 to 4094. The value of vlan-id2 must be greater than that of vlan-id1."
+        },
+        {
+            "Parameters": "identifier",
+            "Info": "Specifies which queue packets enter.\nWhen the identifier is not specified, all users share the bandwidth of one SQ.\n-"
+        },
+        {
+            "Parameters": "none",
+            "Info": "Indicates that the allocation mode is not specified. Indicates that users share the bandwidth of one SQ.\n-"
+        },
+        {
+            "Parameters": "vlan-id",
+            "Info": "Indicates that packets enter different queues for scheduling according to the VLAN ID. Packets with the same VLAN ID use the bandwidth of one SQ alone.\n-"
+        },
+        {
+            "Parameters": "group group-name",
+            "Info": "Specifies the name of a shared group of QoS profile instances.\nThe value is a string of 1 to 31 characters."
+        },
+        {
+            "Parameters": "linkage-bandwidth",
+            "Info": "Enables bandwidth association. By default, bandwidth association is disabled.\nIf bandwidth association is disabled, the percentage base value of the CIR and PIR in the user-queue command is the physical bandwidth of the interface.If bandwidth association is enabled, the percentage base value of the CIR and PIR in the user-queue command is the interface bandwidth configured using the bandwidth.This parameter is mutually exclusive with the.\ngroup parameter.\n-"
+        }
+    ],
+    "Examples": [
+        [
+            "<HUAWEI> system-view",
+            "[~HUAWEI] qos-profile p1",
+            "[*HUAWEI-qos-profile-p1] quit",
+            "[*HUAWEI] vlan 5",
+            "[*HUAWEI-vlan5] quit",
+            "[*HUAWEI] interface GigabitEthernet1/0/0",
+            "[*HUAWEI-GigabitEthernet1/0/0] portswitch",
+            "[*HUAWEI-GigabitEthernet1/0/0] qos-profile p1 inbound vlan 5 identifier vlan-id"
+        ]
+    ],
+    "ExtraInfo": "Usage Scenario\nTo achieve uniform scheduling of incoming traffic flows on multiple interfaces, you need to implement traffic management by user levels. Profile-based HQoS, by comparison, allows traffic on multiple interfaces to enter an SQ for scheduling. It implements uniform scheduling of traffic on multiple interfaces by defining a QoS profile and applying the profile to different interfaces. In addition, an identity attribute allows traffic from different VLANs on an interface to share an SQ bandwidth or individually use an SQ bandwidth.\nTo apply the qos-profile vlan command on a sub-interface, the sub-interface must be encapsulated with dot1q termination. To apply a QoS profile to inconsecutive VLANs, you can run the qos-profile { inbound | outbound } command to apply simplified configurations.\nIf an interface is already configured with the car command, or the user-queue command, or layer-2 traffic suppression commands, and these commands are configured for the same direction as the direction of the QoS profile, you need to delete the configured commands before being able to configure the qos-profile vlan command to apply the QoS profile to the interface.\nPrerequisites\nBefore applying the qos-profile vlan command, ensure that packets are already configured with VLAN IDs.\nPrecautions\nIf the direction configured in the QoS profile is different from the direction to which the QoS profile is applied on the interface, the profile does not take effect. If directionless traffic control is configured in the QoS profile, the QoS profile takes effect on traffic in the direction that is specified when the QoS profile is applied to the interface."
+}
